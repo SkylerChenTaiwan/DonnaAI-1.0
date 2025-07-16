@@ -1,155 +1,155 @@
-name: "DonnaAI Foundation Setup - Expo + Firebase + Auth"
+name: "DonnaAI 基礎架構設置 - Expo + Firebase + 認證系統"
 description: |
 
-## Purpose
-Set up the foundational infrastructure for DonnaAI business AI assistant platform, including Expo project initialization, Firebase configuration, and tree-based authentication system.
+## 目的
+為 DonnaAI 業務 AI 助理平台建立基礎架構，包含 Expo 專案初始化、Firebase 配置，以及樹狀認證系統。
 
-## Core Principles
-1. **Context is King**: Include ALL necessary documentation, examples, and caveats
-2. **Validation Loops**: Provide executable tests/lints the AI can run and fix
-3. **Information Dense**: Use keywords and patterns from the codebase
-4. **Progressive Success**: Start simple, validate, then enhance
-5. **Global rules**: Be sure to follow all rules in CLAUDE.md
+## 核心原則
+1. **情境為王**：包含所有必要的文件、範例和注意事項
+2. **驗證循環**：提供 AI 可執行並修正的測試/檢查
+3. **資訊密集**：使用程式碼庫中的關鍵字和模式
+4. **漸進式成功**：從簡單開始，驗證後再強化
+5. **全域規則**：確保遵循 CLAUDE.md 中的所有規則
 
 ---
 
-## Goal
-Create a production-ready foundation for DonnaAI with Expo + React Native + TypeScript + Firebase, including:
-- Cross-platform app (iOS/Android/Web) with Expo
-- Firebase backend services (Auth, Firestore, Storage, Functions)
-- Tree-based hierarchical permission system
-- Notion-style UI with NativeBase
-- TypeScript for type safety
-- Zustand for state management with Firestore real-time sync
+## 目標
+建立 DonnaAI 的生產就緒基礎架構，使用 Expo + React Native + TypeScript + Firebase，包含：
+- 跨平台應用程式（iOS/Android/Web）使用 Expo
+- Firebase 後端服務（Auth、Firestore、Storage、Functions）
+- 樹狀階層權限系統
+- Notion 風格 UI 使用 NativeBase
+- TypeScript 確保型別安全
+- Zustand 狀態管理搭配 Firestore 即時同步
 
-## Why
-- **Business value**: Enable sales teams to focus on communication/strategy instead of admin work
-- **User impact**: Reduce administrative burden by 70% for 200+ initial users
-- **Integration**: Foundation for AI meeting recording, analytics dashboard, business tools
-- **Problems solved**: Manual data entry, complex reporting, scattered business tools
+## 為什麼
+- **商業價值**：讓業務團隊專注於溝通/策略而非行政工作
+- **使用者影響**：為 200+ 初期使用者減少 70% 的行政負擔
+- **整合**：為 AI 會議記錄、分析儀表板、業務工具奠定基礎
+- **解決問題**：手動資料輸入、複雜報表、分散的業務工具
 
-## What
-A cross-platform business app with:
-- Secure authentication with role-based access (salesperson/manager/admin)
-- Tree-structured organization permissions
-- Real-time data synchronization
-- Offline-first architecture
-- Notion-inspired clean UI
+## 什麼
+一個跨平台業務應用程式，具備：
+- 安全認證與角色權限（業務員/主管/管理員）
+- 樹狀組織權限結構
+- 即時資料同步
+- 離線優先架構
+- Notion 風格簡潔 UI
 
-### Success Criteria
-- [ ] Expo project runs on iOS/Android/Web
-- [ ] Firebase Auth working with email/password
-- [ ] Firestore connected with Security Rules
-- [ ] Tree-based permissions system functional
-- [ ] Notion-style UI theme applied
-- [ ] TypeScript strict mode with no errors
-- [ ] Basic navigation structure in place
+### 成功標準
+- [ ] Expo 專案在 iOS/Android/Web 上執行
+- [ ] Firebase Auth 支援 email/password 登入
+- [ ] Firestore 連接並設定 Security Rules
+- [ ] 樹狀權限系統正常運作
+- [ ] Notion 風格 UI 主題套用
+- [ ] TypeScript 嚴格模式無錯誤
+- [ ] 基本導航結構就位
 
-## All Needed Context
+## 所需情境
 
-### Documentation & References
+### 文件與參考資料
 ```yaml
-# MUST READ - Include these in your context window
+# 必讀 - 在您的情境視窗中包含這些
 - url: https://docs.expo.dev/get-started/create-a-new-app/
-  why: Official Expo setup guide with TypeScript template
+  why: 官方 Expo 設置指南與 TypeScript 模板
   
 - url: https://docs.expo.dev/guides/using-firebase/
-  why: Firebase integration with Expo - critical for web compatibility
+  why: Firebase 與 Expo 整合 - 對 Web 相容性至關重要
   
 - url: https://firebase.google.com/docs/firestore/security/rules-structure
-  why: Security rules for tree-based permissions
+  why: 樹狀權限的 Security Rules
   
 - url: https://docs.nativebase.io/setup-provider
-  why: NativeBase setup and theming for Notion-style UI
+  why: NativeBase 設置和 Notion 風格 UI 主題
   
 - url: https://github.com/pmndrs/zustand
-  why: State management setup and Firebase integration patterns
+  why: 狀態管理設置和 Firebase 整合模式
   
 - url: https://reactnavigation.org/docs/getting-started
-  why: Navigation structure for multi-platform app
+  why: 多平台應用程式的導航結構
 
 - docfile: ARCHITECTURE.md
-  why: Complete technical architecture and folder structure
+  why: 完整的技術架構和資料夾結構
 
 - docfile: INITIAL.md
-  why: Feature requirements and business logic
+  why: 功能需求和商業邏輯
 ```
 
-### Current Codebase Structure
+### 目前程式碼結構
 ```bash
 DonnaAI-1.0/
-├── ARCHITECTURE.md      # Technical specifications
-├── CLAUDE.md           # AI development guidelines  
-├── INITIAL.md          # Project requirements
-├── TASK.md             # Task tracking
-├── PRPs/               # Product requirement prompts
-└── use-cases/          # Example implementations
+├── ARCHITECTURE.md      # 技術規格
+├── CLAUDE.md           # AI 開發指南  
+├── INITIAL.md          # 專案需求
+├── TASK.md             # 任務追蹤
+├── PRPs/               # 產品需求提示
+└── use-cases/          # 範例實作
 ```
 
-### Desired Codebase Structure
+### 期望的程式碼結構
 ```bash
 DonnaAI-1.0/
 ├── src/
-│   ├── components/     # Reusable UI components
-│   │   ├── common/     # Layout, LoadingSpinner, ErrorBoundary
-│   │   └── auth/       # LoginForm, RoleSelector
-│   ├── screens/        # Screen components
-│   │   ├── auth/       # LoginScreen, RegisterScreen
-│   │   └── dashboard/  # SalespersonDashboard, ManagerDashboard
-│   ├── services/       # External service integrations
-│   │   ├── firebase/   # config.ts, auth.ts, firestore.ts
-│   │   └── api/        # API abstraction layer
+│   ├── components/     # 可重用 UI 元件
+│   │   ├── common/     # Layout、LoadingSpinner、ErrorBoundary
+│   │   └── auth/       # LoginForm、RoleSelector
+│   ├── screens/        # 畫面元件
+│   │   ├── auth/       # LoginScreen、RegisterScreen
+│   │   └── dashboard/  # SalespersonDashboard、ManagerDashboard
+│   ├── services/       # 外部服務整合
+│   │   ├── firebase/   # config.ts、auth.ts、firestore.ts
+│   │   └── api/        # API 抽象層
 │   ├── stores/         # Zustand stores
 │   │   ├── authStore.ts
 │   │   └── appStore.ts
-│   ├── types/          # TypeScript type definitions
-│   │   ├── user.ts     # User, Role, Organization types
-│   │   └── firebase.ts # Firestore document types
-│   ├── navigation/     # Navigation configuration
+│   ├── types/          # TypeScript 型別定義
+│   │   ├── user.ts     # User、Role、Organization 型別
+│   │   └── firebase.ts # Firestore 文件型別
+│   ├── navigation/     # 導航配置
 │   │   └── AppNavigator.tsx
-│   ├── theme/          # Notion-style theming
+│   ├── theme/          # Notion 風格主題
 │   │   └── index.ts
-│   └── utils/          # Helper functions
-├── assets/             # Images, fonts, icons
-├── app.json           # Expo configuration
-├── firebase.json      # Firebase configuration
-├── .env.example       # Environment variables template
-└── package.json       # Dependencies
+│   └── utils/          # 輔助函數
+├── assets/             # 圖片、字型、圖示
+├── app.json           # Expo 配置
+├── firebase.json      # Firebase 配置
+├── .env.example       # 環境變數模板
+└── package.json       # 相依套件
 ```
 
-### Known Gotchas & Library Quirks
+### 已知問題與程式庫特性
 ```typescript
-// CRITICAL: Firebase JS SDK works with Expo but requires specific setup
-// Use Firebase JS SDK (not React Native Firebase) for Expo compatibility
-// Example: import { initializeApp } from 'firebase/app' NOT @react-native-firebase/app
+// 重要：Firebase JS SDK 可與 Expo 搭配但需要特殊設置
+// 使用 Firebase JS SDK（非 React Native Firebase）以確保 Expo 相容性
+// 範例：import { initializeApp } from 'firebase/app' 而非 @react-native-firebase/app
 
-// CRITICAL: NativeBase requires wrapping app with NativeBaseProvider
-// Must configure SSR for web platform support
+// 重要：NativeBase 需要用 NativeBaseProvider 包裝應用程式
+// 必須為 Web 平台支援配置 SSR
 
-// CRITICAL: Expo Web requires specific metro.config.js for Firebase
-// See: https://github.com/expo/expo/issues/17270
+// 重要：Expo Web 需要特定的 metro.config.js 來支援 Firebase
+// 參見：https://github.com/expo/expo/issues/17270
 
-// CRITICAL: TypeScript paths need both tsconfig and babel.config.js
-// Expo doesn't support tsconfig paths out of the box
+// 重要：TypeScript 路徑需要同時配置 tsconfig 和 babel.config.js
+// Expo 不支援開箱即用的 tsconfig 路徑
 
-// CRITICAL: Zustand + Firebase Realtime requires careful unsubscribe handling
-// Memory leaks if listeners aren't cleaned up properly
+// 重要：Zustand + Firebase 即時同步需要謹慎處理取消訂閱
+// 如果監聽器沒有正確清理會造成記憶體洩漏
 ```
 
-## Implementation Blueprint
+## 實作藍圖
 
-### Data Models and Structure
+### 資料模型與結構
 
 ```typescript
-// types/user.ts - Core user and organization types
+// types/user.ts - 核心使用者和組織型別
 export interface User {
   id: string;
   email: string;
   name: string;
   role: 'salesperson' | 'manager' | 'admin';
   organizationId: string;
-  teamIds: string[]; // Can belong to multiple teams
-  managedTeamIds?: string[]; // Teams they manage
+  teamIds: string[]; // 可屬於多個團隊
+  managedTeamIds?: string[]; // 管理的團隊
   createdAt: Date;
   lastLoginAt: Date;
 }
@@ -158,7 +158,7 @@ export interface Organization {
   id: string;
   name: string;
   subscriptionPlan: 'trial' | 'basic' | 'enterprise';
-  aiMinutesQuota: number; // Monthly AI processing minutes
+  aiMinutesQuota: number; // 每月 AI 處理分鐘數
   aiMinutesUsed: number;
   createdAt: Date;
 }
@@ -167,12 +167,12 @@ export interface Team {
   id: string;
   name: string;
   organizationId: string;
-  parentTeamId?: string; // For tree structure
+  parentTeamId?: string; // 用於樹狀結構
   managerIds: string[];
   memberIds: string[];
 }
 
-// types/firebase.ts - Firestore document types
+// types/firebase.ts - Firestore 文件型別
 export interface FirestoreDoc {
   createdAt: Timestamp;
   updatedAt: Timestamp;
@@ -184,118 +184,118 @@ export interface CustomerDoc extends FirestoreDoc {
   company: string;
   email?: string;
   phone?: string;
-  assignedTo: string; // salesperson ID
+  assignedTo: string; // 業務員 ID
   teamId: string;
   notes?: string;
 }
 ```
 
-### List of Tasks to Complete
+### 待完成任務清單
 
 ```yaml
-Task 1: Initialize Expo Project with TypeScript
-CREATE project root:
-  - RUN: npx create-expo-app@latest DonnaAI --template blank-typescript
-  - VERIFY: App runs with: npx expo start
-  - TEST: Open in web browser, iOS simulator, Android emulator
+任務 1：初始化 Expo 專案與 TypeScript
+建立專案根目錄：
+  - 執行：npx create-expo-app@latest DonnaAI --template blank-typescript
+  - 驗證：使用 npx expo start 執行應用程式
+  - 測試：在網頁瀏覽器、iOS 模擬器、Android 模擬器中開啟
 
-Task 2: Install Core Dependencies
-MODIFY package.json:
-  - ADD dependencies:
+任務 2：安裝核心相依套件
+修改 package.json：
+  - 新增相依套件：
     - firebase: ^10.7.0
     - native-base: ^3.4.0
     - react-native-svg: (expo install)
     - zustand: ^4.4.0
-    - react-navigation packages
+    - react-navigation 套件
     - react-hook-form: ^7.48.0
     - zod: ^3.22.0
-  - RUN: npm install
-  - RUN: npx expo install react-native-svg react-native-safe-area-context
+  - 執行：npm install
+  - 執行：npx expo install react-native-svg react-native-safe-area-context
 
-Task 3: Configure Firebase Project
-CREATE firebase.json:
-  - ADD Firestore indexes
-  - ADD Security rules
-CREATE .env.example:
-  - ADD Firebase config keys template
-  - ADD API keys placeholders
-CREATE src/services/firebase/config.ts:
-  - SETUP Firebase initialization
-  - HANDLE Web/Native platform differences
+任務 3：配置 Firebase 專案
+建立 firebase.json：
+  - 新增 Firestore 索引
+  - 新增 Security rules
+建立 .env.example：
+  - 新增 Firebase 配置金鑰模板
+  - 新增 API 金鑰占位符
+建立 src/services/firebase/config.ts：
+  - 設置 Firebase 初始化
+  - 處理 Web/Native 平台差異
 
-Task 4: Setup NativeBase with Notion Theme
-CREATE src/theme/index.ts:
-  - COPY theme config from ARCHITECTURE.md
-  - CUSTOMIZE colors, fonts, components
-MODIFY App.tsx:
-  - WRAP with NativeBaseProvider
-  - ADD SSR configuration for web
+任務 4：設置 NativeBase 與 Notion 主題
+建立 src/theme/index.ts：
+  - 複製 ARCHITECTURE.md 中的主題配置
+  - 自訂顏色、字型、元件
+修改 App.tsx：
+  - 使用 NativeBaseProvider 包裝
+  - 為 Web 新增 SSR 配置
 
-Task 5: Implement Authentication Service
-CREATE src/services/firebase/auth.ts:
-  - IMPLEMENT signIn, signUp, signOut
-  - ADD role-based authentication
-  - HANDLE auth state persistence
-CREATE src/stores/authStore.ts:
-  - SETUP Zustand store for auth state
-  - INTEGRATE Firebase auth listener
-  - ADD user profile management
+任務 5：實作認證服務
+建立 src/services/firebase/auth.ts：
+  - 實作 signIn、signUp、signOut
+  - 新增角色型認證
+  - 處理認證狀態持久化
+建立 src/stores/authStore.ts：
+  - 設置 Zustand store 管理認證狀態
+  - 整合 Firebase 認證監聽器
+  - 新增使用者檔案管理
 
-Task 6: Setup Tree-based Permissions
-CREATE src/services/firebase/permissions.ts:
-  - IMPLEMENT isManagerOfTeam function
-  - ADD hierarchical permission checks
-  - CREATE permission helper functions
-CREATE firestore.rules:
-  - ADD Security Rules from ARCHITECTURE.md
-  - TEST rules in Firebase console
+任務 6：設置樹狀權限
+建立 src/services/firebase/permissions.ts：
+  - 實作 isManagerOfTeam 函數
+  - 新增階層權限檢查
+  - 建立權限輔助函數
+建立 firestore.rules：
+  - 新增 ARCHITECTURE.md 中的 Security Rules
+  - 在 Firebase 控制台測試規則
 
-Task 7: Create Authentication Screens
-CREATE src/screens/auth/LoginScreen.tsx:
-  - USE Notion-style form design
-  - INTEGRATE with authStore
-  - ADD form validation with react-hook-form + zod
-CREATE src/screens/auth/RegisterScreen.tsx:
-  - IMPLEMENT organization setup flow
-  - ADD role selection
-  - HANDLE initial team creation
+任務 7：建立認證畫面
+建立 src/screens/auth/LoginScreen.tsx：
+  - 使用 Notion 風格表單設計
+  - 整合 authStore
+  - 使用 react-hook-form + zod 新增表單驗證
+建立 src/screens/auth/RegisterScreen.tsx：
+  - 實作組織設置流程
+  - 新增角色選擇
+  - 處理初始團隊建立
 
-Task 8: Setup Navigation Structure
-CREATE src/navigation/AppNavigator.tsx:
-  - SETUP authenticated/unauthenticated stacks
-  - ADD role-based navigation
-  - CONFIGURE deep linking for web
-CREATE src/navigation/TabNavigator.tsx:
-  - ADD bottom tabs for main sections
-  - IMPLEMENT role-specific tabs
+任務 8：設置導航結構
+建立 src/navigation/AppNavigator.tsx：
+  - 設置已認證/未認證堆疊
+  - 新增角色型導航
+  - 為 Web 配置深層連結
+建立 src/navigation/TabNavigator.tsx：
+  - 為主要區塊新增底部標籤
+  - 實作角色特定標籤
 
-Task 9: Create Dashboard Screens
-CREATE src/screens/dashboard/SalespersonDashboard.tsx:
-  - ADD placeholder for meeting recordings
-  - SHOW customer list preview
-  - ADD quick actions
-CREATE src/screens/dashboard/ManagerDashboard.tsx:
-  - ADD team overview
-  - SHOW analytics preview
-  - ADD team management options
+任務 9：建立儀表板畫面
+建立 src/screens/dashboard/SalespersonDashboard.tsx：
+  - 新增會議記錄占位符
+  - 顯示客戶清單預覽
+  - 新增快速操作
+建立 src/screens/dashboard/ManagerDashboard.tsx：
+  - 新增團隊概覽
+  - 顯示分析預覽
+  - 新增團隊管理選項
 
-Task 10: Setup Development Environment
-CREATE .env.example:
-  - DOCUMENT all required environment variables
-CREATE README.md:
-  - ADD setup instructions
-  - INCLUDE Firebase project setup guide
-  - ADD development workflow
-MODIFY app.json:
-  - CONFIGURE app name, bundle ID
-  - ADD Firebase plugin configuration
-  - SETUP notification icons
+任務 10：設置開發環境
+建立 .env.example：
+  - 記錄所有必需的環境變數
+建立 README.md：
+  - 新增設置說明
+  - 包含 Firebase 專案設置指南
+  - 新增開發工作流程
+修改 app.json：
+  - 配置應用程式名稱、bundle ID
+  - 新增 Firebase 插件配置
+  - 設置通知圖示
 ```
 
-### Task Implementation Details
+### 任務實作細節
 
 ```typescript
-// Task 3: Firebase Configuration
+// 任務 3：Firebase 配置
 // src/services/firebase/config.ts
 import { initializeApp, getApps } from 'firebase/app';
 import { getAuth, connectAuthEmulator } from 'firebase/auth';
@@ -313,7 +313,7 @@ const firebaseConfig = {
   appId: Constants.expoConfig?.extra?.firebaseAppId,
 };
 
-// Initialize Firebase only if not already initialized
+// 只在尚未初始化時初始化 Firebase
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
 export const auth = getAuth(app);
@@ -321,14 +321,14 @@ export const db = getFirestore(app);
 export const storage = getStorage(app);
 export const functions = getFunctions(app);
 
-// Connect to emulators in development
+// 在開發環境連接到模擬器
 if (__DEV__) {
   connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
   connectFirestoreEmulator(db, 'localhost', 8080);
   connectFunctionsEmulator(functions, 'localhost', 5001);
 }
 
-// Task 5: Auth Store with Zustand
+// 任務 5：使用 Zustand 的認證 Store
 // src/stores/authStore.ts
 import { create } from 'zustand';
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
@@ -343,11 +343,11 @@ interface AuthState {
   isAuthenticated: boolean;
   error: string | null;
   
-  // Actions
+  // 動作
   setUser: (user: User | null) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
-  initializeAuth: () => () => void; // Returns unsubscribe function
+  initializeAuth: () => () => void; // 返回取消訂閱函數
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -362,13 +362,13 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   setError: (error) => set({ error }),
   
   initializeAuth: () => {
-    // Subscribe to auth state changes
+    // 訂閱認證狀態變更
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       set({ firebaseUser, isLoading: true });
       
       if (firebaseUser) {
         try {
-          // Fetch user profile from Firestore
+          // 從 Firestore 取得使用者檔案
           const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
           if (userDoc.exists()) {
             const userData = userDoc.data() as User;
@@ -379,12 +379,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
               error: null 
             });
           } else {
-            // User authenticated but no profile
+            // 已認證但沒有檔案
             set({ 
               user: null, 
               isAuthenticated: false, 
               isLoading: false,
-              error: 'User profile not found' 
+              error: '找不到使用者檔案' 
             });
           }
         } catch (error) {
@@ -396,7 +396,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           });
         }
       } else {
-        // Not authenticated
+        // 未認證
         set({ 
           user: null, 
           isAuthenticated: false, 
@@ -411,48 +411,48 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 }));
 ```
 
-### Integration Points
+### 整合點
 ```yaml
-FIREBASE:
-  - project: Create new Firebase project in console
-  - auth: Enable Email/Password authentication
-  - firestore: Create database in production mode
-  - storage: Enable for audio file storage later
-  - functions: Initialize for AI processing
+FIREBASE：
+  - 專案：在控制台建立新的 Firebase 專案
+  - 認證：啟用 Email/Password 認證
+  - firestore：在生產模式建立資料庫
+  - storage：為之後的音訊檔案儲存啟用
+  - functions：為 AI 處理初始化
   
-EXPO:
-  - app.json: Configure with Firebase plugin
-  - eas.json: Setup for EAS Build (native builds)
-  - metro.config.js: Configure for Firebase web support
+EXPO：
+  - app.json：配置 Firebase 插件
+  - eas.json：為 EAS Build 設置（原生建置）
+  - metro.config.js：為 Firebase Web 支援配置
   
-NAVIGATION:
-  - Deep linking: Configure for web URLs
-  - Tab navigation: Different tabs for roles
-  - Stack navigation: Auth flow vs main app
+導航：
+  - 深層連結：為 Web URLs 配置
+  - 標籤導航：不同角色的不同標籤
+  - 堆疊導航：認證流程 vs 主應用程式
 ```
 
-## Validation Loop
+## 驗證循環
 
-### Level 1: Syntax & Style
+### 層級 1：語法與風格
 ```bash
-# TypeScript compilation check
+# TypeScript 編譯檢查
 npx tsc --noEmit
 
-# ESLint check (after setting up)
+# ESLint 檢查（設置後）
 npm run lint
 
-# Prettier format check
+# Prettier 格式檢查
 npm run format:check
 
-# Expected: No errors. If errors, READ and fix TypeScript/ESLint errors
+# 預期：無錯誤。如有錯誤，閱讀並修正 TypeScript/ESLint 錯誤
 ```
 
-### Level 2: Component Testing
+### 層級 2：元件測試
 ```bash
-# Install testing dependencies first
+# 先安裝測試相依套件
 npm install --save-dev @testing-library/react-native jest-expo jest @types/jest
 
-# Create test for auth store
+# 為認證 store 建立測試
 # src/stores/__tests__/authStore.test.ts
 ```
 
@@ -461,7 +461,7 @@ import { renderHook, act } from '@testing-library/react-hooks';
 import { useAuthStore } from '../authStore';
 
 describe('AuthStore', () => {
-  it('should initialize with default state', () => {
+  it('應該以預設狀態初始化', () => {
     const { result } = renderHook(() => useAuthStore());
     
     expect(result.current.user).toBeNull();
@@ -469,12 +469,12 @@ describe('AuthStore', () => {
     expect(result.current.isLoading).toBe(true);
   });
   
-  it('should set user and update auth state', () => {
+  it('應該設置使用者並更新認證狀態', () => {
     const { result } = renderHook(() => useAuthStore());
     const mockUser = {
       id: '123',
       email: 'test@example.com',
-      name: 'Test User',
+      name: '測試使用者',
       role: 'salesperson' as const,
       organizationId: 'org123',
       teamIds: ['team1'],
@@ -492,109 +492,109 @@ describe('AuthStore', () => {
 });
 ```
 
-### Level 3: Integration Testing
+### 層級 3：整合測試
 ```bash
-# Start Expo development server
+# 啟動 Expo 開發伺服器
 npx expo start
 
-# For web testing
-# 1. Press 'w' to open in web browser
-# 2. Check console for any errors
-# 3. Verify login screen appears
+# Web 測試
+# 1. 按 'w' 在網頁瀏覽器開啟
+# 2. 檢查控制台是否有錯誤
+# 3. 驗證登入畫面出現
 
-# For iOS testing (Mac only)
-# 1. Press 'i' to open iOS simulator
-# 2. Verify app loads without crashes
+# iOS 測試（僅限 Mac）
+# 1. 按 'i' 開啟 iOS 模擬器
+# 2. 驗證應用程式載入無崩潰
 
-# For Android testing  
-# 1. Press 'a' to open Android emulator
-# 2. Verify app loads without crashes
+# Android 測試  
+# 1. 按 'a' 開啟 Android 模擬器
+# 2. 驗證應用程式載入無崩潰
 
-# Test Firebase connection
-# 1. Check browser console for Firebase initialization
-# 2. Try creating a test account
-# 3. Verify Firestore creates user document
+# 測試 Firebase 連接
+# 1. 檢查瀏覽器控制台的 Firebase 初始化
+# 2. 嘗試建立測試帳號
+# 3. 驗證 Firestore 建立使用者文件
 ```
 
-### Level 4: Firebase Security Rules Testing
+### 層級 4：Firebase Security Rules 測試
 ```javascript
-// Test in Firebase Console Rules Playground
-// Test 1: User can read own profile
-// Simulation: 
-//   - Auth: uid = "user123"
-//   - Operation: get
-//   - Path: /users/user123
-// Expected: ALLOW
+// 在 Firebase 控制台規則測試區測試
+// 測試 1：使用者可以讀取自己的檔案
+// 模擬： 
+//   - 認證：uid = "user123"
+//   - 操作：get
+//   - 路徑：/users/user123
+// 預期：允許
 
-// Test 2: User cannot read other's profile  
-// Simulation:
-//   - Auth: uid = "user123"
-//   - Operation: get
-//   - Path: /users/other456
-// Expected: DENY
+// 測試 2：使用者無法讀取他人檔案  
+// 模擬：
+//   - 認證：uid = "user123"
+//   - 操作：get
+//   - 路徑：/users/other456
+// 預期：拒絕
 
-// Test 3: Manager can read team members
-// Simulation:
-//   - Auth: uid = "manager123", token.role = "manager"
-//   - Operation: get
-//   - Path: /users/member456 (where member456.teamId in manager's teams)
-// Expected: ALLOW
+// 測試 3：主管可以讀取團隊成員
+// 模擬：
+//   - 認證：uid = "manager123", token.role = "manager"
+//   - 操作：get
+//   - 路徑：/users/member456（其中 member456.teamId 在主管的團隊中）
+// 預期：允許
 ```
 
-## Final Validation Checklist
-- [ ] Expo app runs on Web: `npx expo start --web`
-- [ ] Expo app runs on iOS: `npx expo start --ios`
-- [ ] Expo app runs on Android: `npx expo start --android`
-- [ ] TypeScript has no errors: `npx tsc --noEmit`
-- [ ] Firebase Auth works: Can create account and sign in
-- [ ] Firestore connected: User document created on signup
-- [ ] Navigation works: Auth flow redirects properly
-- [ ] Notion theme applied: UI matches design
-- [ ] Tree permissions: Manager can see team members
-- [ ] Environment variables: .env.example documents all vars
+## 最終驗證檢查清單
+- [ ] Expo 應用程式在 Web 上執行：`npx expo start --web`
+- [ ] Expo 應用程式在 iOS 上執行：`npx expo start --ios`
+- [ ] Expo 應用程式在 Android 上執行：`npx expo start --android`
+- [ ] TypeScript 無錯誤：`npx tsc --noEmit`
+- [ ] Firebase Auth 運作：可以建立帳號並登入
+- [ ] Firestore 已連接：註冊時建立使用者文件
+- [ ] 導航運作：認證流程正確重定向
+- [ ] Notion 主題已套用：UI 符合設計
+- [ ] 樹狀權限：主管可以看到團隊成員
+- [ ] 環境變數：.env.example 記錄所有變數
 
 ---
 
-## Anti-Patterns to Avoid
-- ❌ Don't use @react-native-firebase packages (incompatible with Expo Go)
-- ❌ Don't skip Firebase emulator setup for development
-- ❌ Don't hardcode Firebase config values
-- ❌ Don't create flat permission structure (must be hierarchical)
-- ❌ Don't skip TypeScript strict mode
-- ❌ Don't use synchronous storage for auth tokens
-- ❌ Don't forget to handle offline states
-- ❌ Don't skip Security Rules testing
+## 應避免的反模式
+- ❌ 不要使用 @react-native-firebase 套件（與 Expo Go 不相容）
+- ❌ 不要跳過開發環境的 Firebase 模擬器設置
+- ❌ 不要硬編碼 Firebase 配置值
+- ❌ 不要建立扁平權限結構（必須是階層式）
+- ❌ 不要跳過 TypeScript 嚴格模式
+- ❌ 不要使用同步儲存來存放認證令牌
+- ❌ 不要忘記處理離線狀態
+- ❌ 不要跳過 Security Rules 測試
 
-## Common Issues & Solutions
+## 常見問題與解決方案
 
-### Issue: Firebase not connecting on Web
+### 問題：Firebase 在 Web 上無法連接
 ```javascript
-// Solution: Add this to metro.config.js
+// 解決方案：新增到 metro.config.js
 const { getDefaultConfig } = require('expo/metro-config');
 const config = getDefaultConfig(__dirname);
 config.resolver.sourceExts.push('cjs');
 module.exports = config;
 ```
 
-### Issue: NativeBase SSR warnings on Web
+### 問題：NativeBase 在 Web 上的 SSR 警告
 ```tsx
-// Solution: Configure SSR in App.tsx
+// 解決方案：在 App.tsx 中配置 SSR
 import { NativeBaseProvider, SSRProvider } from 'native-base';
 
 export default function App() {
   return (
     <SSRProvider>
       <NativeBaseProvider>
-        {/* Your app */}
+        {/* 您的應用程式 */}
       </NativeBaseProvider>
     </SSRProvider>
   );
 }
 ```
 
-### Issue: TypeScript path aliases not working
+### 問題：TypeScript 路徑別名無法運作
 ```json
-// Solution: Install babel-plugin-module-resolver
+// 解決方案：安裝 babel-plugin-module-resolver
 // babel.config.js
 module.exports = function(api) {
   api.cache(true);
@@ -616,27 +616,27 @@ module.exports = function(api) {
 };
 ```
 
-## Next Steps After Foundation
-1. Implement meeting recording feature with expo-av
-2. Add AI transcription via Cloud Functions
-3. Build analytics dashboard with Victory Native
-4. Create business tools marketplace
-5. Add push notifications
-6. Implement offline sync
-7. Add CSV import functionality
-8. Setup subscription billing
+## 基礎架構完成後的下一步
+1. 使用 expo-av 實作會議錄音功能
+2. 透過 Cloud Functions 新增 AI 轉錄
+3. 使用 Victory Native 建立分析儀表板
+4. 建立業務工具市集
+5. 新增推播通知
+6. 實作離線同步
+7. 新增 CSV 匯入功能
+8. 設置訂閱計費
 
 ---
 
-## Confidence Score: 8.5/10
+## 信心分數：8.5/10
 
-### Why 8.5?
-- ✅ Comprehensive documentation links provided
-- ✅ Clear implementation blueprint with code examples
-- ✅ Validation steps at multiple levels
-- ✅ Common gotchas documented
-- ✅ Progressive implementation approach
-- ⚠️ Minor deduction for complex Firebase + Expo setup
-- ⚠️ Tree-based permissions may need iteration
+### 為什麼是 8.5？
+- ✅ 提供完整的文件連結
+- ✅ 清晰的實作藍圖與程式碼範例
+- ✅ 多層級的驗證步驟
+- ✅ 常見問題已記錄
+- ✅ 漸進式實作方法
+- ⚠️ Firebase + Expo 設置複雜性扣分
+- ⚠️ 樹狀權限可能需要迭代
 
-This PRP provides everything needed for one-pass implementation of the DonnaAI foundation with proper validation gates to ensure success.
+這個 PRP 提供了一次性成功實作 DonnaAI 基礎架構所需的所有內容，並有適當的驗證關卡確保成功。
