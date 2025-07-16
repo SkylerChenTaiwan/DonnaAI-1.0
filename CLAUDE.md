@@ -1,6 +1,5 @@
 ### 🔄 Project Awareness & Context
-- **Always read `PLANNING.md`** at the start of a new conversation to understand the project's architecture, goals, style, and constraints.
-- **Check `INITIAL.md`** for project overview and feature requirements.
+- **Check `INITIAL.md`** at the start of a new conversation for project overview and feature requirements.
 - **Consult `ARCHITECTURE.md`** when:
   - Implementing new features that need technical specifications
   - Working with Firebase services (Auth, Firestore, Storage, Functions)
@@ -10,8 +9,8 @@
 - **Check `TASK.md`** before starting a new task. If the task isn't listed, add it with a brief description and today's date.
 - **Consider whole project impact** before making changes - avoid tunnel vision.
 - **Check version compatibility** in requirements.txt/package.json before updates.
-- **Document in PLANNING.md** if changes affect core architecture.
-- **Use consistent naming conventions, file structure, and architecture patterns** as described in `PLANNING.md`.
+- **Document significant architecture changes** in ARCHITECTURE.md.
+- **Use consistent naming conventions, file structure, and architecture patterns** as described in `ARCHITECTURE.md`.
 - **Use venv_linux** (the virtual environment) whenever executing Python commands, including for unit tests.
 
 ### 🧱 Code Structure & Modularity
