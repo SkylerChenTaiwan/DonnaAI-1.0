@@ -111,10 +111,14 @@
   - 新建 PRP 檔案必須以編號開始：`01-feature-name.md`、`02-another-feature.md`
   - 編號從 01 開始，按建立順序遞增
   - 檔名使用英文，內容使用繁體中文
-- **PRP 執行狀態標記**：
-  - 執行完成後在編號後加上 `v-`：`01v-feature-name.md`
-  - 這樣可以快速識別哪些 PRP 已執行完成
-  - 未執行的 PRP 保持原編號：`02-another-feature.md`
+- **PRP 執行完成後的必要步驟**：
+  1. **重新命名檔案**：在編號後加上 `v-`（例如：`01-feature.md` → `01v-feature.md`）
+  2. **更新 PRPs/README.md**：
+     - 將該 PRP 狀態改為 ✅ 已完成
+     - 填入執行日期
+     - 更新「下一個 PRP 編號」為新的編號
+  3. **提交 Git 變更**：包含檔案重新命名和 README 更新
 - **PRP 目錄管理**：
-  - 定期檢查 PRPs/ 資料夾中的檔案狀態
-  - 可以在 PRPs/ 資料夾建立 README.md 列出所有 PRP 和其狀態
+  - PRPs/README.md 是所有 PRP 的中央狀態追蹤檔案
+  - 必須保持此檔案為最新狀態，方便追蹤專案進度
+  - 未執行的 PRP 保持原編號：`02-another-feature.md`
