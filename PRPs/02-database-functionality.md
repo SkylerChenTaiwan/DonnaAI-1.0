@@ -115,22 +115,27 @@ src/
 │   ├── custom-fields.ts # 新增：自訂欄位類型
 │   ├── record.ts        # 新增：紀錄類型（取代 MeetingDoc）
 │   ├── task.ts          # 新增：任務類型
-│   └── field-interpretations.ts # 新增：欄位解釋系統
+│   ├── field-interpretations.ts # 新增：欄位解釋系統
+│   └── ai-processing.ts # 新增：AI 處理相關類型
 ├── services/
-│   └── firebase/
-│       ├── config.ts    
-│       ├── auth.ts      
-│       ├── permissions.ts # 擴充：自訂欄位權限
-│       ├── customers.ts   # 新增：客戶 CRUD
-│       ├── records.ts     # 新增：紀錄 CRUD
-│       ├── tasks.ts       # 新增：任務 CRUD
-│       ├── custom-fields.ts # 新增：自訂欄位管理
-│       └── ai-field-processor.ts # 新增：AI 欄位處理服務
+│   ├── firebase/
+│   │   ├── config.ts    
+│   │   ├── auth.ts      
+│   │   ├── permissions.ts # 擴充：自訂欄位權限
+│   │   ├── customers.ts   # 新增：客戶 CRUD
+│   │   ├── records.ts     # 新增：紀錄 CRUD
+│   │   ├── tasks.ts       # 新增：任務 CRUD
+│   │   ├── custom-fields.ts # 新增：自訂欄位管理
+│   │   ├── ai-field-processor.ts # 新增：AI 欄位處理服務
+│   │   └── ai-confirmations.ts # 新增：AI 確認管理
+│   └── api/
+│       └── ai-integration.ts # 新增：AI API 整合
 ├── stores/
 │   ├── authStore.ts
 │   ├── customerStore.ts  # 新增：客戶狀態管理
 │   ├── recordStore.ts    # 新增：紀錄狀態管理
-│   └── taskStore.ts      # 新增：任務狀態管理
+│   ├── taskStore.ts      # 新增：任務狀態管理
+│   └── aiConfirmationStore.ts # 新增：AI 確認狀態管理
 └── tests/
     └── services/
         └── firebase/     # 新增：所有服務的單元測試
@@ -190,6 +195,50 @@ interface AIFieldMapping {
   confidence: number;          // 0-1 的信心分數
   extractedValue: any;
   reason?: string;            // AI 判斷原因
+  requiresConfirmation?: boolean; // 是否需要使用者確認
+  alternatives?: Array<{      // 其他可能的值
+    value: any;
+    confidence: number;
+  }>;
+}
+
+// AI 處理確認請求
+interface AIProcessingConfirmation {
+  id: string;
+  recordId: string;
+  customerId?: string;
+  fieldMappings: AIFieldMapping[];
+  status: 'pending' | 'confirmed' | 'rejected' | 'modified';
+  createdAt: Timestamp;
+  reviewedAt?: Timestamp;
+  reviewedBy?: string;
+  userModifications?: Record<string, any>; // 使用者修改的值
+}
+
+// AI API 請求/回應格式
+interface AIFieldExtractionRequest {
+  content: string;              // 紀錄內容（轉錄文字或摘要）
+  fieldDefinitions: Array<{
+    fieldKey: string;
+    fieldName: string;
+    fieldType: string;
+    aiInterpretation?: string;  // AI 理解的欄位說明
+    examples?: string[];
+  }>;
+  contextualInfo?: {            // 額外上下文
+    customerName?: string;
+    previousRecords?: string[];
+  };
+}
+
+interface AIFieldExtractionResponse {
+  fieldMappings: AIFieldMapping[];
+  processingMetadata: {
+    modelUsed: string;
+    processingTime: number;
+    totalConfidence: number;
+  };
+  suggestedActions?: string[];  // AI 建議的後續行動
 }
 
 // 紀錄類型 (src/types/record.ts)
@@ -215,6 +264,9 @@ interface RecordDoc extends FirestoreDoc {
     modelUsed: string;
     totalConfidence: number;
   };
+  // AI 處理確認狀態
+  aiConfirmationId?: string;    // 關聯的確認請求 ID
+  aiConfirmationStatus?: 'pending' | 'confirmed' | 'rejected' | 'modified';
   teamId: string;
   organizationId: string;
 }
@@ -311,20 +363,37 @@ tasks:
       建立 src/services/firebase/customers.ts
       實作客戶 CRUD 和自訂欄位處理
       
+  - id: implement-ai-api-integration
+    name: 實作 AI API 整合
+    dependencies: [implement-custom-fields-service]
+    description: |
+      建立 src/services/api/ai-integration.ts
+      實作與 AI 模型的 API 介接
+      處理請求/回應格式轉換
+      
   - id: implement-ai-field-processor
     name: 實作 AI 欄位處理服務
-    dependencies: [implement-custom-fields-service]
+    dependencies: [implement-ai-api-integration]
     description: |
       建立 src/services/firebase/ai-field-processor.ts
       實作 AI 理解欄位描述和自動填入邏輯
+      整合 AI API 服務
+      
+  - id: implement-ai-confirmations
+    name: 實作 AI 確認機制
+    dependencies: [implement-ai-field-processor]
+    description: |
+      建立 src/services/firebase/ai-confirmations.ts
+      實作 AI 處理結果的確認流程
+      管理確認狀態和使用者修改
       
   - id: implement-records-service
     name: 實作紀錄服務
-    dependencies: [implement-ai-field-processor]
+    dependencies: [implement-ai-confirmations]
     description: |
       建立 src/services/firebase/records.ts
       實作紀錄 CRUD、音訊上傳和 AI 處理觸發
-      整合 AI 欄位自動填入功能
+      整合 AI 欄位自動填入和確認流程
       
   - id: implement-tasks-service
     name: 實作任務服務
@@ -338,6 +407,7 @@ tasks:
     dependencies: [implement-customers-service, implement-records-service, implement-tasks-service]
     description: |
       建立 customerStore.ts, recordStore.ts, taskStore.ts
+      建立 aiConfirmationStore.ts 管理 AI 確認狀態
       實作即時資料同步和狀態管理
       
   - id: implement-cross-db-queries
@@ -355,6 +425,8 @@ tasks:
       實作音訊轉文字和 AI 分析功能
       建立 functions/src/field-extraction.ts
       實作 AI 欄位提取和自動填入
+      建立 functions/src/ai-processing-api.ts
+      提供 AI 處理的 HTTP 端點
       
   - id: implement-calendar-sync
     name: 實作 Google Calendar 同步
@@ -454,18 +526,38 @@ tasks:
      - 返回取消訂閱函數
 ```
 
+#### Task: implement-ai-api-integration
+```
+1. 建立 src/services/api/ai-integration.ts
+
+2. 實作 AI API 整合函數：
+   - callAIFieldExtraction(request: AIFieldExtractionRequest): Promise<AIFieldExtractionResponse>
+     - 呼叫 AI API（OpenAI/Claude/自訂模型）
+     - 處理錯誤和重試邏輯
+     - 轉換回應格式
+   
+   - processFieldDescription(description: string): Promise<string>
+     - 將使用者的欄位描述送給 AI 處理
+     - 返回結構化的解釋
+   
+   - validateAIResponse(response: any): boolean
+     - 驗證 AI 回應的格式和內容
+```
+
 #### Task: implement-ai-field-processor
 ```
 1. 建立 src/services/firebase/ai-field-processor.ts
 
 2. 實作 AI 欄位處理函數：
    - extractFieldsFromRecord(record: RecordDoc, fieldDefinitions: CustomFieldDefinition[])
+     - 調用 AI API 服務
      - 分析紀錄內容（轉錄文字、AI 摘要等）
      - 根據欄位定義提取值
      - 返回 AIFieldMapping 陣列
    
    - autoFillCustomerFields(customerId: string, fieldMappings: AIFieldMapping[])
      - 檢查欄位對應的信心分數
+     - 建立確認請求（如果需要）
      - 更新客戶的自訂欄位
      - 記錄 AI 更新資訊
    
@@ -474,12 +566,35 @@ tasks:
      - 返回多個可能的值和信心分數
 ```
 
+#### Task: implement-ai-confirmations
+```
+1. 建立 src/services/firebase/ai-confirmations.ts
+
+2. 實作確認管理函數：
+   - createConfirmationRequest(confirmation: AIProcessingConfirmation)
+     - 建立新的確認請求
+     - 發送通知給使用者
+   
+   - updateConfirmationStatus(confirmationId: string, status: string, modifications?: any)
+     - 更新確認狀態
+     - 處理使用者修改
+   
+   - applyConfirmedMappings(confirmationId: string)
+     - 應用已確認的欄位對應
+     - 更新相關客戶資料
+   
+   - getpendingConfirmations(userId: string)
+     - 獲取待確認的請求列表
+```
+
 ### Integration Points
 - Firebase Auth: 所有操作需要認證使用者
 - Firebase Storage: 錄音檔案上傳
-- Cloud Functions: 音訊處理觸發器
+- Cloud Functions: 音訊處理觸發器和 AI API 端點
 - Google Calendar API: 任務同步
+- AI Model API: OpenAI/Claude API 或自訂模型端點
 - Zustand Stores: 狀態管理和 UI 更新
+- 確認通知系統: 推送通知或應用內通知
 
 ## Validation Loop
 
