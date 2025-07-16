@@ -1,6 +1,9 @@
 ### 🔄 Project Awareness & Context
 - **Always read `PLANNING.md`** at the start of a new conversation to understand the project's architecture, goals, style, and constraints.
-- **Check `TASK.md`** before starting a new task. If the task isn’t listed, add it with a brief description and today's date.
+- **Check `TASK.md`** before starting a new task. If the task isn't listed, add it with a brief description and today's date.
+- **Consider whole project impact** before making changes - avoid tunnel vision.
+- **Check version compatibility** in requirements.txt/package.json before updates.
+- **Document in PLANNING.md** if changes affect core architecture.
 - **Use consistent naming conventions, file structure, and architecture patterns** as described in `PLANNING.md`.
 - **Use venv_linux** (the virtual environment) whenever executing Python commands, including for unit tests.
 
@@ -24,9 +27,16 @@
     - 1 edge case
     - 1 failure case
 
-### ✅ Task Completion
+### ✅ Task Completion & Git Management
 - **Mark completed tasks in `TASK.md`** immediately after finishing them.
-- Add new sub-tasks or TODOs discovered during development to `TASK.md` under a “Discovered During Work” section.
+- **MANDATORY: Commit all code changes to Git** with descriptive messages:
+  ```
+  [type]: Brief description
+  
+  Reason: Why this change was made
+  Effect: Expected outcome
+  ```
+- Add new sub-tasks or TODOs discovered during development to `TASK.md` under a "Discovered During Work" section.
 
 ### 📎 Style & Conventions
 - **Use Python** as the primary language.
@@ -57,3 +67,17 @@
 - **Never hallucinate libraries or functions** – only use known, verified Python packages.
 - **Always confirm file paths and module names** exist before referencing them in code or tests.
 - **Never delete or overwrite existing code** unless explicitly instructed to or if part of a task from `TASK.md`.
+
+### 🚨 Error Analysis Protocol
+- **NEVER fix errors immediately** - create an analysis report first at `/docs/error-reports/[date]-[error-description].md`
+- **Error report must include**: root cause analysis, multiple solution options, impact assessment
+- **Discuss the report with user** before implementing any fixes
+- **Update TASK.md** with the chosen solution approach
+
+### 📋 Change Planning Requirements
+- **All significant changes require a plan document** before implementation:
+  - New features: `/docs/plans/features/[feature-name].md`
+  - Bug fixes: `/docs/plans/fixes/[issue-description].md`
+  - Refactoring: `/docs/plans/refactoring/[component].md`
+- **Get user approval** on the plan before proceeding
+- **Link plan documents in TASK.md** when adding related tasks
