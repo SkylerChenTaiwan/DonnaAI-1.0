@@ -13,7 +13,7 @@ description: |
 
 ---
 
-## 目標
+## Goal
 建立 DonnaAI 的生產就緒基礎架構，使用 Expo + React Native + TypeScript + Firebase，包含：
 - 跨平台應用程式（iOS/Android/Web）使用 Expo
 - Firebase 後端服務（Auth、Firestore、Storage、Functions）
@@ -22,13 +22,13 @@ description: |
 - TypeScript 確保型別安全
 - Zustand 狀態管理搭配 Firestore 即時同步
 
-## 為什麼
+## Why
 - **商業價值**：讓業務團隊專注於溝通/策略而非行政工作
 - **使用者影響**：為 200+ 初期使用者減少 70% 的行政負擔
 - **整合**：為 AI 會議記錄、分析儀表板、業務工具奠定基礎
 - **解決問題**：手動資料輸入、複雜報表、分散的業務工具
 
-## 什麼
+## What
 一個跨平台業務應用程式，具備：
 - 安全認證與角色權限（業務員/主管/管理員）
 - 樹狀組織權限結構
@@ -36,7 +36,7 @@ description: |
 - 離線優先架構
 - Notion 風格簡潔 UI
 
-### 成功標準
+### Success Criteria
 - [ ] Expo 專案在 iOS/Android/Web 上執行
 - [ ] Firebase Auth 支援 email/password 登入
 - [ ] Firestore 連接並設定 Security Rules
@@ -45,9 +45,9 @@ description: |
 - [ ] TypeScript 嚴格模式無錯誤
 - [ ] 基本導航結構就位
 
-## 所需情境
+## All Needed Context
 
-### 文件與參考資料
+### Documentation & References
 ```yaml
 # 必讀 - 在您的情境視窗中包含這些
 - url: https://docs.expo.dev/get-started/create-a-new-app/
@@ -75,7 +75,7 @@ description: |
   why: 功能需求和商業邏輯
 ```
 
-### 目前程式碼結構
+### Current Codebase Structure
 ```bash
 DonnaAI-1.0/
 ├── ARCHITECTURE.md      # 技術規格
@@ -86,7 +86,7 @@ DonnaAI-1.0/
 └── use-cases/          # 範例實作
 ```
 
-### 期望的程式碼結構
+### Desired Codebase Structure
 ```bash
 DonnaAI-1.0/
 ├── src/
@@ -117,7 +117,7 @@ DonnaAI-1.0/
 └── package.json       # 相依套件
 ```
 
-### 已知問題與程式庫特性
+### Known Gotchas & Library Quirks
 ```typescript
 // 重要：Firebase JS SDK 可與 Expo 搭配但需要特殊設置
 // 使用 Firebase JS SDK（非 React Native Firebase）以確保 Expo 相容性
@@ -136,9 +136,9 @@ DonnaAI-1.0/
 // 如果監聽器沒有正確清理會造成記憶體洩漏
 ```
 
-## 實作藍圖
+## Implementation Blueprint
 
-### 資料模型與結構
+### Data Models and Structure
 
 ```typescript
 // types/user.ts - 核心使用者和組織型別
@@ -190,7 +190,7 @@ export interface CustomerDoc extends FirestoreDoc {
 }
 ```
 
-### 待完成任務清單
+### List of Tasks to Complete
 
 ```yaml
 任務 1：初始化 Expo 專案與 TypeScript
@@ -292,7 +292,7 @@ export interface CustomerDoc extends FirestoreDoc {
   - 設置通知圖示
 ```
 
-### 任務實作細節
+### Task Implementation Details
 
 ```typescript
 // 任務 3：Firebase 配置
@@ -411,7 +411,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 }));
 ```
 
-### 整合點
+### Integration Points
 ```yaml
 FIREBASE：
   - 專案：在控制台建立新的 Firebase 專案
@@ -431,9 +431,9 @@ EXPO：
   - 堆疊導航：認證流程 vs 主應用程式
 ```
 
-## 驗證循環
+## Validation Loop
 
-### 層級 1：語法與風格
+### Level 1: Syntax & Style
 ```bash
 # TypeScript 編譯檢查
 npx tsc --noEmit
@@ -447,7 +447,7 @@ npm run format:check
 # 預期：無錯誤。如有錯誤，閱讀並修正 TypeScript/ESLint 錯誤
 ```
 
-### 層級 2：元件測試
+### Level 2: Component Testing
 ```bash
 # 先安裝測試相依套件
 npm install --save-dev @testing-library/react-native jest-expo jest @types/jest
@@ -492,7 +492,7 @@ describe('AuthStore', () => {
 });
 ```
 
-### 層級 3：整合測試
+### Level 3: Integration Testing
 ```bash
 # 啟動 Expo 開發伺服器
 npx expo start
@@ -516,7 +516,7 @@ npx expo start
 # 3. 驗證 Firestore 建立使用者文件
 ```
 
-### 層級 4：Firebase Security Rules 測試
+### Level 4: Firebase Security Rules Testing
 ```javascript
 // 在 Firebase 控制台規則測試區測試
 // 測試 1：使用者可以讀取自己的檔案
@@ -541,7 +541,7 @@ npx expo start
 // 預期：允許
 ```
 
-## 最終驗證檢查清單
+## Final Validation Checklist
 - [ ] Expo 應用程式在 Web 上執行：`npx expo start --web`
 - [ ] Expo 應用程式在 iOS 上執行：`npx expo start --ios`
 - [ ] Expo 應用程式在 Android 上執行：`npx expo start --android`
@@ -555,7 +555,7 @@ npx expo start
 
 ---
 
-## 應避免的反模式
+## Anti-Patterns to Avoid
 - ❌ 不要使用 @react-native-firebase 套件（與 Expo Go 不相容）
 - ❌ 不要跳過開發環境的 Firebase 模擬器設置
 - ❌ 不要硬編碼 Firebase 配置值
@@ -565,9 +565,9 @@ npx expo start
 - ❌ 不要忘記處理離線狀態
 - ❌ 不要跳過 Security Rules 測試
 
-## 常見問題與解決方案
+## Common Issues & Solutions
 
-### 問題：Firebase 在 Web 上無法連接
+### Issue: Firebase not connecting on Web
 ```javascript
 // 解決方案：新增到 metro.config.js
 const { getDefaultConfig } = require('expo/metro-config');
@@ -576,7 +576,7 @@ config.resolver.sourceExts.push('cjs');
 module.exports = config;
 ```
 
-### 問題：NativeBase 在 Web 上的 SSR 警告
+### Issue: NativeBase SSR warnings on Web
 ```tsx
 // 解決方案：在 App.tsx 中配置 SSR
 import { NativeBaseProvider, SSRProvider } from 'native-base';
@@ -592,7 +592,7 @@ export default function App() {
 }
 ```
 
-### 問題：TypeScript 路徑別名無法運作
+### Issue: TypeScript path aliases not working
 ```json
 // 解決方案：安裝 babel-plugin-module-resolver
 // babel.config.js
@@ -616,7 +616,7 @@ module.exports = function(api) {
 };
 ```
 
-## 基礎架構完成後的下一步
+## Next Steps After Foundation
 1. 使用 expo-av 實作會議錄音功能
 2. 透過 Cloud Functions 新增 AI 轉錄
 3. 使用 Victory Native 建立分析儀表板
@@ -628,9 +628,9 @@ module.exports = function(api) {
 
 ---
 
-## 信心分數：8.5/10
+## Confidence Score: 8.5/10
 
-### 為什麼是 8.5？
+### Why 8.5?
 - ✅ 提供完整的文件連結
 - ✅ 清晰的實作藍圖與程式碼範例
 - ✅ 多層級的驗證步驟
