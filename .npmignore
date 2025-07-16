@@ -1,0 +1,20 @@
+# 測試
+__tests__/
+**/*.test.ts
+**/*.test.tsx
+jest.config.js
+jest.setup.js
+
+# 開發工具配置
+.eslintrc.json
+.prettierrc
+tsconfig.json
+
+# 源代碼（如果發布為 npm 包）
+src/
+
+# 其他
+.DS_Store
+*.log
+.vscode/
+.idea/

@@ -49,7 +49,9 @@
    - 更新 INITIAL.md 和 PRP 文件
 
 ### 🔄 進行中的任務
-- （無）
+1. **手動建立 Expo TypeScript 專案結構**
+   - 查看 Expo blank-typescript 模板標準結構
+   - 建立必要的配置檔案
 
 ### ⏳ 待處理的任務
 - 建立專案基礎架構（Expo + TypeScript）
