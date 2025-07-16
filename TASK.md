@@ -36,8 +36,14 @@
    - 加入 ARCHITECTURE.md 使用時機
    - 移除不存在的 PLANNING.md 引用
 
+6. **建立 DonnaAI Foundation Setup PRP**
+   - 生成完整的專案基礎設置 PRP
+   - 包含 Expo + Firebase + 認證系統
+   - 詳細的實作步驟和驗證方法
+   - 信心分數：8.5/10
+
 ### 🔄 進行中的任務
-- 建立 TASK.md 任務追蹤系統
+- （無）
 
 ### ⏳ 待處理的任務
 - 建立專案基礎架構（Expo + TypeScript）
@@ -57,7 +63,8 @@
 ---
 
 ## 下一步行動計劃
-1. 初始化 Expo 專案
-2. 設定 Firebase 服務
-3. 建立基礎 UI 架構
-4. 實作第一個核心功能（建議從會議錄音開始）
+1. 執行 Foundation Setup PRP：`/execute-prp PRPs/donnaai-foundation-setup.md`
+2. 初始化 Expo 專案與 Firebase 設定
+3. 實作認證系統與樹狀權限
+4. 建立基礎 UI 架構（Notion 風格）
+5. 完成後進入下一階段：會議錄音功能
