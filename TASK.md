@@ -48,13 +48,17 @@
    - 加入高效能資料渲染元件（FlashList）
    - 更新 INITIAL.md 和 PRP 文件
 
-### 🔄 進行中的任務
-1. **手動建立 Expo TypeScript 專案結構**
+8. **手動建立 Expo TypeScript 專案結構**
    - 查看 Expo blank-typescript 模板標準結構
-   - 建立必要的配置檔案
+   - 建立所有必要的配置檔案（package.json、tsconfig.json、App.tsx、app.json、babel.config.js）
+   - 設定 TypeScript 路徑別名和模組解析器
+   - 建立專案目錄結構（src/、assets/）
+   - 配置 ESLint、Prettier、Jest 測試環境
+
+### 🔄 進行中的任務
+- （無）
 
 ### ⏳ 待處理的任務
-- 建立專案基礎架構（Expo + TypeScript）
 - 設定 Firebase 專案
 - 實作認證系統
 - 開發會議錄音功能
@@ -71,8 +75,9 @@
 ---
 
 ## 下一步行動計劃
-1. 執行 Foundation Setup PRP：`/execute-prp PRPs/donnaai-foundation-setup.md`
-2. 初始化 Expo 專案與 Firebase 設定
+1. 安裝 npm 依賴項：`npm install`
+2. 設定 Firebase 專案與環境變數
+3. 執行 Foundation Setup PRP：`/execute-prp PRPs/donnaai-foundation-setup.md`
 3. 實作認證系統與樹狀權限
 4. 建立基礎 UI 架構（Notion 風格）
 5. 完成後進入下一階段：會議錄音功能
