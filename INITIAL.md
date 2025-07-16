@@ -13,13 +13,61 @@
 
 ## EXAMPLES:
 
-- `examples/multi-ai-provider/` - 多 AI 服務商整合範例
-- `examples/firebase-auth-roles/` - Firebase 樹狀權限管理
-- `examples/audio-processing/` - 錄音上傳與處理流程
-- `examples/usage-tracking/` - 使用量追蹤與計費邏輯
-- `examples/notion-ui-kit/` - Notion 風格 UI 元件
-- `examples/data-import/` - CSV 解析與 CRM 資料導入範例
-- `examples/crm-integration/` - 常見 CRM API 整合模式
+### Firebase 樹狀權限管理範例：
+```typescript
+// 檢查用戶是否為團隊主管
+function isManagerOfTeam(userId: string, teamId: string) {
+  const userDoc = await getDoc(doc(db, 'users', userId));
+  const userData = userDoc.data();
+  return userData.role === 'manager' && userData.teams.includes(teamId);
+}
+```
+
+### AI 會議分析 Cloud Function 範例：
+```typescript
+export const analyzeMeetingContent = onDocumentUpdated(
+  'meetings/{meetingId}',
+  async (event) => {
+    const transcription = event.data?.after.data()?.transcription;
+    if (!transcription) return;
+    
+    const analysis = await analyzeWithClaude(transcription);
+    // 更新會議文檔與客戶資料
+  }
+);
+```
+
+### CSV 資料導入範例：
+```typescript
+async function importCustomersFromCSV(file: File) {
+  const batch = writeBatch(db);
+  const rows = await parseCSV(file);
+  
+  rows.forEach((row) => {
+    const customerRef = doc(collection(db, 'customers'));
+    batch.set(customerRef, {
+      ...mapCSVToCustomer(row),
+      importedAt: serverTimestamp(),
+      organizationId: currentOrg.id
+    });
+  });
+  
+  await batch.commit();
+}
+```
+
+### Notion 風格 UI 元件範例：
+```tsx
+<Card style={notionStyles.card}>
+  <HStack space={3} alignItems="center">
+    <Avatar size="sm" source={{ uri: customer.avatar }} />
+    <VStack flex={1}>
+      <Text style={notionStyles.title}>{customer.name}</Text>
+      <Text style={notionStyles.subtitle}>{customer.company}</Text>
+    </VStack>
+  </HStack>
+</Card>
+```
 
 ## DOCUMENTATION:
 
@@ -28,6 +76,7 @@
 - 多 AI 整合：LangChain.js 或自建 adapter pattern
 - 音訊處理：React Native Audio + Cloud Functions
 - 訂閱計費：Revenue Cat 或 Stripe Billing
+- 詳細技術架構：請參考 ARCHITECTURE.md
 
 ## OTHER CONSIDERATIONS:
 
@@ -68,3 +117,27 @@
 - 環境變數：.env.example 需包含所有服務配置
 - UI/UX：參考 Notion 的簡潔設計風格
 - 推播通知：支援 iOS/Android 雙平台
+
+### 技術架構
+- **前端**：Expo + React Native + TypeScript + NativeBase
+- **後端**：Firebase (Firestore + Auth + Storage + Cloud Functions)
+- **狀態管理**：Zustand + Firestore 實時監聽
+- **AI 整合**：
+  - Claude API (主要) via Cloud Functions
+  - Google Cloud Speech-to-Text (中文語音識別)
+  - OpenAI API (備用)
+- **關鍵架構決策**：
+  - NoSQL 文檔資料庫適合樹狀權限結構
+  - Cloud Functions 處理 AI 呼叫避免暴露 API Keys
+  - Firebase Offline Persistence 支援離線使用
+  - NativeBase 可快速實現 Notion 風格 UI
+
+### 專案結構（簡化版）
+```
+src/
+├── components/     # UI 元件
+├── screens/        # 頁面
+├── services/       # Firebase & AI 服務
+├── stores/         # Zustand 狀態管理
+└── types/          # TypeScript 類型定義
+```
