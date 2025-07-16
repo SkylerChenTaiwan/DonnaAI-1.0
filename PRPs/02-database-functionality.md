@@ -54,6 +54,9 @@ description: |
 - [ ] 任務資料庫支援三種狀態管理（有時間、無時間、待定）
 - [ ] 實作跨資料庫關聯查詢
 - [ ] 權限系統控制自訂欄位定義權限
+- [ ] AI 欄位解釋系統能正確處理使用者描述
+- [ ] AI 能從紀錄中自動提取並填入客戶欄位
+- [ ] 自訂欄位支援 AI 解釋和自動填入
 - [ ] 單元測試覆蓋率 > 80%
 - [ ] 通過所有 TypeScript 類型檢查
 
@@ -111,7 +114,8 @@ src/
 │   ├── user.ts          # 擴充 User 類型
 │   ├── custom-fields.ts # 新增：自訂欄位類型
 │   ├── record.ts        # 新增：紀錄類型（取代 MeetingDoc）
-│   └── task.ts          # 新增：任務類型
+│   ├── task.ts          # 新增：任務類型
+│   └── field-interpretations.ts # 新增：欄位解釋系統
 ├── services/
 │   └── firebase/
 │       ├── config.ts    
@@ -120,7 +124,8 @@ src/
 │       ├── customers.ts   # 新增：客戶 CRUD
 │       ├── records.ts     # 新增：紀錄 CRUD
 │       ├── tasks.ts       # 新增：任務 CRUD
-│       └── custom-fields.ts # 新增：自訂欄位管理
+│       ├── custom-fields.ts # 新增：自訂欄位管理
+│       └── ai-field-processor.ts # 新增：AI 欄位處理服務
 ├── stores/
 │   ├── authStore.ts
 │   ├── customerStore.ts  # 新增：客戶狀態管理
@@ -169,6 +174,22 @@ interface CustomFieldDefinition {
   permissions: {
     canEdit: string[];         // 可編輯的角色或使用者 ID
   };
+  // AI 欄位理解系統
+  aiFieldInterpretation?: {
+    userDescription: string;       // 使用者輸入的欄位說明
+    aiProcessedDescription: string; // AI 處理後的結構化說明
+    extractionRules?: string[];    // AI 提取規則
+    examples?: string[];           // 範例值
+    synonyms?: string[];           // 同義詞（AI 辨識用）
+  };
+}
+
+// AI 欄位對應結果
+interface AIFieldMapping {
+  fieldKey: string;
+  confidence: number;          // 0-1 的信心分數
+  extractedValue: any;
+  reason?: string;            // AI 判斷原因
 }
 
 // 紀錄類型 (src/types/record.ts)
@@ -187,6 +208,13 @@ interface RecordDoc extends FirestoreDoc {
   aiActionItems?: string[];    // AI 提取的行動項目
   status: 'draft' | 'processing' | 'completed';
   customFields?: Record<string, any>;  // 自訂欄位值
+  // AI 欄位自動填入結果
+  aiFieldMappings?: AIFieldMapping[];  // AI 建議的欄位對應
+  aiProcessingMetadata?: {
+    processedAt: Timestamp;
+    modelUsed: string;
+    totalConfidence: number;
+  };
   teamId: string;
   organizationId: string;
 }
@@ -222,6 +250,23 @@ interface CustomerDoc extends FirestoreDoc {
   tags?: string[];                     // 標籤
   lastContactDate?: Timestamp;         // 最後聯絡日期
   nextFollowUpDate?: Timestamp;        // 下次跟進日期
+  // AI 自動更新追蹤
+  aiAutoUpdates?: {
+    lastUpdated: Timestamp;
+    updatedFields: string[];           // 哪些欄位被 AI 更新過
+    updateSource: string;              // 來源紀錄 ID
+  };
+}
+
+// 系統預設欄位解釋 (src/types/field-interpretations.ts)
+interface SystemFieldInterpretation {
+  entityType: 'customer' | 'record' | 'task';
+  fieldKey: string;
+  fieldName: string;
+  aiDescription: string;               // 給 AI 的欄位說明
+  extractionHints: string[];           // 提取提示
+  dataType: string;
+  examples: string[];
 }
 ```
 
@@ -233,15 +278,24 @@ tasks:
     name: 建立和擴充類型定義
     dependencies: []
     description: |
-      建立新的類型檔案（custom-fields.ts, record.ts, task.ts）
+      建立新的類型檔案（custom-fields.ts, record.ts, task.ts, field-interpretations.ts）
       擴充現有的 User 和 CustomerDoc 類型
+      加入 AI 欄位解釋相關類型
+      
+  - id: implement-field-interpretations
+    name: 實作欄位解釋系統
+    dependencies: [setup-types]
+    description: |
+      建立系統預設欄位解釋對照表
+      實作 AI 處理使用者欄位描述的功能
       
   - id: implement-custom-fields-service
     name: 實作自訂欄位服務
-    dependencies: [setup-types]
+    dependencies: [implement-field-interpretations]
     description: |
       建立 src/services/firebase/custom-fields.ts
       實作自訂欄位的 CRUD 操作和權限檢查
+      加入 AI 欄位解釋處理
       
   - id: implement-permissions-extension
     name: 擴充權限系統
@@ -257,12 +311,20 @@ tasks:
       建立 src/services/firebase/customers.ts
       實作客戶 CRUD 和自訂欄位處理
       
+  - id: implement-ai-field-processor
+    name: 實作 AI 欄位處理服務
+    dependencies: [implement-custom-fields-service]
+    description: |
+      建立 src/services/firebase/ai-field-processor.ts
+      實作 AI 理解欄位描述和自動填入邏輯
+      
   - id: implement-records-service
     name: 實作紀錄服務
-    dependencies: [implement-custom-fields-service]
+    dependencies: [implement-ai-field-processor]
     description: |
       建立 src/services/firebase/records.ts
       實作紀錄 CRUD、音訊上傳和 AI 處理觸發
+      整合 AI 欄位自動填入功能
       
   - id: implement-tasks-service
     name: 實作任務服務
@@ -291,6 +353,8 @@ tasks:
     description: |
       建立 functions/src/audio-processing.ts
       實作音訊轉文字和 AI 分析功能
+      建立 functions/src/field-extraction.ts
+      實作 AI 欄位提取和自動填入
       
   - id: implement-calendar-sync
     name: 實作 Google Calendar 同步
@@ -388,6 +452,26 @@ tasks:
    - subscribeToCustomers(teamId: string, callback: (customers: CustomerDoc[]) => void)
      - 設置 onSnapshot 監聽器
      - 返回取消訂閱函數
+```
+
+#### Task: implement-ai-field-processor
+```
+1. 建立 src/services/firebase/ai-field-processor.ts
+
+2. 實作 AI 欄位處理函數：
+   - extractFieldsFromRecord(record: RecordDoc, fieldDefinitions: CustomFieldDefinition[])
+     - 分析紀錄內容（轉錄文字、AI 摘要等）
+     - 根據欄位定義提取值
+     - 返回 AIFieldMapping 陣列
+   
+   - autoFillCustomerFields(customerId: string, fieldMappings: AIFieldMapping[])
+     - 檢查欄位對應的信心分數
+     - 更新客戶的自訂欄位
+     - 記錄 AI 更新資訊
+   
+   - generateFieldSuggestions(content: string, fieldDef: CustomFieldDefinition)
+     - 根據內容和欄位定義生成建議值
+     - 返回多個可能的值和信心分數
 ```
 
 ### Integration Points
