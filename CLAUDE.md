@@ -1,5 +1,12 @@
 ### 🔄 Project Awareness & Context
 - **Always read `PLANNING.md`** at the start of a new conversation to understand the project's architecture, goals, style, and constraints.
+- **Check `INITIAL.md`** for project overview and feature requirements.
+- **Consult `ARCHITECTURE.md`** when:
+  - Implementing new features that need technical specifications
+  - Working with Firebase services (Auth, Firestore, Storage, Functions)
+  - Setting up AI integrations or Cloud Functions
+  - Implementing UI components following Notion style
+  - Understanding the project structure and dependencies
 - **Check `TASK.md`** before starting a new task. If the task isn't listed, add it with a brief description and today's date.
 - **Consider whole project impact** before making changes - avoid tunnel vision.
 - **Check version compatibility** in requirements.txt/package.json before updates.
