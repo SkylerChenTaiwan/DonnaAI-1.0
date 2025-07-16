@@ -5,6 +5,7 @@
   1. **AI 會議記錄**：錄音轉文字，自動擷取重點並同步 CRM
   2. **智能報表查詢**：主管用自然語言即時查詢業務數據
   3. **業務小工具平台**：產業特定工具的 WebApp 集合
+  4. **客戶資料導入**：支援從現有 CRM 系統或 CSV 檔案批量導入客戶資料
 - 技術架構：TypeScript + Expo + Firebase
 - AI 服務：支援 OpenAI、Claude、Gemini 多模型切換
 - 雙平台：iOS/Android App + Web Dashboard（業務員和主管都可使用兩種平台）
@@ -17,6 +18,8 @@
 - `examples/audio-processing/` - 錄音上傳與處理流程
 - `examples/usage-tracking/` - 使用量追蹤與計費邏輯
 - `examples/notion-ui-kit/` - Notion 風格 UI 元件
+- `examples/data-import/` - CSV 解析與 CRM 資料導入範例
+- `examples/crm-integration/` - 常見 CRM API 整合模式
 
 ## DOCUMENTATION:
 
@@ -49,6 +52,11 @@
 - 報表查詢：即時處理
 - CRM 同步：定時批次（每小時一次）
 - 錄音存儲：原檔保留 30 天，轉錄文字永久保存
+- 客戶資料導入：
+  - 支援 CSV 檔案上傳（需提供對應欄位設定）
+  - 支援常見 CRM API 整合（Salesforce、HubSpot、Zoho 等）
+  - 批量導入時顯示進度和錯誤報告
+  - 重複資料偵測與合併策略
 
 ### 安全與備份
 - Firebase 內建加密存儲
