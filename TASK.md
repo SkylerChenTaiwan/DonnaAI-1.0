@@ -42,6 +42,12 @@
    - 詳細的實作步驟和驗證方法
    - 信心分數：8.5/10
 
+7. **更新為 CRM 資料密集型 UI 架構**
+   - 將 UI 從 NativeBase 改為 Tamagui + React Table
+   - 新增多檢視模式支援（表格、看板、日曆、列表）
+   - 加入高效能資料渲染元件（FlashList）
+   - 更新 INITIAL.md 和 PRP 文件
+
 ### 🔄 進行中的任務
 - （無）
 
