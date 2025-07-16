@@ -1,3 +1,16 @@
+### 🌐 語言要求
+- **所有溝通必須使用繁體中文**：
+  - 與使用者的對話
+  - 程式碼註解
+  - 文件內容（.md 檔案）
+  - PRP 文件
+  - Git commit 訊息
+  - 錯誤訊息和日誌
+- **例外情況**：
+  - 程式碼本身（變數名、函數名等）
+  - 技術專有名詞（如 Firebase、TypeScript）
+  - 引用的外部文件連結
+
 ### 🔄 Project Awareness & Context
 - **Check `INITIAL.md`** at the start of a new conversation for project overview and feature requirements.
 - **Consult `ARCHITECTURE.md`** when:
