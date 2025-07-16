@@ -34,6 +34,11 @@
     - 1 failure case
 
 ### ✅ Task Completion & Git Management
+- **IMPORTANT: Create `TASK.md` if it doesn't exist** at the beginning of any development session.
+- **Update `TASK.md` IMMEDIATELY** when:
+  - Starting any new task (mark as 🔄 進行中)
+  - Completing any task (mark as ✅ 完成)
+  - Discovering new TODOs (add to ⏳ 待處理)
 - **Mark completed tasks in `TASK.md`** immediately after finishing them.
 - **MANDATORY: Commit all code changes to Git** with descriptive messages:
   ```
