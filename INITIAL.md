@@ -56,23 +56,38 @@ async function importCustomersFromCSV(file: File) {
 }
 ```
 
-### Notion 風格 UI 元件範例：
+### CRM 資料表格範例：
 ```tsx
-<Card style={notionStyles.card}>
-  <HStack space={3} alignItems="center">
-    <Avatar size="sm" source={{ uri: customer.avatar }} />
-    <VStack flex={1}>
-      <Text style={notionStyles.title}>{customer.name}</Text>
-      <Text style={notionStyles.subtitle}>{customer.company}</Text>
-    </VStack>
-  </HStack>
-</Card>
+// 使用 @tanstack/react-table 實現類 Notion 表格
+<DataTable
+  data={customers}
+  columns={[
+    { header: '客戶名稱', accessor: 'name', enableSorting: true },
+    { header: '公司', accessor: 'company', enableFiltering: true },
+    { header: '最後聯絡', accessor: 'lastContact', cell: DateCell },
+    { header: '交易狀態', accessor: 'dealStatus', cell: StatusBadge },
+    { header: '預估金額', accessor: 'dealSize', cell: CurrencyCell }
+  ]}
+  enableRowSelection
+  enableColumnResizing
+  onRowEdit={handleInlineEdit}
+/>
+
+// 多檢視切換
+<ViewSwitcher
+  views={['table', 'kanban', 'calendar', 'list']}
+  currentView={currentView}
+  onViewChange={setCurrentView}
+/>
 ```
 
 ## DOCUMENTATION:
 
 - Expo + Firebase：https://docs.expo.dev/guides/using-firebase/
 - Firebase 樹狀權限：Custom Claims + Firestore Rules
+- Tamagui UI 框架：https://tamagui.dev/docs/intro/installation
+- React Table：https://tanstack.com/table/latest/docs/introduction
+- FlashList 高效能列表：https://shopify.github.io/flash-list/
 - 多 AI 整合：LangChain.js 或自建 adapter pattern
 - 音訊處理：React Native Audio + Cloud Functions
 - 訂閱計費：Revenue Cat 或 Stripe Billing
@@ -115,13 +130,22 @@ async function importCustomersFromCSV(file: File) {
 
 ### 開發需求
 - 環境變數：.env.example 需包含所有服務配置
-- UI/UX：參考 Notion 的簡潔設計風格
+- UI/UX：CRM 資料密集型介面，參考 Notion Database、Airtable
+  - 多檢視模式：表格、看板、日曆、列表
+  - 強大的資料篩選、排序、搜尋功能
+  - 支援大量資料的高效能渲染
+  - 行內編輯和批量操作
 - 推播通知：支援 iOS/Android 雙平台
 
 ### 技術架構
-- **前端**：Expo + React Native + TypeScript + NativeBase
+- **前端**：Expo + React Native + TypeScript + Tamagui
 - **後端**：Firebase (Firestore + Auth + Storage + Cloud Functions)
 - **狀態管理**：Zustand + Firestore 實時監聽
+- **資料呈現**：
+  - @tanstack/react-table (表格功能)
+  - FlashList (高效能列表)
+  - Victory Native (圖表)
+  - react-native-draggable-flatlist (看板拖放)
 - **AI 整合**：
   - Claude API (主要) via Cloud Functions
   - Google Cloud Speech-to-Text (中文語音識別)
@@ -130,7 +154,8 @@ async function importCustomersFromCSV(file: File) {
   - NoSQL 文檔資料庫適合樹狀權限結構
   - Cloud Functions 處理 AI 呼叫避免暴露 API Keys
   - Firebase Offline Persistence 支援離線使用
-  - NativeBase 可快速實現 Notion 風格 UI
+  - Tamagui 提供專業商務 UI 基礎
+  - 組件化的資料檢視系統支援多種呈現方式
 
 ### 專案結構（簡化版）
 ```

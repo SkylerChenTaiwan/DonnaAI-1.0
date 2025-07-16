@@ -18,9 +18,10 @@ description: |
 - 跨平台應用程式（iOS/Android/Web）使用 Expo
 - Firebase 後端服務（Auth、Firestore、Storage、Functions）
 - 樹狀階層權限系統
-- Notion 風格 UI 使用 NativeBase
+- CRM 資料密集型 UI 使用 Tamagui + React Table
 - TypeScript 確保型別安全
 - Zustand 狀態管理搭配 Firestore 即時同步
+- 多檢視模式（表格、看板、日曆、列表）
 
 ## Why
 - **商業價值**：讓業務團隊專注於溝通/策略而非行政工作
@@ -34,14 +35,16 @@ description: |
 - 樹狀組織權限結構
 - 即時資料同步
 - 離線優先架構
-- Notion 風格簡潔 UI
+- CRM 專業介面（類似 Notion Database、Airtable）
+- 支援大量資料的高效能渲染
 
 ### Success Criteria
 - [ ] Expo 專案在 iOS/Android/Web 上執行
 - [ ] Firebase Auth 支援 email/password 登入
 - [ ] Firestore 連接並設定 Security Rules
 - [ ] 樹狀權限系統正常運作
-- [ ] Notion 風格 UI 主題套用
+- [ ] Tamagui UI 框架整合完成
+- [ ] 資料表格元件可排序、篩選、編輯
 - [ ] TypeScript 嚴格模式無錯誤
 - [ ] 基本導航結構就位
 
@@ -59,8 +62,11 @@ description: |
 - url: https://firebase.google.com/docs/firestore/security/rules-structure
   why: 樹狀權限的 Security Rules
   
-- url: https://docs.nativebase.io/setup-provider
-  why: NativeBase 設置和 Notion 風格 UI 主題
+- url: https://tamagui.dev/docs/intro/installation
+  why: Tamagui 設置和商務 UI 主題
+  
+- url: https://tanstack.com/table/latest/docs/introduction
+  why: React Table 實現 CRM 資料表格功能
   
 - url: https://github.com/pmndrs/zustand
   why: 狀態管理設置和 Firebase 整合模式
@@ -92,7 +98,8 @@ DonnaAI-1.0/
 ├── src/
 │   ├── components/     # 可重用 UI 元件
 │   │   ├── common/     # Layout、LoadingSpinner、ErrorBoundary
-│   │   └── auth/       # LoginForm、RoleSelector
+│   │   ├── auth/       # LoginForm、RoleSelector
+│   │   └── data/       # DataTable、DataView、ViewSwitcher
 │   ├── screens/        # 畫面元件
 │   │   ├── auth/       # LoginScreen、RegisterScreen
 │   │   └── dashboard/  # SalespersonDashboard、ManagerDashboard
@@ -123,8 +130,15 @@ DonnaAI-1.0/
 // 使用 Firebase JS SDK（非 React Native Firebase）以確保 Expo 相容性
 // 範例：import { initializeApp } from 'firebase/app' 而非 @react-native-firebase/app
 
-// 重要：NativeBase 需要用 NativeBaseProvider 包裝應用程式
-// 必須為 Web 平台支援配置 SSR
+// 重要：Tamagui 需要特殊的配置步驟
+// 必須安裝 @tamagui/config 和設置 tamagui.config.ts
+// Web 需要額外的 webpack 配置
+
+// 重要：React Table 在 React Native 需要自建表格元件
+// @tanstack/react-table 只提供邏輯，UI 需要自己實作
+
+// 重要：大量資料渲染使用 FlashList 替代 FlatList
+// 可提升 10x 效能，特別是長列表
 
 // 重要：Expo Web 需要特定的 metro.config.js 來支援 Firebase
 // 參見：https://github.com/expo/expo/issues/17270
@@ -203,14 +217,18 @@ export interface CustomerDoc extends FirestoreDoc {
 修改 package.json：
   - 新增相依套件：
     - firebase: ^10.7.0
-    - native-base: ^3.4.0
-    - react-native-svg: (expo install)
+    - tamagui: ^1.79.0
+    - @tamagui/config: ^1.79.0
+    - @tanstack/react-table: ^8.11.0
+    - @shopify/flash-list: ^1.6.0
     - zustand: ^4.4.0
     - react-navigation 套件
     - react-hook-form: ^7.48.0
     - zod: ^3.22.0
+    - victory-native: ^36.6.0
+    - react-native-draggable-flatlist: ^4.0.0
   - 執行：npm install
-  - 執行：npx expo install react-native-svg react-native-safe-area-context
+  - 執行：npx expo install react-native-svg react-native-safe-area-context react-native-reanimated
 
 任務 3：配置 Firebase 專案
 建立 firebase.json：
@@ -223,13 +241,18 @@ export interface CustomerDoc extends FirestoreDoc {
   - 設置 Firebase 初始化
   - 處理 Web/Native 平台差異
 
-任務 4：設置 NativeBase 與 Notion 主題
-建立 src/theme/index.ts：
-  - 複製 ARCHITECTURE.md 中的主題配置
-  - 自訂顏色、字型、元件
+任務 4：設置 Tamagui 與 CRM UI 元件
+建立 tamagui.config.ts：
+  - 設置 Tamagui 主題配置
+  - 定義商務風格的設計令牌
+建立 src/components/data/DataTable.tsx：
+  - 實作 React Table 的表格元件
+  - 支援排序、篩選、行內編輯
+建立 src/components/data/ViewSwitcher.tsx：
+  - 實作多檢視模式切換
 修改 App.tsx：
-  - 使用 NativeBaseProvider 包裝
-  - 為 Web 新增 SSR 配置
+  - 使用 TamaguiProvider 包裝
+  - 配置主題
 
 任務 5：實作認證服務
 建立 src/services/firebase/auth.ts：
@@ -549,7 +572,9 @@ npx expo start
 - [ ] Firebase Auth 運作：可以建立帳號並登入
 - [ ] Firestore 已連接：註冊時建立使用者文件
 - [ ] 導航運作：認證流程正確重定向
-- [ ] Notion 主題已套用：UI 符合設計
+- [ ] Tamagui 主題已套用：UI 符合商務風格
+- [ ] 資料表格功能：可排序、篩選、編輯
+- [ ] 多檢視模式：表格/看板/列表切換正常
 - [ ] 樹狀權限：主管可以看到團隊成員
 - [ ] 環境變數：.env.example 記錄所有變數
 
@@ -576,20 +601,24 @@ config.resolver.sourceExts.push('cjs');
 module.exports = config;
 ```
 
-### Issue: NativeBase SSR warnings on Web
-```tsx
-// 解決方案：在 App.tsx 中配置 SSR
-import { NativeBaseProvider, SSRProvider } from 'native-base';
-
-export default function App() {
-  return (
-    <SSRProvider>
-      <NativeBaseProvider>
-        {/* 您的應用程式 */}
-      </NativeBaseProvider>
-    </SSRProvider>
-  );
-}
+### Issue: Tamagui setup in Expo
+```javascript
+// 解決方案：在 babel.config.js 加入
+module.exports = function(api) {
+  api.cache(true);
+  return {
+    presets: ['babel-preset-expo'],
+    plugins: [
+      [
+        '@tamagui/babel-plugin',
+        {
+          components: ['tamagui'],
+          config: './tamagui.config.ts'
+        }
+      ]
+    ]
+  };
+};
 ```
 
 ### Issue: TypeScript path aliases not working
