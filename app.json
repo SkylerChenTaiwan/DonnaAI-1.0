@@ -28,13 +28,25 @@
       "versionCode": 1
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
     },
-    "plugins": [],
+    "plugins": [
+      "expo-font",
+      "expo-splash-screen"
+    ],
     "extra": {
       "eas": {
         "projectId": "your-project-id"
-      }
-    }
+      },
+      "firebaseApiKey": "",
+      "firebaseAuthDomain": "",
+      "firebaseProjectId": "",
+      "firebaseStorageBucket": "",
+      "firebaseMessagingSenderId": "",
+      "firebaseAppId": ""
+    },
+    "scheme": "donnaai",
+    "description": "DonnaAI - 您的 AI 業務助理平台，提供會議記錄、客戶管理、智能分析等功能。"
   }
 }

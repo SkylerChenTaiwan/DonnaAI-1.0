@@ -1,0 +1,129 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 組織存取規則
+    match /organizations/{orgId} {
+      allow read, write: if isOrganizationMember(orgId);
+    }
+    
+    // 使用者檔案存取規則
+    match /users/{userId} {
+      // 使用者可以讀寫自己的檔案
+      allow read, write: if request.auth.uid == userId;
+      
+      // 同組織成員可以讀取（非敏感資訊）
+      allow read: if isOrganizationMember(getUserOrganization(userId));
+      
+      // 主管可以讀取其管理團隊的成員資料
+      allow read: if isManagerOfUser(userId);
+    }
+    
+    // 團隊存取規則
+    match /teams/{teamId} {
+      // 團隊成員可以讀取團隊資訊
+      allow read: if isTeamMember(teamId);
+      
+      // 團隊主管可以修改團隊資訊
+      allow write: if isTeamManager(teamId);
+      
+      // 組織管理員可以管理所有團隊
+      allow read, write: if isOrgAdmin();
+    }
+    
+    // 客戶資料存取規則
+    match /customers/{customerId} {
+      // 負責業務員可以讀寫
+      allow read, write: if isAssignedSalesperson(customerId);
+      
+      // 團隊主管可以讀取其團隊的客戶資料
+      allow read: if isManagerOfCustomer(customerId);
+      
+      // 組織管理員可以讀取所有客戶
+      allow read: if isOrgAdmin();
+    }
+    
+    // 會議記錄存取規則
+    match /meetings/{meetingId} {
+      // 會議參與者可以讀寫
+      allow read, write: if isMeetingAttendee(meetingId);
+      
+      // 團隊主管可以讀取其團隊的會議記錄
+      allow read: if isManagerOfMeeting(meetingId);
+    }
+    
+    // AI 使用記錄（僅供查詢統計）
+    match /ai_usage/{usageId} {
+      allow read: if request.auth.uid == resource.data.userId 
+                  || isOrgAdmin();
+      allow create: if request.auth.uid != null;
+    }
+    
+    // 輔助函數
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOrganizationMember(orgId) {
+      return isAuthenticated() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.organizationId == orgId;
+    }
+    
+    function getUserOrganization(userId) {
+      return get(/databases/$(database)/documents/users/$(userId)).data.organizationId;
+    }
+    
+    function isTeamMember(teamId) {
+      return isAuthenticated() && 
+             request.auth.uid in get(/databases/$(database)/documents/teams/$(teamId)).data.memberIds;
+    }
+    
+    function isTeamManager(teamId) {
+      return isAuthenticated() && 
+             request.auth.uid in get(/databases/$(database)/documents/teams/$(teamId)).data.managerIds;
+    }
+    
+    function isManagerOfUser(userId) {
+      let userTeams = get(/databases/$(database)/documents/users/$(userId)).data.teamIds;
+      let currentUserManagedTeams = get(/databases/$(database)/documents/users/$(request.auth.uid)).data.managedTeamIds;
+      return isAuthenticated() && 
+             userTeams.hasAny(currentUserManagedTeams);
+    }
+    
+    function isAssignedSalesperson(customerId) {
+      return isAuthenticated() && 
+             get(/databases/$(database)/documents/customers/$(customerId)).data.assignedTo == request.auth.uid;
+    }
+    
+    function isManagerOfCustomer(customerId) {
+      let customerTeamId = get(/databases/$(database)/documents/customers/$(customerId)).data.teamId;
+      return isTeamManager(customerTeamId);
+    }
+    
+    function isMeetingAttendee(meetingId) {
+      return isAuthenticated() && 
+             request.auth.uid in get(/databases/$(database)/documents/meetings/$(meetingId)).data.attendeeIds;
+    }
+    
+    function isManagerOfMeeting(meetingId) {
+      let meetingAttendees = get(/databases/$(database)/documents/meetings/$(meetingId)).data.attendeeIds;
+      let currentUserManagedTeams = get(/databases/$(database)/documents/users/$(request.auth.uid)).data.managedTeamIds;
+      
+      // 檢查會議參與者是否屬於當前使用者管理的團隊
+      return exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+             currentUserManagedTeams != null &&
+             meetingAttendees.hasAny(getTeamMembers(currentUserManagedTeams));
+    }
+    
+    function getTeamMembers(teamIds) {
+      // 這是一個簡化版本，實際實作可能需要更複雜的邏輯
+      return teamIds;
+    }
+    
+    function isOrgAdmin() {
+      return isAuthenticated() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+  }
+}
