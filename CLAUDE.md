@@ -105,3 +105,16 @@
   - Refactoring: `/docs/plans/refactoring/[component].md`
 - **Get user approval** on the plan before proceeding
 - **Link plan documents in TASK.md** when adding related tasks
+
+### 📝 PRP 管理流程
+- **PRP 檔案命名規則**：
+  - 新建 PRP 檔案必須以編號開始：`01-feature-name.md`、`02-another-feature.md`
+  - 編號從 01 開始，按建立順序遞增
+  - 檔名使用英文，內容使用繁體中文
+- **PRP 執行狀態標記**：
+  - 執行完成後在編號後加上 `v-`：`01v-feature-name.md`
+  - 這樣可以快速識別哪些 PRP 已執行完成
+  - 未執行的 PRP 保持原編號：`02-another-feature.md`
+- **PRP 目錄管理**：
+  - 定期檢查 PRPs/ 資料夾中的檔案狀態
+  - 可以在 PRPs/ 資料夾建立 README.md 列出所有 PRP 和其狀態
