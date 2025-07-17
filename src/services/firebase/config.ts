@@ -3,11 +3,12 @@
  */
 
 import { initializeApp, getApps } from 'firebase/app';
-import { getAuth, connectAuthEmulator } from 'firebase/auth';
+import { initializeAuth, getAuth, connectAuthEmulator, getReactNativePersistence } from 'firebase/auth';
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
 import { environmentManager, getFirebaseConfig } from '../../config/environment';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // 從環境管理器取得 Firebase 配置
 const firebaseConfig = getFirebaseConfig();
@@ -21,7 +22,18 @@ if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
 // 只在尚未初始化時初始化 Firebase
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
-export const auth = getAuth(app);
+// 使用 initializeAuth 並設定 React Native 的持久化
+let auth;
+try {
+  auth = initializeAuth(app, {
+    persistence: getReactNativePersistence(AsyncStorage)
+  });
+} catch (error) {
+  // 如果已經初始化過，使用 getAuth
+  auth = getAuth(app);
+}
+
+export { auth };
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 export const functions = getFunctions(app);
