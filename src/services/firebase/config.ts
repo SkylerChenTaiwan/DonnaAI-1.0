@@ -7,16 +7,16 @@ import { getAuth, connectAuthEmulator } from 'firebase/auth';
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
-import Constants from 'expo-constants';
+import { environmentManager, getFirebaseConfig } from '../../config/environment';
 
-const firebaseConfig = {
-  apiKey: Constants.expoConfig?.extra?.firebaseApiKey || process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
-  authDomain: Constants.expoConfig?.extra?.firebaseAuthDomain || process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: Constants.expoConfig?.extra?.firebaseProjectId || process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: Constants.expoConfig?.extra?.firebaseStorageBucket || process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: Constants.expoConfig?.extra?.firebaseMessagingSenderId || process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: Constants.expoConfig?.extra?.firebaseAppId || process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
-};
+// 從環境管理器取得 Firebase 配置
+const firebaseConfig = getFirebaseConfig();
+
+// 驗證配置
+if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
+  console.error('Firebase 配置不完整，請檢查環境變數設定');
+  throw new Error('Firebase 配置錯誤');
+}
 
 // 只在尚未初始化時初始化 Firebase
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
@@ -27,15 +27,22 @@ export const storage = getStorage(app);
 export const functions = getFunctions(app);
 
 // 在開發環境連接到模擬器
-if (__DEV__ && !auth.config?.apiKey?.includes('demo-project')) {
+const env = environmentManager.getConfig();
+if (env.firebaseEmulators.enabled && !auth.config?.apiKey?.includes('demo-project')) {
   // 只在非 demo 專案時連接模擬器（避免重複連接錯誤）
   try {
-    connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
-    connectFirestoreEmulator(db, 'localhost', 8080);
-    connectFunctionsEmulator(functions, 'localhost', 5001);
+    connectAuthEmulator(auth, env.firebaseEmulators.authUrl, { disableWarnings: true });
+    connectFirestoreEmulator(db, env.firebaseEmulators.firestoreHost, env.firebaseEmulators.firestorePort);
+    connectFunctionsEmulator(functions, env.firebaseEmulators.functionsHost, env.firebaseEmulators.functionsPort);
+    
+    if (__DEV__) {
+      console.log('✅ Firebase 模擬器已連接');
+    }
   } catch (error) {
     // 忽略重複連接錯誤
-    console.warn('Firebase 模擬器已連接或無法連接:', error);
+    if (__DEV__) {
+      console.warn('⚠️ Firebase 模擬器連接狀態:', error);
+    }
   }
 }
 

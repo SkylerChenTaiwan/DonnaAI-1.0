@@ -7,6 +7,10 @@ export type RootStackParamList = {
   CreateCustomerModal: undefined;
   CreateRecordModal: undefined;
   CreateTaskModal: undefined;
+  // 開發者工具畫面
+  StateInspector: undefined;
+  ErrorLogs: undefined;
+  PerformanceMonitor: undefined;
 };
 
 export type MainTabParamList = {
@@ -15,4 +19,10 @@ export type MainTabParamList = {
   AddAction: undefined; // 僅用於觸發modal，不實際導航
   Tools: undefined;
   Settings: undefined;
+};
+
+export type AuthStackParamList = {
+  Login: undefined;
+  Register: undefined;
+  ForgotPassword: undefined;
 };

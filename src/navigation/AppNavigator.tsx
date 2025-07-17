@@ -13,6 +13,10 @@ import { RootStackParamList } from '@/types/navigation';
 import { CreateCustomerModal } from '@/screens/modals/CreateCustomerModal';
 import { CreateRecordModal } from '@/screens/modals/CreateRecordModal';
 import { CreateTaskModal } from '@/screens/modals/CreateTaskModal';
+import { StateInspector } from '@/components/developer/StateInspector';
+import { ErrorLogsScreen } from '@/screens/developer/ErrorLogsScreen';
+import { PerformanceMonitorScreen } from '@/screens/developer/PerformanceMonitorScreen';
+import { environmentManager } from '@/config/environment';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -75,6 +79,27 @@ export const AppNavigator: React.FC = () => {
                 options={{ title: '新增任務' }}
               />
             </Stack.Group>
+            
+            {/* 開發者工具畫面（只在開發模式顯示） */}
+            {environmentManager.isDevToolsEnabled() && (
+              <Stack.Group screenOptions={{ headerShown: true }}>
+                <Stack.Screen
+                  name="StateInspector"
+                  component={StateInspector}
+                  options={{ title: '狀態檢查工具' }}
+                />
+                <Stack.Screen
+                  name="ErrorLogs"
+                  component={ErrorLogsScreen}
+                  options={{ title: '錯誤日誌' }}
+                />
+                <Stack.Screen
+                  name="PerformanceMonitor"
+                  component={PerformanceMonitorScreen}
+                  options={{ title: '效能監控' }}
+                />
+              </Stack.Group>
+            )}
           </>
         ) : (
           <Stack.Screen
