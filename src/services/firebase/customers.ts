@@ -319,8 +319,8 @@ export async function getCustomerWithRelations(
   userId: string
 ): Promise<{
   customer: CustomerDoc;
-  relatedRecords?: any[]; // TODO: 使用 RecordDoc 類型
-  relatedTasks?: any[];   // TODO: 使用 TaskDoc 類型
+  relatedRecords?: import('../types/record').RecordDoc[];
+  relatedTasks?: import('../types/task').TaskDoc[];
   customFieldDefinitions?: CustomFieldDefinition[];
 } | null> {
   try {
@@ -342,17 +342,17 @@ export async function getCustomerWithRelations(
       'customer'
     );
     
-    // TODO: 並行查詢相關紀錄和任務
-    // const [relatedRecords, relatedTasks] = await Promise.all([
-    //   getRecordsByCustomer(customerId, userId),
-    //   getTasksByCustomer(customerId, userId)
-    // ]);
+    // 並行查詢相關紀錄和任務
+    const [relatedRecords, relatedTasks] = await Promise.all([
+      (await import('./records')).getRecordsByCustomer(customerId, userId),
+      (await import('./tasks')).getTasksByCustomer(customerId, userId)
+    ]);
     
     return {
       customer,
       customFieldDefinitions,
-      // relatedRecords,
-      // relatedTasks
+      relatedRecords,
+      relatedTasks
     };
   } catch (error) {
     console.error('獲取客戶相關資料失敗:', error);
