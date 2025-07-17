@@ -11,6 +11,7 @@ export interface FirestoreDoc {
 }
 
 export interface CustomerDoc extends FirestoreDoc {
+  id?: string;  // 文件 ID（從 Firestore 獲取時會有）
   name: string;
   company: string;
   email?: string;

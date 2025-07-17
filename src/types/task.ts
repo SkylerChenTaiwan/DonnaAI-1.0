@@ -19,6 +19,7 @@ export type TaskSource = 'manual' | 'ai_extracted' | 'calendar_sync';
 
 // 任務文件
 export interface TaskDoc extends FirestoreDoc {
+  id?: string;                         // 文件 ID（從 Firestore 獲取時會有）
   title: string;                       // 任務標題
   description?: string;                // 任務描述
   type: TaskType;                      // 任務類型

@@ -17,6 +17,7 @@ export type AIConfirmationStatus = 'pending' | 'confirmed' | 'rejected' | 'modif
 
 // 紀錄文件
 export interface RecordDoc extends FirestoreDoc {
+  id?: string;                         // 文件 ID（從 Firestore 獲取時會有）
   type: RecordType;                    // 紀錄類型
   title: string;                       // 標題
   customerIds: string[];               // 關聯客戶 IDs

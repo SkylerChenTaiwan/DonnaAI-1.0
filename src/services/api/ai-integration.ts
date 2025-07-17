@@ -3,6 +3,7 @@
  * 處理與 AI 模型的通訊，包含欄位提取、文字分析等功能
  */
 
+import { Timestamp } from 'firebase/firestore';
 import {
   AIFieldExtractionRequest,
   AIFieldExtractionResponse,
@@ -11,8 +12,7 @@ import {
 import {
   AIModel,
   AIProcessingRequest,
-  AIProcessingResponse,
-  AITaskType
+  AIProcessingResponse
 } from '../../types/ai-processing';
 
 // AI API 配置
@@ -158,7 +158,7 @@ export async function processAIRequest(
         cost: calculateCost(result.tokensUsed || 0),
         confidence: result.confidence
       },
-      processedAt: new Date(),
+      processedAt: Timestamp.now(),
       success: true
     } as AIProcessingResponse;
   } catch (error) {
@@ -174,7 +174,7 @@ export async function processAIRequest(
         tokensUsed: 0,
         cost: 0
       },
-      processedAt: new Date(),
+      processedAt: Timestamp.now(),
       success: false,
       error: error instanceof Error ? error.message : '未知錯誤'
     } as AIProcessingResponse;
@@ -361,7 +361,7 @@ async function callAIAPI(params: any): Promise<any> {
 
 // === 特定任務處理函數 ===
 
-async function processTranscription(request: AIProcessingRequest): Promise<any> {
+async function processTranscription(_request: AIProcessingRequest): Promise<any> {
   // TODO: 實作音訊轉文字
   throw new Error('音訊轉文字功能尚未實作');
 }
