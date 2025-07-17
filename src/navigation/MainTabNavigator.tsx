@@ -2,71 +2,79 @@
  * 主要標籤導航器
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import { View, StyleSheet } from 'react-native';
 import { useAuthStore } from '@/stores/authStore';
-import { SalespersonDashboard } from '@/screens/dashboard/SalespersonDashboard';
-import { ManagerDashboard } from '@/screens/dashboard/ManagerDashboard';
-import { AdminDashboard } from '@/screens/dashboard/AdminDashboard';
-import { CustomersScreen } from '@/screens/customers/CustomersScreen';
-import { MeetingsScreen } from '@/screens/meetings/MeetingsScreen';
-import { ProfileScreen } from '@/screens/profile/ProfileScreen';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { EnhancedDashboard } from '@/screens/dashboard/EnhancedDashboard';
+import { DatabaseScreen } from '@/screens/database/DatabaseScreen';
+import { ToolsScreen } from '@/screens/tools/ToolsScreen';
+import { SettingsScreen } from '@/screens/settings/SettingsScreen';
+import { ActionModal } from '@/components/common/ActionModal';
+import { MainTabParamList, RootStackParamList } from '@/types/navigation';
 
-export type MainTabParamList = {
-  Dashboard: undefined;
-  Customers: undefined;
-  Meetings: undefined;
-  Tools: undefined;
-  Profile: undefined;
-};
+type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
 export const MainTabNavigator: React.FC = () => {
   const { user } = useAuthStore();
+  const navigation = useNavigation<NavigationProp>();
+  const [showActionModal, setShowActionModal] = useState(false);
 
-  // 根據使用者角色決定儀表板元件
-  const getDashboardComponent = () => {
-    switch (user?.role) {
-      case 'admin':
-        return AdminDashboard;
-      case 'manager':
-        return ManagerDashboard;
-      case 'salesperson':
-      default:
-        return SalespersonDashboard;
+  const handleActionSelect = (action: { id: string; type: string }) => {
+    setShowActionModal(false);
+    
+    switch (action.type) {
+      case 'customer':
+        navigation.navigate('CreateCustomerModal');
+        break;
+      case 'record':
+        navigation.navigate('CreateRecordModal');
+        break;
+      case 'task':
+        navigation.navigate('CreateTaskModal');
+        break;
     }
   };
 
   return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName: keyof typeof Ionicons.glyphMap;
+    <>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName: keyof typeof Ionicons.glyphMap;
 
-          switch (route.name) {
-            case 'Dashboard':
-              iconName = focused ? 'analytics' : 'analytics-outline';
-              break;
-            case 'Customers':
-              iconName = focused ? 'people' : 'people-outline';
-              break;
-            case 'Meetings':
-              iconName = focused ? 'calendar' : 'calendar-outline';
-              break;
-            case 'Tools':
-              iconName = focused ? 'build' : 'build-outline';
-              break;
-            case 'Profile':
-              iconName = focused ? 'person' : 'person-outline';
-              break;
-            default:
-              iconName = 'ellipse-outline';
-          }
+            switch (route.name) {
+              case 'Home':
+                iconName = focused ? 'analytics' : 'analytics-outline';
+                break;
+              case 'Database':
+                iconName = focused ? 'people' : 'people-outline';
+                break;
+              case 'AddAction':
+                return (
+                  <View style={styles.addButtonContainer}>
+                    <View style={styles.addButton}>
+                      <Ionicons name="add" size={24} color="#FFFFFF" />
+                    </View>
+                  </View>
+                );
+              case 'Tools':
+                iconName = focused ? 'build' : 'build-outline';
+                break;
+              case 'Settings':
+                iconName = focused ? 'person' : 'person-outline';
+                break;
+              default:
+                iconName = 'ellipse-outline';
+            }
 
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
         tabBarActiveTintColor: '#007AFF',
         tabBarInactiveTintColor: '#8E8E93',
         tabBarStyle: {
@@ -93,50 +101,84 @@ export const MainTabNavigator: React.FC = () => {
         },
       })}
     >
-      <Tab.Screen
-        name="Dashboard"
-        component={getDashboardComponent()}
-        options={{
-          title: '儀表板',
-          headerTitle: `歡迎回來，${user?.name || ''}`,
-        }}
-      />
+        <Tab.Screen
+          name="Home"
+          component={EnhancedDashboard}
+          options={{
+            title: '首頁',
+            headerTitle: '首頁',
+          }}
+        />
 
-      <Tab.Screen
-        name="Customers"
-        component={CustomersScreen}
-        options={{
-          title: '客戶',
-          headerTitle: '客戶管理',
-        }}
-      />
+        <Tab.Screen
+          name="Database"
+          component={DatabaseScreen}
+          options={{
+            title: '資料庫',
+            headerTitle: '資料庫',
+          }}
+        />
 
-      <Tab.Screen
-        name="Meetings"
-        component={MeetingsScreen}
-        options={{
-          title: '會議',
-          headerTitle: '會議記錄',
-        }}
-      />
+        <Tab.Screen
+          name="AddAction"
+          component={EmptyComponent}
+          options={{
+            title: '',
+            tabBarLabel: () => null,
+            tabBarOnPress: (e) => {
+              e.preventDefault();
+              setShowActionModal(true);
+            },
+          }}
+        />
 
-      <Tab.Screen
-        name="Tools"
-        component={ProfileScreen} // 暫時使用 ProfileScreen，稍後會建立 ToolsScreen
-        options={{
-          title: '工具',
-          headerTitle: '業務工具',
-        }}
-      />
+        <Tab.Screen
+          name="Tools"
+          component={ToolsScreen}
+          options={{
+            title: '小工具',
+            headerTitle: '小工具',
+          }}
+        />
 
-      <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{
-          title: '個人',
-          headerTitle: '個人資料',
-        }}
+        <Tab.Screen
+          name="Settings"
+          component={SettingsScreen}
+          options={{
+            title: '設定',
+            headerTitle: '設定',
+          }}
+        />
+      </Tab.Navigator>
+
+      <ActionModal
+        visible={showActionModal}
+        onClose={() => setShowActionModal(false)}
+        onAction={handleActionSelect}
       />
-    </Tab.Navigator>
+    </>
   );
 };
+
+// 空元件用於 AddAction tab
+const EmptyComponent: React.FC = () => null;
+
+const styles = StyleSheet.create({
+  addButtonContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  addButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#007AFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+  },
+});

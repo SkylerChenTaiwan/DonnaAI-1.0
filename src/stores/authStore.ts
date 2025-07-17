@@ -14,11 +14,13 @@ interface AuthState {
   isLoading: boolean;
   isAuthenticated: boolean;
   error: string | null;
+  mode: 'business' | 'manager';
   
   // 動作
   setUser: (user: User | null) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  toggleMode: () => void;
   initializeAuth: () => () => void; // 返回取消訂閱函數
   signOut: () => Promise<void>;
 }
@@ -29,10 +31,14 @@ export const useAuthStore = create<AuthState>((set) => ({
   isLoading: true,
   isAuthenticated: false,
   error: null,
+  mode: 'business',
   
   setUser: (user) => set({ user, isAuthenticated: !!user }),
   setLoading: (loading) => set({ isLoading: loading }),
   setError: (error) => set({ error }),
+  toggleMode: () => set((state) => ({ 
+    mode: state.mode === 'business' ? 'manager' : 'business' 
+  })),
   
   initializeAuth: () => {
     // 訂閱認證狀態變更

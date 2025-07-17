@@ -9,8 +9,12 @@ import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { useAuthStore } from '@/stores/authStore';
 import { AuthNavigator } from './AuthNavigator';
 import { MainTabNavigator } from './MainTabNavigator';
+import { RootStackParamList } from '@/types/navigation';
+import { CreateCustomerModal } from '@/screens/modals/CreateCustomerModal';
+import { CreateRecordModal } from '@/screens/modals/CreateRecordModal';
+import { CreateTaskModal } from '@/screens/modals/CreateTaskModal';
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
 
 export const AppNavigator: React.FC = () => {
   const { isAuthenticated, isLoading, initializeAuth } = useAuthStore();
@@ -45,13 +49,33 @@ export const AppNavigator: React.FC = () => {
         }}
       >
         {isAuthenticated ? (
-          <Stack.Screen
-            name="Main"
-            component={MainTabNavigator}
-            options={{
-              animationTypeForReplace: 'push',
-            }}
-          />
+          <>
+            <Stack.Screen
+              name="MainTabs"
+              component={MainTabNavigator}
+              options={{
+                headerShown: false,
+                animationTypeForReplace: 'push',
+              }}
+            />
+            <Stack.Group screenOptions={{ presentation: 'modal', headerShown: true }}>
+              <Stack.Screen
+                name="CreateCustomerModal"
+                component={CreateCustomerModal}
+                options={{ title: '新增客戶' }}
+              />
+              <Stack.Screen
+                name="CreateRecordModal"
+                component={CreateRecordModal}
+                options={{ title: '新增紀錄' }}
+              />
+              <Stack.Screen
+                name="CreateTaskModal"
+                component={CreateTaskModal}
+                options={{ title: '新增任務' }}
+              />
+            </Stack.Group>
+          </>
         ) : (
           <Stack.Screen
             name="Auth"
