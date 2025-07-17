@@ -463,14 +463,14 @@ export async function processRecordForCustomerFields(
 export async function getRecordsByCustomer(
   customerId: string,
   userId: string,
-  limit: number = 50
+  limitCount: number = 50
 ): Promise<RecordDoc[]> {
   try {
     const q = query(
       collection(db, RECORDS_COLLECTION),
       where('customerIds', 'array-contains', customerId),
       orderBy('scheduledAt', 'desc'),
-      limit(limit)
+      limit(limitCount)
     );
     
     const snapshot = await getDocs(q);

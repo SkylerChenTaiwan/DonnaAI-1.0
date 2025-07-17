@@ -54,6 +54,7 @@ export interface TaskCreateRequest {
   source: TaskSource;
   tags?: string[];
   teamId: string;
+  organizationId: string;
 }
 
 // 任務更新請求

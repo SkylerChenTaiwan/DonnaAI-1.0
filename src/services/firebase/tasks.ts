@@ -24,10 +24,7 @@ import {
 import { db } from './config';
 import { 
   TaskDoc,
-  TaskType,
   TaskStatus,
-  TaskPriority,
-  TaskSource,
   TaskCreateRequest,
   TaskUpdateRequest,
   TaskFilter,
@@ -454,7 +451,7 @@ export async function createTasksFromAIActions(
   actionItems: string[],
   assigneeId: string,
   teamId: string,
-  _organizationId: string,
+  organizationId: string,
   customerIds?: string[]
 ): Promise<TaskDoc[]> {
   try {
@@ -469,7 +466,8 @@ export async function createTasksFromAIActions(
         teamId,
         source: 'ai_extracted',
         recordId,
-        customerIds
+        customerIds,
+        organizationId
       }, assigneeId); // AI 建立的任務預設由負責人自己建立
       
       createdTasks.push(task);

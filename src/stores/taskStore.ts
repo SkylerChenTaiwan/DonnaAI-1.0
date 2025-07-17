@@ -4,6 +4,7 @@
 
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
+import { Timestamp } from 'firebase/firestore';
 import { 
   TaskDoc,
   TaskCreateRequest,
@@ -162,15 +163,30 @@ export const useTaskStore = create<TaskState>()(
           await updateTask(taskId, updates, userId);
           
           // 更新本地狀態
-          set(state => ({
-            tasks: state.tasks.map(t => 
-              t.id === taskId ? { ...t, ...updates } : t
-            ),
-            selectedTask: state.selectedTask?.id === taskId 
-              ? { ...state.selectedTask, ...updates }
-              : state.selectedTask,
-            isLoading: false
-          }));
+          set(state => {
+            // 轉換日期為 Timestamp
+            const processedUpdates: any = { ...updates };
+            if (updates.scheduledAt !== undefined) {
+              processedUpdates.scheduledAt = updates.scheduledAt 
+                ? Timestamp.fromDate(updates.scheduledAt) 
+                : null;
+            }
+            if (updates.dueDate !== undefined) {
+              processedUpdates.dueDate = updates.dueDate 
+                ? Timestamp.fromDate(updates.dueDate) 
+                : null;
+            }
+            
+            return {
+              tasks: state.tasks.map(t => 
+                t.id === taskId ? { ...t, ...processedUpdates } : t
+              ),
+              selectedTask: state.selectedTask?.id === taskId 
+                ? { ...state.selectedTask, ...processedUpdates }
+                : state.selectedTask,
+              isLoading: false
+            };
+          });
           
           // 如果狀態改變，更新統計
           if (updates.status) {
