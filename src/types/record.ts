@@ -33,6 +33,35 @@ export interface RecordDoc extends FirestoreDoc {
   status: RecordStatus;                // 紀錄狀態
   customFields?: Record<string, any>;  // 自訂欄位值
   
+  // 音訊錄製相關
+  audioRecordingState?: {
+    status: 'recording' | 'paused' | 'stopped' | 'editing' | 'processing';
+    startTime?: Timestamp;
+    endTime?: Timestamp;
+    duration?: number;          // 秒數
+    fileSize?: number;          // bytes
+    format?: string;            // mp3, wav, m4a
+    trimSettings?: {            // 編輯設定
+      originalDuration: number;
+      trimStart: number;        // 秒數
+      trimEnd: number;          // 秒數
+    };
+  };
+  
+  // 處理偏好設定
+  processingPreference?: 'immediate' | 'edit_first' | 'manual';
+  
+  // 補救錄音標識
+  recordingType?: 'live' | 'voice_summary' | 'text_summary';
+  
+  // 使用者確認狀態
+  userConfirmationStatus?: {
+    aiSuggestionsReviewed: boolean;
+    customModifications?: Record<string, any>;
+    confirmedAt?: Timestamp;
+    rejectedSuggestions?: string[];
+  };
+  
   // AI 欄位自動填入結果
   aiFieldMappings?: AIFieldMapping[]; // AI 建議的欄位對應
   aiProcessingMetadata?: {
@@ -94,4 +123,29 @@ export interface RecordStats {
   byStatus: Record<RecordStatus, number>;
   averageDuration?: number;
   totalAudioMinutes?: number;
+}
+
+// 音訊編輯相關類型
+export interface AudioEditingSession {
+  recordId: string;
+  originalAudioUrl: string;
+  editedAudioUrl?: string;
+  waveformData?: number[];     // 波形視覺化資料
+  editHistory: Array<{
+    action: 'trim' | 'cut' | 'volume_adjust';
+    timestamp: Date;
+    parameters: Record<string, any>;
+  }>;
+  isEditing: boolean;
+}
+
+// 推播通知類型
+export interface MeetingReminder {
+  id: string;
+  meetingId?: string;
+  userId: string;
+  scheduledTime: Timestamp;
+  reminderType: 'pre_meeting' | 'in_meeting' | 'post_meeting';
+  notificationSent: boolean;
+  userResponse?: 'dismissed' | 'snoozed' | 'started_recording';
 }
