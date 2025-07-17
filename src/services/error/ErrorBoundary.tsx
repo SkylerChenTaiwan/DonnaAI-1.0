@@ -4,7 +4,7 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, Platform } from 'react-native';
 import { errorLogger } from './ErrorLogger';
 import { ErrorBoundaryState, ErrorInfo } from '../../types/error';
 import { environmentManager } from '../../config/environment';
