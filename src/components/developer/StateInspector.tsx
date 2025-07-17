@@ -17,11 +17,8 @@ import {
 } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useAuthStore } from '@/stores/authStore';
-import { useClientStore } from '@/stores/clientStore';
 import { useTaskStore } from '@/stores/taskStore';
-import { useCustomFieldStore } from '@/stores/customFieldStore';
-import { useAudioStore } from '@/stores/audioStore';
-import { useMeetingStore } from '@/stores/meetingStore';
+import { useRecordStore } from '@/stores/recordStore';
 import { DEV_TOOLS_CONSTANTS } from '@/config/constants';
 
 interface StoreData {
@@ -51,34 +48,16 @@ export const StateInspector: React.FC = () => {
       getState: useAuthStore.getState
     },
     {
-      name: 'Client Store',
-      icon: '👥',
-      data: useClientStore(),
-      getState: useClientStore.getState
-    },
-    {
       name: 'Task Store',
       icon: '✅',
       data: useTaskStore(),
       getState: useTaskStore.getState
     },
     {
-      name: 'Custom Field Store',
-      icon: '📝',
-      data: useCustomFieldStore(),
-      getState: useCustomFieldStore.getState
-    },
-    {
-      name: 'Audio Store',
-      icon: '🎙️',
-      data: useAudioStore(),
-      getState: useAudioStore.getState
-    },
-    {
-      name: 'Meeting Store',
-      icon: '📅',
-      data: useMeetingStore(),
-      getState: useMeetingStore.getState
+      name: 'Records Store',
+      icon: '📋',
+      data: useRecordStore(),
+      getState: useRecordStore.getState
     }
   ];
   

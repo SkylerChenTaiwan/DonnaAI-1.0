@@ -32,7 +32,7 @@ if (__DEV__) {
     // 記錄真正的錯誤
     if (args[0] instanceof Error) {
       errorLogger.logError(args[0], { 
-        context: { source: 'console.error' } 
+        additionalData: { source: 'console.error' } 
       });
     }
   };
