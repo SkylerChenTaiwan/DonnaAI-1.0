@@ -5,7 +5,7 @@
 import { create } from 'zustand';
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
-import { auth, db } from '@/services/firebase/config';
+import { getFirebaseAuth, getFirebaseDb } from '@/services/firebase/config';
 import { User } from '@/types/user';
 
 interface AuthState {
@@ -42,13 +42,13 @@ export const useAuthStore = create<AuthState>((set) => ({
   
   initializeAuth: () => {
     // 訂閱認證狀態變更
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+    const unsubscribe = onAuthStateChanged(getFirebaseAuth(), async (firebaseUser) => {
       set({ firebaseUser, isLoading: true, error: null });
       
       if (firebaseUser) {
         try {
           // 從 Firestore 取得使用者檔案
-          const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+          const userDoc = await getDoc(doc(getFirebaseDb(), 'users', firebaseUser.uid));
           if (userDoc.exists()) {
             const userData = userDoc.data() as User;
             set({ 
@@ -91,7 +91,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   
   signOut: async () => {
     try {
-      await auth.signOut();
+      await getFirebaseAuth().signOut();
       set({ 
         user: null, 
         firebaseUser: null, 

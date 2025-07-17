@@ -9,7 +9,7 @@ import {
   sendPasswordResetEmail
 } from 'firebase/auth';
 import { doc, setDoc, Timestamp } from 'firebase/firestore';
-import { auth, db } from './config';
+import { getFirebaseAuth, getFirebaseDb } from './config';
 import { User, Organization, Team } from '@/types/user';
 
 export interface SignUpData {
@@ -30,10 +30,10 @@ export interface SignInData {
  */
 export const signIn = async ({ email, password }: SignInData) => {
   try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const userCredential = await signInWithEmailAndPassword(getFirebaseAuth(), email, password);
     
     // 更新最後登入時間
-    const userRef = doc(db, 'users', userCredential.user.uid);
+    const userRef = doc(getFirebaseDb(), 'users', userCredential.user.uid);
     await setDoc(userRef, {
       lastLoginAt: Timestamp.now()
     }, { merge: true });
@@ -51,7 +51,7 @@ export const signIn = async ({ email, password }: SignInData) => {
 export const signUp = async ({ email, password, name, organizationName, role }: SignUpData) => {
   try {
     // 建立 Firebase 認證帳號
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const userCredential = await createUserWithEmailAndPassword(getFirebaseAuth(), email, password);
     const { user: firebaseUser } = userCredential;
     
     // 更新 Firebase 使用者顯示名稱
@@ -76,7 +76,7 @@ export const signUp = async ({ email, password, name, organizationName, role }: 
       lastLoginAt: new Date()
     };
     
-    const userRef = doc(db, 'users', firebaseUser.uid);
+    const userRef = doc(getFirebaseDb(), 'users', firebaseUser.uid);
     await setDoc(userRef, {
       ...userData,
       createdAt: Timestamp.now(),
@@ -95,7 +95,7 @@ export const signUp = async ({ email, password, name, organizationName, role }: 
  */
 export const resetPassword = async (email: string) => {
   try {
-    await sendPasswordResetEmail(auth, email);
+    await sendPasswordResetEmail(getFirebaseAuth(), email);
   } catch (error) {
     console.error('密碼重設失敗:', error);
     throw new Error(getAuthErrorMessage(error));
@@ -119,7 +119,7 @@ const createOrganizationIfNeeded = async (organizationName: string): Promise<str
     createdAt: new Date()
   };
   
-  const orgRef = doc(db, 'organizations', orgId);
+  const orgRef = doc(getFirebaseDb(), 'organizations', orgId);
   await setDoc(orgRef, {
     ...organizationData,
     createdAt: Timestamp.now()
@@ -138,11 +138,11 @@ const createDefaultTeam = async (organizationId: string, userName: string): Prom
     id: teamId,
     name: `${userName}的團隊`,
     organizationId,
-    managerIds: [auth.currentUser!.uid],
-    memberIds: [auth.currentUser!.uid]
+    managerIds: [getFirebaseAuth().currentUser!.uid],
+    memberIds: [getFirebaseAuth().currentUser!.uid]
   };
   
-  const teamRef = doc(db, 'teams', teamId);
+  const teamRef = doc(getFirebaseDb(), 'teams', teamId);
   await setDoc(teamRef, teamData);
   
   return teamId;

@@ -26,7 +26,7 @@ import {
   getDownloadURL,
   deleteObject
 } from 'firebase/storage';
-import { db, storage } from './config';
+import { getFirebaseDb, getFirebaseStorage } from './config';
 import { 
   RecordDoc,
   RecordStatus,
@@ -107,7 +107,7 @@ export async function createRecord(
     
     // 儲存到 Firestore
     await setDoc(
-      doc(db, RECORDS_COLLECTION, recordId),
+      doc(getFirebaseDb(), RECORDS_COLLECTION, recordId),
       recordDoc
     );
     
@@ -139,7 +139,7 @@ export async function updateRecord(
     }
     
     // 獲取現有紀錄
-    const recordDoc = await getDoc(doc(db, RECORDS_COLLECTION, recordId));
+    const recordDoc = await getDoc(doc(getFirebaseDb(), RECORDS_COLLECTION, recordId));
     if (!recordDoc.exists()) {
       throw new Error('找不到指定的紀錄');
     }
@@ -172,7 +172,7 @@ export async function updateRecord(
     
     // 更新文件
     await updateDoc(
-      doc(db, RECORDS_COLLECTION, recordId),
+      doc(getFirebaseDb(), RECORDS_COLLECTION, recordId),
       {
         ...updates,
         updatedAt: serverTimestamp()
@@ -205,14 +205,14 @@ export async function deleteRecord(
     }
     
     // 獲取紀錄以刪除相關檔案
-    const recordDoc = await getDoc(doc(db, RECORDS_COLLECTION, recordId));
+    const recordDoc = await getDoc(doc(getFirebaseDb(), RECORDS_COLLECTION, recordId));
     if (recordDoc.exists()) {
       const record = recordDoc.data() as RecordDoc;
       
       // 刪除音訊檔案（如果有）
       if (record.audioFileUrl) {
         try {
-          const audioRef = ref(storage, record.audioFileUrl);
+          const audioRef = ref(getFirebaseStorage(), record.audioFileUrl);
           await deleteObject(audioRef);
         } catch (error) {
           console.error('刪除音訊檔案失敗:', error);
@@ -221,7 +221,7 @@ export async function deleteRecord(
     }
     
     // 刪除文件
-    await deleteDoc(doc(db, RECORDS_COLLECTION, recordId));
+    await deleteDoc(doc(getFirebaseDb(), RECORDS_COLLECTION, recordId));
   } catch (error) {
     console.error('刪除紀錄失敗:', error);
     throw error;
@@ -242,7 +242,7 @@ export async function getRecord(
       throw new Error('您沒有權限查看此紀錄');
     }
     
-    const recordDoc = await getDoc(doc(db, RECORDS_COLLECTION, recordId));
+    const recordDoc = await getDoc(doc(getFirebaseDb(), RECORDS_COLLECTION, recordId));
     if (!recordDoc.exists()) {
       return null;
     }
@@ -266,7 +266,7 @@ export async function getRecords(
   filter?: RecordFilter
 ): Promise<RecordDoc[]> {
   try {
-    let q = query(collection(db, RECORDS_COLLECTION));
+    let q = query(collection(getFirebaseDb(), RECORDS_COLLECTION));
     
     // 套用過濾條件
     if (filter) {
@@ -337,7 +337,7 @@ export function subscribeToRecords(
   filter?: RecordFilter
 ): Unsubscribe {
   let q = query(
-    collection(db, RECORDS_COLLECTION),
+    collection(getFirebaseDb(), RECORDS_COLLECTION),
     where('teamId', '==', teamId),
     orderBy('updatedAt', 'desc'),
     limit(50) // 限制數量以提升效能
@@ -381,7 +381,7 @@ export async function processRecordForCustomerFields(
   
   try {
     // 獲取紀錄
-    const recordDoc = await getDoc(doc(db, RECORDS_COLLECTION, recordId));
+    const recordDoc = await getDoc(doc(getFirebaseDb(), RECORDS_COLLECTION, recordId));
     if (!recordDoc.exists()) {
       throw new Error('找不到指定的紀錄');
     }
@@ -398,7 +398,7 @@ export async function processRecordForCustomerFields(
     
     // 更新紀錄的 AI 欄位對應
     await updateDoc(
-      doc(db, RECORDS_COLLECTION, recordId),
+      doc(getFirebaseDb(), RECORDS_COLLECTION, recordId),
       {
         aiFieldMappings: customerFieldMappings,
         aiProcessingMetadata: {
@@ -467,7 +467,7 @@ export async function getRecordsByCustomer(
 ): Promise<RecordDoc[]> {
   try {
     const q = query(
-      collection(db, RECORDS_COLLECTION),
+      collection(getFirebaseDb(), RECORDS_COLLECTION),
       where('customerIds', 'array-contains', customerId),
       orderBy('scheduledAt', 'desc'),
       limit(limitCount)
@@ -502,7 +502,7 @@ export async function getRecordsByCustomer(
 async function uploadAudioFile(recordId: string, file: File): Promise<string> {
   try {
     const fileName = `${recordId}_${Date.now()}_${file.name}`;
-    const storageRef = ref(storage, `${AUDIO_STORAGE_PATH}/${fileName}`);
+    const storageRef = ref(getFirebaseStorage(), `${AUDIO_STORAGE_PATH}/${fileName}`);
     
     const snapshot = await uploadBytes(storageRef, file, {
       contentType: file.type,
@@ -546,7 +546,7 @@ async function triggerAIProcessing(recordId: string, record: RecordDoc): Promise
       if (transcriptionResult.success && transcriptionResult.output.transcription) {
         // 更新紀錄的轉錄文字
         await updateDoc(
-          doc(db, RECORDS_COLLECTION, recordId),
+          doc(getFirebaseDb(), RECORDS_COLLECTION, recordId),
           {
             transcription: transcriptionResult.output.transcription,
             status: 'processing' as RecordStatus
@@ -569,7 +569,7 @@ async function triggerAIProcessing(recordId: string, record: RecordDoc): Promise
         if (summaryResult.success && summaryResult.output.summary) {
           // 更新紀錄的 AI 摘要和狀態
           await updateDoc(
-            doc(db, RECORDS_COLLECTION, recordId),
+            doc(getFirebaseDb(), RECORDS_COLLECTION, recordId),
             {
               aiSummary: summaryResult.output.summary,
               status: 'completed' as RecordStatus,
@@ -587,7 +587,7 @@ async function triggerAIProcessing(recordId: string, record: RecordDoc): Promise
     
     // 更新狀態為失敗
     await updateDoc(
-      doc(db, RECORDS_COLLECTION, recordId),
+      doc(getFirebaseDb(), RECORDS_COLLECTION, recordId),
       {
         status: 'completed' as RecordStatus,
         updatedAt: serverTimestamp()

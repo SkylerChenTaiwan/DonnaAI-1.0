@@ -19,7 +19,7 @@ import {
   serverTimestamp,
   Unsubscribe
 } from 'firebase/firestore';
-import { db } from './config';
+import { getFirebaseDb } from './config';
 import { CustomerDoc } from '../../types/firebase';
 import { 
   CustomFieldDefinition
@@ -79,7 +79,7 @@ export async function createCustomer(
     
     // 儲存到 Firestore
     await setDoc(
-      doc(db, CUSTOMERS_COLLECTION, customerId),
+      doc(getFirebaseDb(), CUSTOMERS_COLLECTION, customerId),
       customerDoc
     );
     
@@ -106,7 +106,7 @@ export async function updateCustomer(
     }
     
     // 獲取現有客戶資料
-    const customerDoc = await getDoc(doc(db, CUSTOMERS_COLLECTION, customerId));
+    const customerDoc = await getDoc(doc(getFirebaseDb(), CUSTOMERS_COLLECTION, customerId));
     if (!customerDoc.exists()) {
       throw new Error('找不到指定的客戶');
     }
@@ -139,7 +139,7 @@ export async function updateCustomer(
     
     // 更新文件
     await updateDoc(
-      doc(db, CUSTOMERS_COLLECTION, customerId),
+      doc(getFirebaseDb(), CUSTOMERS_COLLECTION, customerId),
       {
         ...updates,
         updatedAt: serverTimestamp()
@@ -169,7 +169,7 @@ export async function deleteCustomer(
     // 如果有，可能需要先處理或警告使用者
     
     // 刪除文件
-    await deleteDoc(doc(db, CUSTOMERS_COLLECTION, customerId));
+    await deleteDoc(doc(getFirebaseDb(), CUSTOMERS_COLLECTION, customerId));
   } catch (error) {
     console.error('刪除客戶失敗:', error);
     throw error;
@@ -190,7 +190,7 @@ export async function getCustomer(
       throw new Error('您沒有權限查看此客戶');
     }
     
-    const customerDoc = await getDoc(doc(db, CUSTOMERS_COLLECTION, customerId));
+    const customerDoc = await getDoc(doc(getFirebaseDb(), CUSTOMERS_COLLECTION, customerId));
     if (!customerDoc.exists()) {
       return null;
     }
@@ -219,7 +219,7 @@ export async function getCustomers(
   }
 ): Promise<CustomerDoc[]> {
   try {
-    let q = query(collection(db, CUSTOMERS_COLLECTION));
+    let q = query(collection(getFirebaseDb(), CUSTOMERS_COLLECTION));
     
     // 根據團隊過濾
     if (teamId) {
@@ -285,7 +285,7 @@ export function subscribeToCustomers(
   callback: (customers: CustomerDoc[]) => void
 ): Unsubscribe {
   const q = query(
-    collection(db, CUSTOMERS_COLLECTION),
+    collection(getFirebaseDb(), CUSTOMERS_COLLECTION),
     where('teamId', '==', teamId),
     orderBy('updatedAt', 'desc')
   );
@@ -410,7 +410,7 @@ export async function updateCustomerAIFields(
     };
     
     await updateDoc(
-      doc(db, CUSTOMERS_COLLECTION, customerId),
+      doc(getFirebaseDb(), CUSTOMERS_COLLECTION, customerId),
       {
         ...updates,
         updatedAt: serverTimestamp()

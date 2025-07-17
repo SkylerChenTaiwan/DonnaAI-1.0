@@ -21,7 +21,7 @@ import {
   writeBatch,
   limit
 } from 'firebase/firestore';
-import { db } from './config';
+import { getFirebaseDb } from './config';
 import { 
   TaskDoc,
   TaskStatus,
@@ -85,7 +85,7 @@ export async function createTask(
     
     // 儲存到 Firestore
     await setDoc(
-      doc(db, TASKS_COLLECTION, taskId),
+      doc(getFirebaseDb(), TASKS_COLLECTION, taskId),
       taskDoc
     );
     
@@ -106,7 +106,7 @@ export async function updateTask(
 ): Promise<void> {
   try {
     // 獲取現有任務
-    const taskDoc = await getDoc(doc(db, TASKS_COLLECTION, taskId));
+    const taskDoc = await getDoc(doc(getFirebaseDb(), TASKS_COLLECTION, taskId));
     if (!taskDoc.exists()) {
       throw new Error('找不到指定的任務');
     }
@@ -149,7 +149,7 @@ export async function updateTask(
     
     // 更新文件
     await updateDoc(
-      doc(db, TASKS_COLLECTION, taskId),
+      doc(getFirebaseDb(), TASKS_COLLECTION, taskId),
       {
         ...processedUpdates,
         updatedAt: serverTimestamp()
@@ -170,7 +170,7 @@ export async function deleteTask(
 ): Promise<void> {
   try {
     // 獲取任務
-    const taskDoc = await getDoc(doc(db, TASKS_COLLECTION, taskId));
+    const taskDoc = await getDoc(doc(getFirebaseDb(), TASKS_COLLECTION, taskId));
     if (!taskDoc.exists()) {
       throw new Error('找不到指定的任務');
     }
@@ -189,7 +189,7 @@ export async function deleteTask(
     }
     
     // 刪除文件
-    await deleteDoc(doc(db, TASKS_COLLECTION, taskId));
+    await deleteDoc(doc(getFirebaseDb(), TASKS_COLLECTION, taskId));
   } catch (error) {
     console.error('刪除任務失敗:', error);
     throw error;
@@ -204,7 +204,7 @@ export async function getTask(
   userId: string
 ): Promise<TaskDoc | null> {
   try {
-    const taskDoc = await getDoc(doc(db, TASKS_COLLECTION, taskId));
+    const taskDoc = await getDoc(doc(getFirebaseDb(), TASKS_COLLECTION, taskId));
     if (!taskDoc.exists()) {
       return null;
     }
@@ -236,7 +236,7 @@ export async function getTasks(
   filter?: TaskFilter
 ): Promise<TaskDoc[]> {
   try {
-    let q = query(collection(db, TASKS_COLLECTION));
+    let q = query(collection(getFirebaseDb(), TASKS_COLLECTION));
     
     // 套用過濾條件
     if (filter) {
@@ -325,7 +325,7 @@ export function subscribeToTasks(
   filter?: TaskFilter
 ): Unsubscribe {
   let q = query(
-    collection(db, TASKS_COLLECTION),
+    collection(getFirebaseDb(), TASKS_COLLECTION),
     orderBy('updatedAt', 'desc'),
     limit(100) // 限制數量以提升效能
   );
@@ -333,7 +333,7 @@ export function subscribeToTasks(
   // 基本過濾（最常用的）
   if (filter?.assigneeId) {
     q = query(
-      collection(db, TASKS_COLLECTION),
+      collection(getFirebaseDb(), TASKS_COLLECTION),
       where('assigneeId', '==', filter.assigneeId),
       orderBy('updatedAt', 'desc'),
       limit(100)
@@ -381,7 +381,7 @@ export async function batchOperateTasks(
     const batch = writeBatch(db);
     
     for (const taskId of operation.taskIds) {
-      const taskRef = doc(db, TASKS_COLLECTION, taskId);
+      const taskRef = doc(getFirebaseDb(), TASKS_COLLECTION, taskId);
       
       switch (operation.operation) {
         case 'update':
@@ -488,7 +488,7 @@ export async function getTaskStats(
   teamId?: string
 ): Promise<TaskStats> {
   try {
-    let q = query(collection(db, TASKS_COLLECTION));
+    let q = query(collection(getFirebaseDb(), TASKS_COLLECTION));
     
     if (teamId) {
       q = query(q, where('teamId', '==', teamId));
@@ -581,14 +581,14 @@ export async function getTasksByCustomer(
 ): Promise<TaskDoc[]> {
   try {
     let q = query(
-      collection(db, TASKS_COLLECTION),
+      collection(getFirebaseDb(), TASKS_COLLECTION),
       where('customerIds', 'array-contains', customerId),
       orderBy('updatedAt', 'desc')
     );
     
     if (!includeCompleted) {
       q = query(
-        collection(db, TASKS_COLLECTION),
+        collection(getFirebaseDb(), TASKS_COLLECTION),
         where('customerIds', 'array-contains', customerId),
         where('status', 'in', ['todo', 'in_progress']),
         orderBy('updatedAt', 'desc')

@@ -6,6 +6,21 @@
 
 ---
 
+## 2025-07-17
+
+### ✅ 完成的任務
+1. **更新 Firebase 服務檔案配置**
+   - ✅ 將 import { db } from './config' 改為 import { getFirebaseDb } from './config'
+   - ✅ 將所有使用 db 的地方改為 getFirebaseDb()
+   - ✅ 更新 records.ts 將 storage 改為 getFirebaseStorage()
+   - ✅ 更新檔案：
+     - /src/services/firebase/customers.ts
+     - /src/services/firebase/tasks.ts
+     - /src/services/firebase/records.ts
+     - /src/services/firebase/custom-fields.ts
+     - /src/services/firebase/ai-confirmations.ts
+     - /src/services/firebase/permissions.ts
+
 ## 2025-01-17
 
 ### ✅ 完成的任務
@@ -22,7 +37,6 @@
    - ✅ 實作補救錄音功能
    - ✅ 更新 MeetingsScreen 整合所有功能
 
-### ✅ 完成的任務
 2. **修正 TypeScript 類型錯誤和 ESLint 配置**
    - ✅ 修正 ConfirmationInterface.tsx 中未使用的變數
    - ✅ 更新 .eslintrc.json 環境配置

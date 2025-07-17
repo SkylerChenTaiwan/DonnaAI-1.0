@@ -18,7 +18,7 @@ import {
   Timestamp,
   Unsubscribe
 } from 'firebase/firestore';
-import { db } from './config';
+import { getFirebaseDb } from './config';
 import { 
   AIProcessingConfirmation
 } from '../../types/custom-fields';
@@ -48,7 +48,7 @@ export async function createConfirmationRequest(
     
     // 儲存到 Firestore
     await setDoc(
-      doc(db, CONFIRMATIONS_COLLECTION, confirmationId),
+      doc(getFirebaseDb(), CONFIRMATIONS_COLLECTION, confirmationId),
       confirmationDoc
     );
     
@@ -75,7 +75,7 @@ export async function updateConfirmationStatus(
 ): Promise<void> {
   try {
     // 獲取確認請求
-    const confirmDoc = await getDoc(doc(db, CONFIRMATIONS_COLLECTION, confirmationId));
+    const confirmDoc = await getDoc(doc(getFirebaseDb(), CONFIRMATIONS_COLLECTION, confirmationId));
     if (!confirmDoc.exists()) {
       throw new Error('找不到指定的確認請求');
     }
@@ -102,7 +102,7 @@ export async function updateConfirmationStatus(
     }
     
     await updateDoc(
-      doc(db, CONFIRMATIONS_COLLECTION, confirmationId),
+      doc(getFirebaseDb(), CONFIRMATIONS_COLLECTION, confirmationId),
       updates
     );
     
@@ -125,7 +125,7 @@ export async function applyConfirmedMappings(
 ): Promise<void> {
   try {
     // 獲取確認請求
-    const confirmDoc = await getDoc(doc(db, CONFIRMATIONS_COLLECTION, confirmationId));
+    const confirmDoc = await getDoc(doc(getFirebaseDb(), CONFIRMATIONS_COLLECTION, confirmationId));
     if (!confirmDoc.exists()) {
       throw new Error('找不到指定的確認請求');
     }
@@ -177,7 +177,7 @@ export async function getPendingConfirmations(
 ): Promise<AIProcessingConfirmation[]> {
   try {
     let q = query(
-      collection(db, CONFIRMATIONS_COLLECTION),
+      collection(getFirebaseDb(), CONFIRMATIONS_COLLECTION),
       where('status', '==', 'pending'),
       orderBy('createdAt', 'desc')
     );
@@ -213,7 +213,7 @@ export async function getConfirmation(
   userId: string
 ): Promise<AIProcessingConfirmation | null> {
   try {
-    const confirmDoc = await getDoc(doc(db, CONFIRMATIONS_COLLECTION, confirmationId));
+    const confirmDoc = await getDoc(doc(getFirebaseDb(), CONFIRMATIONS_COLLECTION, confirmationId));
     if (!confirmDoc.exists()) {
       return null;
     }
@@ -243,7 +243,7 @@ export function subscribeToPendingConfirmations(
   callback: (confirmations: AIProcessingConfirmation[]) => void
 ): Unsubscribe {
   const q = query(
-    collection(db, CONFIRMATIONS_COLLECTION),
+    collection(getFirebaseDb(), CONFIRMATIONS_COLLECTION),
     where('status', '==', 'pending'),
     orderBy('createdAt', 'desc')
   );
@@ -310,7 +310,7 @@ export async function getConfirmationStats(
   topFields: Array<{ fieldKey: string; count: number }>;
 }> {
   try {
-    let q = query(collection(db, CONFIRMATIONS_COLLECTION));
+    let q = query(collection(getFirebaseDb(), CONFIRMATIONS_COLLECTION));
     
     // TODO: 加入組織和日期過濾
     
@@ -390,7 +390,7 @@ export async function cleanupExpiredConfirmations(
     expirationDate.setDate(expirationDate.getDate() - daysToKeep);
     
     const q = query(
-      collection(db, CONFIRMATIONS_COLLECTION),
+      collection(getFirebaseDb(), CONFIRMATIONS_COLLECTION),
       where('createdAt', '<', Timestamp.fromDate(expirationDate)),
       where('status', 'in', ['confirmed', 'rejected'])
     );

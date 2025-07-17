@@ -3,7 +3,7 @@
  */
 
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from './config';
+import { getFirebaseDb } from './config';
 import { User, Team } from '@/types/user';
 
 /**
@@ -11,7 +11,7 @@ import { User, Team } from '@/types/user';
  */
 export const isManagerOfTeam = async (userId: string, teamId: string): Promise<boolean> => {
   try {
-    const teamDoc = await getDoc(doc(db, 'teams', teamId));
+    const teamDoc = await getDoc(doc(getFirebaseDb(), 'teams', teamId));
     if (!teamDoc.exists()) {
       return false;
     }
@@ -29,7 +29,7 @@ export const isManagerOfTeam = async (userId: string, teamId: string): Promise<b
  */
 export const isTeamMember = async (userId: string, teamId: string): Promise<boolean> => {
   try {
-    const teamDoc = await getDoc(doc(db, 'teams', teamId));
+    const teamDoc = await getDoc(doc(getFirebaseDb(), 'teams', teamId));
     if (!teamDoc.exists()) {
       return false;
     }
@@ -48,7 +48,7 @@ export const isTeamMember = async (userId: string, teamId: string): Promise<bool
 export const isManagerOfUser = async (managerId: string, userId: string): Promise<boolean> => {
   try {
     // 取得被檢查使用者的資料
-    const userDoc = await getDoc(doc(db, 'users', userId));
+    const userDoc = await getDoc(doc(getFirebaseDb(), 'users', userId));
     if (!userDoc.exists()) {
       return false;
     }
@@ -56,7 +56,7 @@ export const isManagerOfUser = async (managerId: string, userId: string): Promis
     const user = userDoc.data() as User;
     
     // 取得主管的資料
-    const managerDoc = await getDoc(doc(db, 'users', managerId));
+    const managerDoc = await getDoc(doc(getFirebaseDb(), 'users', managerId));
     if (!managerDoc.exists()) {
       return false;
     }
@@ -82,7 +82,7 @@ export const isManagerOfUser = async (managerId: string, userId: string): Promis
  */
 export const isOrgAdmin = async (userId: string): Promise<boolean> => {
   try {
-    const userDoc = await getDoc(doc(db, 'users', userId));
+    const userDoc = await getDoc(doc(getFirebaseDb(), 'users', userId));
     if (!userDoc.exists()) {
       return false;
     }
@@ -100,7 +100,7 @@ export const isOrgAdmin = async (userId: string): Promise<boolean> => {
  */
 export const getAccessibleTeamMembers = async (userId: string): Promise<User[]> => {
   try {
-    const userDoc = await getDoc(doc(db, 'users', userId));
+    const userDoc = await getDoc(doc(getFirebaseDb(), 'users', userId));
     if (!userDoc.exists()) {
       return [];
     }
@@ -111,7 +111,7 @@ export const getAccessibleTeamMembers = async (userId: string): Promise<User[]> 
     // 管理員可以看到組織內所有成員
     if (user.role === 'admin') {
       const teamsQuery = query(
-        collection(db, 'teams'),
+        collection(getFirebaseDb(), 'teams'),
         where('organizationId', '==', user.organizationId)
       );
       const teamsSnapshot = await getDocs(teamsQuery);
@@ -126,7 +126,7 @@ export const getAccessibleTeamMembers = async (userId: string): Promise<User[]> 
     
     // 取得所有可存取團隊的成員
     const membersQuery = query(
-      collection(db, 'users'),
+      collection(getFirebaseDb(), 'users'),
       where('teamIds', 'array-contains-any', accessibleTeamIds)
     );
     const membersSnapshot = await getDocs(membersQuery);
@@ -148,7 +148,7 @@ export const getAccessibleTeamMembers = async (userId: string): Promise<User[]> 
  */
 export const getManagedTeams = async (userId: string): Promise<Team[]> => {
   try {
-    const userDoc = await getDoc(doc(db, 'users', userId));
+    const userDoc = await getDoc(doc(getFirebaseDb(), 'users', userId));
     if (!userDoc.exists()) {
       return [];
     }
@@ -161,7 +161,7 @@ export const getManagedTeams = async (userId: string): Promise<Team[]> => {
     
     const teams: Team[] = [];
     for (const teamId of user.managedTeamIds) {
-      const teamDoc = await getDoc(doc(db, 'teams', teamId));
+      const teamDoc = await getDoc(doc(getFirebaseDb(), 'teams', teamId));
       if (teamDoc.exists()) {
         teams.push({ id: teamDoc.id, ...teamDoc.data() } as Team);
       }
@@ -179,7 +179,7 @@ export const getManagedTeams = async (userId: string): Promise<Team[]> => {
  */
 export const canEditCustomer = async (userId: string, customerId: string): Promise<boolean> => {
   try {
-    const customerDoc = await getDoc(doc(db, 'customers', customerId));
+    const customerDoc = await getDoc(doc(getFirebaseDb(), 'customers', customerId));
     if (!customerDoc.exists()) {
       return false;
     }
@@ -213,13 +213,13 @@ export const canEditCustomer = async (userId: string, customerId: string): Promi
  */
 export const canViewCustomer = async (userId: string, customerId: string): Promise<boolean> => {
   try {
-    const customerDoc = await getDoc(doc(db, 'customers', customerId));
+    const customerDoc = await getDoc(doc(getFirebaseDb(), 'customers', customerId));
     if (!customerDoc.exists()) {
       return false;
     }
     
     const customer = customerDoc.data();
-    const userDoc = await getDoc(doc(db, 'users', userId));
+    const userDoc = await getDoc(doc(getFirebaseDb(), 'users', userId));
     if (!userDoc.exists()) {
       return false;
     }
@@ -259,7 +259,7 @@ export const canViewCustomer = async (userId: string, customerId: string): Promi
  */
 export const canDefineCustomFields = async (userId: string, organizationId: string): Promise<boolean> => {
   try {
-    const userDoc = await getDoc(doc(db, 'users', userId));
+    const userDoc = await getDoc(doc(getFirebaseDb(), 'users', userId));
     if (!userDoc.exists()) {
       return false;
     }
@@ -326,13 +326,13 @@ export const canEditCustomFieldDefinition = async (
  */
 export const canViewRecord = async (userId: string, recordId: string): Promise<boolean> => {
   try {
-    const recordDoc = await getDoc(doc(db, 'records', recordId));
+    const recordDoc = await getDoc(doc(getFirebaseDb(), 'records', recordId));
     if (!recordDoc.exists()) {
       return false;
     }
     
     const record = recordDoc.data();
-    const userDoc = await getDoc(doc(db, 'users', userId));
+    const userDoc = await getDoc(doc(getFirebaseDb(), 'users', userId));
     if (!userDoc.exists()) {
       return false;
     }
@@ -376,7 +376,7 @@ export const canViewRecord = async (userId: string, recordId: string): Promise<b
  */
 export const canEditRecord = async (userId: string, recordId: string): Promise<boolean> => {
   try {
-    const recordDoc = await getDoc(doc(db, 'records', recordId));
+    const recordDoc = await getDoc(doc(getFirebaseDb(), 'records', recordId));
     if (!recordDoc.exists()) {
       return false;
     }

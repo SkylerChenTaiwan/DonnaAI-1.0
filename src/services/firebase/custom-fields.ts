@@ -17,7 +17,7 @@ import {
   Timestamp,
   serverTimestamp
 } from 'firebase/firestore';
-import { db } from './config';
+import { getFirebaseDb } from './config';
 import { 
   CustomFieldDefinition, 
   CustomFieldValidationError 
@@ -73,7 +73,7 @@ export async function createCustomFieldDefinition(
     
     // 儲存到 Firestore
     await setDoc(
-      doc(db, CUSTOM_FIELDS_COLLECTION, fieldId), 
+      doc(getFirebaseDb(), CUSTOM_FIELDS_COLLECTION, fieldId), 
       fieldDefinition
     );
     
@@ -94,7 +94,7 @@ export async function updateCustomFieldDefinition(
 ): Promise<void> {
   try {
     // 獲取現有欄位定義
-    const fieldDoc = await getDoc(doc(db, CUSTOM_FIELDS_COLLECTION, fieldId));
+    const fieldDoc = await getDoc(doc(getFirebaseDb(), CUSTOM_FIELDS_COLLECTION, fieldId));
     if (!fieldDoc.exists()) {
       throw new Error('找不到指定的欄位定義');
     }
@@ -137,7 +137,7 @@ export async function updateCustomFieldDefinition(
     
     // 更新文件
     await updateDoc(
-      doc(db, CUSTOM_FIELDS_COLLECTION, fieldId),
+      doc(getFirebaseDb(), CUSTOM_FIELDS_COLLECTION, fieldId),
       {
         ...updates,
         updatedAt: serverTimestamp()
@@ -158,7 +158,7 @@ export async function deleteCustomFieldDefinition(
 ): Promise<void> {
   try {
     // 獲取欄位定義
-    const fieldDoc = await getDoc(doc(db, CUSTOM_FIELDS_COLLECTION, fieldId));
+    const fieldDoc = await getDoc(doc(getFirebaseDb(), CUSTOM_FIELDS_COLLECTION, fieldId));
     if (!fieldDoc.exists()) {
       throw new Error('找不到指定的欄位定義');
     }
@@ -183,7 +183,7 @@ export async function deleteCustomFieldDefinition(
     }
     
     // 刪除文件
-    await deleteDoc(doc(db, CUSTOM_FIELDS_COLLECTION, fieldId));
+    await deleteDoc(doc(getFirebaseDb(), CUSTOM_FIELDS_COLLECTION, fieldId));
   } catch (error) {
     console.error('刪除自訂欄位定義失敗:', error);
     throw error;
@@ -199,14 +199,14 @@ export async function getCustomFieldDefinitions(
 ): Promise<CustomFieldDefinition[]> {
   try {
     let q = query(
-      collection(db, CUSTOM_FIELDS_COLLECTION),
+      collection(getFirebaseDb(), CUSTOM_FIELDS_COLLECTION),
       where('organizationId', '==', organizationId),
       orderBy('createdAt', 'desc')
     );
     
     if (entityType) {
       q = query(
-        collection(db, CUSTOM_FIELDS_COLLECTION),
+        collection(getFirebaseDb(), CUSTOM_FIELDS_COLLECTION),
         where('organizationId', '==', organizationId),
         where('entityType', '==', entityType),
         orderBy('createdAt', 'desc')
@@ -365,7 +365,7 @@ async function checkFieldKeyUniqueness(
   entityType: 'customer' | 'record'
 ): Promise<boolean> {
   const q = query(
-    collection(db, CUSTOM_FIELDS_COLLECTION),
+    collection(getFirebaseDb(), CUSTOM_FIELDS_COLLECTION),
     where('organizationId', '==', organizationId),
     where('entityType', '==', entityType),
     where('fieldKey', '==', fieldKey)
@@ -405,7 +405,7 @@ export async function getCustomFieldDefinition(
   _userId: string
 ): Promise<CustomFieldDefinition | null> {
   try {
-    const fieldDoc = await getDoc(doc(db, CUSTOM_FIELDS_COLLECTION, fieldId));
+    const fieldDoc = await getDoc(doc(getFirebaseDb(), CUSTOM_FIELDS_COLLECTION, fieldId));
     if (!fieldDoc.exists()) {
       return null;
     }
