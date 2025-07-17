@@ -10,6 +10,7 @@ import { Audio, InterruptionModeIOS, InterruptionModeAndroid } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
 import { Button } from '@/components/common/Button';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
+import { OfflineRecordingService, NetworkMonitor } from '@/services/offline-recording';
 
 export interface AudioRecorderProps {
   onRecordingComplete: (audioUri: string, duration: number) => void;
@@ -19,6 +20,8 @@ export interface AudioRecorderProps {
   onRecordingResume?: () => void;
   maxDuration?: number; // 最大錄製時間（秒）
   showWaveform?: boolean;
+  enableOfflineSupport?: boolean; // 是否啟用離線支援
+  userId?: string; // 用戶ID（離線模式需要）
 }
 
 type RecordingStatus = 'idle' | 'recording' | 'paused' | 'stopped' | 'loading';
@@ -30,15 +33,57 @@ export const AudioRecorder: React.FC<AudioRecorderProps> = ({
   onRecordingPause,
   onRecordingResume,
   maxDuration = 3600, // 預設最大1小時
-  showWaveform = true
+  showWaveform = true,
+  enableOfflineSupport = true,
+  userId
 }) => {
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [recordingStatus, setRecordingStatus] = useState<RecordingStatus>('idle');
   const [duration, setDuration] = useState(0);
   const [permissionResponse, requestPermission] = Audio.usePermissions();
+  const [isOnline, setIsOnline] = useState(true);
+  const [offlineRecordingsCount, setOfflineRecordingsCount] = useState(0);
   const [waveformData, setWaveformData] = useState<number[]>([]);
   const durationTimerRef = useRef<NodeJS.Timeout | null>(null);
   const waveformTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // 初始化離線支援和網路監控
+  useEffect(() => {
+    if (enableOfflineSupport) {
+      OfflineRecordingService.initialize();
+      loadOfflineRecordingsCount();
+      
+      // 監聽網路狀態變化
+      const handleNetworkChange = (online: boolean) => {
+        setIsOnline(online);
+        if (online && userId) {
+          // 網路恢復時自動同步
+          OfflineRecordingService.autoSync(userId);
+        }
+      };
+
+      NetworkMonitor.addListener(handleNetworkChange);
+      
+      // 檢查初始網路狀態
+      checkInitialNetworkStatus();
+
+      return () => {
+        NetworkMonitor.removeListener(handleNetworkChange);
+      };
+    }
+  }, [enableOfflineSupport, userId]);
+
+  // 檢查初始網路狀態
+  const checkInitialNetworkStatus = async () => {
+    const online = await OfflineRecordingService.isOnline();
+    setIsOnline(online);
+  };
+
+  // 載入離線錄音數量
+  const loadOfflineRecordingsCount = async () => {
+    const count = await OfflineRecordingService.getOfflineRecordingsCount();
+    setOfflineRecordingsCount(count);
+  };
 
   // 初始化音訊模式
   const initializeAudio = useCallback(async () => {

@@ -9,7 +9,7 @@ import { Button } from '@/components/common/Button';
 import { TextInput } from '@/components/common/TextInput';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { useAIConfirmationStore } from '@/stores/aiConfirmationStore';
-import { useRecordStore } from '@/stores/recordStore';
+// import { useRecordStore } from '@/stores/recordStore';
 import { useCustomerStore } from '@/stores/customerStore';
 import { useTaskStore } from '@/stores/taskStore';
 // import { AIFieldMapping } from '@/types/custom-fields';
@@ -47,19 +47,14 @@ export const ConfirmationInterface: React.FC<ConfirmationInterfaceProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [customerFieldMappings, setCustomerFieldMappings] = useState<FieldModification[]>([]);
   const [taskSuggestions, setTaskSuggestions] = useState<TaskSuggestion[]>([]);
-  const [selectedCustomer, setSelectedCustomer] = useState<string | null>(null);
+  const [selectedCustomer] = useState<string | null>(null);
   const [processingMode, setProcessingMode] = useState<'review' | 'confirm' | 'complete'>('review');
 
   const { 
-    pendingConfirmations,
-    selectedConfirmation,
-    isLoading: storeLoading,
     fetchConfirmation,
     confirmRequest
   } = useAIConfirmationStore();
-
-  const { selectedRecord } = useRecordStore();
-  const { updateCustomer, createCustomer } = useCustomerStore();
+  const { updateCustomer } = useCustomerStore();
   const { createTask } = useTaskStore();
 
   // 載入 AI 確認資料
@@ -224,7 +219,7 @@ export const ConfirmationInterface: React.FC<ConfirmationInterfaceProps> = ({
     });
 
     if (Object.keys(customerUpdates).length > 0) {
-      await updateCustomer(selectedCustomer, customerUpdates);
+      await updateCustomer(selectedCustomer, customerUpdates, 'current-user-id');
     }
   };
 
@@ -241,7 +236,7 @@ export const ConfirmationInterface: React.FC<ConfirmationInterfaceProps> = ({
         relatedRecordId: recordId,
         teamId: '', // 需要從使用者資訊獲取
         organizationId: '' // 需要從使用者資訊獲取
-      });
+      }, 'current-user-id');
     }
   };
 
@@ -253,7 +248,7 @@ export const ConfirmationInterface: React.FC<ConfirmationInterfaceProps> = ({
         AI 從會議內容中提取的客戶資訊，請檢視並修改
       </Text>
       
-      {customerFieldMappings.map((field, index) => (
+      {customerFieldMappings.map((field) => (
         <View key={field.fieldKey} style={styles.fieldContainer}>
           <View style={styles.fieldHeader}>
             <Text style={styles.fieldName}>{field.fieldKey}</Text>
@@ -302,7 +297,7 @@ export const ConfirmationInterface: React.FC<ConfirmationInterfaceProps> = ({
                 onPress={() => handleTaskSelection(task.id, !task.isSelected)}
                 style={[
                   styles.checkbox,
-                  task.isSelected && styles.checkedBox
+                  ...(task.isSelected ? [styles.checkedBox] : [])
                 ]}
                 textStyle={styles.checkboxText}
               />
