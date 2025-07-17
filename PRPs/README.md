@@ -9,6 +9,7 @@
 | 01v  | donnaai-foundation-setup.md | ✅ 已完成 | DonnaAI 基礎架構設置 - Expo + Firebase + 認證系統 | 2025-07-16 |
 | 02v  | database-functionality.md | ✅ 已完成 | 資料庫功能實作 - 使用者、客戶、紀錄、任務資料庫 | 2025-07-17 |
 | 03v  | ai-meeting-recorder.md | ✅ 已完成 | AI 會議記錄與智能分析系統 - 音訊錄製、AI 分析、智能確認 | 2025-07-17 |
+| 04   | frontend-pages-implementation.md | 📋 待執行 | 完整前端頁面系統 - 底部導航、首頁模式切換、資料庫Table、小工具、設定頁面 | - |
 
 ## 命名規則
 
@@ -24,7 +25,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：04**
+**下一個新建的 PRP 應使用編號：05**
 
 ## PRP 類型說明
 
