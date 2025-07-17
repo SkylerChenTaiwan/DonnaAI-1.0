@@ -7,7 +7,7 @@ import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import { Platform } from 'react-native';
 import { doc, setDoc, getDoc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from './firebase/config';
+import { getFirebaseDb } from './firebase/config';
 import { MeetingReminder } from '../types/record';
 
 // 設定通知處理器
@@ -126,7 +126,7 @@ class NotificationService {
     }
 
     try {
-      await setDoc(doc(db, 'user_push_tokens', userId), {
+      await setDoc(doc(getFirebaseDb(), 'user_push_tokens', userId), {
         token: this.expoPushToken,
         platform: Platform.OS,
         updatedAt: new Date(),
@@ -263,7 +263,7 @@ class NotificationService {
         notificationSent: false,
       };
 
-      await setDoc(doc(db, 'meeting_reminders', reminderId), {
+      await setDoc(doc(getFirebaseDb(), 'meeting_reminders', reminderId), {
         ...reminder,
         notificationId,
         createdAt: new Date(),
@@ -312,7 +312,7 @@ class NotificationService {
   async getUserMeetingReminders(userId: string): Promise<MeetingReminder[]> {
     try {
       const q = query(
-        collection(db, 'meeting_reminders'),
+        collection(getFirebaseDb(), 'meeting_reminders'),
         where('userId', '==', userId),
         where('notificationSent', '==', false)
       );
@@ -336,7 +336,7 @@ class NotificationService {
    */
   async markReminderAsSent(reminderId: string, userResponse?: string): Promise<void> {
     try {
-      await updateDoc(doc(db, 'meeting_reminders', reminderId), {
+      await updateDoc(doc(getFirebaseDb(), 'meeting_reminders', reminderId), {
         notificationSent: true,
         sentAt: new Date(),
         userResponse: userResponse || null,
@@ -368,7 +368,7 @@ class NotificationService {
       expiredDate.setDate(expiredDate.getDate() - 7); // 7天前的提醒
 
       const q = query(
-        collection(db, 'meeting_reminders'),
+        collection(getFirebaseDb(), 'meeting_reminders'),
         where('scheduledTime', '<', expiredDate)
       );
       
@@ -383,7 +383,7 @@ class NotificationService {
         }
         
         // 刪除 Firebase 記錄（這裡可以選擇標記為已清理而不是刪除）
-        await updateDoc(doc(db, 'meeting_reminders', docSnapshot.id), {
+        await updateDoc(doc(getFirebaseDb(), 'meeting_reminders', docSnapshot.id), {
           cleaned: true,
           cleanedAt: new Date(),
         });

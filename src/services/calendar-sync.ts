@@ -10,7 +10,7 @@ import {
   UserCredential
 } from 'firebase/auth';
 import { doc, updateDoc, getDoc, setDoc } from 'firebase/firestore';
-import { db } from './firebase/config';
+import { getFirebaseDb, getFirebaseAuth } from './firebase/config';
 import { TaskDoc, TaskStatus } from '../types/task';
 import { RecordDoc } from '../types/record';
 import { createTask, updateTask, getTasks } from './firebase/tasks';
@@ -60,7 +60,7 @@ interface CalendarSyncState {
  */
 export async function requestCalendarAuthorization(): Promise<string | null> {
   try {
-    const auth = getAuth();
+    const auth = getFirebaseAuth();
     const provider = new GoogleAuthProvider();
     
     // 添加 Calendar 範圍
@@ -83,7 +83,7 @@ export async function requestCalendarAuthorization(): Promise<string | null> {
     
     // 儲存存取權杖到使用者文件
     const userId = result.user.uid;
-    await updateDoc(doc(db, 'users', userId), {
+    await updateDoc(doc(getFirebaseDb(), 'users', userId), {
       googleCalendarToken: credential.accessToken,
       googleCalendarTokenExpiry: new Date(Date.now() + 3600 * 1000), // 1 小時後過期
       googleCalendarSyncEnabled: true,
@@ -102,7 +102,7 @@ export async function requestCalendarAuthorization(): Promise<string | null> {
  */
 async function getCalendarAccessToken(userId: string): Promise<string | null> {
   try {
-    const userDoc = await getDoc(doc(db, 'users', userId));
+    const userDoc = await getDoc(doc(getFirebaseDb(), 'users', userId));
     if (!userDoc.exists()) {
       return null;
     }
@@ -167,7 +167,7 @@ export async function syncCalendarEvents(
   
   try {
     // 獲取同步狀態
-    const syncStateDoc = await getDoc(doc(db, 'calendarSync', userId));
+    const syncStateDoc = await getDoc(doc(getFirebaseDb(), 'calendarSync', userId));
     const syncState: CalendarSyncState = syncStateDoc.exists() 
       ? syncStateDoc.data() as CalendarSyncState
       : {};
@@ -213,7 +213,7 @@ export async function syncCalendarEvents(
     }
     
     // 更新同步狀態
-    await setDoc(doc(db, 'calendarSync', userId), {
+    await setDoc(doc(getFirebaseDb(), 'calendarSync', userId), {
       lastSyncAt: new Date(),
       syncToken: data.nextSyncToken || syncState.syncToken,
       calendarId
@@ -495,7 +495,7 @@ export async function setupAutoSync(
 ): Promise<void> {
   // 這個函數應該在 Cloud Functions 中實作為定期觸發器
   // 這裡只是記錄設定
-  await setDoc(doc(db, 'calendarSyncSettings', userId), {
+  await setDoc(doc(getFirebaseDb(), 'calendarSyncSettings', userId), {
     enabled: true,
     intervalMinutes,
     teamId,
