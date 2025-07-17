@@ -212,10 +212,11 @@ export async function getTask(
       return null;
     }
     
-    const task = {
+    const data = taskDoc.data() as Omit<TaskDoc, 'id'>;
+    const task: TaskDoc = {
       id: taskDoc.id,
-      ...taskDoc.data()
-    } as TaskDoc;
+      ...data
+    };
     
     // 檢查查看權限
     const canView = await checkTaskViewPermission(userId, task);
@@ -292,10 +293,11 @@ export async function getTasks(
     
     // 逐一檢查權限和過濾
     for (const doc of snapshot.docs) {
-      const task = {
+      const data = doc.data() as Omit<TaskDoc, 'id'>;
+      const task: TaskDoc = {
         id: doc.id,
-        ...doc.data()
-      } as TaskDoc;
+        ...data
+      };
       
       const canView = await checkTaskViewPermission(userId, task);
       if (canView) {
@@ -346,10 +348,11 @@ export function subscribeToTasks(
     
     // 逐一檢查權限
     for (const doc of snapshot.docs) {
-      const task = {
+      const data = doc.data() as Omit<TaskDoc, 'id'>;
+      const task: TaskDoc = {
         id: doc.id,
-        ...doc.data()
-      } as TaskDoc;
+        ...data
+      };
       
       const canView = await checkTaskViewPermission(userId, task);
       if (canView) {
@@ -451,7 +454,7 @@ export async function createTasksFromAIActions(
   actionItems: string[],
   assigneeId: string,
   teamId: string,
-  organizationId: string,
+  _organizationId: string,
   customerIds?: string[]
 ): Promise<TaskDoc[]> {
   try {
@@ -598,10 +601,11 @@ export async function getTasksByCustomer(
     const tasks: TaskDoc[] = [];
     
     for (const doc of snapshot.docs) {
-      const task = {
+      const data = doc.data() as Omit<TaskDoc, 'id'>;
+      const task: TaskDoc = {
         id: doc.id,
-        ...doc.data()
-      } as TaskDoc;
+        ...data
+      };
       
       const canView = await checkTaskViewPermission(userId, task);
       if (canView) {

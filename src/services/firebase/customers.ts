@@ -22,8 +22,7 @@ import {
 import { db } from './config';
 import { CustomerDoc } from '../../types/firebase';
 import { 
-  CustomFieldDefinition,
-  CustomFieldValidationError 
+  CustomFieldDefinition
 } from '../../types/custom-fields';
 import { 
   getCustomFieldDefinitions,
@@ -84,7 +83,7 @@ export async function createCustomer(
       customerDoc
     );
     
-    return { ...customerDoc, id: customerId } as CustomerDoc;
+    return { ...customerDoc, id: customerId };
   } catch (error) {
     console.error('建立客戶失敗:', error);
     throw error;
@@ -196,10 +195,11 @@ export async function getCustomer(
       return null;
     }
     
+    const data = customerDoc.data() as Omit<CustomerDoc, 'id'>;
     return {
       id: customerDoc.id,
-      ...customerDoc.data()
-    } as CustomerDoc;
+      ...data
+    };
   } catch (error) {
     console.error('獲取客戶失敗:', error);
     throw error;
@@ -246,10 +246,11 @@ export async function getCustomers(
     for (const doc of snapshot.docs) {
       const hasPermission = await canViewCustomer(userId, doc.id);
       if (hasPermission) {
-        const customer = {
+        const data = doc.data() as Omit<CustomerDoc, 'id'>;
+        const customer: CustomerDoc = {
           id: doc.id,
-          ...doc.data()
-        } as CustomerDoc;
+          ...data
+        };
         
         // 客戶端搜尋過濾（因為 Firestore 不支援全文搜尋）
         if (filters?.searchTerm) {
@@ -296,10 +297,11 @@ export function subscribeToCustomers(
     for (const doc of snapshot.docs) {
       const hasPermission = await canViewCustomer(userId, doc.id);
       if (hasPermission) {
+        const data = doc.data() as Omit<CustomerDoc, 'id'>;
         customers.push({
           id: doc.id,
-          ...doc.data()
-        } as CustomerDoc);
+          ...data
+        });
       }
     }
     

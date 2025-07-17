@@ -7,8 +7,7 @@ import { devtools } from 'zustand/middleware';
 import { 
   RecordDoc,
   RecordFilter,
-  RecordProcessingResult,
-  RecordUploadRequest 
+  RecordProcessingResult
 } from '../types/record';
 import { CustomFieldDefinition } from '../types/custom-fields';
 import { 

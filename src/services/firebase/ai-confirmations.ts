@@ -16,13 +16,11 @@ import {
   orderBy,
   onSnapshot,
   Timestamp,
-  serverTimestamp,
   Unsubscribe
 } from 'firebase/firestore';
 import { db } from './config';
 import { 
-  AIProcessingConfirmation,
-  AIFieldMapping 
+  AIProcessingConfirmation
 } from '../../types/custom-fields';
 import { updateCustomerAIFields } from './customers';
 import { canViewRecord, canEditRecord } from './permissions';
@@ -123,7 +121,7 @@ export async function updateConfirmationStatus(
  */
 export async function applyConfirmedMappings(
   confirmationId: string,
-  userId: string
+  _userId: string
 ): Promise<void> {
   try {
     // 獲取確認請求
@@ -175,7 +173,7 @@ export async function applyConfirmedMappings(
  */
 export async function getPendingConfirmations(
   userId: string,
-  teamId?: string
+  _teamId?: string
 ): Promise<AIProcessingConfirmation[]> {
   try {
     let q = query(
@@ -299,9 +297,9 @@ export async function batchConfirmRequests(
  * 獲取確認請求的統計資料
  */
 export async function getConfirmationStats(
-  organizationId: string,
-  dateFrom?: Date,
-  dateTo?: Date
+  _organizationId: string,
+  _dateFrom?: Date,
+  _dateTo?: Date
 ): Promise<{
   total: number;
   pending: number;

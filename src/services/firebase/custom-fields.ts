@@ -20,10 +20,8 @@ import {
 import { db } from './config';
 import { 
   CustomFieldDefinition, 
-  CustomFieldValue,
   CustomFieldValidationError 
 } from '../../types/custom-fields';
-import { formatFieldDescriptionForAI } from './field-interpretation';
 
 const CUSTOM_FIELDS_COLLECTION = 'customFieldDefinitions';
 
@@ -380,7 +378,7 @@ async function checkFieldKeyUniqueness(
 /**
  * 檢查欄位是否被使用
  */
-async function checkFieldUsage(fieldDef: CustomFieldDefinition): Promise<boolean> {
+async function checkFieldUsage(_fieldDef: CustomFieldDefinition): Promise<boolean> {
   // TODO: 實作檢查邏輯
   // 需要查詢相應的 customers 或 records 集合
   // 檢查是否有文件的 customFields 包含此欄位鍵值
@@ -404,7 +402,7 @@ async function processFieldDescription(
  */
 export async function getCustomFieldDefinition(
   fieldId: string,
-  userId: string
+  _userId: string
 ): Promise<CustomFieldDefinition | null> {
   try {
     const fieldDoc = await getDoc(doc(db, CUSTOM_FIELDS_COLLECTION, fieldId));

@@ -161,7 +161,7 @@ export function mergeFieldInterpretations(
 export function validateFieldValue(
   value: any,
   fieldType: string,
-  interpretation?: SystemFieldInterpretation
+  _interpretation?: SystemFieldInterpretation
 ): boolean {
   // 基本類型驗證
   switch (fieldType) {

@@ -13,7 +13,6 @@ import {
 } from '../../types/custom-fields';
 import { 
   getSystemFieldInterpretations,
-  mergeFieldInterpretations,
   calculateFieldRelevance
 } from './field-interpretation';
 import { 

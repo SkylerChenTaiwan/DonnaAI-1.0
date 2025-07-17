@@ -29,14 +29,11 @@ import {
 import { db, storage } from './config';
 import { 
   RecordDoc,
-  RecordType,
   RecordStatus,
   RecordFilter,
-  RecordUploadRequest,
   RecordProcessingResult
 } from '../../types/record';
 import { 
-  CustomFieldDefinition,
   AIFieldMapping 
 } from '../../types/custom-fields';
 import { 
@@ -119,7 +116,7 @@ export async function createRecord(
       triggerAIProcessing(recordId, recordDoc);
     }
     
-    return { ...recordDoc, id: recordId } as RecordDoc;
+    return { ...recordDoc, id: recordId };
   } catch (error) {
     console.error('建立紀錄失敗:', error);
     throw error;
@@ -250,10 +247,11 @@ export async function getRecord(
       return null;
     }
     
+    const data = recordDoc.data() as Omit<RecordDoc, 'id'>;
     return {
       id: recordDoc.id,
-      ...recordDoc.data()
-    } as RecordDoc;
+      ...data
+    };
   } catch (error) {
     console.error('獲取紀錄失敗:', error);
     throw error;
@@ -314,10 +312,11 @@ export async function getRecords(
     for (const doc of snapshot.docs) {
       const hasPermission = await canViewRecord(userId, doc.id);
       if (hasPermission) {
+        const data = doc.data() as Omit<RecordDoc, 'id'>;
         records.push({
           id: doc.id,
-          ...doc.data()
-        } as RecordDoc);
+          ...data
+        });
       }
     }
     
@@ -357,10 +356,11 @@ export function subscribeToRecords(
     for (const doc of snapshot.docs) {
       const hasPermission = await canViewRecord(userId, doc.id);
       if (hasPermission) {
+        const data = doc.data() as Omit<RecordDoc, 'id'>;
         records.push({
           id: doc.id,
-          ...doc.data()
-        } as RecordDoc);
+          ...data
+        });
       }
     }
     
@@ -386,10 +386,11 @@ export async function processRecordForCustomerFields(
       throw new Error('找不到指定的紀錄');
     }
     
-    const record = {
+    const data = recordDoc.data() as Omit<RecordDoc, 'id'>;
+    const record: RecordDoc = {
       id: recordDoc.id,
-      ...recordDoc.data()
-    } as RecordDoc;
+      ...data
+    };
     
     // 執行欄位提取
     const { customerFieldMappings, recordFieldMappings, suggestedActions } = 
@@ -478,10 +479,11 @@ export async function getRecordsByCustomer(
     for (const doc of snapshot.docs) {
       const hasPermission = await canViewRecord(userId, doc.id);
       if (hasPermission) {
+        const data = doc.data() as Omit<RecordDoc, 'id'>;
         records.push({
           id: doc.id,
-          ...doc.data()
-        } as RecordDoc);
+          ...data
+        });
       }
     }
     

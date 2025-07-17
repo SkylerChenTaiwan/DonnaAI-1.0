@@ -6,7 +6,6 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { AIProcessingConfirmation } from '../types/custom-fields';
 import { 
-  createConfirmationRequest,
   updateConfirmationStatus,
   getPendingConfirmations,
   getConfirmation,
