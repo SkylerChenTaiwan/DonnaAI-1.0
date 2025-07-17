@@ -14,11 +14,11 @@ import {
   Alert,
   Platform,
   Animated,
-  Vibration
+  Vibration,
+  DevSettings
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Updates from 'expo-updates';
 import { Accelerometer } from 'expo-sensors';
 import { environmentManager } from '../../config/environment';
 import { errorLogger } from '../../services/error/ErrorLogger';
@@ -129,11 +129,11 @@ export const DeveloperMenu: React.FC = () => {
       title: '重新載入',
       icon: '🔄',
       description: '重新載入應用程式',
-      action: async () => {
-        try {
-          await Updates.reloadAsync();
-        } catch (error) {
-          Alert.alert('重新載入失敗', error.message);
+      action: () => {
+        if (__DEV__) {
+          DevSettings.reload();
+        } else {
+          Alert.alert('提示', '此功能僅在開發模式可用');
         }
       }
     },

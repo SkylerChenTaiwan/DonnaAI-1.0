@@ -16,13 +16,13 @@ import {
   Alert
 } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
-import { useAuthStore } from '../../stores/authStore';
-import { useClientStore } from '../../stores/clientStore';
-import { useTaskStore } from '../../stores/taskStore';
-import { useCustomFieldStore } from '../../stores/customFieldStore';
-import { useAudioStore } from '../../stores/audioStore';
-import { useMeetingStore } from '../../stores/meetingStore';
-import { DEV_TOOLS_CONSTANTS } from '../../config/constants';
+import { useAuthStore } from '@/stores/authStore';
+import { useClientStore } from '@/stores/clientStore';
+import { useTaskStore } from '@/stores/taskStore';
+import { useCustomFieldStore } from '@/stores/customFieldStore';
+import { useAudioStore } from '@/stores/audioStore';
+import { useMeetingStore } from '@/stores/meetingStore';
+import { DEV_TOOLS_CONSTANTS } from '@/config/constants';
 
 interface StoreData {
   name: string;
