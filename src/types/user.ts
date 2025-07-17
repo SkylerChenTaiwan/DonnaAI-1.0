@@ -12,6 +12,12 @@ export interface User {
   managedTeamIds?: string[]; // 管理的團隊
   createdAt: Date;
   lastLoginAt: Date;
+  // CRM 相關欄位
+  department?: string;          // 部門
+  jobTitle?: string;           // 職稱
+  supervisorId?: string;       // 上級主管 ID
+  phoneNumber?: string;        // 電話號碼
+  avatar?: string;             // 頭像 URL
 }
 
 export interface Organization {

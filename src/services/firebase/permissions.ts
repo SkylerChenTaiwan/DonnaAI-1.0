@@ -252,3 +252,182 @@ export const canViewCustomer = async (userId: string, customerId: string): Promi
     return false;
   }
 };
+
+/**
+ * 檢查使用者是否可以定義自訂欄位
+ * 只有管理員和授權的主管可以定義自訂欄位
+ */
+export const canDefineCustomFields = async (userId: string, organizationId: string): Promise<boolean> => {
+  try {
+    const userDoc = await getDoc(doc(db, 'users', userId));
+    if (!userDoc.exists()) {
+      return false;
+    }
+    
+    const user = userDoc.data() as User;
+    
+    // 確認使用者屬於該組織
+    if (user.organizationId !== organizationId) {
+      return false;
+    }
+    
+    // 管理員可以定義自訂欄位
+    if (user.role === 'admin') {
+      return true;
+    }
+    
+    // 主管需要特殊授權（可以在組織設定中配置）
+    if (user.role === 'manager') {
+      // TODO: 檢查組織設定中是否允許主管定義自訂欄位
+      // 目前預設主管也可以定義
+      return true;
+    }
+    
+    return false;
+  } catch (error) {
+    console.error('檢查自訂欄位定義權限時發生錯誤:', error);
+    return false;
+  }
+};
+
+/**
+ * 檢查使用者是否可以編輯特定的自訂欄位定義
+ */
+export const canEditCustomFieldDefinition = async (
+  userId: string, 
+  fieldCreatorId: string,
+  fieldPermissions?: { canEdit: string[] }
+): Promise<boolean> => {
+  try {
+    // 建立者可以編輯
+    if (userId === fieldCreatorId) {
+      return true;
+    }
+    
+    // 在授權編輯清單中的使用者可以編輯
+    if (fieldPermissions?.canEdit.includes(userId)) {
+      return true;
+    }
+    
+    // 組織管理員可以編輯所有欄位
+    if (await isOrgAdmin(userId)) {
+      return true;
+    }
+    
+    return false;
+  } catch (error) {
+    console.error('檢查自訂欄位編輯權限時發生錯誤:', error);
+    return false;
+  }
+};
+
+/**
+ * 檢查使用者是否可以查看特定紀錄
+ */
+export const canViewRecord = async (userId: string, recordId: string): Promise<boolean> => {
+  try {
+    const recordDoc = await getDoc(doc(db, 'records', recordId));
+    if (!recordDoc.exists()) {
+      return false;
+    }
+    
+    const record = recordDoc.data();
+    const userDoc = await getDoc(doc(db, 'users', userId));
+    if (!userDoc.exists()) {
+      return false;
+    }
+    
+    const user = userDoc.data() as User;
+    
+    // 建立者可以查看
+    if (record.createdBy === userId) {
+      return true;
+    }
+    
+    // 參與者可以查看
+    if (record.participantIds?.includes(userId)) {
+      return true;
+    }
+    
+    // 同團隊成員可以查看
+    if (user.teamIds.includes(record.teamId)) {
+      return true;
+    }
+    
+    // 團隊主管可以查看
+    if (await isManagerOfTeam(userId, record.teamId)) {
+      return true;
+    }
+    
+    // 組織管理員可以查看
+    if (await isOrgAdmin(userId)) {
+      return true;
+    }
+    
+    return false;
+  } catch (error) {
+    console.error('檢查紀錄查看權限時發生錯誤:', error);
+    return false;
+  }
+};
+
+/**
+ * 檢查使用者是否可以編輯特定紀錄
+ */
+export const canEditRecord = async (userId: string, recordId: string): Promise<boolean> => {
+  try {
+    const recordDoc = await getDoc(doc(db, 'records', recordId));
+    if (!recordDoc.exists()) {
+      return false;
+    }
+    
+    const record = recordDoc.data();
+    
+    // 建立者可以編輯
+    if (record.createdBy === userId) {
+      return true;
+    }
+    
+    // 團隊主管可以編輯
+    if (await isManagerOfTeam(userId, record.teamId)) {
+      return true;
+    }
+    
+    // 組織管理員可以編輯
+    if (await isOrgAdmin(userId)) {
+      return true;
+    }
+    
+    return false;
+  } catch (error) {
+    console.error('檢查紀錄編輯權限時發生錯誤:', error);
+    return false;
+  }
+};
+
+/**
+ * 檢查使用者是否可以分派任務給另一個使用者
+ */
+export const canAssignTaskTo = async (assignerId: string, assigneeId: string): Promise<boolean> => {
+  try {
+    // 使用者可以分派任務給自己
+    if (assignerId === assigneeId) {
+      return true;
+    }
+    
+    // 主管可以分派任務給其管理的團隊成員
+    if (await isManagerOfUser(assignerId, assigneeId)) {
+      return true;
+    }
+    
+    // 組織管理員可以分派任務給任何人
+    if (await isOrgAdmin(assignerId)) {
+      return true;
+    }
+    
+    return false;
+  } catch (error) {
+    console.error('檢查任務分派權限時發生錯誤:', error);
+    return false;
+  }
+};
