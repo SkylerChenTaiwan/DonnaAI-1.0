@@ -12,6 +12,7 @@
 | 04v  | frontend-pages-implementation.md | ✅ 已完成 | 完整前端頁面系統 - 底部導航、首頁模式切換、資料庫Table、小工具、設定頁面 | 2025-07-17 |
 | 05v  | test-environment-error-monitoring.md | ✅ 已完成 | 測試環境與錯誤監控系統 - 環境配置、錯誤邊界、開發者工具、協作優化 | 2025-07-17 |
 | 06   | expo-sdk-upgrade-and-dependency-optimization.md | 📋 待執行 | Expo SDK 升級與依賴優化 - 版本升級、相容性修復、功能驗證、效能優化 | - |
+| 07   | expo-sdk-53-upgrade.md | 📋 待執行 | Expo SDK 53 升級 - 解決 Firebase 相容性、維持 React 18、Metro 配置優化 | - |
 
 ## 命名規則
 
@@ -27,7 +28,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：07**
+**下一個新建的 PRP 應使用編號：08**
 
 ## PRP 類型說明
 
