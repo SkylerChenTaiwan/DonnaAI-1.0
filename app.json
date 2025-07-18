@@ -18,7 +18,6 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.donnaai.app",
       "buildNumber": "1.0.0",
-      "deploymentTarget": "15.1",
       "infoPlist": {
         "UIBackgroundModes": ["audio"],
         "NSMicrophoneUsageDescription": "此應用需要錄音權限來記錄會議內容，協助您進行會議記錄和智能分析。",
@@ -56,9 +55,6 @@
       }]
     ],
     "extra": {
-      "eas": {
-        "projectId": "your-project-id"
-      },
       "firebaseApiKey": "",
       "firebaseAuthDomain": "",
       "firebaseProjectId": "",
