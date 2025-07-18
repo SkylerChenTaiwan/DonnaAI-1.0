@@ -21,6 +21,16 @@
      - /src/services/firebase/ai-confirmations.ts
      - /src/services/firebase/permissions.ts
 
+2. **修復 Expo Go 連接問題**
+   - ✅ 診斷根本原因：Node.js v24.3.0 與 Metro bundler 相容性問題
+   - ✅ 安裝並配置 nvm 版本管理器
+   - ✅ 降級 Node.js 到穩定版本 v20.18.0
+   - ✅ 重新安裝所有依賴套件並修復依賴衝突
+   - ✅ 驗證 Metro bundler 正確監聽端口 8081
+   - ✅ 確認透過 LAN IP (10.1.1.142:8081) 可正常連接
+   - ✅ 提交修復解決方案到 Git
+   - **結果**：Expo Go 現在可以正常連接開發伺服器
+
 ## 2025-01-17
 
 ### ✅ 完成的任務
