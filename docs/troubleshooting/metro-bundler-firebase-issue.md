@@ -258,15 +258,33 @@ module.exports = config;
 - ✅ 開發體驗順暢
 
 ## 版本資訊
-- Expo SDK: 52.0.0（注意：SDK 53 也有相同問題）
+- Expo SDK: 52.0.0（穩定版本）
 - React Native: 0.76.9
 - Firebase: 10.12.2
 - Metro: 內建於 Expo SDK
 - Node.js: v20.18.0
 
+## ⚠️ 重要提醒
+
+### 1. SDK 版本選擇
+- **建議使用 SDK 52**：經過驗證的穩定版本
+- **SDK 53 已知問題**：
+  - 需要 React 19（可能導致相容性問題）
+  - 可能出現 C++ Exception 錯誤
+  - 需要大量套件升級
+
+### 2. Expo Go 版本不匹配
+如果你的 Expo Go 是 SDK 53：
+- **方案 1**：下載 SDK 52 版本的 Expo Go（推薦）
+  - iOS: https://expo.dev/go?sdkVersion=52&platform=ios&device=false
+  - Android: https://expo.dev/go?sdkVersion=52&platform=android&device=false
+- **方案 2**：忽略版本警告，仍可正常使用（會顯示警告但能運行）
+
 ## 🔗 相關資源
 - [GitHub Issue #36588](https://github.com/expo/expo/issues/36588) - 官方已知問題
 - [Watchman Troubleshooting](https://facebook.github.io/watchman/docs/troubleshooting.html#recrawl)
+- [Expo SDK 53 升級指南](https://docs.expo.dev/workflow/upgrading-expo-sdk-walkthrough/)
 
 ## 更新日期
 - 2025-07-20：發現命令行超時問題，更新完整解決方案
+- 2025-07-20：升級到 SDK 53 並記錄新的相容性問題
