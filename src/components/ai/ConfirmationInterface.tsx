@@ -39,11 +39,11 @@ interface TaskSuggestion {
   confidence: number;
 }
 
-export const ConfirmationInterface: React.FC<ConfirmationInterfaceProps> = ({
+export const ConfirmationInterface = ({
   recordId,
   onComplete,
   onCancel
-}) => {
+}: ConfirmationInterfaceProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [customerFieldMappings, setCustomerFieldMappings] = useState<FieldModification[]>([]);
   const [taskSuggestions, setTaskSuggestions] = useState<TaskSuggestion[]>([]);

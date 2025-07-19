@@ -32,12 +32,12 @@ interface ErrorReporterProps {
  * 錯誤報告元件
  * 允許使用者查看、複製和分享錯誤報告
  */
-export const ErrorReporter: React.FC<ErrorReporterProps> = ({
+export const ErrorReporter = ({
   errorId,
   error,
   visible,
   onClose
-}) => {
+}: ErrorReporterProps) => {
   const [reportText, setReportText] = useState('');
   const [showPreview, setShowPreview] = useState(false);
   

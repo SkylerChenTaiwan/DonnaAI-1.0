@@ -32,7 +32,7 @@ interface ErrorDisplayProps {
  * 錯誤顯示元件
  * 根據 compact 模式決定顯示簡潔版或詳細版
  */
-export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
+export const ErrorDisplay = ({
   error,
   errorInfo,
   errorId,
@@ -40,7 +40,7 @@ export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
   onCopy,
   onShare,
   compact = false
-}) => {
+}: ErrorDisplayProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showStackTrace, setShowStackTrace] = useState(false);
   const animatedHeight = useState(new Animated.Value(0))[0];

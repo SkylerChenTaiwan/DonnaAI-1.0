@@ -11,11 +11,11 @@ interface SettingSectionProps extends SettingSectionType {
   onItemValueChange?: (itemId: string, value: any) => void;
 }
 
-export const SettingSection: React.FC<SettingSectionProps> = ({
+export const SettingSection = ({
   title,
   items,
   onItemValueChange,
-}) => {
+}: SettingSectionProps) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>

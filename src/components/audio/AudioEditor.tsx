@@ -25,12 +25,12 @@ interface TrimSettings {
 
 type EditMode = 'trim' | 'cut' | 'preview';
 
-export const AudioEditor: React.FC<AudioEditorProps> = ({
+export const AudioEditor = ({
   audioUri,
   originalDuration,
   onSaveEdit,
   onCancel
-}) => {
+}: AudioEditorProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);

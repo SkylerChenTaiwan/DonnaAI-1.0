@@ -32,7 +32,7 @@ interface StoreData {
  * 狀態檢查工具
  * 顯示所有 Zustand store 的當前狀態
  */
-export const StateInspector: React.FC = () => {
+export const StateInspector = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedStores, setExpandedStores] = useState<Set<string>>(new Set());
   const [selectedPath, setSelectedPath] = useState<string | null>(null);

@@ -17,7 +17,7 @@ interface SettingItemProps extends SettingItemType {
   onValueChange?: (value: any) => void;
 }
 
-export const SettingItem: React.FC<SettingItemProps> = ({
+export const SettingItem = ({
   title,
   subtitle,
   type,
@@ -25,7 +25,7 @@ export const SettingItem: React.FC<SettingItemProps> = ({
   action,
   icon,
   onValueChange,
-}) => {
+}: SettingItemProps) => {
   const renderRight = () => {
     switch (type) {
       case 'switch':

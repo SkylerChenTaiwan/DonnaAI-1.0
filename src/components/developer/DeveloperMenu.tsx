@@ -38,7 +38,7 @@ interface MenuItem {
  * 開發者選單元件
  * 通過搖晃手勢或其他方式觸發
  */
-export const DeveloperMenu: React.FC = () => {
+export const DeveloperMenu = () => {
   const navigation = useNavigation<any>();
   const [visible, setVisible] = useState(false);
   const [shakeCount, setShakeCount] = useState(0);

@@ -21,12 +21,12 @@ interface MakeupRecordingProps {
 
 type MakeupMode = 'selection' | 'voice_summary' | 'text_summary' | 'processing';
 
-export const MakeupRecording: React.FC<MakeupRecordingProps> = ({
+export const MakeupRecording = ({
   meetingTitle,
   originalMeetingDate,
   onComplete,
   onCancel
-}) => {
+}: MakeupRecordingProps) => {
   const [currentMode, setCurrentMode] = useState<MakeupMode>('selection');
   const [textSummary, setTextSummary] = useState('');
   const [voiceSummaryUri, setVoiceSummaryUri] = useState<string | null>(null);
