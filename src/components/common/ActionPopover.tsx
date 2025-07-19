@@ -52,12 +52,12 @@ const actions: Action[] = [
   },
 ];
 
-export const ActionPopover: React.FC<ActionPopoverProps> = ({
+export const ActionPopover = ({
   visible,
   onClose,
   onAction,
   fromRef,
-}) => {
+}: ActionPopoverProps) => {
   return (
     <Popover
       isVisible={visible}

@@ -20,14 +20,14 @@ interface SearchBarProps extends Omit<TextInputProps, 'value' | 'onChangeText'> 
   onClear?: () => void;
 }
 
-export const SearchBar: React.FC<SearchBarProps> = ({
+export const SearchBar = ({
   value,
   onChangeText,
   placeholder = '搜尋...',
   debounce = 300,
   onClear,
   ...props
-}) => {
+}: SearchBarProps) => {
   const [localValue, setLocalValue] = useState(value);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 

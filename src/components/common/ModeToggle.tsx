@@ -17,11 +17,11 @@ interface ModeToggleProps {
   label?: string;
 }
 
-export const ModeToggle: React.FC<ModeToggleProps> = ({
+export const ModeToggle = ({
   value,
   onToggle,
   label = '主管模式',
-}) => {
+}: ModeToggleProps) => {
   const isManagerMode = value === 'manager';
 
   const handleToggle = (newValue: boolean) => {

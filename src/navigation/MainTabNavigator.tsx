@@ -20,7 +20,7 @@ type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
-export const MainTabNavigator: React.FC = () => {
+export const MainTabNavigator = () => {
   const { user } = useAuthStore();
   const navigation = useNavigation<NavigationProp>();
   const [showActionModal, setShowActionModal] = useState(false);
@@ -167,7 +167,7 @@ export const MainTabNavigator: React.FC = () => {
 };
 
 // 空元件用於 AddAction tab
-const EmptyComponent: React.FC = () => null;
+const EmptyComponent = () => null;
 
 const styles = StyleSheet.create({
   addButtonContainer: {

@@ -26,7 +26,7 @@ export interface AudioRecorderProps {
 
 type RecordingStatus = 'idle' | 'recording' | 'paused' | 'stopped' | 'loading';
 
-export const AudioRecorder: React.FC<AudioRecorderProps> = ({
+export const AudioRecorder = ({
   onRecordingComplete,
   onRecordingStart,
   onRecordingStop,
@@ -36,7 +36,7 @@ export const AudioRecorder: React.FC<AudioRecorderProps> = ({
   showWaveform = true,
   enableOfflineSupport = true,
   userId
-}) => {
+}: AudioRecorderProps) => {
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [recordingStatus, setRecordingStatus] = useState<RecordingStatus>('idle');
   const [duration, setDuration] = useState(0);

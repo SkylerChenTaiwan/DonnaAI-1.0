@@ -18,12 +18,12 @@ interface LoadingSpinnerProps {
   style?: ViewStyle;
 }
 
-export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
+export const LoadingSpinner = ({
   message,
   size = 'large',
   color = '#007AFF',
   style,
-}) => {
+}: LoadingSpinnerProps) => {
   return (
     <View style={[styles.container, style]}>
       <ActivityIndicator size={size} color={color} />

@@ -21,14 +21,14 @@ interface ToolCardProps {
   onPress: () => void;
 }
 
-export const ToolCard: React.FC<ToolCardProps> = ({
+export const ToolCard = ({
   id,
   title,
   description,
   icon,
   color = '#007AFF',
   onPress,
-}) => {
+}: ToolCardProps) => {
   return (
     <TouchableOpacity
       style={styles.container}

@@ -19,12 +19,12 @@ interface LayoutProps {
   contentStyle?: ViewStyle;
 }
 
-export const Layout: React.FC<LayoutProps> = ({
+export const Layout = ({
   children,
   scrollable = true,
   style,
   contentStyle,
-}) => {
+}: LayoutProps) => {
   const content = scrollable ? (
     <ScrollView
       style={styles.scrollView}

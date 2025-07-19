@@ -18,13 +18,13 @@ interface TextInputProps extends RNTextInputProps {
   containerStyle?: ViewStyle;
 }
 
-export const TextInput: React.FC<TextInputProps> = ({
+export const TextInput = ({
   label,
   error,
   containerStyle,
   style,
   ...props
-}) => {
+}: TextInputProps) => {
   return (
     <View style={[styles.container, containerStyle]}>
       {label && <Text style={styles.label}>{label}</Text>}

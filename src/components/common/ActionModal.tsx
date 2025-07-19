@@ -52,11 +52,11 @@ const actions: Action[] = [
   },
 ];
 
-export const ActionModal: React.FC<ActionModalProps> = ({
+export const ActionModal = ({
   visible,
   onClose,
   onAction,
-}) => {
+}: ActionModalProps) => {
   const scaleAnim = React.useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {

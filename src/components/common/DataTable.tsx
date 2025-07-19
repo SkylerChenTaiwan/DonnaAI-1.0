@@ -16,7 +16,7 @@ import { SearchBar } from './SearchBar';
 import { useTableData } from '@/hooks/useTableData';
 import { TableProps, TableData, TableColumn } from '@/types/table';
 
-export const DataTable: React.FC<TableProps> = ({
+export const DataTable = ({
   data,
   columns,
   searchable = true,
@@ -25,7 +25,7 @@ export const DataTable: React.FC<TableProps> = ({
   onRowPress,
   refreshing = false,
   onRefresh,
-}) => {
+}: TableProps) => {
   const {
     data: processedData,
     searchQuery,
