@@ -5,9 +5,8 @@
 
 import React, { useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
-import { AppNavigator } from '@/navigation/AppNavigator';
+import { AppWithDeveloperMenu } from '@/navigation/AppWithDeveloperMenu';
 import { ErrorBoundary } from '@/services/error/ErrorBoundary';
-import { DeveloperMenu } from '@/components/developer/DeveloperMenu';
 import { errorLogger } from '@/services/error/ErrorLogger';
 import { environmentManager } from '@/config/environment';
 
@@ -72,9 +71,7 @@ export default function App() {
         }
       }}
     >
-      <AppNavigator />
-      {/* 開發者工具（只在開發模式顯示） */}
-      {environmentManager.isDevToolsEnabled() && <DeveloperMenu />}
+      <AppWithDeveloperMenu />
     </ErrorBoundary>
   );
 }

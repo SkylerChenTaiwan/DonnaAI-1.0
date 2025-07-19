@@ -20,7 +20,7 @@ import { environmentManager } from '@/config/environment';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
-export const AppNavigator: React.FC = () => {
+export const AppNavigator = () => {
   const { isAuthenticated, isLoading, initializeAuth } = useAuthStore();
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -45,9 +45,8 @@ export const AppNavigator: React.FC = () => {
   }
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
+    <Stack.Navigator
+      screenOptions={{
           headerShown: false,
           animationTypeForReplace: isAuthenticated ? 'push' : 'pop',
         }}
@@ -111,6 +110,5 @@ export const AppNavigator: React.FC = () => {
           />
         )}
       </Stack.Navigator>
-    </NavigationContainer>
   );
 };
