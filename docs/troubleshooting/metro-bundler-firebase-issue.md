@@ -210,9 +210,9 @@ module.exports = config;
 - `.watchmanconfig` 文件
 
 ### 4. **Firebase 版本相容性**
-- Firebase v10+ 的 exports 欄位與 Expo SDK 53 不相容
-- 必須手動移除 exports 欄位
-- 考慮使用 Firebase v9.6.11 避免問題
+- Firebase v10+ 的 exports 欄位與 Metro bundler 不相容
+- **解決方案：使用腳本移除 exports 欄位**（不需要降級 Firebase）
+- 我們成功使用 Firebase v10.12.2 搭配此解決方案
 
 ### 5. **自動化工具會破壞修復**
 - 某些 IDE 會自動將 `getFirebaseDb()` 改回 `db`
