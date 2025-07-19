@@ -90,9 +90,9 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     if (!this.state.errorId) return;
     
     try {
-      const { default: Clipboard } = await import('@react-native-clipboard/clipboard');
+      const Clipboard = await import('expo-clipboard');
       const errorText = errorLogger.formatErrorForSharing(this.state.errorId);
-      await Clipboard.setString(errorText);
+      await Clipboard.setStringAsync(errorText);
       
       // TODO: 顯示複製成功提示
       if (__DEV__) {

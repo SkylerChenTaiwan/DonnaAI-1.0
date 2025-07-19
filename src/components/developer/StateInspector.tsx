@@ -15,7 +15,7 @@ import {
   Platform,
   Alert
 } from 'react-native';
-import Clipboard from '@react-native-clipboard/clipboard';
+import * as Clipboard from 'expo-clipboard';
 import { useAuthStore } from '@/stores/authStore';
 import { useTaskStore } from '@/stores/taskStore';
 import { useRecordStore } from '@/stores/recordStore';
@@ -204,7 +204,7 @@ export const StateInspector = () => {
   const copyToClipboard = async (data: any, storeName: string) => {
     try {
       const json = JSON.stringify(data, null, 2);
-      await Clipboard.setString(json);
+      await Clipboard.setStringAsync(json);
       Alert.alert('複製成功', `${storeName} 的狀態已複製到剪貼簿`);
     } catch (error) {
       Alert.alert('複製失敗', '無法複製狀態資料');
@@ -222,7 +222,7 @@ export const StateInspector = () => {
       });
       
       const json = JSON.stringify(allStates, null, 2);
-      await Clipboard.setString(json);
+      await Clipboard.setStringAsync(json);
       Alert.alert('匯出成功', '所有狀態已複製到剪貼簿');
     } catch (error) {
       Alert.alert('匯出失敗', '無法匯出狀態資料');

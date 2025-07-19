@@ -14,7 +14,7 @@ import {
   ScrollView,
   Platform
 } from 'react-native';
-import Clipboard from '@react-native-clipboard/clipboard';
+import * as Clipboard from 'expo-clipboard';
 import { Share } from 'react-native';
 import { errorLogger } from './ErrorLogger';
 import { ErrorReport } from '../../types/error';
@@ -65,7 +65,7 @@ export const ErrorReporter = ({
   const handleCopy = async () => {
     try {
       const report = await generateReport();
-      await Clipboard.setString(report);
+      await Clipboard.setStringAsync(report);
       
       Alert.alert(
         '複製成功',
