@@ -2,7 +2,7 @@
  * 主要標籤導航器
  */
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { View, StyleSheet } from 'react-native';
@@ -13,7 +13,7 @@ import { EnhancedDashboard } from '@/screens/dashboard/EnhancedDashboard';
 import { DatabaseScreen } from '@/screens/database/DatabaseScreen';
 import { ToolsScreen } from '@/screens/tools/ToolsScreen';
 import { SettingsScreen } from '@/screens/settings/SettingsScreen';
-import { ActionModal } from '@/components/common/ActionModal';
+import { ActionPopover } from '@/components/common/ActionPopover';
 import { MainTabParamList, RootStackParamList } from '@/types/navigation';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
@@ -24,6 +24,7 @@ export const MainTabNavigator: React.FC = () => {
   const { user } = useAuthStore();
   const navigation = useNavigation<NavigationProp>();
   const [showActionModal, setShowActionModal] = useState(false);
+  const addButtonRef = useRef<View>(null);
 
   const handleActionSelect = (action: { id: string; type: string }) => {
     setShowActionModal(false);
@@ -57,7 +58,7 @@ export const MainTabNavigator: React.FC = () => {
                 break;
               case 'AddAction':
                 return (
-                  <View style={styles.addButtonContainer}>
+                  <View style={styles.addButtonContainer} ref={addButtonRef}>
                     <View style={styles.addButton}>
                       <Ionicons name="add" size={24} color="#FFFFFF" />
                     </View>
@@ -78,12 +79,16 @@ export const MainTabNavigator: React.FC = () => {
         tabBarActiveTintColor: '#007AFF',
         tabBarInactiveTintColor: '#8E8E93',
         tabBarStyle: {
+          height: 88,
+          paddingBottom: 20, // 增加底部安全間距
+          paddingTop: 10,
           backgroundColor: '#FFFFFF',
           borderTopWidth: 1,
           borderTopColor: '#E5E5EA',
-          paddingTop: 8,
-          paddingBottom: 8,
-          height: 88,
+          position: 'absolute',
+          bottom: 0,
+          elevation: 0,
+          shadowOpacity: 0,
         },
         tabBarLabelStyle: {
           fontSize: 12,
@@ -106,7 +111,7 @@ export const MainTabNavigator: React.FC = () => {
           component={EnhancedDashboard}
           options={{
             title: '首頁',
-            headerTitle: '首頁',
+            headerShown: false,
           }}
         />
 
@@ -115,7 +120,7 @@ export const MainTabNavigator: React.FC = () => {
           component={DatabaseScreen}
           options={{
             title: '資料庫',
-            headerTitle: '資料庫',
+            headerShown: false,
           }}
         />
 
@@ -137,7 +142,7 @@ export const MainTabNavigator: React.FC = () => {
           component={ToolsScreen}
           options={{
             title: '小工具',
-            headerTitle: '小工具',
+            headerShown: false,
           }}
         />
 
@@ -151,10 +156,11 @@ export const MainTabNavigator: React.FC = () => {
         />
       </Tab.Navigator>
 
-      <ActionModal
+      <ActionPopover
         visible={showActionModal}
         onClose={() => setShowActionModal(false)}
         onAction={handleActionSelect}
+        fromRef={addButtonRef}
       />
     </>
   );

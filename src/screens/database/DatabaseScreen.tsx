@@ -130,6 +130,26 @@ export const DatabaseScreen: React.FC = () => {
 
   return (
     <Layout style={styles.container}>
+      {/* 工具列 */}
+      <View style={styles.toolbar}>
+        <TouchableOpacity style={styles.toolButton} activeOpacity={0.7}>
+          <Ionicons name="filter" size={20} color="#007AFF" />
+          <Text style={styles.toolButtonText}>篩選</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.toolButton} activeOpacity={0.7}>
+          <Ionicons name="swap-vertical" size={20} color="#007AFF" />
+          <Text style={styles.toolButtonText}>排序</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.toolButton} activeOpacity={0.7}>
+          <Ionicons name="checkmark-circle" size={20} color="#007AFF" />
+          <Text style={styles.toolButtonText}>多選</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.toolButton} activeOpacity={0.7}>
+          <Ionicons name="list" size={20} color="#007AFF" />
+          <Text style={styles.toolButtonText}>欄位</Text>
+        </TouchableOpacity>
+      </View>
+      
       {/* Tab 導航 */}
       <View style={styles.tabContainer}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -193,6 +213,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F8F9FA',
+  },
+  toolbar: {
+    flexDirection: 'row',
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E5EA',
+    justifyContent: 'space-around',
+  },
+  toolButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: '#F2F2F7',
+    borderRadius: 8,
+    gap: 4,
+  },
+  toolButtonText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#007AFF',
   },
   tabContainer: {
     backgroundColor: '#FFFFFF',

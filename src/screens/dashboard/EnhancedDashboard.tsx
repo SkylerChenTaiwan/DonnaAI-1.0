@@ -82,9 +82,9 @@ export const EnhancedDashboard: React.FC = () => {
       >
         {/* 頭部區域 */}
         <View style={styles.header}>
-          <View>
-            <Text style={styles.welcomeText}>歡迎回來</Text>
+          <View style={styles.userInfo}>
             <Text style={styles.userName}>{user?.name || '使用者'}</Text>
+            <Text style={styles.userEmail}>{user?.email || 'user@example.com'}</Text>
           </View>
           <ModeToggle
             value={mode}
@@ -182,15 +182,18 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#E5E5EA',
   },
-  welcomeText: {
-    fontSize: 14,
-    color: '#8E8E93',
-    marginBottom: 4,
+  userInfo: {
+    flex: 1,
   },
   userName: {
     fontSize: 24,
     fontWeight: '700',
     color: '#1C1C1E',
+    marginBottom: 2,
+  },
+  userEmail: {
+    fontSize: 14,
+    color: '#8E8E93',
   },
   statsContainer: {
     flexDirection: 'row',
