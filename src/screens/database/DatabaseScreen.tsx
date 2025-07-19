@@ -10,6 +10,7 @@ import {
   StyleSheet,
   ScrollView,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Layout } from '@/components/common/Layout';
 import { DataTable } from '@/components/common/DataTable';
 import { useCustomerStore } from '@/stores/customerStore';
