@@ -82,11 +82,19 @@ export const useCustomerStore = create<CustomerState>()(
       fetchCustomers: async (userId: string, teamId?: string) => {
         set({ isLoading: true, error: null });
         
+        console.log('📦 customerStore.fetchCustomers 呼叫參數:', {
+          userId,
+          teamId,
+          filters: get().filters
+        });
+        
         try {
           const filters = get().filters;
           const customers = await getCustomers(userId, teamId, filters);
+          console.log(`✅ 獲取到 ${customers.length} 個客戶`);
           set({ customers, isLoading: false });
         } catch (error) {
+          console.error('❌ fetchCustomers 錯誤:', error);
           set({ 
             error: error instanceof Error ? error.message : '獲取客戶列表失敗',
             isLoading: false 

@@ -219,10 +219,13 @@ export async function getCustomers(
   }
 ): Promise<CustomerDoc[]> {
   try {
+    console.log('🔍 getCustomers 呼叫:', { userId, teamId, filters });
+    
     let q = query(collection(getFirebaseDb(), CUSTOMERS_COLLECTION));
     
     // 根據團隊過濾
     if (teamId) {
+      console.log('🏢 使用 teamId 過濾:', teamId);
       q = query(q, where('teamId', '==', teamId));
     }
     
@@ -240,6 +243,8 @@ export async function getCustomers(
     q = query(q, orderBy('updatedAt', 'desc'));
     
     const snapshot = await getDocs(q);
+    console.log(`📊 查詢結果: ${snapshot.size} 筆資料`);
+    
     const customers: CustomerDoc[] = [];
     
     // 逐一檢查權限
@@ -269,6 +274,7 @@ export async function getCustomers(
       }
     }
     
+    console.log(`✅ 權限檢查後: ${customers.length} 個客戶`);
     return customers;
   } catch (error) {
     console.error('獲取客戶列表失敗:', error);

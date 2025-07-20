@@ -23,6 +23,14 @@ export const CustomersScreen: React.FC = () => {
 
   useEffect(() => {
     if (user) {
+      console.log('🔍 CustomersScreen - 使用者資料:', {
+        id: user.id,
+        email: user.email,
+        teamId: user.teamId,
+        teamIds: user.teamIds,
+        role: user.role
+      });
+      
       // 初始載入客戶資料
       fetchCustomers(user.id, user.teamId);
       
@@ -30,6 +38,8 @@ export const CustomersScreen: React.FC = () => {
       if (user.teamId) {
         subscribeToCustomers(user.teamId, user.id);
       }
+    } else {
+      console.log('⚠️ CustomersScreen - 使用者未登入');
     }
 
     // 清理訂閱
