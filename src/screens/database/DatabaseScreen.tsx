@@ -2,7 +2,7 @@
  * 資料庫主頁面
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -16,6 +16,7 @@ import { DataTable } from '@/components/common/DataTable';
 import { useCustomerStore } from '@/stores/customerStore';
 import { useRecordStore } from '@/stores/recordStore';
 import { useTaskStore } from '@/stores/taskStore';
+import { useAuthStore } from '@/stores/authStore';
 import { TableColumn } from '@/types/table';
 
 type TabType = 'customers' | 'records' | 'tasks';
@@ -28,12 +29,21 @@ interface Tab {
 
 export const DatabaseScreen: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('customers');
-  const { customers, loading: customerLoading } = useCustomerStore();
+  const { user } = useAuthStore();
+  const { customers, isLoading: customerLoading, fetchCustomers } = useCustomerStore();
   const { records, loading: recordLoading } = useRecordStore();
   const { tasks, loading: taskLoading } = useTaskStore();
 
+  // 初始載入資料
+  useEffect(() => {
+    if (user) {
+      console.log('📊 DatabaseScreen - 載入資料, 使用者:', user.email);
+      fetchCustomers(user.id, user.teamId);
+    }
+  }, [user]);
+
   const tabs: Tab[] = [
-    { id: 'customers', title: '客戶', count: customers?.length || 0 },
+    { id: 'customers', title: '客戶', count: customers.length },
     { id: 'records', title: '紀錄', count: records?.length || 0 },
     { id: 'tasks', title: '任務', count: tasks?.length || 0 },
   ];
@@ -79,13 +89,13 @@ export const DatabaseScreen: React.FC = () => {
     switch (activeTab) {
       case 'customers':
         return {
-          data: customers?.map(c => ({
-            id: c.id,
+          data: customers.map(c => ({
+            id: c.id || '',
             name: c.name,
             company: c.company || '-',
             phone: c.phone || '-',
             status: c.status || 'pending',
-          })) || [],
+          })),
           columns: customerColumns,
           loading: customerLoading,
         };
@@ -193,9 +203,11 @@ export const DatabaseScreen: React.FC = () => {
         refreshing={currentData.loading}
         onRefresh={() => {
           // 重新載入資料
+          if (!user) return;
+          
           switch (activeTab) {
             case 'customers':
-              useCustomerStore.getState().fetchCustomers();
+              fetchCustomers(user.id, user.teamId);
               break;
             case 'records':
               useRecordStore.getState().fetchRecords();
