@@ -130,7 +130,9 @@ export const MainTabNavigator = () => {
           options={{
             title: '',
             tabBarLabel: () => null,
-            tabBarOnPress: (e) => {
+          }}
+          listeners={{
+            tabPress: (e) => {
               e.preventDefault();
               setShowActionModal(true);
             },
