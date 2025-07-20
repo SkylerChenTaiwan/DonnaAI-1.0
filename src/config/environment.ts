@@ -109,7 +109,7 @@ class EnvironmentManager {
       enableDevTools: env !== 'production' || isDebug,
       logLevel: this.getLogLevel(env),
       firebaseEmulators: {
-        enabled: env === 'development',
+        enabled: false, // 暫時停用模擬器，直接使用真實 Firebase
         authUrl: Platform.OS === 'ios' ? 'http://10.1.1.142:9099' : 'http://localhost:9099',
         firestoreHost: Platform.OS === 'ios' ? '10.1.1.142' : 'localhost',
         firestorePort: 8080,
