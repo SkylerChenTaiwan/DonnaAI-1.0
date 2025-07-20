@@ -15,6 +15,7 @@
 | 07   | expo-sdk-53-upgrade.md | 📋 待執行 | Expo SDK 53 升級 - 解決 Firebase 相容性、維持 React 18、Metro 配置優化 | - |
 | 10v  | ui-ux-improvements.md | ✅ 已完成 | UI/UX 介面優化 - 修正導航欄位置、改善 + 按鈕行為、優化頁面標題、增強資料庫功能、更新使用者資訊顯示 | 2025-07-19 |
 | 11v  | seed-test-data.md | ✅ 已完成 | 測試資料生成器 - 為 admin@donnaai.ai 建立客戶、紀錄、任務等測試資料 | 2025-07-20 |
+| 12   | customer-list-implementation.md | 📋 待執行 | 客戶列表功能實作 - 顯示客戶資料、即時更新、空狀態提示 | - |
 
 ## 命名規則
 
@@ -30,7 +31,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：12**
+**下一個新建的 PRP 應使用編號：13**
 
 ## PRP 類型說明
 

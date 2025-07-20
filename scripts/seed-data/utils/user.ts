@@ -12,6 +12,7 @@ export interface AdminUser {
   name: string;
   role: 'admin';
   organizationId: string;
+  teamId: string; // 加入主要團隊 ID
   teamIds: string[];
   createdAt: admin.firestore.FieldValue;
   updatedAt: admin.firestore.FieldValue;
@@ -36,6 +37,12 @@ export async function getOrCreateAdminUser(
   if (!query.empty) {
     const userData = query.docs[0].data();
     console.log(`✅ 找到現有使用者: ${userData.name} (${userData.id})`);
+    // 確保現有使用者有 teamId
+    if (!userData.teamId && userData.teamIds && userData.teamIds.length > 0) {
+      userData.teamId = userData.teamIds[0];
+      await query.docs[0].ref.update({ teamId: userData.teamId });
+      console.log(`   更新使用者主要團隊: ${userData.teamId}`);
+    }
     return userData as AdminUser;
   }
   
@@ -55,6 +62,7 @@ export async function getOrCreateAdminUser(
     name: '系統管理員',
     role: 'admin',
     organizationId: organization.id,
+    teamId: team.id, // 設定主要團隊
     teamIds: [team.id],
     createdAt: getTimestamp(),
     updatedAt: getTimestamp()
