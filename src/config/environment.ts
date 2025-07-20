@@ -4,6 +4,7 @@
  */
 
 import Constants from 'expo-constants';
+import { Platform } from 'react-native';
 
 /**
  * 支援的環境類型
@@ -109,10 +110,10 @@ class EnvironmentManager {
       logLevel: this.getLogLevel(env),
       firebaseEmulators: {
         enabled: env === 'development',
-        authUrl: 'http://localhost:9099',
-        firestoreHost: 'localhost',
+        authUrl: Platform.OS === 'ios' ? 'http://10.1.1.142:9099' : 'http://localhost:9099',
+        firestoreHost: Platform.OS === 'ios' ? '10.1.1.142' : 'localhost',
         firestorePort: 8080,
-        functionsHost: 'localhost',
+        functionsHost: Platform.OS === 'ios' ? '10.1.1.142' : 'localhost',
         functionsPort: 5001
       }
     };
