@@ -239,8 +239,9 @@ export async function getCustomers(
       q = query(q, where('tags', 'array-contains-any', filters.tags));
     }
     
-    // 排序
-    q = query(q, orderBy('updatedAt', 'desc'));
+    // 暫時註解掉排序，避免索引錯誤
+    // TODO: 需要在 Firebase Console 創建複合索引
+    // q = query(q, orderBy('updatedAt', 'desc'));
     
     const snapshot = await getDocs(q);
     console.log(`📊 查詢結果: ${snapshot.size} 筆資料`);
@@ -292,8 +293,9 @@ export function subscribeToCustomers(
 ): Unsubscribe {
   const q = query(
     collection(getFirebaseDb(), CUSTOMERS_COLLECTION),
-    where('teamId', '==', teamId),
-    orderBy('updatedAt', 'desc')
+    where('teamId', '==', teamId)
+    // 暫時移除 orderBy 以避免索引錯誤
+    // orderBy('updatedAt', 'desc')
   );
   
   return onSnapshot(q, async (snapshot) => {
