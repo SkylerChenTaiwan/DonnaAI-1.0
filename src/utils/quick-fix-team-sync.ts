@@ -1,112 +1,57 @@
 /**
- * 快速修復團隊同步問題的工具函數
- * 可以在瀏覽器控制台中直接執行
+ * 快速修復團隊資料同步問題
+ * 可以在瀏覽器控制台直接執行
  */
 
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { getFirebaseDb } from '../services/firebase/config';
-import { auth } from '../services/firebase/config';
+import { doc, getDoc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { getFirebaseDb } from '@/services/firebase/config';
+import { useAuthStore } from '@/stores/authStore';
 
 /**
  * 快速修復當前使用者的團隊資料
- * 在瀏覽器控制台執行: quickFixCurrentUserTeams()
  */
 export async function quickFixCurrentUserTeams() {
-  const currentUser = auth.currentUser;
-  if (!currentUser) {
-    console.error('❌ 請先登入');
+  const user = useAuthStore.getState().user;
+  if (!user) {
+    console.error('❌ 使用者未登入');
     return;
   }
 
-  const db = getFirebaseDb();
-  const userId = currentUser.uid;
+  console.log('🔧 開始修復使用者團隊資料:', user.email);
 
   try {
-    console.log('🔄 開始修復當前使用者的團隊資料...');
+    const db = getFirebaseDb();
     
-    // 獲取使用者資料
-    const userDoc = await getDoc(doc(db, 'users', userId));
-    if (!userDoc.exists()) {
-      console.error('❌ 找不到使用者資料');
-      return;
-    }
+    // 查詢所有包含此使用者的團隊
+    const teamsQuery = query(
+      collection(db, 'teams'),
+      where('memberIds', 'array-contains', user.id)
+    );
+    const teamsSnapshot = await getDocs(teamsQuery);
+    
+    const userTeamIds = teamsSnapshot.docs.map(doc => doc.id);
+    console.log('📋 找到使用者所屬的團隊:', userTeamIds);
 
-    const userData = userDoc.data();
-    console.log('👤 使用者資料:', {
-      id: userId,
-      name: userData.name,
-      teamIds: userData.teamIds || [],
-      organizationId: userData.organizationId
+    // 更新使用者的 teamIds
+    await updateDoc(doc(db, 'users', user.id), {
+      teamIds: userTeamIds,
+      updatedAt: new Date()
     });
 
-    // 如果沒有 teamIds，嘗試從組織的預設團隊獲取
-    if (!userData.teamIds || userData.teamIds.length === 0) {
-      console.log('⚠️ 使用者沒有設置 teamIds，嘗試查找組織的團隊...');
-      
-      // 這裡可以根據實際情況調整邏輯
-      // 例如：查找組織的第一個團隊，或者特定名稱的團隊
-      const { getDocs, query, collection, where, limit } = await import('firebase/firestore');
-      
-      const teamsQuery = query(
-        collection(db, 'teams'),
-        where('organizationId', '==', userData.organizationId),
-        limit(1)
-      );
-      
-      const teamsSnapshot = await getDocs(teamsQuery);
-      
-      if (!teamsSnapshot.empty) {
-        const firstTeam = teamsSnapshot.docs[0];
-        const teamId = firstTeam.id;
-        const teamData = firstTeam.data();
-        
-        console.log('🏢 找到團隊:', {
-          id: teamId,
-          name: teamData.name
-        });
-        
-        // 更新使用者的 teamIds
-        await updateDoc(doc(db, 'users', userId), {
-          teamIds: [teamId]
-        });
-        
-        console.log('✅ 已將使用者加入團隊');
-        
-        // 更新團隊的 memberIds
-        const memberIds = teamData.memberIds || [];
-        if (!memberIds.includes(userId)) {
-          await updateDoc(doc(db, 'teams', teamId), {
-            memberIds: [...memberIds, userId]
-          });
-          console.log('✅ 已將使用者加入團隊成員列表');
-        }
-      } else {
-        console.error('❌ 找不到任何團隊');
+    // 更新本地狀態
+    useAuthStore.setState({
+      user: {
+        ...user,
+        teamIds: userTeamIds
       }
-    } else {
-      console.log('✅ 使用者已有團隊設置:', userData.teamIds);
-      
-      // 確保每個團隊都包含此使用者
-      for (const teamId of userData.teamIds) {
-        const teamDoc = await getDoc(doc(db, 'teams', teamId));
-        if (teamDoc.exists()) {
-          const teamData = teamDoc.data();
-          const memberIds = teamData.memberIds || [];
-          
-          if (!memberIds.includes(userId)) {
-            console.log(`🔧 修復團隊 ${teamId} 的成員列表...`);
-            await updateDoc(doc(db, 'teams', teamId), {
-              memberIds: [...memberIds, userId]
-            });
-            console.log(`✅ 已將使用者加入團隊 ${teamId}`);
-          }
-        }
-      }
-    }
+    });
+
+    console.log('✅ 團隊資料同步完成！請重新整理頁面。');
     
-    console.log('✅ 修復完成！請重新整理頁面。');
+    return userTeamIds;
   } catch (error) {
     console.error('❌ 修復失敗:', error);
+    throw error;
   }
 }
 
@@ -114,67 +59,49 @@ export async function quickFixCurrentUserTeams() {
  * 檢查當前使用者的權限狀態
  */
 export async function checkCurrentUserPermissions() {
-  const currentUser = auth.currentUser;
-  if (!currentUser) {
-    console.error('❌ 請先登入');
+  const user = useAuthStore.getState().user;
+  if (!user) {
+    console.error('❌ 使用者未登入');
     return;
   }
 
+  console.log('🔍 檢查使用者權限狀態:');
+  console.log('👤 使用者:', user.email);
+  console.log('🏢 組織 ID:', user.organizationId);
+  console.log('👥 團隊 IDs:', user.teamIds);
+  console.log('🔑 角色:', user.role);
+  console.log('📊 管理的團隊:', user.managedTeamIds);
+
   const db = getFirebaseDb();
-  const userId = currentUser.uid;
-
-  try {
-    // 獲取使用者資料
-    const userDoc = await getDoc(doc(db, 'users', userId));
-    if (!userDoc.exists()) {
-      console.error('❌ 找不到使用者資料');
-      return;
-    }
-
-    const userData = userDoc.data();
-    console.log('👤 使用者資料:', userData);
-
-    // 檢查團隊
-    if (userData.teamIds && userData.teamIds.length > 0) {
-      console.log('🏢 使用者所屬團隊:');
-      for (const teamId of userData.teamIds) {
+  
+  // 檢查團隊成員資格
+  if (user.teamIds && user.teamIds.length > 0) {
+    for (const teamId of user.teamIds) {
+      try {
         const teamDoc = await getDoc(doc(db, 'teams', teamId));
         if (teamDoc.exists()) {
           const teamData = teamDoc.data();
-          console.log(`  - ${teamData.name} (${teamId})`);
-          console.log(`    成員數: ${(teamData.memberIds || []).length}`);
-          console.log(`    包含當前使用者: ${(teamData.memberIds || []).includes(userId) ? '✅' : '❌'}`);
+          const isMember = teamData.memberIds?.includes(user.id);
+          console.log(`📌 團隊 ${teamId}: ${isMember ? '✅ 是成員' : '❌ 非成員'}`);
+        } else {
+          console.log(`⚠️ 團隊 ${teamId} 不存在`);
         }
-      }
-    } else {
-      console.log('⚠️ 使用者未設置任何團隊');
-    }
-
-    // 檢查組織
-    if (userData.organizationId) {
-      const orgDoc = await getDoc(doc(db, 'organizations', userData.organizationId));
-      if (orgDoc.exists()) {
-        const orgData = orgDoc.data();
-        console.log('🏢 組織:', orgData.name);
+      } catch (error) {
+        console.error(`❌ 無法檢查團隊 ${teamId}:`, error);
       }
     }
-
-    // 檢查角色
-    console.log('👔 角色:', userData.role || '未設置');
-    console.log('🔐 是否為管理員:', userData.role === 'admin' ? '✅' : '❌');
-
-  } catch (error) {
-    console.error('❌ 檢查失敗:', error);
+  } else {
+    console.log('⚠️ 使用者沒有分配到任何團隊');
   }
 }
 
-// 將函數掛載到 window 物件，方便在控制台使用
+// 將函數掛載到 window 以便在控制台使用
 if (typeof window !== 'undefined') {
   (window as any).quickFixCurrentUserTeams = quickFixCurrentUserTeams;
   (window as any).checkCurrentUserPermissions = checkCurrentUserPermissions;
   
-  console.log('💡 團隊同步修復工具已載入！');
-  console.log('📌 可用命令:');
-  console.log('  - quickFixCurrentUserTeams() : 修復當前使用者的團隊資料');
-  console.log('  - checkCurrentUserPermissions() : 檢查當前使用者的權限狀態');
+  console.log('💡 快速修復工具已載入！');
+  console.log('可用命令：');
+  console.log('- checkCurrentUserPermissions() : 檢查權限狀態');
+  console.log('- quickFixCurrentUserTeams() : 修復團隊資料同步');
 }
