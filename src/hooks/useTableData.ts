@@ -8,7 +8,7 @@ import { TableData } from '@/types/table';
 interface UseTableDataOptions {
   initialSortKey?: string;
   initialSortDirection?: 'asc' | 'desc';
-  filters?: { key: string; value: string; label?: string }[];
+  filters?: { key: string; value: string; label?: string; operator?: string }[];
 }
 
 export const useTableData = (
@@ -102,8 +102,20 @@ export const useTableData = (
           result = result.filter((item) => {
             const itemValue = String(item[filter.key] || '').toLowerCase();
             const filterValue = filter.value.toLowerCase();
-            // 使用包含邏輯，而不是完全匹配
-            return itemValue.includes(filterValue);
+            const operator = filter.operator || 'contains';
+            
+            switch (operator) {
+              case 'equals':
+                return itemValue === filterValue;
+              case 'contains':
+                return itemValue.includes(filterValue);
+              case 'startsWith':
+                return itemValue.startsWith(filterValue);
+              case 'endsWith':
+                return itemValue.endsWith(filterValue);
+              default:
+                return itemValue.includes(filterValue);
+            }
           });
         }
       });

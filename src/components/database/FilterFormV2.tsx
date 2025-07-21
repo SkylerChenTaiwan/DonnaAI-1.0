@@ -23,7 +23,14 @@ interface FilterFormProps {
   onRemove: () => void;
 }
 
-type FilterOperator = 'contains';
+type FilterOperator = 'equals' | 'contains' | 'startsWith' | 'endsWith';
+
+const operatorLabels: Record<FilterOperator, string> = {
+  equals: '等於',
+  contains: '包含',
+  startsWith: '開頭是',
+  endsWith: '結尾是',
+};
 
 export const FilterForm: React.FC<FilterFormProps> = ({
   condition,
@@ -35,7 +42,9 @@ export const FilterForm: React.FC<FilterFormProps> = ({
   // 只顯示可篩選的欄位
   const filterableColumns = columns.filter(col => col.filterable !== false);
   const [showColumnPicker, setShowColumnPicker] = useState(false);
+  const [showOperatorPicker, setShowOperatorPicker] = useState(false);
   const [showValuePicker, setShowValuePicker] = useState(false);
+  const [operator, setOperator] = useState<FilterOperator>((condition as any).operator || 'contains');
 
   const handleColumnChange = (columnKey: string) => {
     const column = columns.find(col => col.key === columnKey);
@@ -54,7 +63,17 @@ export const FilterForm: React.FC<FilterFormProps> = ({
     onChange({
       ...condition,
       value,
-    });
+      operator,
+    } as any);
+  };
+
+  const handleOperatorChange = (newOperator: FilterOperator) => {
+    setOperator(newOperator);
+    setShowOperatorPicker(false);
+    onChange({
+      ...condition,
+      operator: newOperator,
+    } as any);
   };
 
   // 根據不同的 tabType 和欄位提供預設選項
@@ -123,12 +142,39 @@ export const FilterForm: React.FC<FilterFormProps> = ({
         )}
       </View>
 
-      {/* 條件（固定為"包含"） */}
+      {/* 條件選擇 */}
       <View style={styles.fieldGroup}>
         <Text style={styles.label}>條件</Text>
-        <View style={styles.fixedField}>
-          <Text style={styles.fixedFieldText}>包含</Text>
-        </View>
+        <TouchableOpacity
+          style={styles.selectButton}
+          onPress={() => setShowOperatorPicker(!showOperatorPicker)}
+        >
+          <Text style={styles.selectButtonText}>
+            {operatorLabels[operator]}
+          </Text>
+          <Ionicons name="chevron-down" size={20} color="#8E8E93" />
+        </TouchableOpacity>
+        
+        {showOperatorPicker && (
+          <View style={styles.pickerOptions}>
+            {Object.entries(operatorLabels).map(([op, label]) => (
+              <TouchableOpacity
+                key={op}
+                style={styles.pickerOption}
+                onPress={() => handleOperatorChange(op as FilterOperator)}
+              >
+                <Text 
+                  style={[
+                    styles.pickerOptionText,
+                    operator === op && styles.pickerOptionTextSelected
+                  ]}
+                >
+                  {label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
       </View>
 
       {/* 值輸入 */}

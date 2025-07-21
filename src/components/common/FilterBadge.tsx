@@ -12,10 +12,26 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+const getOperatorLabel = (operator?: string): string => {
+  switch (operator) {
+    case 'equals':
+      return '等於';
+    case 'contains':
+      return '包含';
+    case 'startsWith':
+      return '開頭是';
+    case 'endsWith':
+      return '結尾是';
+    default:
+      return '包含';
+  }
+};
+
 export interface FilterCondition {
   key: string;
   label: string;
   value: string;
+  operator?: string;
 }
 
 interface FilterBadgeProps {
@@ -44,7 +60,7 @@ export const FilterBadge: React.FC<FilterBadgeProps> = ({
           {filters.map((filter) => (
             <View key={filter.key} style={styles.filterItem}>
               <Text style={styles.filterText} numberOfLines={1}>
-                {filter.label}: {filter.value}
+                {filter.label} {getOperatorLabel(filter.operator)} {filter.value}
               </Text>
               <TouchableOpacity
                 onPress={() => onRemoveFilter(filter.key)}
