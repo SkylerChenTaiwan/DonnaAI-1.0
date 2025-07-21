@@ -129,7 +129,7 @@ export const ActionPopover = ({
           style={[
             styles.actionPanel,
             {
-              bottom: actualTabBarHeight + 1, // +1 來覆蓋邊框
+              bottom: actualTabBarHeight, // 恰好貼合導航欄頂部
               transform: [{ translateY }],
             },
           ]}
@@ -176,7 +176,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     backgroundColor: '#FFFFFF',
-    borderTopWidth: 0, // 移除邊框避免重複線條
+    borderTopWidth: 1,
+    borderTopColor: '#E5E7EB',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.08,
