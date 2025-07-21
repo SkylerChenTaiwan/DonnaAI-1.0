@@ -35,21 +35,21 @@ const actions: Action[] = [
   {
     id: '1',
     type: 'customer',
-    title: '新增客戶',
+    title: '客戶',
     subtitle: '建立新的客戶資料',
     icon: 'person-add-outline',
   },
   {
     id: '2',
     type: 'record',
-    title: '新增紀錄',
+    title: '紀錄',
     subtitle: '記錄會議或通話內容',
     icon: 'document-text-outline',
   },
   {
     id: '3',
     type: 'task',
-    title: '新增任務',
+    title: '任務',
     subtitle: '建立待辦事項',
     icon: 'checkbox-outline',
   },
@@ -99,7 +99,7 @@ export const ActionPopover = ({
               style={[
                 styles.actionPanel,
                 {
-                  bottom: 88 + insets.bottom,
+                  bottom: 88 + insets.bottom - 1, // 減1消除縫隙
                   transform: [{ translateY }],
                 },
               ]}
@@ -116,7 +116,7 @@ export const ActionPopover = ({
                     activeOpacity={0.7}
                   >
                     <View style={styles.actionIconContainer}>
-                      <Ionicons name={action.icon} size={32} color="#1A1A1A" />
+                      <Ionicons name={action.icon} size={24} color="#1A1A1A" />
                     </View>
                     <Text style={styles.actionTitle}>{action.title}</Text>
                   </TouchableOpacity>
@@ -135,42 +135,41 @@ const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    backgroundColor: 'transparent', // 移除背景遮罩
   },
   actionPanel: {
     position: 'absolute',
     left: 0,
     right: 0,
     backgroundColor: '#FFFFFF',
-    borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopWidth: 0, // 移除頂部邊框避免重複
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 8,
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 5,
   },
   actionContainer: {
     flexDirection: 'row',
-    paddingVertical: 24,
-    paddingHorizontal: 20,
+    paddingVertical: 16, // 減小垂直內距
+    paddingHorizontal: 24,
   },
   actionButton: {
     flex: 1,
     alignItems: 'center',
-    paddingHorizontal: 8,
+    paddingHorizontal: 4,
   },
   actionIconContainer: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+    width: 48, // 減小圖標容器
+    height: 48,
+    borderRadius: 24,
     backgroundColor: '#F5F5F5',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 8,
+    marginBottom: 6,
   },
   actionTitle: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '500',
     color: '#1A1A1A',
     textAlign: 'center',
