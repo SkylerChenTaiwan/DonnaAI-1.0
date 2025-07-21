@@ -676,21 +676,6 @@ export const DatabaseScreen: React.FC = () => {
         onApply={setCurrentSort}
       />
 
-      {/* 批量編輯表單 - 在當前頁面顯示 */}
-      {showBatchEdit && (
-        <View style={styles.batchEditContainer}>
-          <View style={styles.batchEditContent}>
-            <BatchEditForm
-              fields={getBatchEditFields()}
-              selectedCount={selectedItems.length}
-              onSubmit={handleBatchEditSubmit}
-              onCancel={() => setShowBatchEdit(false)}
-              tabType={activeTab}
-            />
-          </View>
-        </View>
-      )}
-
       {/* 欄位設定 Modal */}
       <ColumnSettingsModal
         visible={showColumnSettings}
@@ -767,6 +752,26 @@ export const DatabaseScreen: React.FC = () => {
             >
               <Text style={styles.cancelButtonText}>取消</Text>
             </TouchableOpacity>
+          </View>
+        </View>
+      )}
+      
+      {/* 批量編輯表單 - 移到最外層確保正確覆蓋 */}
+      {showBatchEdit && (
+        <View style={styles.batchEditContainer}>
+          <TouchableOpacity
+            style={styles.batchEditOverlay}
+            activeOpacity={1}
+            onPress={() => setShowBatchEdit(false)}
+          />
+          <View style={styles.batchEditContent}>
+            <BatchEditForm
+              fields={getBatchEditFields()}
+              selectedCount={selectedItems.length}
+              onSubmit={handleBatchEditSubmit}
+              onCancel={() => setShowBatchEdit(false)}
+              tabType={activeTab}
+            />
           </View>
         </View>
       )}
@@ -958,18 +963,29 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+    zIndex: 1000,
+  },
+  batchEditOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    padding: 20,
   },
   batchEditContent: {
+    position: 'absolute',
+    top: 60,
+    left: 20,
+    right: 20,
+    bottom: 20,
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
-    maxHeight: '80%',
-    elevation: 5,
+    elevation: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    overflow: 'hidden',
   },
 });
