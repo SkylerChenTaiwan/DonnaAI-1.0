@@ -234,7 +234,7 @@ export const FilterForm: React.FC<FilterFormProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   selectButton: {
-    backgroundColor: '#E1DFDB',
+    backgroundColor: '#F0F0F0',
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 12,
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
     color: '#1A1A1A',
   },
   pickerOptions: {
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     borderRadius: 8,
     marginTop: 4,
     ...Platform.select({
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E1DFDB',
+    borderBottomColor: '#F0F0F0',
   },
   pickerOptionText: {
     fontSize: 16,
@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   fixedField: {
-    backgroundColor: '#E1DFDB',
+    backgroundColor: '#F0F0F0',
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 12,
@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
     color: '#7A7A7A',
   },
   input: {
-    backgroundColor: '#E1DFDB',
+    backgroundColor: '#F0F0F0',
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 12,

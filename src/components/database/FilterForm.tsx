@@ -183,7 +183,7 @@ export const FilterForm: React.FC<FilterFormProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   pickerWrapper: {
-    backgroundColor: '#E1DFDB',
+    backgroundColor: '#F0F0F0',
     borderRadius: 8,
     overflow: 'hidden',
   },
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     height: 44,
   },
   input: {
-    backgroundColor: '#E1DFDB',
+    backgroundColor: '#F0F0F0',
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 12,

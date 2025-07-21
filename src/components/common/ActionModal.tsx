@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     paddingBottom: 120,
   },
   bubble: {
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 16,
     marginHorizontal: 20,
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#E1DFDB',
+    backgroundColor: '#F0F0F0',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,

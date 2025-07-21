@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   container: {
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     paddingBottom: 34, // Safe area bottom
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#E1DFDB',
+    backgroundColor: '#F0F0F0',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
     color: '#A94438',
   },
   cancelButton: {
-    backgroundColor: '#E1DFDB',
+    backgroundColor: '#F0F0F0',
     borderRadius: 12,
     paddingVertical: 16,
     marginHorizontal: 20,

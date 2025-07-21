@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   itemsContainer: {
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
     borderTopColor: '#E1DFDB',
     borderBottomWidth: 1,

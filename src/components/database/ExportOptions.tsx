@@ -220,10 +220,10 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E1DFDB',
+    backgroundColor: '#F0F0F0',
   },
   header: {
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     paddingVertical: 16,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
   },
   formatOption: {
     flex: 1,
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
   },
@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
     color: '#1A1A1A',
   },
   input: {
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   columnChip: {
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     padding: 16,
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
     borderTopColor: '#E3E1DC',
     gap: 12,
@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   cancelButton: {
-    backgroundColor: '#E1DFDB',
+    backgroundColor: '#F0F0F0',
   },
   cancelButtonText: {
     fontSize: 16,

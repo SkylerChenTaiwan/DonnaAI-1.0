@@ -139,7 +139,7 @@ export const EnhancedDashboard: React.FC = () => {
             {recentActivities.map((activity) => (
               <View key={activity.id} style={styles.activityItem}>
                 <View style={styles.activityIcon}>
-                  <Ionicons name={activity.icon} size={20} color="#8E8E93" />
+                  <Ionicons name={activity.icon} size={20} color="#999999" />
                 </View>
                 <View style={styles.activityContent}>
                   <Text style={styles.activityTitle}>{activity.title}</Text>
@@ -153,14 +153,14 @@ export const EnhancedDashboard: React.FC = () => {
         {/* 提醒卡片 */}
         <View style={styles.section}>
           <View style={styles.reminderCard}>
-            <Ionicons name="notifications-outline" size={24} color="#FF9500" />
+            <Ionicons name="notifications-outline" size={24} color="#F59E0B" />
             <View style={styles.reminderContent}>
               <Text style={styles.reminderTitle}>今日提醒</Text>
               <Text style={styles.reminderText}>
                 您有 3 個待跟進的客戶和 2 個即將到期的任務
               </Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#C7C7CC" />
+            <Ionicons name="chevron-forward" size={20} color="#999999" />
           </View>
         </View>
       </ScrollView>
@@ -171,7 +171,7 @@ export const EnhancedDashboard: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#F5F5F5',
   },
   header: {
     flexDirection: 'row',
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     padding: 24,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
+    borderBottomColor: '#E5E7EB',
   },
   userInfo: {
     flex: 1,
@@ -188,12 +188,12 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
     marginBottom: 2,
   },
   userEmail: {
     fontSize: 14,
-    color: '#8E8E93',
+    color: '#666666',
   },
   statsContainer: {
     flexDirection: 'row',
@@ -222,17 +222,17 @@ const styles = StyleSheet.create({
   statsValue: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
     marginBottom: 4,
   },
   statsTitle: {
     fontSize: 14,
-    color: '#8E8E93',
+    color: '#666666',
   },
   statsChange: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#34C759',
+    color: '#666666',  // 改為中灰色，更柔和
   },
   section: {
     paddingHorizontal: 24,
@@ -247,11 +247,11 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
   seeAllText: {
     fontSize: 14,
-    color: '#007AFF',
+    color: '#1A1A1A',
     fontWeight: '500',
   },
   quickActionsGrid: {
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#F0F0F0',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 8,
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
   quickActionTitle: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
   activitiesList: {
     backgroundColor: '#FFFFFF',
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#F0F0F0',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -312,12 +312,12 @@ const styles = StyleSheet.create({
   },
   activityTitle: {
     fontSize: 16,
-    color: '#1C1C1E',
+    color: '#1A1A1A',
     marginBottom: 2,
   },
   activityTime: {
     fontSize: 14,
-    color: '#8E8E93',
+    color: '#666666',
   },
   reminderCard: {
     flexDirection: 'row',
@@ -333,11 +333,11 @@ const styles = StyleSheet.create({
   reminderTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
     marginBottom: 4,
   },
   reminderText: {
     fontSize: 14,
-    color: '#8E8E93',
+    color: '#666666',
   },
 });

@@ -216,14 +216,14 @@ export const SortModal: React.FC<SortModalProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E1DFDB',
+    backgroundColor: '#F0F0F0',
     paddingTop: StatusBar.currentHeight || 0,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     paddingHorizontal: 16,
     paddingVertical: 16,
     borderBottomWidth: 1,
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   section: {
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     marginTop: 16,
     paddingVertical: 8,
   },
@@ -271,10 +271,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
   },
   selectedOption: {
-    backgroundColor: '#E1DFDB',
+    backgroundColor: '#F0F0F0',
   },
   optionContent: {
     flex: 1,
@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
   directionButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E1DFDB',
+    backgroundColor: '#F0F0F0',
     borderRadius: 12,
     padding: 16,
     gap: 8,

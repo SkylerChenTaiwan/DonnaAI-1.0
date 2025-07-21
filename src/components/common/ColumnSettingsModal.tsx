@@ -193,14 +193,14 @@ export const ColumnSettingsModal: React.FC<ColumnSettingsModalProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E1DFDB',
+    backgroundColor: '#F0F0F0',
     paddingTop: StatusBar.currentHeight || 0,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     paddingHorizontal: 16,
     paddingVertical: 16,
     borderBottomWidth: 1,
@@ -233,14 +233,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 16,
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     marginBottom: 16,
   },
   quickActionButton: {
     paddingHorizontal: 20,
     paddingVertical: 8,
     borderRadius: 16,
-    backgroundColor: '#E1DFDB',
+    backgroundColor: '#F0F0F0',
   },
   quickActionText: {
     fontSize: 14,
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
   section: {
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
   },
   sectionTitle: {
     fontSize: 16,
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderBottomWidth: 1,

@@ -42,7 +42,7 @@ export const Layout = ({
 
   return (
     <SafeAreaView style={[styles.container, style]}>
-      <StatusBar barStyle="dark-content" backgroundColor="#F7F6F3" />
+      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
       {content}
     </SafeAreaView>
   );
@@ -51,7 +51,7 @@ export const Layout = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#F5F5F5',
   },
   scrollView: {
     flex: 1,

@@ -174,7 +174,7 @@ export const ToolsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#F5F5F5',
   },
   searchContainer: {
     padding: 16,

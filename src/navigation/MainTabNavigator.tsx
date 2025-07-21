@@ -95,7 +95,7 @@ export const MainTabNavigator = () => {
           fontWeight: '500',
         },
         headerStyle: {
-          backgroundColor: '#F7F6F3',
+          backgroundColor: '#FFFFFF',
           borderBottomWidth: 1,
           borderBottomColor: '#E3E1DC',
         },

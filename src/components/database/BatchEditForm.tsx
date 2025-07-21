@@ -246,10 +246,10 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E1DFDB',
+    backgroundColor: '#F0F0F0',
   },
   header: {
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     paddingVertical: 16,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#E1DFDB',
+    backgroundColor: '#F0F0F0',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   fieldItem: {
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     marginBottom: 12,
     padding: 16,
@@ -323,7 +323,7 @@ const styles = StyleSheet.create({
     // 移除左邊距
   },
   textInput: {
-    backgroundColor: '#E1DFDB',
+    backgroundColor: '#F0F0F0',
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 12,
@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   pickerWrapper: {
-    backgroundColor: '#E1DFDB',
+    backgroundColor: '#F0F0F0',
     borderRadius: 8,
     overflow: 'hidden',
   },
@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
     height: 44,
   },
   previewSection: {
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
     marginTop: 24,
@@ -373,7 +373,7 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     padding: 16,
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
     borderTopColor: '#E3E1DC',
     gap: 12,
@@ -385,7 +385,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cancelButton: {
-    backgroundColor: '#E1DFDB',
+    backgroundColor: '#F0F0F0',
   },
   cancelButtonText: {
     fontSize: 16,

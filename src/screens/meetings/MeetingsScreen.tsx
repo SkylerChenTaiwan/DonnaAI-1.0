@@ -334,7 +334,7 @@ export const MeetingsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9fafb',
+    backgroundColor: '#F5F5F5',
   },
   contentContainer: {
     padding: 16,
@@ -350,7 +350,7 @@ const styles = StyleSheet.create({
     color: '#6b7280',
   },
   header: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 24,
     marginBottom: 16,
@@ -385,7 +385,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   quickActionsContainer: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 20,
     marginBottom: 16,
@@ -410,7 +410,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   recordsContainer: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 20,
     shadowColor: '#000000',
@@ -438,7 +438,7 @@ const styles = StyleSheet.create({
     maxHeight: 400,
   },
   recordItem: {
-    backgroundColor: '#f9fafb',
+    backgroundColor: '#F5F5F5',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,

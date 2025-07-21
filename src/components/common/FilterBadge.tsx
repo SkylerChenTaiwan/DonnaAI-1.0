@@ -87,7 +87,7 @@ export const FilterBadge: React.FC<FilterBadgeProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
     borderBottomColor: '#E3E1DC',
   },
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   filterItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E1DFDB',
+    backgroundColor: '#F0F0F0',
     borderRadius: 16,
     paddingLeft: 12,
     paddingRight: 8,

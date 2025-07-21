@@ -217,17 +217,17 @@ export const DataTable = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ECE9E3',
+    backgroundColor: '#F5F5F5',
   },
   searchContainer: {
     padding: 16,
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
     borderBottomColor: '#E3E1DC',
   },
   header: {
     flexDirection: 'row',
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
     borderBottomColor: '#E3E1DC',
     paddingVertical: 12,
@@ -246,16 +246,16 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    backgroundColor: '#F7F6F3',
+    backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E1DFDB',
+    borderBottomColor: '#F0F0F0',
     paddingVertical: 12,
     paddingHorizontal: 16,
     minHeight: 60,
     alignItems: 'center',
   },
   selectedRow: {
-    backgroundColor: '#E1DFDB',
+    backgroundColor: '#F0F0F0',
   },
   cell: {
     justifyContent: 'center',
