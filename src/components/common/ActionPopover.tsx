@@ -65,19 +65,6 @@ export const ActionPopover = ({
 }: ActionPopoverProps) => {
   const insets = useSafeAreaInsets();
   const slideAnim = React.useRef(new Animated.Value(0)).current;
-  const [panelBottom, setPanelBottom] = React.useState(0);
-
-  React.useEffect(() => {
-    if (visible && fromRef.current) {
-      fromRef.current.measureInWindow((x, y, width, height) => {
-        // 計算面板應該出現的位置（從按鈕頂部開始）
-        const screenHeight = Dimensions.get('window').height;
-        const buttonTop = y;
-        const bottomPosition = screenHeight - buttonTop;
-        setPanelBottom(bottomPosition);
-      });
-    }
-  }, [visible, fromRef]);
 
   React.useEffect(() => {
     if (visible) {
@@ -119,7 +106,7 @@ export const ActionPopover = ({
               styles.overlay, 
               { 
                 opacity,
-                bottom: panelBottom || (tabBarHeight + insets.bottom)
+                bottom: tabBarHeight + insets.bottom
               }
             ]} 
           />
@@ -129,7 +116,7 @@ export const ActionPopover = ({
           style={[
             styles.actionPanel,
             {
-              bottom: panelBottom || (tabBarHeight + insets.bottom),
+              bottom: tabBarHeight + insets.bottom - 1,
               transform: [{ translateY }],
             },
           ]}
