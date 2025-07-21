@@ -110,12 +110,6 @@ export const DataTable = ({
   const renderItem = useCallback(
     ({ item }: { item: TableData }) => {
       // 在多選模式下，整行都是可點擊的
-      console.log('🔍 renderItem:', { 
-        itemId: item.id, 
-        selectable, 
-        showCheckboxes,
-        shouldShowCheckbox: selectable && showCheckboxes 
-      });
       if (selectable && showCheckboxes) {
         return (
           <TouchableOpacity

@@ -10,6 +10,7 @@ import {
   StyleSheet,
   Modal,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Layout } from '@/components/common/Layout';
 import { DataTable } from '@/components/common/DataTable';
 import { SearchBar } from '@/components/common/SearchBar';
