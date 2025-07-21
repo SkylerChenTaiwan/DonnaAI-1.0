@@ -100,7 +100,7 @@ export const ActionModal = ({
               activeOpacity={0.7}
             >
               <View style={styles.actionIconContainer}>
-                <Ionicons name={action.icon} size={24} color="#FF5C00" />
+                <Ionicons name={action.icon} size={24} color="#1A1A1A" />
               </View>
               <View style={styles.actionTextContainer}>
                 <Text style={styles.actionTitle}>{action.title}</Text>

@@ -171,7 +171,7 @@ export const ColumnSettingsModal: React.FC<ColumnSettingsModalProps> = ({
                 <Switch
                   value={visibleColumns.has(column.key)}
                   onValueChange={() => toggleColumn(column.key)}
-                  trackColor={{ false: '#E3E1DC', true: '#FF5C00' }}
+                  trackColor={{ false: '#E3E1DC', true: '#1A1A1A' }}
                 />
               </View>
             );
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
   },
   closeButtonText: {
     fontSize: 17,
-    color: '#FF5C00',
+    color: '#1A1A1A',
   },
   applyButton: {
     padding: 8,
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
   applyButtonText: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#FF5C00',
+    color: '#1A1A1A',
   },
   content: {
     flex: 1,
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
   quickActionText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FF5C00',
+    color: '#1A1A1A',
   },
   section: {
     paddingHorizontal: 16,

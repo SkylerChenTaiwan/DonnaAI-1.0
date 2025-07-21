@@ -104,7 +104,7 @@ export const BatchActionsModal: React.FC<BatchActionsModalProps> = ({
                     <Ionicons
                       name={action.icon}
                       size={24}
-                      color={action.type === 'delete' ? '#A94438' : '#FF5C00'}
+                      color={action.type === 'delete' ? '#A94438' : '#1A1A1A'}
                     />
                   </View>
                   <View style={styles.actionTextContainer}>

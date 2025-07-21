@@ -163,7 +163,7 @@ export const SortModal: React.FC<SortModalProps> = ({
                   <Ionicons 
                     name="arrow-up" 
                     size={20} 
-                    color={sortDirection === 'asc' ? '#FFFFFF' : '#FF5C00'} 
+                    color={sortDirection === 'asc' ? '#FFFFFF' : '#1A1A1A'} 
                   />
                   <Text style={[
                     styles.directionButtonText,
@@ -184,7 +184,7 @@ export const SortModal: React.FC<SortModalProps> = ({
                   <Ionicons 
                     name="arrow-down" 
                     size={20} 
-                    color={sortDirection === 'desc' ? '#FFFFFF' : '#FF5C00'} 
+                    color={sortDirection === 'desc' ? '#FFFFFF' : '#1A1A1A'} 
                   />
                   <Text style={[
                     styles.directionButtonText,
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
   },
   closeButtonText: {
     fontSize: 17,
-    color: '#FF5C00',
+    color: '#1A1A1A',
   },
   applyButton: {
     padding: 8,
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
   applyButtonText: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#FF5C00',
+    color: '#1A1A1A',
   },
   content: {
     flex: 1,
@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
   },
   selectedOptionText: {
     fontWeight: '600',
-    color: '#FF5C00',
+    color: '#1A1A1A',
   },
   directionIndicator: {
     flexDirection: 'row',
@@ -297,7 +297,7 @@ const styles = StyleSheet.create({
   },
   directionText: {
     fontSize: 14,
-    color: '#FF5C00',
+    color: '#1A1A1A',
   },
   directionButtons: {
     paddingHorizontal: 16,
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
   directionButtonText: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#FF5C00',
+    color: '#1A1A1A',
   },
   activeDirectionButtonText: {
     color: '#FFFFFF',

@@ -26,7 +26,7 @@ export const ToolCard = ({
   title,
   description,
   icon,
-  color = '#FF5C00',
+  color = '#1A1A1A',
   onPress,
 }: ToolCardProps) => {
   return (

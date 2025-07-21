@@ -835,12 +835,12 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   toolButtonActive: {
-    backgroundColor: '#FF5C00',
+    backgroundColor: '#1A1A1A',
   },
   toolButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FF5C00',
+    color: '#1A1A1A',
   },
   toolButtonTextActive: {
     color: '#F7F6F3',
@@ -862,7 +862,7 @@ const styles = StyleSheet.create({
   },
   activeTab: {
     borderBottomWidth: 2,
-    borderBottomColor: '#FF5C00',
+    borderBottomColor: '#1A1A1A',
   },
   tabText: {
     fontSize: 18,
@@ -870,7 +870,7 @@ const styles = StyleSheet.create({
     color: '#7A7A7A',
   },
   activeTabText: {
-    color: '#FF5C00',
+    color: '#1A1A1A',
     fontWeight: '700',
   },
   countBadge: {

@@ -36,7 +36,7 @@ export const ModeToggle = ({
         onValueChange={handleToggle}
         trackColor={{
           false: '#E3E1DC',
-          true: '#FF5C00',
+          true: '#1A1A1A',
         }}
         thumbColor="#F7F6F3"
         ios_backgroundColor="#E3E1DC"

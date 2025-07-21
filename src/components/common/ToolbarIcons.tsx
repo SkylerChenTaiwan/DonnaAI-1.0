@@ -74,7 +74,7 @@ export const ToolbarIcons: React.FC<ToolbarIconsProps> = ({
           <Ionicons 
             name="checkmark-circle" 
             size={20} 
-            color={multiSelectMode ? "#FF5C00" : "#6B6B6B"} 
+            color={multiSelectMode ? "#1A1A1A" : "#6B6B6B"} 
           />
         </TouchableOpacity>
       )}

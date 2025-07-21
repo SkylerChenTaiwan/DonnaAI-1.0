@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
     borderColor: '#E3E1DC',
   },
   formatOptionActive: {
-    borderColor: '#FF5C00',
+    borderColor: '#1A1A1A',
     backgroundColor: '#FFF5F0',
   },
   formatOptionText: {
@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   formatOptionTextActive: {
-    color: '#FF5C00',
+    color: '#1A1A1A',
   },
   formatDescription: {
     fontSize: 12,
@@ -359,7 +359,7 @@ const styles = StyleSheet.create({
     color: '#1A1A1A',
   },
   exportButton: {
-    backgroundColor: '#FF5C00',
+    backgroundColor: '#1A1A1A',
   },
   exportButtonText: {
     fontSize: 16,

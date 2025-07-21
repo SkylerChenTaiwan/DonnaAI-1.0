@@ -113,7 +113,7 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
           <Switch
             value={value || false}
             onValueChange={(val) => updateValue(field.key, val)}
-            trackColor={{ false: '#E3E1DC', true: '#FF5C00' }}
+            trackColor={{ false: '#E3E1DC', true: '#1A1A1A' }}
           />
         );
 
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    backgroundColor: '#FF5C00',
+    backgroundColor: '#1A1A1A',
     borderRadius: 18,
   },
   saveButtonText: {
@@ -393,7 +393,7 @@ const styles = StyleSheet.create({
     color: '#1A1A1A',
   },
   submitButton: {
-    backgroundColor: '#FF5C00',
+    backgroundColor: '#1A1A1A',
   },
   submitButtonText: {
     fontSize: 16,

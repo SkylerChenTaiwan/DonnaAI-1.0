@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
     color: '#1A1A1A',
   },
   pickerOptionTextSelected: {
-    color: '#FF5C00',
+    color: '#1A1A1A',
     fontWeight: '600',
   },
   fixedField: {
