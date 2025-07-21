@@ -87,15 +87,14 @@ export const DataTable = ({
           key={column.key}
           style={[
             styles.headerCell, 
-            column.width ? { width: column.width } : { flex: 1 },
-            column.sortable ? styles.sortableHeader : styles.nonSortableHeader
+            column.width ? { width: column.width } : { flex: 1 }
           ]}
-          onPress={() => column.sortable && handleSort(column.key)}
-          disabled={!column.sortable}
-          activeOpacity={column.sortable ? 0.7 : 1}
+          onPress={() => column.sortable !== false && handleSort(column.key)}
+          disabled={column.sortable === false}
+          activeOpacity={column.sortable !== false ? 0.7 : 1}
         >
           <Text style={styles.headerText}>{column.title}</Text>
-          {column.sortable && (
+          {column.sortable !== false && (
             <Ionicons
               name={
                 sortConfig.key === column.key
@@ -244,12 +243,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: '#8E8E93',
-  },
-  sortableHeader: {
-    opacity: 1,
-  },
-  nonSortableHeader: {
-    opacity: 0.6,
   },
   row: {
     flexDirection: 'row',

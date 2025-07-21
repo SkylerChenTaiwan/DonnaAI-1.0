@@ -122,8 +122,8 @@ export const DatabaseScreen: React.FC = () => {
   const customerColumns: TableColumn[] = useMemo(() => [
     { key: 'name', title: '姓名', sortable: true, filterable: true },
     { key: 'company', title: '公司', sortable: true, filterable: true },
-    { key: 'phone', title: '電話', filterable: true },
-    { key: 'tags', title: '標籤', filterable: true },
+    { key: 'phone', title: '電話', sortable: true, filterable: true },
+    { key: 'tags', title: '標籤', sortable: true, filterable: true },
   ], []);
 
   // 紀錄表格欄位
@@ -131,15 +131,15 @@ export const DatabaseScreen: React.FC = () => {
     { key: 'type', title: '類型', sortable: true, filterable: true, render: (value) => (
       <Text style={styles.typeText}>{value === 'meeting' ? '會議' : '通話'}</Text>
     )},
-    { key: 'customerName', title: '客戶', filterable: true },
+    { key: 'customerName', title: '客戶', sortable: true, filterable: true },
     { key: 'date', title: '日期', sortable: true, filterable: true },
-    { key: 'summary', title: '摘要', filterable: true },
+    { key: 'summary', title: '摘要', sortable: true, filterable: true },
   ], []);
 
   // 任務表格欄位
   const taskColumns: TableColumn[] = useMemo(() => [
     { key: 'title', title: '標題', sortable: true, filterable: true },
-    { key: 'assignee', title: '負責人', filterable: true },
+    { key: 'assignee', title: '負責人', sortable: true, filterable: true },
     { key: 'dueDate', title: '到期日', sortable: true, filterable: true },
     { key: 'status', title: '狀態', sortable: true, filterable: true, render: (value) => (
       <View style={[styles.statusBadge, getTaskStatusStyle(value)]}>

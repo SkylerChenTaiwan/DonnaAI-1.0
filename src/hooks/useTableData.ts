@@ -38,14 +38,22 @@ export const useTableData = (
     setSearchQuery(query);
   }, []);
 
-  // 排序功能
+  // 排序功能 - 支援三個狀態：升序 -> 降序 -> 無排序
   const handleSort = useCallback((key: string) => {
     setSortConfig((prevConfig) => {
-      let direction: 'asc' | 'desc' = 'asc';
-      if (prevConfig.key === key && prevConfig.direction === 'asc') {
-        direction = 'desc';
+      // 如果是不同的欄位，從升序開始
+      if (prevConfig.key !== key) {
+        return { key, direction: 'asc' };
       }
-      return { key, direction };
+      
+      // 如果是同一個欄位，循環切換：升序 -> 降序 -> 無排序
+      if (prevConfig.direction === 'asc') {
+        return { key, direction: 'desc' };
+      } else if (prevConfig.direction === 'desc') {
+        return { key: null, direction: 'asc' };
+      } else {
+        return { key, direction: 'asc' };
+      }
     });
   }, []);
 
