@@ -22,6 +22,7 @@
 | 16v  | ui-color-scheme-update.md | ✅ 已完成 | UI 色彩主題系統更新 - 建立集中顏色管理、橘色系暖色調主題 | 2025-07-21 |
 | 17v  | multimodal-data-input-system.md | ✅ 已完成 | 多模態用戶輸入系統 - 表格輸入、CSV批量上傳、音頻錄音、語音轉任務、Excel式編輯 | 2025-02-08 |
 | 18v  | fix-multimodal-system-and-ui-integration.md | ✅ 已完成 | 修復多模態系統與前端 UI 整合 - 修復編譯錯誤、恢復模態框、整合 UI、完善功能 | 2025-01-07 |
+| 19   | natural-language-data-visualization.md | 📋 待執行 | 自然語言資料視覺化系統 - 自然語言查詢、AI 意圖理解、智能圖表生成、互動式視覺化 | - |
 
 ## 命名規則
 
@@ -37,7 +38,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：19**
+**下一個新建的 PRP 應使用編號：20**
 
 ## PRP 類型說明
 
