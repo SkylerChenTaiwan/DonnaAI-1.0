@@ -33,6 +33,10 @@ import {
   canViewCustomer,
   isOrgAdmin 
 } from './permissions';
+import { 
+  getUserPermissionContext,
+  buildQueryConstraints 
+} from './permissions-v2';
 
 const CUSTOMERS_COLLECTION = 'customers';
 
@@ -379,21 +383,44 @@ export async function batchUpdateCustomers(
   userId: string
 ): Promise<void> {
   try {
-    // 檢查是否為管理員
-    const isAdmin = await isOrgAdmin(userId);
-    if (!isAdmin && !updates.assignedTo) {
-      throw new Error('只有管理員可以執行批次更新');
-    }
+    console.log('🔄 開始批次更新客戶:', { 
+      customerIds: customerIds.length, 
+      updates: Object.keys(updates),
+      userId 
+    });
+    
+    let successCount = 0;
+    let failedCount = 0;
+    const errors: string[] = [];
     
     // 逐一檢查權限並更新
     const updatePromises = customerIds.map(async (customerId) => {
-      const hasPermission = await canEditCustomer(userId, customerId);
-      if (hasPermission) {
-        await updateCustomer(customerId, updates, userId);
+      try {
+        const hasPermission = await canEditCustomer(userId, customerId);
+        if (hasPermission) {
+          await updateCustomer(customerId, updates, userId);
+          successCount++;
+        } else {
+          const msg = `無權限更新客戶 ${customerId}`;
+          console.warn(`⚠️ ${msg}`);
+          errors.push(msg);
+          failedCount++;
+        }
+      } catch (error) {
+        const msg = `更新客戶 ${customerId} 失敗: ${error}`;
+        console.error(`❌ ${msg}`);
+        errors.push(msg);
+        failedCount++;
       }
     });
     
     await Promise.all(updatePromises);
+    
+    console.log(`✅ 批次更新完成：成功 ${successCount} 個，失敗 ${failedCount} 個`);
+    
+    if (failedCount > 0 && successCount === 0) {
+      throw new Error(`批次更新失敗: ${errors.join('; ')}`);
+    }
   } catch (error) {
     console.error('批次更新客戶失敗:', error);
     throw error;
