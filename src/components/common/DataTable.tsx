@@ -29,12 +29,6 @@ export const DataTable = ({
   filters = [],
   sortConfig: externalSortConfig,
 }: TableProps) => {
-  console.log('📊 DataTable render:', { 
-    selectable, 
-    showCheckboxes, 
-    dataLength: data.length,
-    columnsLength: columns.length 
-  });
   const {
     data: processedData,
     searchQuery,
@@ -62,7 +56,9 @@ export const DataTable = ({
   }, [selectedItems]);
 
   // 渲染表頭
-  const renderHeader = () => (
+  const renderHeader = () => {
+    console.log('🎯 renderHeader:', { selectable, showCheckboxes });
+    return (
     <View style={styles.header}>
       {selectable && showCheckboxes && (
         <TouchableOpacity
@@ -111,6 +107,7 @@ export const DataTable = ({
       ))}
     </View>
   );
+  };
 
   // 渲染行
   const renderItem = useCallback(
