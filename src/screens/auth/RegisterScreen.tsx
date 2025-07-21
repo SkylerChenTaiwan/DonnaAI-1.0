@@ -111,7 +111,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
       <View style={styles.container}>
         <View style={styles.header}>
           <Image 
-            source={require('@/assets/images/donna-logo.png')}
+            source={require('../../assets/images/donna-logo.png')}
             style={styles.logo}
             resizeMode="contain"
           />
