@@ -20,6 +20,7 @@
 | 14v  | database-functionality-enhancements.md | ✅ 已完成 | 資料庫功能增強 - 篩選器 UI、排序選擇器、批量操作、欄位設定 | 2025-07-21 |
 | 15v  | permissions-optimization.md | ✅ 已完成 | 權限系統優化 - 查詢層級權限、批量檢查、效能優化、Security Rules 強化 | 2025-07-21 |
 | 16v  | ui-color-scheme-update.md | ✅ 已完成 | UI 色彩主題系統更新 - 建立集中顏色管理、橘色系暖色調主題 | 2025-07-21 |
+| 17   | multimodal-data-input-system.md | 📋 待執行 | 多模態用戶輸入系統 - 表格輸入、CSV批量上傳、音頻錄音、語音轉任務、Excel式編輯 | - |
 
 ## 命名規則
 
@@ -35,7 +36,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：17**
+**下一個新建的 PRP 應使用編號：18**
 
 ## PRP 類型說明
 

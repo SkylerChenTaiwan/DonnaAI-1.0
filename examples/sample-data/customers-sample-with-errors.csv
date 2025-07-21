@@ -1,0 +1,9 @@
+name,company,email,phone,industry,address,notes,tags
+張小明,台積電,ming.chang@tsmc.com,0912-345-678,半導體,新竹科學園區,重要客戶,VIP;大客戶
+,聯發科,hua.li@mediatek.com,0923-456-789,半導體,新竹,技術合作夥伴,技術;合作
+王大成,,cheng.wang@foxconn.com,0934-567-890,電子製造,土城,代工合作,製造;代工;大量
+陳小玲,華碩,invalid-email,0945-678-901,電腦硬體,台北,品質要求高,電腦;硬體
+林志明,廣達,ming.lin@quanta.com,,筆電製造,桃園龜山,ODM合作,ODM;筆電
+黃美玲,台達電,mei.huang@delta.com,0967-890-123,電源供應,桃園,綠能合作,電源;綠能
+,,,,,,,
+吳建國,研華,kuo.wu@advantech.com,0978-901-234,工業電腦,台北內湖,工業4.0,工業;自動化
