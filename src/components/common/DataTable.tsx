@@ -14,13 +14,14 @@ import { FlashList } from '@shopify/flash-list';
 import { Ionicons } from '@expo/vector-icons';
 import { SearchBar } from './SearchBar';
 import { useTableData } from '@/hooks/useTableData';
-import { TableProps, TableData, TableColumn } from '@/types/table';
+import { TableProps, TableData } from '@/types/table';
 
 export const DataTable = ({
   data,
   columns,
   searchable = true,
   selectable = false,
+  showCheckboxes = false,
   onSelect,
   onRowPress,
   refreshing = false,
@@ -48,7 +49,7 @@ export const DataTable = ({
   // 渲染表頭
   const renderHeader = () => (
     <View style={styles.header}>
-      {selectable && (
+      {selectable && showCheckboxes && (
         <TouchableOpacity
           style={styles.checkboxContainer}
           onPress={() => {
@@ -105,16 +106,15 @@ export const DataTable = ({
           selectedItems.has(item.id) && styles.selectedRow,
         ]}
         onPress={() => {
-          if (selectable) {
+          if (selectable && showCheckboxes) {
             toggleSelection(item.id);
-          }
-          if (onRowPress) {
+          } else if (onRowPress) {
             onRowPress(item);
           }
         }}
         activeOpacity={0.7}
       >
-        {selectable && (
+        {selectable && showCheckboxes && (
           <View style={styles.checkboxContainer}>
             <Ionicons
               name={
@@ -141,7 +141,7 @@ export const DataTable = ({
         ))}
       </TouchableOpacity>
     ),
-    [columns, selectedItems, selectable, toggleSelection, onRowPress]
+    [columns, selectedItems, selectable, showCheckboxes, toggleSelection, onRowPress]
   );
 
   return (

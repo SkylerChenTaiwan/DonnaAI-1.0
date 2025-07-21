@@ -35,6 +35,7 @@ export interface TableProps {
   columns: TableColumn[];
   searchable?: boolean;
   selectable?: boolean;
+  showCheckboxes?: boolean; // 新增：控制是否顯示勾選框
   onSelect?: (selectedIds: string[]) => void;
   onRowPress?: (item: TableData) => void;
   refreshing?: boolean;

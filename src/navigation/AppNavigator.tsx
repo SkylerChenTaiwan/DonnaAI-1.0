@@ -3,7 +3,6 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { useAuthStore } from '@/stores/authStore';
@@ -13,6 +12,9 @@ import { RootStackParamList } from '@/types/navigation';
 import { CreateCustomerModal } from '@/screens/modals/CreateCustomerModal';
 import { CreateRecordModal } from '@/screens/modals/CreateRecordModal';
 import { CreateTaskModal } from '@/screens/modals/CreateTaskModal';
+import { CustomerDetailScreen } from '@/screens/database/CustomerDetailScreen';
+import { RecordDetailScreen } from '@/screens/database/RecordDetailScreen';
+import { TaskDetailScreen } from '@/screens/database/TaskDetailScreen';
 import { StateInspector } from '@/components/developer/StateInspector';
 import { ErrorLogsScreen } from '@/screens/developer/ErrorLogsScreen';
 import { PerformanceMonitorScreen } from '@/screens/developer/PerformanceMonitorScreen';
@@ -60,6 +62,22 @@ export const AppNavigator = () => {
                 headerShown: false,
                 animationTypeForReplace: 'push',
               }}
+            />
+            {/* 詳細檢視頁面 */}
+            <Stack.Screen
+              name="CustomerDetail"
+              component={CustomerDetailScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="RecordDetail"
+              component={RecordDetailScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="TaskDetail"
+              component={TaskDetailScreen}
+              options={{ headerShown: false }}
             />
             <Stack.Group screenOptions={{ presentation: 'modal', headerShown: true }}>
               <Stack.Screen
