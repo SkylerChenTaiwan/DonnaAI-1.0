@@ -145,14 +145,14 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
           </Text>
         </View>
         <View style={styles.headerActions}>
-          {hasChanges && (
+          {(hasChanges || showPreview) && (
             <TouchableOpacity
               style={styles.saveButton}
-              onPress={handleSave}
+              onPress={showPreview ? handleConfirmSubmit : handleSave}
               activeOpacity={0.7}
             >
-              <Ionicons name="checkmark" size={20} color="#007AFF" />
-              <Text style={styles.saveButtonText}>儲存</Text>
+              <Ionicons name="checkmark" size={18} color="#FFFFFF" />
+              <Text style={styles.saveButtonText}>{showPreview ? '確認' : '儲存'}</Text>
             </TouchableOpacity>
           )}
           <TouchableOpacity
