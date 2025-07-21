@@ -305,7 +305,7 @@ export const canEditCustomFieldDefinition = async (
     }
     
     // 在授權編輯清單中的使用者可以編輯
-    if (fieldPermissions?.canEdit.includes(userId)) {
+    if (fieldPermissions?.canEdit?.includes(userId)) {
       return true;
     }
     
