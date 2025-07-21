@@ -65,6 +65,19 @@ export const ActionPopover = ({
 }: ActionPopoverProps) => {
   const insets = useSafeAreaInsets();
   const slideAnim = React.useRef(new Animated.Value(0)).current;
+  const [panelBottom, setPanelBottom] = React.useState(0);
+
+  React.useEffect(() => {
+    if (visible && fromRef.current) {
+      fromRef.current.measureInWindow((x, y, width, height) => {
+        const screenHeight = Dimensions.get('window').height;
+        // 計算面板應該距離螢幕底部的距離
+        // 螢幕高度 - 按鈕頂部位置 = 面板應該的 bottom 值
+        const bottomDistance = screenHeight - y;
+        setPanelBottom(bottomDistance);
+      });
+    }
+  }, [visible, fromRef]);
 
   React.useEffect(() => {
     if (visible) {
@@ -106,7 +119,7 @@ export const ActionPopover = ({
               styles.overlay, 
               { 
                 opacity,
-                bottom: 88 + insets.bottom
+                bottom: panelBottom || (tabBarHeight + insets.bottom)
               }
             ]} 
           />
@@ -116,7 +129,7 @@ export const ActionPopover = ({
           style={[
             styles.actionPanel,
             {
-              bottom: 88 + insets.bottom, // 使用固定安全值
+              bottom: panelBottom || (tabBarHeight + insets.bottom),
               transform: [{ translateY }],
             },
           ]}
