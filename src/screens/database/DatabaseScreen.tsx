@@ -113,10 +113,10 @@ export const DatabaseScreen: React.FC = () => {
   });
 
   const tabs = useMemo((): Tab[] => [
-    { id: 'customers', title: '客戶', count: customers.length },
-    { id: 'records', title: '紀錄', count: records?.length || 0 },
-    { id: 'tasks', title: '任務', count: tasks?.length || 0 },
-  ], [customers.length, records?.length, tasks?.length]);
+    { id: 'customers', title: '客戶' },
+    { id: 'records', title: '紀錄' },
+    { id: 'tasks', title: '任務' },
+  ], []);
 
   // 客戶表格欄位
   const customerColumns: TableColumn[] = useMemo(() => [
@@ -601,11 +601,6 @@ export const DatabaseScreen: React.FC = () => {
                 >
                   {tab.title}
                 </Text>
-                {tab.count !== undefined && (
-                  <View style={styles.countBadge}>
-                    <Text style={styles.countText}>{tab.count}</Text>
-                  </View>
-                )}
               </TouchableOpacity>
             ))}
           </View>
@@ -872,19 +867,6 @@ const styles = StyleSheet.create({
   activeTabText: {
     color: '#1A1A1A',
     fontWeight: '700',
-  },
-  countBadge: {
-    backgroundColor: '#E3E1DC',
-    borderRadius: 10,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    minWidth: 20,
-    alignItems: 'center',
-  },
-  countText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#7A7A7A',
   },
   statusBadge: {
     backgroundColor: '#E3E1DC',
