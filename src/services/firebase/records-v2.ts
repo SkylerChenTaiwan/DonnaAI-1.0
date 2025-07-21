@@ -328,15 +328,19 @@ export async function getRecordsOptimized(
       }
     }
     
-    // 排序
-    q = query(q, orderBy('updatedAt', 'desc'));
-    
-    // 執行查詢
+    // 執行查詢（暫時不排序，避免需要複合索引）
     const snapshot = await getDocs(q);
-    const records: RecordDoc[] = snapshot.docs.map(doc => ({
+    let records: RecordDoc[] = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     } as RecordDoc));
+    
+    // 在客戶端排序
+    records.sort((a, b) => {
+      const aTime = a.updatedAt?.toDate?.()?.getTime() || 0;
+      const bTime = b.updatedAt?.toDate?.()?.getTime() || 0;
+      return bTime - aTime;
+    });
     
     console.log(`✅ 獲取到 ${records.length} 個紀錄（優化版）`);
     return records;
@@ -375,15 +379,22 @@ export function subscribeToRecordsOptimized(
       q = query(q, where('type', 'in', types));
     }
     
-    // 排序和限制
-    q = query(q, orderBy('updatedAt', 'desc'), limit(50));
+    // 限制數量（暫時不排序，避免需要複合索引）
+    q = query(q, limit(50));
     
     // 訂閱
     unsubscribe = onSnapshot(q, (snapshot) => {
-      const records: RecordDoc[] = snapshot.docs.map(doc => ({
+      let records: RecordDoc[] = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       } as RecordDoc));
+      
+      // 在客戶端排序
+      records.sort((a, b) => {
+        const aTime = a.updatedAt?.toDate?.()?.getTime() || 0;
+        const bTime = b.updatedAt?.toDate?.()?.getTime() || 0;
+        return bTime - aTime;
+      });
       
       callback(records);
     }, (error) => {
@@ -425,14 +436,21 @@ export async function getRecordsByCustomerOptimized(
       q = query(q, where(field as string, op as any, value));
     });
     
-    // 排序和限制
-    q = query(q, orderBy('scheduledAt', 'desc'), limit(limitCount));
+    // 限制數量（暫時不排序，避免需要複合索引）
+    q = query(q, limit(limitCount));
     
     const snapshot = await getDocs(q);
-    const records: RecordDoc[] = snapshot.docs.map(doc => ({
+    let records: RecordDoc[] = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     } as RecordDoc));
+    
+    // 在客戶端排序
+    records.sort((a, b) => {
+      const aTime = a.scheduledAt?.toDate?.()?.getTime() || a.updatedAt?.toDate?.()?.getTime() || 0;
+      const bTime = b.scheduledAt?.toDate?.()?.getTime() || b.updatedAt?.toDate?.()?.getTime() || 0;
+      return bTime - aTime;
+    });
     
     return records;
   } catch (error) {
