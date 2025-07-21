@@ -15,7 +15,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { TableColumn } from '@/types/table';
 import { FilterCondition } from './FilterBadge';
-import { FilterForm } from '../database/FilterForm';
+import { FilterForm } from '../database/FilterFormV2';
 
 interface FilterModalProps {
   visible: boolean;

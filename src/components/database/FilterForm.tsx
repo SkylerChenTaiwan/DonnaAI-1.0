@@ -63,6 +63,11 @@ export const FilterForm: React.FC<FilterFormProps> = ({
   };
 
   const handleValueChange = (value: string) => {
+    console.log('🔍 FilterForm - 值改變:', { 
+      columnKey: condition.key, 
+      oldValue: condition.value, 
+      newValue: value 
+    });
     onChange({
       ...condition,
       value,
@@ -163,10 +168,12 @@ export const FilterForm: React.FC<FilterFormProps> = ({
         ) : (
           <TextInput
             style={styles.input}
-            value={condition.value}
+            value={condition.value || ''}
             onChangeText={handleValueChange}
             placeholder="輸入篩選值"
             placeholderTextColor="#8E8E93"
+            autoCapitalize="none"
+            autoCorrect={false}
           />
         )}
       </View>
@@ -222,5 +229,6 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     fontSize: 16,
     color: '#1C1C1E',
+    minHeight: 44,
   },
 });

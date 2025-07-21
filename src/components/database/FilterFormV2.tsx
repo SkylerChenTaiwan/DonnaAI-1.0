@@ -1,0 +1,281 @@
+/**
+ * 篩選表單元件 V2 - 改善的版本
+ */
+
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Platform,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { TableColumn } from '@/types/table';
+import { FilterCondition } from '@/components/common/FilterBadge';
+
+interface FilterFormProps {
+  condition: FilterCondition;
+  columns: TableColumn[];
+  tabType: 'customers' | 'records' | 'tasks';
+  onChange: (condition: FilterCondition) => void;
+  onRemove: () => void;
+}
+
+type FilterOperator = 'contains';
+
+export const FilterForm: React.FC<FilterFormProps> = ({
+  condition,
+  columns,
+  tabType,
+  onChange,
+  onRemove,
+}) => {
+  // 只顯示可篩選的欄位
+  const filterableColumns = columns.filter(col => col.filterable !== false);
+  const [showColumnPicker, setShowColumnPicker] = useState(false);
+  const [showValuePicker, setShowValuePicker] = useState(false);
+
+  const handleColumnChange = (columnKey: string) => {
+    const column = columns.find(col => col.key === columnKey);
+    if (column) {
+      onChange({
+        ...condition,
+        key: columnKey,
+        label: column.title,
+        value: '', // 重置值
+      });
+    }
+    setShowColumnPicker(false);
+  };
+
+  const handleValueChange = (value: string) => {
+    onChange({
+      ...condition,
+      value,
+    });
+  };
+
+  // 根據不同的 tabType 和欄位提供預設選項
+  const getPresetOptions = (columnKey: string): { value: string; label: string }[] => {
+    if (tabType === 'tasks' && columnKey === 'status') {
+      return [
+        { value: 'todo', label: '待開始' },
+        { value: 'in_progress', label: '進行中' },
+        { value: 'completed', label: '已完成' },
+        { value: 'cancelled', label: '已取消' },
+      ];
+    }
+    if (tabType === 'records' && columnKey === 'type') {
+      return [
+        { value: 'meeting', label: '會議' },
+        { value: 'call', label: '通話' },
+      ];
+    }
+    return [];
+  };
+
+  const presetOptions = getPresetOptions(condition.key);
+  const selectedColumn = columns.find(col => col.key === condition.key);
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>篩選條件</Text>
+        <TouchableOpacity onPress={onRemove} style={styles.removeButton}>
+          <Ionicons name="trash-outline" size={20} color="#FF3B30" />
+        </TouchableOpacity>
+      </View>
+
+      {/* 欄位選擇 */}
+      <View style={styles.fieldGroup}>
+        <Text style={styles.label}>欄位</Text>
+        <TouchableOpacity
+          style={styles.selectButton}
+          onPress={() => setShowColumnPicker(!showColumnPicker)}
+        >
+          <Text style={styles.selectButtonText}>
+            {selectedColumn?.title || '請選擇欄位'}
+          </Text>
+          <Ionicons name="chevron-down" size={20} color="#8E8E93" />
+        </TouchableOpacity>
+        
+        {showColumnPicker && (
+          <View style={styles.pickerOptions}>
+            {filterableColumns.map(column => (
+              <TouchableOpacity
+                key={column.key}
+                style={styles.pickerOption}
+                onPress={() => handleColumnChange(column.key)}
+              >
+                <Text 
+                  style={[
+                    styles.pickerOptionText,
+                    condition.key === column.key && styles.pickerOptionTextSelected
+                  ]}
+                >
+                  {column.title}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
+      </View>
+
+      {/* 條件（固定為"包含"） */}
+      <View style={styles.fieldGroup}>
+        <Text style={styles.label}>條件</Text>
+        <View style={styles.fixedField}>
+          <Text style={styles.fixedFieldText}>包含</Text>
+        </View>
+      </View>
+
+      {/* 值輸入 */}
+      <View style={styles.fieldGroup}>
+        <Text style={styles.label}>值</Text>
+        {presetOptions.length > 0 ? (
+          <>
+            <TouchableOpacity
+              style={styles.selectButton}
+              onPress={() => setShowValuePicker(!showValuePicker)}
+            >
+              <Text style={styles.selectButtonText}>
+                {presetOptions.find(opt => opt.value === condition.value)?.label || '請選擇'}
+              </Text>
+              <Ionicons name="chevron-down" size={20} color="#8E8E93" />
+            </TouchableOpacity>
+            
+            {showValuePicker && (
+              <View style={styles.pickerOptions}>
+                {presetOptions.map(option => (
+                  <TouchableOpacity
+                    key={option.value}
+                    style={styles.pickerOption}
+                    onPress={() => {
+                      handleValueChange(option.value);
+                      setShowValuePicker(false);
+                    }}
+                  >
+                    <Text 
+                      style={[
+                        styles.pickerOptionText,
+                        condition.value === option.value && styles.pickerOptionTextSelected
+                      ]}
+                    >
+                      {option.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
+          </>
+        ) : (
+          <TextInput
+            style={styles.input}
+            value={condition.value || ''}
+            onChangeText={handleValueChange}
+            placeholder="輸入篩選值"
+            placeholderTextColor="#8E8E93"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+        )}
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  headerText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1C1C1E',
+  },
+  removeButton: {
+    padding: 4,
+  },
+  fieldGroup: {
+    marginBottom: 16,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#8E8E93',
+    marginBottom: 8,
+  },
+  selectButton: {
+    backgroundColor: '#F2F2F7',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  selectButtonText: {
+    fontSize: 16,
+    color: '#1C1C1E',
+  },
+  pickerOptions: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    marginTop: 4,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 3,
+      },
+    }),
+  },
+  pickerOption: {
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F2F2F7',
+  },
+  pickerOptionText: {
+    fontSize: 16,
+    color: '#1C1C1E',
+  },
+  pickerOptionTextSelected: {
+    color: '#007AFF',
+    fontWeight: '600',
+  },
+  fixedField: {
+    backgroundColor: '#F2F2F7',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+  },
+  fixedFieldText: {
+    fontSize: 16,
+    color: '#8E8E93',
+  },
+  input: {
+    backgroundColor: '#F2F2F7',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    fontSize: 16,
+    color: '#1C1C1E',
+    minHeight: 44,
+  },
+});
