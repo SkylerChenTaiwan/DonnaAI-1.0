@@ -1,10 +1,10 @@
 # PRP #16: UI 色彩主題系統更新
 
 ## 專案背景
-DonnaAI 專案需要將現有的硬編碼顏色系統替換為集中管理的主題色彩系統。目前所有顏色都直接定義在各個元件的 StyleSheet 中，導致維護困難且不一致。
+DonnaAI 專案需要更新整體視覺風格，從 iOS 風格的藍色主題轉換為暖色調的橘色系主題。顏色定義已在設計規格文件中統一管理。
 
 ## 實作目標
-建立集中的顏色管理系統，並將整個應用程式的配色從 iOS 風格藍色主題更換為暖色調的橘色系主題。
+將整個應用程式的配色從 iOS 風格藍色主題更換為暖色調的橘色系主題，直接修改現有元件中的顏色值，參考設計規格文件 `/PRPs/design-specs/04-frontend-pages-design-spec.md` 中定義的新色彩系統。
 
 ## 現況分析
 
@@ -107,38 +107,36 @@ const styles = StyleSheet.create({
 
 **修改後**：
 ```typescript
-import { colors } from '@/theme';
+// 直接使用新的顏色值
 
 const styles = StyleSheet.create({
   primary: {
-    backgroundColor: colors.primary,
+    backgroundColor: '#FF5C00',  // 主橘色
   },
   outline: {
-    borderColor: colors.primary,
+    borderColor: '#FF5C00',      // 主橘色
   },
 });
 ```
 
-### 第三階段：顏色映射規則
+### 顏色映射規則
 
-| 舊顏色 | 新顏色變數 | 使用場景 |
+| 舊顏色 | 新顏色 | 使用場景 |
 |--------|------------|----------|
-| `#007AFF` | `colors.primary` | 主要按鈕、連結、選中狀態 |
-| `#F8F9FA` | `colors.cardBackground` | 卡片背景 |
-| `#F2F2F7` | `colors.sectionBackground` | 區塊背景、hover 狀態 |
-| `#FFFFFF` | `colors.cardBackground` | 白色背景改為略帶暖色 |
-| `#1C1C1E` | `colors.textPrimary` | 主要文字 |
-| `#8E8E93` | `colors.textSecondary` | 次要文字、標籤 |
-| `#E5E5EA` | `colors.borderLight` | 邊框、分隔線 |
-| `#FF3B30` | `colors.error` | 錯誤、刪除按鈕 |
-| `#34C759` | `colors.success` | 成功狀態 |
+| `#007AFF` | `#FF5C00` | 主要按鈕、連結、選中狀態 |
+| `#F8F9FA` | `#ECE9E3` | 主背景色 |
+| `#F2F2F7` | `#E1DFDB` | 區塊背景、hover 狀態 |
+| `#FFFFFF` | `#F7F6F3` | 卡片背景 |
+| `#1C1C1E` | `#1A1A1A` | 主要文字 |
+| `#8E8E93` | `#7A7A7A` | 次要文字、標籤 |
+| `#C7C7CC` | `#BEBEBE` | 停用文字 |
+| `#E5E5EA` | `#E3E1DC` | 邊框、分隔線 |
+| `#FF3B30` | `#A94438` | 錯誤、刪除按鈕 |
+| `#34C759` | `#227A63` | 成功狀態 |
+| `#FF9500` | `#B96A00` | 警告狀態 |
+| `#5AC8FA` | `#5A6770` | 資訊狀態 |
 
 ## 實作步驟清單
-
-### 基礎設置
-1. ✅ 建立 `/src/theme/colors.ts` 定義所有顏色常數
-2. ✅ 建立 `/src/theme/index.ts` 作為主題匯出入口
-3. ✅ 建立 `/src/theme/types.ts` 定義 TypeScript 類型
 
 ### 核心元件更新（優先順序高）
 4. ✅ 更新 Button.tsx - 按鈕顏色
@@ -178,11 +176,12 @@ const styles = StyleSheet.create({
 
 ### React Native 特殊性
 - 使用 `StyleSheet.create()` 而非 CSS
-- 不支援 CSS 變數，必須使用 JS 常數
+- 直接在各元件中修改顏色值
 - 顏色必須是有效的 hex、rgb 或顏色名稱
 
-### 效能最佳化
-- 顏色常數應該定義在檔案頂層，避免在 render 中計算
+### 實作方式
+- 直接搜尋並替換舊顏色值
+- 參考設計規格文件確保一致性
 - 使用 `StyleSheet.create()` 來優化樣式物件
 
 ### 程式碼範例參考
@@ -253,9 +252,9 @@ npm start
 
 ## 成功標準
 
-1. 所有硬編碼顏色都已替換為主題變數
-2. 應用程式視覺一致性提升
-3. 未來可輕鬆切換主題（如深色模式）
+1. 所有舊顏色都已替換為新的橘色系顏色
+2. 應用程式視覺風格統一為暖色調
+3. 與設計規格文件保持一致
 4. 無視覺錯誤或對比度問題
 5. 通過所有自動化測試
 
