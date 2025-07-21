@@ -10,4 +10,11 @@ config.resolver.sourceExts.push('cjs');
 // React Native 0.79 預設啟用的 package.json exports 功能與 Firebase SDK 不相容
 config.resolver.unstable_enablePackageExports = false;
 
+// 確保支援所有圖片格式
+config.resolver.assetExts = [...(config.resolver.assetExts || []), 'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'];
+
+// 除錯用：列出所有支援的資源副檔名
+console.log('Metro Config - Asset Extensions:', config.resolver.assetExts);
+console.log('Metro Config - Source Extensions:', config.resolver.sourceExts);
+
 module.exports = config;
