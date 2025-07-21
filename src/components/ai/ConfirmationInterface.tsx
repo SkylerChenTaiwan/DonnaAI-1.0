@@ -231,7 +231,7 @@ export const ConfirmationInterface = ({
         description: task.description,
         priority: task.priority,
         dueDate: task.dueDate,
-        assignedTo: task.assignedTo,
+        assigneeId: task.assignedTo,
         status: 'pending',
         relatedRecordId: recordId,
         teamId: '', // 需要從使用者資訊獲取
