@@ -66,7 +66,6 @@ service cloud.firestore {
       // 更新：可以更新自己的資料，管理員可以更新同組織使用者資料
       allow update: if (isOwner(userId) || 
                        (isOrgAdmin() && isOrgMember(resource.data.organizationId))) &&
-                       request.resource.data.updatedAt == request.time &&
                        // 不允許修改重要欄位
                        request.resource.data.email == resource.data.email &&
                        request.resource.data.organizationId == resource.data.organizationId;
@@ -88,8 +87,7 @@ service cloud.firestore {
                        request.resource.data.createdAt == request.time;
       
       // 更新：只有組織管理員可以更新
-      allow update: if isOrgAdmin() && isOrgMember(orgId) &&
-                       request.resource.data.updatedAt == request.time;
+      allow update: if isOrgAdmin() && isOrgMember(orgId);
       
       // 刪除：只有組織管理員可以刪除
       allow delete: if isOrgAdmin() && isOrgMember(orgId);
@@ -138,7 +136,6 @@ service cloud.firestore {
       allow update: if (isTeamMember(resource.data.teamId) &&
                        (request.auth.uid == resource.data.assignedTo || 
                         isOrgAdmin())) &&
-                       request.resource.data.updatedAt == request.time &&
                        // 不允許修改組織和團隊
                        request.resource.data.organizationId == resource.data.organizationId &&
                        request.resource.data.teamId == resource.data.teamId;
@@ -168,7 +165,6 @@ service cloud.firestore {
                        (request.auth.uid == resource.data.createdBy ||
                         request.auth.uid in resource.data.participantIds ||
                         isOrgAdmin()) &&
-                       request.resource.data.updatedAt == request.time &&
                        // 不允許修改建立者
                        request.resource.data.createdBy == resource.data.createdBy;
       
@@ -198,8 +194,7 @@ service cloud.firestore {
       allow update: if isTeamMember(resource.data.teamId) &&
                        (request.auth.uid == resource.data.assigneeId ||
                         request.auth.uid == resource.data.assignerId ||
-                        isOrgAdmin()) &&
-                       request.resource.data.updatedAt == request.time;
+                        isOrgAdmin());
       
       // 刪除：指派者或管理員可以刪除
       allow delete: if isTeamMember(resource.data.teamId) &&
