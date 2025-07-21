@@ -882,7 +882,7 @@ const styles = StyleSheet.create({
   // 批量操作工具列樣式
   batchActionsBar: {
     position: 'absolute',
-    bottom: 0,
+    bottom: 90,
     left: 0,
     right: 0,
     backgroundColor: '#1C1C1E',
