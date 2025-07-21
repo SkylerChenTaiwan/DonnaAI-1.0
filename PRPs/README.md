@@ -17,7 +17,7 @@
 | 11v  | seed-test-data.md | ✅ 已完成 | 測試資料生成器 - 為 admin@donnaai.ai 建立客戶、紀錄、任務等測試資料 | 2025-07-20 |
 | 12v  | customer-list-implementation.md | ✅ 已完成 | 客戶列表功能實作 - 顯示客戶資料、即時更新、空狀態提示 | 2025-07-20 |
 | 13v  | database-ui-improvements.md | ✅ 已完成 | 資料庫頁面功能和 UI 改進 - 詳細檢視、優化多選、改善空間利用、均分 Tab | 2025-07-21 |
-| 14   | database-functionality-enhancements.md | 📋 待執行 | 資料庫功能增強 - 篩選器 UI、排序選擇器、批量操作、欄位設定 | - |
+| 14v  | database-functionality-enhancements.md | ✅ 已完成 | 資料庫功能增強 - 篩選器 UI、排序選擇器、批量操作、欄位設定 | 2025-07-21 |
 
 ## 命名規則
 
