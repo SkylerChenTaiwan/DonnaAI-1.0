@@ -8,7 +8,7 @@ export interface User {
   name: string;
   role: 'salesperson' | 'manager' | 'admin';
   organizationId: string;
-  teamIds: string[]; // 可屬於多個團隊
+  teamIds?: string[]; // 可屬於多個團隊
   managedTeamIds?: string[]; // 管理的團隊
   createdAt: Date;
   lastLoginAt: Date;
@@ -34,8 +34,8 @@ export interface Team {
   name: string;
   organizationId: string;
   parentTeamId?: string; // 用於樹狀結構
-  managerIds: string[];
-  memberIds: string[];
+  managerIds?: string[];
+  memberIds?: string[];
 }
 
 export type UserRole = User['role'];

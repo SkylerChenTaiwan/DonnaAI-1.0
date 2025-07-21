@@ -17,7 +17,7 @@ export const isManagerOfTeam = async (userId: string, teamId: string): Promise<b
     }
     
     const team = teamDoc.data() as Team;
-    return team.managerIds.includes(userId);
+    return team.managerIds?.includes(userId) || false;
   } catch (error) {
     console.error('檢查團隊主管權限時發生錯誤:', error);
     return false;
@@ -35,7 +35,7 @@ export const isTeamMember = async (userId: string, teamId: string): Promise<bool
     }
     
     const team = teamDoc.data() as Team;
-    return team.memberIds.includes(userId);
+    return team.memberIds?.includes(userId) || false;
   } catch (error) {
     console.error('檢查團隊成員權限時發生錯誤:', error);
     return false;
@@ -68,9 +68,9 @@ export const isManagerOfUser = async (managerId: string, userId: string): Promis
       return false;
     }
     
-    return user.teamIds.some(teamId => 
-      manager.managedTeamIds!.includes(teamId)
-    );
+    return user.teamIds?.some(teamId => 
+      manager.managedTeamIds?.includes(teamId)
+    ) || false;
   } catch (error) {
     console.error('檢查使用者主管權限時發生錯誤:', error);
     return false;
@@ -121,7 +121,7 @@ export const getAccessibleTeamMembers = async (userId: string): Promise<User[]> 
       accessibleTeamIds = user.managedTeamIds;
     } else {
       // 業務員只能看到自己團隊的成員
-      accessibleTeamIds = user.teamIds;
+      accessibleTeamIds = user.teamIds || [];
     }
     
     // 取得所有可存取團隊的成員
@@ -232,7 +232,7 @@ export const canViewCustomer = async (userId: string, customerId: string): Promi
     }
     
     // 同團隊成員可以查看
-    if (user.teamIds.includes(customer.teamId)) {
+    if (user.teamIds?.includes(customer.teamId)) {
       return true;
     }
     
@@ -350,7 +350,7 @@ export const canViewRecord = async (userId: string, recordId: string): Promise<b
     }
     
     // 同團隊成員可以查看
-    if (user.teamIds.includes(record.teamId)) {
+    if (user.teamIds?.includes(record.teamId)) {
       return true;
     }
     
