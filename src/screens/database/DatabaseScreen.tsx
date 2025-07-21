@@ -17,7 +17,6 @@ import { ToolbarIcons } from '@/components/common/ToolbarIcons';
 import { FilterBadge, FilterCondition } from '@/components/common/FilterBadge';
 import { FilterModal } from '@/components/common/FilterModal';
 import { SortModal, SortConfig } from '@/components/common/SortModal';
-import { BatchActionsModal, BatchAction } from '@/components/common/BatchActionsModal';
 import { BatchEditForm } from '@/components/database/BatchEditForm';
 import { ColumnSettingsModal } from '@/components/common/ColumnSettingsModal';
 import { useColumnSettings } from '@/hooks/useColumnSettings';
@@ -78,7 +77,6 @@ export const DatabaseScreen: React.FC = () => {
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [showSortModal, setShowSortModal] = useState(false);
   const [currentSort, setCurrentSort] = useState<SortConfig | null>(null);
-  const [showBatchActions, setShowBatchActions] = useState(false);
   const [showBatchEdit, setShowBatchEdit] = useState(false);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [showColumnSettings, setShowColumnSettings] = useState(false);
@@ -240,11 +238,7 @@ export const DatabaseScreen: React.FC = () => {
 
   const handleSelect = useCallback((selectedIds: string[]) => {
     setSelectedItems(selectedIds);
-    // 當有選中項目且在多選模式下時，顯示批量操作
-    if (selectedIds.length > 0 && multiSelectMode) {
-      setShowBatchActions(true);
-    }
-  }, [multiSelectMode]);
+  }, []);
 
   // 取得當前 Tab 的批量操作（使用 useMemo 優化）
   const batchActions = useMemo((): BatchAction[] => {
@@ -608,7 +602,7 @@ export const DatabaseScreen: React.FC = () => {
             if (!newMode) {
               // 關閉多選模式時清除選擇
               setSelectedItems([]);
-              setShowBatchActions(false);
+              setShowBatchEdit(false);
             }
           }}
           onColumnsPress={() => setShowColumnSettings(true)}
@@ -673,31 +667,66 @@ export const DatabaseScreen: React.FC = () => {
         onApply={setCurrentSort}
       />
 
-      {/* 批量操作 Modal */}
-      <BatchActionsModal
-        visible={showBatchActions}
-        onClose={() => setShowBatchActions(false)}
-        selectedCount={selectedItems.length}
-        actions={batchActions}
-        onAction={handleBatchAction}
-      />
+      {/* 批量操作工具列 - 類似 Notion 的設計 */}
+      {multiSelectMode && selectedItems.length > 0 && (
+        <View style={styles.batchActionsBar}>
+          <View style={styles.batchActionsLeft}>
+            <Text style={styles.batchActionsText}>
+              已選擇 {selectedItems.length} 個項目
+            </Text>
+          </View>
+          <View style={styles.batchActionsRight}>
+            <TouchableOpacity
+              style={styles.batchActionButton}
+              onPress={() => setShowBatchEdit(true)}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="create-outline" size={20} color="#FFFFFF" />
+              <Text style={styles.batchActionButtonText}>編輯</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.batchActionButton}
+              onPress={handleBatchDelete}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="trash-outline" size={20} color="#FFFFFF" />
+              <Text style={styles.batchActionButtonText}>刪除</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.batchActionButton}
+              onPress={() => setShowExportOptions(true)}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="download-outline" size={20} color="#FFFFFF" />
+              <Text style={styles.batchActionButtonText}>匯出</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.batchActionButton, styles.cancelButton]}
+              onPress={() => {
+                setSelectedItems([]);
+                setMultiSelectMode(false);
+              }}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.cancelButtonText}>取消</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
 
-      {/* 批量編輯 Modal */}
+      {/* 批量編輯表單 - 在當前頁面顯示 */}
       {showBatchEdit && (
-        <Modal
-          visible={showBatchEdit}
-          animationType="slide"
-          presentationStyle="fullScreen"
-          onRequestClose={() => setShowBatchEdit(false)}
-        >
-          <BatchEditForm
-            fields={getBatchEditFields()}
-            selectedCount={selectedItems.length}
-            onSubmit={handleBatchEditSubmit}
-            onCancel={() => setShowBatchEdit(false)}
-            tabType={activeTab}
-          />
-        </Modal>
+        <View style={styles.batchEditContainer}>
+          <View style={styles.batchEditContent}>
+            <BatchEditForm
+              fields={getBatchEditFields()}
+              selectedCount={selectedItems.length}
+              onSubmit={handleBatchEditSubmit}
+              onCancel={() => setShowBatchEdit(false)}
+              tabType={activeTab}
+            />
+          </View>
+        </View>
       )}
 
       {/* 欄位設定 Modal */}
@@ -848,5 +877,79 @@ const styles = StyleSheet.create({
   typeText: {
     fontSize: 14,
     color: '#1C1C1E',
+  },
+  // 批量操作工具列樣式
+  batchActionsBar: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#1C1C1E',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  batchActionsLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  batchActionsText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#FFFFFF',
+  },
+  batchActionsRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  batchActionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    gap: 6,
+  },
+  batchActionButtonText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#FFFFFF',
+  },
+  cancelButton: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+  },
+  cancelButtonText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#FFFFFF',
+  },
+  // 批量編輯容器樣式
+  batchEditContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  batchEditContent: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    maxHeight: '80%',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
   },
 });

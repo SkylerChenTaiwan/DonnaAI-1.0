@@ -108,35 +108,51 @@ export const DataTable = ({
 
   // 渲染行
   const renderItem = useCallback(
-    ({ item }: { item: TableData }) => (
-      <View
-        style={[
-          styles.row,
-          selectedItems.has(item.id) && styles.selectedRow,
-        ]}
-      >
-        {selectable && showCheckboxes && (
+    ({ item }: { item: TableData }) => {
+      // 在多選模式下，整行都是可點擊的
+      if (selectable && showCheckboxes) {
+        return (
           <TouchableOpacity
-            style={styles.checkboxContainer}
+            style={[
+              styles.row,
+              selectedItems.has(item.id) && styles.selectedRow,
+            ]}
             onPress={() => toggleSelection(item.id)}
             activeOpacity={0.7}
           >
-            <Ionicons
-              name={selectedItems.has(item.id) ? 'checkbox' : 'square-outline'}
-              size={20}
-              color="#007AFF"
-            />
+            <View style={styles.checkboxContainer}>
+              <Ionicons
+                name={selectedItems.has(item.id) ? 'checkbox' : 'square-outline'}
+                size={20}
+                color="#007AFF"
+              />
+            </View>
+            {columns.map((column) => (
+              <View
+                key={column.key}
+                style={[styles.cell, column.width ? { width: column.width } : { flex: 1 }]}
+              >
+                {column.render ? (
+                  column.render(item[column.key], item)
+                ) : (
+                  <Text style={styles.cellText} numberOfLines={1}>
+                    {item[column.key] || '-'}
+                  </Text>
+                )}
+              </View>
+            ))}
           </TouchableOpacity>
-        )}
+        );
+      }
+      
+      // 非多選模式下，點擊行會觸發 onRowPress
+      return (
         <TouchableOpacity
-          style={styles.rowContent}
-          onPress={() => {
-            if (selectable && showCheckboxes) {
-              toggleSelection(item.id);
-            } else if (onRowPress) {
-              onRowPress(item);
-            }
-          }}
+          style={[
+            styles.row,
+            selectedItems.has(item.id) && styles.selectedRow,
+          ]}
+          onPress={() => onRowPress && onRowPress(item)}
           activeOpacity={0.7}
         >
           {columns.map((column) => (
@@ -154,8 +170,8 @@ export const DataTable = ({
             </View>
           ))}
         </TouchableOpacity>
-      </View>
-    ),
+      );
+    },
     [columns, selectedItems, selectable, showCheckboxes, toggleSelection, onRowPress]
   );
 
@@ -187,19 +203,6 @@ export const DataTable = ({
           </View>
         }
       />
-      {selectedItems.size > 0 && (
-        <View style={styles.bulkActionsBar}>
-          <Text style={styles.bulkActionsText}>
-            已選擇 {selectedItems.size} 個項目
-          </Text>
-          <TouchableOpacity
-            onPress={clearSelection}
-            style={styles.bulkActionButton}
-          >
-            <Text style={styles.bulkActionButtonText}>取消選擇</Text>
-          </TouchableOpacity>
-        </View>
-      )}
     </View>
   );
 };
@@ -243,10 +246,6 @@ const styles = StyleSheet.create({
     minHeight: 60,
     alignItems: 'center',
   },
-  rowContent: {
-    flex: 1,
-    flexDirection: 'row',
-  },
   selectedRow: {
     backgroundColor: '#F2F2F7',
   },
@@ -273,33 +272,5 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     color: '#8E8E93',
-  },
-  bulkActionsBar: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: '#007AFF',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 16,
-    height: 60,
-  },
-  bulkActionsText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFFFFF',
-  },
-  bulkActionButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 8,
-  },
-  bulkActionButtonText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#FFFFFF',
   },
 });
