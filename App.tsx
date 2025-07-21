@@ -29,6 +29,10 @@ if (__DEV__) {
   import('@/utils/immediate-permission-fix').catch(err => 
     console.warn('立即權限修復失敗:', err)
   );
+  // 載入權限調試工具
+  import('@/utils/debug-permission-mismatch').catch(err => 
+    console.warn('權限調試工具載入失敗:', err)
+  );
 }
 
 // 防止自動隱藏啟動畫面
