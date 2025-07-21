@@ -633,7 +633,7 @@ export const DatabaseScreen: React.FC = () => {
         data={currentData.data}
         columns={currentData.columns}
         searchable={false}
-        selectable
+        selectable={multiSelectMode}
         showCheckboxes={multiSelectMode}
         onRowPress={handleRowPress}
         onSelect={handleSelect}
