@@ -13,7 +13,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
 import { createTask } from '@/services/firebase/tasks';
 import { TaskCreateRequest } from '@/types/task';
-import { showToast } from '@/utils/toast';
+import { showToast } from '../../utils/toast';
 import { Ionicons } from '@expo/vector-icons';
 
 type RouteParams = {

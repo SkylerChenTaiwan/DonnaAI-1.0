@@ -13,7 +13,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
 import { createRecord } from '@/services/firebase/records';
 import { RecordCreateRequest } from '@/types/record';
-import { showToast } from '@/utils/toast';
+import { showToast } from '../../utils/toast';
 import { Ionicons } from '@expo/vector-icons';
 
 type RouteParams = {

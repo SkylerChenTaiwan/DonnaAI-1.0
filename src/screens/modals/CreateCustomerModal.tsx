@@ -15,7 +15,7 @@ import { createCustomer, createMultipleCustomers } from '@/services/firebase/cus
 import { CustomerFormData } from '@/services/validation/form-schemas';
 import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
-import { showToast } from '@/utils/toast';
+import { showToast } from '../../utils/toast';
 
 type RouteParams = {
   CreateCustomerModal: {
