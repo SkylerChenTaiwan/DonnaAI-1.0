@@ -8,6 +8,7 @@ import {
   Text,
   StyleSheet,
   Alert,
+  Image,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Layout } from '@/components/common/Layout';
@@ -109,6 +110,11 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
     <Layout>
       <View style={styles.container}>
         <View style={styles.header}>
+          <Image 
+            source={require('@/assets/images/donna-logo.png')}
+            style={styles.logo}
+            resizeMode="contain"
+          />
           <Text style={styles.title}>加入 DonnaAI</Text>
           <Text style={styles.subtitle}>開始您的 AI 助理之旅</Text>
         </View>
@@ -214,6 +220,11 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     marginBottom: 32,
+  },
+  logo: {
+    width: 120,
+    height: 60,
+    marginBottom: 24,
   },
   title: {
     fontSize: 32,

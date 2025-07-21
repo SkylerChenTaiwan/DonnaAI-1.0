@@ -8,6 +8,7 @@ import {
   Text,
   StyleSheet,
   Alert,
+  Image,
 } from 'react-native';
 import { Layout } from '@/components/common/Layout';
 import { TextInput } from '@/components/common/TextInput';
@@ -71,6 +72,11 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
     <Layout>
       <View style={styles.container}>
         <View style={styles.header}>
+          <Image 
+            source={require('@/assets/images/donna-logo.png')}
+            style={styles.logo}
+            resizeMode="contain"
+          />
           <Text style={styles.title}>歡迎回到 DonnaAI</Text>
           <Text style={styles.subtitle}>您的 AI 業務助理</Text>
         </View>
@@ -134,6 +140,11 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     marginBottom: 48,
+  },
+  logo: {
+    width: 120,
+    height: 60,
+    marginBottom: 24,
   },
   title: {
     fontSize: 32,
