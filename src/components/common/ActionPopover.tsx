@@ -85,6 +85,11 @@ export const ActionPopover = ({
     outputRange: [100, 0],
   });
 
+  const opacity = slideAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 0.3],
+  });
+
   return (
     <Modal
       visible={visible}
@@ -92,40 +97,40 @@ export const ActionPopover = ({
       animationType="none"
       onRequestClose={onClose}
     >
-      <TouchableWithoutFeedback onPress={onClose}>
-        <View style={styles.overlay}>
-          <TouchableWithoutFeedback>
-            <Animated.View
-              style={[
-                styles.actionPanel,
-                {
-                  bottom: 88 + insets.bottom - 1, // 減1消除縫隙
-                  transform: [{ translateY }],
-                },
-              ]}
-            >
-              <View style={styles.actionContainer}>
-                {actions.map((action) => (
-                  <TouchableOpacity
-                    key={action.id}
-                    style={styles.actionButton}
-                    onPress={() => {
-                      onAction(action);
-                      onClose();
-                    }}
-                    activeOpacity={0.7}
-                  >
-                    <View style={styles.actionIconContainer}>
-                      <Ionicons name={action.icon} size={24} color="#1A1A1A" />
-                    </View>
-                    <Text style={styles.actionTitle}>{action.title}</Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </Animated.View>
-          </TouchableWithoutFeedback>
-        </View>
-      </TouchableWithoutFeedback>
+      <View style={styles.container}>
+        <TouchableWithoutFeedback onPress={onClose}>
+          <Animated.View style={[styles.overlay, { opacity }]} />
+        </TouchableWithoutFeedback>
+        
+        <Animated.View
+          style={[
+            styles.actionPanel,
+            {
+              bottom: 87 + insets.bottom, // 調整位置完全貼合
+              transform: [{ translateY }],
+            },
+          ]}
+        >
+          <View style={styles.actionContainer}>
+            {actions.map((action) => (
+              <TouchableOpacity
+                key={action.id}
+                style={styles.actionButton}
+                onPress={() => {
+                  onAction(action);
+                  onClose();
+                }}
+                activeOpacity={0.7}
+              >
+                <View style={styles.actionIconContainer}>
+                  <Ionicons name={action.icon} size={24} color="#1A1A1A" />
+                </View>
+                <Text style={styles.actionTitle}>{action.title}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </Animated.View>
+      </View>
     </Modal>
   );
 };
@@ -133,16 +138,24 @@ export const ActionPopover = ({
 const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  overlay: {
+  container: {
     flex: 1,
-    backgroundColor: 'transparent', // 移除背景遮罩
+  },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 88, // 只遮罩到導航欄上方
+    backgroundColor: '#000000',
   },
   actionPanel: {
     position: 'absolute',
     left: 0,
     right: 0,
     backgroundColor: '#FFFFFF',
-    borderTopWidth: 0, // 移除頂部邊框避免重複
+    borderTopWidth: 1,
+    borderTopColor: '#E5E7EB',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.08,
