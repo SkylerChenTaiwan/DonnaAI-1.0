@@ -192,6 +192,9 @@ export const DatabaseScreen: React.FC = () => {
     }
   }, [activeTab, customers, records, tasks, customerLoading, recordLoading, taskLoading]);
   
+  // 定義缺少的變數
+  const [showBatchActions, setShowBatchActions] = useState(false);
+  
   // 使用 useMemo 穩定 allColumns 參考
   const allColumns = useMemo(() => {
     switch (activeTab) {
@@ -546,42 +549,44 @@ export const DatabaseScreen: React.FC = () => {
   };
 
   return (
-    <Layout style={styles.container}>
-      {/* Tab 導航 */}
-      <View style={styles.tabContainer}>
-        {tabs.map((tab) => (
-          <TouchableOpacity
-            key={tab.id}
-            style={[
-              styles.tab,
-              activeTab === tab.id && styles.activeTab,
-            ]}
-            onPress={() => {
-              setActiveTab(tab.id);
-              // 切換 Tab 時清除選擇狀態
-              setMultiSelectMode(false);
-              setSelectedItems([]);
-              setShowBatchActions(false);
-            }}
-            activeOpacity={0.7}
-          >
-            <Text
-              style={[
-                styles.tabText,
-                activeTab === tab.id && styles.activeTabText,
-              ]}
-              numberOfLines={1}
-            >
-              {tab.title}
-            </Text>
-            {tab.count !== undefined && (
-              <View style={styles.countBadge}>
-                <Text style={styles.countText}>{tab.count}</Text>
-              </View>
-            )}
-          </TouchableOpacity>
-        ))}
-      </View>
+    <View style={styles.mainContainer}>
+      <Layout style={styles.container} scrollable={false}>
+        <View style={styles.contentWrapper}>
+          {/* Tab 導航 */}
+          <View style={styles.tabContainer}>
+            {tabs.map((tab) => (
+              <TouchableOpacity
+                key={tab.id}
+                style={[
+                  styles.tab,
+                  activeTab === tab.id && styles.activeTab,
+                ]}
+                onPress={() => {
+                  setActiveTab(tab.id);
+                  // 切換 Tab 時清除選擇狀態
+                  setMultiSelectMode(false);
+                  setSelectedItems([]);
+                  setShowBatchActions(false);
+                }}
+                activeOpacity={0.7}
+              >
+                <Text
+                  style={[
+                    styles.tabText,
+                    activeTab === tab.id && styles.activeTabText,
+                  ]}
+                  numberOfLines={1}
+                >
+                  {tab.title}
+                </Text>
+                {tab.count !== undefined && (
+                  <View style={styles.countBadge}>
+                    <Text style={styles.countText}>{tab.count}</Text>
+                  </View>
+                )}
+              </TouchableOpacity>
+            ))}
+          </View>
       
       {/* 整合工具列和搜尋欄 */}
       <View style={styles.toolbar}>
@@ -619,35 +624,38 @@ export const DatabaseScreen: React.FC = () => {
         onClearAll={useCallback(() => setActiveFilters([]), [])}
       />
 
-      {/* 資料表格 */}
-      <DataTable
-        data={currentData.data}
-        columns={currentData.columns}
-        searchable={false}
-        selectable={multiSelectMode}
-        showCheckboxes={multiSelectMode}
-        onRowPress={handleRowPress}
-        onSelect={handleSelect}
-        refreshing={currentData.loading}
-        filters={activeFilters}
-        sortConfig={currentSort}
-        onRefresh={useCallback(() => {
-          // 重新載入資料
-          if (!user) return;
-          
-          switch (activeTab) {
-            case 'customers':
-              fetchCustomers(user);
-              break;
-            case 'records':
-              useRecordStore.getState().fetchRecords(user);
-              break;
-            case 'tasks':
-              useTaskStore.getState().fetchTasks(user);
-              break;
-          }
-        }, [user, activeTab, fetchCustomers])}
-      />
+          {/* 資料表格 - 包裝在可滾動的容器中 */}
+          <View style={styles.tableContainer}>
+            <DataTable
+              data={currentData.data}
+              columns={currentData.columns}
+              searchable={false}
+              selectable={multiSelectMode}
+              showCheckboxes={multiSelectMode}
+              onRowPress={handleRowPress}
+              onSelect={handleSelect}
+              refreshing={currentData.loading}
+              filters={activeFilters}
+              sortConfig={currentSort}
+              onRefresh={useCallback(() => {
+                // 重新載入資料
+                if (!user) return;
+                
+                switch (activeTab) {
+                  case 'customers':
+                    fetchCustomers(user);
+                    break;
+                  case 'records':
+                    useRecordStore.getState().fetchRecords(user);
+                    break;
+                  case 'tasks':
+                    useTaskStore.getState().fetchTasks(user);
+                    break;
+                }
+              }, [user, activeTab, fetchCustomers])}
+            />
+          </View>
+        </View>
 
       {/* 篩選器 Modal */}
       <FilterModal
@@ -667,53 +675,6 @@ export const DatabaseScreen: React.FC = () => {
         currentSort={currentSort}
         onApply={setCurrentSort}
       />
-
-      {/* 批量操作工具列 - 類似 Notion 的設計 */}
-      {multiSelectMode && selectedItems.length > 0 && (
-        <View style={styles.batchActionsBar}>
-          <View style={styles.batchActionsLeft}>
-            <Text style={styles.batchActionsText}>
-              已選擇 {selectedItems.length} 個項目
-            </Text>
-          </View>
-          <View style={styles.batchActionsRight}>
-            <TouchableOpacity
-              style={styles.batchActionButton}
-              onPress={() => setShowBatchEdit(true)}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="create-outline" size={20} color="#FFFFFF" />
-              <Text style={styles.batchActionButtonText}>編輯</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.batchActionButton}
-              onPress={handleBatchDelete}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="trash-outline" size={20} color="#FFFFFF" />
-              <Text style={styles.batchActionButtonText}>刪除</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.batchActionButton}
-              onPress={() => setShowExportOptions(true)}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="download-outline" size={20} color="#FFFFFF" />
-              <Text style={styles.batchActionButtonText}>匯出</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.batchActionButton, styles.cancelButton]}
-              onPress={() => {
-                setSelectedItems([]);
-                setMultiSelectMode(false);
-              }}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.cancelButtonText}>取消</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      )}
 
       {/* 批量編輯表單 - 在當前頁面顯示 */}
       {showBatchEdit && (
@@ -761,14 +722,72 @@ export const DatabaseScreen: React.FC = () => {
           />
         </Modal>
       )}
-    </Layout>
+      </Layout>
+      
+      {/* 批量操作工具列 - 固定在視窗底部 */}
+      {multiSelectMode && selectedItems.length > 0 && (
+        <View style={styles.batchActionsBar}>
+          <View style={styles.batchActionsLeft}>
+            <Text style={styles.batchActionsText}>
+              已選擇 {selectedItems.length} 個項目
+            </Text>
+          </View>
+          <View style={styles.batchActionsRight}>
+            <TouchableOpacity
+              style={styles.batchActionButton}
+              onPress={() => setShowBatchEdit(true)}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="create-outline" size={20} color="#FFFFFF" />
+              <Text style={styles.batchActionButtonText}>編輯</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.batchActionButton}
+              onPress={handleBatchDelete}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="trash-outline" size={20} color="#FFFFFF" />
+              <Text style={styles.batchActionButtonText}>刪除</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.batchActionButton}
+              onPress={() => setShowExportOptions(true)}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="download-outline" size={20} color="#FFFFFF" />
+              <Text style={styles.batchActionButtonText}>匯出</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.batchActionButton, styles.cancelButton]}
+              onPress={() => {
+                setSelectedItems([]);
+                setMultiSelectMode(false);
+              }}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.cancelButtonText}>取消</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: '#F8F9FA',
+  },
   container: {
     flex: 1,
     backgroundColor: '#F8F9FA',
+  },
+  contentWrapper: {
+    flex: 1,
+  },
+  tableContainer: {
+    flex: 1,
   },
   toolbar: {
     flexDirection: 'row',
