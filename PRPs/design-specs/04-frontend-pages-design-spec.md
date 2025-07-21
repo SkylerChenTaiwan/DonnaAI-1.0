@@ -5,8 +5,7 @@
 ### 色彩系統
 ```yaml
 Primary Colors:
-  - primary: "#1A1A1A"          # 深灰黑（主要互動元素、選中狀態）
-  - accent: "#FF5C00"           # 橘色（極少使用，只用於關鍵 CTA）
+  - primary: "#1A1A1A"          # 深灰黑（主要互動元素、選中狀態、所有按鈕）
   - primary-hover: "#333333"    # 深灰 hover 狀態
   - primary-pressed: "#000000"  # 純黑按下狀態
 
@@ -113,7 +112,7 @@ Tab Items:
   5. 設定 (person icon)
 
 Special Tab (新增按鈕):
-  - background: "#FF5C00"
+  - background: "#1A1A1A"
   - color: "#FFFFFF"
   - border-radius: 20px
   - size: 40px x 40px
