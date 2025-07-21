@@ -13,6 +13,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { Layout } from '@/components/common/Layout';
 import { DataTable } from '@/components/common/DataTable';
+import { InlineEditToggle } from '@/components/database/InlineEditToggle';
 import { SearchBar } from '@/components/common/SearchBar';
 import { ToolbarIcons } from '@/components/common/ToolbarIcons';
 import { FilterBadge, FilterCondition } from '@/components/common/FilterBadge';
@@ -570,6 +571,102 @@ export const DatabaseScreen: React.FC = () => {
     }
   };
 
+  // 處理行內編輯批次儲存
+  const handleInlineEditSave = async (changes: Array<{ id: string; field: string; value: any }>) => {
+    const user = useAuthStore.getState().user;
+    if (!user) {
+      throw new Error('用戶未登入');
+    }
+
+    console.log('🔄 行內編輯批次儲存:', { activeTab, changes });
+
+    // 按項目 ID 分組變更
+    const changesByItem = new Map<string, Record<string, any>>();
+    changes.forEach(change => {
+      if (!changesByItem.has(change.id)) {
+        changesByItem.set(change.id, {});
+      }
+      changesByItem.get(change.id)![change.field] = change.value;
+    });
+
+    // 執行批次更新
+    for (const [itemId, updates] of changesByItem.entries()) {
+      switch (activeTab) {
+        case 'customers':
+          await useCustomerStore.getState().updateCustomer(itemId, updates, user.id);
+          break;
+        case 'records':
+          await useRecordStore.getState().updateRecord(itemId, updates, user.id);
+          break;
+        case 'tasks':
+          await useTaskStore.getState().updateTask(itemId, updates, user.id);
+          break;
+      }
+    }
+
+    // 重新載入資料
+    await handleRefresh();
+  };
+
+  // 處理行內編輯即時儲存
+  const handleInlineEditRowSave = async (itemId: string, changes: Record<string, any>) => {
+    const user = useAuthStore.getState().user;
+    if (!user) {
+      throw new Error('用戶未登入');
+    }
+
+    console.log('🔄 行內編輯即時儲存:', { activeTab, itemId, changes });
+
+    switch (activeTab) {
+      case 'customers':
+        await useCustomerStore.getState().updateCustomer(itemId, changes, user.id);
+        break;
+      case 'records':
+        await useRecordStore.getState().updateRecord(itemId, changes, user.id);
+        break;
+      case 'tasks':
+        await useTaskStore.getState().updateTask(itemId, changes, user.id);
+        break;
+    }
+  };
+
+  // 統一的重新載入方法
+  const handleRefresh = async () => {
+    if (!user) return;
+    
+    switch (activeTab) {
+      case 'customers':
+        await fetchCustomers(user);
+        break;
+      case 'records':
+        await useRecordStore.getState().fetchRecords(user);
+        break;
+      case 'tasks':
+        await useTaskStore.getState().fetchTasks(user);
+        break;
+    }
+  };
+
+  // 檢查編輯權限
+  const checkEditPermission = (item: any) => {
+    if (!user) return false;
+    
+    // 管理員可以編輯所有項目
+    if (user.role === 'admin') return true;
+    
+    // 一般用戶只能編輯自己負責的項目
+    switch (activeTab) {
+      case 'customers':
+        return item.assignedTo === user.id;
+      case 'records':
+        return item.createdBy === user.id;
+      case 'tasks':
+        return item.assigneeId === user.id || item.createdBy === user.id;
+      default:
+        return false;
+    }
+  };
+
   return (
     <View style={styles.mainContainer}>
       <Layout style={styles.container} scrollable={false}>
@@ -643,7 +740,7 @@ export const DatabaseScreen: React.FC = () => {
 
           {/* 資料表格 - 包裝在可滾動的容器中 */}
           <View style={styles.tableContainer}>
-            <DataTable
+            <InlineEditToggle
               data={currentData.data}
               columns={currentData.columns}
               searchable={false}
@@ -654,22 +751,12 @@ export const DatabaseScreen: React.FC = () => {
               refreshing={currentData.loading}
               filters={activeFilters}
               sortConfig={currentSort}
-              onRefresh={useCallback(() => {
-                // 重新載入資料
-                if (!user) return;
-                
-                switch (activeTab) {
-                  case 'customers':
-                    fetchCustomers(user);
-                    break;
-                  case 'records':
-                    useRecordStore.getState().fetchRecords(user);
-                    break;
-                  case 'tasks':
-                    useTaskStore.getState().fetchTasks(user);
-                    break;
-                }
-              }, [user, activeTab, fetchCustomers])}
+              onRefresh={handleRefresh}
+              onSave={handleInlineEditSave}
+              onRowSave={handleInlineEditRowSave}
+              saveMode="batch"
+              allowEdit={!!user}
+              editPermissionCheck={checkEditPermission}
             />
           </View>
         </View>

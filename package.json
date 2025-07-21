@@ -21,6 +21,7 @@
     "seed:clean": "cd scripts/seed-data && npx ts-node index.ts --clean"
   },
   "dependencies": {
+    "@expo/config-plugins": "~10.1.1",
     "@expo/vector-icons": "^14.1.0",
     "@hookform/resolvers": "^5.1.1",
     "@react-native-async-storage/async-storage": "2.1.2",
@@ -31,6 +32,7 @@
     "@sentry/react-native": "~6.14.0",
     "@shopify/flash-list": "1.7.6",
     "@types/papaparse": "^5.3.16",
+    "eslint-config-expo": "~9.2.0",
     "expo": "~53.0.0",
     "expo-av": "~15.1.7",
     "expo-clipboard": "~7.1.5",
@@ -47,6 +49,7 @@
     "expo-splash-screen": "~0.30.10",
     "expo-status-bar": "~2.2.3",
     "firebase": "^10.12.2",
+    "jest-expo": "~53.0.9",
     "papaparse": "^5.5.3",
     "react": "19.0.0",
     "react-hook-form": "^7.52.0",
@@ -57,6 +60,7 @@
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.11.1",
     "react-native-svg": "15.11.2",
+    "typescript": "~5.8.3",
     "zod": "^3.23.8",
     "zustand": "^4.5.2"
   },

@@ -14,7 +14,7 @@
     },
     "jsx": "react-native",
     "lib": ["ESNext"],
-    "module": "ESNext",
+    "module": "esnext",
     "target": "ESNext",
     "moduleResolution": "bundler",
     "allowJs": true,
@@ -48,6 +48,8 @@
     "metro.config.js",
     "jest.config.js",
     "use-cases/**/*",
-    "examples/**/*"
+    "examples/**/*",
+    "functions/**/*",
+    "scripts/**/*"
   ]
 }

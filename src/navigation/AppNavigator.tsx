@@ -21,6 +21,7 @@ import { TaskDetailScreen } from '@/screens/database/TaskDetailScreen';
 import { StateInspector } from '@/components/developer/StateInspector';
 import { ErrorLogsScreen } from '@/screens/developer/ErrorLogsScreen';
 import { PerformanceMonitorScreen } from '@/screens/developer/PerformanceMonitorScreen';
+import { TestScreen } from '@/screens/developer/TestScreen';
 import { environmentManager } from '@/config/environment';
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -132,6 +133,11 @@ export const AppNavigator = () => {
                   name="PerformanceMonitor"
                   component={PerformanceMonitorScreen}
                   options={{ title: '效能監控' }}
+                />
+                <Stack.Screen
+                  name="TestScreen"
+                  component={TestScreen}
+                  options={{ title: '系統測試' }}
                 />
               </Stack.Group>
             )}

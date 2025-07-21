@@ -20,6 +20,7 @@ export type RootStackParamList = {
   StateInspector: undefined;
   ErrorLogs: undefined;
   PerformanceMonitor: undefined;
+  TestScreen: undefined;
 };
 
 export type MainTabParamList = {
