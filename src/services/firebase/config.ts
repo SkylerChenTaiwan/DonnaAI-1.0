@@ -3,7 +3,7 @@
  */
 
 import { FirebaseApp, initializeApp, getApps } from 'firebase/app';
-import { Auth, initializeAuth, getAuth, connectAuthEmulator } from 'firebase/auth';
+import { Auth, initializeAuth, getAuth, connectAuthEmulator, getReactNativePersistence } from 'firebase/auth';
 import { Firestore, getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 import { FirebaseStorage, getStorage } from 'firebase/storage';
 import { Functions, getFunctions, connectFunctionsEmulator } from 'firebase/functions';
@@ -51,8 +51,9 @@ export const getFirebaseAuth = (): Auth => {
   
   try {
     // 使用 initializeAuth 並設定 React Native 的持久化
-    // 在 React Native 中，Firebase Auth 自動使用 AsyncStorage 進行持久化
-    auth = initializeAuth(firebaseApp);
+    auth = initializeAuth(firebaseApp, {
+      persistence: getReactNativePersistence(AsyncStorage)
+    });
   } catch (error) {
     // 如果已經初始化過，使用 getAuth
     auth = getAuth(firebaseApp);
