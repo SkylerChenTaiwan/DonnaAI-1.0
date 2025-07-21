@@ -29,6 +29,7 @@ interface ActionPopoverProps {
   onClose: () => void;
   onAction: (action: Action) => void;
   fromRef: React.RefObject<any>;
+  tabBarHeight?: number;
 }
 
 const actions: Action[] = [
@@ -60,9 +61,23 @@ export const ActionPopover = ({
   onClose,
   onAction,
   fromRef,
+  tabBarHeight = 88,
 }: ActionPopoverProps) => {
   const insets = useSafeAreaInsets();
   const slideAnim = React.useRef(new Animated.Value(0)).current;
+  const [panelBottom, setPanelBottom] = React.useState(0);
+
+  React.useEffect(() => {
+    if (visible && fromRef.current) {
+      fromRef.current.measureInWindow((x, y, width, height) => {
+        // 計算面板應該出現的位置（從按鈕頂部開始）
+        const screenHeight = Dimensions.get('window').height;
+        const buttonTop = y;
+        const bottomPosition = screenHeight - buttonTop;
+        setPanelBottom(bottomPosition);
+      });
+    }
+  }, [visible, fromRef]);
 
   React.useEffect(() => {
     if (visible) {
@@ -99,14 +114,22 @@ export const ActionPopover = ({
     >
       <View style={styles.container}>
         <TouchableWithoutFeedback onPress={onClose}>
-          <Animated.View style={[styles.overlay, { opacity }]} />
+          <Animated.View 
+            style={[
+              styles.overlay, 
+              { 
+                opacity,
+                bottom: panelBottom || (tabBarHeight + insets.bottom)
+              }
+            ]} 
+          />
         </TouchableWithoutFeedback>
         
         <Animated.View
           style={[
             styles.actionPanel,
             {
-              bottom: 87 + insets.bottom, // 調整位置完全貼合
+              bottom: panelBottom || (tabBarHeight + insets.bottom),
               transform: [{ translateY }],
             },
           ]}
@@ -146,7 +169,6 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    bottom: 88, // 只遮罩到導航欄上方
     backgroundColor: '#000000',
   },
   actionPanel: {

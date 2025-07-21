@@ -25,6 +25,7 @@ export const MainTabNavigator = () => {
   const navigation = useNavigation<NavigationProp>();
   const [showActionModal, setShowActionModal] = useState(false);
   const addButtonRef = useRef<View>(null);
+  const tabBarRef = useRef<View>(null);
 
   const handleActionSelect = (action: { id: string; type: string }) => {
     setShowActionModal(false);
