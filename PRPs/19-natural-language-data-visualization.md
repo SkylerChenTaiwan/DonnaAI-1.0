@@ -14,12 +14,18 @@
 - 在首頁新增「智能分析」入口
 - 支援文字輸入和語音輸入（利用現有語音功能）
 - 查詢歷史記錄功能
+- **對話式介面**：支援多輪對話和澄清
 
 ### 2. AI 查詢理解引擎
 - 解析自然語言意圖
 - 識別查詢的實體（客戶、紀錄、任務、時間範圍等）
 - 轉換為結構化查詢參數
 - 建議最適合的圖表類型
+- **對話管理**：
+  - 識別不明確或缺失的資訊
+  - 生成澄清問題
+  - 維護對話上下文
+  - 支援查詢修正和細化
 
 ### 3. 資料查詢與處理
 - 基於現有的跨資料庫查詢函式
@@ -33,12 +39,26 @@
 - 支援圖表互動（縮放、篩選、詳細資訊）
 - 匯出功能（圖片、資料）
 
-### 5. 查詢範例
+### 5. 查詢範例與對話流程
+**簡單查詢**：
 - "顯示本月每個業務員的客戶拜訪次數"
 - "比較上季度和這季度的任務完成率"
-- "分析最近 30 天的會議時長趨勢"
-- "各團隊的客戶分佈圓餅圖"
-- "顯示 AI 使用量的每週變化"
+
+**需要澄清的查詢**：
+- 用戶："顯示業績"
+- AI："請問您想查看哪方面的業績？我可以顯示：
+  1. 各業務員的客戶拜訪次數
+  2. 新增客戶數量
+  3. 任務完成率
+  4. 會議時長統計"
+- 用戶："第2個，看這個月的"
+- AI：[生成本月新增客戶數量圖表]
+
+**逐步細化查詢**：
+- 用戶："分析團隊表現"
+- AI："我為您生成了各團隊本月的綜合表現圖表。您想深入了解特定指標嗎？"
+- 用戶："只看銷售團隊的詳細數據"
+- AI：[調整圖表只顯示銷售團隊詳細資料]
 
 ## 技術架構
 
@@ -50,6 +70,8 @@ interface NLQuery {
   query: string;
   timestamp: Date;
   userId: string;
+  conversationId: string;  // 對話串 ID
+  parentQueryId?: string;  // 上一個查詢 ID
 }
 
 interface QueryInterpretation {
@@ -62,6 +84,22 @@ interface QueryInterpretation {
   };
   suggestedChartType: ChartType;
   confidence: number;
+  needsClarification?: {
+    reason: string;
+    suggestions: string[];
+    missingInfo?: string[];
+  };
+}
+
+interface ConversationContext {
+  conversationId: string;
+  queries: NLQuery[];
+  interpretations: QueryInterpretation[];
+  currentChart?: ChartData;
+  clarificationState?: {
+    waitingFor: string;
+    options: string[];
+  };
 }
 
 interface ChartData {
@@ -88,9 +126,11 @@ import { GoogleGenAI, FunctionCallingConfigMode } from '@google/genai';
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
+// 對話式查詢解析
 export const interpretDataQueryWithGemini = async (
   query: string,
-  userContext: UserContext
+  userContext: UserContext,
+  conversationContext?: ConversationContext
 ): Promise<QueryInterpretation> => {
   // 定義函數宣告（JSON Schema）
   const queryInterpretationFunction = {
@@ -136,20 +176,45 @@ export const interpretDataQueryWithGemini = async (
     }
   };
 
+  // 建構對話歷史
+  const conversationHistory = conversationContext ? 
+    conversationContext.queries.map((q, i) => ({
+      role: 'user',
+      content: q.query
+    })).concat(
+      conversationContext.interpretations.map((interp, i) => ({
+        role: 'assistant',
+        content: interp.needsClarification ? 
+          `需要澄清：${interp.needsClarification.reason}` : 
+          `已理解查詢：${JSON.stringify(interp.entities)}`
+      }))
+    ) : [];
+
   const response = await ai.models.generateContent({
     model: 'gemini-2.0-flash-001',
     contents: `
       分析用戶的資料查詢需求，轉換為結構化查詢參數。
       
-      用戶查詢：${query}
+      當前查詢：${query}
       用戶角色：${userContext.role}
       可存取團隊：${userContext.teamIds.join(', ')}
+      
+      ${conversationHistory.length > 0 ? `對話歷史：
+      ${conversationHistory.map(h => `${h.role}: ${h.content}`).join('\n')}` : ''}
+      
+      ${conversationContext?.currentChart ? `
+      目前顯示的圖表：
+      - 類型：${conversationContext.currentChart.type}
+      - 資料：${conversationContext.currentChart.metadata.title}
+      ` : ''}
       
       資料庫包含：
       - customers: 客戶資料（姓名、公司、標籤、最後聯絡日期）
       - records: 紀錄（會議、通話、筆記，包含時間、時長、AI摘要）
       - tasks: 任務（標題、狀態、優先級、截止日期）
       - aiUsage: AI使用統計（處理分鐘數、信心分數）
+      
+      如果查詢不明確或缺少必要資訊，請在 needsClarification 中說明並提供建議。
     `,
     config: {
       toolConfig: {
@@ -220,6 +285,74 @@ export const executeVisualizationQuery = async (
 };
 ```
 
+### 對話管理層
+```typescript
+// 對話狀態管理 - src/stores/conversationStore.ts
+interface ConversationStore {
+  conversations: Map<string, ConversationContext>;
+  currentConversationId: string | null;
+  
+  // 開始新對話
+  startConversation: () => string;
+  
+  // 添加查詢到對話
+  addQuery: (conversationId: string, query: string) => void;
+  
+  // 更新解析結果
+  updateInterpretation: (
+    conversationId: string, 
+    interpretation: QueryInterpretation
+  ) => void;
+  
+  // 處理澄清回應
+  handleClarification: (
+    conversationId: string,
+    clarificationResponse: string
+  ) => void;
+  
+  // 更新當前圖表
+  updateChart: (conversationId: string, chart: ChartData) => void;
+  
+  // 清理過期對話
+  cleanupOldConversations: () => void;
+}
+
+// UI 元件 - src/components/DataVisualization/ConversationInterface.tsx
+export const ConversationInterface: React.FC = () => {
+  const [inputText, setInputText] = useState('');
+  const { currentConversation, sendQuery } = useConversation();
+  
+  return (
+    <View style={styles.container}>
+      {/* 對話歷史 */}
+      <ScrollView style={styles.chatHistory}>
+        {currentConversation?.queries.map((query, index) => (
+          <View key={query.id}>
+            <UserMessage text={query.query} />
+            {currentConversation.interpretations[index]?.needsClarification ? (
+              <ClarificationMessage 
+                clarification={currentConversation.interpretations[index].needsClarification}
+                onSelect={(option) => handleClarification(option)}
+              />
+            ) : (
+              <ChartMessage chart={currentConversation.currentChart} />
+            )}
+          </View>
+        ))}
+      </ScrollView>
+      
+      {/* 輸入區域 */}
+      <InputArea 
+        value={inputText}
+        onChangeText={setInputText}
+        onSubmit={() => sendQuery(inputText)}
+        placeholder="詢問資料相關問題..."
+      />
+    </View>
+  );
+};
+```
+
 ## 實作步驟
 
 ### 第一階段：基礎架構（2天）
@@ -255,25 +388,34 @@ export const executeVisualizationQuery = async (
    - 統計計算（平均、百分比等）
    - 資料格式標準化
 
-### 第四階段：UI 整合（2天）
-7. **查詢介面開發**
-   - 智能分析頁面
-   - 查詢輸入元件（支援語音）
+### 第四階段：UI 整合（3天）
+7. **對話式查詢介面**
+   - 聊天式 UI 元件
+   - 訊息氣泡（用戶/AI/圖表）
+   - 澄清選項介面
    - 查詢歷史管理
 
 8. **圖表展示與互動**
    - 圖表渲染元件
    - 互動功能（縮放、篩選）
+   - 圖表編輯和調整
    - 匯出功能實作
 
-### 第五階段：優化與測試（1天）
-9. **效能優化**
-   - 查詢結果快取
-   - 圖表渲染優化
-   - 載入狀態處理
+9. **對話流程優化**
+   - 快速建議按鈕
+   - 上下文相關提示
+   - 錯誤恢復機制
 
-10. **完整測試**
+### 第五階段：優化與測試（1天）
+10. **效能優化**
+    - 查詢結果快取
+    - 圖表渲染優化
+    - 載入狀態處理
+    - 對話歷史管理
+
+11. **完整測試**
     - 各種查詢場景測試
+    - 對話流程測試
     - 圖表正確性驗證
     - 錯誤處理測試
 
@@ -306,8 +448,10 @@ export const executeVisualizationQuery = async (
 
 ### 使用者體驗
 - 提供查詢建議和自動完成
-- 清楚的錯誤訊息
+- 清楚的錯誤訊息和引導
 - 查詢處理進度顯示
+- 對話式互動降低學習曲線
+- 保留對話上下文避免重複輸入
 
 ## 驗證檢查點
 
@@ -325,11 +469,13 @@ npm test
 
 ### 功能驗證
 1. ✅ 自然語言查詢正確解析
-2. ✅ 資料查詢結果準確
-3. ✅ 圖表類型選擇合理
-4. ✅ 圖表顯示正確
-5. ✅ 互動功能正常
-6. ✅ 權限控制有效
+2. ✅ 對話上下文保持準確
+3. ✅ 澄清流程運作正常
+4. ✅ 資料查詢結果準確
+5. ✅ 圖表類型選擇合理
+6. ✅ 圖表顯示正確
+7. ✅ 互動功能正常
+8. ✅ 權限控制有效
 
 ### 整合測試案例
 ```typescript
@@ -348,6 +494,17 @@ describe('自然語言資料視覺化', () => {
     expect(result.chartType).toBe('grouped-bar');
     expect(result.data[0]).toHaveProperty('teamName');
     expect(result.data[0]).toHaveProperty('completionRate');
+  });
+
+  test('對話式查詢：需要澄清', async () => {
+    const conversation = await startConversation();
+    const result1 = await processNLQuery("顯示業績", mockUser, conversation);
+    expect(result1.needsClarification).toBeTruthy();
+    expect(result1.needsClarification.suggestions).toContain('客戶拜訪次數');
+    
+    const result2 = await processNLQuery("第2個選項", mockUser, conversation);
+    expect(result2.chartType).toBeDefined();
+    expect(result2.needsClarification).toBeFalsy();
   });
 });
 ```
@@ -398,13 +555,14 @@ npm install --save-dev @types/victory
    - 智能資料視覺化
    - 可擴展的架構設計
 
-## 實作信心評分：8/10
+## 實作信心評分：9/10
 
 **評分理由**：
 - ✅ 現有 AI 整合基礎完善
 - ✅ 資料查詢架構成熟
 - ✅ Victory Native 文件詳細
-- ⚠️ 需要仔細處理自然語言解析的邊界情況
+- ✅ Gemini API 成本效益極佳
+- ✅ 對話式設計提升使用體驗
 - ⚠️ 圖表效能優化需要迭代調整
 
 ## 下一步行動
