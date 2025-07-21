@@ -98,7 +98,7 @@ export const DatabaseScreen: React.FC = () => {
       useRecordStore.getState().fetchRecords(user.id);
       useTaskStore.getState().fetchTasks(user.id);
     }
-  }, [user, fetchCustomers]);
+  }, [user?.id, user?.teamIds?.[0]]);
 
   // 調試：監控重新渲染
   console.log('🔄 DatabaseScreen render:', {
@@ -118,25 +118,25 @@ export const DatabaseScreen: React.FC = () => {
   ], [customers.length, records?.length, tasks?.length]);
 
   // 客戶表格欄位
-  const customerColumns: TableColumn[] = [
+  const customerColumns: TableColumn[] = useMemo(() => [
     { key: 'name', title: '姓名', sortable: true, filterable: true },
     { key: 'company', title: '公司', sortable: true, filterable: true },
     { key: 'phone', title: '電話', filterable: true },
     { key: 'tags', title: '標籤', filterable: true },
-  ];
+  ], []);
 
   // 紀錄表格欄位
-  const recordColumns: TableColumn[] = [
+  const recordColumns: TableColumn[] = useMemo(() => [
     { key: 'type', title: '類型', sortable: true, filterable: true, render: (value) => (
       <Text style={styles.typeText}>{value === 'meeting' ? '會議' : '通話'}</Text>
     )},
     { key: 'customerName', title: '客戶', filterable: true },
     { key: 'date', title: '日期', sortable: true, filterable: true },
     { key: 'summary', title: '摘要', filterable: true },
-  ];
+  ], []);
 
   // 任務表格欄位
-  const taskColumns: TableColumn[] = [
+  const taskColumns: TableColumn[] = useMemo(() => [
     { key: 'title', title: '標題', sortable: true, filterable: true },
     { key: 'assignee', title: '負責人', filterable: true },
     { key: 'dueDate', title: '到期日', sortable: true, filterable: true },
@@ -147,7 +147,7 @@ export const DatabaseScreen: React.FC = () => {
         </Text>
       </View>
     )},
-  ];
+  ], []);
 
   // 取得當前標籤的資料（使用 useMemo 優化）
   const currentData = useMemo(() => {
@@ -192,8 +192,20 @@ export const DatabaseScreen: React.FC = () => {
         return { data: [], columns: [], loading: false };
     }
   }, [activeTab, customers, records, tasks, customerLoading, recordLoading, taskLoading]);
-  const allColumns = activeTab === 'customers' ? customerColumns : 
-                     activeTab === 'records' ? recordColumns : taskColumns;
+  
+  // 使用 useMemo 穩定 allColumns 參考
+  const allColumns = useMemo(() => {
+    switch (activeTab) {
+      case 'customers':
+        return customerColumns;
+      case 'records':
+        return recordColumns;
+      case 'tasks':
+        return taskColumns;
+      default:
+        return customerColumns;
+    }
+  }, [activeTab]);
   
   // 使用欄位設定管理
   const defaultColumnKeys = useMemo(() => allColumns.map(col => col.key), [allColumns]);
@@ -207,7 +219,7 @@ export const DatabaseScreen: React.FC = () => {
     return columnSettings 
       ? allColumns.filter(col => columnSettings.visibleColumns.includes(col.key))
       : allColumns;
-  }, [allColumns, columnSettings]);
+  }, [allColumns, columnSettings?.visibleColumns]);
 
   const handleRowPress = (item: any) => {
     // 只在非多選模式下導航到詳細頁面

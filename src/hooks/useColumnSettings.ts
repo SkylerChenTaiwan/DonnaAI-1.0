@@ -39,16 +39,16 @@ export const useColumnSettings = (
         } else {
           // 使用預設值
           setSettings({
-            visibleColumns: defaultColumns,
-            columnOrder: defaultColumns,
+            visibleColumns: [...defaultColumns],
+            columnOrder: [...defaultColumns],
           });
         }
       } catch (error) {
         console.error('載入欄位設定失敗:', error);
         // 出錯時使用預設值
         setSettings({
-          visibleColumns: defaultColumns,
-          columnOrder: defaultColumns,
+          visibleColumns: [...defaultColumns],
+          columnOrder: [...defaultColumns],
         });
       } finally {
         setLoading(false);
@@ -56,7 +56,7 @@ export const useColumnSettings = (
     };
 
     loadSettings();
-  }, [tabId, defaultColumns]);
+  }, [tabId]);
 
   // 儲存設定
   const saveSettings = useCallback(async (newSettings: ColumnSettings) => {
@@ -73,11 +73,22 @@ export const useColumnSettings = (
   // 重置為預設值
   const resetToDefaults = useCallback(async () => {
     const defaultSettings: ColumnSettings = {
-      visibleColumns: defaultColumns,
-      columnOrder: defaultColumns,
+      visibleColumns: [...defaultColumns],
+      columnOrder: [...defaultColumns],
     };
     await saveSettings(defaultSettings);
   }, [defaultColumns, saveSettings]);
+
+  // 當 defaultColumns 改變時，如果沒有設定則使用新的預設值
+  useEffect(() => {
+    if (!settings && defaultColumns.length > 0) {
+      setSettings({
+        visibleColumns: [...defaultColumns],
+        columnOrder: [...defaultColumns],
+      });
+      setLoading(false);
+    }
+  }, [defaultColumns, settings]);
 
   return {
     settings,
