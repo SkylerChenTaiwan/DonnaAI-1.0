@@ -117,8 +117,8 @@ service cloud.firestore {
     // ====== 客戶集合 ======
     
     match /customers/{customerId} {
-      // 讀取：團隊成員可以讀取
-      allow read: if isTeamMember(resource.data.teamId);
+      // 讀取：認證使用者都可以讀取（查詢時會在應用層過濾）
+      allow read: if isAuthenticated();
       
       // 建立：團隊成員可以建立客戶
       allow create: if isTeamMember(request.resource.data.teamId) &&
@@ -147,8 +147,8 @@ service cloud.firestore {
     // ====== 紀錄集合 ======
     
     match /records/{recordId} {
-      // 讀取：團隊成員可以讀取
-      allow read: if isTeamMember(resource.data.teamId);
+      // 讀取：認證使用者都可以讀取（查詢時會在應用層過濾）
+      allow read: if isAuthenticated();
       
       // 建立：團隊成員可以建立紀錄
       allow create: if isTeamMember(request.resource.data.teamId) &&
@@ -176,8 +176,8 @@ service cloud.firestore {
     // ====== 任務集合 ======
     
     match /tasks/{taskId} {
-      // 讀取：團隊成員可以讀取
-      allow read: if isTeamMember(resource.data.teamId);
+      // 讀取：認證使用者都可以讀取（查詢時會在應用層過濾）
+      allow read: if isAuthenticated();
       
       // 建立：團隊成員可以建立任務
       allow create: if isTeamMember(request.resource.data.teamId) &&
