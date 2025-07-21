@@ -93,12 +93,12 @@ export const DatabaseScreen: React.FC = () => {
   useEffect(() => {
     if (user) {
       console.log('📊 DatabaseScreen - 載入資料, 使用者:', user.email);
-      fetchCustomers(user.id, user.teamIds?.[0] || '');
-      // 載入其他資料
-      useRecordStore.getState().fetchRecords(user.id);
-      useTaskStore.getState().fetchTasks(user.id);
+      fetchCustomers(user); // 傳遞完整的 user 物件
+      // 載入其他資料 - 傳遞完整的 user 物件
+      useRecordStore.getState().fetchRecords(user);
+      useTaskStore.getState().fetchTasks(user);
     }
-  }, [user?.id, user?.teamIds?.[0]]);
+  }, [user, fetchCustomers]);
 
   // 調試：監控重新渲染
   console.log('🔄 DatabaseScreen render:', {
@@ -471,13 +471,13 @@ export const DatabaseScreen: React.FC = () => {
           
           switch (activeTab) {
             case 'customers':
-              fetchCustomers(user.id, user.teamIds?.[0] || '');
+              fetchCustomers(user);
               break;
             case 'records':
-              useRecordStore.getState().fetchRecords(user.id);
+              useRecordStore.getState().fetchRecords(user);
               break;
             case 'tasks':
-              useTaskStore.getState().fetchTasks(user.id);
+              useTaskStore.getState().fetchTasks(user);
               break;
           }
         }, [user, activeTab, fetchCustomers])}
