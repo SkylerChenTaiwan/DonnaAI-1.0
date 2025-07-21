@@ -219,21 +219,21 @@ export const DatabaseScreen: React.FC = () => {
       
       {/* 整合工具列和搜尋欄 */}
       <View style={styles.toolbar}>
-        <SearchBar
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          placeholder="搜尋資料..."
-          style={styles.searchBar}
-        />
-        <View style={styles.toolbarButtons}>
-          <ToolbarIcons
-            multiSelectMode={multiSelectMode}
-            onFilterPress={() => console.log('Filter pressed')}
-            onSortPress={() => console.log('Sort pressed')}
-            onMultiSelectPress={() => setMultiSelectMode(!multiSelectMode)}
-            onColumnsPress={() => console.log('Columns pressed')}
+        <View style={styles.searchContainer}>
+          <SearchBar
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            placeholder="搜尋"
+            style={styles.searchBar}
           />
         </View>
+        <ToolbarIcons
+          multiSelectMode={multiSelectMode}
+          onFilterPress={() => console.log('Filter pressed')}
+          onSortPress={() => console.log('Sort pressed')}
+          onMultiSelectPress={() => setMultiSelectMode(!multiSelectMode)}
+          onColumnsPress={() => console.log('Columns pressed')}
+        />
       </View>
       
       {/* 篩選條件顯示 */}
@@ -289,16 +289,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#E5E5EA',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    gap: 16,
+  },
+  searchContainer: {
+    flex: 1,
+    minWidth: 200,
   },
   searchBar: {
-    flex: 1,
-    marginRight: 12,
-  },
-  toolbarButtons: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexShrink: 0,
+    width: '100%',
   },
   toolButton: {
     flexDirection: 'row',

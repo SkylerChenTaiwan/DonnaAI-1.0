@@ -70,7 +70,7 @@ export const SearchBar = ({
 
   return (
     <View style={styles.container}>
-      <Ionicons name="search" size={20} color="#8E8E93" style={styles.icon} />
+      <Ionicons name="search" size={16} color="#8E8E93" style={styles.icon} />
       <TextInput
         style={styles.input}
         value={localValue}
@@ -95,17 +95,17 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F2F2F7',
-    borderRadius: 8,
+    backgroundColor: '#F7F7F7',
+    borderRadius: 6,
     paddingHorizontal: 10,
-    height: 36,
+    height: 32,
   },
   icon: {
     marginRight: 8,
   },
   input: {
     flex: 1,
-    fontSize: 15,
+    fontSize: 14,
     color: '#1C1C1E',
   },
   clearButton: {
