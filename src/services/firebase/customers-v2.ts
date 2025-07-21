@@ -12,8 +12,8 @@ import {
   Unsubscribe
 } from 'firebase/firestore';
 import { getFirebaseDb } from './config';
-import { CustomerDoc } from '@/types/firebase';
-import { User } from '@/types/user';
+import { CustomerDoc } from '../../types/firebase';
+import { User } from '../../types/user';
 import { getUserPermissionContext, buildQueryConstraints } from './permissions-v2';
 
 /**

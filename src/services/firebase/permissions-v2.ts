@@ -3,7 +3,7 @@
  * 使用查詢層級權限和快取來提升效能
  */
 
-import { User } from '@/types/user';
+import { User } from '../../types/user';
 
 interface UserPermissionContext {
   userId: string;
@@ -104,8 +104,8 @@ export function buildQueryConstraints(context: UserPermissionContext, dataType: 
  */
 export async function batchCheckPermissions(
   context: UserPermissionContext,
-  items: Array<{ id: string; teamId?: string; assignedTo?: string }>,
-  dataType: 'customers' | 'records' | 'tasks'
+  items: { id: string; teamId?: string; assignedTo?: string }[],
+  _dataType: 'customers' | 'records' | 'tasks'
 ): Promise<Map<string, boolean>> {
   const results = new Map<string, boolean>();
   

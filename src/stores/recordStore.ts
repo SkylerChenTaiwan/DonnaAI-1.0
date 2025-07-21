@@ -14,14 +14,17 @@ import {
   createRecord,
   updateRecord,
   deleteRecord,
-  getRecords,
-  getRecord,
-  subscribeToRecords,
-  processRecordForCustomerFields,
-  getRecordsByCustomer
+  processRecordForCustomerFields
 } from '../services/firebase/records';
+import { 
+  getRecord,
+  getRecordsOptimized,
+  subscribeToRecordsOptimized,
+  getRecordsByCustomerOptimized
+} from '../services/firebase/records-v2';
 import { getCustomFieldDefinitions } from '../services/firebase/custom-fields';
 import { Unsubscribe } from 'firebase/firestore';
+import { User } from '../types/user';
 
 interface RecordState {
   // 狀態
@@ -38,8 +41,8 @@ interface RecordState {
   unsubscribe: Unsubscribe | null;
   
   // 動作 - 基本 CRUD
-  fetchRecords: (userId: string, filter?: RecordFilter) => Promise<void>;
-  fetchRecord: (recordId: string, userId: string) => Promise<void>;
+  fetchRecords: (userOrUserId: User | string, filter?: RecordFilter) => Promise<void>;
+  fetchRecord: (recordId: string, userOrUserId: User | string) => Promise<void>;
   createRecord: (record: Omit<RecordDoc, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>, userId: string, audioFile?: File) => Promise<RecordDoc>;
   updateRecord: (recordId: string, updates: Partial<RecordDoc>, userId: string) => Promise<void>;
   deleteRecord: (recordId: string, userId: string) => Promise<void>;
@@ -48,7 +51,7 @@ interface RecordState {
   processRecordFields: (recordId: string, autoApply?: boolean) => Promise<void>;
   
   // 動作 - 即時訂閱
-  subscribeToRecords: (teamId: string, userId: string) => void;
+  subscribeToRecords: (userOrTeamId: User | string, userId?: string) => void;
   unsubscribeFromRecords: () => void;
   
   // 動作 - 自訂欄位
@@ -59,7 +62,7 @@ interface RecordState {
   clearFilter: () => void;
   
   // 動作 - 客戶相關
-  fetchCustomerRecords: (customerId: string, userId: string) => Promise<void>;
+  fetchCustomerRecords: (customerId: string, userOrUserId: User | string) => Promise<void>;
   
   // 動作 - 狀態管理
   setSelectedRecord: (record: RecordDoc | null) => void;
@@ -84,12 +87,34 @@ export const useRecordStore = create<RecordState>()(
     (set, get) => ({
       ...initialState,
       
-      // 獲取紀錄列表
-      fetchRecords: async (userId: string, filter?: RecordFilter) => {
+      // 獲取紀錄列表（支援向後相容）
+      fetchRecords: async (userOrUserId: User | string, filter?: RecordFilter) => {
         set({ isLoading: true, error: null });
         
         try {
-          const records = await getRecords(userId, filter || get().filter);
+          let records: RecordDoc[];
+          const currentFilter = filter || get().filter;
+          
+          if (typeof userOrUserId === 'string') {
+            // 舊版調用方式 - 創建臨時 User 物件
+            const tempUser: User = {
+              id: userOrUserId,
+              email: '',
+              name: '',
+              role: 'salesperson',
+              organizationId: '',
+              teamIds: [],
+              managedTeamIds: [],
+              createdAt: new Date(),
+              updatedAt: new Date()
+            };
+            
+            records = await getRecordsOptimized(tempUser, currentFilter);
+          } else {
+            // 新版調用方式 - 直接使用 User 物件
+            records = await getRecordsOptimized(userOrUserId, currentFilter);
+          }
+          
           set({ records, isLoading: false });
         } catch (error) {
           set({ 
@@ -99,12 +124,33 @@ export const useRecordStore = create<RecordState>()(
         }
       },
       
-      // 獲取單一紀錄
-      fetchRecord: async (recordId: string, userId: string) => {
+      // 獲取單一紀錄（支援向後相容）
+      fetchRecord: async (recordId: string, userOrUserId: User | string) => {
         set({ isLoading: true, error: null });
         
         try {
-          const record = await getRecord(recordId, userId);
+          let record: RecordDoc | null;
+          
+          if (typeof userOrUserId === 'string') {
+            // 舊版調用方式 - 創建臨時 User 物件
+            const tempUser: User = {
+              id: userOrUserId,
+              email: '',
+              name: '',
+              role: 'salesperson',
+              organizationId: '',
+              teamIds: [],
+              managedTeamIds: [],
+              createdAt: new Date(),
+              updatedAt: new Date()
+            };
+            
+            record = await getRecord(recordId, tempUser);
+          } else {
+            // 新版調用方式 - 直接使用 User 物件
+            record = await getRecord(recordId, userOrUserId);
+          }
+          
           if (record) {
             set({ selectedRecord: record, isLoading: false });
           } else {
@@ -238,8 +284,8 @@ export const useRecordStore = create<RecordState>()(
         }
       },
       
-      // 訂閱紀錄變更
-      subscribeToRecords: (teamId: string, userId: string) => {
+      // 訂閱紀錄變更（支援向後相容）
+      subscribeToRecords: (userOrTeamId: User | string, userId?: string) => {
         // 先取消現有訂閱
         const currentUnsubscribe = get().unsubscribe;
         if (currentUnsubscribe) {
@@ -247,9 +293,33 @@ export const useRecordStore = create<RecordState>()(
         }
         
         const filter = get().filter;
-        const unsubscribe = subscribeToRecords(teamId, userId, (records) => {
-          set({ records });
-        }, filter);
+        let unsubscribe: Unsubscribe;
+        
+        if (typeof userOrTeamId === 'string' && userId) {
+          // 舊版調用方式 - 創建臨時 User 物件
+          const tempUser: User = {
+            id: userId,
+            email: '',
+            name: '',
+            role: 'salesperson',
+            organizationId: '',
+            teamIds: [userOrTeamId],
+            managedTeamIds: [],
+            createdAt: new Date(),
+            updatedAt: new Date()
+          };
+          
+          unsubscribe = subscribeToRecordsOptimized(tempUser, (records) => {
+            set({ records });
+          }, filter);
+        } else if (typeof userOrTeamId === 'object') {
+          // 新版調用方式 - 直接使用 User 物件
+          unsubscribe = subscribeToRecordsOptimized(userOrTeamId, (records) => {
+            set({ records });
+          }, filter);
+        } else {
+          throw new Error('無效的參數');
+        }
         
         set({ unsubscribe });
       },
@@ -285,12 +355,33 @@ export const useRecordStore = create<RecordState>()(
         set({ filter: {} });
       },
       
-      // 獲取客戶相關紀錄
-      fetchCustomerRecords: async (customerId: string, userId: string) => {
+      // 獲取客戶相關紀錄（支援向後相容）
+      fetchCustomerRecords: async (customerId: string, userOrUserId: User | string) => {
         set({ isLoading: true, error: null });
         
         try {
-          const records = await getRecordsByCustomer(customerId, userId);
+          let records: RecordDoc[];
+          
+          if (typeof userOrUserId === 'string') {
+            // 舊版調用方式 - 創建臨時 User 物件
+            const tempUser: User = {
+              id: userOrUserId,
+              email: '',
+              name: '',
+              role: 'salesperson',
+              organizationId: '',
+              teamIds: [],
+              managedTeamIds: [],
+              createdAt: new Date(),
+              updatedAt: new Date()
+            };
+            
+            records = await getRecordsByCustomerOptimized(customerId, tempUser);
+          } else {
+            // 新版調用方式 - 直接使用 User 物件
+            records = await getRecordsByCustomerOptimized(customerId, userOrUserId);
+          }
+          
           set({ records, isLoading: false });
         } catch (error) {
           set({ 

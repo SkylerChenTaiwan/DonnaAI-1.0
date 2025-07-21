@@ -10,13 +10,16 @@ import {
   createCustomer,
   updateCustomer,
   deleteCustomer,
-  getCustomers,
   getCustomer,
-  subscribeToCustomers,
   batchUpdateCustomers
 } from '../services/firebase/customers';
+import { 
+  getCustomersOptimized,
+  subscribeToCustomersOptimized
+} from '../services/firebase/customers-v2';
 import { getCustomFieldDefinitions } from '../services/firebase/custom-fields';
 import { Unsubscribe } from 'firebase/firestore';
+import { User } from '../types/user';
 
 interface CustomerState {
   // 狀態
@@ -36,7 +39,7 @@ interface CustomerState {
   unsubscribe: Unsubscribe | null;
   
   // 動作 - 基本 CRUD
-  fetchCustomers: (userId: string, teamId?: string) => Promise<void>;
+  fetchCustomers: (userOrUserId: User | string, teamId?: string) => Promise<void>;
   fetchCustomer: (customerId: string, userId: string) => Promise<void>;
   addCustomer: (customer: Omit<CustomerDoc, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>, userId: string) => Promise<CustomerDoc>;
   updateCustomer: (customerId: string, updates: Partial<CustomerDoc>, userId: string) => Promise<void>;
@@ -46,7 +49,7 @@ interface CustomerState {
   batchUpdateCustomers: (customerIds: string[], updates: Partial<CustomerDoc>, userId: string) => Promise<void>;
   
   // 動作 - 即時訂閱
-  subscribeToCustomers: (teamId: string, userId: string) => void;
+  subscribeToCustomers: (userOrTeamId: User | string, userIdOrCallback?: string | ((customers: CustomerDoc[]) => void)) => void;
   unsubscribeFromCustomers: () => void;
   
   // 動作 - 自訂欄位
@@ -78,19 +81,47 @@ export const useCustomerStore = create<CustomerState>()(
     (set, get) => ({
       ...initialState,
       
-      // 獲取客戶列表
-      fetchCustomers: async (userId: string, teamId?: string) => {
+      // 獲取客戶列表（支援向後相容）
+      fetchCustomers: async (userOrUserId: User | string, teamId?: string) => {
         set({ isLoading: true, error: null });
-        
-        console.log('📦 customerStore.fetchCustomers 呼叫參數:', {
-          userId,
-          teamId,
-          filters: get().filters
-        });
         
         try {
           const filters = get().filters;
-          const customers = await getCustomers(userId, teamId, filters);
+          let customers: CustomerDoc[];
+          
+          // 判斷參數類型
+          if (typeof userOrUserId === 'string') {
+            // 舊版調用方式 - 創建臨時的 User 物件
+            console.log('📦 customerStore.fetchCustomers (舊版模式):', {
+              userId: userOrUserId,
+              teamId,
+              filters
+            });
+            
+            // 創建一個簡化的 User 物件用於優化查詢
+            const tempUser: User = {
+              id: userOrUserId,
+              email: '',
+              name: '',
+              role: 'salesperson',
+              organizationId: '',
+              teamIds: teamId ? [teamId] : [],
+              managedTeamIds: [],
+              createdAt: new Date(),
+              updatedAt: new Date()
+            };
+            
+            customers = await getCustomersOptimized(tempUser, filters);
+          } else {
+            // 新版調用方式 - 直接使用 User 物件
+            console.log('📦 customerStore.fetchCustomers (優化模式):', {
+              user: userOrUserId.email,
+              filters
+            });
+            
+            customers = await getCustomersOptimized(userOrUserId, filters);
+          }
+          
           console.log(`✅ 獲取到 ${customers.length} 個客戶`);
           set({ customers, isLoading: false });
         } catch (error) {
@@ -217,43 +248,94 @@ export const useCustomerStore = create<CustomerState>()(
         }
       },
       
-      // 訂閱客戶變更
-      subscribeToCustomers: (teamId: string, userId: string) => {
+      // 訂閱客戶變更（支援向後相容）
+      subscribeToCustomers: (userOrTeamId: User | string, userIdOrCallback?: string | ((customers: CustomerDoc[]) => void)) => {
         // 先取消現有訂閱
         const currentUnsubscribe = get().unsubscribe;
         if (currentUnsubscribe) {
           currentUnsubscribe();
         }
         
-        const unsubscribe = subscribeToCustomers(teamId, userId, (customers) => {
-          // 應用過濾
-          const filters = get().filters;
-          let filteredCustomers = customers;
+        let unsubscribe: Unsubscribe;
+        
+        // 判斷參數類型
+        if (typeof userOrTeamId === 'string' && typeof userIdOrCallback === 'string') {
+          // 舊版調用方式 - 創建臨時 User 物件
+          const tempUser: User = {
+            id: userIdOrCallback,
+            email: '',
+            name: '',
+            role: 'salesperson',
+            organizationId: '',
+            teamIds: [userOrTeamId],
+            managedTeamIds: [],
+            createdAt: new Date(),
+            updatedAt: new Date()
+          };
           
-          if (filters.searchTerm) {
-            const searchLower = filters.searchTerm.toLowerCase();
-            filteredCustomers = filteredCustomers.filter(c =>
-              c.name.toLowerCase().includes(searchLower) ||
-              c.company.toLowerCase().includes(searchLower) ||
-              c.email?.toLowerCase().includes(searchLower) ||
-              c.phone?.includes(filters.searchTerm!)
-            );
-          }
-          
-          if (filters.assignedTo) {
-            filteredCustomers = filteredCustomers.filter(c => 
-              c.assignedTo === filters.assignedTo
-            );
-          }
-          
-          if (filters.tags && filters.tags.length > 0) {
-            filteredCustomers = filteredCustomers.filter(c =>
-              c.tags?.some(tag => filters.tags!.includes(tag))
-            );
-          }
-          
-          set({ customers: filteredCustomers });
-        });
+          unsubscribe = subscribeToCustomersOptimized(tempUser, (customers) => {
+            // 應用客戶端過濾
+            const filters = get().filters;
+            let filteredCustomers = customers;
+            
+            if (filters.searchTerm) {
+              const searchLower = filters.searchTerm.toLowerCase();
+              filteredCustomers = filteredCustomers.filter(c =>
+                c.name.toLowerCase().includes(searchLower) ||
+                c.company?.toLowerCase().includes(searchLower) ||
+                c.email?.toLowerCase().includes(searchLower) ||
+                c.phone?.includes(filters.searchTerm!)
+              );
+            }
+            
+            if (filters.assignedTo) {
+              filteredCustomers = filteredCustomers.filter(c => 
+                c.assignedTo === filters.assignedTo
+              );
+            }
+            
+            if (filters.tags && filters.tags.length > 0) {
+              filteredCustomers = filteredCustomers.filter(c =>
+                c.tags?.some(tag => filters.tags!.includes(tag))
+              );
+            }
+            
+            set({ customers: filteredCustomers });
+          });
+        } else if (typeof userOrTeamId === 'object') {
+          // 新版調用方式 - 直接使用 User 物件
+          unsubscribe = subscribeToCustomersOptimized(userOrTeamId, (customers) => {
+            // 應用客戶端過濾
+            const filters = get().filters;
+            let filteredCustomers = customers;
+            
+            if (filters.searchTerm) {
+              const searchLower = filters.searchTerm.toLowerCase();
+              filteredCustomers = filteredCustomers.filter(c =>
+                c.name.toLowerCase().includes(searchLower) ||
+                c.company?.toLowerCase().includes(searchLower) ||
+                c.email?.toLowerCase().includes(searchLower) ||
+                c.phone?.includes(filters.searchTerm!)
+              );
+            }
+            
+            if (filters.assignedTo) {
+              filteredCustomers = filteredCustomers.filter(c => 
+                c.assignedTo === filters.assignedTo
+              );
+            }
+            
+            if (filters.tags && filters.tags.length > 0) {
+              filteredCustomers = filteredCustomers.filter(c =>
+                c.tags?.some(tag => filters.tags!.includes(tag))
+              );
+            }
+            
+            set({ customers: filteredCustomers });
+          });
+        } else {
+          throw new Error('無效的參數');
+        }
         
         set({ unsubscribe });
       },

@@ -17,15 +17,18 @@ import {
   createTask,
   updateTask,
   deleteTask,
-  getTasks,
-  getTask,
-  subscribeToTasks,
-  batchOperateTasks,
-  getTaskStats,
-  getTasksByCustomer,
   createTasksFromAIActions
 } from '../services/firebase/tasks';
+import { 
+  getTask,
+  getTasksOptimized,
+  subscribeToTasksOptimized,
+  batchOperateTasks,
+  getTaskStats,
+  getTasksByCustomerOptimized
+} from '../services/firebase/tasks-v2';
 import { Unsubscribe } from 'firebase/firestore';
+import { User } from '../types/user';
 
 interface TaskState {
   // 狀態
@@ -40,28 +43,28 @@ interface TaskState {
   unsubscribe: Unsubscribe | null;
   
   // 動作 - 基本 CRUD
-  fetchTasks: (userId: string, filter?: TaskFilter) => Promise<void>;
-  fetchTask: (taskId: string, userId: string) => Promise<void>;
+  fetchTasks: (userOrUserId: User | string, filter?: TaskFilter) => Promise<void>;
+  fetchTask: (taskId: string, userOrUserId: User | string) => Promise<void>;
   createTask: (task: TaskCreateRequest, userId: string) => Promise<TaskDoc>;
   updateTask: (taskId: string, updates: TaskUpdateRequest, userId: string) => Promise<void>;
   deleteTask: (taskId: string, userId: string) => Promise<void>;
   
   // 動作 - 批次操作
-  batchOperateTasks: (operation: TaskBatchOperation, userId: string) => Promise<void>;
+  batchOperateTasks: (operation: TaskBatchOperation, userOrUserId: User | string) => Promise<void>;
   
   // 動作 - 快速操作
   completeTask: (taskId: string, userId: string) => Promise<void>;
   assignTask: (taskId: string, assigneeId: string, userId: string) => Promise<void>;
   
   // 動作 - 即時訂閱
-  subscribeToTasks: (userId: string, filter?: TaskFilter) => void;
+  subscribeToTasks: (userOrUserId: User | string, filter?: TaskFilter) => void;
   unsubscribeFromTasks: () => void;
   
   // 動作 - 統計
-  fetchTaskStats: (userId: string, teamId?: string) => Promise<void>;
+  fetchTaskStats: (userOrUserId: User | string, teamId?: string) => Promise<void>;
   
   // 動作 - 客戶相關
-  fetchCustomerTasks: (customerId: string, userId: string, includeCompleted?: boolean) => Promise<void>;
+  fetchCustomerTasks: (customerId: string, userOrUserId: User | string, includeCompleted?: boolean) => Promise<void>;
   
   // 動作 - AI 整合
   createTasksFromAI: (
@@ -98,12 +101,34 @@ export const useTaskStore = create<TaskState>()(
     (set, get) => ({
       ...initialState,
       
-      // 獲取任務列表
-      fetchTasks: async (userId: string, filter?: TaskFilter) => {
+      // 獲取任務列表（支援向後相容）
+      fetchTasks: async (userOrUserId: User | string, filter?: TaskFilter) => {
         set({ isLoading: true, error: null });
         
         try {
-          const tasks = await getTasks(userId, filter || get().filter);
+          let tasks: TaskDoc[];
+          const currentFilter = filter || get().filter;
+          
+          if (typeof userOrUserId === 'string') {
+            // 舊版調用方式 - 創建臨時 User 物件
+            const tempUser: User = {
+              id: userOrUserId,
+              email: '',
+              name: '',
+              role: 'salesperson',
+              organizationId: '',
+              teamIds: [],
+              managedTeamIds: [],
+              createdAt: new Date(),
+              updatedAt: new Date()
+            };
+            
+            tasks = await getTasksOptimized(tempUser, currentFilter);
+          } else {
+            // 新版調用方式 - 直接使用 User 物件
+            tasks = await getTasksOptimized(userOrUserId, currentFilter);
+          }
+          
           set({ tasks, isLoading: false });
         } catch (error) {
           set({ 
@@ -113,12 +138,33 @@ export const useTaskStore = create<TaskState>()(
         }
       },
       
-      // 獲取單一任務
-      fetchTask: async (taskId: string, userId: string) => {
+      // 獲取單一任務（支援向後相容）
+      fetchTask: async (taskId: string, userOrUserId: User | string) => {
         set({ isLoading: true, error: null });
         
         try {
-          const task = await getTask(taskId, userId);
+          let task: TaskDoc | null;
+          
+          if (typeof userOrUserId === 'string') {
+            // 舊版調用方式 - 創建臨時 User 物件
+            const tempUser: User = {
+              id: userOrUserId,
+              email: '',
+              name: '',
+              role: 'salesperson',
+              organizationId: '',
+              teamIds: [],
+              managedTeamIds: [],
+              createdAt: new Date(),
+              updatedAt: new Date()
+            };
+            
+            task = await getTask(taskId, tempUser);
+          } else {
+            // 新版調用方式 - 直接使用 User 物件
+            task = await getTask(taskId, userOrUserId);
+          }
+          
           if (task) {
             set({ selectedTask: task, isLoading: false });
           } else {
@@ -234,21 +280,46 @@ export const useTaskStore = create<TaskState>()(
         }
       },
       
-      // 批次操作任務
-      batchOperateTasks: async (operation, userId) => {
+      // 批次操作任務（支援向後相容）
+      batchOperateTasks: async (operation, userOrUserId) => {
         set({ isLoading: true, error: null });
         
         try {
-          await batchOperateTasks(operation, userId);
-          
-          // 重新獲取任務列表
-          await get().fetchTasks(userId);
-          
-          // 更新統計
-          const state = get();
-          if (state.taskStats) {
-            get().fetchTaskStats(userId);
+          if (typeof userOrUserId === 'string') {
+            // 舊版調用方式 - 創建臨時 User 物件
+            const tempUser: User = {
+              id: userOrUserId,
+              email: '',
+              name: '',
+              role: 'salesperson',
+              organizationId: '',
+              teamIds: [],
+              managedTeamIds: [],
+              createdAt: new Date(),
+              updatedAt: new Date()
+            };
+            
+            await batchOperateTasks(operation, tempUser);
+            await get().fetchTasks(tempUser);
+            
+            // 更新統計
+            const state = get();
+            if (state.taskStats) {
+              get().fetchTaskStats(tempUser);
+            }
+          } else {
+            // 新版調用方式 - 直接使用 User 物件
+            await batchOperateTasks(operation, userOrUserId);
+            await get().fetchTasks(userOrUserId);
+            
+            // 更新統計
+            const state = get();
+            if (state.taskStats) {
+              get().fetchTaskStats(userOrUserId);
+            }
           }
+          
+          set({ isLoading: false });
         } catch (error) {
           set({ 
             error: error instanceof Error ? error.message : '批次操作任務失敗',
@@ -268,8 +339,8 @@ export const useTaskStore = create<TaskState>()(
         await get().updateTask(taskId, { assigneeId }, userId);
       },
       
-      // 訂閱任務變更
-      subscribeToTasks: (userId: string, filter?: TaskFilter) => {
+      // 訂閱任務變更（支援向後相容）
+      subscribeToTasks: (userOrUserId: User | string, filter?: TaskFilter) => {
         // 先取消現有訂閱
         const currentUnsubscribe = get().unsubscribe;
         if (currentUnsubscribe) {
@@ -277,9 +348,31 @@ export const useTaskStore = create<TaskState>()(
         }
         
         const currentFilter = filter || get().filter;
-        const unsubscribe = subscribeToTasks(userId, (tasks) => {
-          set({ tasks });
-        }, currentFilter);
+        let unsubscribe: Unsubscribe;
+        
+        if (typeof userOrUserId === 'string') {
+          // 舊版調用方式 - 創建臨時 User 物件
+          const tempUser: User = {
+            id: userOrUserId,
+            email: '',
+            name: '',
+            role: 'salesperson',
+            organizationId: '',
+            teamIds: [],
+            managedTeamIds: [],
+            createdAt: new Date(),
+            updatedAt: new Date()
+          };
+          
+          unsubscribe = subscribeToTasksOptimized(tempUser, (tasks) => {
+            set({ tasks });
+          }, currentFilter);
+        } else {
+          // 新版調用方式 - 直接使用 User 物件
+          unsubscribe = subscribeToTasksOptimized(userOrUserId, (tasks) => {
+            set({ tasks });
+          }, currentFilter);
+        }
         
         set({ unsubscribe });
       },
@@ -293,22 +386,64 @@ export const useTaskStore = create<TaskState>()(
         }
       },
       
-      // 獲取任務統計
-      fetchTaskStats: async (userId: string, teamId?: string) => {
+      // 獲取任務統計（支援向後相容）
+      fetchTaskStats: async (userOrUserId: User | string, teamId?: string) => {
         try {
-          const stats = await getTaskStats(userId, teamId);
+          let stats: TaskStats;
+          
+          if (typeof userOrUserId === 'string') {
+            // 舊版調用方式 - 創建臨時 User 物件
+            const tempUser: User = {
+              id: userOrUserId,
+              email: '',
+              name: '',
+              role: 'salesperson',
+              organizationId: '',
+              teamIds: teamId ? [teamId] : [],
+              managedTeamIds: [],
+              createdAt: new Date(),
+              updatedAt: new Date()
+            };
+            
+            stats = await getTaskStats(tempUser, teamId);
+          } else {
+            // 新版調用方式 - 直接使用 User 物件
+            stats = await getTaskStats(userOrUserId, teamId);
+          }
+          
           set({ taskStats: stats });
         } catch (error) {
           console.error('獲取任務統計失敗:', error);
         }
       },
       
-      // 獲取客戶相關任務
-      fetchCustomerTasks: async (customerId: string, userId: string, includeCompleted: boolean = false) => {
+      // 獲取客戶相關任務（支援向後相容）
+      fetchCustomerTasks: async (customerId: string, userOrUserId: User | string, includeCompleted: boolean = false) => {
         set({ isLoading: true, error: null });
         
         try {
-          const tasks = await getTasksByCustomer(customerId, userId, includeCompleted);
+          let tasks: TaskDoc[];
+          
+          if (typeof userOrUserId === 'string') {
+            // 舊版調用方式 - 創建臨時 User 物件
+            const tempUser: User = {
+              id: userOrUserId,
+              email: '',
+              name: '',
+              role: 'salesperson',
+              organizationId: '',
+              teamIds: [],
+              managedTeamIds: [],
+              createdAt: new Date(),
+              updatedAt: new Date()
+            };
+            
+            tasks = await getTasksByCustomerOptimized(customerId, tempUser, includeCompleted);
+          } else {
+            // 新版調用方式 - 直接使用 User 物件
+            tasks = await getTasksByCustomerOptimized(customerId, userOrUserId, includeCompleted);
+          }
+          
           set({ tasks, isLoading: false });
         } catch (error) {
           set({ 
