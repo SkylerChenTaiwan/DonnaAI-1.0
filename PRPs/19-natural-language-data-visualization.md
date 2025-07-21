@@ -13,19 +13,19 @@
 ### 1. 自然語言查詢介面
 - 在首頁新增「智能分析」入口
 - 支援文字輸入和語音輸入（利用現有語音功能）
-- 查詢歷史記錄功能
-- **對話式介面**：支援多輪對話和澄清
+- 查詢歷史記錄功能（儲存完整查詢，不是對話）
+- **澄清專用介面**：僅用於 AI 收集必要資訊
 
 ### 2. AI 查詢理解引擎
 - 解析自然語言意圖
 - 識別查詢的實體（客戶、紀錄、任務、時間範圍等）
 - 轉換為結構化查詢參數
 - 建議最適合的圖表類型
-- **對話管理**：
-  - 識別不明確或缺失的資訊
-  - 生成澄清問題
-  - 維護對話上下文
-  - 支援查詢修正和細化
+- **最小化澄清機制**：
+  - 一次性收集所有缺失資訊
+  - 提供預設選項減少往返
+  - 使用結構化表單而非自由對話
+  - 澄清完成後直接生成圖表
 
 ### 3. 資料查詢與處理
 - 基於現有的跨資料庫查詢函式
@@ -39,26 +39,37 @@
 - 支援圖表互動（縮放、篩選、詳細資訊）
 - 匯出功能（圖片、資料）
 
-### 5. 查詢範例與對話流程
-**簡單查詢**：
+### 5. 查詢範例與澄清流程
+
+**直接執行的查詢**：
 - "顯示本月每個業務員的客戶拜訪次數"
 - "比較上季度和這季度的任務完成率"
+- "最近30天的會議時長趨勢"
 
-**需要澄清的查詢**：
-- 用戶："顯示業績"
-- AI："請問您想查看哪方面的業績？我可以顯示：
-  1. 各業務員的客戶拜訪次數
-  2. 新增客戶數量
-  3. 任務完成率
-  4. 會議時長統計"
-- 用戶："第2個，看這個月的"
-- AI：[生成本月新增客戶數量圖表]
+**需要澄清的查詢（一次性表單）**：
+```
+用戶："顯示業績"
 
-**逐步細化查詢**：
-- 用戶："分析團隊表現"
-- AI："我為您生成了各團隊本月的綜合表現圖表。您想深入了解特定指標嗎？"
-- 用戶："只看銷售團隊的詳細數據"
-- AI：[調整圖表只顯示銷售團隊詳細資料]
+系統顯示澄清表單：
+┌─────────────────────────────┐
+│ 請選擇您要查看的業績指標：     │
+│ ○ 客戶拜訪次數              │
+│ ● 新增客戶數量              │
+│ ○ 任務完成率                │
+│ ○ 會議時長統計              │
+│                            │
+│ 時間範圍：                   │
+│ ○ 本週  ● 本月  ○ 本季      │
+│                            │
+│ [確認查詢]                  │
+└─────────────────────────────┘
+```
+
+**澄清原則**：
+1. 最多一次澄清往返
+2. 提供智能預設值
+3. 使用表單而非開放式問答
+4. 澄清後立即執行，不再詢問
 
 ## 技術架構
 
@@ -70,8 +81,8 @@ interface NLQuery {
   query: string;
   timestamp: Date;
   userId: string;
-  conversationId: string;  // 對話串 ID
-  parentQueryId?: string;  // 上一個查詢 ID
+  finalQuery?: string;  // 澄清後的完整查詢
+  chartId?: string;     // 生成的圖表 ID
 }
 
 interface QueryInterpretation {
@@ -84,22 +95,29 @@ interface QueryInterpretation {
   };
   suggestedChartType: ChartType;
   confidence: number;
-  needsClarification?: {
-    reason: string;
-    suggestions: string[];
-    missingInfo?: string[];
-  };
+  clarificationNeeded?: ClarificationRequest;
 }
 
-interface ConversationContext {
-  conversationId: string;
-  queries: NLQuery[];
-  interpretations: QueryInterpretation[];
-  currentChart?: ChartData;
-  clarificationState?: {
-    waitingFor: string;
-    options: string[];
-  };
+interface ClarificationRequest {
+  fields: {
+    name: string;
+    type: 'select' | 'multiselect' | 'dateRange';
+    options?: Array<{
+      value: string;
+      label: string;
+      default?: boolean;
+    }>;
+    defaultValue?: any;
+  }[];
+}
+
+// 簡化的查詢狀態（無對話歷史）
+interface QuerySession {
+  queryId: string;
+  originalQuery: string;
+  interpretation?: QueryInterpretation;
+  clarificationForm?: ClarificationRequest;
+  finalParameters?: any;
 }
 
 interface ChartData {
@@ -126,11 +144,11 @@ import { GoogleGenAI, FunctionCallingConfigMode } from '@google/genai';
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-// 對話式查詢解析
+// 優化的查詢解析（最小化 token 使用）
 export const interpretDataQueryWithGemini = async (
   query: string,
   userContext: UserContext,
-  conversationContext?: ConversationContext
+  clarificationResponse?: any  // 如果是澄清回應，直接傳入結構化資料
 ): Promise<QueryInterpretation> => {
   // 定義函數宣告（JSON Schema）
   const queryInterpretationFunction = {
@@ -170,51 +188,57 @@ export const interpretDataQueryWithGemini = async (
           type: 'string',
           enum: ['bar', 'line', 'pie', 'scatter', 'grouped-bar', 'stacked-bar'],
           description: '建議的圖表類型'
+        },
+        clarificationNeeded: {
+          type: 'object',
+          properties: {
+            fields: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  name: { type: 'string' },
+                  type: { type: 'string', enum: ['select', 'multiselect', 'dateRange'] },
+                  options: { type: 'array' },
+                  defaultValue: { type: 'any' }
+                }
+              }
+            }
+          },
+          description: '需要澄清的欄位（盡量提供預設值）'
         }
       },
       required: ['dataType', 'metrics', 'suggestedChartType']
     }
   };
 
-  // 建構對話歷史
-  const conversationHistory = conversationContext ? 
-    conversationContext.queries.map((q, i) => ({
-      role: 'user',
-      content: q.query
-    })).concat(
-      conversationContext.interpretations.map((interp, i) => ({
-        role: 'assistant',
-        content: interp.needsClarification ? 
-          `需要澄清：${interp.needsClarification.reason}` : 
-          `已理解查詢：${JSON.stringify(interp.entities)}`
-      }))
-    ) : [];
+  // 如果是澄清回應，直接合併參數
+  if (clarificationResponse) {
+    const mergedQuery = `${query} ${Object.entries(clarificationResponse)
+      .map(([key, value]) => `${key}: ${value}`)
+      .join(', ')}`;
+    query = mergedQuery;
+  }
 
   const response = await ai.models.generateContent({
     model: 'gemini-2.0-flash-001',
     contents: `
       分析用戶的資料查詢需求，轉換為結構化查詢參數。
       
-      當前查詢：${query}
+      查詢：${query}
       用戶角色：${userContext.role}
-      可存取團隊：${userContext.teamIds.join(', ')}
       
-      ${conversationHistory.length > 0 ? `對話歷史：
-      ${conversationHistory.map(h => `${h.role}: ${h.content}`).join('\n')}` : ''}
+      資料類型：
+      - customers: 客戶資料
+      - records: 會議/通話紀錄
+      - tasks: 任務
+      - aiUsage: AI使用統計
       
-      ${conversationContext?.currentChart ? `
-      目前顯示的圖表：
-      - 類型：${conversationContext.currentChart.type}
-      - 資料：${conversationContext.currentChart.metadata.title}
-      ` : ''}
-      
-      資料庫包含：
-      - customers: 客戶資料（姓名、公司、標籤、最後聯絡日期）
-      - records: 紀錄（會議、通話、筆記，包含時間、時長、AI摘要）
-      - tasks: 任務（標題、狀態、優先級、截止日期）
-      - aiUsage: AI使用統計（處理分鐘數、信心分數）
-      
-      如果查詢不明確或缺少必要資訊，請在 needsClarification 中說明並提供建議。
+      重要原則：
+      1. 如果查詢不明確，在 clarificationNeeded 中列出需要的資訊
+      2. 為每個需要澄清的欄位提供合理的預設值
+      3. 時間範圍預設為本月
+      4. 盡量一次性收集所有需要的資訊
     `,
     config: {
       toolConfig: {
@@ -285,69 +309,108 @@ export const executeVisualizationQuery = async (
 };
 ```
 
-### 對話管理層
+### 查詢狀態管理層
 ```typescript
-// 對話狀態管理 - src/stores/conversationStore.ts
-interface ConversationStore {
-  conversations: Map<string, ConversationContext>;
-  currentConversationId: string | null;
+// 簡化的查詢狀態管理 - src/stores/queryStore.ts
+interface QueryStore {
+  currentSession: QuerySession | null;
+  queryHistory: NLQuery[];  // 只儲存成功的查詢
   
-  // 開始新對話
-  startConversation: () => string;
+  // 開始新查詢
+  startQuery: (query: string) => void;
   
-  // 添加查詢到對話
-  addQuery: (conversationId: string, query: string) => void;
+  // 處理 AI 回應
+  handleInterpretation: (interpretation: QueryInterpretation) => void;
   
-  // 更新解析結果
-  updateInterpretation: (
-    conversationId: string, 
-    interpretation: QueryInterpretation
-  ) => void;
+  // 提交澄清表單
+  submitClarification: (formData: any) => void;
   
-  // 處理澄清回應
-  handleClarification: (
-    conversationId: string,
-    clarificationResponse: string
-  ) => void;
-  
-  // 更新當前圖表
-  updateChart: (conversationId: string, chart: ChartData) => void;
-  
-  // 清理過期對話
-  cleanupOldConversations: () => void;
+  // 儲存成功的查詢
+  saveSuccessfulQuery: (finalQuery: string, chartId: string) => void;
 }
 
-// UI 元件 - src/components/DataVisualization/ConversationInterface.tsx
-export const ConversationInterface: React.FC = () => {
-  const [inputText, setInputText] = useState('');
-  const { currentConversation, sendQuery } = useConversation();
+// 澄清表單元件 - src/components/DataVisualization/ClarificationForm.tsx
+export const ClarificationForm: React.FC<{
+  fields: ClarificationRequest['fields'];
+  onSubmit: (data: any) => void;
+}> = ({ fields, onSubmit }) => {
+  const [formData, setFormData] = useState(() => {
+    // 初始化預設值
+    return fields.reduce((acc, field) => ({
+      ...acc,
+      [field.name]: field.defaultValue || 
+        field.options?.find(o => o.default)?.value ||
+        field.options?.[0]?.value
+    }), {});
+  });
+
+  return (
+    <View style={styles.formContainer}>
+      <Text style={styles.title}>請提供以下資訊以生成圖表：</Text>
+      
+      {fields.map(field => (
+        <View key={field.name} style={styles.field}>
+          <Text style={styles.label}>{field.name}：</Text>
+          
+          {field.type === 'select' && (
+            <RadioGroup
+              value={formData[field.name]}
+              onChange={(value) => setFormData({...formData, [field.name]: value})}
+              options={field.options || []}
+            />
+          )}
+          
+          {field.type === 'dateRange' && (
+            <DateRangePicker
+              value={formData[field.name]}
+              onChange={(value) => setFormData({...formData, [field.name]: value})}
+              presets={['本週', '本月', '本季', '自訂']}
+            />
+          )}
+        </View>
+      ))}
+      
+      <Button
+        title="生成圖表"
+        onPress={() => onSubmit(formData)}
+        style={styles.submitButton}
+      />
+    </View>
+  );
+};
+
+// 主查詢介面 - src/components/DataVisualization/QueryInterface.tsx
+export const QueryInterface: React.FC = () => {
+  const [query, setQuery] = useState('');
+  const { currentSession, startQuery, submitClarification } = useQueryStore();
   
   return (
     <View style={styles.container}>
-      {/* 對話歷史 */}
-      <ScrollView style={styles.chatHistory}>
-        {currentConversation?.queries.map((query, index) => (
-          <View key={query.id}>
-            <UserMessage text={query.query} />
-            {currentConversation.interpretations[index]?.needsClarification ? (
-              <ClarificationMessage 
-                clarification={currentConversation.interpretations[index].needsClarification}
-                onSelect={(option) => handleClarification(option)}
-              />
-            ) : (
-              <ChartMessage chart={currentConversation.currentChart} />
-            )}
-          </View>
-        ))}
-      </ScrollView>
+      {/* 查詢輸入 */}
+      {!currentSession && (
+        <QueryInput
+          value={query}
+          onChange={setQuery}
+          onSubmit={() => startQuery(query)}
+          placeholder="詢問您想查看的資料..."
+        />
+      )}
       
-      {/* 輸入區域 */}
-      <InputArea 
-        value={inputText}
-        onChangeText={setInputText}
-        onSubmit={() => sendQuery(inputText)}
-        placeholder="詢問資料相關問題..."
-      />
+      {/* 澄清表單 */}
+      {currentSession?.clarificationForm && (
+        <ClarificationForm
+          fields={currentSession.clarificationForm.fields}
+          onSubmit={submitClarification}
+        />
+      )}
+      
+      {/* 圖表顯示 */}
+      {currentSession?.finalParameters && (
+        <ChartDisplay parameters={currentSession.finalParameters} />
+      )}
+      
+      {/* 快速查詢建議 */}
+      <QuickQuerySuggestions />
     </View>
   );
 };
@@ -388,36 +451,36 @@ export const ConversationInterface: React.FC = () => {
    - 統計計算（平均、百分比等）
    - 資料格式標準化
 
-### 第四階段：UI 整合（3天）
-7. **對話式查詢介面**
-   - 聊天式 UI 元件
-   - 訊息氣泡（用戶/AI/圖表）
-   - 澄清選項介面
-   - 查詢歷史管理
+### 第四階段：UI 整合（2天）
+7. **澄清專用介面**
+   - 結構化表單元件
+   - 單選/多選/日期範圍選擇器
+   - 預設值自動填充
+   - 一鍵提交機制
 
 8. **圖表展示與互動**
    - 圖表渲染元件
    - 互動功能（縮放、篩選）
-   - 圖表編輯和調整
    - 匯出功能實作
+   - 新查詢按鈕（重置狀態）
 
-9. **對話流程優化**
-   - 快速建議按鈕
-   - 上下文相關提示
-   - 錯誤恢復機制
+9. **查詢優化**
+   - 快速查詢範本
+   - 查詢歷史（只顯示成功的）
+   - 常用查詢收藏
 
 ### 第五階段：優化與測試（1天）
 10. **效能優化**
-    - 查詢結果快取
+    - 查詢結果快取（15分鐘有效期）
     - 圖表渲染優化
     - 載入狀態處理
-    - 對話歷史管理
+    - 最小化 API 呼叫
 
 11. **完整測試**
     - 各種查詢場景測試
-    - 對話流程測試
+    - 澄清流程測試
     - 圖表正確性驗證
-    - 錯誤處理測試
+    - Token 使用量監控
 
 ## 關鍵實作參考
 
@@ -441,17 +504,22 @@ export const ConversationInterface: React.FC = () => {
 - 防止 SQL 注入式的查詢攻擊
 - 敏感資料過濾
 
-### 效能考量
+### 效能與成本考量
 - 實作查詢結果快取（15分鐘）
 - 限制單次查詢的資料量
 - 使用分頁載入大量資料
+- **Token 優化策略**：
+  - 不傳送對話歷史，只傳當前查詢
+  - 澄清時使用結構化資料而非自然語言
+  - 快取常見查詢的解析結果
+  - 使用 Gemini Flash 降低成本
 
 ### 使用者體驗
-- 提供查詢建議和自動完成
+- 提供查詢建議和快速範本
 - 清楚的錯誤訊息和引導
 - 查詢處理進度顯示
-- 對話式互動降低學習曲線
-- 保留對話上下文避免重複輸入
+- 結構化澄清降低學習曲線
+- 一次性收集資訊避免多次往返
 
 ## 驗證檢查點
 
@@ -496,15 +564,20 @@ describe('自然語言資料視覺化', () => {
     expect(result.data[0]).toHaveProperty('completionRate');
   });
 
-  test('對話式查詢：需要澄清', async () => {
-    const conversation = await startConversation();
-    const result1 = await processNLQuery("顯示業績", mockUser, conversation);
-    expect(result1.needsClarification).toBeTruthy();
-    expect(result1.needsClarification.suggestions).toContain('客戶拜訪次數');
+  test('澄清流程：結構化表單', async () => {
+    // 第一次查詢
+    const result1 = await processNLQuery("顯示業績", mockUser);
+    expect(result1.clarificationNeeded).toBeTruthy();
+    expect(result1.clarificationNeeded.fields).toHaveLength(2); // 指標和時間
     
-    const result2 = await processNLQuery("第2個選項", mockUser, conversation);
-    expect(result2.chartType).toBeDefined();
-    expect(result2.needsClarification).toBeFalsy();
+    // 提交澄清表單
+    const clarificationData = {
+      metric: '新增客戶數量',
+      timeRange: '本月'
+    };
+    const result2 = await processNLQuery("顯示業績", mockUser, clarificationData);
+    expect(result2.chartType).toBe('bar');
+    expect(result2.clarificationNeeded).toBeFalsy();
   });
 });
 ```
@@ -543,17 +616,17 @@ npm install --save-dev @types/victory
 1. **用戶價值**
    - 無需學習複雜的查詢語法
    - 快速獲得資料洞察
-   - 互動式探索資料
+   - 最少互動步驟完成查詢
 
 2. **商業價值**
    - 提升資料利用率
    - 加速決策過程
-   - 差異化競爭優勢
+   - 控制 API 成本
 
 3. **技術成就**
-   - 先進的 NLP 整合
+   - 高效的 NLP 整合
    - 智能資料視覺化
-   - 可擴展的架構設計
+   - Token 使用最佳化
 
 ## 實作信心評分：9/10
 

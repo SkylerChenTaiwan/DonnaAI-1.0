@@ -16,7 +16,6 @@ import { TextInput } from '@/components/common/TextInput';
 import { Button } from '@/components/common/Button';
 import { signUp } from '@/services/firebase/auth';
 import { UserRole } from '@/types/user';
-import { images } from '../../assets/images';
 
 interface RegisterScreenProps {
   onNavigateToLogin: () => void;
@@ -112,7 +111,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
       <View style={styles.container}>
         <View style={styles.header}>
           <Image 
-            source={images.donnaLogo}
+            source={require('../../../assets/donna-logo.png')}
             style={styles.logo}
             resizeMode="contain"
           />

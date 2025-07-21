@@ -14,7 +14,6 @@ import { Layout } from '@/components/common/Layout';
 import { TextInput } from '@/components/common/TextInput';
 import { Button } from '@/components/common/Button';
 import { signIn } from '@/services/firebase/auth';
-import { images } from '../../assets/images';
 
 interface LoginScreenProps {
   onNavigateToRegister: () => void;
@@ -74,7 +73,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
       <View style={styles.container}>
         <View style={styles.header}>
           <Image 
-            source={images.donnaLogo}
+            source={require('../../../assets/donna-logo.png')}
             style={styles.logo}
             resizeMode="contain"
           />
