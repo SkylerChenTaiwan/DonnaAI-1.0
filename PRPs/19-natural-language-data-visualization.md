@@ -79,9 +79,110 @@ interface ChartData {
 // 使用 Victory Native 實作各種圖表
 ```
 
-### AI 整合
+### AI 整合 - 支援多模型選擇
+
+#### 選項 1：Google Gemini 2.0 Flash（推薦 - 成本效益最佳）
 ```typescript
-// 擴展現有 AI 服務 - src/services/api/ai-integration.ts
+// 使用 Gemini API - src/services/api/gemini-integration.ts
+import { GoogleGenAI, FunctionCallingConfigMode } from '@google/genai';
+
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+export const interpretDataQueryWithGemini = async (
+  query: string,
+  userContext: UserContext
+): Promise<QueryInterpretation> => {
+  // 定義函數宣告（JSON Schema）
+  const queryInterpretationFunction = {
+    name: 'interpretDataQuery',
+    description: '解析自然語言查詢為結構化資料查詢參數',
+    parametersJsonSchema: {
+      type: 'object',
+      properties: {
+        dataType: {
+          type: 'string',
+          enum: ['customers', 'records', 'tasks', 'aiUsage'],
+          description: '查詢的資料類型'
+        },
+        metrics: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '需要計算的指標'
+        },
+        dimensions: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '分組維度'
+        },
+        filters: {
+          type: 'object',
+          description: '篩選條件'
+        },
+        timeRange: {
+          type: 'object',
+          properties: {
+            start: { type: 'string', format: 'date' },
+            end: { type: 'string', format: 'date' }
+          },
+          description: '時間範圍'
+        },
+        suggestedChartType: {
+          type: 'string',
+          enum: ['bar', 'line', 'pie', 'scatter', 'grouped-bar', 'stacked-bar'],
+          description: '建議的圖表類型'
+        }
+      },
+      required: ['dataType', 'metrics', 'suggestedChartType']
+    }
+  };
+
+  const response = await ai.models.generateContent({
+    model: 'gemini-2.0-flash-001',
+    contents: `
+      分析用戶的資料查詢需求，轉換為結構化查詢參數。
+      
+      用戶查詢：${query}
+      用戶角色：${userContext.role}
+      可存取團隊：${userContext.teamIds.join(', ')}
+      
+      資料庫包含：
+      - customers: 客戶資料（姓名、公司、標籤、最後聯絡日期）
+      - records: 紀錄（會議、通話、筆記，包含時間、時長、AI摘要）
+      - tasks: 任務（標題、狀態、優先級、截止日期）
+      - aiUsage: AI使用統計（處理分鐘數、信心分數）
+    `,
+    config: {
+      toolConfig: {
+        functionCallingConfig: {
+          mode: FunctionCallingConfigMode.ANY,
+          allowedFunctionNames: ['interpretDataQuery']
+        }
+      },
+      tools: [{ functionDeclarations: [queryInterpretationFunction] }]
+    }
+  });
+  
+  const functionCall = response.functionCalls?.[0];
+  if (!functionCall) {
+    throw new Error('無法解析查詢');
+  }
+  
+  return {
+    entities: functionCall.args,
+    confidence: 0.9 // Gemini 通常表現良好
+  };
+};
+
+// 成本優勢：
+// - Gemini 2.0 Flash: $0.075/百萬 input tokens（比 GPT-4 便宜 40 倍）
+// - 支援 1M token 上下文（vs GPT-4 的 128K）
+// - 250+ tokens/秒的生成速度
+// - 免費層級：每天 1,500 次請求
+```
+
+#### 選項 2：OpenAI GPT-4（備選）
+```typescript
+// 原有 GPT-4 實作 - src/services/api/ai-integration.ts
 export const interpretDataQuery = async (
   query: string,
   userContext: UserContext
@@ -186,8 +287,10 @@ export const executeVisualizationQuery = async (
 
 ### 外部資源
 1. **Victory Native 文件**：https://formidable.com/open-source/victory/docs/native/
-2. **GPT-4 Function Calling**：https://platform.openai.com/docs/guides/function-calling
-3. **自然語言轉 SQL 最佳實踐**：https://www.kdnuggets.com/leveraging-gpt-models-to-transform-natural-language-to-sql-queries
+2. **Gemini Function Calling 指南**：https://ai.google.dev/gemini-api/docs/function-calling
+3. **Gemini TypeScript SDK**：https://github.com/googleapis/js-genai
+4. **GPT-4 Function Calling**：https://platform.openai.com/docs/guides/function-calling
+5. **自然語言轉 SQL 最佳實踐**：https://www.kdnuggets.com/leveraging-gpt-models-to-transform-natural-language-to-sql-queries
 
 ## 注意事項
 
@@ -257,9 +360,26 @@ npm install victory-native react-native-svg
 # 如果使用 Expo
 expo install react-native-svg
 
+# Gemini API SDK（如果選擇使用 Gemini）
+npm install @google/genai
+
 # 開發相依
 npm install --save-dev @types/victory
 ```
+
+## AI 模型選擇建議
+
+### 成本比較（每百萬 tokens）
+| 模型 | Input 成本 | Output 成本 | 上下文長度 | 速度 |
+|------|------------|-------------|------------|------|
+| Gemini 2.0 Flash | $0.075 | $0.30 | 1M tokens | 250+ tokens/秒 |
+| GPT-4o | $2.50 | $10.00 | 128K tokens | ~100 tokens/秒 |
+| GPT-4o Mini | $0.15 | $0.60 | 128K tokens | ~150 tokens/秒 |
+
+### 建議
+- **開發和測試階段**：使用 Gemini 2.0 Flash 免費層級（每天 1,500 次請求）
+- **生產環境**：Gemini 2.0 Flash 提供最佳成本效益
+- **複雜查詢**：可保留 GPT-4 作為備選，處理特別複雜的自然語言理解
 
 ## 預期成果
 
