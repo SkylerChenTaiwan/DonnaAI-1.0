@@ -25,6 +25,7 @@ interface QueryStore extends QueryStoreState {
   // Actions
   startQuery: (query: string, userContext: UserContext) => Promise<void>;
   handleInterpretation: (interpretation: QueryInterpretation) => void;
+  executeQuery: (interpretation: QueryInterpretation, userContext: UserContext) => Promise<void>;
   submitClarification: (formData: any, userContext: UserContext) => Promise<void>;
   saveSuccessfulQuery: (finalQuery: string, chartId: string) => void;
   clearCurrentSession: () => void;
