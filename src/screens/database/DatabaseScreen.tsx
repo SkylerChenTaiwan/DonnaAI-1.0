@@ -603,7 +603,13 @@ export const DatabaseScreen: React.FC = () => {
           onFilterPress={() => setShowFilterModal(true)}
           onSortPress={() => setShowSortModal(true)}
           onMultiSelectPress={() => {
-            setMultiSelectMode(!multiSelectMode);
+            const newMode = !multiSelectMode;
+            console.log('🔄 切換多選模式:', { 
+              oldMode: multiSelectMode, 
+              newMode,
+              activeTab 
+            });
+            setMultiSelectMode(newMode);
             if (multiSelectMode) {
               setSelectedItems([]);
               setShowBatchActions(false);

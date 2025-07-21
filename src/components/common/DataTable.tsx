@@ -29,6 +29,12 @@ export const DataTable = ({
   filters = [],
   sortConfig: externalSortConfig,
 }: TableProps) => {
+  console.log('📊 DataTable render:', { 
+    selectable, 
+    showCheckboxes, 
+    dataLength: data.length,
+    columnsLength: columns.length 
+  });
   const {
     data: processedData,
     searchQuery,
@@ -85,7 +91,7 @@ export const DataTable = ({
       {columns.map((column) => (
         <TouchableOpacity
           key={column.key}
-          style={[styles.headerCell, { width: column.width }]}
+          style={[styles.headerCell, column.width ? { width: column.width } : { flex: 1 }]}
           onPress={() => column.sortable && handleSort(column.key)}
           disabled={!column.sortable}
         >
@@ -137,7 +143,7 @@ export const DataTable = ({
         {columns.map((column) => (
           <View
             key={column.key}
-            style={[styles.cell, { width: column.width }]}
+            style={[styles.cell, column.width ? { width: column.width } : { flex: 1 }]}
           >
             {column.render ? (
               column.render(item[column.key], item)
@@ -218,7 +224,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   headerCell: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
@@ -241,7 +246,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2F2F7',
   },
   cell: {
-    flex: 1,
     justifyContent: 'center',
   },
   cellText: {
