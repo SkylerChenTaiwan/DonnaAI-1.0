@@ -2,7 +2,7 @@
  * 資料庫主頁面
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   View,
   Text,
@@ -221,7 +221,7 @@ export const DatabaseScreen: React.FC = () => {
       : allColumns;
   }, [allColumns, columnSettings?.visibleColumns]);
 
-  const handleRowPress = (item: any) => {
+  const handleRowPress = useCallback((item: any) => {
     // 只在非多選模式下導航到詳細頁面
     if (!multiSelectMode) {
       switch (activeTab) {
@@ -236,15 +236,15 @@ export const DatabaseScreen: React.FC = () => {
           break;
       }
     }
-  };
+  }, [multiSelectMode, activeTab, navigation]);
 
-  const handleSelect = (selectedIds: string[]) => {
+  const handleSelect = useCallback((selectedIds: string[]) => {
     setSelectedItems(selectedIds);
     // 當有選中項目且在多選模式下時，顯示批量操作
     if (selectedIds.length > 0 && multiSelectMode) {
       setShowBatchActions(true);
     }
-  };
+  }, [multiSelectMode]);
 
   // 取得當前 Tab 的批量操作（使用 useMemo 優化）
   const batchActions = useMemo((): BatchAction[] => {
@@ -447,10 +447,10 @@ export const DatabaseScreen: React.FC = () => {
       {/* 篩選條件顯示 */}
       <FilterBadge
         filters={activeFilters}
-        onRemoveFilter={(key) => {
-          setActiveFilters(activeFilters.filter(f => f.key !== key));
-        }}
-        onClearAll={() => setActiveFilters([])}
+        onRemoveFilter={useCallback((key: string) => {
+          setActiveFilters(prev => prev.filter(f => f.key !== key));
+        }, [])}
+        onClearAll={useCallback(() => setActiveFilters([]), [])}
       />
 
       {/* 資料表格 */}
@@ -465,7 +465,7 @@ export const DatabaseScreen: React.FC = () => {
         refreshing={currentData.loading}
         filters={activeFilters}
         sortConfig={currentSort}
-        onRefresh={() => {
+        onRefresh={useCallback(() => {
           // 重新載入資料
           if (!user) return;
           
@@ -480,7 +480,7 @@ export const DatabaseScreen: React.FC = () => {
               useTaskStore.getState().fetchTasks(user.id);
               break;
           }
-        }}
+        }, [user, activeTab, fetchCustomers])}
       />
 
       {/* 篩選器 Modal */}

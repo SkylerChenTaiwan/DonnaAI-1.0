@@ -43,14 +43,17 @@ export const DataTable = ({
     filters,
     initialSortKey: externalSortConfig?.key,
     initialSortDirection: externalSortConfig?.direction,
-  }), [filters, externalSortConfig?.key, externalSortConfig?.direction]));
+  }), [JSON.stringify(filters), externalSortConfig?.key, externalSortConfig?.direction]));
 
-  // 處理選擇變更
+  // 處理選擇變更 - 使用 useRef 避免 onSelect 依賴
+  const onSelectRef = React.useRef(onSelect);
+  onSelectRef.current = onSelect;
+  
   React.useEffect(() => {
-    if (onSelect) {
-      onSelect(Array.from(selectedItems));
+    if (onSelectRef.current) {
+      onSelectRef.current(Array.from(selectedItems));
     }
-  }, [selectedItems, onSelect]);
+  }, [selectedItems]);
 
   // 渲染表頭
   const renderHeader = () => (
