@@ -56,13 +56,11 @@ export const DataTable = ({
   }, [selectedItems]);
 
   // 渲染表頭
-  const renderHeader = () => {
-    console.log('🎯 renderHeader:', { selectable, showCheckboxes });
-    return (
+  const renderHeader = () => (
     <View style={styles.header}>
       {selectable && showCheckboxes && (
         <TouchableOpacity
-          style={[styles.checkboxContainer, { backgroundColor: 'rgba(255, 0, 0, 0.1)' }]}
+          style={styles.checkboxContainer}
           onPress={() => {
             if (selectedItems.size === processedData.length) {
               clearSelection();
@@ -71,7 +69,17 @@ export const DataTable = ({
             }
           }}
         >
-          <Text style={{ color: '#007AFF' }}>□</Text>
+          <Ionicons
+            name={
+              selectedItems.size === processedData.length && processedData.length > 0
+                ? 'checkbox'
+                : selectedItems.size > 0
+                ? 'square'
+                : 'square-outline'
+            }
+            size={20}
+            color="#007AFF"
+          />
         </TouchableOpacity>
       )}
       {columns.map((column) => (
@@ -97,45 +105,56 @@ export const DataTable = ({
       ))}
     </View>
   );
-  };
 
   // 渲染行
   const renderItem = useCallback(
     ({ item }: { item: TableData }) => (
-      <TouchableOpacity
+      <View
         style={[
           styles.row,
           selectedItems.has(item.id) && styles.selectedRow,
         ]}
-        onPress={() => {
-          if (selectable && showCheckboxes) {
-            toggleSelection(item.id);
-          } else if (onRowPress) {
-            onRowPress(item);
-          }
-        }}
-        activeOpacity={0.7}
       >
         {selectable && showCheckboxes && (
-          <View style={[styles.checkboxContainer, { backgroundColor: 'rgba(0, 255, 0, 0.1)' }]}>
-            <Text style={{ color: '#007AFF' }}>{selectedItems.has(item.id) ? '☑' : '□'}</Text>
-          </View>
-        )}
-        {columns.map((column) => (
-          <View
-            key={column.key}
-            style={[styles.cell, column.width ? { width: column.width } : { flex: 1 }]}
+          <TouchableOpacity
+            style={styles.checkboxContainer}
+            onPress={() => toggleSelection(item.id)}
+            activeOpacity={0.7}
           >
-            {column.render ? (
-              column.render(item[column.key], item)
-            ) : (
-              <Text style={styles.cellText} numberOfLines={1}>
-                {item[column.key] || '-'}
-              </Text>
-            )}
-          </View>
-        ))}
-      </TouchableOpacity>
+            <Ionicons
+              name={selectedItems.has(item.id) ? 'checkbox' : 'square-outline'}
+              size={20}
+              color="#007AFF"
+            />
+          </TouchableOpacity>
+        )}
+        <TouchableOpacity
+          style={styles.rowContent}
+          onPress={() => {
+            if (selectable && showCheckboxes) {
+              toggleSelection(item.id);
+            } else if (onRowPress) {
+              onRowPress(item);
+            }
+          }}
+          activeOpacity={0.7}
+        >
+          {columns.map((column) => (
+            <View
+              key={column.key}
+              style={[styles.cell, column.width ? { width: column.width } : { flex: 1 }]}
+            >
+              {column.render ? (
+                column.render(item[column.key], item)
+              ) : (
+                <Text style={styles.cellText} numberOfLines={1}>
+                  {item[column.key] || '-'}
+                </Text>
+              )}
+            </View>
+          ))}
+        </TouchableOpacity>
+      </View>
     ),
     [columns, selectedItems, selectable, showCheckboxes, toggleSelection, onRowPress]
   );
@@ -222,6 +241,11 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     minHeight: 60,
+    alignItems: 'center',
+  },
+  rowContent: {
+    flex: 1,
+    flexDirection: 'row',
   },
   selectedRow: {
     backgroundColor: '#F2F2F7',
