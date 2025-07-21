@@ -187,32 +187,6 @@ export const DatabaseScreen: React.FC = () => {
 
   return (
     <Layout style={styles.container}>
-      {/* 整合工具列和搜尋欄 */}
-      <View style={styles.toolbar}>
-        <SearchBar
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          placeholder="搜尋資料..."
-          style={styles.searchBar}
-        />
-        <ToolbarIcons
-          multiSelectMode={multiSelectMode}
-          onFilterPress={() => console.log('Filter pressed')}
-          onSortPress={() => console.log('Sort pressed')}
-          onMultiSelectPress={() => setMultiSelectMode(!multiSelectMode)}
-          onColumnsPress={() => console.log('Columns pressed')}
-        />
-      </View>
-      
-      {/* 篩選條件顯示 */}
-      <FilterBadge
-        filters={activeFilters}
-        onRemoveFilter={(key) => {
-          setActiveFilters(activeFilters.filter(f => f.key !== key));
-        }}
-        onClearAll={() => setActiveFilters([])}
-      />
-      
       {/* Tab 導航 */}
       <View style={styles.tabContainer}>
         {tabs.map((tab) => (
@@ -242,6 +216,34 @@ export const DatabaseScreen: React.FC = () => {
           </TouchableOpacity>
         ))}
       </View>
+      
+      {/* 整合工具列和搜尋欄 */}
+      <View style={styles.toolbar}>
+        <SearchBar
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          placeholder="搜尋資料..."
+          style={styles.searchBar}
+        />
+        <View style={styles.toolbarButtons}>
+          <ToolbarIcons
+            multiSelectMode={multiSelectMode}
+            onFilterPress={() => console.log('Filter pressed')}
+            onSortPress={() => console.log('Sort pressed')}
+            onMultiSelectPress={() => setMultiSelectMode(!multiSelectMode)}
+            onColumnsPress={() => console.log('Columns pressed')}
+          />
+        </View>
+      </View>
+      
+      {/* 篩選條件顯示 */}
+      <FilterBadge
+        filters={activeFilters}
+        onRemoveFilter={(key) => {
+          setActiveFilters(activeFilters.filter(f => f.key !== key));
+        }}
+        onClearAll={() => setActiveFilters([])}
+      />
 
       {/* 資料表格 */}
       <DataTable
@@ -287,10 +289,15 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#E5E5EA',
     alignItems: 'center',
-    gap: 12,
+    justifyContent: 'space-between',
   },
   searchBar: {
     flex: 1,
+    marginRight: 16,
+  },
+  toolbarButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   toolButton: {
     flexDirection: 'row',
@@ -324,7 +331,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 14,
     gap: 8,
   },
   activeTab: {
@@ -332,12 +339,13 @@ const styles = StyleSheet.create({
     borderBottomColor: '#007AFF',
   },
   tabText: {
-    fontSize: 16,
-    fontWeight: '500',
+    fontSize: 18,
+    fontWeight: '600',
     color: '#8E8E93',
   },
   activeTabText: {
     color: '#007AFF',
+    fontWeight: '700',
   },
   countBadge: {
     backgroundColor: '#E5E5EA',
