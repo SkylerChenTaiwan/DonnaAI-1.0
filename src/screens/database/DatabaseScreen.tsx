@@ -94,14 +94,28 @@ export const DatabaseScreen: React.FC = () => {
     if (user) {
       console.log('📊 DatabaseScreen - 載入資料, 使用者:', user.email);
       fetchCustomers(user.id, user.teamIds?.[0] || '');
+      // 載入其他資料
+      useRecordStore.getState().fetchRecords(user.id);
+      useTaskStore.getState().fetchTasks(user.id);
     }
-  }, [user]);
+  }, [user, fetchCustomers]);
 
-  const tabs: Tab[] = [
+  // 調試：監控重新渲染
+  console.log('🔄 DatabaseScreen render:', {
+    activeTab,
+    customersLength: customers.length,
+    recordsLength: records?.length,
+    tasksLength: tasks?.length,
+    customerLoading,
+    recordLoading,
+    taskLoading
+  });
+
+  const tabs = useMemo((): Tab[] => [
     { id: 'customers', title: '客戶', count: customers.length },
     { id: 'records', title: '紀錄', count: records?.length || 0 },
     { id: 'tasks', title: '任務', count: tasks?.length || 0 },
-  ];
+  ], [customers.length, records?.length, tasks?.length]);
 
   // 客戶表格欄位
   const customerColumns: TableColumn[] = [
@@ -135,8 +149,8 @@ export const DatabaseScreen: React.FC = () => {
     )},
   ];
 
-  // 取得當前標籤的資料
-  const getCurrentData = () => {
+  // 取得當前標籤的資料（使用 useMemo 優化）
+  const currentData = useMemo(() => {
     switch (activeTab) {
       case 'customers':
         return {
@@ -152,41 +166,40 @@ export const DatabaseScreen: React.FC = () => {
         };
       case 'records':
         return {
-          data: records?.map(r => ({
+          data: (records || []).map(r => ({
             id: r.id || '',
-            type: r.type,
+            type: r.type || '',
             customerName: r.customerIds?.length > 0 ? '多位客戶' : '-',
-            date: new Date(r.createdAt.seconds * 1000).toLocaleDateString('zh-TW'),
+            date: r.createdAt?.seconds ? new Date(r.createdAt.seconds * 1000).toLocaleDateString('zh-TW') : '-',
             summary: r.aiSummary || '-',
-          })) || [],
+          })),
           columns: recordColumns,
           loading: recordLoading,
         };
       case 'tasks':
         return {
-          data: tasks?.map(t => ({
+          data: (tasks || []).map(t => ({
             id: t.id || '',
-            title: t.title,
+            title: t.title || '',
             assignee: t.assigneeId || '-',
-            dueDate: t.dueDate ? new Date(t.dueDate.seconds * 1000).toLocaleDateString('zh-TW') : '-',
-            status: t.status,
-          })) || [],
+            dueDate: t.dueDate?.seconds ? new Date(t.dueDate.seconds * 1000).toLocaleDateString('zh-TW') : '-',
+            status: t.status || 'todo',
+          })),
           columns: taskColumns,
           loading: taskLoading,
         };
       default:
         return { data: [], columns: [], loading: false };
     }
-  };
-
-  const currentData = getCurrentData();
+  }, [activeTab, customers, records, tasks, customerLoading, recordLoading, taskLoading]);
   const allColumns = activeTab === 'customers' ? customerColumns : 
                      activeTab === 'records' ? recordColumns : taskColumns;
   
   // 使用欄位設定管理
+  const defaultColumnKeys = useMemo(() => allColumns.map(col => col.key), [allColumns]);
   const { settings: columnSettings, saveSettings } = useColumnSettings(
     activeTab,
-    allColumns.map(col => col.key)
+    defaultColumnKeys
   );
   
   // 根據設定過濾顯示的欄位（使用 useMemo 優化）
