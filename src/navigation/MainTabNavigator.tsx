@@ -60,7 +60,10 @@ export const MainTabNavigator = () => {
                 return (
                   <View style={styles.addButtonContainer} ref={addButtonRef}>
                     <View style={styles.addButton}>
-                      <Ionicons name="add" size={28} color="#FFFFFF" />
+                      <View style={styles.plusIcon}>
+                        <View style={styles.plusHorizontal} />
+                        <View style={styles.plusVertical} />
+                      </View>
                     </View>
                   </View>
                 );
@@ -183,10 +186,43 @@ const styles = StyleSheet.create({
     backgroundColor: '#1A1A1A',
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 4,
+    elevation: 6,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.25,
+    shadowRadius: 5,
+  },
+  plusIcon: {
+    width: 20,
+    height: 20,
+    position: 'relative',
+  },
+  plusHorizontal: {
+    position: 'absolute',
+    left: 0,
+    top: '50%',
+    width: '100%',
+    height: 3,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 1.5,
+    transform: [{ translateY: -1.5 }],
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
-    shadowRadius: 4,
+    shadowRadius: 1,
+  },
+  plusVertical: {
+    position: 'absolute',
+    left: '50%',
+    top: 0,
+    width: 3,
+    height: '100%',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 1.5,
+    transform: [{ translateX: -1.5 }],
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
   },
 });
