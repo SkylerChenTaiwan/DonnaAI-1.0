@@ -102,8 +102,8 @@ Dimensions:
 Visual Design:
   - background: "#FFFFFF"
   - border-top: "1px solid #E5E5EA"
-  - active-color: "#FF5C00"
-  - inactive-color: "#7A7A7A"
+  - active-color: "#1A1A1A"
+  - inactive-color: "#999999"
   
 Tab Items:
   1. 首頁 (analytics icon)
@@ -164,7 +164,7 @@ Welcome Text:
 Mode Toggle:
   - position: top-right
   - size: 44px x 24px
-  - background: "#E3E1DC" (off), "#FF5C00" (on)
+  - background: "#E5E7EB" (off), "#1A1A1A" (on)
   - thumb: 20px circle, "#FFFFFF"
   - animation: 200ms ease
 
@@ -307,7 +307,7 @@ Setting Item Layout:
 
 Toggle Switch:
   - size: 44px x 24px
-  - track: "#E3E1DC" (off), "#FF5C00" (on)
+  - track: "#E5E7EB" (off), "#1A1A1A" (on)
   - thumb: 20px circle, "#FFFFFF"
 ```
 
