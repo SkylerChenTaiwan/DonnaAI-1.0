@@ -62,7 +62,7 @@ export const DataTable = ({
     <View style={styles.header}>
       {selectable && showCheckboxes && (
         <TouchableOpacity
-          style={styles.checkboxContainer}
+          style={[styles.checkboxContainer, { backgroundColor: 'rgba(255, 0, 0, 0.1)' }]}
           onPress={() => {
             if (selectedItems.size === processedData.length) {
               clearSelection();
@@ -71,17 +71,7 @@ export const DataTable = ({
             }
           }}
         >
-          <Ionicons
-            name={
-              selectedItems.size === processedData.length
-                ? 'checkbox'
-                : selectedItems.size > 0
-                ? 'square-outline'
-                : 'square-outline'
-            }
-            size={20}
-            color="#007AFF"
-          />
+          <Text style={{ color: '#007AFF' }}>□</Text>
         </TouchableOpacity>
       )}
       {columns.map((column) => (
@@ -127,14 +117,8 @@ export const DataTable = ({
         activeOpacity={0.7}
       >
         {selectable && showCheckboxes && (
-          <View style={styles.checkboxContainer}>
-            <Ionicons
-              name={
-                selectedItems.has(item.id) ? 'checkbox' : 'square-outline'
-              }
-              size={20}
-              color="#007AFF"
-            />
+          <View style={[styles.checkboxContainer, { backgroundColor: 'rgba(0, 255, 0, 0.1)' }]}>
+            <Text style={{ color: '#007AFF' }}>{selectedItems.has(item.id) ? '☑' : '□'}</Text>
           </View>
         )}
         {columns.map((column) => (
@@ -250,10 +234,11 @@ const styles = StyleSheet.create({
     color: '#1C1C1E',
   },
   checkboxContainer: {
-    width: 32,
+    width: 40,
+    minWidth: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 8,
+    marginRight: 12,
   },
   emptyContainer: {
     flex: 1,
