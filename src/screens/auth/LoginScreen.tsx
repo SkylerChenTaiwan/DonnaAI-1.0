@@ -138,12 +138,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 18,
-    color: '#8E8E93',
+    color: '#7A7A7A',
   },
   form: {
     width: '100%',
@@ -159,11 +159,11 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: 16,
-    color: '#8E8E93',
+    color: '#7A7A7A',
   },
   errorText: {
     fontSize: 14,
-    color: '#FF3B30',
+    color: '#A94438',
     textAlign: 'center',
     marginBottom: 16,
   },

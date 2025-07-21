@@ -21,7 +21,7 @@ interface LoadingSpinnerProps {
 export const LoadingSpinner = ({
   message,
   size = 'large',
-  color = '#007AFF',
+  color = '#FF5C00',
   style,
 }: LoadingSpinnerProps) => {
   return (
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   message: {
     marginTop: 16,
     fontSize: 16,
-    color: '#8E8E93',
+    color: '#7A7A7A',
     textAlign: 'center',
   },
 });

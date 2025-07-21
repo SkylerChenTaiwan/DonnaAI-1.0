@@ -78,7 +78,7 @@ export const DataTable = ({
                 : 'square-outline'
             }
             size={20}
-            color="#007AFF"
+            color="#FF5C00"
           />
         </TouchableOpacity>
       )}
@@ -104,7 +104,7 @@ export const DataTable = ({
                   : 'chevron-expand'
               }
               size={14}
-              color={sortConfig.key === column.key ? '#007AFF' : '#C7C7CC'}
+              color={sortConfig.key === column.key ? '#FF5C00' : '#BEBEBE'}
             />
           )}
         </TouchableOpacity>
@@ -130,7 +130,7 @@ export const DataTable = ({
               <Ionicons
                 name={selectedItems.has(item.id) ? 'checkbox' : 'square-outline'}
                 size={20}
-                color="#007AFF"
+                color="#FF5C00"
               />
             </View>
             {columns.map((column) => (
@@ -217,19 +217,19 @@ export const DataTable = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#ECE9E3',
   },
   searchContainer: {
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
+    borderBottomColor: '#E3E1DC',
   },
   header: {
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
+    borderBottomColor: '#E3E1DC',
     paddingVertical: 12,
     paddingHorizontal: 16,
   },
@@ -242,27 +242,27 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#8E8E93',
+    color: '#7A7A7A',
   },
   row: {
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
+    borderBottomColor: '#E1DFDB',
     paddingVertical: 12,
     paddingHorizontal: 16,
     minHeight: 60,
     alignItems: 'center',
   },
   selectedRow: {
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
   },
   cell: {
     justifyContent: 'center',
   },
   cellText: {
     fontSize: 16,
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
   checkboxContainer: {
     width: 40,
@@ -279,6 +279,6 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 16,
-    color: '#8E8E93',
+    color: '#7A7A7A',
   },
 });

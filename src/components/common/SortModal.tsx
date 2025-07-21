@@ -131,7 +131,7 @@ export const SortModal: React.FC<SortModalProps> = ({
                         <Ionicons
                           name={sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'}
                           size={16}
-                          color="#007AFF"
+                          color="#FF5C00"
                         />
                         <Text style={styles.directionText}>
                           {sortDirection === 'asc' ? '升序' : '降序'}
@@ -163,7 +163,7 @@ export const SortModal: React.FC<SortModalProps> = ({
                   <Ionicons 
                     name="arrow-up" 
                     size={20} 
-                    color={sortDirection === 'asc' ? '#FFFFFF' : '#007AFF'} 
+                    color={sortDirection === 'asc' ? '#FFFFFF' : '#FF5C00'} 
                   />
                   <Text style={[
                     styles.directionButtonText,
@@ -184,7 +184,7 @@ export const SortModal: React.FC<SortModalProps> = ({
                   <Ionicons 
                     name="arrow-down" 
                     size={20} 
-                    color={sortDirection === 'desc' ? '#FFFFFF' : '#007AFF'} 
+                    color={sortDirection === 'desc' ? '#FFFFFF' : '#FF5C00'} 
                   />
                   <Text style={[
                     styles.directionButtonText,
@@ -216,30 +216,30 @@ export const SortModal: React.FC<SortModalProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
     paddingTop: StatusBar.currentHeight || 0,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     paddingHorizontal: 16,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
+    borderBottomColor: '#E3E1DC',
   },
   title: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
   closeButton: {
     padding: 8,
   },
   closeButtonText: {
     fontSize: 17,
-    color: '#007AFF',
+    color: '#FF5C00',
   },
   applyButton: {
     padding: 8,
@@ -247,20 +247,20 @@ const styles = StyleSheet.create({
   applyButtonText: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#007AFF',
+    color: '#FF5C00',
   },
   content: {
     flex: 1,
   },
   section: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     marginTop: 16,
     paddingVertical: 8,
   },
   sectionTitle: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#8E8E93',
+    color: '#7A7A7A',
     textTransform: 'uppercase',
     paddingHorizontal: 16,
     paddingVertical: 8,
@@ -271,10 +271,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
   },
   selectedOption: {
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
   },
   optionContent: {
     flex: 1,
@@ -284,11 +284,11 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: 16,
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
   selectedOptionText: {
     fontWeight: '600',
-    color: '#007AFF',
+    color: '#FF5C00',
   },
   directionIndicator: {
     flexDirection: 'row',
@@ -297,7 +297,7 @@ const styles = StyleSheet.create({
   },
   directionText: {
     fontSize: 14,
-    color: '#007AFF',
+    color: '#FF5C00',
   },
   directionButtons: {
     paddingHorizontal: 16,
@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
   directionButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
     borderRadius: 12,
     padding: 16,
     gap: 8,
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
   directionButtonText: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#007AFF',
+    color: '#FF5C00',
   },
   activeDirectionButtonText: {
     color: '#FFFFFF',
@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
   clearButton: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FF3B30',
+    backgroundColor: '#A94438',
     borderRadius: 12,
     padding: 16,
     marginHorizontal: 16,

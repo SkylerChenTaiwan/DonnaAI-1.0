@@ -35,11 +35,11 @@ export const ModeToggle = ({
         value={isManagerMode}
         onValueChange={handleToggle}
         trackColor={{
-          false: '#E5E5EA',
-          true: '#007AFF',
+          false: '#E3E1DC',
+          true: '#FF5C00',
         }}
-        thumbColor="#FFFFFF"
-        ios_backgroundColor="#E5E5EA"
+        thumbColor="#F7F6F3"
+        ios_backgroundColor="#E3E1DC"
         style={Platform.OS === 'ios' ? styles.iosSwitch : undefined}
       />
     </View>
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#8E8E93',
+    color: '#7A7A7A',
   },
   iosSwitch: {
     transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }],

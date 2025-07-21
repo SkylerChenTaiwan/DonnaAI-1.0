@@ -76,15 +76,15 @@ export const MainTabNavigator = () => {
 
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-        tabBarActiveTintColor: '#007AFF',
-        tabBarInactiveTintColor: '#8E8E93',
+        tabBarActiveTintColor: '#FF5C00',
+        tabBarInactiveTintColor: '#7A7A7A',
         tabBarStyle: {
           height: 88,
           paddingBottom: 20, // 增加底部安全間距
           paddingTop: 10,
-          backgroundColor: '#FFFFFF',
+          backgroundColor: '#F7F6F3',
           borderTopWidth: 1,
-          borderTopColor: '#E5E5EA',
+          borderTopColor: '#E3E1DC',
           position: 'absolute',
           bottom: 0,
           elevation: 0,
@@ -95,14 +95,14 @@ export const MainTabNavigator = () => {
           fontWeight: '500',
         },
         headerStyle: {
-          backgroundColor: '#FFFFFF',
+          backgroundColor: '#F7F6F3',
           borderBottomWidth: 1,
-          borderBottomColor: '#E5E5EA',
+          borderBottomColor: '#E3E1DC',
         },
         headerTitleStyle: {
           fontSize: 18,
           fontWeight: '600',
-          color: '#1C1C1E',
+          color: '#1A1A1A',
         },
       })}
     >
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FF5C00',
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 4,

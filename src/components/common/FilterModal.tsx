@@ -116,7 +116,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
             onPress={handleAddCondition}
             activeOpacity={0.7}
           >
-            <Ionicons name="add-circle-outline" size={24} color="#007AFF" />
+            <Ionicons name="add-circle-outline" size={24} color="#FF5C00" />
             <Text style={styles.addButtonText}>新增篩選條件</Text>
           </TouchableOpacity>
 
@@ -139,30 +139,30 @@ export const FilterModal: React.FC<FilterModalProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
     paddingTop: StatusBar.currentHeight || 0,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     paddingHorizontal: 16,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
+    borderBottomColor: '#E3E1DC',
   },
   title: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
   closeButton: {
     padding: 8,
   },
   closeButtonText: {
     fontSize: 17,
-    color: '#007AFF',
+    color: '#FF5C00',
   },
   applyButton: {
     padding: 8,
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
   applyButtonText: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#007AFF',
+    color: '#FF5C00',
   },
   content: {
     flex: 1,
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     borderRadius: 12,
     padding: 16,
     marginTop: 16,
@@ -189,12 +189,12 @@ const styles = StyleSheet.create({
   addButtonText: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#007AFF',
+    color: '#FF5C00',
   },
   clearButton: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FF3B30',
+    backgroundColor: '#A94438',
     borderRadius: 12,
     padding: 16,
     marginTop: 12,

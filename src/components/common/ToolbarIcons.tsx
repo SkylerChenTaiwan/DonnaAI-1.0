@@ -74,7 +74,7 @@ export const ToolbarIcons: React.FC<ToolbarIconsProps> = ({
           <Ionicons 
             name="checkmark-circle" 
             size={20} 
-            color={multiSelectMode ? "#007AFF" : "#6B6B6B"} 
+            color={multiSelectMode ? "#FF5C00" : "#6B6B6B"} 
           />
         </TouchableOpacity>
       )}
@@ -104,6 +104,6 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   iconButtonActive: {
-    backgroundColor: 'rgba(0, 122, 255, 0.1)',
+    backgroundColor: 'rgba(255, 92, 0, 0.1)',
   },
 });

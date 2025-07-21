@@ -58,7 +58,7 @@ export const Button = ({
     >
       {loading ? (
         <ActivityIndicator 
-          color={variant === 'primary' ? '#FFFFFF' : '#007AFF'} 
+          color={variant === 'primary' ? '#F7F6F3' : '#FF5C00'} 
           size="small" 
         />
       ) : (
@@ -78,15 +78,15 @@ const styles = StyleSheet.create({
   
   // 變體樣式
   primary: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FF5C00',
   },
   secondary: {
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
   },
   outline: {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: '#007AFF',
+    borderColor: '#FF5C00',
   },
   
   // 尺寸樣式
@@ -105,8 +105,8 @@ const styles = StyleSheet.create({
   
   // 停用狀態
   disabled: {
-    backgroundColor: '#F2F2F7',
-    borderColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
+    borderColor: '#E1DFDB',
   },
   
   // 文字樣式
@@ -114,13 +114,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   primaryText: {
-    color: '#FFFFFF',
+    color: '#F7F6F3',
   },
   secondaryText: {
-    color: '#007AFF',
+    color: '#FF5C00',
   },
   outlineText: {
-    color: '#007AFF',
+    color: '#FF5C00',
   },
   
   // 尺寸文字
@@ -135,6 +135,6 @@ const styles = StyleSheet.create({
   },
   
   disabledText: {
-    color: '#8E8E93',
+    color: '#7A7A7A',
   },
 });

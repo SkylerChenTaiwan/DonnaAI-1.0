@@ -83,7 +83,7 @@ export const BatchActionsModal: React.FC<BatchActionsModalProps> = ({
 
           {loading ? (
             <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color="#007AFF" />
+              <ActivityIndicator size="large" color="#FF5C00" />
               <Text style={styles.loadingText}>處理中...</Text>
             </View>
           ) : (
@@ -104,7 +104,7 @@ export const BatchActionsModal: React.FC<BatchActionsModalProps> = ({
                     <Ionicons
                       name={action.icon}
                       size={24}
-                      color={action.type === 'delete' ? '#FF3B30' : '#007AFF'}
+                      color={action.type === 'delete' ? '#A94438' : '#FF5C00'}
                     />
                   </View>
                   <View style={styles.actionTextContainer}>
@@ -117,7 +117,7 @@ export const BatchActionsModal: React.FC<BatchActionsModalProps> = ({
                       {action.label}
                     </Text>
                   </View>
-                  <Ionicons name="chevron-forward" size={16} color="#C7C7CC" />
+                  <Ionicons name="chevron-forward" size={16} color="#BEBEBE" />
                 </TouchableOpacity>
               ))}
             </ScrollView>
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     paddingBottom: 34, // Safe area bottom
@@ -155,24 +155,24 @@ const styles = StyleSheet.create({
     paddingTop: 12,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
+    borderBottomColor: '#E3E1DC',
   },
   handle: {
     width: 36,
     height: 5,
-    backgroundColor: '#C7C7CC',
+    backgroundColor: '#BEBEBE',
     borderRadius: 3,
     marginBottom: 12,
   },
   title: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
     marginBottom: 4,
   },
   subtitle: {
     fontSize: 14,
-    color: '#8E8E93',
+    color: '#7A7A7A',
   },
   content: {
     paddingVertical: 8,
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#8E8E93',
+    color: '#7A7A7A',
     marginTop: 12,
   },
   actionItem: {
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -211,13 +211,13 @@ const styles = StyleSheet.create({
   actionLabel: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
   deleteActionLabel: {
-    color: '#FF3B30',
+    color: '#A94438',
   },
   cancelButton: {
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
     borderRadius: 12,
     paddingVertical: 16,
     marginHorizontal: 20,
@@ -227,6 +227,6 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
 });

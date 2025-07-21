@@ -84,7 +84,7 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
             value={value || ''}
             onChangeText={(text) => updateValue(field.key, text)}
             placeholder={field.placeholder || `輸入${field.label}`}
-            placeholderTextColor="#8E8E93"
+            placeholderTextColor="#7A7A7A"
           />
         );
 
@@ -113,7 +113,7 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
           <Switch
             value={value || false}
             onValueChange={(val) => updateValue(field.key, val)}
-            trackColor={{ false: '#E5E5EA', true: '#007AFF' }}
+            trackColor={{ false: '#E3E1DC', true: '#FF5C00' }}
           />
         );
 
@@ -124,7 +124,7 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
             value={value || ''}
             onChangeText={(text) => updateValue(field.key, text)}
             placeholder="輸入標籤，以逗號分隔"
-            placeholderTextColor="#8E8E93"
+            placeholderTextColor="#7A7A7A"
           />
         );
 
@@ -151,7 +151,7 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
               onPress={showPreview ? handleConfirmSubmit : handleSave}
               activeOpacity={0.7}
             >
-              <Ionicons name="checkmark" size={18} color="#FFFFFF" />
+              <Ionicons name="checkmark" size={18} color="#F7F6F3" />
               <Text style={styles.saveButtonText}>{showPreview ? '確認' : '儲存'}</Text>
             </TouchableOpacity>
           )}
@@ -161,7 +161,7 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
             activeOpacity={0.7}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <Ionicons name="close" size={24} color="#8E8E93" />
+            <Ionicons name="close" size={24} color="#7A7A7A" />
           </TouchableOpacity>
         </View>
       </View>
@@ -246,14 +246,14 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
   },
   header: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     paddingVertical: 16,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
+    borderBottomColor: '#E3E1DC',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -272,31 +272,31 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FF5C00',
     borderRadius: 18,
   },
   saveButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: '#F7F6F3',
   },
   closeButton: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
     alignItems: 'center',
     justifyContent: 'center',
   },
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
     marginBottom: 4,
   },
   subtitle: {
     fontSize: 14,
-    color: '#8E8E93',
+    color: '#7A7A7A',
   },
   content: {
     flex: 1,
@@ -304,11 +304,11 @@ const styles = StyleSheet.create({
   },
   instruction: {
     fontSize: 14,
-    color: '#8E8E93',
+    color: '#7A7A7A',
     marginBottom: 16,
   },
   fieldItem: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     borderRadius: 12,
     marginBottom: 12,
     padding: 16,
@@ -316,27 +316,27 @@ const styles = StyleSheet.create({
   fieldLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
     marginBottom: 8,
   },
   fieldInputContainer: {
     // 移除左邊距
   },
   textInput: {
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 12,
     fontSize: 16,
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
   previewSubtitle: {
     fontSize: 14,
-    color: '#8E8E93',
+    color: '#7A7A7A',
     marginBottom: 16,
   },
   pickerWrapper: {
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
     borderRadius: 8,
     overflow: 'hidden',
   },
@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
     height: 44,
   },
   previewSection: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     borderRadius: 12,
     padding: 16,
     marginTop: 24,
@@ -352,7 +352,7 @@ const styles = StyleSheet.create({
   previewTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
     marginBottom: 12,
   },
   previewItem: {
@@ -361,21 +361,21 @@ const styles = StyleSheet.create({
   },
   previewLabel: {
     fontSize: 14,
-    color: '#8E8E93',
+    color: '#7A7A7A',
     width: 100,
   },
   previewValue: {
     fontSize: 14,
-    color: '#1C1C1E',
+    color: '#1A1A1A',
     flex: 1,
     fontWeight: '500',
   },
   footer: {
     flexDirection: 'row',
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     borderTopWidth: 1,
-    borderTopColor: '#E5E5EA',
+    borderTopColor: '#E3E1DC',
     gap: 12,
   },
   button: {
@@ -385,19 +385,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cancelButton: {
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
   },
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
   submitButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FF5C00',
   },
   submitButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: '#F7F6F3',
   },
 });

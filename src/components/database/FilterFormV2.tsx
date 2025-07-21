@@ -103,7 +103,7 @@ export const FilterForm: React.FC<FilterFormProps> = ({
       <View style={styles.header}>
         <Text style={styles.headerText}>篩選條件</Text>
         <TouchableOpacity onPress={onRemove} style={styles.removeButton}>
-          <Ionicons name="trash-outline" size={20} color="#FF3B30" />
+          <Ionicons name="trash-outline" size={20} color="#A94438" />
         </TouchableOpacity>
       </View>
 
@@ -117,7 +117,7 @@ export const FilterForm: React.FC<FilterFormProps> = ({
           <Text style={styles.selectButtonText}>
             {selectedColumn?.title || '請選擇欄位'}
           </Text>
-          <Ionicons name="chevron-down" size={20} color="#8E8E93" />
+          <Ionicons name="chevron-down" size={20} color="#7A7A7A" />
         </TouchableOpacity>
         
         {showColumnPicker && (
@@ -152,7 +152,7 @@ export const FilterForm: React.FC<FilterFormProps> = ({
           <Text style={styles.selectButtonText}>
             {operatorLabels[operator]}
           </Text>
-          <Ionicons name="chevron-down" size={20} color="#8E8E93" />
+          <Ionicons name="chevron-down" size={20} color="#7A7A7A" />
         </TouchableOpacity>
         
         {showOperatorPicker && (
@@ -189,7 +189,7 @@ export const FilterForm: React.FC<FilterFormProps> = ({
               <Text style={styles.selectButtonText}>
                 {presetOptions.find(opt => opt.value === condition.value)?.label || '請選擇'}
               </Text>
-              <Ionicons name="chevron-down" size={20} color="#8E8E93" />
+              <Ionicons name="chevron-down" size={20} color="#7A7A7A" />
             </TouchableOpacity>
             
             {showValuePicker && (
@@ -222,7 +222,7 @@ export const FilterForm: React.FC<FilterFormProps> = ({
             value={condition.value || ''}
             onChangeText={handleValueChange}
             placeholder="輸入篩選值"
-            placeholderTextColor="#8E8E93"
+            placeholderTextColor="#7A7A7A"
             autoCapitalize="none"
             autoCorrect={false}
           />
@@ -234,7 +234,7 @@ export const FilterForm: React.FC<FilterFormProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
   removeButton: {
     padding: 4,
@@ -259,11 +259,11 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#8E8E93',
+    color: '#7A7A7A',
     marginBottom: 8,
   },
   selectButton: {
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 12,
@@ -273,10 +273,10 @@ const styles = StyleSheet.create({
   },
   selectButtonText: {
     fontSize: 16,
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
   pickerOptions: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     borderRadius: 8,
     marginTop: 4,
     ...Platform.select({
@@ -295,33 +295,33 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
+    borderBottomColor: '#E1DFDB',
   },
   pickerOptionText: {
     fontSize: 16,
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
   pickerOptionTextSelected: {
-    color: '#007AFF',
+    color: '#FF5C00',
     fontWeight: '600',
   },
   fixedField: {
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 12,
   },
   fixedFieldText: {
     fontSize: 16,
-    color: '#8E8E93',
+    color: '#7A7A7A',
   },
   input: {
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 12,
     fontSize: 16,
-    color: '#1C1C1E',
+    color: '#1A1A1A',
     minHeight: 44,
   },
 });

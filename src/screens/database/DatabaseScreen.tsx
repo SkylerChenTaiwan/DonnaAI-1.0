@@ -737,7 +737,7 @@ export const DatabaseScreen: React.FC = () => {
               onPress={() => setShowBatchEdit(true)}
               activeOpacity={0.7}
             >
-              <Ionicons name="create-outline" size={20} color="#FFFFFF" />
+              <Ionicons name="create-outline" size={20} color="#F7F6F3" />
               <Text style={styles.batchActionButtonText}>編輯</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -745,7 +745,7 @@ export const DatabaseScreen: React.FC = () => {
               onPress={handleBatchDelete}
               activeOpacity={0.7}
             >
-              <Ionicons name="trash-outline" size={20} color="#FFFFFF" />
+              <Ionicons name="trash-outline" size={20} color="#F7F6F3" />
               <Text style={styles.batchActionButtonText}>刪除</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -753,7 +753,7 @@ export const DatabaseScreen: React.FC = () => {
               onPress={() => setShowExportOptions(true)}
               activeOpacity={0.7}
             >
-              <Ionicons name="download-outline" size={20} color="#FFFFFF" />
+              <Ionicons name="download-outline" size={20} color="#F7F6F3" />
               <Text style={styles.batchActionButtonText}>匯出</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -810,11 +810,11 @@ const styles = StyleSheet.create({
   },
   toolbar: {
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
+    borderBottomColor: '#E3E1DC',
     alignItems: 'center',
     gap: 16,
   },
@@ -830,26 +830,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 12,
     paddingVertical: 8,
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
     borderRadius: 8,
     gap: 4,
   },
   toolButtonActive: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FF5C00',
   },
   toolButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#007AFF',
+    color: '#FF5C00',
   },
   toolButtonTextActive: {
-    color: '#FFFFFF',
+    color: '#F7F6F3',
   },
   tabContainer: {
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
+    borderBottomColor: '#E3E1DC',
   },
   tab: {
     flex: 1,
@@ -862,19 +862,19 @@ const styles = StyleSheet.create({
   },
   activeTab: {
     borderBottomWidth: 2,
-    borderBottomColor: '#007AFF',
+    borderBottomColor: '#FF5C00',
   },
   tabText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#8E8E93',
+    color: '#7A7A7A',
   },
   activeTabText: {
-    color: '#007AFF',
+    color: '#FF5C00',
     fontWeight: '700',
   },
   countBadge: {
-    backgroundColor: '#E5E5EA',
+    backgroundColor: '#E3E1DC',
     borderRadius: 10,
     paddingHorizontal: 8,
     paddingVertical: 2,
@@ -884,10 +884,10 @@ const styles = StyleSheet.create({
   countText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#8E8E93',
+    color: '#7A7A7A',
   },
   statusBadge: {
-    backgroundColor: '#E5E5EA',
+    backgroundColor: '#E3E1DC',
     borderRadius: 4,
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -911,11 +911,11 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
   typeText: {
     fontSize: 14,
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
   // 批量操作工具列樣式
   batchActionsBar: {
@@ -923,7 +923,7 @@ const styles = StyleSheet.create({
     bottom: 90,
     left: 0,
     right: 0,
-    backgroundColor: '#1C1C1E',
+    backgroundColor: '#1A1A1A',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -942,7 +942,7 @@ const styles = StyleSheet.create({
   batchActionsText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: '#F7F6F3',
   },
   batchActionsRight: {
     flexDirection: 'row',
@@ -960,7 +960,7 @@ const styles = StyleSheet.create({
   batchActionButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: '#F7F6F3',
   },
   cancelButton: {
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
@@ -968,7 +968,7 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: '#F7F6F3',
   },
   // 批量編輯容器樣式
   batchEditContainer: {
@@ -993,7 +993,7 @@ const styles = StyleSheet.create({
     left: 20,
     right: 20,
     bottom: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     borderRadius: 16,
     elevation: 10,
     shadowColor: '#000',

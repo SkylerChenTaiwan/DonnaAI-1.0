@@ -34,7 +34,7 @@ export const TextInput = ({
           error ? styles.inputError : null,
           style,
         ]}
-        placeholderTextColor="#8E8E93"
+        placeholderTextColor="#7A7A7A"
         {...props}
       />
       {error && <Text style={styles.errorText}>{error}</Text>}
@@ -49,25 +49,25 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
     marginBottom: 8,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#E5E5EA',
+    borderColor: '#E3E1DC',
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 16,
-    color: '#1C1C1E',
-    backgroundColor: '#FFFFFF',
+    color: '#1A1A1A',
+    backgroundColor: '#F7F6F3',
   },
   inputError: {
-    borderColor: '#FF3B30',
+    borderColor: '#A94438',
   },
   errorText: {
     fontSize: 14,
-    color: '#FF3B30',
+    color: '#A94438',
     marginTop: 4,
   },
 });

@@ -39,16 +39,16 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#8E8E93',
+    color: '#7A7A7A',
     textTransform: 'uppercase',
     paddingHorizontal: 16,
     paddingBottom: 8,
   },
   itemsContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     borderTopWidth: 1,
-    borderTopColor: '#F2F2F7',
+    borderTopColor: '#E1DFDB',
     borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
+    borderBottomColor: '#E1DFDB',
   },
 });

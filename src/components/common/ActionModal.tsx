@@ -100,13 +100,13 @@ export const ActionModal = ({
               activeOpacity={0.7}
             >
               <View style={styles.actionIconContainer}>
-                <Ionicons name={action.icon} size={24} color="#007AFF" />
+                <Ionicons name={action.icon} size={24} color="#FF5C00" />
               </View>
               <View style={styles.actionTextContainer}>
                 <Text style={styles.actionTitle}>{action.title}</Text>
                 <Text style={styles.actionSubtitle}>{action.subtitle}</Text>
               </View>
-              <Ionicons name="chevron-forward" size={16} color="#C7C7CC" />
+              <Ionicons name="chevron-forward" size={16} color="#BEBEBE" />
             </TouchableOpacity>
           ))}
         </Animated.View>
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     paddingBottom: 120,
   },
   bubble: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     borderRadius: 16,
     padding: 16,
     marginHorizontal: 20,
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -156,11 +156,11 @@ const styles = StyleSheet.create({
   actionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
     marginBottom: 2,
   },
   actionSubtitle: {
     fontSize: 14,
-    color: '#8E8E93',
+    color: '#7A7A7A',
   },
 });

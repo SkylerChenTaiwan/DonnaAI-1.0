@@ -34,21 +34,21 @@ export const SettingItem = ({
             value={value}
             onValueChange={onValueChange}
             trackColor={{
-              false: '#E5E5EA',
-              true: '#007AFF',
+              false: '#E3E1DC',
+              true: '#FF5C00',
             }}
-            thumbColor="#FFFFFF"
+            thumbColor="#F7F6F3"
           />
         );
       case 'select':
         return (
           <View style={styles.selectContainer}>
             <Text style={styles.selectValue}>{value || '未選擇'}</Text>
-            <Ionicons name="chevron-forward" size={16} color="#C7C7CC" />
+            <Ionicons name="chevron-forward" size={16} color="#BEBEBE" />
           </View>
         );
       case 'navigation':
-        return <Ionicons name="chevron-forward" size={20} color="#C7C7CC" />;
+        return <Ionicons name="chevron-forward" size={20} color="#BEBEBE" />;
       case 'action':
         return null;
       default:
@@ -71,7 +71,7 @@ export const SettingItem = ({
       <View style={styles.leftContent}>
         {icon && (
           <View style={styles.iconContainer}>
-            <Ionicons name={icon as any} size={20} color="#007AFF" />
+            <Ionicons name={icon as any} size={20} color="#FF5C00" />
           </View>
         )}
         <View style={styles.textContainer}>
@@ -89,12 +89,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     paddingVertical: 12,
     paddingHorizontal: 16,
     minHeight: 56,
     borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
+    borderBottomColor: '#E1DFDB',
   },
   leftContent: {
     flex: 1,
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 8,
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -115,11 +115,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
   subtitle: {
     fontSize: 14,
-    color: '#8E8E93',
+    color: '#7A7A7A',
     marginTop: 2,
   },
   selectContainer: {
@@ -129,6 +129,6 @@ const styles = StyleSheet.create({
   },
   selectValue: {
     fontSize: 14,
-    color: '#8E8E93',
+    color: '#7A7A7A',
   },
 });

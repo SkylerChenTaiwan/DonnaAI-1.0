@@ -66,7 +66,7 @@ export const FilterBadge: React.FC<FilterBadgeProps> = ({
                 onPress={() => onRemoveFilter(filter.key)}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               >
-                <Ionicons name="close-circle" size={16} color="#8E8E93" />
+                <Ionicons name="close-circle" size={16} color="#7A7A7A" />
               </TouchableOpacity>
             </View>
           ))}
@@ -87,9 +87,9 @@ export const FilterBadge: React.FC<FilterBadgeProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
+    borderBottomColor: '#E3E1DC',
   },
   scrollView: {
     flexGrow: 0,
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   filterItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
     borderRadius: 16,
     paddingLeft: 12,
     paddingRight: 8,
@@ -114,17 +114,17 @@ const styles = StyleSheet.create({
   },
   filterText: {
     fontSize: 14,
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
   clearAllButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
-    backgroundColor: '#FF3B30',
+    backgroundColor: '#A94438',
   },
   clearAllText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: '#F7F6F3',
   },
 });

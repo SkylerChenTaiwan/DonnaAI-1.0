@@ -26,7 +26,7 @@ export const ToolCard = ({
   title,
   description,
   icon,
-  color = '#007AFF',
+  color = '#FF5C00',
   onPress,
 }: ToolCardProps) => {
   return (
@@ -51,7 +51,7 @@ export const ToolCard = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
@@ -73,13 +73,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
     marginBottom: 4,
     textAlign: 'center',
   },
   description: {
     fontSize: 14,
-    color: '#8E8E93',
+    color: '#7A7A7A',
     textAlign: 'center',
     lineHeight: 18,
   },

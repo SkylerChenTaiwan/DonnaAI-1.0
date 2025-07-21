@@ -83,7 +83,7 @@ export const ActionPopover = ({
             activeOpacity={0.7}
           >
             <View style={styles.actionIconContainer}>
-              <Ionicons name={action.icon} size={24} color="#007AFF" />
+              <Ionicons name={action.icon} size={24} color="#FF5C00" />
             </View>
             <Text style={styles.actionTitle}>{action.title}</Text>
           </TouchableOpacity>
@@ -97,7 +97,7 @@ const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   popover: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     borderRadius: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
@@ -123,13 +123,13 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
+    borderBottomColor: '#E1DFDB',
   },
   actionIconContainer: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 16,
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
   actionTitle: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
     flex: 1,
   },
 });

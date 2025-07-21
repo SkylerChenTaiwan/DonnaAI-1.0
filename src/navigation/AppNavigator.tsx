@@ -44,7 +44,7 @@ export const AppNavigator = () => {
     return (
       <LoadingSpinner 
         message="正在載入 DonnaAI..." 
-        style={{ backgroundColor: '#FFFFFF' }}
+        style={{ backgroundColor: '#F7F6F3' }}
       />
     );
   }

@@ -66,7 +66,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
 
       {loading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#007AFF" />
+          <ActivityIndicator size="large" color="#FF5C00" />
           <Text style={styles.loadingText}>準備匯出...</Text>
         </View>
       ) : (
@@ -86,7 +86,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
                 <Ionicons
                   name="document-text-outline"
                   size={24}
-                  color={format === 'csv' ? '#007AFF' : '#8E8E93'}
+                  color={format === 'csv' ? '#FF5C00' : '#7A7A7A'}
                 />
                 <Text
                   style={[
@@ -112,7 +112,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
                 <Ionicons
                   name="code-outline"
                   size={24}
-                  color={format === 'json' ? '#007AFF' : '#8E8E93'}
+                  color={format === 'json' ? '#FF5C00' : '#7A7A7A'}
                 />
                 <Text
                   style={[
@@ -137,7 +137,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
                 <Switch
                   value={includeHeaders}
                   onValueChange={setIncludeHeaders}
-                  trackColor={{ false: '#E5E5EA', true: '#007AFF' }}
+                  trackColor={{ false: '#E3E1DC', true: '#FF5C00' }}
                 />
               </View>
             </View>
@@ -151,7 +151,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
               value={filename}
               onChangeText={setFilename}
               placeholder="輸入檔案名稱"
-              placeholderTextColor="#8E8E93"
+              placeholderTextColor="#7A7A7A"
             />
           </View>
 
@@ -171,7 +171,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
                 value={email}
                 onChangeText={setEmail}
                 placeholder="輸入郵件地址"
-                placeholderTextColor="#8E8E93"
+                placeholderTextColor="#7A7A7A"
                 keyboardType="email-address"
                 autoCapitalize="none"
               />
@@ -209,7 +209,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
           activeOpacity={0.7}
           disabled={loading}
         >
-          <Ionicons name="download-outline" size={20} color="#FFFFFF" />
+          <Ionicons name="download-outline" size={20} color="#F7F6F3" />
           <Text style={styles.exportButtonText}>匯出</Text>
         </TouchableOpacity>
       </View>
@@ -220,24 +220,24 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
   },
   header: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     paddingVertical: 16,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
+    borderBottomColor: '#E3E1DC',
   },
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
     marginBottom: 4,
   },
   subtitle: {
     fontSize: 14,
-    color: '#8E8E93',
+    color: '#7A7A7A',
   },
   loadingContainer: {
     flex: 1,
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#8E8E93',
+    color: '#7A7A7A',
     marginTop: 12,
   },
   content: {
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#8E8E93',
+    color: '#7A7A7A',
     marginBottom: 12,
     textTransform: 'uppercase',
   },
@@ -269,51 +269,51 @@ const styles = StyleSheet.create({
   },
   formatOption: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#E5E5EA',
+    borderColor: '#E3E1DC',
   },
   formatOptionActive: {
-    borderColor: '#007AFF',
-    backgroundColor: '#F0F8FF',
+    borderColor: '#FF5C00',
+    backgroundColor: '#FFF5F0',
   },
   formatOptionText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#8E8E93',
+    color: '#7A7A7A',
     marginTop: 8,
     marginBottom: 4,
   },
   formatOptionTextActive: {
-    color: '#007AFF',
+    color: '#FF5C00',
   },
   formatDescription: {
     fontSize: 12,
-    color: '#8E8E93',
+    color: '#7A7A7A',
     textAlign: 'center',
   },
   optionRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     borderRadius: 12,
     padding: 16,
   },
   optionLabel: {
     fontSize: 16,
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
   input: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 16,
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
   emailInput: {
     marginTop: 12,
@@ -324,21 +324,21 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   columnChip: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     borderRadius: 16,
     paddingHorizontal: 12,
     paddingVertical: 6,
   },
   columnChipText: {
     fontSize: 14,
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
   footer: {
     flexDirection: 'row',
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     borderTopWidth: 1,
-    borderTopColor: '#E5E5EA',
+    borderTopColor: '#E3E1DC',
     gap: 12,
   },
   button: {
@@ -351,19 +351,19 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   cancelButton: {
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
   },
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
   exportButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FF5C00',
   },
   exportButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: '#F7F6F3',
   },
 });

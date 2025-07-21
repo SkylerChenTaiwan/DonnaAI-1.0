@@ -165,13 +165,13 @@ export const ColumnSettingsModal: React.FC<ColumnSettingsModalProps> = ({
               <View key={column.key} style={styles.columnItem}>
                 <View style={styles.columnItemLeft}>
                   {/* TODO: 拖曳手柄 */}
-                  <Ionicons name="reorder-three" size={24} color="#C7C7CC" />
+                  <Ionicons name="reorder-three" size={24} color="#BEBEBE" />
                   <Text style={styles.columnLabel}>{column.title}</Text>
                 </View>
                 <Switch
                   value={visibleColumns.has(column.key)}
                   onValueChange={() => toggleColumn(column.key)}
-                  trackColor={{ false: '#E5E5EA', true: '#007AFF' }}
+                  trackColor={{ false: '#E3E1DC', true: '#FF5C00' }}
                 />
               </View>
             );
@@ -179,7 +179,7 @@ export const ColumnSettingsModal: React.FC<ColumnSettingsModalProps> = ({
 
           {/* 提示文字 */}
           <View style={styles.tipContainer}>
-            <Ionicons name="information-circle" size={20} color="#8E8E93" />
+            <Ionicons name="information-circle" size={20} color="#7A7A7A" />
             <Text style={styles.tipText}>
               提示：您可以拖曳欄位來調整顯示順序（開發中）
             </Text>
@@ -193,30 +193,30 @@ export const ColumnSettingsModal: React.FC<ColumnSettingsModalProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
     paddingTop: StatusBar.currentHeight || 0,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     paddingHorizontal: 16,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
+    borderBottomColor: '#E3E1DC',
   },
   title: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
   closeButton: {
     padding: 8,
   },
   closeButtonText: {
     fontSize: 17,
-    color: '#007AFF',
+    color: '#FF5C00',
   },
   applyButton: {
     padding: 8,
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
   applyButtonText: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#007AFF',
+    color: '#FF5C00',
   },
   content: {
     flex: 1,
@@ -233,40 +233,40 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     marginBottom: 16,
   },
   quickActionButton: {
     paddingHorizontal: 20,
     paddingVertical: 8,
     borderRadius: 16,
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#E1DFDB',
   },
   quickActionText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#007AFF',
+    color: '#FF5C00',
   },
   section: {
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1C1C1E',
+    color: '#1A1A1A',
     marginBottom: 4,
   },
   sectionSubtitle: {
     fontSize: 14,
-    color: '#8E8E93',
+    color: '#7A7A7A',
   },
   columnItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6F3',
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
   },
   columnLabel: {
     fontSize: 16,
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
   tipContainer: {
     flexDirection: 'row',
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
   },
   tipText: {
     fontSize: 14,
-    color: '#8E8E93',
+    color: '#7A7A7A',
     flex: 1,
   },
 });

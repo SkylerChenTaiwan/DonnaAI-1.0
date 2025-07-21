@@ -70,13 +70,13 @@ export const SearchBar = ({
 
   return (
     <View style={styles.container}>
-      <Ionicons name="search" size={16} color="#8E8E93" style={styles.icon} />
+      <Ionicons name="search" size={16} color="#7A7A7A" style={styles.icon} />
       <TextInput
         style={styles.input}
         value={localValue}
         onChangeText={handleChangeText}
         placeholder={placeholder}
-        placeholderTextColor="#8E8E93"
+        placeholderTextColor="#7A7A7A"
         returnKeyType="search"
         autoCapitalize="none"
         autoCorrect={false}
@@ -84,7 +84,7 @@ export const SearchBar = ({
       />
       {localValue.length > 0 && (
         <TouchableOpacity onPress={handleClear} style={styles.clearButton}>
-          <Ionicons name="close-circle" size={18} color="#8E8E93" />
+          <Ionicons name="close-circle" size={18} color="#7A7A7A" />
         </TouchableOpacity>
       )}
     </View>
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F7F7F7',
+    backgroundColor: '#E1DFDB',
     borderRadius: 6,
     paddingHorizontal: 10,
     height: 32,
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 14,
-    color: '#1C1C1E',
+    color: '#1A1A1A',
   },
   clearButton: {
     padding: 4,
