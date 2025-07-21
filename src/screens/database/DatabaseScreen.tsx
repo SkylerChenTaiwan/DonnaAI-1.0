@@ -100,7 +100,7 @@ export const DatabaseScreen: React.FC = () => {
     }
   }, [user?.id, user?.teamIds?.[0]]);
 
-  // 調試：監控重新渲染
+  // 調試：監控重新渲染和使用者資料
   console.log('🔄 DatabaseScreen render:', {
     activeTab,
     customersLength: customers.length,
@@ -109,6 +109,18 @@ export const DatabaseScreen: React.FC = () => {
     customerLoading,
     recordLoading,
     taskLoading
+  });
+  
+  // 調試：檢查使用者資料
+  console.log('👤 User data:', {
+    userExists: !!user,
+    userId: user?.id,
+    email: user?.email,
+    teamIds: user?.teamIds,
+    teamIdsType: typeof user?.teamIds,
+    teamIdsLength: user?.teamIds?.length,
+    role: user?.role,
+    organizationId: user?.organizationId
   });
 
   const tabs = useMemo((): Tab[] => [
