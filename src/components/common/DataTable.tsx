@@ -85,20 +85,27 @@ export const DataTable = ({
       {columns.map((column) => (
         <TouchableOpacity
           key={column.key}
-          style={[styles.headerCell, column.width ? { width: column.width } : { flex: 1 }]}
+          style={[
+            styles.headerCell, 
+            column.width ? { width: column.width } : { flex: 1 },
+            column.sortable ? styles.sortableHeader : styles.nonSortableHeader
+          ]}
           onPress={() => column.sortable && handleSort(column.key)}
           disabled={!column.sortable}
+          activeOpacity={column.sortable ? 0.7 : 1}
         >
           <Text style={styles.headerText}>{column.title}</Text>
-          {column.sortable && sortConfig.key === column.key && (
+          {column.sortable && (
             <Ionicons
               name={
-                sortConfig.direction === 'asc'
-                  ? 'chevron-up'
-                  : 'chevron-down'
+                sortConfig.key === column.key
+                  ? sortConfig.direction === 'asc'
+                    ? 'chevron-up'
+                    : 'chevron-down'
+                  : 'chevron-expand'
               }
-              size={16}
-              color="#007AFF"
+              size={14}
+              color={sortConfig.key === column.key ? '#007AFF' : '#C7C7CC'}
             />
           )}
         </TouchableOpacity>
@@ -231,11 +238,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
+    paddingVertical: 4,
   },
   headerText: {
     fontSize: 14,
     fontWeight: '600',
     color: '#8E8E93',
+  },
+  sortableHeader: {
+    opacity: 1,
+  },
+  nonSortableHeader: {
+    opacity: 0.6,
   },
   row: {
     flexDirection: 'row',

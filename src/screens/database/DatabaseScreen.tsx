@@ -17,7 +17,10 @@ import { SearchBar } from '@/components/common/SearchBar';
 import { ToolbarIcons } from '@/components/common/ToolbarIcons';
 import { FilterBadge, FilterCondition } from '@/components/common/FilterBadge';
 import { FilterModal } from '@/components/common/FilterModal';
-import { SortModal, SortConfig } from '@/components/common/SortModal';
+interface SortConfig {
+  key: string | null;
+  direction: 'asc' | 'desc';
+}
 import { BatchEditForm } from '@/components/database/BatchEditForm';
 import { ColumnSettingsModal } from '@/components/common/ColumnSettingsModal';
 import { useColumnSettings } from '@/hooks/useColumnSettings';
@@ -76,7 +79,6 @@ export const DatabaseScreen: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilters, setActiveFilters] = useState<FilterCondition[]>([]);
   const [showFilterModal, setShowFilterModal] = useState(false);
-  const [showSortModal, setShowSortModal] = useState(false);
   const [currentSort, setCurrentSort] = useState<SortConfig | null>(null);
   const [showBatchEdit, setShowBatchEdit] = useState(false);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
@@ -620,8 +622,8 @@ export const DatabaseScreen: React.FC = () => {
         </View>
         <ToolbarIcons
           multiSelectMode={multiSelectMode}
+          showSort={false}
           onFilterPress={() => setShowFilterModal(true)}
-          onSortPress={() => setShowSortModal(true)}
           onMultiSelectPress={() => {
             const newMode = !multiSelectMode;
             setMultiSelectMode(newMode);
@@ -687,14 +689,6 @@ export const DatabaseScreen: React.FC = () => {
         tabType={activeTab}
       />
 
-      {/* 排序選擇器 Modal */}
-      <SortModal
-        visible={showSortModal}
-        onClose={() => setShowSortModal(false)}
-        columns={currentColumns}
-        currentSort={currentSort}
-        onApply={setCurrentSort}
-      />
 
       {/* 欄位設定 Modal */}
       <ColumnSettingsModal

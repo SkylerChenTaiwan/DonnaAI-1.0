@@ -5,30 +5,30 @@
 ### 色彩系統
 ```yaml
 Primary Colors:
-  - primary: "#007AFF"          # 主要藍色（按鈕、連結、選中狀態）
-  - primary-light: "#4A90E2"    # 較淺藍色（hover狀態）
-  - primary-dark: "#0056CC"     # 較深藍色（按下狀態）
+  - primary: "#FF5C00"          # 主橘色（選中/互動強調）
+  - primary-light: "#FFA87A"    # 橘色 hover 狀態
+  - primary-dark: "#C74A00"     # 深橘按下狀態
 
 Background Colors:
-  - background: "#F8F9FA"       # 主背景色
-  - card-background: "#FFFFFF"  # 卡片背景
-  - section-background: "#F2F2F7" # 區塊背景
+  - background: "#ECE9E3"       # 主背景色（沙灰米白）
+  - card-background: "#F7F6F3"  # 卡片背景（略白）
+  - section-background: "#E1DFDB" # 區塊背景（低對比灰沙色）
 
 Text Colors:
-  - text-primary: "#1C1C1E"     # 主要文字
-  - text-secondary: "#8E8E93"   # 次要文字
-  - text-disabled: "#C7C7CC"    # 停用文字
+  - text-primary: "#1A1A1A"     # 主要文字（霧黑）
+  - text-secondary: "#7A7A7A"   # 次要文字（柔和灰）
+  - text-disabled: "#BEBEBE"    # 停用文字（淡灰）
 
 Status Colors:
-  - success: "#34C759"          # 成功/綠色
-  - warning: "#FF9500"          # 警告/橘色
-  - error: "#FF3B30"            # 錯誤/紅色
-  - info: "#5AC8FA"             # 資訊/淺藍色
+  - success: "#227A63"          # 深墨綠（成功）
+  - warning: "#B96A00"          # 橘褐色（警告）
+  - error: "#A94438"            # 磚紅（錯誤）
+  - info: "#5A6770"             # 中性灰藍（資訊）
 
 Border Colors:
-  - border-light: "#E5E5EA"     # 淺色邊框
-  - border-medium: "#D1D1D6"    # 中等邊框
-  - border-dark: "#C7C7CC"      # 深色邊框
+  - border-light: "#E3E1DC"     # 卡片邊界用
+  - border-medium: "#CAC7C1"    # 分隔線用
+  - border-dark: "#9C9993"      # 強調輪廓用
 ```
 
 ### 字體系統
@@ -101,8 +101,8 @@ Dimensions:
 Visual Design:
   - background: "#FFFFFF"
   - border-top: "1px solid #E5E5EA"
-  - active-color: "#007AFF"
-  - inactive-color: "#8E8E93"
+  - active-color: "#FF5C00"
+  - inactive-color: "#7A7A7A"
   
 Tab Items:
   1. 首頁 (analytics icon)
@@ -112,7 +112,7 @@ Tab Items:
   5. 設定 (person icon)
 
 Special Tab (新增按鈕):
-  - background: "#007AFF"
+  - background: "#FF5C00"
   - color: "#FFFFFF"
   - border-radius: 20px
   - size: 40px x 40px
@@ -163,7 +163,7 @@ Welcome Text:
 Mode Toggle:
   - position: top-right
   - size: 44px x 24px
-  - background: "#E5E5EA" (off), "#007AFF" (on)
+  - background: "#E3E1DC" (off), "#FF5C00" (on)
   - thumb: 20px circle, "#FFFFFF"
   - animation: 200ms ease
 
@@ -210,13 +210,13 @@ Tab Item:
   - padding: 12px 16px
   - font-size: 16px
   - font-weight: 500
-  - active: "#007AFF" text + bottom border
-  - inactive: "#8E8E93" text
+  - active: "#FF5C00" text + bottom border
+  - inactive: "#7A7A7A" text
 
 Search Bar:
   - height: 44px
   - margin: 16px
-  - background: "#F2F2F7"
+  - background: "#E1DFDB"
   - border-radius: 8px
   - padding: 12px 16px
   - icon: search, 20px, left
@@ -225,14 +225,14 @@ Search Bar:
 Filter Button:
   - position: right of search
   - size: 44px x 44px
-  - background: "#F2F2F7"
+  - background: "#E1DFDB"
   - border-radius: 8px
   - icon: filter, 20px
 
 Table Header:
   - height: 44px
-  - background: "#F8F9FA"
-  - border-bottom: "1px solid #E5E5EA"
+  - background: "#ECE9E3"
+  - border-bottom: "1px solid #E3E1DC"
   - padding: 12px 16px
   - font-size: 14px
   - font-weight: 600
@@ -240,19 +240,19 @@ Table Header:
 Table Row:
   - height: 60px
   - padding: 12px 16px
-  - border-bottom: "1px solid #F2F2F7"
-  - background: "#FFFFFF"
-  - press-state: "#F2F2F7"
+  - border-bottom: "1px solid #E3E1DC"
+  - background: "#F7F6F3"
+  - press-state: "#E1DFDB"
 
 Selection Checkbox:
   - size: 20px
   - position: left margin
-  - color: "#007AFF"
+  - color: "#FF5C00"
   - border-radius: 4px
 
 Bulk Actions Bar:
   - height: 60px
-  - background: "#007AFF"
+  - background: "#FF5C00"
   - position: bottom, above tab bar
   - padding: 12px 16px
   - slide-up animation
@@ -306,7 +306,7 @@ Setting Item Layout:
 
 Toggle Switch:
   - size: 44px x 24px
-  - track: "#E5E5EA" (off), "#007AFF" (on)
+  - track: "#E3E1DC" (off), "#FF5C00" (on)
   - thumb: 20px circle, "#FFFFFF"
 ```
 
