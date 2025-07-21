@@ -97,15 +97,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F2F2F7',
     borderRadius: 8,
-    paddingHorizontal: 12,
-    height: 44,
+    paddingHorizontal: 10,
+    height: 36,
   },
   icon: {
     marginRight: 8,
   },
   input: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 15,
     color: '#1C1C1E',
   },
   clearButton: {

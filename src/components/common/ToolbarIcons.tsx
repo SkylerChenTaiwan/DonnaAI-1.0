@@ -45,7 +45,7 @@ export const ToolbarIcons: React.FC<ToolbarIconsProps> = ({
           activeOpacity={0.7}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Ionicons name="filter" size={20} color="#007AFF" />
+          <Ionicons name="filter" size={18} color="#007AFF" />
         </TouchableOpacity>
       )}
       {showSort && (
@@ -55,7 +55,7 @@ export const ToolbarIcons: React.FC<ToolbarIconsProps> = ({
           activeOpacity={0.7}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Ionicons name="swap-vertical" size={20} color="#007AFF" />
+          <Ionicons name="swap-vertical" size={18} color="#007AFF" />
         </TouchableOpacity>
       )}
       {showMultiSelect && (
@@ -70,7 +70,7 @@ export const ToolbarIcons: React.FC<ToolbarIconsProps> = ({
         >
           <Ionicons 
             name="checkmark-circle" 
-            size={20} 
+            size={18} 
             color={multiSelectMode ? "#FFFFFF" : "#007AFF"} 
           />
         </TouchableOpacity>
@@ -82,7 +82,7 @@ export const ToolbarIcons: React.FC<ToolbarIconsProps> = ({
           activeOpacity={0.7}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Ionicons name="list" size={20} color="#007AFF" />
+          <Ionicons name="list" size={18} color="#007AFF" />
         </TouchableOpacity>
       )}
     </View>
@@ -96,8 +96,8 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   iconButton: {
-    padding: 8,
-    borderRadius: 8,
+    padding: 6,
+    borderRadius: 6,
     backgroundColor: '#F2F2F7',
   },
   iconButtonActive: {

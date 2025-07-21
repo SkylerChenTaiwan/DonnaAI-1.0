@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#E5E5EA',
     alignItems: 'center',
@@ -293,11 +293,12 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     flex: 1,
-    marginRight: 16,
+    marginRight: 12,
   },
   toolbarButtons: {
     flexDirection: 'row',
     alignItems: 'center',
+    flexShrink: 0,
   },
   toolButton: {
     flexDirection: 'row',
