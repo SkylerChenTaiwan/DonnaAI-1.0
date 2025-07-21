@@ -10,10 +10,13 @@ import { ErrorBoundary } from '@/services/error/ErrorBoundary';
 import { errorLogger } from '@/services/error/ErrorLogger';
 import { environmentManager } from '@/config/environment';
 
-// 開發模式下載入團隊同步修復工具
+// 開發模式下載入除錯工具
 if (__DEV__) {
   import('@/utils/quick-fix-team-sync').catch(err => 
     console.warn('團隊同步修復工具載入失敗:', err)
+  );
+  import('@/utils/diagnose-permission').catch(err => 
+    console.warn('權限診斷工具載入失敗:', err)
   );
 }
 
