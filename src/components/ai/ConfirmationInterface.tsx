@@ -232,9 +232,11 @@ export const ConfirmationInterface = ({
         priority: task.priority,
         dueDate: task.dueDate,
         assigneeId: task.assignedTo || '',
-        relatedRecordId: recordId,
+        recordId: recordId,
         teamId: '', // 需要從使用者資訊獲取
-        organizationId: '' // 需要從使用者資訊獲取
+        organizationId: '', // 需要從使用者資訊獲取
+        type: 'once',
+        source: 'ai'
       }, 'current-user-id');
     }
   };
@@ -294,10 +296,11 @@ export const ConfirmationInterface = ({
               <Button
                 title={task.isSelected ? "✓" : ""}
                 onPress={() => handleTaskSelection(task.id, !task.isSelected)}
-                style={[
-                  styles.checkbox,
-                  ...(task.isSelected ? [styles.checkedBox] : [])
-                ]}
+                style={
+                  task.isSelected 
+                    ? [styles.checkbox, styles.checkedBox]
+                    : styles.checkbox
+                }
                 textStyle={styles.checkboxText}
               />
               <View style={[
@@ -333,14 +336,16 @@ export const ConfirmationInterface = ({
                 key={priority}
                 title={priority === 'low' ? '低' : priority === 'medium' ? '中' : '高'}
                 onPress={() => handleTaskModification(task.id, 'priority', priority)}
-                style={[
-                  styles.priorityButton,
-                  task.priority === priority && styles.selectedPriorityButton
-                ]}
-                textStyle={[
-                  styles.priorityButtonText,
-                  task.priority === priority && styles.selectedPriorityButtonText
-                ]}
+                style={
+                  task.priority === priority
+                    ? [styles.priorityButton, styles.selectedPriorityButton]
+                    : styles.priorityButton
+                }
+                textStyle={
+                  task.priority === priority
+                    ? [styles.priorityButtonText, styles.selectedPriorityButtonText]
+                    : styles.priorityButtonText
+                }
               />
             ))}
           </View>

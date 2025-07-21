@@ -9,11 +9,12 @@ import {
   TouchableOpacity,
   StyleSheet,
   Modal,
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Layout } from '@/components/common/Layout';
 import { DataTable } from '@/components/common/DataTable';
-import { InlineEditToggle } from '@/components/database/InlineEditToggle';
+import { EditableDataTable } from '@/components/common/EditableDataTable';
 import { SearchBar } from '@/components/common/SearchBar';
 import { ToolbarIcons } from '@/components/common/ToolbarIcons';
 import { FilterBadge, FilterCondition } from '@/components/common/FilterBadge';
@@ -25,6 +26,7 @@ interface SortConfig {
 import { BatchEditForm } from '@/components/database/BatchEditForm';
 import { ColumnSettingsModal } from '@/components/common/ColumnSettingsModal';
 import { useColumnSettings } from '@/hooks/useColumnSettings';
+import { BatchAction } from '@/components/common/BatchActionsModal';
 import { ExportOptions } from '@/components/database/ExportOptions';
 import { exportTableData } from '@/utils/tableExport';
 import { useCustomerStore } from '@/stores/customerStore';
@@ -85,6 +87,7 @@ export const DatabaseScreen: React.FC = () => {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [showColumnSettings, setShowColumnSettings] = useState(false);
   const [showExportOptions, setShowExportOptions] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
   
   const { user } = useAuthStore();
   const { customers, isLoading: customerLoading, fetchCustomers } = useCustomerStore();
@@ -682,10 +685,11 @@ export const DatabaseScreen: React.FC = () => {
                 ]}
                 onPress={() => {
                   setActiveTab(tab.id);
-                  // 切換 Tab 時清除選擇狀態
+                  // 切換 Tab 時清除選擇狀態和編輯模式
                   setMultiSelectMode(false);
                   setSelectedItems([]);
                   setShowBatchActions(false);
+                  setIsEditMode(false);
                 }}
                 activeOpacity={0.7}
               >
@@ -712,6 +716,38 @@ export const DatabaseScreen: React.FC = () => {
             style={styles.searchBar}
           />
         </View>
+        {/* 行內編輯模式切換按鈕 */}
+        <TouchableOpacity
+          style={[
+            styles.toolButton,
+            isEditMode && styles.toolButtonActive,
+          ]}
+          onPress={() => {
+            if (!user) {
+              Alert.alert('無權限', '您沒有編輯資料的權限');
+              return;
+            }
+            // 切換編輯模式時關閉多選模式
+            if (!isEditMode) {
+              setMultiSelectMode(false);
+              setSelectedItems([]);
+            }
+            setIsEditMode(!isEditMode);
+          }}
+          activeOpacity={0.7}
+        >
+          <Ionicons
+            name={isEditMode ? 'create' : 'create-outline'}
+            size={20}
+            color={isEditMode ? '#F7F6F3' : '#1A1A1A'}
+          />
+          <Text style={[
+            styles.toolButtonText,
+            isEditMode && styles.toolButtonTextActive
+          ]}>
+            編輯
+          </Text>
+        </TouchableOpacity>
         <ToolbarIcons
           multiSelectMode={multiSelectMode}
           showSort={false}
@@ -723,6 +759,10 @@ export const DatabaseScreen: React.FC = () => {
               // 關閉多選模式時清除選擇
               setSelectedItems([]);
               setShowBatchEdit(false);
+            }
+            // 切換多選模式時關閉編輯模式
+            if (newMode) {
+              setIsEditMode(false);
             }
           }}
           onColumnsPress={() => setShowColumnSettings(true)}
@@ -740,24 +780,51 @@ export const DatabaseScreen: React.FC = () => {
 
           {/* 資料表格 - 包裝在可滾動的容器中 */}
           <View style={styles.tableContainer}>
-            <InlineEditToggle
-              data={currentData.data}
-              columns={currentData.columns}
-              searchable={false}
-              selectable={multiSelectMode}
-              showCheckboxes={multiSelectMode}
-              onRowPress={handleRowPress}
-              onSelect={handleSelect}
-              refreshing={currentData.loading}
-              filters={activeFilters}
-              sortConfig={currentSort}
-              onRefresh={handleRefresh}
-              onSave={handleInlineEditSave}
-              onRowSave={handleInlineEditRowSave}
-              saveMode="batch"
-              allowEdit={!!user}
-              editPermissionCheck={checkEditPermission}
-            />
+            {isEditMode ? (
+              // 編輯模式：使用 EditableDataTable
+              <EditableDataTable
+                data={currentData.data}
+                columns={currentData.columns.map(col => ({
+                  ...col,
+                  editable: col.key !== 'id', // 除了 ID 以外都可編輯
+                  validator: col.key === 'email' ? ((value: any) => {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    return value && !emailRegex.test(value) ? '請輸入有效的電子郵件格式' : null;
+                  }) : col.key === 'phone' ? ((value: any) => {
+                    const phoneRegex = /^[\d\s\-+()]{8,}$/;
+                    return value && !phoneRegex.test(value) ? '請輸入有效的電話號碼' : null;
+                  }) : undefined,
+                }))}
+                searchable={false}
+                selectable={false}
+                showCheckboxes={false}
+                onRowPress={handleRowPress}
+                refreshing={currentData.loading}
+                filters={activeFilters}
+                sortConfig={currentSort}
+                onRefresh={handleRefresh}
+                onSave={handleInlineEditSave}
+                onRowSave={handleInlineEditRowSave}
+                saveMode="batch"
+                showSaveButton={true}
+                readOnly={false}
+              />
+            ) : (
+              // 檢視模式：使用標準 DataTable
+              <DataTable
+                data={currentData.data}
+                columns={currentData.columns}
+                searchable={false}
+                selectable={multiSelectMode}
+                showCheckboxes={multiSelectMode}
+                onRowPress={handleRowPress}
+                onSelect={handleSelect}
+                refreshing={currentData.loading}
+                filters={activeFilters}
+                sortConfig={currentSort}
+                onRefresh={handleRefresh}
+              />
+            )}
           </View>
         </View>
 

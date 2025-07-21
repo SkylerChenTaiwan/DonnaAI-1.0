@@ -305,15 +305,15 @@ export const testDataIntegrity = async (): Promise<TestSuite> => {
 
     // 測試關聯性
     const hasRelationships = testData.data.tasks.some(task => 
-      task.relatedCustomerId || task.relatedRecordId
+      (task.customerIds && task.customerIds.length > 0) || task.recordId
     );
     results.push({
       name: '資料關聯性',
       passed: hasRelationships,
       message: hasRelationships ? '資料間存在正確關聯' : '缺少資料關聯',
       details: {
-        tasksWithCustomers: testData.data.tasks.filter(t => t.relatedCustomerId).length,
-        tasksWithRecords: testData.data.tasks.filter(t => t.relatedRecordId).length,
+        tasksWithCustomers: testData.data.tasks.filter(t => t.customerIds && t.customerIds.length > 0).length,
+        tasksWithRecords: testData.data.tasks.filter(t => t.recordId).length,
       }
     });
 

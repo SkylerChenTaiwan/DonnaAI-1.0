@@ -1,8 +1,9 @@
 /**
  * 動作選擇 Popover 元件
+ * 支援兩階段選擇：資料類型 → 輸入方式
  */
 
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -15,6 +16,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 
 interface Action {
   id: string;
@@ -24,10 +26,17 @@ interface Action {
   icon: keyof typeof Ionicons.glyphMap;
 }
 
+interface InputMethod {
+  id: string;
+  title: string;
+  icon: keyof typeof Ionicons.glyphMap;
+  description: string;
+}
+
 interface ActionPopoverProps {
   visible: boolean;
   onClose: () => void;
-  onAction: (action: Action) => void;
+  onAction?: (action: Action) => void; // 保留向後相容
   fromRef: React.RefObject<any>;
   tabBarHeight?: number;
 }
@@ -56,6 +65,52 @@ const actions: Action[] = [
   },
 ];
 
+// 定義每個資料類型的輸入方式
+const inputMethods: Record<string, InputMethod[]> = {
+  customer: [
+    {
+      id: 'form',
+      title: '表格填寫',
+      icon: 'document-text',
+      description: '手動輸入客戶資料'
+    },
+    {
+      id: 'csv',
+      title: 'CSV 匯入',
+      icon: 'cloud-upload',
+      description: '批量匯入客戶名單'
+    }
+  ],
+  record: [
+    {
+      id: 'audio',
+      title: '語音錄製',
+      icon: 'mic',
+      description: '錄音並自動轉文字'
+    },
+    {
+      id: 'text',
+      title: '文字輸入',
+      icon: 'create',
+      description: '直接輸入文字內容'
+    }
+  ],
+  task: [
+    {
+      id: 'voice',
+      title: '語音輸入',
+      icon: 'mic',
+      description: '說出任務內容'
+    },
+    {
+      id: 'form',
+      title: '表格填寫',
+      icon: 'list',
+      description: '填寫詳細任務資訊'
+    }
+  ]
+};
+
 export const ActionPopover = ({
   visible,
   onClose,
@@ -63,9 +118,11 @@ export const ActionPopover = ({
   fromRef,
   tabBarHeight = 88,
 }: ActionPopoverProps) => {
+  const navigation = useNavigation<any>();
   const insets = useSafeAreaInsets();
   const slideAnim = React.useRef(new Animated.Value(0)).current;
   const [panelBottom, setPanelBottom] = React.useState(0);
+  const [selectedAction, setSelectedAction] = React.useState<Action | null>(null);
 
   React.useEffect(() => {
     if (visible && fromRef.current) {
@@ -106,6 +163,57 @@ export const ActionPopover = ({
     outputRange: [0, 0.3],
   });
 
+  // 處理動作選擇
+  const handleActionSelect = useCallback((action: Action) => {
+    // 如果該動作類型只有一種輸入方式，直接導航
+    const methods = inputMethods[action.type];
+    if (!methods || methods.length === 0) {
+      // 向後相容：如果沒有定義輸入方式，使用舊的回調
+      if (onAction) {
+        onAction(action);
+        onClose();
+      }
+      return;
+    }
+    
+    if (methods.length === 1) {
+      // 只有一種輸入方式，直接導航
+      navigateToModal(action.type, methods[0].id);
+    } else {
+      // 多種輸入方式，顯示選擇
+      setSelectedAction(action);
+    }
+  }, [onAction, onClose, navigateToModal]);
+
+  // 處理輸入方式選擇
+  const handleInputMethodSelect = useCallback((method: InputMethod) => {
+    if (selectedAction) {
+      navigateToModal(selectedAction.type, method.id);
+    }
+  }, [selectedAction, navigateToModal]);
+
+  // 導航到對應的 Modal
+  const navigateToModal = useCallback((type: string, mode: string) => {
+    onClose();
+    
+    switch (type) {
+      case 'customer':
+        navigation.navigate('CreateCustomerModal', { mode });
+        break;
+      case 'record':
+        navigation.navigate('CreateRecordModal', { mode });
+        break;
+      case 'task':
+        navigation.navigate('CreateTaskModal', { mode });
+        break;
+    }
+  }, [navigation, onClose]);
+
+  // 返回到動作選擇
+  const handleBack = useCallback(() => {
+    setSelectedAction(null);
+  }, []);
+
   return (
     <Modal
       visible={visible}
@@ -135,24 +243,55 @@ export const ActionPopover = ({
             },
           ]}
         >
-          <View style={styles.actionContainer}>
-            {actions.map((action) => (
-              <TouchableOpacity
-                key={action.id}
-                style={styles.actionButton}
-                onPress={() => {
-                  onAction(action);
-                  onClose();
-                }}
-                activeOpacity={0.7}
-              >
-                <View style={styles.actionIconContainer}>
-                  <Ionicons name={action.icon} size={24} color="#1A1A1A" />
-                </View>
-                <Text style={styles.actionTitle}>{action.title}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+          {!selectedAction ? (
+            // 第一階段：選擇資料類型
+            <View style={styles.actionContainer}>
+              {actions.map((action) => (
+                <TouchableOpacity
+                  key={action.id}
+                  style={styles.actionButton}
+                  onPress={() => handleActionSelect(action)}
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.actionIconContainer}>
+                    <Ionicons name={action.icon} size={24} color="#1A1A1A" />
+                  </View>
+                  <Text style={styles.actionTitle}>{action.title}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          ) : (
+            // 第二階段：選擇輸入方式
+            <View style={styles.inputMethodContainer}>
+              <View style={styles.inputMethodHeader}>
+                <TouchableOpacity onPress={handleBack} style={styles.backButton}>
+                  <Ionicons name="chevron-back" size={24} color="#1A1A1A" />
+                </TouchableOpacity>
+                <Text style={styles.inputMethodTitle}>{selectedAction.title}</Text>
+                <View style={styles.headerSpacer} />
+              </View>
+              
+              <View style={styles.methodList}>
+                {inputMethods[selectedAction.type]?.map((method) => (
+                  <TouchableOpacity
+                    key={method.id}
+                    style={styles.methodItem}
+                    onPress={() => handleInputMethodSelect(method)}
+                    activeOpacity={0.7}
+                  >
+                    <View style={styles.methodIconContainer}>
+                      <Ionicons name={method.icon} size={24} color="#FF6B35" />
+                    </View>
+                    <View style={styles.methodContent}>
+                      <Text style={styles.methodTitle}>{method.title}</Text>
+                      <Text style={styles.methodDescription}>{method.description}</Text>
+                    </View>
+                    <Ionicons name="chevron-forward" size={20} color="#C7C7CC" />
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+          )}
         </Animated.View>
       </View>
     </Modal>
@@ -209,5 +348,61 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#1A1A1A',
     textAlign: 'center',
+  },
+  // 輸入方式選擇樣式
+  inputMethodContainer: {
+    paddingBottom: 8,
+  },
+  inputMethodHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
+  },
+  backButton: {
+    padding: 4,
+  },
+  inputMethodTitle: {
+    flex: 1,
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#1A1A1A',
+    textAlign: 'center',
+  },
+  headerSpacer: {
+    width: 32,
+  },
+  methodList: {
+    paddingVertical: 8,
+  },
+  methodItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+  },
+  methodIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#FFF5F0',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  methodContent: {
+    flex: 1,
+  },
+  methodTitle: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#1A1A1A',
+    marginBottom: 2,
+  },
+  methodDescription: {
+    fontSize: 13,
+    color: '#8E8E93',
   },
 });

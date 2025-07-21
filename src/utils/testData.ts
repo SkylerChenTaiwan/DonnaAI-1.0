@@ -114,8 +114,8 @@ export const generateTestTasks = (customerIds: string[], recordIds: string[]): P
     status: statuses[Math.floor(Math.random() * statuses.length)],
     dueDate: generateRandomDate(-30), // 未來 30 天內
     assigneeId: 'test-user-id',
-    relatedCustomerId: Math.random() > 0.3 ? customerIds[Math.floor(Math.random() * customerIds.length)] : undefined,
-    relatedRecordId: Math.random() > 0.5 ? recordIds[Math.floor(Math.random() * recordIds.length)] : undefined,
+    customerIds: Math.random() > 0.3 ? [customerIds[Math.floor(Math.random() * customerIds.length)]] : undefined,
+    recordId: Math.random() > 0.5 ? recordIds[Math.floor(Math.random() * recordIds.length)] : undefined,
     tags: ['重要', '緊急', '客戶相關'].filter(() => Math.random() > 0.6),
     estimatedHours: Math.floor(Math.random() * 16) + 2, // 2-18 小時
     actualHours: Math.random() > 0.5 ? Math.floor(Math.random() * 20) + 1 : undefined,
