@@ -2,12 +2,13 @@
  * 表格資料管理 Hook
  */
 
-import { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { TableData, TableState } from '@/types/table';
 
 interface UseTableDataOptions {
   initialSortKey?: string;
   initialSortDirection?: 'asc' | 'desc';
+  filters?: { key: string; value: string; label?: string }[];
 }
 
 export const useTableData = (
@@ -25,6 +26,19 @@ export const useTableData = (
     selectedItems: new Set<string>(),
     filters: {},
   });
+
+  // 同步外部排序設定
+  React.useEffect(() => {
+    if (options?.initialSortKey !== undefined || options?.initialSortDirection !== undefined) {
+      setState(prevState => ({
+        ...prevState,
+        sortConfig: {
+          key: options.initialSortKey || null,
+          direction: options.initialSortDirection || 'asc',
+        },
+      }));
+    }
+  }, [options?.initialSortKey, options?.initialSortDirection]);
 
   // 搜尋功能
   const handleSearch = useCallback((query: string) => {
@@ -116,6 +130,20 @@ export const useTableData = (
       }
     });
 
+    // 外部篩選條件
+    if (options?.filters && options.filters.length > 0) {
+      options.filters.forEach((filter) => {
+        if (filter.value) {
+          result = result.filter((item) => {
+            const itemValue = String(item[filter.key] || '').toLowerCase();
+            const filterValue = filter.value.toLowerCase();
+            // 使用包含邏輯，而不是完全匹配
+            return itemValue.includes(filterValue);
+          });
+        }
+      });
+    }
+
     // 排序
     if (state.sortConfig.key) {
       result.sort((a, b) => {
@@ -136,7 +164,7 @@ export const useTableData = (
     }
 
     return result;
-  }, [data, state.searchQuery, state.filters, state.sortConfig]);
+  }, [data, state.searchQuery, state.filters, state.sortConfig, options?.filters]);
 
   return {
     data: processedData,

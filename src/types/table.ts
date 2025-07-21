@@ -40,4 +40,6 @@ export interface TableProps {
   onRowPress?: (item: TableData) => void;
   refreshing?: boolean;
   onRefresh?: () => void;
+  filters?: { key: string; value: string; label?: string }[]; // 新增：外部篩選條件
+  sortConfig?: { key: string; direction: 'asc' | 'desc'; label?: string } | null; // 新增：外部排序設定
 }

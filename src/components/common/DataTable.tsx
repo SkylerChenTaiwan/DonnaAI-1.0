@@ -26,6 +26,8 @@ export const DataTable = ({
   onRowPress,
   refreshing = false,
   onRefresh,
+  filters = [],
+  sortConfig: externalSortConfig,
 }: TableProps) => {
   const {
     data: processedData,
@@ -37,7 +39,11 @@ export const DataTable = ({
     toggleSelection,
     selectAll,
     clearSelection,
-  } = useTableData(data);
+  } = useTableData(data, { 
+    filters,
+    initialSortKey: externalSortConfig?.key,
+    initialSortDirection: externalSortConfig?.direction,
+  });
 
   // 處理選擇變更
   React.useEffect(() => {

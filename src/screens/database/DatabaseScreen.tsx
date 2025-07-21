@@ -2,18 +2,27 @@
  * 資料庫主頁面
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
+  Modal,
 } from 'react-native';
 import { Layout } from '@/components/common/Layout';
 import { DataTable } from '@/components/common/DataTable';
 import { SearchBar } from '@/components/common/SearchBar';
 import { ToolbarIcons } from '@/components/common/ToolbarIcons';
 import { FilterBadge, FilterCondition } from '@/components/common/FilterBadge';
+import { FilterModal } from '@/components/common/FilterModal';
+import { SortModal, SortConfig } from '@/components/common/SortModal';
+import { BatchActionsModal, BatchAction } from '@/components/common/BatchActionsModal';
+import { BatchEditForm } from '@/components/database/BatchEditForm';
+import { ColumnSettingsModal } from '@/components/common/ColumnSettingsModal';
+import { useColumnSettings } from '@/hooks/useColumnSettings';
+import { ExportOptions } from '@/components/database/ExportOptions';
+import { exportTableData } from '@/utils/tableExport';
 import { useCustomerStore } from '@/stores/customerStore';
 import { useRecordStore } from '@/stores/recordStore';
 import { useTaskStore } from '@/stores/taskStore';
@@ -66,6 +75,14 @@ export const DatabaseScreen: React.FC = () => {
   const [multiSelectMode, setMultiSelectMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilters, setActiveFilters] = useState<FilterCondition[]>([]);
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [showSortModal, setShowSortModal] = useState(false);
+  const [currentSort, setCurrentSort] = useState<SortConfig | null>(null);
+  const [showBatchActions, setShowBatchActions] = useState(false);
+  const [showBatchEdit, setShowBatchEdit] = useState(false);
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [showColumnSettings, setShowColumnSettings] = useState(false);
+  const [showExportOptions, setShowExportOptions] = useState(false);
   
   const { user } = useAuthStore();
   const { customers, isLoading: customerLoading, fetchCustomers } = useCustomerStore();
@@ -88,28 +105,28 @@ export const DatabaseScreen: React.FC = () => {
 
   // 客戶表格欄位
   const customerColumns: TableColumn[] = [
-    { key: 'name', title: '姓名', sortable: true },
-    { key: 'company', title: '公司', sortable: true },
-    { key: 'phone', title: '電話' },
-    { key: 'tags', title: '標籤' },
+    { key: 'name', title: '姓名', sortable: true, filterable: true },
+    { key: 'company', title: '公司', sortable: true, filterable: true },
+    { key: 'phone', title: '電話', filterable: true },
+    { key: 'tags', title: '標籤', filterable: true },
   ];
 
   // 紀錄表格欄位
   const recordColumns: TableColumn[] = [
-    { key: 'type', title: '類型', sortable: true, render: (value) => (
+    { key: 'type', title: '類型', sortable: true, filterable: true, render: (value) => (
       <Text style={styles.typeText}>{value === 'meeting' ? '會議' : '通話'}</Text>
     )},
-    { key: 'customerName', title: '客戶' },
-    { key: 'date', title: '日期', sortable: true },
-    { key: 'summary', title: '摘要' },
+    { key: 'customerName', title: '客戶', filterable: true },
+    { key: 'date', title: '日期', sortable: true, filterable: true },
+    { key: 'summary', title: '摘要', filterable: true },
   ];
 
   // 任務表格欄位
   const taskColumns: TableColumn[] = [
-    { key: 'title', title: '標題', sortable: true },
-    { key: 'assignee', title: '負責人' },
-    { key: 'dueDate', title: '到期日', sortable: true },
-    { key: 'status', title: '狀態', sortable: true, render: (value) => (
+    { key: 'title', title: '標題', sortable: true, filterable: true },
+    { key: 'assignee', title: '負責人', filterable: true },
+    { key: 'dueDate', title: '到期日', sortable: true, filterable: true },
+    { key: 'status', title: '狀態', sortable: true, filterable: true, render: (value) => (
       <View style={[styles.statusBadge, getTaskStatusStyle(value)]}>
         <Text style={styles.statusText}>
           {getTaskStatusText(value)}
@@ -163,6 +180,21 @@ export const DatabaseScreen: React.FC = () => {
   };
 
   const currentData = getCurrentData();
+  const allColumns = activeTab === 'customers' ? customerColumns : 
+                     activeTab === 'records' ? recordColumns : taskColumns;
+  
+  // 使用欄位設定管理
+  const { settings: columnSettings, saveSettings } = useColumnSettings(
+    activeTab,
+    allColumns.map(col => col.key)
+  );
+  
+  // 根據設定過濾顯示的欄位（使用 useMemo 優化）
+  const currentColumns = useMemo(() => {
+    return columnSettings 
+      ? allColumns.filter(col => columnSettings.visibleColumns.includes(col.key))
+      : allColumns;
+  }, [allColumns, columnSettings]);
 
   const handleRowPress = (item: any) => {
     // 只在非多選模式下導航到詳細頁面
@@ -182,7 +214,146 @@ export const DatabaseScreen: React.FC = () => {
   };
 
   const handleSelect = (selectedIds: string[]) => {
-    console.log('Selected items:', selectedIds);
+    setSelectedItems(selectedIds);
+    // 當有選中項目且在多選模式下時，顯示批量操作
+    if (selectedIds.length > 0 && multiSelectMode) {
+      setShowBatchActions(true);
+    }
+  };
+
+  // 取得當前 Tab 的批量操作（使用 useMemo 優化）
+  const batchActions = useMemo((): BatchAction[] => {
+    switch (activeTab) {
+      case 'customers':
+        return [
+          { id: 'edit', label: '批量編輯', icon: 'create-outline', type: 'edit' },
+          { id: 'tag', label: '新增標籤', icon: 'pricetag-outline', type: 'tag' },
+          { id: 'export', label: '匯出資料', icon: 'download-outline', type: 'export' },
+          { 
+            id: 'delete', 
+            label: '批量刪除', 
+            icon: 'trash-outline', 
+            type: 'delete',
+            confirmRequired: true,
+            confirmMessage: `確定要刪除 ${selectedItems.length} 個客戶嗎？此操作無法撤銷。`
+          },
+        ];
+      case 'records':
+        return [
+          { id: 'export', label: '匯出資料', icon: 'download-outline', type: 'export' },
+          { 
+            id: 'delete', 
+            label: '批量刪除', 
+            icon: 'trash-outline', 
+            type: 'delete',
+            confirmRequired: true,
+            confirmMessage: `確定要刪除 ${selectedItems.length} 筆紀錄嗎？此操作無法撤銷。`
+          },
+        ];
+      case 'tasks':
+        return [
+          { id: 'edit', label: '批量編輯', icon: 'create-outline', type: 'edit' },
+          { id: 'assign', label: '指派給', icon: 'person-outline', type: 'assign' },
+          { 
+            id: 'delete', 
+            label: '批量刪除', 
+            icon: 'trash-outline', 
+            type: 'delete',
+            confirmRequired: true,
+            confirmMessage: `確定要刪除 ${selectedItems.length} 個任務嗎？此操作無法撤銷。`
+          },
+        ];
+      default:
+        return [];
+    }
+  }, [activeTab, selectedItems.length]);
+
+  // 處理批量操作
+  const handleBatchAction = async (action: BatchAction) => {
+    switch (action.id) {
+      case 'edit':
+        setShowBatchActions(false);
+        setShowBatchEdit(true);
+        break;
+      case 'delete':
+        // TODO: 實作批量刪除
+        console.log('批量刪除:', selectedItems);
+        break;
+      case 'export':
+        setShowBatchActions(false);
+        setShowExportOptions(true);
+        break;
+      case 'tag':
+        // TODO: 實作批量標籤
+        console.log('新增標籤:', selectedItems);
+        break;
+      case 'assign':
+        // TODO: 實作批量指派
+        console.log('批量指派:', selectedItems);
+        break;
+    }
+  };
+
+  // 取得批量編輯欄位
+  const getBatchEditFields = () => {
+    switch (activeTab) {
+      case 'customers':
+        return [
+          { key: 'company', label: '公司', type: 'text' as const },
+          { key: 'tags', label: '標籤', type: 'tags' as const },
+          { key: 'assignedTo', label: '負責人', type: 'select' as const, options: [
+            { label: '張三', value: 'user1' },
+            { label: '李四', value: 'user2' },
+          ]},
+        ];
+      case 'tasks':
+        return [
+          { key: 'status', label: '狀態', type: 'select' as const, options: [
+            { label: '待開始', value: 'todo' },
+            { label: '進行中', value: 'in_progress' },
+            { label: '已完成', value: 'completed' },
+            { label: '已取消', value: 'cancelled' },
+          ]},
+          { key: 'assignee', label: '負責人', type: 'select' as const, options: [
+            { label: '張三', value: 'user1' },
+            { label: '李四', value: 'user2' },
+          ]},
+          { key: 'priority', label: '優先級', type: 'select' as const, options: [
+            { label: '高', value: 'high' },
+            { label: '中', value: 'medium' },
+            { label: '低', value: 'low' },
+          ]},
+        ];
+      default:
+        return [];
+    }
+  };
+
+  // 處理批量編輯提交
+  const handleBatchEditSubmit = async (updates: Record<string, any>) => {
+    // TODO: 實作批量更新
+    console.log('批量更新:', selectedItems, updates);
+    setShowBatchEdit(false);
+    setMultiSelectMode(false);
+    setSelectedItems([]);
+  };
+
+  // 取得選中的資料
+  const getSelectedData = () => {
+    return currentData.data.filter(item => selectedItems.includes(item.id));
+  };
+
+  // 處理資料匯出
+  const handleExport = async (options: any) => {
+    try {
+      const selectedData = getSelectedData();
+      await exportTableData(selectedData, currentColumns, options);
+      setShowExportOptions(false);
+      setMultiSelectMode(false);
+      setSelectedItems([]);
+    } catch (error) {
+      console.error('匯出失敗:', error);
+    }
   };
 
   return (
@@ -196,7 +367,13 @@ export const DatabaseScreen: React.FC = () => {
               styles.tab,
               activeTab === tab.id && styles.activeTab,
             ]}
-            onPress={() => setActiveTab(tab.id)}
+            onPress={() => {
+              setActiveTab(tab.id);
+              // 切換 Tab 時清除選擇狀態
+              setMultiSelectMode(false);
+              setSelectedItems([]);
+              setShowBatchActions(false);
+            }}
             activeOpacity={0.7}
           >
             <Text
@@ -229,10 +406,16 @@ export const DatabaseScreen: React.FC = () => {
         </View>
         <ToolbarIcons
           multiSelectMode={multiSelectMode}
-          onFilterPress={() => console.log('Filter pressed')}
-          onSortPress={() => console.log('Sort pressed')}
-          onMultiSelectPress={() => setMultiSelectMode(!multiSelectMode)}
-          onColumnsPress={() => console.log('Columns pressed')}
+          onFilterPress={() => setShowFilterModal(true)}
+          onSortPress={() => setShowSortModal(true)}
+          onMultiSelectPress={() => {
+            setMultiSelectMode(!multiSelectMode);
+            if (multiSelectMode) {
+              setSelectedItems([]);
+              setShowBatchActions(false);
+            }
+          }}
+          onColumnsPress={() => setShowColumnSettings(true)}
         />
       </View>
       
@@ -255,6 +438,8 @@ export const DatabaseScreen: React.FC = () => {
         onRowPress={handleRowPress}
         onSelect={handleSelect}
         refreshing={currentData.loading}
+        filters={activeFilters}
+        sortConfig={currentSort}
         onRefresh={() => {
           // 重新載入資料
           if (!user) return;
@@ -272,6 +457,84 @@ export const DatabaseScreen: React.FC = () => {
           }
         }}
       />
+
+      {/* 篩選器 Modal */}
+      <FilterModal
+        visible={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
+        columns={currentColumns}
+        filters={activeFilters}
+        onApply={setActiveFilters}
+        tabType={activeTab}
+      />
+
+      {/* 排序選擇器 Modal */}
+      <SortModal
+        visible={showSortModal}
+        onClose={() => setShowSortModal(false)}
+        columns={currentColumns}
+        currentSort={currentSort}
+        onApply={setCurrentSort}
+      />
+
+      {/* 批量操作 Modal */}
+      <BatchActionsModal
+        visible={showBatchActions}
+        onClose={() => setShowBatchActions(false)}
+        selectedCount={selectedItems.length}
+        actions={batchActions}
+        onAction={handleBatchAction}
+      />
+
+      {/* 批量編輯 Modal */}
+      {showBatchEdit && (
+        <Modal
+          visible={showBatchEdit}
+          animationType="slide"
+          presentationStyle="fullScreen"
+          onRequestClose={() => setShowBatchEdit(false)}
+        >
+          <BatchEditForm
+            fields={getBatchEditFields()}
+            selectedCount={selectedItems.length}
+            onSubmit={handleBatchEditSubmit}
+            onCancel={() => setShowBatchEdit(false)}
+            tabType={activeTab}
+          />
+        </Modal>
+      )}
+
+      {/* 欄位設定 Modal */}
+      <ColumnSettingsModal
+        visible={showColumnSettings}
+        onClose={() => setShowColumnSettings(false)}
+        columns={allColumns}
+        visibleColumns={columnSettings?.visibleColumns || allColumns.map(col => col.key)}
+        onApply={async (visibleColumns) => {
+          await saveSettings({
+            visibleColumns,
+            columnOrder: visibleColumns,
+          });
+          setShowColumnSettings(false);
+        }}
+      />
+
+      {/* 匯出選項 Modal */}
+      {showExportOptions && (
+        <Modal
+          visible={showExportOptions}
+          animationType="slide"
+          presentationStyle="fullScreen"
+          onRequestClose={() => setShowExportOptions(false)}
+        >
+          <ExportOptions
+            data={getSelectedData()}
+            columns={currentColumns}
+            onExport={handleExport}
+            onCancel={() => setShowExportOptions(false)}
+          />
+        </Modal>
+      )}
     </Layout>
   );
 };
