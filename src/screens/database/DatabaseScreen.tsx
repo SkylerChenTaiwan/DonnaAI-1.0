@@ -320,33 +320,60 @@ export const DatabaseScreen: React.FC = () => {
 
   // 取得批量編輯欄位
   const getBatchEditFields = () => {
+    // 獲取團隊成員作為選項（暫時使用模擬資料）
+    const teamMembers = [
+      { label: '張三', value: 'user1' },
+      { label: '李四', value: 'user2' },
+      { label: '王五', value: 'user3' },
+    ];
+
     switch (activeTab) {
       case 'customers':
         return [
           { key: 'company', label: '公司', type: 'text' as const },
+          { key: 'email', label: '電子郵件', type: 'text' as const },
+          { key: 'phone', label: '電話', type: 'text' as const },
           { key: 'tags', label: '標籤', type: 'tags' as const },
-          { key: 'assignedTo', label: '負責人', type: 'select' as const, options: [
-            { label: '張三', value: 'user1' },
-            { label: '李四', value: 'user2' },
+          { key: 'assignedTo', label: '負責人', type: 'select' as const, options: teamMembers },
+          { key: 'notes', label: '備註', type: 'text' as const },
+        ];
+      case 'records':
+        return [
+          { key: 'type', label: '類型', type: 'select' as const, options: [
+            { label: '會議', value: 'meeting' },
+            { label: '電話', value: 'call' },
+            { label: '筆記', value: 'note' },
+            { label: '其他', value: 'other' },
           ]},
+          { key: 'status', label: '狀態', type: 'select' as const, options: [
+            { label: '草稿', value: 'draft' },
+            { label: '處理中', value: 'processing' },
+            { label: '已完成', value: 'completed' },
+          ]},
+          { key: 'location', label: '地點', type: 'text' as const },
+          { key: 'title', label: '標題', type: 'text' as const },
         ];
       case 'tasks':
         return [
           { key: 'status', label: '狀態', type: 'select' as const, options: [
-            { label: '待開始', value: 'todo' },
+            { label: '待辦', value: 'todo' },
             { label: '進行中', value: 'in_progress' },
             { label: '已完成', value: 'completed' },
             { label: '已取消', value: 'cancelled' },
           ]},
-          { key: 'assignee', label: '負責人', type: 'select' as const, options: [
-            { label: '張三', value: 'user1' },
-            { label: '李四', value: 'user2' },
-          ]},
+          { key: 'assigneeId', label: '負責人', type: 'select' as const, options: teamMembers },
           { key: 'priority', label: '優先級', type: 'select' as const, options: [
+            { label: '緊急', value: 'urgent' },
             { label: '高', value: 'high' },
             { label: '中', value: 'medium' },
             { label: '低', value: 'low' },
           ]},
+          { key: 'type', label: '類型', type: 'select' as const, options: [
+            { label: '已排程', value: 'scheduled' },
+            { label: '未排程', value: 'unscheduled' },
+            { label: '待定', value: 'pending' },
+          ]},
+          { key: 'tags', label: '標籤', type: 'tags' as const },
         ];
       default:
         return [];
@@ -430,13 +457,30 @@ export const DatabaseScreen: React.FC = () => {
       return;
     }
 
+    // 處理特殊欄位（如標籤）
+    const processedUpdates = { ...updates };
+    if (processedUpdates.tags && typeof processedUpdates.tags === 'string') {
+      // 將逗號分隔的字串轉換為陣列
+      processedUpdates.tags = processedUpdates.tags
+        .split(',')
+        .map((tag: string) => tag.trim())
+        .filter((tag: string) => tag.length > 0);
+    }
+
+    console.log('🔄 批量更新開始:', {
+      activeTab,
+      selectedItems,
+      processedUpdates,
+      userId: user.id
+    });
+
     try {
       // 根據當前標籤頁執行不同的批量更新
       switch (activeTab) {
         case 'customers':
           await useCustomerStore.getState().batchUpdateCustomers(
             selectedItems,
-            updates,
+            processedUpdates,
             user.id
           );
           break;
@@ -444,7 +488,7 @@ export const DatabaseScreen: React.FC = () => {
         case 'records':
           await useRecordStore.getState().batchUpdateRecords(
             selectedItems,
-            updates,
+            processedUpdates,
             user.id
           );
           break;
@@ -455,7 +499,7 @@ export const DatabaseScreen: React.FC = () => {
             {
               taskIds: selectedItems,
               operation: 'update',
-              updates
+              updates: processedUpdates
             },
             user
           );
