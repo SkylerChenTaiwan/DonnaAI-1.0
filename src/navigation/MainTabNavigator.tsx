@@ -76,15 +76,15 @@ export const MainTabNavigator = () => {
 
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-        tabBarActiveTintColor: '#FF5C00',
-        tabBarInactiveTintColor: '#7A7A7A',
+        tabBarActiveTintColor: '#1A1A1A',
+        tabBarInactiveTintColor: '#999999',
         tabBarStyle: {
           height: 88,
           paddingBottom: 20, // 增加底部安全間距
           paddingTop: 10,
-          backgroundColor: '#F7F6F3',
+          backgroundColor: '#FFFFFF',
           borderTopWidth: 1,
-          borderTopColor: '#E3E1DC',
+          borderTopColor: '#E5E7EB',
           position: 'absolute',
           bottom: 0,
           elevation: 0,

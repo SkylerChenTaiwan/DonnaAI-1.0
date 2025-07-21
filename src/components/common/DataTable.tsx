@@ -78,7 +78,7 @@ export const DataTable = ({
                 : 'square-outline'
             }
             size={20}
-            color="#FF5C00"
+            color="#1A1A1A"
           />
         </TouchableOpacity>
       )}
@@ -104,7 +104,7 @@ export const DataTable = ({
                   : 'chevron-expand'
               }
               size={14}
-              color={sortConfig.key === column.key ? '#FF5C00' : '#BEBEBE'}
+              color={sortConfig.key === column.key ? '#1A1A1A' : '#999999'}
             />
           )}
         </TouchableOpacity>
@@ -130,7 +130,7 @@ export const DataTable = ({
               <Ionicons
                 name={selectedItems.has(item.id) ? 'checkbox' : 'square-outline'}
                 size={20}
-                color="#FF5C00"
+                color="#1A1A1A"
               />
             </View>
             {columns.map((column) => (

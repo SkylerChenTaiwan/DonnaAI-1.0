@@ -131,7 +131,7 @@ export const SortModal: React.FC<SortModalProps> = ({
                         <Ionicons
                           name={sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'}
                           size={16}
-                          color="#FF5C00"
+                          color="#999999"
                         />
                         <Text style={styles.directionText}>
                           {sortDirection === 'asc' ? '升序' : '降序'}
@@ -140,7 +140,7 @@ export const SortModal: React.FC<SortModalProps> = ({
                     )}
                   </View>
                   {isSelected && (
-                    <Ionicons name="checkmark" size={20} color="#007AFF" />
+                    <Ionicons name="checkmark" size={20} color="#1A1A1A" />
                   )}
                 </TouchableOpacity>
               );

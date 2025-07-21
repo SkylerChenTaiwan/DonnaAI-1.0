@@ -98,7 +98,7 @@ export const EnhancedDashboard: React.FC = () => {
           {statsCards.map((card) => (
             <View key={card.id} style={styles.statsCard}>
               <View style={styles.statsCardHeader}>
-                <Ionicons name={card.icon} size={20} color="#007AFF" />
+                <Ionicons name={card.icon} size={20} color="#1A1A1A" />
                 <Text style={styles.statsChange}>{card.change}</Text>
               </View>
               <Text style={styles.statsValue}>{card.value}</Text>
@@ -119,7 +119,7 @@ export const EnhancedDashboard: React.FC = () => {
                 activeOpacity={0.7}
               >
                 <View style={styles.quickActionIcon}>
-                  <Ionicons name={action.icon} size={24} color="#007AFF" />
+                  <Ionicons name={action.icon} size={24} color="#1A1A1A" />
                 </View>
                 <Text style={styles.quickActionTitle}>{action.title}</Text>
               </TouchableOpacity>

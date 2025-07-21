@@ -89,7 +89,7 @@ export const CustomersScreen: React.FC = () => {
     return (
       <Layout>
         <View style={styles.centerContainer}>
-          <ActivityIndicator size="large" color="#007AFF" />
+          <ActivityIndicator size="large" color="#1A1A1A" />
           <Text style={styles.loadingText}>載入客戶資料中...</Text>
         </View>
       </Layout>

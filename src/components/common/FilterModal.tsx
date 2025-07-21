@@ -116,7 +116,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
             onPress={handleAddCondition}
             activeOpacity={0.7}
           >
-            <Ionicons name="add-circle-outline" size={24} color="#FF5C00" />
+            <Ionicons name="add-circle-outline" size={24} color="#1A1A1A" />
             <Text style={styles.addButtonText}>新增篩選條件</Text>
           </TouchableOpacity>
 

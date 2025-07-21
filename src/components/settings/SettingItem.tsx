@@ -35,7 +35,7 @@ export const SettingItem = ({
             onValueChange={onValueChange}
             trackColor={{
               false: '#E3E1DC',
-              true: '#FF5C00',
+              true: '#1A1A1A',
             }}
             thumbColor="#F7F6F3"
           />
@@ -71,7 +71,7 @@ export const SettingItem = ({
       <View style={styles.leftContent}>
         {icon && (
           <View style={styles.iconContainer}>
-            <Ionicons name={icon as any} size={20} color="#FF5C00" />
+            <Ionicons name={icon as any} size={20} color="#1A1A1A" />
           </View>
         )}
         <View style={styles.textContainer}>

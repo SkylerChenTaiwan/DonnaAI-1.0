@@ -127,7 +127,7 @@ export const SalespersonDashboard: React.FC = () => {
           <View style={styles.activityCard}>
             <View style={styles.activityItem}>
               <View style={styles.activityIcon}>
-                <Ionicons name="calendar" size={16} color="#007AFF" />
+                <Ionicons name="calendar" size={16} color="#1A1A1A" />
               </View>
               <View style={styles.activityContent}>
                 <Text style={styles.activityTitle}>與王先生會議</Text>

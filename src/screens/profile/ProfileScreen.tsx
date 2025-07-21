@@ -89,7 +89,7 @@ export const ProfileScreen: React.FC = () => {
               >
                 <View style={styles.settingLeft}>
                   <View style={styles.settingIcon}>
-                    <Ionicons name={item.icon} size={20} color="#007AFF" />
+                    <Ionicons name={item.icon} size={20} color="#1A1A1A" />
                   </View>
                   <View style={styles.settingContent}>
                     <Text style={styles.settingTitle}>{item.title}</Text>

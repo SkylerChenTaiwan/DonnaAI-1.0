@@ -5,30 +5,31 @@
 ### 色彩系統
 ```yaml
 Primary Colors:
-  - primary: "#FF5C00"          # 主橘色（選中/互動強調）
-  - primary-light: "#FFA87A"    # 橘色 hover 狀態
-  - primary-dark: "#C74A00"     # 深橘按下狀態
+  - primary: "#1A1A1A"          # 深灰黑（主要互動元素、選中狀態）
+  - accent: "#FF5C00"           # 橘色（極少使用，只用於關鍵 CTA）
+  - primary-hover: "#333333"    # 深灰 hover 狀態
+  - primary-pressed: "#000000"  # 純黑按下狀態
 
 Background Colors:
-  - background: "#ECE9E3"       # 主背景色（沙灰米白）
-  - card-background: "#F7F6F3"  # 卡片背景（略白）
-  - section-background: "#E1DFDB" # 區塊背景（低對比灰沙色）
+  - background: "#F5F5F5"       # 淺灰白（主背景）
+  - card-background: "#FFFFFF"  # 純白（卡片背景）
+  - section-background: "#F0F0F0" # 區塊背景（低對比灰）
 
 Text Colors:
-  - text-primary: "#1A1A1A"     # 主要文字（霧黑）
-  - text-secondary: "#7A7A7A"   # 次要文字（柔和灰）
-  - text-disabled: "#BEBEBE"    # 停用文字（淡灰）
+  - text-primary: "#1A1A1A"     # 深灰黑（主要文字）
+  - text-secondary: "#666666"   # 中灰（次要文字）
+  - text-tertiary: "#999999"    # 淺灰（輔助文字）
 
 Status Colors:
-  - success: "#227A63"          # 深墨綠（成功）
-  - warning: "#B96A00"          # 橘褐色（警告）
-  - error: "#A94438"            # 磚紅（錯誤）
-  - info: "#5A6770"             # 中性灰藍（資訊）
+  - success: "#22C55E"          # 綠色（成功）
+  - warning: "#F59E0B"          # 黃橙色（警告）
+  - error: "#EF4444"            # 紅色（錯誤）
+  - info: "#6B7280"             # 中性灰（資訊）
 
 Border Colors:
-  - border-light: "#E3E1DC"     # 卡片邊界用
-  - border-medium: "#CAC7C1"    # 分隔線用
-  - border-dark: "#9C9993"      # 強調輪廓用
+  - border-light: "#E5E7EB"     # 淺灰邊框
+  - border-medium: "#D1D5DB"    # 中灰邊框
+  - border-dark: "#9CA3AF"      # 深灰邊框
 ```
 
 ### 字體系統

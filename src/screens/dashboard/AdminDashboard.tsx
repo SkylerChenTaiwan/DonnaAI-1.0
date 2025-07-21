@@ -171,7 +171,7 @@ export const AdminDashboard: React.FC = () => {
             
             <View style={styles.activityItem}>
               <View style={styles.activityIcon}>
-                <Ionicons name="checkmark-circle" size={16} color="#007AFF" />
+                <Ionicons name="checkmark-circle" size={16} color="#1A1A1A" />
               </View>
               <View style={styles.activityContent}>
                 <Text style={styles.activityTitle}>系統備份完成</Text>

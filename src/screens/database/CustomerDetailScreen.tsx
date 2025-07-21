@@ -74,7 +74,7 @@ export const CustomerDetailScreen: React.FC = () => {
     return (
       <Layout style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#007AFF" />
+          <ActivityIndicator size="large" color="#1A1A1A" />
           <Text style={styles.loadingText}>載入中...</Text>
         </View>
       </Layout>
@@ -86,7 +86,7 @@ export const CustomerDetailScreen: React.FC = () => {
       {/* 自定義標題列 */}
       <View style={styles.header}>
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-          <Ionicons name="chevron-back" size={24} color="#007AFF" />
+          <Ionicons name="chevron-back" size={24} color="#1A1A1A" />
         </TouchableOpacity>
         <Text style={styles.headerTitle} numberOfLines={1}>
           {customer.name}
@@ -95,7 +95,7 @@ export const CustomerDetailScreen: React.FC = () => {
           style={styles.editButton}
           onPress={() => navigation.navigate('EditCustomer', { customerId })}
         >
-          <Ionicons name="create-outline" size={24} color="#007AFF" />
+          <Ionicons name="create-outline" size={24} color="#1A1A1A" />
         </TouchableOpacity>
       </View>
 

@@ -83,7 +83,7 @@ export const BatchActionsModal: React.FC<BatchActionsModalProps> = ({
 
           {loading ? (
             <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color="#FF5C00" />
+              <ActivityIndicator size="large" color="#1A1A1A" />
               <Text style={styles.loadingText}>處理中...</Text>
             </View>
           ) : (

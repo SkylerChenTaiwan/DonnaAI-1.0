@@ -66,7 +66,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
 
       {loading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#FF5C00" />
+          <ActivityIndicator size="large" color="#1A1A1A" />
           <Text style={styles.loadingText}>準備匯出...</Text>
         </View>
       ) : (
@@ -86,7 +86,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
                 <Ionicons
                   name="document-text-outline"
                   size={24}
-                  color={format === 'csv' ? '#FF5C00' : '#7A7A7A'}
+                  color={format === 'csv' ? '#1A1A1A' : '#999999'}
                 />
                 <Text
                   style={[
@@ -112,7 +112,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
                 <Ionicons
                   name="code-outline"
                   size={24}
-                  color={format === 'json' ? '#FF5C00' : '#7A7A7A'}
+                  color={format === 'json' ? '#1A1A1A' : '#999999'}
                 />
                 <Text
                   style={[
@@ -137,7 +137,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
                 <Switch
                   value={includeHeaders}
                   onValueChange={setIncludeHeaders}
-                  trackColor={{ false: '#E3E1DC', true: '#FF5C00' }}
+                  trackColor={{ false: '#E3E1DC', true: '#1A1A1A' }}
                 />
               </View>
             </View>

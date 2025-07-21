@@ -112,7 +112,7 @@ export const EditCustomerModal: React.FC = () => {
     return (
       <Layout style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#007AFF" />
+          <ActivityIndicator size="large" color="#1A1A1A" />
           <Text style={styles.loadingText}>載入中...</Text>
         </View>
       </Layout>
@@ -124,7 +124,7 @@ export const EditCustomerModal: React.FC = () => {
       {/* 標題列 */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerButton}>
-          <Ionicons name="close" size={24} color="#007AFF" />
+          <Ionicons name="close" size={24} color="#1A1A1A" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>編輯客戶</Text>
         <TouchableOpacity 
@@ -133,7 +133,7 @@ export const EditCustomerModal: React.FC = () => {
           disabled={isSaving}
         >
           {isSaving ? (
-            <ActivityIndicator size="small" color="#007AFF" />
+            <ActivityIndicator size="small" color="#1A1A1A" />
           ) : (
             <Text style={styles.saveButtonText}>儲存</Text>
           )}
@@ -206,7 +206,7 @@ export const EditCustomerModal: React.FC = () => {
                 onSubmitEditing={handleAddTag}
               />
               <TouchableOpacity onPress={handleAddTag} style={styles.addTagButton}>
-                <Ionicons name="add-circle" size={24} color="#007AFF" />
+                <Ionicons name="add-circle" size={24} color="#1A1A1A" />
               </TouchableOpacity>
             </View>
             <View style={styles.tagList}>
