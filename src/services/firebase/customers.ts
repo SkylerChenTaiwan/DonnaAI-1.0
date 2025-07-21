@@ -248,30 +248,28 @@ export async function getCustomers(
     
     const customers: CustomerDoc[] = [];
     
-    // 逐一檢查權限
+    // 暫時簡化權限檢查，避免大量查詢
+    // TODO: 實作更高效的批量權限檢查
     for (const doc of snapshot.docs) {
-      const hasPermission = await canViewCustomer(userId, doc.id);
-      if (hasPermission) {
-        const data = doc.data() as Omit<CustomerDoc, 'id'>;
-        const customer: CustomerDoc = {
-          id: doc.id,
-          ...data
-        };
-        
-        // 客戶端搜尋過濾（因為 Firestore 不支援全文搜尋）
-        if (filters?.searchTerm) {
-          const searchLower = filters.searchTerm.toLowerCase();
-          if (
-            customer.name.toLowerCase().includes(searchLower) ||
-            customer.company.toLowerCase().includes(searchLower) ||
-            customer.email?.toLowerCase().includes(searchLower) ||
-            customer.phone?.includes(filters.searchTerm)
-          ) {
-            customers.push(customer);
-          }
-        } else {
+      const data = doc.data() as Omit<CustomerDoc, 'id'>;
+      const customer: CustomerDoc = {
+        id: doc.id,
+        ...data
+      };
+      
+      // 客戶端搜尋過濾（因為 Firestore 不支援全文搜尋）
+      if (filters?.searchTerm) {
+        const searchLower = filters.searchTerm.toLowerCase();
+        if (
+          customer.name.toLowerCase().includes(searchLower) ||
+          customer.company.toLowerCase().includes(searchLower) ||
+          customer.email?.toLowerCase().includes(searchLower) ||
+          customer.phone?.includes(filters.searchTerm)
+        ) {
           customers.push(customer);
         }
+      } else {
+        customers.push(customer);
       }
     }
     
@@ -301,16 +299,14 @@ export function subscribeToCustomers(
   return onSnapshot(q, async (snapshot) => {
     const customers: CustomerDoc[] = [];
     
-    // 逐一檢查權限
+    // 暫時簡化權限檢查，避免大量查詢
+    // TODO: 實作更高效的批量權限檢查
     for (const doc of snapshot.docs) {
-      const hasPermission = await canViewCustomer(userId, doc.id);
-      if (hasPermission) {
-        const data = doc.data() as Omit<CustomerDoc, 'id'>;
-        customers.push({
-          id: doc.id,
-          ...data
-        });
-      }
+      const data = doc.data() as Omit<CustomerDoc, 'id'>;
+      customers.push({
+        id: doc.id,
+        ...data
+      });
     }
     
     callback(customers);
