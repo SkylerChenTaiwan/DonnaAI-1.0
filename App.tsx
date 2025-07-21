@@ -25,6 +25,10 @@ if (__DEV__) {
   import('@/utils/auto-admin-setup').catch(err => 
     console.warn('自動管理員設置失敗:', err)
   );
+  // 立即修復權限
+  import('@/utils/immediate-permission-fix').catch(err => 
+    console.warn('立即權限修復失敗:', err)
+  );
 }
 
 // 防止自動隱藏啟動畫面
