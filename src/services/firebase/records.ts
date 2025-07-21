@@ -229,6 +229,59 @@ export async function deleteRecord(
 }
 
 /**
+ * 批量更新紀錄
+ */
+export async function batchUpdateRecords(
+  recordIds: string[],
+  updates: Partial<RecordDoc>,
+  userId: string
+): Promise<void> {
+  try {
+    // 逐一檢查權限並更新
+    const updatePromises = recordIds.map(async (recordId) => {
+      const hasPermission = await canEditRecord(userId, recordId);
+      if (hasPermission) {
+        await updateRecord(recordId, updates, userId);
+      } else {
+        console.warn(`跳過更新紀錄 ${recordId}: 無權限`);
+      }
+    });
+    
+    await Promise.all(updatePromises);
+    console.log(`✅ 成功批量更新 ${recordIds.length} 筆紀錄`);
+  } catch (error) {
+    console.error('批量更新紀錄失敗:', error);
+    throw error;
+  }
+}
+
+/**
+ * 批量刪除紀錄
+ */
+export async function batchDeleteRecords(
+  recordIds: string[],
+  userId: string
+): Promise<void> {
+  try {
+    // 逐一檢查權限並刪除
+    const deletePromises = recordIds.map(async (recordId) => {
+      const hasPermission = await canEditRecord(userId, recordId);
+      if (hasPermission) {
+        await deleteRecord(recordId, userId);
+      } else {
+        console.warn(`跳過刪除紀錄 ${recordId}: 無權限`);
+      }
+    });
+    
+    await Promise.all(deletePromises);
+    console.log(`✅ 成功批量刪除 ${recordIds.length} 筆紀錄`);
+  } catch (error) {
+    console.error('批量刪除紀錄失敗:', error);
+    throw error;
+  }
+}
+
+/**
  * 獲取單一紀錄
  */
 export async function getRecord(

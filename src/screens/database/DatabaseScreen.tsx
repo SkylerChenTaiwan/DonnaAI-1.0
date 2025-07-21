@@ -301,8 +301,7 @@ export const DatabaseScreen: React.FC = () => {
         setShowBatchEdit(true);
         break;
       case 'delete':
-        // TODO: 實作批量刪除
-        console.log('批量刪除:', selectedItems);
+        handleBatchDelete();
         break;
       case 'export':
         setShowBatchActions(false);
@@ -354,13 +353,139 @@ export const DatabaseScreen: React.FC = () => {
     }
   };
 
+  // 處理批量刪除
+  const handleBatchDelete = async () => {
+    const user = useAuthStore.getState().user;
+    if (!user) {
+      console.error('用戶未登入');
+      return;
+    }
+
+    // TODO: 顯示確認對話框
+    const confirmDelete = true; // 暫時設為 true，之後需要實作確認對話框
+    if (!confirmDelete) {
+      return;
+    }
+
+    try {
+      // 根據當前標籤頁執行不同的批量刪除
+      switch (activeTab) {
+        case 'customers':
+          await useCustomerStore.getState().batchDeleteCustomers(
+            selectedItems,
+            user.id
+          );
+          break;
+          
+        case 'records':
+          await useRecordStore.getState().batchDeleteRecords(
+            selectedItems,
+            user.id
+          );
+          break;
+          
+        case 'tasks':
+          // 任務使用 batchOperateTasks 方法
+          await useTaskStore.getState().batchOperateTasks(
+            {
+              taskIds: selectedItems,
+              operation: 'delete'
+            },
+            user
+          );
+          break;
+      }
+      
+      // 重新載入資料
+      switch (activeTab) {
+        case 'customers':
+          await useCustomerStore.getState().fetchCustomers(user);
+          break;
+        case 'records':
+          await useRecordStore.getState().fetchRecords(user);
+          break;
+        case 'tasks':
+          await useTaskStore.getState().fetchTasks(user);
+          break;
+      }
+      
+      // 清除選擇狀態
+      setShowBatchActions(false);
+      setMultiSelectMode(false);
+      setSelectedItems([]);
+      
+      // TODO: 顯示成功訊息
+      console.log(`✅ 成功刪除 ${selectedItems.length} 筆資料`);
+    } catch (error) {
+      console.error('批量刪除失敗:', error);
+      // TODO: 顯示錯誤訊息
+    }
+  };
+
   // 處理批量編輯提交
   const handleBatchEditSubmit = async (updates: Record<string, any>) => {
-    // TODO: 實作批量更新
-    console.log('批量更新:', selectedItems, updates);
-    setShowBatchEdit(false);
-    setMultiSelectMode(false);
-    setSelectedItems([]);
+    const user = useAuthStore.getState().user;
+    if (!user) {
+      console.error('用戶未登入');
+      return;
+    }
+
+    try {
+      // 根據當前標籤頁執行不同的批量更新
+      switch (activeTab) {
+        case 'customers':
+          await useCustomerStore.getState().batchUpdateCustomers(
+            selectedItems,
+            updates,
+            user.id
+          );
+          break;
+          
+        case 'records':
+          await useRecordStore.getState().batchUpdateRecords(
+            selectedItems,
+            updates,
+            user.id
+          );
+          break;
+          
+        case 'tasks':
+          // 任務使用 batchOperateTasks 方法
+          await useTaskStore.getState().batchOperateTasks(
+            {
+              taskIds: selectedItems,
+              operation: 'update',
+              updates
+            },
+            user
+          );
+          break;
+      }
+      
+      // 重新載入資料
+      switch (activeTab) {
+        case 'customers':
+          await useCustomerStore.getState().fetchCustomers(user);
+          break;
+        case 'records':
+          await useRecordStore.getState().fetchRecords(user);
+          break;
+        case 'tasks':
+          await useTaskStore.getState().fetchTasks(user);
+          break;
+      }
+      
+      // 清除選擇狀態
+      setShowBatchEdit(false);
+      setMultiSelectMode(false);
+      setSelectedItems([]);
+      
+      // TODO: 顯示成功訊息
+      console.log(`✅ 成功更新 ${selectedItems.length} 筆資料`);
+    } catch (error) {
+      console.error('批量更新失敗:', error);
+      // TODO: 顯示錯誤訊息
+    }
   };
 
   // 取得選中的資料

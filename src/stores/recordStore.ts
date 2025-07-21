@@ -14,6 +14,8 @@ import {
   createRecord,
   updateRecord,
   deleteRecord,
+  batchUpdateRecords,
+  batchDeleteRecords,
   processRecordForCustomerFields
 } from '../services/firebase/records';
 import { 
@@ -46,6 +48,10 @@ interface RecordState {
   createRecord: (record: Omit<RecordDoc, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>, userId: string, audioFile?: File) => Promise<RecordDoc>;
   updateRecord: (recordId: string, updates: Partial<RecordDoc>, userId: string) => Promise<void>;
   deleteRecord: (recordId: string, userId: string) => Promise<void>;
+  
+  // 動作 - 批量操作
+  batchUpdateRecords: (recordIds: string[], updates: Partial<RecordDoc>, userId: string) => Promise<void>;
+  batchDeleteRecords: (recordIds: string[], userId: string) => Promise<void>;
   
   // 動作 - AI 處理
   processRecordFields: (recordId: string, autoApply?: boolean) => Promise<void>;
@@ -231,6 +237,53 @@ export const useRecordStore = create<RecordState>()(
         } catch (error) {
           set({ 
             error: error instanceof Error ? error.message : '刪除紀錄失敗',
+            isLoading: false 
+          });
+          throw error;
+        }
+      },
+      
+      // 批量更新紀錄
+      batchUpdateRecords: async (recordIds, updates, userId) => {
+        set({ isLoading: true, error: null });
+        
+        try {
+          await batchUpdateRecords(recordIds, updates, userId);
+          
+          // 更新本地狀態
+          set(state => ({
+            records: state.records.map(r => 
+              recordIds.includes(r.id!) ? { ...r, ...updates } : r
+            ),
+            isLoading: false
+          }));
+        } catch (error) {
+          set({ 
+            error: error instanceof Error ? error.message : '批量更新紀錄失敗',
+            isLoading: false 
+          });
+          throw error;
+        }
+      },
+      
+      // 批量刪除紀錄
+      batchDeleteRecords: async (recordIds, userId) => {
+        set({ isLoading: true, error: null });
+        
+        try {
+          await batchDeleteRecords(recordIds, userId);
+          
+          // 更新本地狀態
+          set(state => ({
+            records: state.records.filter(r => !recordIds.includes(r.id!)),
+            selectedRecord: state.selectedRecord && recordIds.includes(state.selectedRecord.id!) 
+              ? null 
+              : state.selectedRecord,
+            isLoading: false
+          }));
+        } catch (error) {
+          set({ 
+            error: error instanceof Error ? error.message : '批量刪除紀錄失敗',
             isLoading: false 
           });
           throw error;

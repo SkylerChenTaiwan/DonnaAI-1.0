@@ -395,6 +395,32 @@ export async function batchUpdateCustomers(
 }
 
 /**
+ * 批量刪除客戶
+ */
+export async function batchDeleteCustomers(
+  customerIds: string[],
+  userId: string
+): Promise<void> {
+  try {
+    // 逐一檢查權限並刪除
+    const deletePromises = customerIds.map(async (customerId) => {
+      const hasPermission = await canEditCustomer(userId, customerId);
+      if (hasPermission) {
+        await deleteCustomer(customerId, userId);
+      } else {
+        console.warn(`跳過刪除客戶 ${customerId}: 無權限`);
+      }
+    });
+    
+    await Promise.all(deletePromises);
+    console.log(`✅ 成功批量刪除 ${customerIds.length} 個客戶`);
+  } catch (error) {
+    console.error('批量刪除客戶失敗:', error);
+    throw error;
+  }
+}
+
+/**
  * 更新客戶的 AI 自動更新記錄
  */
 export async function updateCustomerAIFields(

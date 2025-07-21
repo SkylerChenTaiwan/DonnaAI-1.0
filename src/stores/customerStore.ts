@@ -11,7 +11,8 @@ import {
   updateCustomer,
   deleteCustomer,
   getCustomer,
-  batchUpdateCustomers
+  batchUpdateCustomers,
+  batchDeleteCustomers
 } from '../services/firebase/customers';
 import { 
   getCustomersOptimized,
@@ -47,6 +48,7 @@ interface CustomerState {
   
   // 動作 - 批次操作
   batchUpdateCustomers: (customerIds: string[], updates: Partial<CustomerDoc>, userId: string) => Promise<void>;
+  batchDeleteCustomers: (customerIds: string[], userId: string) => Promise<void>;
   
   // 動作 - 即時訂閱
   subscribeToCustomers: (userOrTeamId: User | string, userIdOrCallback?: string | ((customers: CustomerDoc[]) => void)) => void;
@@ -242,6 +244,30 @@ export const useCustomerStore = create<CustomerState>()(
         } catch (error) {
           set({ 
             error: error instanceof Error ? error.message : '批次更新客戶失敗',
+            isLoading: false 
+          });
+          throw error;
+        }
+      },
+      
+      // 批量刪除客戶
+      batchDeleteCustomers: async (customerIds, userId) => {
+        set({ isLoading: true, error: null });
+        
+        try {
+          await batchDeleteCustomers(customerIds, userId);
+          
+          // 更新本地狀態
+          set(state => ({
+            customers: state.customers.filter(c => !customerIds.includes(c.id!)),
+            selectedCustomer: state.selectedCustomer && customerIds.includes(state.selectedCustomer.id!) 
+              ? null 
+              : state.selectedCustomer,
+            isLoading: false
+          }));
+        } catch (error) {
+          set({ 
+            error: error instanceof Error ? error.message : '批量刪除客戶失敗',
             isLoading: false 
           });
           throw error;
