@@ -186,13 +186,15 @@ export const canEditCustomer = async (userId: string, customerId: string): Promi
     
     const customer = customerDoc.data();
     
-    // 負責的業務員可以編輯
-    if (customer.assignedTo === userId) {
-      return true;
+    // 首先必須是團隊成員
+    const isTeamMemberCheck = await isTeamMember(userId, customer.teamId);
+    if (!isTeamMemberCheck) {
+      console.log(`使用者 ${userId} 不是團隊 ${customer.teamId} 的成員`);
+      return false;
     }
     
-    // 團隊主管可以編輯其團隊客戶
-    if (await isManagerOfTeam(userId, customer.teamId)) {
+    // 負責的業務員可以編輯
+    if (customer.assignedTo === userId) {
       return true;
     }
     
@@ -201,6 +203,7 @@ export const canEditCustomer = async (userId: string, customerId: string): Promi
       return true;
     }
     
+    console.log(`使用者 ${userId} 不是客戶 ${customerId} 的負責人，也不是管理員`);
     return false;
   } catch (error) {
     console.error('檢查客戶編輯權限時發生錯誤:', error);

@@ -73,9 +73,18 @@ export function buildQueryConstraints(context: UserPermissionContext, dataType: 
       // 主管：看管理團隊的資料
       if (context.managedTeamIds.length > 0) {
         constraints.push(['teamId', 'in', context.managedTeamIds]);
-      } else {
+      } else if (context.teamIds.length > 0) {
         // 沒有管理團隊，只看自己團隊
         constraints.push(['teamId', 'in', context.teamIds]);
+      } else {
+        // 如果沒有任何團隊，根據資料類型決定
+        if (dataType === 'customers') {
+          constraints.push(['assignedTo', '==', context.userId]);
+        } else if (dataType === 'records') {
+          constraints.push(['createdBy', '==', context.userId]);
+        } else if (dataType === 'tasks') {
+          constraints.push(['assigneeId', '==', context.userId]);
+        }
       }
       break;
       
@@ -83,12 +92,20 @@ export function buildQueryConstraints(context: UserPermissionContext, dataType: 
       // 業務員：根據資料類型有不同權限
       if (dataType === 'customers') {
         // 客戶：看自己團隊或自己負責的
-        constraints.push(['teamId', 'in', context.teamIds]);
-        // 或者用複合查詢
-        // constraints.push(['assignedTo', '==', context.userId]);
+        if (context.teamIds.length > 0) {
+          constraints.push(['teamId', 'in', context.teamIds]);
+        } else {
+          // 如果沒有團隊，只看自己負責的客戶
+          constraints.push(['assignedTo', '==', context.userId]);
+        }
       } else if (dataType === 'records') {
         // 紀錄：看自己參與的或團隊的
-        constraints.push(['teamId', 'in', context.teamIds]);
+        if (context.teamIds.length > 0) {
+          constraints.push(['teamId', 'in', context.teamIds]);
+        } else {
+          // 如果沒有團隊，只看自己建立的紀錄
+          constraints.push(['createdBy', '==', context.userId]);
+        }
       } else if (dataType === 'tasks') {
         // 任務：看自己負責的
         constraints.push(['assigneeId', '==', context.userId]);

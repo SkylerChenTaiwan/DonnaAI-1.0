@@ -113,6 +113,12 @@ export async function updateCustomer(
     
     const existingCustomer = customerDoc.data() as CustomerDoc;
     
+    // 確保不會修改不允許修改的欄位
+    delete updates.organizationId;
+    delete updates.teamId;
+    delete updates.createdBy;
+    delete updates.createdAt;
+    
     // 驗證自訂欄位更新
     if (updates.customFields) {
       const fieldDefinitions = await getCustomFieldDefinitions(
