@@ -167,6 +167,7 @@ export const MainTabNavigator = () => {
         onClose={() => setShowActionModal(false)}
         onAction={handleActionSelect}
         fromRef={addButtonRef}
+        tabBarHeight={88}
       />
     </>
   );
