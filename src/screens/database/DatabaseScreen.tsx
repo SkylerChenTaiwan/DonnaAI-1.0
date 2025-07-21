@@ -716,7 +716,26 @@ export const DatabaseScreen: React.FC = () => {
             style={styles.searchBar}
           />
         </View>
-        {/* 行內編輯模式切換按鈕 */}
+        <ToolbarIcons
+          multiSelectMode={multiSelectMode}
+          showSort={false}
+          onFilterPress={() => setShowFilterModal(true)}
+          onMultiSelectPress={() => {
+            const newMode = !multiSelectMode;
+            setMultiSelectMode(newMode);
+            if (!newMode) {
+              // 關閉多選模式時清除選擇
+              setSelectedItems([]);
+              setShowBatchEdit(false);
+            }
+            // 切換多選模式時關閉編輯模式
+            if (newMode) {
+              setIsEditMode(false);
+            }
+          }}
+          onColumnsPress={() => setShowColumnSettings(true)}
+        />
+        {/* 行內編輯模式切換按鈕 - 移到最右方 */}
         <TouchableOpacity
           style={[
             styles.toolButton,
@@ -748,25 +767,6 @@ export const DatabaseScreen: React.FC = () => {
             編輯
           </Text>
         </TouchableOpacity>
-        <ToolbarIcons
-          multiSelectMode={multiSelectMode}
-          showSort={false}
-          onFilterPress={() => setShowFilterModal(true)}
-          onMultiSelectPress={() => {
-            const newMode = !multiSelectMode;
-            setMultiSelectMode(newMode);
-            if (!newMode) {
-              // 關閉多選模式時清除選擇
-              setSelectedItems([]);
-              setShowBatchEdit(false);
-            }
-            // 切換多選模式時關閉編輯模式
-            if (newMode) {
-              setIsEditMode(false);
-            }
-          }}
-          onColumnsPress={() => setShowColumnSettings(true)}
-        />
       </View>
       
       {/* 篩選條件顯示 */}

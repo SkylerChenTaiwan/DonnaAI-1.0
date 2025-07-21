@@ -23,6 +23,7 @@
   "dependencies": {
     "@expo/config-plugins": "~10.1.1",
     "@expo/vector-icons": "^14.1.0",
+    "@google/genai": "^1.10.0",
     "@hookform/resolvers": "^5.1.1",
     "@react-native-async-storage/async-storage": "2.1.2",
     "@react-native-picker/picker": "^2.11.1",
@@ -61,6 +62,7 @@
     "react-native-screens": "~4.11.1",
     "react-native-svg": "15.11.2",
     "typescript": "~5.8.3",
+    "victory-native": "^41.17.4",
     "zod": "^3.23.8",
     "zustand": "^4.5.2"
   },
@@ -73,6 +75,7 @@
     "@types/jest": "^29.5.12",
     "@types/node": "^24.0.15",
     "@types/react": "~19.0.0",
+    "@types/victory": "^33.1.5",
     "@typescript-eslint/eslint-plugin": "^7.7.0",
     "@typescript-eslint/parser": "^7.7.0",
     "@vitejs/plugin-react": "^4.2.1",
