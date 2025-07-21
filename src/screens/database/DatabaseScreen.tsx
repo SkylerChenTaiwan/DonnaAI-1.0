@@ -572,6 +572,35 @@ export const DatabaseScreen: React.FC = () => {
     <View style={styles.mainContainer}>
       <Layout style={styles.container} scrollable={false}>
         <View style={styles.contentWrapper}>
+          {/* 臨時調試按鈕 */}
+          {__DEV__ && (
+            <TouchableOpacity
+              style={{
+                backgroundColor: '#FF3B30',
+                padding: 10,
+                margin: 10,
+                borderRadius: 8,
+                alignItems: 'center',
+              }}
+              onPress={async () => {
+                console.log('🔍 開始權限調試...');
+                try {
+                  // 直接導入並執行調試函數
+                  const { debugPermissionMismatch } = await import('@/utils/debug-permission-mismatch');
+                  // 使用第一個選中的客戶ID，或預設的測試ID
+                  const customerId = selectedItems[0] || 'customer_1753014438955_mg9rcg';
+                  await debugPermissionMismatch(customerId);
+                } catch (error) {
+                  console.error('調試失敗:', error);
+                }
+              }}
+            >
+              <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                🐛 調試權限問題
+              </Text>
+            </TouchableOpacity>
+          )}
+
           {/* Tab 導航 */}
           <View style={styles.tabContainer}>
             {tabs.map((tab) => (
