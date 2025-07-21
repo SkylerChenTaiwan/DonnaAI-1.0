@@ -39,11 +39,11 @@ export const DataTable = ({
     toggleSelection,
     selectAll,
     clearSelection,
-  } = useTableData(data, { 
+  } = useTableData(data, React.useMemo(() => ({ 
     filters,
     initialSortKey: externalSortConfig?.key,
     initialSortDirection: externalSortConfig?.direction,
-  });
+  }), [filters, externalSortConfig?.key, externalSortConfig?.direction]));
 
   // 處理選擇變更
   React.useEffect(() => {

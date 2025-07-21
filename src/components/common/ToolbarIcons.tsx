@@ -44,6 +44,7 @@ export const ToolbarIcons: React.FC<ToolbarIconsProps> = ({
           onPress={onFilterPress}
           activeOpacity={0.7}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          testID="filter-button"
         >
           <Ionicons name="filter" size={20} color="#6B6B6B" />
         </TouchableOpacity>
@@ -54,6 +55,7 @@ export const ToolbarIcons: React.FC<ToolbarIconsProps> = ({
           onPress={onSortPress}
           activeOpacity={0.7}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          testID="sort-button"
         >
           <Ionicons name="swap-vertical" size={20} color="#6B6B6B" />
         </TouchableOpacity>
@@ -67,6 +69,7 @@ export const ToolbarIcons: React.FC<ToolbarIconsProps> = ({
           onPress={onMultiSelectPress}
           activeOpacity={0.7}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          testID="multi-select-button"
         >
           <Ionicons 
             name="checkmark-circle" 
@@ -81,6 +84,7 @@ export const ToolbarIcons: React.FC<ToolbarIconsProps> = ({
           onPress={onColumnsPress}
           activeOpacity={0.7}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          testID="columns-button"
         >
           <Ionicons name="list" size={20} color="#6B6B6B" />
         </TouchableOpacity>

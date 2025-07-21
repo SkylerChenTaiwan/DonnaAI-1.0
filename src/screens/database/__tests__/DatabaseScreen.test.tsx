@@ -159,7 +159,7 @@ describe('DatabaseScreen', () => {
   });
 
   it('切換 Tab 應該清除選擇狀態', () => {
-    const { getByText, getByTestId } = renderScreen();
+    const { getByText, getByTestId, queryByText } = renderScreen();
     
     // 進入多選模式
     const multiSelectButton = getByTestId('multi-select-button');

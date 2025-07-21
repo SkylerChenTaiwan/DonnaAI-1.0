@@ -3,7 +3,7 @@
  */
 
 import React, { useState, useMemo, useCallback } from 'react';
-import { TableData, TableState } from '@/types/table';
+import { TableData } from '@/types/table';
 
 interface UseTableDataOptions {
   initialSortKey?: string;
@@ -15,97 +15,62 @@ export const useTableData = (
   data: TableData[],
   options?: UseTableDataOptions
 ) => {
-  const [state, setState] = useState<TableState>({
-    data,
-    filteredData: data,
-    sortConfig: {
-      key: options?.initialSortKey || null,
-      direction: options?.initialSortDirection || 'asc',
-    },
-    searchQuery: '',
-    selectedItems: new Set<string>(),
-    filters: {},
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
+  const [filters, setFilters] = useState<Record<string, any>>({});
+  const [sortConfig, setSortConfig] = useState({
+    key: options?.initialSortKey || null,
+    direction: (options?.initialSortDirection || 'asc') as 'asc' | 'desc',
   });
 
   // 同步外部排序設定
   React.useEffect(() => {
     if (options?.initialSortKey !== undefined || options?.initialSortDirection !== undefined) {
-      setState(prevState => ({
-        ...prevState,
-        sortConfig: {
-          key: options.initialSortKey || null,
-          direction: options.initialSortDirection || 'asc',
-        },
-      }));
+      setSortConfig({
+        key: options?.initialSortKey || null,
+        direction: options?.initialSortDirection || 'asc',
+      });
     }
   }, [options?.initialSortKey, options?.initialSortDirection]);
 
   // 搜尋功能
   const handleSearch = useCallback((query: string) => {
-    setState((prevState) => ({
-      ...prevState,
-      searchQuery: query,
-    }));
+    setSearchQuery(query);
   }, []);
 
   // 排序功能
   const handleSort = useCallback((key: string) => {
-    setState((prevState) => {
-      const { sortConfig } = prevState;
+    setSortConfig((prevConfig) => {
       let direction: 'asc' | 'desc' = 'asc';
-
-      if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      if (prevConfig.key === key && prevConfig.direction === 'asc') {
         direction = 'desc';
       }
-
-      return {
-        ...prevState,
-        sortConfig: { key, direction },
-      };
+      return { key, direction };
     });
   }, []);
 
   // 選擇功能
   const toggleSelection = useCallback((id: string) => {
-    setState((prevState) => {
-      const newSelectedItems = new Set(prevState.selectedItems);
-      if (newSelectedItems.has(id)) {
-        newSelectedItems.delete(id);
+    setSelectedItems((prevItems) => {
+      const newItems = new Set(prevItems);
+      if (newItems.has(id)) {
+        newItems.delete(id);
       } else {
-        newSelectedItems.add(id);
+        newItems.add(id);
       }
-      return {
-        ...prevState,
-        selectedItems: newSelectedItems,
-      };
-    });
-  }, []);
-
-  const selectAll = useCallback(() => {
-    setState((prevState) => {
-      const allIds = prevState.filteredData.map((item) => item.id);
-      return {
-        ...prevState,
-        selectedItems: new Set(allIds),
-      };
+      return newItems;
     });
   }, []);
 
   const clearSelection = useCallback(() => {
-    setState((prevState) => ({
-      ...prevState,
-      selectedItems: new Set<string>(),
-    }));
+    setSelectedItems(new Set<string>());
   }, []);
 
   // 篩選功能
   const setFilter = useCallback((key: string, value: any) => {
-    setState((prevState) => ({
-      ...prevState,
-      filters: {
-        ...prevState.filters,
-        [key]: value,
-      },
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [key]: value,
     }));
   }, []);
 
@@ -114,8 +79,8 @@ export const useTableData = (
     let result = [...data];
 
     // 搜尋過濾
-    if (state.searchQuery) {
-      const query = state.searchQuery.toLowerCase();
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
       result = result.filter((item) =>
         Object.values(item).some((value) =>
           String(value).toLowerCase().includes(query)
@@ -124,7 +89,7 @@ export const useTableData = (
     }
 
     // 自訂篩選
-    Object.entries(state.filters).forEach(([key, value]) => {
+    Object.entries(filters).forEach(([key, value]) => {
       if (value !== null && value !== undefined && value !== '') {
         result = result.filter((item) => item[key] === value);
       }
@@ -145,33 +110,38 @@ export const useTableData = (
     }
 
     // 排序
-    if (state.sortConfig.key) {
+    if (sortConfig.key) {
       result.sort((a, b) => {
-        const aValue = a[state.sortConfig.key!];
-        const bValue = b[state.sortConfig.key!];
+        const aValue = a[sortConfig.key!];
+        const bValue = b[sortConfig.key!];
 
         if (aValue === null || aValue === undefined) return 1;
         if (bValue === null || bValue === undefined) return -1;
 
         if (aValue < bValue) {
-          return state.sortConfig.direction === 'asc' ? -1 : 1;
+          return sortConfig.direction === 'asc' ? -1 : 1;
         }
         if (aValue > bValue) {
-          return state.sortConfig.direction === 'asc' ? 1 : -1;
+          return sortConfig.direction === 'asc' ? 1 : -1;
         }
         return 0;
       });
     }
 
     return result;
-  }, [data, state.searchQuery, state.filters, state.sortConfig, options?.filters]);
+  }, [data, searchQuery, filters, sortConfig, options?.filters]);
+
+  const selectAll = useCallback(() => {
+    const allIds = processedData.map((item) => item.id);
+    setSelectedItems(new Set(allIds));
+  }, [processedData]);
 
   return {
     data: processedData,
-    searchQuery: state.searchQuery,
-    sortConfig: state.sortConfig,
-    selectedItems: state.selectedItems,
-    filters: state.filters,
+    searchQuery,
+    sortConfig,
+    selectedItems,
+    filters,
     handleSearch,
     handleSort,
     toggleSelection,
