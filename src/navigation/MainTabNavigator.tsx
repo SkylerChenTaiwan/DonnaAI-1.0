@@ -60,7 +60,7 @@ export const MainTabNavigator = () => {
                 return (
                   <View style={styles.addButtonContainer} ref={addButtonRef}>
                     <View style={styles.addButton}>
-                      <Ionicons name="add" size={24} color="#FFFFFF" />
+                      <Ionicons name="add" size={28} color="#FFFFFF" />
                     </View>
                   </View>
                 );
