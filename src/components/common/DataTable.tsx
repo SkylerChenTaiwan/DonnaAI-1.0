@@ -110,6 +110,12 @@ export const DataTable = ({
   const renderItem = useCallback(
     ({ item }: { item: TableData }) => {
       // 在多選模式下，整行都是可點擊的
+      console.log('🔍 renderItem:', { 
+        itemId: item.id, 
+        selectable, 
+        showCheckboxes,
+        shouldShowCheckbox: selectable && showCheckboxes 
+      });
       if (selectable && showCheckboxes) {
         return (
           <TouchableOpacity
@@ -192,6 +198,7 @@ export const DataTable = ({
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         estimatedItemSize={60}
+        extraData={{ selectable, showCheckboxes }}
         refreshControl={
           onRefresh ? (
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
