@@ -26,6 +26,7 @@ export const MainTabNavigator = () => {
   const [showActionModal, setShowActionModal] = useState(false);
   const addButtonRef = useRef<View>(null);
   const tabBarRef = useRef<View>(null);
+  const [tabBarHeight, setTabBarHeight] = useState(88);
 
   const handleActionSelect = (action: { id: string; type: string }) => {
     setShowActionModal(false);
@@ -45,7 +46,15 @@ export const MainTabNavigator = () => {
 
   return (
     <>
-      <Tab.Navigator
+      <View 
+        ref={tabBarRef}
+        onLayout={(event) => {
+          const { height } = event.nativeEvent.layout;
+          setTabBarHeight(height);
+        }}
+        style={{ flex: 1 }}
+      >
+        <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName: keyof typeof Ionicons.glyphMap;
@@ -160,14 +169,15 @@ export const MainTabNavigator = () => {
             headerTitle: '設定',
           }}
         />
-      </Tab.Navigator>
+        </Tab.Navigator>
+      </View>
 
       <ActionPopover
         visible={showActionModal}
         onClose={() => setShowActionModal(false)}
         onAction={handleActionSelect}
         fromRef={addButtonRef}
-        tabBarHeight={88}
+        tabBarHeight={tabBarHeight}
       />
     </>
   );

@@ -65,6 +65,19 @@ export const ActionPopover = ({
 }: ActionPopoverProps) => {
   const insets = useSafeAreaInsets();
   const slideAnim = React.useRef(new Animated.Value(0)).current;
+  const [actualTabBarHeight, setActualTabBarHeight] = React.useState(tabBarHeight);
+
+  React.useEffect(() => {
+    if (visible && fromRef.current) {
+      fromRef.current.measureInWindow((x, y, width, height) => {
+        const screenHeight = Dimensions.get('window').height;
+        // 計算從按鈕底部到螢幕底部的距離
+        const distanceToBottom = screenHeight - (y + height);
+        // 這就是導航欄的實際高度
+        setActualTabBarHeight(distanceToBottom + insets.bottom);
+      });
+    }
+  }, [visible, fromRef, insets.bottom]);
 
   React.useEffect(() => {
     if (visible) {
@@ -106,7 +119,7 @@ export const ActionPopover = ({
               styles.overlay, 
               { 
                 opacity,
-                bottom: tabBarHeight + insets.bottom
+                bottom: actualTabBarHeight
               }
             ]} 
           />
@@ -116,7 +129,7 @@ export const ActionPopover = ({
           style={[
             styles.actionPanel,
             {
-              bottom: tabBarHeight + insets.bottom + 1, // +1 來覆蓋邊框
+              bottom: actualTabBarHeight + 1, // +1 來覆蓋邊框
               transform: [{ translateY }],
             },
           ]}
