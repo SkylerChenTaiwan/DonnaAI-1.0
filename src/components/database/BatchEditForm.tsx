@@ -39,21 +39,8 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
   onCancel,
   tabType,
 }) => {
-  const [selectedFields, setSelectedFields] = useState<Set<string>>(new Set());
   const [values, setValues] = useState<Record<string, any>>({});
-
-  const toggleField = (fieldKey: string) => {
-    const newSelected = new Set(selectedFields);
-    if (newSelected.has(fieldKey)) {
-      newSelected.delete(fieldKey);
-      const newValues = { ...values };
-      delete newValues[fieldKey];
-      setValues(newValues);
-    } else {
-      newSelected.add(fieldKey);
-    }
-    setSelectedFields(newSelected);
-  };
+  const [showPreview, setShowPreview] = useState(false);
 
   const updateValue = (fieldKey: string, value: any) => {
     setValues({
@@ -62,58 +49,51 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
     });
   };
 
-  const handleSubmit = () => {
-    if (selectedFields.size === 0) {
-      Alert.alert('提示', '請至少選擇一個欄位進行編輯');
+  // 檢查是否有任何修改
+  const hasChanges = Object.keys(values).some(key => values[key] !== undefined && values[key] !== '');
+
+  const handleSave = () => {
+    if (!hasChanges) {
+      Alert.alert('提示', '請至少修改一個欄位');
       return;
     }
+    setShowPreview(true);
+  };
 
-    // 只提交選中的欄位
+  const handleConfirmSubmit = () => {
+    // 只提交有值的欄位
     const updates: Record<string, any> = {};
-    selectedFields.forEach((fieldKey) => {
-      if (values[fieldKey] !== undefined) {
-        updates[fieldKey] = values[fieldKey];
+    Object.keys(values).forEach((key) => {
+      if (values[key] !== undefined && values[key] !== '') {
+        updates[key] = values[key];
       }
     });
-
-    Alert.alert(
-      '確認批量編輯',
-      `即將對 ${selectedCount} 個項目進行編輯，此操作無法撤銷。`,
-      [
-        { text: '取消', style: 'cancel' },
-        {
-          text: '確定',
-          style: 'destructive',
-          onPress: () => onSubmit(updates),
-        },
-      ]
-    );
+    
+    onSubmit(updates);
+    setShowPreview(false);
   };
 
   const renderFieldInput = (field: BatchEditField) => {
-    const isSelected = selectedFields.has(field.key);
     const value = values[field.key];
 
     switch (field.type) {
       case 'text':
         return (
           <TextInput
-            style={[styles.textInput, !isSelected && styles.disabledInput]}
+            style={styles.textInput}
             value={value || ''}
             onChangeText={(text) => updateValue(field.key, text)}
             placeholder={field.placeholder || `輸入${field.label}`}
             placeholderTextColor="#8E8E93"
-            editable={isSelected}
           />
         );
 
       case 'select':
         return (
-          <View style={[styles.pickerWrapper, !isSelected && styles.disabledInput]}>
+          <View style={styles.pickerWrapper}>
             <Picker
               selectedValue={value || ''}
               onValueChange={(itemValue) => updateValue(field.key, itemValue)}
-              enabled={isSelected}
               style={styles.picker}
             >
               <Picker.Item label={`選擇${field.label}`} value="" />
@@ -133,7 +113,6 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
           <Switch
             value={value || false}
             onValueChange={(val) => updateValue(field.key, val)}
-            disabled={!isSelected}
             trackColor={{ false: '#E5E5EA', true: '#007AFF' }}
           />
         );
@@ -141,12 +120,11 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
       case 'tags':
         return (
           <TextInput
-            style={[styles.textInput, !isSelected && styles.disabledInput]}
+            style={styles.textInput}
             value={value || ''}
             onChangeText={(text) => updateValue(field.key, text)}
             placeholder="輸入標籤，以逗號分隔"
             placeholderTextColor="#8E8E93"
-            editable={isSelected}
           />
         );
 
@@ -166,48 +144,53 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
             {tabType === 'customers' ? '客戶' : tabType === 'records' ? '紀錄' : '任務'}
           </Text>
         </View>
-        <TouchableOpacity
-          style={styles.closeButton}
-          onPress={onCancel}
-          activeOpacity={0.7}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-        >
-          <Ionicons name="close" size={24} color="#8E8E93" />
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView style={styles.content}>
-        <Text style={styles.instruction}>選擇要編輯的欄位：</Text>
-
-        {fields.map((field) => (
-          <View key={field.key} style={styles.fieldItem}>
+        <View style={styles.headerActions}>
+          {hasChanges && (
             <TouchableOpacity
-              style={styles.fieldHeader}
-              onPress={() => toggleField(field.key)}
+              style={styles.saveButton}
+              onPress={handleSave}
               activeOpacity={0.7}
             >
-              <View style={styles.checkbox}>
-                {selectedFields.has(field.key) && (
-                  <Ionicons name="checkmark" size={16} color="#007AFF" />
-                )}
-              </View>
-              <Text style={styles.fieldLabel}>{field.label}</Text>
+              <Ionicons name="checkmark" size={20} color="#007AFF" />
+              <Text style={styles.saveButtonText}>儲存</Text>
             </TouchableOpacity>
-            
-            <View style={styles.fieldInputContainer}>
-              {renderFieldInput(field)}
-            </View>
-          </View>
-        ))}
+          )}
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={onCancel}
+            activeOpacity={0.7}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Ionicons name="close" size={24} color="#8E8E93" />
+          </TouchableOpacity>
+        </View>
+      </View>
 
-        {/* 預覽區域 */}
-        {selectedFields.size > 0 && (
+      {!showPreview ? (
+        <ScrollView style={styles.content}>
+          <Text style={styles.instruction}>修改要變更的欄位（留空則不變更）：</Text>
+
+          {fields.map((field) => (
+            <View key={field.key} style={styles.fieldItem}>
+              <Text style={styles.fieldLabel}>{field.label}</Text>
+              <View style={styles.fieldInputContainer}>
+                {renderFieldInput(field)}
+              </View>
+            </View>
+          ))}
+        </ScrollView>
+      ) : (
+        <ScrollView style={styles.content}>
           <View style={styles.previewSection}>
-            <Text style={styles.previewTitle}>變更預覽</Text>
-            {Array.from(selectedFields).map((fieldKey) => {
+            <Text style={styles.previewTitle}>確認變更</Text>
+            <Text style={styles.previewSubtitle}>
+              以下變更將套用到 {selectedCount} 個項目：
+            </Text>
+            
+            {Object.keys(values).map((fieldKey) => {
               const field = fields.find((f) => f.key === fieldKey);
               const value = values[fieldKey];
-              if (!field || value === undefined) return null;
+              if (!field || value === undefined || value === '') return null;
               
               return (
                 <View key={fieldKey} style={styles.previewItem}>
@@ -215,32 +198,46 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
                   <Text style={styles.previewValue}>
                     {field.type === 'switch'
                       ? value ? '是' : '否'
-                      : value || '(空白)'}
+                      : field.type === 'select'
+                      ? field.options?.find(opt => opt.value === value)?.label || value
+                      : value}
                   </Text>
                 </View>
               );
             })}
           </View>
-        )}
-      </ScrollView>
+        </ScrollView>
+      )}
 
       {/* 底部按鈕 */}
       <View style={styles.footer}>
-        <TouchableOpacity
-          style={[styles.button, styles.cancelButton]}
-          onPress={onCancel}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.cancelButtonText}>取消</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity
-          style={[styles.button, styles.submitButton]}
-          onPress={handleSubmit}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.submitButtonText}>套用變更</Text>
-        </TouchableOpacity>
+        {!showPreview ? (
+          <TouchableOpacity
+            style={[styles.button, styles.cancelButton]}
+            onPress={onCancel}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.cancelButtonText}>取消</Text>
+          </TouchableOpacity>
+        ) : (
+          <>
+            <TouchableOpacity
+              style={[styles.button, styles.cancelButton]}
+              onPress={() => setShowPreview(false)}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.cancelButtonText}>返回</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+              style={[styles.button, styles.submitButton]}
+              onPress={handleConfirmSubmit}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.submitButtonText}>確認變更</Text>
+            </TouchableOpacity>
+          </>
+        )}
       </View>
     </View>
   );
@@ -264,6 +261,25 @@ const styles = StyleSheet.create({
   headerContent: {
     flex: 1,
   },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  saveButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: '#007AFF',
+    borderRadius: 18,
+  },
+  saveButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#FFFFFF',
+  },
   closeButton: {
     width: 32,
     height: 32,
@@ -271,7 +287,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2F2F7',
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 16,
   },
   title: {
     fontSize: 20,
@@ -298,28 +313,14 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     padding: 16,
   },
-  fieldHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  checkbox: {
-    width: 22,
-    height: 22,
-    borderWidth: 2,
-    borderColor: '#007AFF',
-    borderRadius: 4,
-    marginRight: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   fieldLabel: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: '#1C1C1E',
+    marginBottom: 8,
   },
   fieldInputContainer: {
-    paddingLeft: 34,
+    // 移除左邊距
   },
   textInput: {
     backgroundColor: '#F2F2F7',
@@ -329,8 +330,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#1C1C1E',
   },
-  disabledInput: {
-    opacity: 0.5,
+  previewSubtitle: {
+    fontSize: 14,
+    color: '#8E8E93',
+    marginBottom: 16,
   },
   pickerWrapper: {
     backgroundColor: '#F2F2F7',
