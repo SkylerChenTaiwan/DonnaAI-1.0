@@ -5,7 +5,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { doc, getDoc, getDocs, collection, query, where, onSnapshot } from 'firebase/firestore';
-import { getFirebaseDb } from '@/services/firebase/config';
+import { getFirebaseDb, getFirebaseAuth } from '@/services/firebase/config';
 import { useAuth } from './useAuth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -141,6 +141,14 @@ export function useOrganization(): OrganizationState {
   // 獲取用戶的所有組織
   const fetchUserOrganizations = async (userId: string): Promise<Organization[]> => {
     try {
+      const auth = getFirebaseAuth();
+      
+      // 檢查用戶是否已登入
+      if (!auth.currentUser) {
+        console.log('User not authenticated, skipping organization fetch');
+        return [];
+      }
+      
       const db = getFirebaseDb();
       const orgsQuery = query(
         collection(db, 'organizations'),
@@ -154,13 +162,21 @@ export function useOrganization(): OrganizationState {
       } as Organization));
     } catch (error) {
       console.error('Error fetching user organizations:', error);
-      throw error;
+      return []; // 返回空陣列而不是拋出錯誤
     }
   };
 
   // 獲取組織的所有團隊
   const fetchOrganizationTeams = async (organizationId: string): Promise<Team[]> => {
     try {
+      const auth = getFirebaseAuth();
+      
+      // 檢查用戶是否已登入
+      if (!auth.currentUser) {
+        console.log('User not authenticated, skipping teams fetch');
+        return [];
+      }
+      
       const db = getFirebaseDb();
       const teamsQuery = query(
         collection(db, 'teams'),
@@ -174,7 +190,7 @@ export function useOrganization(): OrganizationState {
       } as Team));
     } catch (error) {
       console.error('Error fetching organization teams:', error);
-      throw error;
+      return []; // 返回空陣列而不是拋出錯誤
     }
   };
 
@@ -296,6 +312,14 @@ export function useOrganization(): OrganizationState {
       setError(null);
       
       try {
+        // 檢查是否已登入
+        const auth = getFirebaseAuth();
+        if (!auth.currentUser) {
+          console.log('User not authenticated, skipping organization data load');
+          setLoading(false);
+          return;
+        }
+        
         // 載入快取
         const { cachedOrgId, cachedTeamId } = await loadFromCache();
         
