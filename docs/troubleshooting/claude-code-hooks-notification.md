@@ -93,21 +93,59 @@ ls -la ~/.claude/settings.json
 # Write 工具會觸發通知
 ```
 
+## Hook 輸入格式
+
+Claude Code 的 hooks 通過 **stdin** 接收 JSON 格式的輸入，而非環境變數。輸入包含：
+- `session_id` - 會話 ID
+- `transcript_path` - 對話記錄路徑
+- `cwd` - 當前工作目錄
+- `tool_name` - 工具名稱（如 Write、Bash、Edit）
+- `tool_input` - 工具的輸入參數（JSON 物件）
+
+### 智能通知腳本範例
+```bash
+#!/bin/bash
+# 從 stdin 讀取 JSON
+JSON_INPUT=$(cat)
+
+# 使用 Python 解析 JSON
+TOOL_NAME=$(echo "$JSON_INPUT" | python3 -c "import sys, json; data = json.load(sys.stdin); print(data.get('tool_name', ''))")
+
+# 根據工具類型決定是否通知
+case "$TOOL_NAME" in
+  "Write")
+    FILE_PATH=$(echo "$JSON_INPUT" | python3 -c "import sys, json; data = json.load(sys.stdin); print(data.get('tool_input', {}).get('file_path', ''))")
+    if [[ "$FILE_PATH" =~ PRPs/.*\.md$ ]]; then
+      # 發送通知
+    fi
+    ;;
+esac
+```
+
 ## 常見問題
 
 ### Q: 為什麼直接執行腳本可以，但 hooks 不觸發？
-A: 通常是設定格式錯誤或 Claude Code 未重新載入設定。
+A: 
+1. 設定格式錯誤
+2. Claude Code 未重新載入設定（需要重啟）
+3. Hook 腳本沒有正確處理 stdin 輸入
 
 ### Q: 可以使用哪些事件？
-A: 根據官方文檔，目前支援：
-- `PostToolUse` - 工具使用後觸發
-- 其他事件可能因版本而異
+A: 根據官方文檔，支援：
+- `PreToolUse` - 工具使用前
+- `PostToolUse` - 工具使用後
+- `Notification` - 權限請求或閒置通知
+- `UserPromptSubmit` - 用戶提交提示前
+- `Stop` - 主代理完成時
+- `SubagentStop` - 子代理完成時
+- `PreCompact` - 上下文壓縮前
 
 ### Q: 如何調試 hooks？
 A: 
-1. 檢查 `~/.claude/logs/` 目錄是否有錯誤日誌
-2. 確認通知腳本有執行權限：`chmod +x ~/.claude/hooks/*.sh`
-3. 使用完整路徑而非相對路徑或 `~`
+1. 使用 `claude --debug` 啟動以查看詳細的 hook 執行資訊
+2. 檢查腳本權限：`chmod +x ~/.claude/hooks/*.sh`
+3. 測試腳本是否能正確解析 JSON 輸入
+4. 使用完整路徑而非相對路徑或 `~`
 
 ## 備用方案
 如果 hooks 持續無法運作，可以：
