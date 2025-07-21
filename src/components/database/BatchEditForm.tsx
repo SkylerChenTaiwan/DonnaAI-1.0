@@ -159,11 +159,21 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
     <View style={styles.container}>
       {/* 標頭 */}
       <View style={styles.header}>
-        <Text style={styles.title}>批量編輯</Text>
-        <Text style={styles.subtitle}>
-          編輯 {selectedCount} 個{' '}
-          {tabType === 'customers' ? '客戶' : tabType === 'records' ? '紀錄' : '任務'}
-        </Text>
+        <View style={styles.headerContent}>
+          <Text style={styles.title}>批量編輯</Text>
+          <Text style={styles.subtitle}>
+            編輯 {selectedCount} 個{' '}
+            {tabType === 'customers' ? '客戶' : tabType === 'records' ? '紀錄' : '任務'}
+          </Text>
+        </View>
+        <TouchableOpacity
+          style={styles.closeButton}
+          onPress={onCancel}
+          activeOpacity={0.7}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
+          <Ionicons name="close" size={24} color="#8E8E93" />
+        </TouchableOpacity>
       </View>
 
       <ScrollView style={styles.content}>
@@ -247,6 +257,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#E5E5EA',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  headerContent: {
+    flex: 1,
+  },
+  closeButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#F2F2F7',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 16,
   },
   title: {
     fontSize: 20,
