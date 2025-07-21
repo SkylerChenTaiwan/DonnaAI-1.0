@@ -71,10 +71,10 @@ export const ActionPopover = ({
     if (visible && fromRef.current) {
       fromRef.current.measureInWindow((x, y, width, height) => {
         const screenHeight = Dimensions.get('window').height;
-        // 計算從按鈕頂部到螢幕底部的距離
-        // 這就是面板應該距離底部的距離
-        const distanceFromButtonTop = screenHeight - y;
-        setActualTabBarHeight(distanceFromButtonTop);
+        // 加號按鈕頂部位置 - 導航欄的 paddingTop (10px) = 導航欄實際頂部
+        const navBarTop = y - 10; // 減去 paddingTop
+        const distanceFromNavBarTop = screenHeight - navBarTop;
+        setActualTabBarHeight(distanceFromNavBarTop);
       });
     }
   }, [visible, fromRef, insets.bottom]);
