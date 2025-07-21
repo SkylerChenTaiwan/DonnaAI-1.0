@@ -6,6 +6,18 @@
 
 ---
 
+## 2025-07-21
+
+### 🔄 進行中的任務
+1. **修復 Firestore 客戶更新權限錯誤**
+   - ✅ 分析根本原因：User.teamIds 和 Team.memberIds 資料不一致
+   - ✅ 建立錯誤分析報告 `/docs/error-reports/2025-01-21-firestore-customer-update-permission.md`
+   - ✅ 建立團隊資料同步工具 `src/utils/team-data-sync.ts`
+   - ✅ 建立管理介面元件 `src/components/admin/TeamDataSyncTool.tsx`
+   - ✅ 建立快速修復工具 `src/utils/quick-fix-team-sync.ts`
+   - ✅ 在 App.tsx 中引入快速修復工具（開發模式）
+   - ⏳ 等待使用者在瀏覽器控制台執行修復
+
 ## 2025-07-17
 
 ### ✅ 完成的任務
