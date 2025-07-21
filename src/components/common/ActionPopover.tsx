@@ -9,9 +9,12 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
+  Modal,
+  TouchableWithoutFeedback,
+  Animated,
 } from 'react-native';
-import Popover from 'react-native-popover-view';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface Action {
   id: string;
@@ -58,68 +61,99 @@ export const ActionPopover = ({
   onAction,
   fromRef,
 }: ActionPopoverProps) => {
-  return (
-    <Popover
-      isVisible={visible}
-      onRequestClose={onClose}
-      from={fromRef}
-      placement="top"
-      popoverStyle={styles.popover}
-      backgroundStyle={styles.backdrop}
-      animationConfig={{
+  const insets = useSafeAreaInsets();
+  const slideAnim = React.useRef(new Animated.Value(0)).current;
+
+  React.useEffect(() => {
+    if (visible) {
+      Animated.timing(slideAnim, {
+        toValue: 1,
+        duration: 250,
+        useNativeDriver: true,
+      }).start();
+    } else {
+      Animated.timing(slideAnim, {
+        toValue: 0,
         duration: 200,
-      }}
-      arrowStyle={styles.arrow}
-      verticalOffset={-10}
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [visible, slideAnim]);
+
+  const translateY = slideAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [100, 0],
+  });
+
+  return (
+    <Modal
+      visible={visible}
+      transparent
+      animationType="none"
+      onRequestClose={onClose}
     >
-      <View style={styles.actionContainer}>
-        {actions.map((action) => (
-          <TouchableOpacity
-            key={action.id}
-            style={styles.actionButton}
-            onPress={() => {
-              onAction(action);
-              onClose();
-            }}
-            activeOpacity={0.7}
-          >
-            <View style={styles.actionIconContainer}>
-              <Ionicons name={action.icon} size={28} color="#1A1A1A" />
-            </View>
-            <Text style={styles.actionTitle}>{action.title}</Text>
-            <Text style={styles.actionSubtitle}>{action.subtitle}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </Popover>
+      <TouchableWithoutFeedback onPress={onClose}>
+        <View style={styles.overlay}>
+          <TouchableWithoutFeedback>
+            <Animated.View
+              style={[
+                styles.actionPanel,
+                {
+                  bottom: 88 + insets.bottom,
+                  transform: [{ translateY }],
+                },
+              ]}
+            >
+              <View style={styles.actionContainer}>
+                {actions.map((action) => (
+                  <TouchableOpacity
+                    key={action.id}
+                    style={styles.actionButton}
+                    onPress={() => {
+                      onAction(action);
+                      onClose();
+                    }}
+                    activeOpacity={0.7}
+                  >
+                    <View style={styles.actionIconContainer}>
+                      <Ionicons name={action.icon} size={32} color="#1A1A1A" />
+                    </View>
+                    <Text style={styles.actionTitle}>{action.title}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </Animated.View>
+          </TouchableWithoutFeedback>
+        </View>
+      </TouchableWithoutFeedback>
+    </Modal>
   );
 };
 
 const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  popover: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.12,
-    shadowRadius: 12,
-    elevation: 8,
-    width: width * 0.9,
-    maxWidth: 360,
-  },
-  backdrop: {
+  overlay: {
+    flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },
-  arrow: {
-    width: 20,
-    height: 10,
+  actionPanel: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    backgroundColor: '#FFFFFF',
+    borderTopWidth: 1,
+    borderTopColor: '#E5E7EB',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 8,
   },
   actionContainer: {
     flexDirection: 'row',
-    paddingVertical: 20,
-    paddingHorizontal: 16,
+    paddingVertical: 24,
+    paddingHorizontal: 20,
   },
   actionButton: {
     flex: 1,
@@ -127,30 +161,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   actionIconContainer: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
     backgroundColor: '#F5F5F5',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 2,
+    marginBottom: 8,
   },
   actionTitle: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '500',
     color: '#1A1A1A',
-    marginBottom: 4,
     textAlign: 'center',
-  },
-  actionSubtitle: {
-    fontSize: 12,
-    color: '#666666',
-    textAlign: 'center',
-    lineHeight: 16,
   },
 });
