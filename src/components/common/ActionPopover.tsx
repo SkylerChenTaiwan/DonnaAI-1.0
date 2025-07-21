@@ -70,6 +70,7 @@ export const ActionPopover = ({
         duration: 200,
       }}
       arrowStyle={styles.arrow}
+      verticalOffset={-10}
     >
       <View style={styles.actionContainer}>
         {actions.map((action) => (
@@ -83,9 +84,10 @@ export const ActionPopover = ({
             activeOpacity={0.7}
           >
             <View style={styles.actionIconContainer}>
-              <Ionicons name={action.icon} size={24} color="#1A1A1A" />
+              <Ionicons name={action.icon} size={28} color="#1A1A1A" />
             </View>
             <Text style={styles.actionTitle}>{action.title}</Text>
+            <Text style={styles.actionSubtitle}>{action.subtitle}</Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -98,46 +100,57 @@ const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   popover: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    borderRadius: 16,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.15,
-    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
     elevation: 8,
-    width: width * 0.8,
-    maxWidth: 320,
+    width: width * 0.9,
+    maxWidth: 360,
   },
   backdrop: {
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },
   arrow: {
-    width: 16,
-    height: 8,
+    width: 20,
+    height: 10,
   },
   actionContainer: {
-    paddingVertical: 8,
+    flexDirection: 'row',
+    paddingVertical: 20,
+    paddingHorizontal: 16,
   },
   actionButton: {
-    flexDirection: 'row',
+    flex: 1,
     alignItems: 'center',
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E1DFDB',
+    paddingHorizontal: 8,
   },
   actionIconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#F0F0F0',
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#F5F5F5',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 16,
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 2,
   },
   actionTitle: {
-    fontSize: 16,
-    fontWeight: '500',
+    fontSize: 14,
+    fontWeight: '600',
     color: '#1A1A1A',
-    flex: 1,
+    marginBottom: 4,
+    textAlign: 'center',
+  },
+  actionSubtitle: {
+    fontSize: 12,
+    color: '#666666',
+    textAlign: 'center',
+    lineHeight: 16,
   },
 });
