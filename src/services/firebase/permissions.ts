@@ -11,15 +11,27 @@ import { User, Team } from '@/types/user';
  */
 export const isManagerOfTeam = async (userId: string, teamId: string): Promise<boolean> => {
   try {
+    console.log('🔍 isManagerOfTeam 呼叫:', { userId, teamId });
     const teamDoc = await getDoc(doc(getFirebaseDb(), 'teams', teamId));
     if (!teamDoc.exists()) {
+      console.log('❌ 團隊文件不存在:', teamId);
       return false;
     }
     
     const team = teamDoc.data() as Team;
-    return team.managerIds?.includes(userId) || false;
+    console.log('👥 團隊資料:', { teamId, managerIds: team.managerIds, type: typeof team.managerIds });
+    
+    if (!team.managerIds) {
+      console.log('⚠️ managerIds 為空或未定義');
+      return false;
+    }
+    
+    const result = team.managerIds.includes(userId);
+    console.log('✅ 權限檢查結果:', { userId, teamId, result });
+    return result;
   } catch (error) {
     console.error('檢查團隊主管權限時發生錯誤:', error);
+    console.error('錯誤詳情:', { userId, teamId, stack: error.stack });
     return false;
   }
 };
