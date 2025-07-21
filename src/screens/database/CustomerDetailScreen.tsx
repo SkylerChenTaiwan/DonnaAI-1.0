@@ -91,7 +91,10 @@ export const CustomerDetailScreen: React.FC = () => {
         <Text style={styles.headerTitle} numberOfLines={1}>
           {customer.name}
         </Text>
-        <TouchableOpacity style={styles.editButton}>
+        <TouchableOpacity 
+          style={styles.editButton}
+          onPress={() => navigation.navigate('EditCustomer', { customerId })}
+        >
           <Ionicons name="create-outline" size={24} color="#007AFF" />
         </TouchableOpacity>
       </View>

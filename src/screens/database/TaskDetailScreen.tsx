@@ -87,7 +87,10 @@ export const TaskDetailScreen: React.FC = () => {
         <Text style={styles.headerTitle} numberOfLines={1}>
           任務詳情
         </Text>
-        <TouchableOpacity style={styles.editButton}>
+        <TouchableOpacity 
+          style={styles.editButton}
+          onPress={() => navigation.navigate('EditTask', { taskId })}
+        >
           <Ionicons name="create-outline" size={24} color="#007AFF" />
         </TouchableOpacity>
       </View>

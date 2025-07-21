@@ -8,6 +8,10 @@ export type RootStackParamList = {
   CreateCustomerModal: undefined;
   CreateRecordModal: undefined;
   CreateTaskModal: undefined;
+  // 編輯頁面
+  EditCustomer: { customerId: string };
+  EditRecord: { recordId: string };
+  EditTask: { taskId: string };
   // 詳細檢視頁面
   CustomerDetail: { customerId: string };
   RecordDetail: { recordId: string };

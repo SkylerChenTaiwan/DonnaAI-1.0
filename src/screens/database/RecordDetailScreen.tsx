@@ -61,7 +61,10 @@ export const RecordDetailScreen: React.FC = () => {
         <Text style={styles.headerTitle} numberOfLines={1}>
           {record.type === 'meeting' ? '會議紀錄' : '通話紀錄'}
         </Text>
-        <TouchableOpacity style={styles.editButton}>
+        <TouchableOpacity 
+          style={styles.editButton}
+          onPress={() => navigation.navigate('EditRecord', { recordId })}
+        >
           <Ionicons name="create-outline" size={24} color="#007AFF" />
         </TouchableOpacity>
       </View>
