@@ -71,9 +71,10 @@ export const ActionPopover = ({
     if (visible && fromRef.current) {
       fromRef.current.measureInWindow((x, y, width, height) => {
         const screenHeight = Dimensions.get('window').height;
+        // 按鈕位置減去 paddingTop (10px) 得到導航欄實際頂部
+        const navBarTop = y - 10; // paddingTop from tabBarStyle
         // 計算面板應該距離螢幕底部的距離
-        // 螢幕高度 - 按鈕頂部位置 = 面板應該的 bottom 值
-        const bottomDistance = screenHeight - y;
+        const bottomDistance = screenHeight - navBarTop;
         setPanelBottom(bottomDistance);
       });
     }
