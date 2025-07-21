@@ -476,11 +476,31 @@ export const DatabaseScreen: React.FC = () => {
       // 根據當前標籤頁執行不同的批量更新
       switch (activeTab) {
         case 'customers':
-          await useCustomerStore.getState().batchUpdateCustomers(
-            selectedItems,
-            processedUpdates,
-            user.id
-          );
+          // 如果不是管理員，只更新自己負責的客戶
+          let itemsToUpdate = selectedItems;
+          if (user.role !== 'admin') {
+            const editableItems = customers
+              .filter(c => selectedItems.includes(c.id!) && c.assignedTo === user.id)
+              .map(c => c.id!);
+            
+            if (editableItems.length < selectedItems.length) {
+              const skippedCount = selectedItems.length - editableItems.length;
+              console.warn(`⚠️ 跳過 ${skippedCount} 個非負責客戶`);
+              alert(`您只能編輯自己負責的客戶。將更新 ${editableItems.length} 個客戶，跳過 ${skippedCount} 個。`);
+            }
+            itemsToUpdate = editableItems;
+          }
+          
+          if (itemsToUpdate.length > 0) {
+            await useCustomerStore.getState().batchUpdateCustomers(
+              itemsToUpdate,
+              processedUpdates,
+              user.id
+            );
+          } else {
+            alert('您沒有權限編輯所選的客戶');
+            return;
+          }
           break;
           
         case 'records':

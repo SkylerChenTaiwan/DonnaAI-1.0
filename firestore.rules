@@ -134,8 +134,10 @@ service cloud.firestore {
                        (!('customFields' in request.resource.data) || 
                         request.resource.data.customFields is map);
       
-      // 更新：團隊成員可以更新同團隊的客戶
-      allow update: if isTeamMember(resource.data.teamId) &&
+      // 更新：指派的負責人或管理員可以更新
+      allow update: if (isTeamMember(resource.data.teamId) &&
+                       (request.auth.uid == resource.data.assignedTo || 
+                        isOrgAdmin())) &&
                        request.resource.data.updatedAt == request.time &&
                        // 不允許修改組織和團隊
                        request.resource.data.organizationId == resource.data.organizationId &&

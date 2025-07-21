@@ -191,8 +191,12 @@ export const canEditCustomer = async (userId: string, customerId: string): Promi
       return true;
     }
     
+    // 檢查是否為客戶負責人
+    if (customer.assignedTo === userId) {
+      return true;
+    }
+    
     // 檢查團隊成員身份
-    // 根據更新的 Firestore 規則，團隊成員可以編輯同團隊的客戶
     const userDoc = await getDoc(doc(getFirebaseDb(), 'users', userId));
     if (!userDoc.exists()) {
       console.log(`找不到使用者 ${userId}`);
@@ -200,12 +204,12 @@ export const canEditCustomer = async (userId: string, customerId: string): Promi
     }
     
     const userData = userDoc.data();
-    if (userData.teamIds?.includes(customer.teamId)) {
-      // 團隊成員可以編輯同團隊的客戶
-      return true;
+    if (!userData.teamIds?.includes(customer.teamId)) {
+      console.log(`使用者 ${userId} 不是客戶團隊 ${customer.teamId} 的成員`);
+      return false;
     }
     
-    console.log(`使用者 ${userId} 不是客戶 ${customerId} 所屬團隊的成員`);
+    console.log(`使用者 ${userId} 是團隊成員但不是客戶負責人，也不是管理員`);
     return false;
   } catch (error) {
     console.error('檢查客戶編輯權限時發生錯誤:', error);
