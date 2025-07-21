@@ -18,6 +18,9 @@ if (__DEV__) {
   import('@/utils/diagnose-permission').catch(err => 
     console.warn('權限診斷工具載入失敗:', err)
   );
+  import('@/utils/fix-test-data-permissions').catch(err => 
+    console.warn('權限修復工具載入失敗:', err)
+  );
 }
 
 // 防止自動隱藏啟動畫面
