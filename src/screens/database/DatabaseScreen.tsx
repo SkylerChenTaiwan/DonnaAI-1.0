@@ -758,7 +758,7 @@ export const DatabaseScreen: React.FC = () => {
           <Ionicons
             name={isEditMode ? 'create' : 'create-outline'}
             size={20}
-            color={isEditMode ? '#F7F6F3' : '#1A1A1A'}
+            color="#1A1A1A"
           />
           <Text style={[
             styles.toolButtonText,
@@ -977,14 +977,13 @@ const styles = StyleSheet.create({
   toolButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
+    paddingHorizontal: 8,
     paddingVertical: 8,
-    backgroundColor: '#F0F0F0',
-    borderRadius: 8,
+    borderRadius: 6,
     gap: 4,
   },
   toolButtonActive: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: 'rgba(26, 26, 26, 0.1)',
   },
   toolButtonText: {
     fontSize: 14,
@@ -992,7 +991,7 @@ const styles = StyleSheet.create({
     color: '#1A1A1A',
   },
   toolButtonTextActive: {
-    color: '#F7F6F3',
+    color: '#1A1A1A',
   },
   tabContainer: {
     flexDirection: 'row',

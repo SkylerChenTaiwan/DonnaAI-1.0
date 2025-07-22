@@ -55,13 +55,13 @@ export const EnhancedDashboard: React.FC = () => {
         { id: '1', title: '新增客戶', icon: 'person-add-outline' as const, action: () => navigation.navigate('CreateCustomerModal') },
         { id: '2', title: '記錄拜訪', icon: 'document-text-outline' as const, action: () => navigation.navigate('CreateRecordModal') },
         { id: '3', title: '建立任務', icon: 'checkbox-outline' as const, action: () => navigation.navigate('CreateTaskModal') },
-        { id: '4', title: '查看行程', icon: 'calendar-outline' as const, action: () => {} },
+        { id: '4', title: '智能分析', icon: 'analytics-outline' as const, action: () => navigation.navigate('SmartAnalytics') },
       ]
     : [
-        { id: '1', title: '團隊報表', icon: 'bar-chart-outline' as const, action: () => {} },
-        { id: '2', title: '審批中心', icon: 'checkmark-done-outline' as const, action: () => {} },
-        { id: '3', title: '指派任務', icon: 'send-outline' as const, action: () => {} },
-        { id: '4', title: '團隊行程', icon: 'calendar-outline' as const, action: () => {} },
+        { id: '1', title: '智能分析', icon: 'analytics-outline' as const, action: () => navigation.navigate('SmartAnalytics') },
+        { id: '2', title: '團隊報表', icon: 'bar-chart-outline' as const, action: () => {} },
+        { id: '3', title: '審批中心', icon: 'checkmark-done-outline' as const, action: () => {} },
+        { id: '4', title: '指派任務', icon: 'send-outline' as const, action: () => {} },
       ];
 
   // 最近活動
