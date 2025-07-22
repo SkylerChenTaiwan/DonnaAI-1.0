@@ -150,16 +150,31 @@ export function useOrganization(): OrganizationState {
       }
       
       const db = getFirebaseDb();
-      const orgsQuery = query(
-        collection(db, 'organizations'),
-        where('members', 'array-contains', userId)
-      );
       
-      const snapshot = await getDocs(orgsQuery);
-      return snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      } as Organization));
+      // 先獲取使用者文檔以取得 organizationId
+      const userDoc = await getDoc(doc(db, 'users', userId));
+      
+      if (!userDoc.exists()) {
+        console.log('User document not found:', userId);
+        return [];
+      }
+      
+      const userData = userDoc.data();
+      const organizationId = userData?.organizationId;
+      
+      if (!organizationId) {
+        console.log('User has no organization assigned:', userId);
+        return [];
+      }
+      
+      // 獲取使用者的組織
+      const organization = await fetchOrganization(organizationId);
+      
+      if (organization) {
+        return [organization];
+      }
+      
+      return [];
     } catch (error) {
       console.error('Error fetching user organizations:', error);
       return []; // 返回空陣列而不是拋出錯誤
