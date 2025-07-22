@@ -133,6 +133,16 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
     try {
       setRecordingStatus('loading');
       
+      // 確保沒有現有的錄音
+      if (recording) {
+        try {
+          await recording.stopAndUnloadAsync();
+          setRecording(null);
+        } catch (error) {
+          console.warn('清理現有錄音時出錯:', error);
+        }
+      }
+      
       await checkPermissions();
       await initializeAudio();
 
@@ -267,7 +277,7 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
     }
   }, [disabled, recordingStatus, startRecording, pauseRecording, resumeRecording]);
 
-  // 清理定時器
+  // 清理定時器和錄音資源
   useEffect(() => {
     return () => {
       if (durationTimerRef.current) {
@@ -275,8 +285,18 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
       }
       stopPulseAnimation();
       stopWaveformAnimation();
+      
+      // 清理錄音資源
+      if (recording) {
+        recording.stopAndUnloadAsync().catch(error => {
+          console.error('清理錄音資源失敗:', error);
+        });
+        Audio.setAudioModeAsync({ allowsRecordingIOS: false }).catch(error => {
+          console.error('重置音訊模式失敗:', error);
+        });
+      }
     };
-  }, [stopPulseAnimation, stopWaveformAnimation]);
+  }, [recording, stopPulseAnimation, stopWaveformAnimation]);
 
   // 渲染波形
   const renderWaveform = () => {
