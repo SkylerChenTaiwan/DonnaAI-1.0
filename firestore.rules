@@ -96,8 +96,11 @@ service cloud.firestore {
     // ====== 團隊集合 ======
     
     match /teams/{teamId} {
-      // 讀取：團隊成員可以讀取
-      allow read: if isTeamMember(teamId);
+      // 讀取：團隊成員或組織成員可以讀取（允許按組織ID查詢）
+      allow read: if isTeamMember(teamId) || 
+                     (isAuthenticated() && 
+                      'organizationId' in resource.data &&
+                      isOrgMember(resource.data.organizationId));
       
       // 建立：組織管理員可以建立團隊
       allow create: if isOrgAdmin() &&
