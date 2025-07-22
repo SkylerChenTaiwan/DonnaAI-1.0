@@ -6,7 +6,8 @@ import React from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
 export interface FormFieldProps {
-  config: {
+  // 支援兩種格式以保持向後相容
+  config?: {
     name: string;
     label: string;
     type: string;
@@ -14,20 +15,34 @@ export interface FormFieldProps {
     placeholder?: string;
     options?: Array<{ label: string; value: string }>;
   };
+  // 舊的 props 格式
+  label?: string;
+  type?: string;
   value?: any;
   onChange?: (value: any) => void;
+  onChangeText?: (text: string) => void;
   error?: string;
   disabled?: boolean;
+  placeholder?: string;
+  required?: boolean;
+  options?: Array<{ label: string; value: string }>;
+  minHeight?: number;
 }
 
-export const FormField: React.FC<FormFieldProps> = ({
-  config,
-  value,
-  onChange,
-  error,
-  disabled = false,
-}) => {
-  const { label, type = 'text', required = false, placeholder } = config;
+export const FormField: React.FC<FormFieldProps> = (props) => {
+  // 判斷是使用新格式還是舊格式
+  const isNewFormat = !!props.config;
+  
+  // 從 props 中提取值，支援兩種格式
+  const label = isNewFormat ? props.config?.label : props.label;
+  const type = isNewFormat ? props.config?.type : props.type || 'text';
+  const required = isNewFormat ? props.config?.required : props.required || false;
+  const placeholder = isNewFormat ? props.config?.placeholder : props.placeholder;
+  const value = props.value;
+  const onChange = props.onChange || props.onChangeText;
+  const error = props.error;
+  const disabled = props.disabled || false;
+  const minHeight = props.minHeight;
   
   return (
     <View style={styles.container}>
@@ -41,7 +56,7 @@ export const FormField: React.FC<FormFieldProps> = ({
       <TextInput
         style={[
           styles.input,
-          (type === 'textarea' || type === 'multiline') && styles.textarea,
+          (type === 'textarea' || type === 'multiline') && (minHeight ? { height: minHeight } : styles.textarea),
           error && styles.inputError,
         ]}
         value={value || ''}

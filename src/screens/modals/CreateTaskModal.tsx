@@ -14,6 +14,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
 import { createTask } from '@/services/firebase/tasks';
 import { TaskCreateRequest } from '@/types/task';
+import { TaskFormData } from '@/services/validation/form-schemas';
 import { showToast } from '../../utils/toast';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -31,8 +32,8 @@ export const CreateTaskModal: React.FC = () => {
   const { user } = useAuth();
   const { currentOrganization, currentTeam } = useOrganization();
   
-  // 從路由參數獲取模式，預設為語音（根據 ActionPopover 的設定）
-  const mode = route.params?.mode || 'voice';
+  // 從路由參數獲取模式，預設為表單
+  const mode = route.params?.mode || 'form';
   const customerId = route.params?.customerId;
   const recordId = route.params?.recordId;
   
@@ -49,7 +50,7 @@ export const CreateTaskModal: React.FC = () => {
   }, [navigation]);
 
   // 處理表單提交
-  const handleFormSubmit = useCallback(async (data: TaskCreateRequest) => {
+  const handleFormSubmit = useCallback(async (data: TaskFormData) => {
     if (!user || !currentOrganization || !currentTeam) {
       showToast('error', '請先登入');
       return;
@@ -57,11 +58,28 @@ export const CreateTaskModal: React.FC = () => {
 
     setLoading(true);
     try {
-      await createTask({
-        ...data,
+      // 轉換中文優先級到英文
+      const priorityMap: Record<string, 'low' | 'medium' | 'high'> = {
+        '低': 'low',
+        '中': 'medium',
+        '高': 'high',
+      };
+
+      const taskData: TaskCreateRequest = {
+        title: data.title,
+        description: data.description,
+        type: 'once',
+        priority: priorityMap[data.priority] || 'medium',
+        assigneeId: data.assignedTo || user.uid,
+        source: 'manual',
         teamId: currentTeam.id,
         organizationId: currentOrganization.id,
-      }, user.uid);
+        customerIds: data.customerId ? [data.customerId] : [],
+        dueDate: data.dueDate,
+        tags: data.tags,
+      };
+
+      await createTask(taskData, user.uid);
       
       showToast('success', '任務建立成功');
       navigation.goBack();
@@ -108,22 +126,33 @@ export const CreateTaskModal: React.FC = () => {
 
   return (
     <Layout style={styles.container}>
-      {/* 標題欄 */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.closeButton}>
-          <Ionicons name="close" size={24} color="#1C1C1E" />
-        </TouchableOpacity>
-        <Text style={styles.title}>建立任務</Text>
-        <View style={styles.headerSpacer} />
-      </View>
 
       {/* 內容區域 */}
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {mode === 'voice' ? (
+        {mode === 'form' ? (
+          <>
+            {/* 切換到語音輸入的連結 */}
+            <InputMethodLink
+              targetLabel="改用語音輸入"
+              onSwitch={switchToVoice}
+            />
+            <TaskForm 
+              onSubmit={handleFormSubmit}
+              initialData={{
+                customerIds: customerId ? [customerId] : [],
+                recordId: recordId,
+              }}
+              isSubmitting={loading}
+              userId={user?.uid || ''}
+              organizationId={currentOrganization?.id || ''}
+              teamId={currentTeam?.id || ''}
+            />
+          </>
+        ) : (
           <>
             {/* 切換到表格填寫的連結 */}
             <InputMethodLink
-              targetLabel="改用表格填寫 →"
+              targetLabel="改用表格填寫"
               onSwitch={switchToForm}
             />
             <VoiceTaskInput 
@@ -131,20 +160,6 @@ export const CreateTaskModal: React.FC = () => {
               initialCustomerId={customerId}
               initialRecordId={recordId}
               disabled={loading}
-            />
-          </>
-        ) : (
-          <>
-            {/* 切換到語音輸入的連結 */}
-            <InputMethodLink
-              targetLabel="改用語音輸入 →"
-              onSwitch={switchToVoice}
-            />
-            <TaskForm 
-              onSubmit={handleFormSubmit}
-              initialCustomerId={customerId}
-              initialRecordId={recordId}
-              loading={loading}
             />
           </>
         )}
@@ -157,28 +172,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F8F9FA',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 12,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
-  },
-  closeButton: {
-    padding: 8,
-  },
-  title: {
-    fontSize: 17,
-    fontWeight: '600',
-    color: '#1C1C1E',
-  },
-  headerSpacer: {
-    width: 40,
   },
   content: {
     flex: 1,
