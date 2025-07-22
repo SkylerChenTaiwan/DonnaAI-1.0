@@ -90,7 +90,12 @@ export const AppNavigator = () => {
               component={SmartAnalyticsScreen}
               options={{ headerShown: false }}
             />
-            <Stack.Group screenOptions={{ presentation: 'modal', headerShown: true }}>
+            <Stack.Group screenOptions={{ 
+              presentation: 'modal', 
+              headerShown: true,
+              headerTintColor: '#1A1A1A',  // 設定返回按鈕和標題顏色為灰黑色
+              headerBackTitleVisible: false,  // 隱藏返回按鈕旁的文字
+            }}>
               <Stack.Screen
                 name="CreateCustomerModal"
                 component={CreateCustomerModal}
@@ -125,7 +130,11 @@ export const AppNavigator = () => {
             
             {/* 開發者工具畫面（只在開發模式顯示） */}
             {environmentManager.isDevToolsEnabled() && (
-              <Stack.Group screenOptions={{ headerShown: true }}>
+              <Stack.Group screenOptions={{ 
+                headerShown: true,
+                headerTintColor: '#1A1A1A',  // 設定返回按鈕和標題顏色為灰黑色
+                headerBackTitleVisible: false,  // 隱藏返回按鈕旁的文字
+              }}>
                 <Stack.Screen
                   name="StateInspector"
                   component={StateInspector}
