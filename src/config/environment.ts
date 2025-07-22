@@ -142,20 +142,30 @@ class EnvironmentManager {
    * 取得 Firebase 配置
    */
   getFirebaseConfig() {
-    // 在 React Native 環境中，直接從 Constants.expoConfig 讀取環境變數
+    // 優先從 Constants.expoConfig.extra 讀取，如果沒有則使用 process.env 作為備用
     const config = {
-      apiKey: Constants.expoConfig?.extra?.firebaseApiKey,
-      authDomain: Constants.expoConfig?.extra?.firebaseAuthDomain,
-      projectId: Constants.expoConfig?.extra?.firebaseProjectId,
-      storageBucket: Constants.expoConfig?.extra?.firebaseStorageBucket,
-      messagingSenderId: Constants.expoConfig?.extra?.firebaseMessagingSenderId,
-      appId: Constants.expoConfig?.extra?.firebaseAppId
+      apiKey: Constants.expoConfig?.extra?.firebaseApiKey || 
+              process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
+      authDomain: Constants.expoConfig?.extra?.firebaseAuthDomain || 
+                  process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
+      projectId: Constants.expoConfig?.extra?.firebaseProjectId || 
+                 process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
+      storageBucket: Constants.expoConfig?.extra?.firebaseStorageBucket || 
+                     process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: Constants.expoConfig?.extra?.firebaseMessagingSenderId || 
+                        process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+      appId: Constants.expoConfig?.extra?.firebaseAppId || 
+             process.env.EXPO_PUBLIC_FIREBASE_APP_ID
     };
 
     // 檢查配置是否完整
     if (!config.apiKey || !config.projectId) {
-      console.error('Firebase 配置不完整，Constants.expoConfig:', Constants.expoConfig);
-      console.error('Firebase 配置:', config);
+      console.error('Firebase 配置不完整');
+      console.error('Constants.expoConfig.extra:', Constants.expoConfig?.extra);
+      console.error('process.env:', {
+        apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY ? '***' : 'missing',
+        projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID || 'missing'
+      });
     }
 
     return config;

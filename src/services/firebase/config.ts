@@ -65,32 +65,20 @@ const initializeFirebaseApp = (): FirebaseApp => {
   // 從環境管理器取得 Firebase 配置
   const firebaseConfig = getFirebaseConfig();
   
-  // 如果配置為空，嘗試直接使用硬編碼的值作為備用
-  const fallbackConfig = {
-    apiKey: "AIzaSyAxEU8MuVZdZqXd6dDpBYL6Iu-TRD3vblI",
-    authDomain: "donnaai-5e601.firebaseapp.com",
-    projectId: "donnaai-5e601",
-    storageBucket: "donnaai-5e601.firebasestorage.app",
-    messagingSenderId: "748876929238",
-    appId: "1:748876929238:web:fbbe5fd030a68765ea9177"
-  };
-  
-  const finalConfig = firebaseConfig.apiKey ? firebaseConfig : fallbackConfig;
-  
   console.log('Firebase 配置:', {
-    ...finalConfig,
-    apiKey: finalConfig.apiKey ? '***' + finalConfig.apiKey.slice(-4) : 'missing'
+    ...firebaseConfig,
+    apiKey: firebaseConfig.apiKey ? '***' + firebaseConfig.apiKey.slice(-4) : 'missing'
   });
   
   // 驗證配置
-  if (!finalConfig.apiKey || !finalConfig.projectId) {
+  if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
     console.error('Firebase 配置不完整，請檢查環境變數設定');
-    console.error('完整配置:', finalConfig);
+    console.error('完整配置:', firebaseConfig);
     throw new Error('Firebase 配置錯誤');
   }
 
   // 只在尚未初始化時初始化 Firebase
-  app = getApps().length === 0 ? initializeApp(finalConfig) : getApps()[0];
+  app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
   
   console.log('✅ Firebase 初始化成功');
   
