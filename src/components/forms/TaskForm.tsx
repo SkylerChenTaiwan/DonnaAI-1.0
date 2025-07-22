@@ -11,7 +11,6 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
-  Modal,
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -88,95 +87,6 @@ export const TaskForm: React.FC<TaskFormProps> = ({
     { label: '已完成', value: '已完成' },
     { label: '已取消', value: '已取消' },
   ];
-
-  // 輸入模式切換按鈕
-  const renderInputModeToggle = () => (
-    <View style={styles.inputModeContainer}>
-      <Text style={styles.inputModeLabel}>輸入方式：</Text>
-      <View style={styles.inputModeToggle}>
-        <TouchableOpacity
-          style={[
-            styles.modeButton,
-            inputMode === 'text' && styles.modeButtonActive,
-          ]}
-          onPress={() => setInputMode('text')}
-        >
-          <Ionicons 
-            name="create-outline" 
-            size={18} 
-            color={inputMode === 'text' ? '#FFFFFF' : '#7A7A7A'} 
-          />
-          <Text style={[
-            styles.modeButtonText,
-            inputMode === 'text' && styles.modeButtonTextActive,
-          ]}>
-            文字輸入
-          </Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity
-          style={[
-            styles.modeButton,
-            inputMode === 'voice' && styles.modeButtonActive,
-          ]}
-          onPress={() => setInputMode('voice')}
-        >
-          <Ionicons 
-            name="mic-outline" 
-            size={18} 
-            color={inputMode === 'voice' ? '#FFFFFF' : '#7A7A7A'} 
-          />
-          <Text style={[
-            styles.modeButtonText,
-            inputMode === 'voice' && styles.modeButtonTextActive,
-          ]}>
-            語音輸入
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-
-  // 語音輸入提示和按鈕
-  const renderVoiceInputSection = () => {
-    if (inputMode !== 'voice') return null;
-
-    return (
-      <View style={styles.voiceInputSection}>
-        <View style={styles.voiceInputHeader}>
-          <Ionicons name="mic" size={24} color="#ef4444" />
-          <Text style={styles.voiceInputTitle}>語音創建任務</Text>
-        </View>
-        
-        <Text style={styles.voiceInputDescription}>
-          使用語音快速創建任務！說出任務內容，AI 將自動識別任務標題、優先級、截止時間等資訊。
-        </Text>
-
-        <View style={styles.voiceInputTips}>
-          <Text style={styles.tipsTitle}>📝 語音輸入建議：</Text>
-          <Text style={styles.tipText}>• 清楚描述任務目標和要求</Text>
-          <Text style={styles.tipText}>• 提及時間要求（如：「下週五前完成」）</Text>
-          <Text style={styles.tipText}>• 說明重要程度（如：「很重要」、「不急」）</Text>
-        </View>
-
-        <Button
-          title="開始語音輸入"
-          onPress={() => setShowVoiceInput(true)}
-          style={styles.voiceInputButton}
-          icon="mic"
-        />
-
-        {voiceTaskResult && (
-          <View style={styles.voiceResultBanner}>
-            <Ionicons name="checkmark-circle" size={20} color="#22c55e" />
-            <Text style={styles.voiceResultText}>
-              已從語音提取任務資訊，您可以繼續編輯
-            </Text>
-          </View>
-        )}
-      </View>
-    );
-  };
 
   return (
     <View style={styles.container}>
@@ -354,31 +264,11 @@ export const TaskForm: React.FC<TaskFormProps> = ({
         <Button
           title={isSubmitting ? "創建中..." : "創建任務"}
           onPress={handleSubmit(onFormSubmit)}
-          disabled={!isValid || isSubmitting || inputMode === 'voice'}
+          disabled={!isValid || isSubmitting}
           style={styles.footerButton}
           icon={isSubmitting ? undefined : "add"}
         />
       </View>
-
-      {/* 語音任務輸入 Modal */}
-      <Modal
-        visible={showVoiceInput}
-        animationType="slide"
-        presentationStyle="fullScreen"
-      >
-        <VoiceTaskInput
-          onTaskExtracted={handleVoiceTaskExtracted}
-          onCancel={() => setShowVoiceInput(false)}
-          userId={userId}
-          options={{
-            extractDeadline: true,
-            extractPriority: true,
-            extractAssignee: true,
-            autoDetectTaskType: true,
-          }}
-          maxDuration={300} // 5分鐘
-        />
-      </Modal>
     </View>
   );
 };
