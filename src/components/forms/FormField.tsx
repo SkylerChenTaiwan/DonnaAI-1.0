@@ -56,23 +56,35 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   // 下拉選單的狀態
   const [showPicker, setShowPicker] = useState(false);
+  // iOS 日期選擇器的臨時值
+  const [tempDate, setTempDate] = useState<Date | undefined>(undefined);
   
   // 處理日期選擇器變更
   const handleDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     if (Platform.OS === 'android') {
       setShowDatePicker(false);
-    }
-    if (event.type === 'set' && selectedDate && onDateChange) {
-      onDateChange(selectedDate);
-    }
-    if (Platform.OS === 'ios') {
-      // iOS 不會自動關閉，需要手動處理
+      if (event.type === 'set' && selectedDate && onDateChange) {
+        onDateChange(selectedDate);
+      }
+    } else if (Platform.OS === 'ios' && selectedDate) {
+      // iOS：暫存選擇的日期
+      setTempDate(selectedDate);
     }
   };
   
   // iOS 日期選擇器的確認處理
   const handleIOSDateConfirm = () => {
+    if (tempDate && onDateChange) {
+      onDateChange(tempDate);
+    }
     setShowDatePicker(false);
+    setTempDate(undefined);
+  };
+  
+  // iOS 日期選擇器的取消處理
+  const handleIOSDateCancel = () => {
+    setShowDatePicker(false);
+    setTempDate(undefined);
   };
 
   // 格式化日期顯示
@@ -93,7 +105,10 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
           <>
             <TouchableOpacity
               style={[styles.input, styles.dateInput, error && styles.inputError]}
-              onPress={() => setShowDatePicker(true)}
+              onPress={() => {
+                setShowDatePicker(true);
+                setTempDate(value || new Date());
+              }}
               disabled={disabled}
             >
               <Text style={[styles.dateText, !value && styles.placeholderText]}>
@@ -117,12 +132,12 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
                 transparent={true}
                 animationType="slide"
                 visible={showDatePicker}
-                onRequestClose={() => setShowDatePicker(false)}
+                onRequestClose={handleIOSDateCancel}
               >
                 <View style={styles.modalContainer}>
                   <View style={styles.datePickerContainer}>
                     <View style={styles.datePickerHeader}>
-                      <TouchableOpacity onPress={() => setShowDatePicker(false)}>
+                      <TouchableOpacity onPress={handleIOSDateCancel}>
                         <Text style={styles.cancelButton}>取消</Text>
                       </TouchableOpacity>
                       <TouchableOpacity onPress={handleIOSDateConfirm}>
@@ -130,7 +145,7 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
                       </TouchableOpacity>
                     </View>
                     <DateTimePicker
-                      value={value || new Date()}
+                      value={tempDate || value || new Date()}
                       mode="date"
                       display="spinner"
                       onChange={handleDateChange}

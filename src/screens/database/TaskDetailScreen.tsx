@@ -2,7 +2,7 @@
  * 任務詳細資料頁面
  */
 
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -18,6 +18,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useTaskStore } from '@/stores/taskStore';
 import { useCustomerStore } from '@/stores/customerStore';
 import { RootStackParamList } from '@/types/navigation';
+import { showToast } from '@/utils/toast';
+import { useAuth } from '@/hooks/useAuth';
 
 type TaskDetailRouteProp = RouteProp<RootStackParamList, 'TaskDetail'>;
 type TaskDetailNavigationProp = StackNavigationProp<RootStackParamList, 'TaskDetail'>;
@@ -27,8 +29,10 @@ export const TaskDetailScreen: React.FC = () => {
   const route = useRoute<TaskDetailRouteProp>();
   const { taskId } = route.params;
   
-  const { tasks, isLoading: taskLoading } = useTaskStore();
+  const { tasks, isLoading: taskLoading, updateTask } = useTaskStore();
   const { customers } = useCustomerStore();
+  const { user } = useAuth();
+  const [isUpdating, setIsUpdating] = useState(false);
   
   const task = tasks?.find(t => t.id === taskId);
   const customer = task && task.customerIds && task.customerIds.length > 0 
@@ -39,6 +43,34 @@ export const TaskDetailScreen: React.FC = () => {
   const handleBack = () => {
     navigation.goBack();
   };
+
+  // 處理狀態切換
+  const handleStatusToggle = useCallback(async () => {
+    if (!task || !user || isUpdating) return;
+    
+    setIsUpdating(true);
+    try {
+      const statusFlow = ['todo', 'in_progress', 'completed'];
+      const currentIndex = statusFlow.indexOf(task.status);
+      const nextIndex = (currentIndex + 1) % statusFlow.length;
+      const newStatus = statusFlow[nextIndex];
+      
+      await updateTask(task.id!, { 
+        status: newStatus as any,
+        completedAt: newStatus === 'completed' ? new Date() : null,
+      }, user.uid);
+      
+      showToast('success', `狀態已更新為${
+        newStatus === 'completed' ? '已完成' : 
+        newStatus === 'in_progress' ? '進行中' : '待開始'
+      }`);
+    } catch (error) {
+      console.error('更新狀態失敗:', error);
+      showToast('error', '更新狀態失敗');
+    } finally {
+      setIsUpdating(false);
+    }
+  }, [task, user, isUpdating, updateTask]);
 
   if (taskLoading || !task) {
     return (
@@ -99,13 +131,22 @@ export const TaskDetailScreen: React.FC = () => {
         {/* 任務標題和狀態 */}
         <View style={styles.titleSection}>
           <Text style={styles.taskTitle}>{task.title}</Text>
-          <View style={[styles.statusBadge, getStatusColor(task.status)]}>
-            <Text style={styles.statusText}>
-              {task.status === 'completed' ? '已完成' : 
-               task.status === 'in_progress' ? '進行中' : 
-               task.status === 'cancelled' ? '已取消' : '待開始'}
-            </Text>
-          </View>
+          <TouchableOpacity 
+            style={[styles.statusBadge, getStatusColor(task.status)]}
+            onPress={handleStatusToggle}
+            disabled={isUpdating}
+            activeOpacity={0.7}
+          >
+            {isUpdating ? (
+              <ActivityIndicator size="small" color="#FFFFFF" />
+            ) : (
+              <Text style={styles.statusText}>
+                {task.status === 'completed' ? '已完成' : 
+                 task.status === 'in_progress' ? '進行中' : 
+                 task.status === 'cancelled' ? '已取消' : '待開始'}
+              </Text>
+            )}
+          </TouchableOpacity>
         </View>
 
         {/* 基本資訊區塊 */}

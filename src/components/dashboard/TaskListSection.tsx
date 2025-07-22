@@ -108,10 +108,10 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
     setUpdatingTaskIds(prev => new Set(prev).add(task.id));
 
     try {
-      const newStatus = task.status === 'completed' ? 'pending' : 'completed';
+      const newStatus = task.status === 'completed' ? 'todo' : 'completed';
       await updateTask(task.id!, { 
         status: newStatus,
-        completedAt: newStatus === 'completed' ? new Date().toISOString() : null,
+        completedAt: newStatus === 'completed' ? new Date() : null,
       }, userId);
       
       showToast('success', `任務已標記為${newStatus === 'completed' ? '完成' : '待辦'}`);
