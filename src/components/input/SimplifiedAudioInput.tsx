@@ -30,6 +30,15 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
   onComplete,
   disabled = false,
 }) => {
+  // 組件實例ID，用於調試
+  const instanceId = useRef(Math.random().toString(36).substr(2, 9)).current;
+  
+  useEffect(() => {
+    console.log(`SimplifiedAudioInput mounted: ${instanceId}`);
+    return () => {
+      console.log(`SimplifiedAudioInput unmounted: ${instanceId}`);
+    };
+  }, [instanceId]);
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [recordingStatus, setRecordingStatus] = useState<RecordingStatus>('idle');
   const [duration, setDuration] = useState(0);
@@ -139,7 +148,7 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
       await initializeAudio();
 
       // eslint-disable-next-line no-console
-      console.log('開始錄音...');
+      console.log(`開始錄音... (instance: ${instanceId})`);
       
       // 使用全局錄音管理器
       const newRecording = await recordingManager.startNewRecording();
