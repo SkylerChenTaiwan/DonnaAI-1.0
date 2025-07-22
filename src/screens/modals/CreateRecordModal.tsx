@@ -4,11 +4,11 @@
 
 import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { Button } from '@/components/common/Button';
 import { Layout } from '@/components/common/Layout';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { RecordForm } from '@/components/forms/RecordForm';
-import { AudioInput } from '@/components/input/AudioInput';
+import { SimplifiedAudioInput } from '@/components/input/SimplifiedAudioInput';
+import { RecordPurposeSelector } from '@/components/modals/RecordPurposeSelector';
 import { InputMethodLink } from '@/components/modals/InputMethodLink';
 import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
@@ -16,6 +16,7 @@ import { createRecord } from '@/services/firebase/records';
 import { RecordCreateRequest } from '@/types/record';
 import { showToast } from '../../utils/toast';
 import { Ionicons } from '@expo/vector-icons';
+import type { AudioPurpose } from '@/components/input/AudioInput';
 
 type RouteParams = {
   CreateRecordModal: {
@@ -35,6 +36,8 @@ export const CreateRecordModal: React.FC = () => {
   const customerId = route.params?.customerId;
   
   const [loading, setLoading] = useState(false);
+  const [showPurposeSelector, setShowPurposeSelector] = useState(false);
+  const [recordingData, setRecordingData] = useState<{ audioUri: string; duration: number } | null>(null);
   
   // 切換到文字輸入模式
   const switchToText = useCallback(() => {
@@ -66,26 +69,42 @@ export const CreateRecordModal: React.FC = () => {
     }
   }, [user, currentOrganization, currentTeam, navigation]);
 
-  // 處理音頻錄製完成
-  const handleAudioComplete = useCallback(async (audioUri: string, duration: number) => {
-    if (!user || !currentOrganization || !currentTeam) {
+  // 處理音頻錄製完成 - 顯示用途選擇器
+  const handleAudioComplete = useCallback((audioUri: string, duration: number) => {
+    setRecordingData({ audioUri, duration });
+    setShowPurposeSelector(true);
+  }, []);
+
+  // 處理用途選擇
+  const handlePurposeSelect = useCallback(async (purpose: AudioPurpose) => {
+    if (!user || !currentOrganization || !currentTeam || !recordingData) {
       showToast('error', '請先登入');
       return;
     }
 
     setLoading(true);
+    setShowPurposeSelector(false);
+    
     try {
       // TODO: 上傳音頻到 Firebase Storage
       // TODO: 呼叫 Cloud Function 進行語音轉文字
       
+      // 根據用途決定記錄類型
+      const recordType = purpose === 'meeting' ? 'meeting' : 
+                        purpose === 'customer' ? 'call' : 
+                        'note';
+      
       const recordData: RecordCreateRequest = {
-        type: 'meeting',
-        content: '音頻紀錄處理中...',
-        audioUrl: audioUri,
-        audioDuration: duration,
+        type: recordType,
+        content: `[${getPurposeLabel(purpose)}] 音頻紀錄處理中...`,
+        audioUrl: recordingData.audioUri,
+        audioDuration: recordingData.duration,
         customerIds: customerId ? [customerId] : [],
         organizationId: currentOrganization.id,
         teamId: currentTeam.id,
+        metadata: {
+          audioPurpose: purpose,
+        },
       };
       
       await createRecord(recordData);
@@ -97,7 +116,25 @@ export const CreateRecordModal: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [user, currentOrganization, currentTeam, customerId, navigation]);
+  }, [user, currentOrganization, currentTeam, customerId, recordingData, navigation]);
+
+  // 取消用途選擇
+  const handlePurposeCancel = useCallback(() => {
+    setShowPurposeSelector(false);
+    setRecordingData(null);
+  }, []);
+
+  // 獲取用途標籤
+  const getPurposeLabel = (purpose: AudioPurpose): string => {
+    const labels: Record<AudioPurpose, string> = {
+      meeting: '會議記錄',
+      note: '補充記錄',
+      task: '任務說明',
+      customer: '客戶通話',
+      other: '其他用途',
+    };
+    return labels[purpose] || '錄音';
+  };
 
   return (
     <Layout style={styles.container}>
@@ -106,39 +143,55 @@ export const CreateRecordModal: React.FC = () => {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.closeButton}>
           <Ionicons name="close" size={24} color="#1C1C1E" />
         </TouchableOpacity>
-        <Text style={styles.title}>建立紀錄</Text>
+        <Text style={styles.title}>新增紀錄</Text>
         <View style={styles.headerSpacer} />
       </View>
 
       {/* 內容區域 */}
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {mode === 'audio' ? (
-          <>
-            {/* 切換到文字輸入的連結 */}
-            <InputMethodLink
-              targetLabel="改用文字輸入 →"
-              onSwitch={switchToText}
-            />
-            <AudioInput 
-              onComplete={handleAudioComplete}
-              disabled={loading}
-            />
-          </>
-        ) : (
-          <>
-            {/* 切換到語音錄製的連結 */}
-            <InputMethodLink
-              targetLabel="改用語音錄製 →"
-              onSwitch={switchToAudio}
-            />
-            <RecordForm 
-              onSubmit={handleFormSubmit}
-              initialCustomerId={customerId}
-              loading={loading}
-            />
-          </>
-        )}
-      </ScrollView>
+      {mode === 'audio' ? (
+        <View style={styles.audioContent}>
+          {/* 文字輸入連結 - 小而不突兀 */}
+          <TouchableOpacity
+            style={styles.textInputLink}
+            onPress={switchToText}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.linkText}>使用文字輸入</Text>
+            <Ionicons name="arrow-forward" size={16} color="#FF6B35" />
+          </TouchableOpacity>
+          
+          {/* 簡化的錄音介面 */}
+          <SimplifiedAudioInput
+            onComplete={handleAudioComplete}
+            disabled={loading}
+          />
+        </View>
+      ) : (
+        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+          {/* 切換到語音錄製的連結 */}
+          <InputMethodLink
+            targetLabel="改用語音錄製 →"
+            onSwitch={switchToAudio}
+          />
+          <RecordForm 
+            onSubmit={handleFormSubmit}
+            initialData={customerId ? { customerIds: [customerId] } : undefined}
+            isSubmitting={loading}
+            userId={user?.uid || ''}
+            organizationId={currentOrganization?.id || ''}
+            teamId={currentTeam?.id || ''}
+          />
+        </ScrollView>
+      )}
+
+      {/* 錄音用途選擇器 */}
+      <RecordPurposeSelector
+        visible={showPurposeSelector}
+        onSelect={handlePurposeSelect}
+        onCancel={handlePurposeCancel}
+        audioUri={recordingData?.audioUri || ''}
+        duration={recordingData?.duration || 0}
+      />
     </Layout>
   );
 };
@@ -172,5 +225,23 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+  },
+  audioContent: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
+  textInputLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginTop: 20,
+    gap: 6,
+  },
+  linkText: {
+    fontSize: 14,
+    color: '#FF6B35',
+    fontWeight: '500',
   },
 });
