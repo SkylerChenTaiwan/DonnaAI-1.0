@@ -137,6 +137,7 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
       if (recording) {
         try {
           await recording.stopAndUnloadAsync();
+          await Audio.setAudioModeAsync({ allowsRecordingIOS: false });
           setRecording(null);
         } catch (error) {
           console.warn('清理現有錄音時出錯:', error);
@@ -172,7 +173,7 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
       setRecordingStatus('idle');
       Alert.alert('錄音失敗', error instanceof Error ? error.message : '無法開始錄音');
     }
-  }, [checkPermissions, initializeAudio, startPulseAnimation, startWaveformAnimation]);
+  }, [recording, checkPermissions, initializeAudio, startPulseAnimation, startWaveformAnimation]);
 
   // 暫停錄音
   const pauseRecording = useCallback(async () => {
