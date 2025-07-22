@@ -260,11 +260,6 @@ export const EnhancedDashboardV2: React.FC = () => {
         onPress={() => navigation.navigate('CustomerDetail', { customerId: customer.id })}
         activeOpacity={0.7}
       >
-        <View style={styles.customerAvatar}>
-          <Text style={styles.customerInitial}>
-            {customer.name.charAt(0).toUpperCase()}
-          </Text>
-        </View>
         <View style={styles.customerInfo}>
           <Text style={styles.customerName}>{customer.name}</Text>
           <Text style={styles.customerCompany}>{customer.company}</Text>
@@ -455,20 +450,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
     borderBottomColor: '#E5E7EB',
-  },
-  customerAvatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: '#FF6B6B',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 12,
-  },
-  customerInitial: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#FFFFFF',
   },
   customerInfo: {
     flex: 1,
