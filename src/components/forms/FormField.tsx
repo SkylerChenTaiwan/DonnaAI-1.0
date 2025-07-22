@@ -3,7 +3,7 @@
  */
 
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Platform } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Platform, Modal, Button } from 'react-native';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
@@ -60,9 +60,17 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
     if (Platform.OS === 'android') {
       setShowDatePicker(false);
     }
-    if (selectedDate && onDateChange) {
+    if (event.type === 'set' && selectedDate && onDateChange) {
       onDateChange(selectedDate);
     }
+    if (Platform.OS === 'ios') {
+      // iOS 不會自動關閉，需要手動處理
+    }
+  };
+  
+  // iOS 日期選擇器的確認處理
+  const handleIOSDateConfirm = () => {
+    setShowDatePicker(false);
   };
 
   // 格式化日期顯示
@@ -92,14 +100,43 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
               <Ionicons name="calendar-outline" size={20} color="#7A7A7A" />
             </TouchableOpacity>
             
-            {showDatePicker && (
+            {showDatePicker && Platform.OS === 'android' && (
               <DateTimePicker
                 value={value || new Date()}
                 mode="date"
-                display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                display="default"
                 onChange={handleDateChange}
                 locale="zh-TW"
               />
+            )}
+            
+            {showDatePicker && Platform.OS === 'ios' && (
+              <Modal
+                transparent={true}
+                animationType="slide"
+                visible={showDatePicker}
+                onRequestClose={() => setShowDatePicker(false)}
+              >
+                <View style={styles.modalContainer}>
+                  <View style={styles.datePickerContainer}>
+                    <View style={styles.datePickerHeader}>
+                      <TouchableOpacity onPress={() => setShowDatePicker(false)}>
+                        <Text style={styles.cancelButton}>取消</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={handleIOSDateConfirm}>
+                        <Text style={styles.confirmButton}>確定</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <DateTimePicker
+                      value={value || new Date()}
+                      mode="date"
+                      display="spinner"
+                      onChange={handleDateChange}
+                      locale="zh-TW"
+                    />
+                  </View>
+                </View>
+              </Modal>
             )}
           </>
         );
@@ -231,5 +268,35 @@ const styles = StyleSheet.create({
   },
   picker: {
     height: 50,
+  },
+  // Modal 樣式
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  datePickerContainer: {
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingBottom: 20,
+  },
+  datePickerHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E3E1DC',
+  },
+  cancelButton: {
+    fontSize: 16,
+    color: '#7A7A7A',
+  },
+  confirmButton: {
+    fontSize: 16,
+    color: '#FF6B6B',
+    fontWeight: '600',
   },
 });

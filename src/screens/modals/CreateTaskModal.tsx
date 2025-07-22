@@ -65,6 +65,7 @@ export const CreateTaskModal: React.FC = () => {
         '高': 'high',
       };
 
+      // 基礎任務資料
       const taskData: TaskCreateRequest = {
         title: data.title,
         description: data.description || '',
@@ -75,10 +76,13 @@ export const CreateTaskModal: React.FC = () => {
         teamId: currentTeam.id,
         organizationId: currentOrganization.id,
         customerIds: data.customerId ? [data.customerId] : [],
-        dueDate: data.dueDate,
-        location: data.location,
-        tags: data.tags,
+        tags: data.tags || [],
       };
+      
+      // 只有在有值時才添加 optional 欄位
+      if (data.dueDate) {
+        taskData.dueDate = data.dueDate;
+      }
 
       await createTask(taskData, user.uid);
       

@@ -174,22 +174,6 @@ export const TaskForm = forwardRef<any, TaskFormProps>((props, ref) => {
           )}
         />
 
-        {/* 地點 - 重要欄位，放在第三位 */}
-        <Controller
-          control={control}
-          name="location"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <FormField
-              label="地點"
-              type="text"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              error={errors.location?.message}
-              placeholder="任務執行地點（可選）"
-            />
-          )}
-        />
 
         {/* 任務描述 - 選填 */}
         <Controller

@@ -42,8 +42,7 @@ export type RecordFormData = z.infer<typeof RecordFormSchema>;
 // 任務輸入模式
 export const TaskFormSchema = z.object({
   title: z.string().min(1, "任務標題為必填"),
-  dueDate: z.string().optional(),
-  location: z.string().optional(),
+  dueDate: z.date().optional(),
   description: z.string().optional(),
   customerId: z.string().optional(),
   priority: z.enum(['低', '中', '高']).default('中'),
