@@ -308,64 +308,81 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
       {/* 計時器 */}
       <Text style={styles.timer}>{formatDuration(duration)}</Text>
 
-      {/* 錄音按鈕 */}
-      <TouchableOpacity
-        style={styles.recordButtonWrapper}
-        onPress={handleRecordPress}
-        disabled={disabled || recordingStatus === 'loading'}
-        activeOpacity={0.8}
-      >
-        <Animated.View
-          style={[
-            styles.recordButton,
-            recordingStatus === 'recording' && styles.recordingButton,
-            recordingStatus === 'paused' && styles.pausedButton,
-            {
-              transform: [{ scale: pulseAnim }],
-            },
-          ]}
-        >
-          {recordingStatus === 'loading' ? (
-            <LoadingSpinner size="large" color="#FFFFFF" />
-          ) : (
-            <Ionicons
-              name={
-                recordingStatus === 'recording' ? 'pause' : 
-                recordingStatus === 'paused' ? 'play' : 
-                'mic'
-              }
-              size={40}
-              color="#FFFFFF"
-            />
+      {/* 控制按鈕區域 */}
+      <View style={styles.controlsContainer}>
+        {/* 左側按鈕空間 */}
+        <View style={styles.sideButtonContainer}>
+          {recordingStatus === 'recording' && (
+            <TouchableOpacity
+              style={styles.sideButton}
+              onPress={pauseRecording}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="pause" size={32} color="#6B7280" />
+            </TouchableOpacity>
           )}
-        </Animated.View>
-        {recordingStatus === 'recording' && (
-          <View style={styles.recordingIndicator} />
-        )}
-      </TouchableOpacity>
+        </View>
+
+        {/* 中央錄音按鈕 */}
+        <TouchableOpacity
+          style={styles.recordButtonWrapper}
+          onPress={handleRecordPress}
+          disabled={disabled || recordingStatus === 'loading'}
+          activeOpacity={0.8}
+        >
+          <Animated.View
+            style={[
+              styles.recordButton,
+              recordingStatus === 'recording' && styles.recordingButton,
+              recordingStatus === 'paused' && styles.pausedButton,
+              {
+                transform: [{ scale: pulseAnim }],
+              },
+            ]}
+          >
+            {recordingStatus === 'loading' ? (
+              <LoadingSpinner size="large" color="#FFFFFF" />
+            ) : (
+              <Ionicons
+                name={
+                  recordingStatus === 'recording' ? 'mic' : 
+                  recordingStatus === 'paused' ? 'play' : 
+                  'mic'
+                }
+                size={40}
+                color="#FFFFFF"
+              />
+            )}
+          </Animated.View>
+          {recordingStatus === 'recording' && (
+            <View style={styles.recordingIndicator} />
+          )}
+        </TouchableOpacity>
+
+        {/* 右側按鈕空間 */}
+        <View style={styles.sideButtonContainer}>
+          {(recordingStatus === 'recording' || recordingStatus === 'paused') && (
+            <TouchableOpacity
+              style={styles.sideButton}
+              onPress={stopRecording}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="stop" size={32} color="#6B7280" />
+            </TouchableOpacity>
+          )}
+        </View>
+      </View>
 
       {/* 提示文字 */}
       <Text style={styles.hint}>
         {recordingStatus === 'loading'
           ? '處理中...'
           : recordingStatus === 'recording'
-          ? '點擊暫停錄音'
+          ? '錄音中'
           : recordingStatus === 'paused'
-          ? '點擊繼續錄音'
+          ? '已暫停'
           : '點擊開始錄音'}
       </Text>
-      
-      {/* 停止按鈕 - 只在錄音或暫停時顯示 */}
-      {(recordingStatus === 'recording' || recordingStatus === 'paused') && (
-        <TouchableOpacity
-          style={styles.stopButton}
-          onPress={stopRecording}
-          activeOpacity={0.7}
-        >
-          <Ionicons name="stop-circle" size={48} color="#DC2626" />
-          <Text style={styles.stopText}>停止</Text>
-        </TouchableOpacity>
-      )}
     </View>
   );
 };
@@ -401,9 +418,27 @@ const styles = StyleSheet.create({
     marginBottom: 60,
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif-light',
   },
+  controlsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 24,
+    marginBottom: 40,
+  },
   recordButtonWrapper: {
     position: 'relative',
-    marginBottom: 40,
+  },
+  sideButtonContainer: {
+    width: 56,
+    height: 56,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  sideButton: {
+    width: 56,
+    height: 56,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   recordButton: {
     width: 88,
@@ -437,16 +472,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#7A7A7A',
     textAlign: 'center',
-    marginBottom: 20,
-  },
-  stopButton: {
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  stopText: {
-    fontSize: 14,
-    color: '#DC2626',
-    marginTop: 4,
-    fontWeight: '500',
   },
 });
