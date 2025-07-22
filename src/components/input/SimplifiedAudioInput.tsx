@@ -14,7 +14,7 @@ import {
   Animated,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Audio, InterruptionModeIOS, InterruptionModeAndroid } from 'expo-av';
+import { Audio } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { recordingManager } from '@/services/audio/recordingManager';
@@ -61,8 +61,8 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
         allowsRecordingIOS: true,
         playsInSilentModeIOS: true,
         staysActiveInBackground: true,
-        interruptionModeIOS: InterruptionModeIOS.DoNotMix,
-        interruptionModeAndroid: InterruptionModeAndroid.DoNotMix,
+        interruptionModeIOS: 1, // DoNotMix
+        interruptionModeAndroid: 1, // DoNotMix
       });
     } catch (error) {
       console.error('音訊模式初始化失敗:', error);
