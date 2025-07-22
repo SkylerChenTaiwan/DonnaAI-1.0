@@ -3,7 +3,7 @@
  * 支援表單輸入和 CSV 批量匯入
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Alert, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -33,6 +33,7 @@ export const CreateCustomerModal: React.FC = () => {
   // 從路由參數獲取模式，預設為表單
   const mode = route.params?.mode || 'form';
   const [loading, setLoading] = useState(false);
+  const formRef = useRef<any>(null);
   
   // 切換到 CSV 模式
   const switchToCSV = useCallback(() => {
@@ -139,6 +140,36 @@ export const CreateCustomerModal: React.FC = () => {
     navigation.goBack();
   };
 
+  // 處理儲存按鈕點擊
+  const handleSavePress = useCallback(() => {
+    if (mode === 'form' && formRef.current) {
+      formRef.current.submit();
+    }
+  }, [mode]);
+
+  // 設置導航欄右側按鈕
+  useEffect(() => {
+    if (mode === 'form') {
+      navigation.setOptions({
+        headerRight: () => (
+          <TouchableOpacity 
+            onPress={handleSavePress}
+            style={styles.headerButton}
+            disabled={loading}
+          >
+            <Text style={[styles.headerButtonText, loading && styles.disabledText]}>
+              儲存
+            </Text>
+          </TouchableOpacity>
+        ),
+      });
+    } else {
+      navigation.setOptions({
+        headerRight: undefined,
+      });
+    }
+  }, [navigation, handleSavePress, loading, mode]);
+
   return (
     <Layout style={styles.container}>
 
@@ -152,6 +183,7 @@ export const CreateCustomerModal: React.FC = () => {
               onSwitch={switchToCSV}
             />
             <CustomerForm
+              ref={formRef}
               onSubmit={handleSubmit}
               onCancel={handleCancel}
               loading={loading}
@@ -184,5 +216,17 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+  },
+  headerButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  headerButtonText: {
+    fontSize: 17,
+    color: '#007AFF',
+    fontWeight: '600',
+  },
+  disabledText: {
+    color: '#C7C7CC',
   },
 });

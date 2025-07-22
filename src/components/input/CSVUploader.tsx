@@ -25,21 +25,17 @@ import { importCustomers, ImportResult, ImportOptions } from '@/services/csv/imp
 import { CustomerFormData } from '@/services/validation/form-schemas';
 
 export interface CSVUploaderProps {
-  onImportComplete: (result: ImportResult) => void;
-  onCancel?: () => void;
-  userId: string;
-  teamId: string;
-  organizationId: string;
+  onComplete: (customers: CustomerFormData[]) => void;
+  loading?: boolean;
+  dataType: 'customer';
 }
 
 type UploadStage = 'select' | 'preview' | 'validate' | 'import' | 'complete';
 
 export const CSVUploader: React.FC<CSVUploaderProps> = ({
-  onImportComplete,
-  onCancel,
-  userId,
-  teamId,
-  organizationId,
+  onComplete,
+  loading: externalLoading = false,
+  dataType,
 }) => {
   const [stage, setStage] = useState<UploadStage>('select');
   const [selectedFile, setSelectedFile] = useState<{
@@ -188,17 +184,9 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
         },
       };
 
-      const result = await importCustomers(parseResult.data, options);
-      
+      // 簡化：直接回傳客戶資料給父組件處理
+      onComplete(parseResult.data);
       setStage('complete');
-      onImportComplete(result);
-
-      // 顯示完成訊息
-      Alert.alert(
-        '導入完成',
-        `成功導入 ${result.successCount} 筆客戶資料`,
-        [{ text: '確定' }]
-      );
 
     } catch (error) {
       console.error('資料導入失敗:', error);
@@ -206,7 +194,7 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
     } finally {
       setLoading(false);
     }
-  }, [parseResult, validationSummary, userId, teamId, organizationId, onImportComplete]);
+  }, [parseResult, validationSummary, onComplete]);
 
   // 下載範本檔案
   const handleDownloadTemplate = useCallback(async () => {
@@ -384,16 +372,6 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
 
   return (
     <View style={styles.container}>
-      {/* 標頭 */}
-      <View style={styles.header}>
-        <Text style={styles.title}>CSV 批量導入</Text>
-        <TouchableOpacity 
-          style={styles.closeButton}
-          onPress={onCancel}
-        >
-          <Ionicons name="close" size={24} color="#7A7A7A" />
-        </TouchableOpacity>
-      </View>
 
       {/* 內容區域 */}
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -406,7 +384,7 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
           <Button
             title="取消"
             variant="secondary"
-            onPress={onCancel}
+            onPress={() => setStage('select')}
             style={styles.button}
           />
         )}
@@ -435,7 +413,7 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
         {stage === 'complete' && (
           <Button
             title="完成"
-            onPress={onCancel}
+            onPress={() => setStage('select')}
             style={styles.button}
           />
         )}
@@ -448,29 +426,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F0F0F0',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#1A1A1A',
-  },
-  closeButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: '#F0F0F0',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   content: {
     flex: 1,

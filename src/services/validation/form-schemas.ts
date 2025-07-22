@@ -7,7 +7,7 @@ import { z } from 'zod';
 // 客戶輸入模式
 export const CustomerFormSchema = z.object({
   name: z.string().min(1, "客戶姓名為必填"),
-  company: z.string().min(1, "公司名稱為必填"), 
+  company: z.string().optional(), 
   email: z.string().email("請輸入有效的電子郵件地址").optional().or(z.literal("")),
   phone: z.string().optional(),
   industry: z.string().optional(),

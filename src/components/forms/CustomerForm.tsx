@@ -4,7 +4,7 @@
  * 支援必填和選填欄位
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useImperativeHandle, forwardRef } from 'react';
 import {
   View,
   Text,
@@ -32,13 +32,13 @@ export interface CustomerFormProps {
   mode?: 'create' | 'edit';
 }
 
-export const CustomerForm: React.FC<CustomerFormProps> = ({
+export const CustomerForm = forwardRef<any, CustomerFormProps>(({
   onSubmit,
   onCancel,
   initialData = {},
   loading = false,
   mode = 'create',
-}) => {
+}, ref) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
@@ -61,6 +61,16 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
     },
   });
 
+  // 暴露方法給父組件
+  useImperativeHandle(ref, () => ({
+    submit: () => {
+      handleSubmit(handleFormSubmit)();
+    },
+    reset: () => {
+      reset();
+    }
+  }));
+
   // 定義表格欄位配置
   const fieldConfigs: FormFieldConfig[] = [
     {
@@ -74,7 +84,7 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
       name: 'company',
       label: '公司名稱',
       type: 'text',
-      required: true,
+      required: false,
       placeholder: '請輸入公司名稱',
     },
     {
@@ -244,26 +254,9 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
         </View>
       </ScrollView>
 
-      {/* 底部按鈕 */}
-      <View style={styles.footer}>
-        <Button
-          title="取消"
-          variant="secondary"
-          onPress={handleCancel}
-          style={styles.button}
-          disabled={isSubmitting}
-        />
-        <Button
-          title={mode === 'create' ? '建立客戶' : '更新客戶'}
-          onPress={handleSubmit(handleFormSubmit)}
-          style={styles.button}
-          disabled={isSubmitting}
-          loading={isSubmitting}
-        />
-      </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -299,17 +292,5 @@ const styles = StyleSheet.create({
   form: {
     padding: 20,
     gap: 16,
-  },
-  footer: {
-    flexDirection: 'row',
-    gap: 12,
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#FFFFFF',
-    borderTopWidth: 1,
-    borderTopColor: '#E3E1DC',
-  },
-  button: {
-    flex: 1,
   },
 });
