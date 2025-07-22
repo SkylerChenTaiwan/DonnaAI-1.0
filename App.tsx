@@ -11,7 +11,10 @@ import { errorLogger } from '@/services/error/ErrorLogger';
 import { environmentManager } from '@/config/environment';
 
 // 開發模式下載入除錯工具
+// 暫時停用：這些工具會在頂層執行 Firebase 操作，導致初始化錯誤
 if (__DEV__) {
+  console.log('🔧 開發工具已停用自動載入，請在登入後手動執行需要的工具');
+  /*
   import('@/utils/quick-fix-team-sync').catch(err => 
     console.warn('團隊同步修復工具載入失敗:', err)
   );
@@ -33,6 +36,7 @@ if (__DEV__) {
   import('@/utils/debug-permission-mismatch').catch(err => 
     console.warn('權限調試工具載入失敗:', err)
   );
+  */
 }
 
 // 防止自動隱藏啟動畫面
