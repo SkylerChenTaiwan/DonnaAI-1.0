@@ -61,18 +61,23 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
   // 載入任務
   useEffect(() => {
     const loadTasks = async () => {
+      if (!userId || !organizationId || !teamId) {
+        console.log('Missing required IDs for task loading');
+        return;
+      }
       setLoading(true);
-      await fetchTasks({}).finally(() => setLoading(false));
+      await fetchTasks(userId, { organizationId, teamId }).finally(() => setLoading(false));
     };
     loadTasks();
-  }, [fetchTasks]);
+  }, [fetchTasks, userId, organizationId, teamId]);
 
   // 下拉重新整理
   const handleRefresh = useCallback(async () => {
+    if (!userId || !organizationId || !teamId) return;
     setRefreshing(true);
-    await fetchTasks({});
+    await fetchTasks(userId, { organizationId, teamId });
     setRefreshing(false);
-  }, [fetchTasks]);
+  }, [fetchTasks, userId, organizationId, teamId]);
 
   // 切換任務狀態
   const toggleTaskStatus = useCallback(async (task: TaskDoc) => {
@@ -88,7 +93,7 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
       }, userId);
       
       showToast('success', `任務已標記為${newStatus === 'completed' ? '完成' : '待辦'}`);
-      await fetchTasks({}); // 重新載入以更新列表
+      await fetchTasks(userId, { organizationId, teamId }); // 重新載入以更新列表
     } catch (error) {
       console.error('更新任務狀態失敗:', error);
       showToast('error', '更新任務狀態失敗');
@@ -99,7 +104,7 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
         return newSet;
       });
     }
-  }, [updatingTaskIds, fetchTasks]);
+  }, [updatingTaskIds, fetchTasks, userId, organizationId, teamId]);
 
   // 過濾並分組任務
   const getTaskSections = useCallback((): TaskSection[] => {

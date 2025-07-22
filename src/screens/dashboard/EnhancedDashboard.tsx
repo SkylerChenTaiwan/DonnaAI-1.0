@@ -83,13 +83,7 @@ export const EnhancedDashboard: React.FC = () => {
           />
         </View>
 
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-          contentContainerStyle={styles.scrollContent}
-        >
+        <View style={styles.content}>
           {/* 任務列表區塊 */}
           <View style={styles.section}>
             <TaskListSection
@@ -99,14 +93,14 @@ export const EnhancedDashboard: React.FC = () => {
             />
           </View>
 
-          {/* 近期接觸客戶區塊 */}
-          <RecentCustomersSection
+          {/* 近期接觸客戶區塊 - 暫時隱藏以避免嵌套問題 */}
+          {/* <RecentCustomersSection
             userId={authUser.uid}
             organizationId={currentOrganization.id}
             teamId={currentTeam.id}
             limit={5}
-          />
-        </ScrollView>
+          /> */}
+        </View>
       </SafeAreaView>
     </Layout>
   );
@@ -143,8 +137,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#6B7280',
   },
-  scrollContent: {
-    paddingBottom: 20,
+  content: {
+    flex: 1,
   },
   section: {
     marginTop: 20,
