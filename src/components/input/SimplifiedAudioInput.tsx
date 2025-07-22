@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Audio, InterruptionModeIOS, InterruptionModeAndroid } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
+import { recordingManager } from '@/services/audio/recordingManager';
 
 export interface SimplifiedAudioInputProps {
   onComplete: (audioUri: string, duration: number) => void;
@@ -36,6 +37,7 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
   const durationTimerRef = useRef<NodeJS.Timeout | null>(null);
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const waveformAnim = useRef(new Animated.Value(0)).current;
+  const isProcessingRef = useRef(false);
 
   // 初始化音訊模式
   const initializeAudio = useCallback(async () => {
@@ -133,28 +135,14 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
     try {
       setRecordingStatus('loading');
       
-      // 確保沒有現有的錄音
-      if (recording) {
-        try {
-          await recording.stopAndUnloadAsync();
-          await Audio.setAudioModeAsync({ allowsRecordingIOS: false });
-          setRecording(null);
-        } catch (error) {
-          console.warn('清理現有錄音時出錯:', error);
-        }
-      }
-      
       await checkPermissions();
       await initializeAudio();
 
       // eslint-disable-next-line no-console
       console.log('開始錄音...');
       
-      const { recording: newRecording } = await Audio.Recording.createAsync(
-        Audio.RecordingOptionsPresets.HIGH_QUALITY,
-        undefined,
-        100
-      );
+      // 使用全局錄音管理器
+      const newRecording = await recordingManager.startNewRecording();
 
       setRecording(newRecording);
       setRecordingStatus('recording');
@@ -173,7 +161,7 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
       setRecordingStatus('idle');
       Alert.alert('錄音失敗', error instanceof Error ? error.message : '無法開始錄音');
     }
-  }, [recording, checkPermissions, initializeAudio, startPulseAnimation, startWaveformAnimation]);
+  }, [checkPermissions, initializeAudio, startPulseAnimation, startWaveformAnimation]);
 
   // 暫停錄音
   const pauseRecording = useCallback(async () => {
@@ -258,6 +246,9 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
       
       setRecording(null);
       setDuration(0);
+      
+      // 更新全局管理器
+      recordingManager.setCurrentRecording(null);
     } catch (error) {
       console.error('停止錄音失敗:', error);
       setRecordingStatus('idle');
@@ -267,14 +258,27 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
 
   // 處理錄音按鈕點擊
   const handleRecordPress = useCallback(() => {
-    if (disabled) return;
+    if (disabled || isProcessingRef.current) return;
+    
+    // 防止重複點擊
+    isProcessingRef.current = true;
+    
+    const resetProcessing = () => {
+      setTimeout(() => {
+        isProcessingRef.current = false;
+      }, 500);
+    };
 
     if (recordingStatus === 'idle') {
-      startRecording();
+      startRecording().finally(resetProcessing);
     } else if (recordingStatus === 'recording') {
       pauseRecording();
+      resetProcessing();
     } else if (recordingStatus === 'paused') {
       resumeRecording();
+      resetProcessing();
+    } else {
+      resetProcessing();
     }
   }, [disabled, recordingStatus, startRecording, pauseRecording, resumeRecording]);
 
@@ -287,15 +291,10 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
       stopPulseAnimation();
       stopWaveformAnimation();
       
-      // 清理錄音資源
-      if (recording) {
-        recording.stopAndUnloadAsync().catch(error => {
-          console.error('清理錄音資源失敗:', error);
-        });
-        Audio.setAudioModeAsync({ allowsRecordingIOS: false }).catch(error => {
-          console.error('重置音訊模式失敗:', error);
-        });
-      }
+      // 使用全局管理器清理錄音資源
+      recordingManager.stopCurrentRecording().catch(error => {
+        console.error('清理錄音資源失敗:', error);
+      });
     };
   }, [recording, stopPulseAnimation, stopWaveformAnimation]);
 
