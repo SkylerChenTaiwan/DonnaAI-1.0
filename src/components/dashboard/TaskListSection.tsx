@@ -36,6 +36,23 @@ const format = (date: Date, formatStr: string): string => {
   return `${hours}:${minutes}`;
 };
 
+const formatDueDate = (date: Date): string => {
+  if (isToday(date)) {
+    return `今天 ${format(date, 'HH:mm')}`;
+  }
+  
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  if (date.toDateString() === tomorrow.toDateString()) {
+    return `明天 ${format(date, 'HH:mm')}`;
+  }
+  
+  // 格式化為 MM/DD
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${month}/${day}`;
+};
+
 interface TaskListSectionProps {
   userId: string;
   organizationId: string;
@@ -129,6 +146,13 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
       return isToday(dueDate);
     });
 
+    // 新增：所有其他待辦任務（沒有截止日期或未來的任務）
+    const otherTasks = userTasks.filter(task => {
+      if (!task.dueDate) return true; // 沒有截止日期的任務
+      const dueDate = task.dueDate!.toDate();
+      return !isPast(dueDate) && !isToday(dueDate); // 未來的任務
+    });
+
     const sections: TaskSection[] = [];
 
     if (overdueTasks.length > 0) {
@@ -148,6 +172,24 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
         data: todayTasks.sort((a, b) => 
           new Date(a.dueDate!).getTime() - new Date(b.dueDate!).getTime()
         ),
+      });
+    }
+
+    // 新增：顯示所有其他待辦任務
+    if (otherTasks.length > 0) {
+      sections.push({
+        title: `待辦任務 (${otherTasks.length})`,
+        type: 'today', // 使用 'today' 類型以保持樣式一致
+        data: otherTasks.sort((a, b) => {
+          // 有截止日期的排前面
+          if (a.dueDate && !b.dueDate) return -1;
+          if (!a.dueDate && b.dueDate) return 1;
+          if (a.dueDate && b.dueDate) {
+            return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+          }
+          // 都沒有截止日期，按建立時間排序
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        }),
       });
     }
 
@@ -185,13 +227,13 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
           <View style={styles.taskMeta}>
             {item.dueDate && (
               <Text style={styles.taskDue}>
-                {format(item.dueDate!.toDate(), 'HH:mm')}
+                {formatDueDate(item.dueDate.toDate())}
               </Text>
             )}
             {item.priority !== 'medium' && (
               <View style={[styles.priorityBadge, { backgroundColor: priorityColor }]}>
                 <Text style={styles.priorityText}>
-                  {item.priority === 'high' ? '高' : '低'}
+                  {item.priority === 'high' || item.priority === 'urgent' ? '高' : '低'}
                 </Text>
               </View>
             )}
