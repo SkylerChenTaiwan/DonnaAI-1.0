@@ -37,7 +37,7 @@ export const InputMethodLink: React.FC<InputMethodLinkProps> = ({
         <Ionicons 
           name="arrow-forward" 
           size={16} 
-          color={disabled ? '#C7C7CC' : '#FF6B35'} 
+          color={disabled ? '#C7C7CC' : '#7A7A7A'} 
         />
       </View>
     </TouchableOpacity>
@@ -48,12 +48,12 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#FFF5F0',
+    backgroundColor: '#F5F5F7',
     marginHorizontal: 16,
     marginVertical: 8,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#FFE5D8',
+    borderColor: '#E5E5EA',
   },
   disabled: {
     backgroundColor: '#F5F5F7',
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   linkText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FF6B35',
+    color: '#7A7A7A',
     marginRight: 4,
   },
   disabledText: {

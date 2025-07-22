@@ -211,12 +211,9 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
 
   return (
     <View style={styles.container}>
-      {/* 標頭 */}
-      <View style={styles.header}>
-        <Text style={styles.title}>
-          {mode === 'create' ? '新增客戶' : '編輯客戶'}
-        </Text>
-        <Text style={styles.subtitle}>
+      {/* 表單說明 */}
+      <View style={styles.formInfo}>
+        <Text style={styles.infoText}>
           請填寫客戶的基本資訊，標有 * 的欄位為必填項目
         </Text>
       </View>
@@ -284,20 +281,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#7A7A7A',
   },
-  header: {
-    backgroundColor: '#FFFFFF',
+  formInfo: {
+    backgroundColor: '#F8F9FA',
     paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
+    borderBottomColor: '#E5E5EA',
   },
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#1A1A1A',
-    marginBottom: 4,
-  },
-  subtitle: {
+  infoText: {
     fontSize: 14,
     color: '#7A7A7A',
     lineHeight: 20,
