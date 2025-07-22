@@ -30,6 +30,7 @@ export interface TaskFormProps {
   userId: string;
   organizationId: string;
   teamId: string;
+  hideInputToggle?: boolean; // 新增：控制是否隱藏輸入切換標籤
 }
 
 
@@ -42,6 +43,7 @@ export const TaskForm = forwardRef<any, TaskFormProps>((props, ref) => {
     userId,
     organizationId,
     teamId,
+    hideInputToggle = false,
   } = props;
   const [inputMode, setInputMode] = useState<'text' | 'voice'>('text');
 
@@ -103,39 +105,41 @@ export const TaskForm = forwardRef<any, TaskFormProps>((props, ref) => {
 
   return (
     <View style={styles.container}>
-      {/* 輸入方式切換 */}
-      <View style={styles.inputModeTabs}>
-        <TouchableOpacity
-          style={[styles.tabButton, inputMode === 'text' && styles.tabButtonActive]}
-          onPress={() => setInputMode('text')}
-        >
-          <Ionicons 
-            name="create-outline" 
-            size={20} 
-            color={inputMode === 'text' ? '#FFFFFF' : '#7A7A7A'} 
-          />
-          <Text style={[styles.tabText, inputMode === 'text' && styles.tabTextActive]}>
-            文字輸入
-          </Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity
-          style={[styles.tabButton, inputMode === 'voice' && styles.tabButtonActive]}
-          onPress={() => setInputMode('voice')}
-        >
-          <Ionicons 
-            name="mic-outline" 
-            size={20} 
-            color={inputMode === 'voice' ? '#FFFFFF' : '#7A7A7A'} 
-          />
-          <Text style={[styles.tabText, inputMode === 'voice' && styles.tabTextActive]}>
-            語音輸入
-          </Text>
-        </TouchableOpacity>
-      </View>
+      {/* 輸入方式切換 - 只在 hideInputToggle 為 false 時顯示 */}
+      {!hideInputToggle && (
+        <View style={styles.inputModeTabs}>
+          <TouchableOpacity
+            style={[styles.tabButton, inputMode === 'text' && styles.tabButtonActive]}
+            onPress={() => setInputMode('text')}
+          >
+            <Ionicons 
+              name="create-outline" 
+              size={20} 
+              color={inputMode === 'text' ? '#FFFFFF' : '#7A7A7A'} 
+            />
+            <Text style={[styles.tabText, inputMode === 'text' && styles.tabTextActive]}>
+              文字輸入
+            </Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity
+            style={[styles.tabButton, inputMode === 'voice' && styles.tabButtonActive]}
+            onPress={() => setInputMode('voice')}
+          >
+            <Ionicons 
+              name="mic-outline" 
+              size={20} 
+              color={inputMode === 'voice' ? '#FFFFFF' : '#7A7A7A'} 
+            />
+            <Text style={[styles.tabText, inputMode === 'voice' && styles.tabTextActive]}>
+              語音輸入
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
       <ScrollView style={styles.form} showsVerticalScrollIndicator={false}>
-        {inputMode === 'text' ? (
+        {(hideInputToggle || inputMode === 'text') ? (
           <>
             {/* 任務標題 - 必填 */}
             <Controller

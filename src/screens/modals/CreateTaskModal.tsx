@@ -68,7 +68,7 @@ export const CreateTaskModal: React.FC = () => {
       const taskData: TaskCreateRequest = {
         title: data.title,
         description: data.description || '',
-        type: 'scheduled',
+        type: 'unscheduled', // 改為 unscheduled 作為預設
         priority: priorityMap[data.priority] || 'medium',
         assigneeId: data.assignedTo || user.uid,
         source: 'manual',
@@ -173,6 +173,7 @@ export const CreateTaskModal: React.FC = () => {
             userId={user?.uid || ''}
             organizationId={currentOrganization?.id || ''}
             teamId={currentTeam?.id || ''}
+            hideInputToggle={true}
           />
         </ScrollView>
       )}

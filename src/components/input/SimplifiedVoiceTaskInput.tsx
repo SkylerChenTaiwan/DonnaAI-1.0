@@ -235,7 +235,7 @@ export const SimplifiedVoiceTaskInput: React.FC<SimplifiedVoiceTaskInputProps> =
       const taskData: TaskCreateRequest = {
         title: data.title,
         description: data.description || '',
-        type: 'once',
+        type: 'unscheduled', // 修正為正確的任務類型
         priority: priorityMap[data.priority] || 'medium',
         assigneeId: data.assignedTo || userId,
         source: 'voice',

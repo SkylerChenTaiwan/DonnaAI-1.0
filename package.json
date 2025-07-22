@@ -26,7 +26,7 @@
     "@google/genai": "^1.10.0",
     "@hookform/resolvers": "^5.1.1",
     "@react-native-async-storage/async-storage": "2.1.2",
-    "@react-native-picker/picker": "^2.11.1",
+    "@react-native-picker/picker": "2.11.1",
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/stack": "^6.3.29",
@@ -64,7 +64,8 @@
     "typescript": "~5.8.3",
     "victory-native": "^41.17.4",
     "zod": "^3.23.8",
-    "zustand": "^4.5.2"
+    "zustand": "^4.5.2",
+    "@react-native-community/datetimepicker": "8.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",
