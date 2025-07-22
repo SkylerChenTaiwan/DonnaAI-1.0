@@ -68,7 +68,7 @@ export const EnhancedDashboard: React.FC = () => {
   }
 
   return (
-    <Layout style={styles.container}>
+    <Layout style={styles.container} scrollable={false}>
       <SafeAreaView style={styles.safeArea}>
         {/* 頭部區域 - 使用者資訊 */}
         <View style={styles.header}>

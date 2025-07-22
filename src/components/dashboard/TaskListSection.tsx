@@ -263,6 +263,7 @@ const getPriorityColor = (priority: 'low' | 'medium' | 'high' | 'urgent'): strin
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    maxHeight: 400, // 限制高度以避免佔滿整個畫面
   },
   loadingContainer: {
     flex: 1,
