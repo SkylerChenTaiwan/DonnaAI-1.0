@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { TaskDoc } from '@/types/task';
-import { updateTask } from '@/services/firebase/tasks';
 import { useTaskStore } from '@/stores/taskStore';
 import { showToast } from '@/utils/toast';
 // TODO: Install date-fns for better date formatting
@@ -75,7 +74,7 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
   organizationId,
   teamId,
 }) => {
-  const { tasks, fetchTasks } = useTaskStore();
+  const { tasks, fetchTasks, updateTask } = useTaskStore();
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [updatingTaskIds, setUpdatingTaskIds] = useState<Set<string>>(new Set());
@@ -126,7 +125,7 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
         return newSet;
       });
     }
-  }, [updatingTaskIds, fetchTasks, userId, organizationId, teamId]);
+  }, [updatingTaskIds, updateTask, fetchTasks, userId, organizationId, teamId]);
 
   // 過濾並分組任務
   const getTaskSections = useCallback((): TaskSection[] => {
