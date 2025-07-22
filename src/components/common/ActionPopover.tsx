@@ -24,13 +24,13 @@ interface Action {
   title: string;
   subtitle: string;
   icon: keyof typeof Ionicons.glyphMap;
-  defaultMode: string; // 新增：預設輸入模式
+  defaultMode: string;
 }
 
 interface ActionPopoverProps {
   visible: boolean;
   onClose: () => void;
-  onAction?: (action: Action) => void; // 保留向後相容
+  onAction?: (action: Action) => void;
   fromRef: React.RefObject<any>;
   tabBarHeight?: number;
 }
@@ -43,7 +43,7 @@ const actions: Action[] = [
     title: '客戶',
     subtitle: '建立新的客戶資料',
     icon: 'person-add-outline',
-    defaultMode: 'form', // 預設使用表格填寫
+    defaultMode: 'form',
   },
   {
     id: '2',
@@ -51,7 +51,7 @@ const actions: Action[] = [
     title: '紀錄',
     subtitle: '記錄會議或通話內容',
     icon: 'document-text-outline',
-    defaultMode: 'audio', // 預設使用語音錄製
+    defaultMode: 'audio',
   },
   {
     id: '3',
@@ -59,7 +59,7 @@ const actions: Action[] = [
     title: '任務',
     subtitle: '建立待辦事項',
     icon: 'checkbox-outline',
-    defaultMode: 'voice', // 預設使用語音輸入
+    defaultMode: 'voice',
   },
 ];
 
@@ -79,9 +79,7 @@ export const ActionPopover = ({
     if (visible && fromRef.current) {
       fromRef.current.measureInWindow((x, y, width, height) => {
         const screenHeight = Dimensions.get('window').height;
-        // 按鈕位置減去 paddingTop (10px) 得到導航欄實際頂部
-        const navBarTop = y - 10; // paddingTop from tabBarStyle
-        // 計算面板應該距離螢幕底部的距離
+        const navBarTop = y - 10;
         const bottomDistance = screenHeight - navBarTop;
         setPanelBottom(bottomDistance);
       });
@@ -114,12 +112,10 @@ export const ActionPopover = ({
     outputRange: [0, 0.3],
   });
 
-  // 處理動作選擇 - 直接導航到對應 Modal 的預設模式
+  // 處理動作選擇 - 直接導航
   const handleActionSelect = useCallback((action: Action) => {
-    // 立即關閉 Popover
     onClose();
     
-    // 導航到對應的 Modal，使用預設輸入模式
     switch (action.type) {
       case 'customer':
         navigation.navigate('CreateCustomerModal', { mode: action.defaultMode });
@@ -131,7 +127,6 @@ export const ActionPopover = ({
         navigation.navigate('CreateTaskModal', { mode: action.defaultMode });
         break;
       default:
-        // 向後相容：如果有自定義處理
         if (onAction) {
           onAction(action);
         }
@@ -167,7 +162,6 @@ export const ActionPopover = ({
             },
           ]}
         >
-          {/* 簡化為單一階段：選擇資料類型後直接導航 */}
           <View style={styles.actionContainer}>
             {actions.map((action) => (
               <TouchableOpacity
