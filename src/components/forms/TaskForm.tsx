@@ -15,6 +15,7 @@ import {
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Ionicons } from '@expo/vector-icons';
+import { SimplifiedAudioInput } from '@/components/input/SimplifiedAudioInput';
 
 import { TaskFormSchema, TaskFormData } from '@/services/validation/form-schemas';
 import { FormField } from './FormField';
@@ -287,27 +288,14 @@ export const TaskForm = forwardRef<any, TaskFormProps>((props, ref) => {
         />
           </>
         ) : (
-          <View style={styles.voiceInputContainer}>
-            <Ionicons name="mic" size={48} color="#B91C1C" />
-            <Text style={styles.voiceTitle}>語音轉任務</Text>
-            <Text style={styles.voiceDescription}>
-              說出您的任務內容，系統將自動識別任務標題、優先級、截止時間等資訊
-            </Text>
-            
-            <View style={styles.voiceTips}>
-              <Text style={styles.tipTitle}>💡 說話技巧：</Text>
-              <Text style={styles.tipText}>• 清楚說明任務內容和目標</Text>
-              <Text style={styles.tipText}>• 提及重要程度（如：很重要、不急）</Text>
-              <Text style={styles.tipText}>• 說明截止時間（如：明天前、這週五）</Text>
-              <Text style={styles.tipText}>• 可以指定負責人（如：請小明處理）</Text>
-            </View>
-            
-            {/* 這裡可以添加實際的語音輸入組件 */}
-            <TouchableOpacity style={styles.recordButton}>
-              <Ionicons name="mic" size={32} color="#FFFFFF" />
-              <Text style={styles.recordButtonText}>準備錄音</Text>
-            </TouchableOpacity>
-          </View>
+          <SimplifiedAudioInput
+            onComplete={(audioUri, duration) => {
+              // 處理錄音完成
+              console.log('任務錄音完成:', audioUri, duration);
+              // TODO: 處理語音轉任務邏輯
+              Alert.alert('錄音完成', '將處理語音轉換成任務');
+            }}
+          />
         )}
       </ScrollView>
 
@@ -494,60 +482,6 @@ const styles = StyleSheet.create({
     color: '#7A7A7A',
   },
   tabTextActive: {
-    color: '#FFFFFF',
-  },
-  voiceInputContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 60,
-    paddingHorizontal: 20,
-  },
-  voiceTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: '#1A1A1A',
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  voiceDescription: {
-    fontSize: 16,
-    color: '#7A7A7A',
-    textAlign: 'center',
-    lineHeight: 22,
-    marginBottom: 32,
-  },
-  voiceTips: {
-    backgroundColor: '#F8F9FA',
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 40,
-    alignSelf: 'stretch',
-  },
-  tipTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1A1A1A',
-    marginBottom: 12,
-  },
-  tipText: {
-    fontSize: 14,
-    color: '#7A7A7A',
-    lineHeight: 20,
-    marginBottom: 6,
-  },
-  recordButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#B91C1C',
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    borderRadius: 24,
-    gap: 8,
-  },
-  recordButtonText: {
-    fontSize: 18,
-    fontWeight: '600',
     color: '#FFFFFF',
   },
 });
