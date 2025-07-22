@@ -188,10 +188,11 @@ service cloud.firestore {
                        request.resource.data.type in ['scheduled', 'unscheduled', 'pending'] &&
                        request.resource.data.priority in ['low', 'medium', 'high', 'urgent'] &&
                        request.resource.data.status in ['todo', 'in_progress', 'completed', 'cancelled'] &&
-                       request.resource.data.source in ['manual', 'ai_extracted', 'calendar_sync'] &&
+                       request.resource.data.source in ['manual', 'ai_extracted', 'calendar_sync', 'voice'] &&
                        isValidString(request.resource.data.title, 200) &&
-                       request.resource.data.createdAt == request.time &&
-                       request.resource.data.updatedAt == request.time;
+                       request.resource.data.createdAt != null &&
+                       request.resource.data.updatedAt != null &&
+                       request.resource.data.createdBy == request.auth.uid;
       
       // 更新：指派的負責人、指派者或管理員可以更新
       allow update: if isTeamMember(resource.data.teamId) &&
