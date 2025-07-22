@@ -22,17 +22,21 @@ class RecordingManager {
 
   async stopCurrentRecording(): Promise<void> {
     if (this.currentRecording) {
+      const recordingToStop = this.currentRecording;
+      this.currentRecording = null;
+      this.isRecording = false;
+      
       try {
-        const status = await this.currentRecording.getStatusAsync();
-        if (status.isRecording) {
-          await this.currentRecording.stopAndUnloadAsync();
+        const status = await recordingToStop.getStatusAsync();
+        if (status.isRecording || status.canRecord) {
+          await recordingToStop.stopAndUnloadAsync();
         }
         await Audio.setAudioModeAsync({ allowsRecordingIOS: false });
       } catch (error) {
-        console.warn('停止現有錄音時出錯:', error);
-      } finally {
-        this.currentRecording = null;
-        this.isRecording = false;
+        // 忽略 "already unloaded" 錯誤
+        if (!error.message?.includes('already been unloaded')) {
+          console.warn('停止現有錄音時出錯:', error);
+        }
       }
     }
   }

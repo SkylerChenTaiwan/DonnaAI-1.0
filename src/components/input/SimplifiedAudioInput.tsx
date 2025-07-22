@@ -227,6 +227,9 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
   const stopRecording = useCallback(async () => {
     if (!recording) return;
 
+    const recordingToStop = recording;
+    setRecording(null); // 立即清空，防止重複調用
+
     try {
       setRecordingStatus('loading');
       
@@ -240,10 +243,10 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
       stopPulseAnimation();
       stopWaveformAnimation();
 
-      await recording.stopAndUnloadAsync();
+      await recordingToStop.stopAndUnloadAsync();
       await Audio.setAudioModeAsync({ allowsRecordingIOS: false });
 
-      const uri = recording.getURI();
+      const uri = recordingToStop.getURI();
       if (uri) {
         // eslint-disable-next-line no-console
         console.log('錄音完成，檔案位置:', uri);
@@ -259,15 +262,17 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
         throw new Error('無法獲取錄音檔案路徑');
       }
       
-      setRecording(null);
       setDuration(0);
       
       // 更新全局管理器
       recordingManager.setCurrentRecording(null);
     } catch (error) {
-      console.error('停止錄音失敗:', error);
+      // 忽略 "already unloaded" 錯誤
+      if (!error.message?.includes('already been unloaded')) {
+        console.error('停止錄音失敗:', error);
+        Alert.alert('停止錄音失敗', error instanceof Error ? error.message : '無法停止錄音');
+      }
       setRecordingStatus('idle');
-      Alert.alert('停止錄音失敗', error instanceof Error ? error.message : '無法停止錄音');
     }
   }, [recording, duration, onComplete, stopPulseAnimation, stopWaveformAnimation]);
 
