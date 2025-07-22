@@ -3,7 +3,7 @@
  * 支援文字和語音輸入，整合語音轉任務功能
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, forwardRef, useImperativeHandle } from 'react';
 import {
   View,
   Text,
@@ -32,7 +32,7 @@ export interface TaskFormProps {
 }
 
 
-export const TaskForm: React.FC<TaskFormProps> = ({
+export const TaskForm = forwardRef<any, TaskFormProps>(({
   onSubmit,
   onCancel,
   initialData,
@@ -40,7 +40,8 @@ export const TaskForm: React.FC<TaskFormProps> = ({
   userId,
   organizationId,
   teamId,
-}) => {
+}, ref) => {
+  const [inputMode, setInputMode] = useState<'text' | 'voice'>('text');
 
   const {
     control,
@@ -88,11 +89,54 @@ export const TaskForm: React.FC<TaskFormProps> = ({
     { label: '已取消', value: '已取消' },
   ];
 
+  // 暴露方法給父組件
+  useImperativeHandle(ref, () => ({
+    submit: () => {
+      handleSubmit(onFormSubmit)();
+    },
+    reset: () => {
+      reset();
+    }
+  }));
+
   return (
     <View style={styles.container}>
+      {/* 輸入方式切換 */}
+      <View style={styles.inputModeTabs}>
+        <TouchableOpacity
+          style={[styles.tabButton, inputMode === 'text' && styles.tabButtonActive]}
+          onPress={() => setInputMode('text')}
+        >
+          <Ionicons 
+            name="create-outline" 
+            size={20} 
+            color={inputMode === 'text' ? '#FFFFFF' : '#7A7A7A'} 
+          />
+          <Text style={[styles.tabText, inputMode === 'text' && styles.tabTextActive]}>
+            文字輸入
+          </Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity
+          style={[styles.tabButton, inputMode === 'voice' && styles.tabButtonActive]}
+          onPress={() => setInputMode('voice')}
+        >
+          <Ionicons 
+            name="mic-outline" 
+            size={20} 
+            color={inputMode === 'voice' ? '#FFFFFF' : '#7A7A7A'} 
+          />
+          <Text style={[styles.tabText, inputMode === 'voice' && styles.tabTextActive]}>
+            語音輸入
+          </Text>
+        </TouchableOpacity>
+      </View>
+
       <ScrollView style={styles.form} showsVerticalScrollIndicator={false}>
-        {/* 任務標題 - 必填 */}
-        <Controller
+        {inputMode === 'text' ? (
+          <>
+            {/* 任務標題 - 必填 */}
+            <Controller
           control={control}
           name="title"
           render={({ field: { onChange, onBlur, value } }) => (
@@ -240,6 +284,31 @@ export const TaskForm: React.FC<TaskFormProps> = ({
             />
           )}
         />
+          </>
+        ) : (
+          {/* 語音輸入內容 */}
+          <View style={styles.voiceInputContainer}>
+            <Ionicons name="mic" size={48} color="#B91C1C" />
+            <Text style={styles.voiceTitle}>語音轉任務</Text>
+            <Text style={styles.voiceDescription}>
+              說出您的任務內容，系統將自動識別任務標題、優先級、截止時間等資訊
+            </Text>
+            
+            <View style={styles.voiceTips}>
+              <Text style={styles.tipTitle}>💡 說話技巧：</Text>
+              <Text style={styles.tipText}>• 清楚說明任務內容和目標</Text>
+              <Text style={styles.tipText}>• 提及重要程度（如：很重要、不急）</Text>
+              <Text style={styles.tipText}>• 說明截止時間（如：明天前、這週五）</Text>
+              <Text style={styles.tipText}>• 可以指定負責人（如：請小明處理）</Text>
+            </View>
+            
+            {/* 這裡可以添加實際的語音輸入組件 */}
+            <TouchableOpacity style={styles.recordButton}>
+              <Ionicons name="mic" size={32} color="#FFFFFF" />
+              <Text style={styles.recordButtonText}>準備錄音</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </ScrollView>
 
       {/* 底部按鈕 */}
@@ -271,7 +340,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
       </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -398,5 +467,87 @@ const styles = StyleSheet.create({
   },
   footerButton: {
     flex: 1,
+  },
+  inputModeTabs: {
+    flexDirection: 'row',
+    backgroundColor: '#F0F0F0',
+    padding: 4,
+    borderRadius: 8,
+    marginBottom: 16,
+  },
+  tabButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+    gap: 6,
+  },
+  tabButtonActive: {
+    backgroundColor: '#1C1C1E',
+  },
+  tabText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#7A7A7A',
+  },
+  tabTextActive: {
+    color: '#FFFFFF',
+  },
+  voiceInputContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 60,
+    paddingHorizontal: 20,
+  },
+  voiceTitle: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: '#1A1A1A',
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  voiceDescription: {
+    fontSize: 16,
+    color: '#7A7A7A',
+    textAlign: 'center',
+    lineHeight: 22,
+    marginBottom: 32,
+  },
+  voiceTips: {
+    backgroundColor: '#F8F9FA',
+    borderRadius: 12,
+    padding: 20,
+    marginBottom: 40,
+    alignSelf: 'stretch',
+  },
+  tipTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1A1A1A',
+    marginBottom: 12,
+  },
+  tipText: {
+    fontSize: 14,
+    color: '#7A7A7A',
+    lineHeight: 20,
+    marginBottom: 6,
+  },
+  recordButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#B91C1C',
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 24,
+    gap: 8,
+  },
+  recordButtonText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
 });

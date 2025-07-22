@@ -2,7 +2,7 @@
  * 新增任務 Modal - 支援語音和表單輸入
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Button } from '@/components/common/Button';
 import { Layout } from '@/components/common/Layout';
@@ -33,6 +33,7 @@ export const CreateTaskModal: React.FC = () => {
   const recordId = route.params?.recordId;
   
   const [loading, setLoading] = useState(false);
+  const formRef = useRef<any>(null);
 
   // 處理表單提交
   const handleFormSubmit = useCallback(async (data: TaskFormData) => {
@@ -77,12 +78,37 @@ export const CreateTaskModal: React.FC = () => {
     }
   }, [user, currentOrganization, currentTeam, navigation]);
 
+  // 處理 header 儲存按鈕點擊
+  const handleSavePress = useCallback(() => {
+    if (formRef.current?.submit) {
+      formRef.current.submit();
+    }
+  }, []);
+
+  // 設置 navigation header
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity 
+          onPress={handleSavePress}
+          style={styles.headerButton}
+          disabled={loading}
+        >
+          <Text style={[styles.headerButtonText, loading && styles.disabledText]}>
+            儲存
+          </Text>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation, handleSavePress, loading]);
+
   return (
     <Layout style={styles.container}>
 
       {/* 內容區域 */}
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <TaskForm 
+          ref={formRef}
           onSubmit={handleFormSubmit}
           initialData={{
             customerIds: customerId ? [customerId] : [],
@@ -105,5 +131,17 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+  },
+  headerButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  headerButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#B91C1C',
+  },
+  disabledText: {
+    opacity: 0.5,
   },
 });
