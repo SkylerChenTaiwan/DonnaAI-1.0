@@ -37,20 +37,25 @@ const format = (date: Date, formatStr: string): string => {
 };
 
 const formatDueDate = (date: Date): string => {
+  // 檢查是否有具體時間（不是 00:00）
+  const hasTime = date.getHours() !== 0 || date.getMinutes() !== 0;
+  
   if (isToday(date)) {
-    return `今天 ${format(date, 'HH:mm')}`;
+    return hasTime ? `今天 ${format(date, 'HH:mm')}` : '今天';
   }
   
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   if (date.toDateString() === tomorrow.toDateString()) {
-    return `明天 ${format(date, 'HH:mm')}`;
+    return hasTime ? `明天 ${format(date, 'HH:mm')}` : '明天';
   }
   
   // 格式化為 MM/DD
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');
-  return `${month}/${day}`;
+  const dateStr = `${month}/${day}`;
+  
+  return hasTime ? `${dateStr} ${format(date, 'HH:mm')}` : dateStr;
 };
 
 interface TaskListSectionProps {
