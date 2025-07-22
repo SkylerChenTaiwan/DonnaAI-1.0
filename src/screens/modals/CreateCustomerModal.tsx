@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
   },
   headerButtonText: {
     fontSize: 17,
-    color: '#007AFF',
+    color: '#1A1A1A',
     fontWeight: '600',
   },
   disabledText: {

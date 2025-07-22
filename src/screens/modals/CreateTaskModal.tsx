@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   headerButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#B91C1C',
+    color: '#1A1A1A',
   },
   disabledText: {
     opacity: 0.5,
