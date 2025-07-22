@@ -739,8 +739,8 @@ export const DatabaseScreen: React.FC = () => {
           {/* 行內編輯模式切換按鈕 - 移到最右方 */}
           <TouchableOpacity
             style={[
-              styles.toolButton,
-              isEditMode && styles.toolButtonActive,
+              styles.iconButton,
+              isEditMode && styles.iconButtonActive,
             ]}
             onPress={() => {
               if (!user) {
@@ -755,18 +755,14 @@ export const DatabaseScreen: React.FC = () => {
               setIsEditMode(!isEditMode);
             }}
             activeOpacity={0.7}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            testID="edit-button"
           >
             <Ionicons
               name={isEditMode ? 'create' : 'create-outline'}
               size={20}
-              color="#1A1A1A"
+              color={isEditMode ? "#1A1A1A" : "#6B6B6B"}
             />
-            <Text style={[
-              styles.toolButtonText,
-              isEditMode && styles.toolButtonTextActive
-            ]}>
-              編輯
-            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -981,25 +977,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
   },
-  toolButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 8,
-    paddingVertical: 8,
+  iconButton: {
+    padding: 8,
     borderRadius: 6,
-    gap: 4,
-    marginLeft: 4,
   },
-  toolButtonActive: {
+  iconButtonActive: {
     backgroundColor: 'rgba(26, 26, 26, 0.1)',
-  },
-  toolButtonText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#1A1A1A',
-  },
-  toolButtonTextActive: {
-    color: '#1A1A1A',
   },
   tabContainer: {
     flexDirection: 'row',
