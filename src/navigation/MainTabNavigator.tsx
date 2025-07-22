@@ -9,7 +9,7 @@ import { View, StyleSheet } from 'react-native';
 import { useAuthStore } from '@/stores/authStore';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { EnhancedDashboard } from '@/screens/dashboard/EnhancedDashboard';
+import { EnhancedDashboardV2 } from '@/screens/dashboard/EnhancedDashboardV2';
 import { DatabaseScreen } from '@/screens/database/DatabaseScreen';
 import { ToolsScreen } from '@/screens/tools/ToolsScreen';
 import { SettingsScreen } from '@/screens/settings/SettingsScreen';
@@ -121,7 +121,7 @@ export const MainTabNavigator = () => {
         >
           <Tab.Screen
             name="Home"
-            component={EnhancedDashboard}
+            component={EnhancedDashboardV2}
             options={{
               title: '首頁',
               headerShown: false,
