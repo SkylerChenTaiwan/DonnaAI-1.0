@@ -26,6 +26,7 @@
 | 20v  | multimodal-input-ux-improvements.md | ✅ 已完成 | 多模態輸入系統 UX 改進 - 直接顯示主要輸入方式、次要方式作為連結、移除狀態記憶 | 2025-07-22 |
 | 21v  | record-modal-ui-simplification.md | ✅ 已完成 | 記錄模態框 UI 簡化 - 中央錄音按鈕、移除多餘標題、錄音後選擇用途、簡潔專業設計 | 2025-07-22 |
 | 22v  | ui-adjustments-voice-first.md | ✅ 已完成 | UI 調整語音優先介面 - Task 標籤取代+按鈕、語音輸入為主、簡化首頁、任務列表、近期客戶 | 2025-07-22 |
+| 23   | fix-prp22-navigation-and-loading.md | 📋 待執行 | 修復 PRP-22 導航架構和載入狀態 - 恢復+按鈕、CreateTaskModal 預設語音、修復首頁載入檢查 | - |
 
 ## 命名規則
 
@@ -41,7 +42,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：23**
+**下一個新建的 PRP 應使用編號：24**
 
 ## PRP 類型說明
 
