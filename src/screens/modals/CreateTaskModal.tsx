@@ -8,6 +8,7 @@ import { Button } from '@/components/common/Button';
 import { Layout } from '@/components/common/Layout';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { TaskForm } from '@/components/forms/TaskForm';
+import { SimplifiedVoiceTaskInput } from '@/components/input/SimplifiedVoiceTaskInput';
 import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
 import { createTask } from '@/services/firebase/tasks';
@@ -18,6 +19,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 type RouteParams = {
   CreateTaskModal: {
+    mode?: 'voice' | 'form';  // 新增模式參數
     customerId?: string;
     recordId?: string;
   };
@@ -29,11 +31,23 @@ export const CreateTaskModal: React.FC = () => {
   const { user } = useAuth();
   const { currentOrganization, currentTeam } = useOrganization();
   
+  // 預設模式改為語音
+  const mode = route.params?.mode || 'voice';
   const customerId = route.params?.customerId;
   const recordId = route.params?.recordId;
   
   const [loading, setLoading] = useState(false);
   const formRef = useRef<any>(null);
+
+  // 切換到文字輸入模式
+  const switchToForm = useCallback(() => {
+    navigation.setParams({ mode: 'form' });
+  }, [navigation]);
+  
+  // 切換到語音輸入模式
+  const switchToVoice = useCallback(() => {
+    navigation.setParams({ mode: 'voice' });
+  }, [navigation]);
 
   // 處理表單提交
   const handleFormSubmit = useCallback(async (data: TaskFormData) => {
@@ -54,7 +68,7 @@ export const CreateTaskModal: React.FC = () => {
       const taskData: TaskCreateRequest = {
         title: data.title,
         description: data.description || '',
-        type: 'once',
+        type: 'scheduled',
         priority: priorityMap[data.priority] || 'medium',
         assigneeId: data.assignedTo || user.uid,
         source: 'manual',
@@ -78,6 +92,11 @@ export const CreateTaskModal: React.FC = () => {
     }
   }, [user, currentOrganization, currentTeam, navigation]);
 
+  // 處理語音任務建立完成
+  const handleVoiceTaskCreated = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
+
   // 處理 header 儲存按鈕點擊
   const handleSavePress = useCallback(() => {
     if (formRef.current?.submit) {
@@ -87,39 +106,76 @@ export const CreateTaskModal: React.FC = () => {
 
   // 設置 navigation header
   useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity 
-          onPress={handleSavePress}
-          style={styles.headerButton}
-          disabled={loading}
-        >
-          <Text style={[styles.headerButtonText, loading && styles.disabledText]}>
-            儲存
-          </Text>
-        </TouchableOpacity>
-      ),
-    });
-  }, [navigation, handleSavePress, loading]);
+    if (mode === 'form') {
+      navigation.setOptions({
+        headerRight: () => (
+          <TouchableOpacity 
+            onPress={handleSavePress}
+            style={styles.headerButton}
+            disabled={loading}
+          >
+            <Text style={[styles.headerButtonText, loading && styles.disabledText]}>
+              儲存
+            </Text>
+          </TouchableOpacity>
+        ),
+      });
+    } else {
+      navigation.setOptions({
+        headerRight: null,
+      });
+    }
+  }, [navigation, handleSavePress, loading, mode]);
 
   return (
     <Layout style={styles.container}>
-
-      {/* 內容區域 */}
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        <TaskForm 
-          ref={formRef}
-          onSubmit={handleFormSubmit}
-          initialData={{
-            customerIds: customerId ? [customerId] : [],
-            recordId: recordId,
-          }}
-          isSubmitting={loading}
-          userId={user?.uid || ''}
-          organizationId={currentOrganization?.id || ''}
-          teamId={currentTeam?.id || ''}
-        />
-      </ScrollView>
+      {mode === 'voice' ? (
+        <View style={styles.voiceContent}>
+          {/* 切換到文字輸入的連結 - 小而不突兀 */}
+          <TouchableOpacity
+            style={styles.textInputLink}
+            onPress={switchToForm}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.linkText}>使用文字輸入</Text>
+            <Ionicons name="arrow-forward" size={16} color="#7A7A7A" />
+          </TouchableOpacity>
+          
+          {/* 語音輸入介面 */}
+          <SimplifiedVoiceTaskInput
+            onTaskCreated={handleVoiceTaskCreated}
+            userId={user?.uid || ''}
+            organizationId={currentOrganization?.id || ''}
+            teamId={currentTeam?.id || ''}
+          />
+        </View>
+      ) : (
+        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+          {/* 切換到語音輸入的連結 */}
+          <TouchableOpacity
+            style={styles.voiceInputLink}
+            onPress={switchToVoice}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="mic" size={20} color="#FF6B6B" />
+            <Text style={styles.voiceLinkText}>改用語音輸入</Text>
+            <Ionicons name="arrow-forward" size={16} color="#FF6B6B" />
+          </TouchableOpacity>
+          
+          <TaskForm 
+            ref={formRef}
+            onSubmit={handleFormSubmit}
+            initialData={{
+              customerIds: customerId ? [customerId] : [],
+              recordId: recordId,
+            }}
+            isSubmitting={loading}
+            userId={user?.uid || ''}
+            organizationId={currentOrganization?.id || ''}
+            teamId={currentTeam?.id || ''}
+          />
+        </ScrollView>
+      )}
     </Layout>
   );
 };
@@ -130,6 +186,41 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8F9FA',
   },
   content: {
+    flex: 1,
+  },
+  voiceContent: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
+  textInputLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    backgroundColor: '#F8F9FA',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E3E1DC',
+  },
+  linkText: {
+    fontSize: 14,
+    color: '#7A7A7A',
+  },
+  voiceInputLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    backgroundColor: '#FFF5F5',
+    borderBottomWidth: 1,
+    borderBottomColor: '#FFE0E0',
+    marginBottom: 16,
+  },
+  voiceLinkText: {
+    fontSize: 16,
+    color: '#FF6B6B',
+    fontWeight: '500',
     flex: 1,
   },
   headerButton: {

@@ -1,9 +1,8 @@
 /**
  * 動作選擇 Popover 元件
- * 直接導航到對應 Modal 的主要輸入方式
  */
 
-import React, { useCallback } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -16,7 +15,6 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
 
 interface Action {
   id: string;
@@ -24,18 +22,16 @@ interface Action {
   title: string;
   subtitle: string;
   icon: keyof typeof Ionicons.glyphMap;
-  defaultMode: string;
 }
 
 interface ActionPopoverProps {
   visible: boolean;
   onClose: () => void;
-  onAction?: (action: Action) => void;
+  onAction: (action: Action) => void;
   fromRef: React.RefObject<any>;
   tabBarHeight?: number;
 }
 
-// 定義動作與預設輸入方式
 const actions: Action[] = [
   {
     id: '1',
@@ -43,7 +39,6 @@ const actions: Action[] = [
     title: '客戶',
     subtitle: '建立新的客戶資料',
     icon: 'person-add-outline',
-    defaultMode: 'form',
   },
   {
     id: '2',
@@ -51,7 +46,6 @@ const actions: Action[] = [
     title: '紀錄',
     subtitle: '記錄會議或通話內容',
     icon: 'document-text-outline',
-    defaultMode: 'audio',
   },
   {
     id: '3',
@@ -59,7 +53,6 @@ const actions: Action[] = [
     title: '任務',
     subtitle: '建立待辦事項',
     icon: 'checkbox-outline',
-    defaultMode: 'voice',
   },
 ];
 
@@ -70,7 +63,6 @@ export const ActionPopover = ({
   fromRef,
   tabBarHeight = 88,
 }: ActionPopoverProps) => {
-  const navigation = useNavigation<any>();
   const insets = useSafeAreaInsets();
   const slideAnim = React.useRef(new Animated.Value(0)).current;
   const [panelBottom, setPanelBottom] = React.useState(0);
@@ -79,7 +71,9 @@ export const ActionPopover = ({
     if (visible && fromRef.current) {
       fromRef.current.measureInWindow((x, y, width, height) => {
         const screenHeight = Dimensions.get('window').height;
-        const navBarTop = y - 10;
+        // 按鈕位置減去 paddingTop (10px) 得到導航欄實際頂部
+        const navBarTop = y - 10; // paddingTop from tabBarStyle
+        // 計算面板應該距離螢幕底部的距離
         const bottomDistance = screenHeight - navBarTop;
         setPanelBottom(bottomDistance);
       });
@@ -111,27 +105,6 @@ export const ActionPopover = ({
     inputRange: [0, 1],
     outputRange: [0, 0.3],
   });
-
-  // 處理動作選擇 - 直接導航
-  const handleActionSelect = useCallback((action: Action) => {
-    onClose();
-    
-    switch (action.type) {
-      case 'customer':
-        navigation.navigate('CreateCustomerModal', { mode: action.defaultMode });
-        break;
-      case 'record':
-        navigation.navigate('CreateRecordModal', { mode: action.defaultMode });
-        break;
-      case 'task':
-        navigation.navigate('CreateTaskModal', { mode: action.defaultMode });
-        break;
-      default:
-        if (onAction) {
-          onAction(action);
-        }
-    }
-  }, [navigation, onClose, onAction]);
 
   return (
     <Modal
@@ -167,7 +140,10 @@ export const ActionPopover = ({
               <TouchableOpacity
                 key={action.id}
                 style={styles.actionButton}
-                onPress={() => handleActionSelect(action)}
+                onPress={() => {
+                  onAction(action);
+                  onClose();
+                }}
                 activeOpacity={0.7}
               >
                 <View style={styles.actionIconContainer}>
@@ -182,6 +158,8 @@ export const ActionPopover = ({
     </Modal>
   );
 };
+
+const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -209,7 +187,7 @@ const styles = StyleSheet.create({
   },
   actionContainer: {
     flexDirection: 'row',
-    paddingVertical: 16,
+    paddingVertical: 16, // 減小垂直內距
     paddingHorizontal: 24,
   },
   actionButton: {
@@ -218,7 +196,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   actionIconContainer: {
-    width: 48,
+    width: 48, // 減小圖標容器
     height: 48,
     borderRadius: 24,
     backgroundColor: '#F5F5F5',

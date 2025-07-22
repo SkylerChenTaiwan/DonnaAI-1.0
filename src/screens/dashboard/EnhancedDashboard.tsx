@@ -22,7 +22,7 @@ import { useOrganization } from '@/hooks/useOrganization';
 
 export const EnhancedDashboard: React.FC = () => {
   const { user: authUser } = useAuth();
-  const { currentOrganization, currentTeam } = useOrganization();
+  const { currentOrganization, currentTeam, loading: orgLoading } = useOrganization();
   const { user, mode, toggleMode } = useAuthStore();
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -34,12 +34,34 @@ export const EnhancedDashboard: React.FC = () => {
     }, 1000);
   }, []);
 
-  // 如果沒有登入或組織資訊，顯示提示
-  if (!authUser || !currentOrganization || !currentTeam) {
+  // 如果正在載入組織資訊，顯示載入中
+  if (orgLoading) {
+    return (
+      <Layout style={styles.container}>
+        <View style={styles.emptyState}>
+          <Text style={styles.emptyText}>載入中...</Text>
+        </View>
+      </Layout>
+    );
+  }
+
+  // 如果沒有登入，顯示提示
+  if (!authUser) {
     return (
       <Layout style={styles.container}>
         <View style={styles.emptyState}>
           <Text style={styles.emptyText}>請先登入</Text>
+        </View>
+      </Layout>
+    );
+  }
+
+  // 如果登入但沒有組織資訊，顯示設定提示
+  if (!currentOrganization || !currentTeam) {
+    return (
+      <Layout style={styles.container}>
+        <View style={styles.emptyState}>
+          <Text style={styles.emptyText}>請先設定組織資訊</Text>
         </View>
       </Layout>
     );
