@@ -21,8 +21,6 @@ import { TaskFormSchema, TaskFormData } from '@/services/validation/form-schemas
 import { FormField } from './FormField';
 import { Button } from '@/components/common/Button';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
-import { VoiceTaskInput } from '@/components/input/VoiceTaskInput';
-import { VoiceToTaskResult } from '@/services/ai/voice-to-task';
 
 export interface TaskFormProps {
   onSubmit: (data: TaskFormData) => Promise<void>;
@@ -34,7 +32,6 @@ export interface TaskFormProps {
   teamId: string;
 }
 
-type InputMode = 'text' | 'voice';
 
 export const TaskForm: React.FC<TaskFormProps> = ({
   onSubmit,
@@ -45,9 +42,6 @@ export const TaskForm: React.FC<TaskFormProps> = ({
   organizationId,
   teamId,
 }) => {
-  const [inputMode, setInputMode] = useState<InputMode>('text');
-  const [showVoiceInput, setShowVoiceInput] = useState(false);
-  const [voiceTaskResult, setVoiceTaskResult] = useState<VoiceToTaskResult | null>(null);
 
   const {
     control,
@@ -59,8 +53,8 @@ export const TaskForm: React.FC<TaskFormProps> = ({
   } = useForm<TaskFormData>({
     resolver: zodResolver(TaskFormSchema),
     defaultValues: {
-      priority: 'medium',
-      status: 'pending',
+      priority: '中',
+      status: '待處理',
       tags: [],
       ...initialData,
     },
@@ -79,58 +73,20 @@ export const TaskForm: React.FC<TaskFormProps> = ({
     }
   }, [onSubmit]);
 
-  // 處理語音任務提取完成
-  const handleVoiceTaskExtracted = useCallback((
-    taskData: Partial<TaskFormData>,
-    result: VoiceToTaskResult
-  ) => {
-    // 將語音提取的資料設定到表單
-    Object.keys(taskData).forEach(key => {
-      const value = taskData[key as keyof TaskFormData];
-      if (value !== undefined) {
-        setValue(key as keyof TaskFormData, value, { shouldValidate: true });
-      }
-    });
-
-    // 儲存語音轉任務結果以供後續參考
-    setVoiceTaskResult(result);
-    
-    // 切換到文字模式以便用戶檢視和編輯
-    setInputMode('text');
-    setShowVoiceInput(false);
-
-    // 顯示成功訊息
-    if (result.extractedTask) {
-      const confidence = (result.extractedTask.confidence * 100).toFixed(0);
-      Alert.alert(
-        '語音轉任務完成',
-        `已成功提取任務資訊（準確度: ${confidence}%）\n您可以檢視並編輯任務內容後創建任務。`,
-        [{ text: '確定' }]
-      );
-    }
-  }, [setValue]);
-
-  // 清空表單並重新開始
-  const handleReset = useCallback(() => {
-    reset();
-    setVoiceTaskResult(null);
-    setInputMode('text');
-  }, [reset]);
 
   // 優先級選項
   const priorityOptions = [
-    { label: '低', value: 'low' },
-    { label: '中', value: 'medium' },
-    { label: '高', value: 'high' },
-    { label: '緊急', value: 'urgent' },
+    { label: '低', value: '低' },
+    { label: '中', value: '中' },
+    { label: '高', value: '高' },
   ];
 
   // 狀態選項
   const statusOptions = [
-    { label: '待處理', value: 'pending' },
-    { label: '進行中', value: 'in_progress' },
-    { label: '已完成', value: 'completed' },
-    { label: '已取消', value: 'cancelled' },
+    { label: '待處理', value: '待處理' },
+    { label: '進行中', value: '進行中' },
+    { label: '已完成', value: '已完成' },
+    { label: '已取消', value: '已取消' },
   ];
 
   // 輸入模式切換按鈕
@@ -225,132 +181,139 @@ export const TaskForm: React.FC<TaskFormProps> = ({
   return (
     <View style={styles.container}>
       <ScrollView style={styles.form} showsVerticalScrollIndicator={false}>
-        {/* 輸入模式選擇 */}
-        {renderInputModeToggle()}
-
-        {/* 語音輸入區域 */}
-        {renderVoiceInputSection()}
-
-        {/* 表單欄位（文字模式或語音後編輯） */}
-        {inputMode === 'text' && (
-          <>
-            {/* 任務標題 */}
-            <Controller
-              control={control}
-              name="title"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <FormField
-                  label="任務標題"
-                  type="text"
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  error={errors.title?.message}
-                  placeholder="輸入任務標題..."
-                  required
-                />
-              )}
+        {/* 任務標題 - 必填 */}
+        <Controller
+          control={control}
+          name="title"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <FormField
+              label="任務標題"
+              type="text"
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              error={errors.title?.message}
+              placeholder="輸入任務標題..."
+              required
             />
+          )}
+        />
 
-            {/* 任務描述 */}
-            <Controller
-              control={control}
-              name="description"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <FormField
-                  label="任務描述"
-                  type="multiline"
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  error={errors.description?.message}
-                  placeholder="詳細描述任務內容和要求..."
-                  minHeight={120}
-                  required
-                />
-              )}
+        {/* 截止日期 - 重要欄位，放在第二位 */}
+        <Controller
+          control={control}
+          name="dueDate"
+          render={({ field: { onChange, value } }) => (
+            <FormField
+              label="截止日期"
+              type="date"
+              value={value}
+              onDateChange={onChange}
+              error={errors.dueDate?.message}
             />
+          )}
+        />
 
-            {/* 客戶 ID（可選） */}
-            <Controller
-              control={control}
-              name="customerId"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <FormField
-                  label="關聯客戶"
-                  type="text"
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  error={errors.customerId?.message}
-                  placeholder="客戶 ID（可選）"
-                />
-              )}
+        {/* 地點 - 重要欄位，放在第三位 */}
+        <Controller
+          control={control}
+          name="location"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <FormField
+              label="地點"
+              type="text"
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              error={errors.location?.message}
+              placeholder="任務執行地點（可選）"
             />
+          )}
+        />
 
-            {/* 優先級 */}
-            <Controller
-              control={control}
-              name="priority"
-              render={({ field: { onChange, value } }) => (
-                <FormField
-                  label="優先級"
-                  type="select"
-                  value={value}
-                  onValueChange={onChange}
-                  options={priorityOptions}
-                  error={errors.priority?.message}
-                />
-              )}
+        {/* 任務描述 - 選填 */}
+        <Controller
+          control={control}
+          name="description"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <FormField
+              label="任務描述"
+              type="multiline"
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              error={errors.description?.message}
+              placeholder="詳細描述任務內容和要求（可選）..."
+              minHeight={100}
             />
+          )}
+        />
 
-            {/* 狀態 */}
-            <Controller
-              control={control}
-              name="status"
-              render={({ field: { onChange, value } }) => (
-                <FormField
-                  label="狀態"
-                  type="select"
-                  value={value}
-                  onValueChange={onChange}
-                  options={statusOptions}
-                  error={errors.status?.message}
-                />
-              )}
+        {/* 優先級 */}
+        <Controller
+          control={control}
+          name="priority"
+          render={({ field: { onChange, value } }) => (
+            <FormField
+              label="優先級"
+              type="select"
+              value={value}
+              onValueChange={onChange}
+              options={priorityOptions}
+              error={errors.priority?.message}
             />
+          )}
+        />
 
-            {/* 截止日期 */}
-            <Controller
-              control={control}
-              name="dueDate"
-              render={({ field: { onChange, value } }) => (
-                <FormField
-                  label="截止日期"
-                  type="date"
-                  value={value}
-                  onDateChange={onChange}
-                  error={errors.dueDate?.message}
-                />
-              )}
+        {/* 狀態 */}
+        <Controller
+          control={control}
+          name="status"
+          render={({ field: { onChange, value } }) => (
+            <FormField
+              label="狀態"
+              type="select"
+              value={value}
+              onValueChange={onChange}
+              options={statusOptions}
+              error={errors.status?.message}
             />
+          )}
+        />
 
-            {/* 指派人員 */}
-            <Controller
-              control={control}
-              name="assignedTo"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <FormField
-                  label="指派給"
-                  type="text"
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  error={errors.assignedTo?.message}
-                  placeholder="指派給某位成員（可選）"
-                />
-              )}
+        {/* 指派人員 */}
+        <Controller
+          control={control}
+          name="assignedTo"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <FormField
+              label="指派給"
+              type="text"
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              error={errors.assignedTo?.message}
+              placeholder="指派給某位成員（可選）"
             />
+          )}
+        />
+
+        {/* 關聯客戶 */}
+        <Controller
+          control={control}
+          name="customerId"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <FormField
+              label="關聯客戶"
+              type="text"
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              error={errors.customerId?.message}
+              placeholder="客戶 ID（可選）"
+            />
+          )}
+        />
 
             {/* 標籤 */}
             <Controller
