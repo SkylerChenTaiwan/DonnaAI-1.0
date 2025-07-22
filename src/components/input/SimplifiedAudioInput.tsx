@@ -170,7 +170,7 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
       setRecordingStatus('idle');
       Alert.alert('錄音失敗', error instanceof Error ? error.message : '無法開始錄音');
     }
-  }, [checkPermissions, initializeAudio, startPulseAnimation, startWaveformAnimation]);
+  }, [instanceId, checkPermissions, initializeAudio, startPulseAnimation, startWaveformAnimation]);
 
   // 暫停錄音
   const pauseRecording = useCallback(async () => {
@@ -294,18 +294,26 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
   // 清理定時器和錄音資源
   useEffect(() => {
     return () => {
+      console.log(`SimplifiedAudioInput cleanup: ${instanceId}`);
+      
       if (durationTimerRef.current) {
         clearInterval(durationTimerRef.current);
       }
       stopPulseAnimation();
       stopWaveformAnimation();
       
+      // 確保停止錄音
+      if (recording) {
+        setRecording(null);
+        setRecordingStatus('idle');
+      }
+      
       // 使用全局管理器清理錄音資源
       recordingManager.stopCurrentRecording().catch(error => {
         console.error('清理錄音資源失敗:', error);
       });
     };
-  }, [recording, stopPulseAnimation, stopWaveformAnimation]);
+  }, [instanceId, recording, stopPulseAnimation, stopWaveformAnimation]);
 
   // 渲染波形
   const renderWaveform = () => {

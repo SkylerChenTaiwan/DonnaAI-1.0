@@ -9,6 +9,7 @@ class RecordingManager {
   private static instance: RecordingManager;
   private currentRecording: Audio.Recording | null = null;
   private isRecording: boolean = false;
+  private isStarting: boolean = false;
 
   private constructor() {}
 
@@ -36,31 +37,43 @@ class RecordingManager {
   async startNewRecording(): Promise<Audio.Recording> {
     console.log('RecordingManager: 請求開始新錄音');
     
+    // 如果正在啟動錄音，拋出錯誤
+    if (this.isStarting) {
+      console.warn('RecordingManager: 正在啟動另一個錄音');
+      throw new Error('正在啟動另一個錄音');
+    }
+    
     // 如果已經在錄音中，拋出錯誤
     if (this.isRecording && this.currentRecording) {
       console.warn('RecordingManager: 已經有錄音在進行中');
       throw new Error('已經有錄音在進行中');
     }
     
-    // 先停止任何現有的錄音
-    await this.stopCurrentRecording();
-    
-    // 添加延遲以確保資源釋放
-    await new Promise(resolve => setTimeout(resolve, 100));
+    try {
+      this.isStarting = true;
+      
+      // 先停止任何現有的錄音
+      await this.stopCurrentRecording();
+      
+      // 添加延遲以確保資源釋放
+      await new Promise(resolve => setTimeout(resolve, 100));
 
-    // 創建新的錄音
-    console.log('RecordingManager: 創建新錄音...');
-    const { recording } = await Audio.Recording.createAsync(
-      Audio.RecordingOptionsPresets.HIGH_QUALITY,
-      undefined,
-      100
-    );
+      // 創建新的錄音
+      console.log('RecordingManager: 創建新錄音...');
+      const { recording } = await Audio.Recording.createAsync(
+        Audio.RecordingOptionsPresets.HIGH_QUALITY,
+        undefined,
+        100
+      );
 
-    this.currentRecording = recording;
-    this.isRecording = true;
-    console.log('RecordingManager: 錄音開始成功');
-    
-    return recording;
+      this.currentRecording = recording;
+      this.isRecording = true;
+      console.log('RecordingManager: 錄音開始成功');
+      
+      return recording;
+    } finally {
+      this.isStarting = false;
+    }
   }
 
   getCurrentRecording(): Audio.Recording | null {
