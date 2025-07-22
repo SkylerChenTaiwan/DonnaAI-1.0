@@ -57,28 +57,26 @@ class EnvironmentManager {
    * @throws {Error} 如果缺少必要的環境變數
    */
   private validateEnvironment(): void {
-    const required = [
-      'EXPO_PUBLIC_FIREBASE_API_KEY',
-      'EXPO_PUBLIC_FIREBASE_PROJECT_ID',
-      'EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN',
-      'EXPO_PUBLIC_FIREBASE_APP_ID'
+    // 檢查 Firebase 配置（使用轉換後的鍵名）
+    const firebaseKeys = [
+      'firebaseApiKey',
+      'firebaseProjectId',
+      'firebaseAuthDomain',
+      'firebaseAppId'
     ];
     
-    const missing = required.filter(key => {
-      const value = Constants.expoConfig?.extra?.[key] || process.env[key];
+    const missing = firebaseKeys.filter(key => {
+      const value = Constants.expoConfig?.extra?.[key];
       return !value || value === '';
     });
     
     if (missing.length > 0) {
-      const errorMsg = `缺少必要的環境變數: ${missing.join(', ')}\n請檢查 .env 檔案是否正確設定。`;
+      const errorMsg = `缺少必要的 Firebase 配置: ${missing.join(', ')}\n請檢查 app.config.js 和 .env 檔案是否正確設定。`;
       
       // 在開發環境顯示詳細錯誤
       if (__DEV__) {
         console.error(errorMsg);
-        console.log('目前的環境變數:', {
-          extra: Constants.expoConfig?.extra,
-          env: process.env
-        });
+        console.log('目前的配置:', Constants.expoConfig?.extra);
       }
       
       throw new Error(errorMsg);
@@ -89,12 +87,11 @@ class EnvironmentManager {
    * 載入環境配置
    */
   private loadConfiguration(): EnvironmentConfig {
-    const env = (Constants.expoConfig?.extra?.env || 
-                 process.env.EXPO_PUBLIC_ENV || 
-                 'development') as Environment;
+    // 從 Constants.expoConfig.extra 讀取環境變數
+    const env = (Constants.expoConfig?.extra?.env || 'development') as Environment;
     
     const isDebug = Constants.expoConfig?.extra?.debug === 'true' || 
-                   process.env.EXPO_PUBLIC_DEBUG === 'true';
+                   Constants.expoConfig?.extra?.debug === true;
     
     // 根據環境設定 API URL
     const apiUrls: Record<Environment, string> = {
@@ -145,20 +142,23 @@ class EnvironmentManager {
    * 取得 Firebase 配置
    */
   getFirebaseConfig() {
-    return {
-      apiKey: Constants.expoConfig?.extra?.firebaseApiKey || 
-              process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
-      authDomain: Constants.expoConfig?.extra?.firebaseAuthDomain || 
-                  process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
-      projectId: Constants.expoConfig?.extra?.firebaseProjectId || 
-                 process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
-      storageBucket: Constants.expoConfig?.extra?.firebaseStorageBucket || 
-                     process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
-      messagingSenderId: Constants.expoConfig?.extra?.firebaseMessagingSenderId || 
-                        process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-      appId: Constants.expoConfig?.extra?.firebaseAppId || 
-             process.env.EXPO_PUBLIC_FIREBASE_APP_ID
+    // 在 React Native 環境中，直接從 Constants.expoConfig 讀取環境變數
+    const config = {
+      apiKey: Constants.expoConfig?.extra?.firebaseApiKey,
+      authDomain: Constants.expoConfig?.extra?.firebaseAuthDomain,
+      projectId: Constants.expoConfig?.extra?.firebaseProjectId,
+      storageBucket: Constants.expoConfig?.extra?.firebaseStorageBucket,
+      messagingSenderId: Constants.expoConfig?.extra?.firebaseMessagingSenderId,
+      appId: Constants.expoConfig?.extra?.firebaseAppId
     };
+
+    // 檢查配置是否完整
+    if (!config.apiKey || !config.projectId) {
+      console.error('Firebase 配置不完整，Constants.expoConfig:', Constants.expoConfig);
+      console.error('Firebase 配置:', config);
+    }
+
+    return config;
   }
   
   /**
