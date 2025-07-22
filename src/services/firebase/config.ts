@@ -2,6 +2,7 @@
  * Firebase 配置和初始化
  */
 
+import { Platform } from 'react-native';
 import { FirebaseApp, initializeApp, getApps } from 'firebase/app';
 import { Auth, initializeAuth, getAuth, connectAuthEmulator, getReactNativePersistence } from 'firebase/auth';
 import { Firestore, getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
@@ -9,6 +10,35 @@ import { FirebaseStorage, getStorage } from 'firebase/storage';
 import { Functions, getFunctions, connectFunctionsEmulator } from 'firebase/functions';
 import { environmentManager, getFirebaseConfig } from '../../config/environment';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// 完整的環境 polyfill，確保 Firebase SDK 識別為 React Native
+if (typeof global !== 'undefined') {
+  // @ts-ignore
+  global.self = global;
+  // @ts-ignore
+  global.window = global;
+  // @ts-ignore
+  global.navigator = {
+    userAgent: 'ReactNative',
+    product: 'ReactNative',
+    platform: 'ReactNative',
+    appName: 'Netscape',
+    appVersion: '5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X)',
+    vendor: 'Apple Computer, Inc.',
+    vendorSub: ''
+  };
+  // @ts-ignore
+  global.location = {
+    href: 'http://localhost',
+    protocol: 'http:',
+    host: 'localhost',
+    hostname: 'localhost',
+    port: '',
+    pathname: '/',
+    search: '',
+    hash: ''
+  };
+}
 
 // 延遲初始化的實例
 let app: FirebaseApp | null = null;
@@ -26,17 +56,43 @@ let emulatorsConnected = false;
 const initializeFirebaseApp = (): FirebaseApp => {
   if (app) return app;
 
+  console.log('🔥 開始初始化 Firebase...');
+  console.log('Platform.OS:', Platform.OS);
+  console.log('__DEV__:', __DEV__);
+  console.log('navigator.product:', typeof navigator !== 'undefined' ? navigator.product : 'undefined');
+  console.log('global.navigator:', typeof global !== 'undefined' && global.navigator ? global.navigator : 'undefined');
+
   // 從環境管理器取得 Firebase 配置
   const firebaseConfig = getFirebaseConfig();
   
+  // 如果配置為空，嘗試直接使用硬編碼的值作為備用
+  const fallbackConfig = {
+    apiKey: "AIzaSyAxEU8MuVZdZqXd6dDpBYL6Iu-TRD3vblI",
+    authDomain: "donnaai-5e601.firebaseapp.com",
+    projectId: "donnaai-5e601",
+    storageBucket: "donnaai-5e601.firebasestorage.app",
+    messagingSenderId: "748876929238",
+    appId: "1:748876929238:web:fbbe5fd030a68765ea9177"
+  };
+  
+  const finalConfig = firebaseConfig.apiKey ? firebaseConfig : fallbackConfig;
+  
+  console.log('Firebase 配置:', {
+    ...finalConfig,
+    apiKey: finalConfig.apiKey ? '***' + finalConfig.apiKey.slice(-4) : 'missing'
+  });
+  
   // 驗證配置
-  if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
+  if (!finalConfig.apiKey || !finalConfig.projectId) {
     console.error('Firebase 配置不完整，請檢查環境變數設定');
+    console.error('完整配置:', finalConfig);
     throw new Error('Firebase 配置錯誤');
   }
 
   // 只在尚未初始化時初始化 Firebase
-  app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+  app = getApps().length === 0 ? initializeApp(finalConfig) : getApps()[0];
+  
+  console.log('✅ Firebase 初始化成功');
   
   return app;
 };
