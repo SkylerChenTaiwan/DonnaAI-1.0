@@ -10,10 +10,6 @@ import { ErrorBoundary } from '@/services/error/ErrorBoundary';
 import { errorLogger } from '@/services/error/ErrorLogger';
 import { environmentManager } from '@/config/environment';
 
-// 環境變數調試
-if (__DEV__) {
-  import('@/debug-env.js').catch(err => console.error('調試檔案載入失敗:', err));
-}
 
 // 開發模式下載入除錯工具
 // 暫時停用：這些工具會在頂層執行 Firebase 操作，導致初始化錯誤
