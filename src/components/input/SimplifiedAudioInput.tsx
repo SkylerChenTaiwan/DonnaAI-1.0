@@ -354,9 +354,6 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
               />
             )}
           </Animated.View>
-          {recordingStatus === 'recording' && (
-            <View style={styles.recordingIndicator} />
-          )}
         </TouchableOpacity>
 
         {/* 右側按鈕空間 */}
@@ -444,29 +441,20 @@ const styles = StyleSheet.create({
     width: 88,
     height: 88,
     borderRadius: 44,
-    backgroundColor: '#FF6B35',
+    backgroundColor: '#B91C1C',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#FF6B35',
+    shadowColor: '#B91C1C',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 8,
   },
   recordingButton: {
-    backgroundColor: '#DC2626',
+    backgroundColor: '#991B1B',
   },
   pausedButton: {
     backgroundColor: '#F59E0B',
-  },
-  recordingIndicator: {
-    position: 'absolute',
-    top: -8,
-    right: -8,
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: '#DC2626',
   },
   hint: {
     fontSize: 16,
