@@ -138,15 +138,6 @@ export const CreateRecordModal: React.FC = () => {
 
   return (
     <Layout style={styles.container}>
-      {/* 標題欄 */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.closeButton}>
-          <Ionicons name="close" size={24} color="#1C1C1E" />
-        </TouchableOpacity>
-        <Text style={styles.title}>新增紀錄</Text>
-        <View style={styles.headerSpacer} />
-      </View>
-
       {/* 內容區域 */}
       {mode === 'audio' ? (
         <View style={styles.audioContent}>
@@ -200,28 +191,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F8F9FA',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 12,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
-  },
-  closeButton: {
-    padding: 8,
-  },
-  title: {
-    fontSize: 17,
-    fontWeight: '600',
-    color: '#1C1C1E',
-  },
-  headerSpacer: {
-    width: 40,
   },
   content: {
     flex: 1,
