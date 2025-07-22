@@ -1,3 +1,8 @@
+// 調試環境變數
+console.log('📱 app.config.js 載入中...');
+console.log('EXPO_PUBLIC_FIREBASE_API_KEY:', process.env.EXPO_PUBLIC_FIREBASE_API_KEY ? '已設定' : '未設定');
+console.log('EXPO_PUBLIC_FIREBASE_PROJECT_ID:', process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID || '未設定');
+
 export default {
   expo: {
     name: "DonnaAI",

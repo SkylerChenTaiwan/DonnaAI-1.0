@@ -57,6 +57,14 @@ class EnvironmentManager {
    * @throws {Error} 如果缺少必要的環境變數
    */
   private validateEnvironment(): void {
+    // 在開發環境顯示詳細的環境資訊
+    if (__DEV__) {
+      console.log('🔍 驗證環境變數...');
+      console.log('Constants.expoConfig:', Constants.expoConfig);
+      console.log('process.env.EXPO_PUBLIC_FIREBASE_API_KEY:', process.env.EXPO_PUBLIC_FIREBASE_API_KEY ? '***' : 'undefined');
+      console.log('typeof process.env:', typeof process.env);
+    }
+    
     // 檢查 Firebase 配置（使用轉換後的鍵名）
     const firebaseKeys = [
       'firebaseApiKey',
@@ -70,7 +78,11 @@ class EnvironmentManager {
       return !value || value === '';
     });
     
-    if (missing.length > 0) {
+    // 如果 extra 中沒有，檢查 process.env 是否有值
+    const hasProcessEnv = process.env.EXPO_PUBLIC_FIREBASE_API_KEY && 
+                         process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID;
+    
+    if (missing.length > 0 && !hasProcessEnv) {
       const errorMsg = `缺少必要的 Firebase 配置: ${missing.join(', ')}\n請檢查 app.config.js 和 .env 檔案是否正確設定。`;
       
       // 在開發環境顯示詳細錯誤
@@ -142,20 +154,27 @@ class EnvironmentManager {
    * 取得 Firebase 配置
    */
   getFirebaseConfig() {
+    // 調試輸出
+    if (__DEV__) {
+      console.log('🔥 getFirebaseConfig 被調用');
+      console.log('Constants.expoConfig?.extra:', Constants.expoConfig?.extra);
+    }
+    
     // 優先從 Constants.expoConfig.extra 讀取，如果沒有則使用 process.env 作為備用
+    // 注意：在 React Native 中，process.env 變數在編譯時被替換為字串字面值
     const config = {
       apiKey: Constants.expoConfig?.extra?.firebaseApiKey || 
-              process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
+              'AIzaSyAxEU8MuVZdZqXd6dDpBYL6Iu-TRD3vblI',  // 直接使用字串作為備用
       authDomain: Constants.expoConfig?.extra?.firebaseAuthDomain || 
-                  process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
+                  'donnaai-5e601.firebaseapp.com',
       projectId: Constants.expoConfig?.extra?.firebaseProjectId || 
-                 process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
+                 'donnaai-5e601',
       storageBucket: Constants.expoConfig?.extra?.firebaseStorageBucket || 
-                     process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
+                     'donnaai-5e601.firebasestorage.app',
       messagingSenderId: Constants.expoConfig?.extra?.firebaseMessagingSenderId || 
-                        process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+                        '748876929238',
       appId: Constants.expoConfig?.extra?.firebaseAppId || 
-             process.env.EXPO_PUBLIC_FIREBASE_APP_ID
+             '1:748876929238:web:fbbe5fd030a68765ea9177'
     };
 
     // 檢查配置是否完整
