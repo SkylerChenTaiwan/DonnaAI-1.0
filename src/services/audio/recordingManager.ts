@@ -103,6 +103,7 @@ class RecordingManager {
   }
 
   setCurrentRecording(recording: Audio.Recording | null): void {
+    console.log('RecordingManager: 設置當前錄音:', !!recording);
     this.currentRecording = recording;
     this.isRecording = !!recording;
   }

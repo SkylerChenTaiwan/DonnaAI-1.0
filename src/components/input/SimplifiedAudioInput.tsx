@@ -189,21 +189,25 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
 
   // 暫停錄音
   const pauseRecording = useCallback(async () => {
-    console.log('嘗試暫停錄音...', { recording: !!recording, status: recordingStatus });
+    console.log('嘗試暫停錄音...', { 
+      recording: !!recording, 
+      status: recordingStatus,
+      globalRecording: !!recordingManager.getCurrentRecording() 
+    });
     
-    // 使用全局管理器獲取當前錄音
-    const currentRecording = recordingManager.getCurrentRecording();
-    if (!currentRecording || recordingStatus !== 'recording') {
+    // 優先使用組件狀態中的錄音對象
+    const recordingToPause = recording || recordingManager.getCurrentRecording();
+    if (!recordingToPause || recordingStatus !== 'recording') {
       console.warn('無法暫停：沒有活躍的錄音');
       return;
     }
 
     try {
-      const status = await currentRecording.getStatusAsync();
+      const status = await recordingToPause.getStatusAsync();
       console.log('暫停前錄音狀態:', status);
       
       if (status.isRecording) {
-        await currentRecording.pauseAsync();
+        await recordingToPause.pauseAsync();
         setRecordingStatus('paused');
         
         // 停止計時器
@@ -224,15 +228,15 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
       console.error('暫停錄音失敗:', error);
       Alert.alert('暫停失敗', '無法暫停錄音');
     }
-  }, [recordingStatus, stopPulseAnimation, stopWaveformAnimation]);
+  }, [recording, recordingStatus, stopPulseAnimation, stopWaveformAnimation]);
 
   // 恢復錄音
   const resumeRecording = useCallback(async () => {
-    const currentRecording = recordingManager.getCurrentRecording();
-    if (!currentRecording || recordingStatus !== 'paused') return;
+    const recordingToResume = recording || recordingManager.getCurrentRecording();
+    if (!recordingToResume || recordingStatus !== 'paused') return;
 
     try {
-      await currentRecording.startAsync();
+      await recordingToResume.startAsync();
       setRecordingStatus('recording');
       
       // 重新開始計時器
@@ -247,7 +251,7 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
       console.error('恢復錄音失敗:', error);
       Alert.alert('恢復失敗', '無法恢復錄音');
     }
-  }, [recordingStatus, startPulseAnimation, startWaveformAnimation]);
+  }, [recording, recordingStatus, startPulseAnimation, startWaveformAnimation]);
 
   // 停止錄音
   const stopRecording = useCallback(async () => {
@@ -329,29 +333,38 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
     }
   }, [disabled, recordingStatus, startRecording, pauseRecording, resumeRecording]);
 
-  // 清理定時器和錄音資源
+  // 清理定時器和錄音資源 - 只在組件卸載時執行
   useEffect(() => {
     return () => {
-      console.log(`SimplifiedAudioInput cleanup: ${instanceId}`);
+      console.log(`SimplifiedAudioInput 真正卸載: ${instanceId}`);
       
       if (durationTimerRef.current) {
         clearInterval(durationTimerRef.current);
       }
-      stopPulseAnimation();
-      stopWaveformAnimation();
       
-      // 確保停止錄音
-      if (recording) {
-        setRecording(null);
-        setRecordingStatus('idle');
+      // 停止動畫
+      if (pulseAnim) {
+        pulseAnim.stopAnimation();
+      }
+      if (waveformAnim) {
+        waveformAnim.stopAnimation();
       }
       
-      // 使用全局管理器清理錄音資源
-      recordingManager.stopCurrentRecording().catch(error => {
-        console.error('清理錄音資源失敗:', error);
-      });
+      // 如果組件卸載時還在錄音，停止它
+      if (recordingManager.getIsRecording()) {
+        recordingManager.stopCurrentRecording().catch(error => {
+          console.error('組件卸載時清理錄音失敗:', error);
+        });
+      }
     };
-  }, [instanceId, recording, stopPulseAnimation, stopWaveformAnimation]);
+  }, []); // 空依賴數組，只在組件真正卸載時執行
+  
+  // 單獨的 effect 處理錄音狀態
+  useEffect(() => {
+    if (recordingStatus === 'idle' && recording) {
+      setRecording(null);
+    }
+  }, [recordingStatus, recording]);
 
   // 渲染波形
   const renderWaveform = () => {
