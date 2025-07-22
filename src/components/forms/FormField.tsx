@@ -6,48 +6,50 @@ import React from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
 export interface FormFieldProps {
-  label?: string;
-  type?: string;
+  config: {
+    name: string;
+    label: string;
+    type: string;
+    required?: boolean;
+    placeholder?: string;
+    options?: Array<{ label: string; value: string }>;
+  };
   value?: any;
-  onChangeText?: (text: string) => void;
-  onValueChange?: (value: any) => void;
-  onDateChange?: (date: string) => void;
-  onBlur?: () => void;
+  onChange?: (value: any) => void;
   error?: string;
-  placeholder?: string;
-  required?: boolean;
-  options?: Array<{ label: string; value: string }>;
-  minHeight?: number;
+  disabled?: boolean;
 }
 
 export const FormField: React.FC<FormFieldProps> = ({
-  label,
-  type = 'text',
+  config,
   value,
-  onChangeText,
+  onChange,
   error,
-  placeholder,
-  required = false,
-  minHeight,
+  disabled = false,
 }) => {
+  const { label, type = 'text', required = false, placeholder } = config;
+  
   return (
     <View style={styles.container}>
       {label && (
-        <Text style={[styles.label, required && styles.required]}>
+        <Text style={styles.label}>
           {label}
+          {required && <Text style={styles.requiredStar}> *</Text>}
         </Text>
       )}
       
       <TextInput
         style={[
           styles.input,
-          type === 'multiline' && { height: minHeight || 100 },
+          (type === 'textarea' || type === 'multiline') && styles.textarea,
           error && styles.inputError,
         ]}
         value={value || ''}
-        onChangeText={onChangeText}
+        onChangeText={onChange}
         placeholder={placeholder}
-        multiline={type === 'multiline'}
+        placeholderTextColor="#C7C7CC"
+        multiline={type === 'textarea' || type === 'multiline'}
+        editable={!disabled}
       />
       
       {error && (
@@ -67,8 +69,13 @@ const styles = StyleSheet.create({
     color: '#1A1A1A',
     marginBottom: 8,
   },
-  required: {
-    color: '#ef4444',
+  requiredStar: {
+    color: '#DC2626',
+  },
+  textarea: {
+    height: 100,
+    paddingTop: 12,
+    textAlignVertical: 'top',
   },
   input: {
     borderWidth: 1,
