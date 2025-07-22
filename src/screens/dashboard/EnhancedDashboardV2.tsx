@@ -126,7 +126,7 @@ export const EnhancedDashboardV2: React.FC = () => {
 
   // 建立渲染資料
   const sections = useMemo((): DashboardSection[] => {
-    const items: DashboardSection[] = [{ type: 'header' }];
+    const items: DashboardSection[] = [];
 
     // 任務區段
     if (taskSections.overdueTasks.length > 0) {
@@ -155,21 +155,6 @@ export const EnhancedDashboardV2: React.FC = () => {
   // 渲染項目
   const renderItem = useCallback(({ item }: { item: DashboardSection }) => {
     switch (item.type) {
-      case 'header':
-        return (
-          <View style={styles.header}>
-            <View style={styles.userInfo}>
-              <Text style={styles.userName}>{user?.name || authUser?.displayName || '使用者'}</Text>
-              <Text style={styles.userEmail}>{user?.email || authUser?.email}</Text>
-            </View>
-            <ModeToggle
-              value={mode}
-              onToggle={toggleMode}
-              label={mode === 'business' ? '業務模式' : '主管模式'}
-            />
-          </View>
-        );
-
       case 'overdue_tasks':
         return (
           <View>
@@ -324,6 +309,20 @@ export const EnhancedDashboardV2: React.FC = () => {
   return (
     <Layout style={styles.container} scrollable={false}>
       <SafeAreaView style={styles.safeArea}>
+        {/* 固定頭部 */}
+        <View style={styles.header}>
+          <View style={styles.userInfo}>
+            <Text style={styles.userName}>{user?.name || authUser?.displayName || '使用者'}</Text>
+            <Text style={styles.userEmail}>{user?.email || authUser?.email}</Text>
+          </View>
+          <ModeToggle
+            value={mode}
+            onToggle={toggleMode}
+            label={mode === 'business' ? '業務模式' : '主管模式'}
+          />
+        </View>
+        
+        {/* 可滾動內容 */}
         <FlatList
           data={sections}
           renderItem={renderItem}
@@ -348,7 +347,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listContent: {
-    paddingBottom: 20,
+    paddingBottom: 120, // 增加底部間距避免被 navbar 擋住
   },
   loadingState: {
     flex: 1,
