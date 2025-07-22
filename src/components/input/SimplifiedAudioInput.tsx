@@ -300,86 +300,64 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
 
   return (
     <View style={styles.container}>
-      {/* 波形顯示區域 */}
-      <View style={styles.visualizationArea}>
-        {(recordingStatus === 'recording' || recordingStatus === 'paused') && renderWaveform()}
-      </View>
-
       {/* 計時器 */}
       <Text style={styles.timer}>{formatDuration(duration)}</Text>
 
-      {/* 控制按鈕區域 */}
-      <View style={styles.controlsContainer}>
-        {/* 左側按鈕空間 */}
-        <View style={styles.sideButtonContainer}>
-          {recordingStatus === 'recording' && (
-            <TouchableOpacity
-              style={styles.sideButton}
-              onPress={pauseRecording}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="pause" size={32} color="#6B7280" />
-            </TouchableOpacity>
-          )}
-        </View>
-
-        {/* 中央錄音按鈕 */}
-        <TouchableOpacity
-          style={styles.recordButtonWrapper}
-          onPress={handleRecordPress}
-          disabled={disabled || recordingStatus === 'loading'}
-          activeOpacity={0.8}
+      {/* 中央錄音按鈕 */}
+      <TouchableOpacity
+        style={styles.recordButtonWrapper}
+        onPress={handleRecordPress}
+        disabled={disabled || recordingStatus === 'loading'}
+        activeOpacity={0.8}
+      >
+        <Animated.View
+          style={[
+            styles.recordButton,
+            recordingStatus === 'recording' && styles.recordingButton,
+            recordingStatus === 'paused' && styles.pausedButton,
+            {
+              transform: [{ scale: pulseAnim }],
+            },
+          ]}
         >
-          <Animated.View
-            style={[
-              styles.recordButton,
-              recordingStatus === 'recording' && styles.recordingButton,
-              recordingStatus === 'paused' && styles.pausedButton,
-              {
-                transform: [{ scale: pulseAnim }],
-              },
-            ]}
-          >
-            {recordingStatus === 'loading' ? (
-              <LoadingSpinner size="large" color="#FFFFFF" />
-            ) : (
-              <Ionicons
-                name={
-                  recordingStatus === 'recording' ? 'mic' : 
-                  recordingStatus === 'paused' ? 'play' : 
-                  'mic'
-                }
-                size={40}
-                color="#FFFFFF"
-              />
-            )}
-          </Animated.View>
-        </TouchableOpacity>
-
-        {/* 右側按鈕空間 */}
-        <View style={styles.sideButtonContainer}>
-          {(recordingStatus === 'recording' || recordingStatus === 'paused') && (
-            <TouchableOpacity
-              style={styles.sideButton}
-              onPress={stopRecording}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="stop" size={32} color="#6B7280" />
-            </TouchableOpacity>
+          {recordingStatus === 'loading' ? (
+            <LoadingSpinner size="large" color="#FFFFFF" />
+          ) : (
+            <Ionicons
+              name={
+                recordingStatus === 'idle' ? 'mic' : 
+                recordingStatus === 'recording' ? 'mic' : 
+                recordingStatus === 'paused' ? 'play' : 
+                'mic'
+              }
+              size={32}
+              color="#FFFFFF"
+            />
           )}
-        </View>
-      </View>
+        </Animated.View>
+      </TouchableOpacity>
 
       {/* 提示文字 */}
       <Text style={styles.hint}>
         {recordingStatus === 'loading'
           ? '處理中...'
           : recordingStatus === 'recording'
-          ? '錄音中'
+          ? ''
           : recordingStatus === 'paused'
           ? '已暫停'
           : '點擊開始錄音'}
       </Text>
+
+      {/* 右下角工具按鈕 */}
+      {(recordingStatus === 'recording' || recordingStatus === 'paused') && (
+        <TouchableOpacity
+          style={styles.toolButton}
+          onPress={stopRecording}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="hammer" size={24} color="#FFFFFF" />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -390,6 +368,58 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 40,
+  },
+  timer: {
+    fontSize: 60,
+    fontWeight: '200',
+    color: '#1A1A1A',
+    marginBottom: 100,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif-light',
+  },
+  recordButtonWrapper: {
+    position: 'relative',
+    marginBottom: 40,
+  },
+  recordButton: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#B91C1C',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  recordingButton: {
+    backgroundColor: '#B91C1C',
+  },
+  pausedButton: {
+    backgroundColor: '#F59E0B',
+  },
+  hint: {
+    fontSize: 16,
+    color: '#7A7A7A',
+    textAlign: 'center',
+    height: 20,
+  },
+  toolButton: {
+    position: 'absolute',
+    bottom: 40,
+    right: 40,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#3B82F6',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 5,
   },
   visualizationArea: {
     height: 100,
@@ -407,58 +437,5 @@ const styles = StyleSheet.create({
     width: 4,
     backgroundColor: '#C7C7CC',
     borderRadius: 2,
-  },
-  timer: {
-    fontSize: 48,
-    fontWeight: '300',
-    color: '#1A1A1A',
-    marginBottom: 60,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif-light',
-  },
-  controlsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 24,
-    marginBottom: 40,
-  },
-  recordButtonWrapper: {
-    position: 'relative',
-  },
-  sideButtonContainer: {
-    width: 56,
-    height: 56,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  sideButton: {
-    width: 56,
-    height: 56,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  recordButton: {
-    width: 88,
-    height: 88,
-    borderRadius: 44,
-    backgroundColor: '#B91C1C',
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#B91C1C',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
-  },
-  recordingButton: {
-    backgroundColor: '#991B1B',
-  },
-  pausedButton: {
-    backgroundColor: '#F59E0B',
-  },
-  hint: {
-    fontSize: 16,
-    color: '#7A7A7A',
-    textAlign: 'center',
   },
 });
