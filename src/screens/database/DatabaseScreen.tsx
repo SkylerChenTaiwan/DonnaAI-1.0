@@ -716,57 +716,59 @@ export const DatabaseScreen: React.FC = () => {
             style={styles.searchBar}
           />
         </View>
-        <ToolbarIcons
-          multiSelectMode={multiSelectMode}
-          showSort={false}
-          onFilterPress={() => setShowFilterModal(true)}
-          onMultiSelectPress={() => {
-            const newMode = !multiSelectMode;
-            setMultiSelectMode(newMode);
-            if (!newMode) {
-              // 關閉多選模式時清除選擇
-              setSelectedItems([]);
-              setShowBatchEdit(false);
-            }
-            // 切換多選模式時關閉編輯模式
-            if (newMode) {
-              setIsEditMode(false);
-            }
-          }}
-          onColumnsPress={() => setShowColumnSettings(true)}
-        />
-        {/* 行內編輯模式切換按鈕 - 移到最右方 */}
-        <TouchableOpacity
-          style={[
-            styles.toolButton,
-            isEditMode && styles.toolButtonActive,
-          ]}
-          onPress={() => {
-            if (!user) {
-              Alert.alert('無權限', '您沒有編輯資料的權限');
-              return;
-            }
-            // 切換編輯模式時關閉多選模式
-            if (!isEditMode) {
-              setMultiSelectMode(false);
-              setSelectedItems([]);
-            }
-            setIsEditMode(!isEditMode);
-          }}
-          activeOpacity={0.7}
-        >
-          <Ionicons
-            name={isEditMode ? 'create' : 'create-outline'}
-            size={20}
-            color="#1A1A1A"
+        <View style={styles.toolbarButtons}>
+          <ToolbarIcons
+            multiSelectMode={multiSelectMode}
+            showSort={false}
+            onFilterPress={() => setShowFilterModal(true)}
+            onMultiSelectPress={() => {
+              const newMode = !multiSelectMode;
+              setMultiSelectMode(newMode);
+              if (!newMode) {
+                // 關閉多選模式時清除選擇
+                setSelectedItems([]);
+                setShowBatchEdit(false);
+              }
+              // 切換多選模式時關閉編輯模式
+              if (newMode) {
+                setIsEditMode(false);
+              }
+            }}
+            onColumnsPress={() => setShowColumnSettings(true)}
           />
-          <Text style={[
-            styles.toolButtonText,
-            isEditMode && styles.toolButtonTextActive
-          ]}>
-            編輯
-          </Text>
-        </TouchableOpacity>
+          {/* 行內編輯模式切換按鈕 - 移到最右方 */}
+          <TouchableOpacity
+            style={[
+              styles.toolButton,
+              isEditMode && styles.toolButtonActive,
+            ]}
+            onPress={() => {
+              if (!user) {
+                Alert.alert('無權限', '您沒有編輯資料的權限');
+                return;
+              }
+              // 切換編輯模式時關閉多選模式
+              if (!isEditMode) {
+                setMultiSelectMode(false);
+                setSelectedItems([]);
+              }
+              setIsEditMode(!isEditMode);
+            }}
+            activeOpacity={0.7}
+          >
+            <Ionicons
+              name={isEditMode ? 'create' : 'create-outline'}
+              size={20}
+              color="#1A1A1A"
+            />
+            <Text style={[
+              styles.toolButtonText,
+              isEditMode && styles.toolButtonTextActive
+            ]}>
+              編輯
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
       
       {/* 篩選條件顯示 */}
@@ -965,7 +967,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#E3E1DC',
     alignItems: 'center',
-    gap: 16,
+    gap: 12,
   },
   searchContainer: {
     flex: 1,
@@ -974,6 +976,11 @@ const styles = StyleSheet.create({
   searchBar: {
     width: '100%',
   },
+  toolbarButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
   toolButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -981,6 +988,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 6,
     gap: 4,
+    marginLeft: 4,
   },
   toolButtonActive: {
     backgroundColor: 'rgba(26, 26, 26, 0.1)',
