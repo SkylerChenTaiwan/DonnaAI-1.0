@@ -13,7 +13,7 @@ export const AppWithDeveloperMenu = () => {
     <NavigationContainer>
       <AppNavigator />
       {/* 開發者工具（只在開發模式顯示） */}
-      {environmentManager.isDevToolsEnabled() && <DeveloperMenu />}
+      {/* {environmentManager.isDevToolsEnabled() && <DeveloperMenu />} */}
     </NavigationContainer>
   );
 };
