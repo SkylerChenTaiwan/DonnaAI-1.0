@@ -10,6 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { CustomerForm } from '@/components/forms/CustomerForm';
 import { CSVUploader } from '@/components/input/CSVUploader';
+import { InputMethodLink } from '@/components/modals/InputMethodLink';
 import { Layout } from '@/components/common/Layout';
 import { createCustomer, createMultipleCustomers } from '@/services/firebase/customers';
 import { CustomerFormData } from '@/services/validation/form-schemas';
@@ -24,15 +25,24 @@ type RouteParams = {
 };
 
 export const CreateCustomerModal: React.FC = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const route = useRoute<RouteProp<RouteParams, 'CreateCustomerModal'>>();
   const { user } = useAuth();
   const { currentOrganization, currentTeam } = useOrganization();
   
   // 從路由參數獲取模式，預設為表單
-  const initialMode = route.params?.mode || 'form';
-  const [mode, setMode] = useState<'form' | 'csv'>(initialMode);
+  const mode = route.params?.mode || 'form';
   const [loading, setLoading] = useState(false);
+  
+  // 切換到 CSV 模式
+  const switchToCSV = useCallback(() => {
+    navigation.setParams({ mode: 'csv' });
+  }, [navigation]);
+  
+  // 切換到表單模式
+  const switchToForm = useCallback(() => {
+    navigation.setParams({ mode: 'form' });
+  }, [navigation]);
 
   const handleSubmit = useCallback(async (formData: CustomerFormData) => {
     if (!user || !currentOrganization || !currentTeam) {
@@ -140,54 +150,35 @@ export const CreateCustomerModal: React.FC = () => {
         <View style={styles.headerSpacer} />
       </View>
 
-      {/* 模式切換標籤 */}
-      <View style={styles.tabBar}>
-        <TouchableOpacity 
-          style={[styles.tab, mode === 'form' && styles.activeTab]}
-          onPress={() => setMode('form')}
-        >
-          <Ionicons 
-            name="document-text" 
-            size={20} 
-            color={mode === 'form' ? '#FF6B35' : '#8E8E93'} 
-          />
-          <Text style={[styles.tabText, mode === 'form' && styles.activeTabText]}>
-            表格填寫
-          </Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity 
-          style={[styles.tab, mode === 'csv' && styles.activeTab]}
-          onPress={() => setMode('csv')}
-        >
-          <Ionicons 
-            name="cloud-upload" 
-            size={20} 
-            color={mode === 'csv' ? '#FF6B35' : '#8E8E93'} 
-          />
-          <Text style={[styles.tabText, mode === 'csv' && styles.activeTabText]}>
-            CSV 匯入
-          </Text>
-        </TouchableOpacity>
-      </View>
-
       {/* 內容區域 */}
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {mode === 'form' && (
-          <CustomerForm
-            onSubmit={handleSubmit}
-            onCancel={handleCancel}
-            loading={loading}
-            mode="create"
-          />
-        )}
-        
-        {mode === 'csv' && (
-          <CSVUploader
-            onComplete={handleCSVImportComplete}
-            loading={loading}
-            dataType="customer"
-          />
+        {mode === 'form' ? (
+          <>
+            {/* 切換到 CSV 的連結 */}
+            <InputMethodLink
+              targetLabel="改用 CSV 批量匯入 →"
+              onSwitch={switchToCSV}
+            />
+            <CustomerForm
+              onSubmit={handleSubmit}
+              onCancel={handleCancel}
+              loading={loading}
+              mode="create"
+            />
+          </>
+        ) : (
+          <>
+            {/* 切換到表單的連結 */}
+            <InputMethodLink
+              targetLabel="改用表格填寫 →"
+              onSwitch={switchToForm}
+            />
+            <CSVUploader
+              onComplete={handleCSVImportComplete}
+              loading={loading}
+              dataType="customer"
+            />
+          </>
         )}
       </ScrollView>
     </Layout>
@@ -220,36 +211,6 @@ const styles = StyleSheet.create({
   },
   headerSpacer: {
     width: 40,
-  },
-  tabBar: {
-    flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
-  },
-  tab: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    marginHorizontal: 4,
-  },
-  activeTab: {
-    backgroundColor: '#FFF5F0',
-  },
-  tabText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#8E8E93',
-    marginLeft: 6,
-  },
-  activeTabText: {
-    color: '#FF6B35',
   },
   content: {
     flex: 1,

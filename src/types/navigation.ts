@@ -5,9 +5,10 @@
 export type RootStackParamList = {
   MainTabs: undefined;
   Auth: undefined;
-  CreateCustomerModal: undefined;
-  CreateRecordModal: undefined;
-  CreateTaskModal: undefined;
+  // 創建模態框 - 支援模式參數
+  CreateCustomerModal: { mode?: 'form' | 'csv' } | undefined;
+  CreateRecordModal: { mode?: 'audio' | 'text'; customerId?: string } | undefined;
+  CreateTaskModal: { mode?: 'voice' | 'form'; customerId?: string; recordId?: string } | undefined;
   // 編輯頁面
   EditCustomer: { customerId: string };
   EditRecord: { recordId: string };

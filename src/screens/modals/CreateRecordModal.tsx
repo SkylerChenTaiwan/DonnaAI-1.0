@@ -9,6 +9,7 @@ import { Layout } from '@/components/common/Layout';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { RecordForm } from '@/components/forms/RecordForm';
 import { AudioInput } from '@/components/input/AudioInput';
+import { InputMethodLink } from '@/components/modals/InputMethodLink';
 import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
 import { createRecord } from '@/services/firebase/records';
@@ -18,23 +19,32 @@ import { Ionicons } from '@expo/vector-icons';
 
 type RouteParams = {
   CreateRecordModal: {
-    mode?: 'audio' | 'text' | 'upload';
+    mode?: 'audio' | 'text';
     customerId?: string;
   };
 };
 
 export const CreateRecordModal: React.FC = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const route = useRoute<RouteProp<RouteParams, 'CreateRecordModal'>>();
   const { user } = useAuth();
   const { currentOrganization, currentTeam } = useOrganization();
   
   // 從路由參數獲取模式，預設為音頻
-  const initialMode = route.params?.mode || 'audio';
+  const mode = route.params?.mode || 'audio';
   const customerId = route.params?.customerId;
   
-  const [mode, setMode] = useState<'audio' | 'text' | 'upload'>(initialMode);
   const [loading, setLoading] = useState(false);
+  
+  // 切換到文字輸入模式
+  const switchToText = useCallback(() => {
+    navigation.setParams({ mode: 'text' });
+  }, [navigation]);
+  
+  // 切換到音頻錄製模式
+  const switchToAudio = useCallback(() => {
+    navigation.setParams({ mode: 'audio' });
+  }, [navigation]);
 
   // 處理表單提交
   const handleFormSubmit = useCallback(async (data: RecordCreateRequest) => {
@@ -100,74 +110,33 @@ export const CreateRecordModal: React.FC = () => {
         <View style={styles.headerSpacer} />
       </View>
 
-      {/* 模式切換標籤 */}
-      <View style={styles.tabBar}>
-        <TouchableOpacity 
-          style={[styles.tab, mode === 'audio' && styles.activeTab]}
-          onPress={() => setMode('audio')}
-        >
-          <Ionicons 
-            name="mic" 
-            size={20} 
-            color={mode === 'audio' ? '#FF6B35' : '#8E8E93'} 
-          />
-          <Text style={[styles.tabText, mode === 'audio' && styles.activeTabText]}>
-            語音錄製
-          </Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity 
-          style={[styles.tab, mode === 'text' && styles.activeTab]}
-          onPress={() => setMode('text')}
-        >
-          <Ionicons 
-            name="create" 
-            size={20} 
-            color={mode === 'text' ? '#FF6B35' : '#8E8E93'} 
-          />
-          <Text style={[styles.tabText, mode === 'text' && styles.activeTabText]}>
-            文字輸入
-          </Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity 
-          style={[styles.tab, mode === 'upload' && styles.activeTab]}
-          onPress={() => setMode('upload')}
-          disabled // 暫時停用
-        >
-          <Ionicons 
-            name="cloud-upload" 
-            size={20} 
-            color={mode === 'upload' ? '#FF6B35' : '#D1D1D6'} 
-          />
-          <Text style={[styles.tabText, mode === 'upload' && styles.activeTabText, styles.disabledTab]}>
-            音檔上傳
-          </Text>
-        </TouchableOpacity>
-      </View>
-
       {/* 內容區域 */}
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {mode === 'audio' && (
-          <AudioInput 
-            onComplete={handleAudioComplete}
-            disabled={loading}
-          />
-        )}
-        
-        {mode === 'text' && (
-          <RecordForm 
-            onSubmit={handleFormSubmit}
-            initialCustomerId={customerId}
-            loading={loading}
-          />
-        )}
-        
-        {mode === 'upload' && (
-          <View style={styles.uploadPlaceholder}>
-            <Ionicons name="cloud-upload-outline" size={64} color="#D1D1D6" />
-            <Text style={styles.placeholderText}>音檔上傳功能即將推出</Text>
-          </View>
+        {mode === 'audio' ? (
+          <>
+            {/* 切換到文字輸入的連結 */}
+            <InputMethodLink
+              targetLabel="改用文字輸入 →"
+              onSwitch={switchToText}
+            />
+            <AudioInput 
+              onComplete={handleAudioComplete}
+              disabled={loading}
+            />
+          </>
+        ) : (
+          <>
+            {/* 切換到語音錄製的連結 */}
+            <InputMethodLink
+              targetLabel="改用語音錄製 →"
+              onSwitch={switchToAudio}
+            />
+            <RecordForm 
+              onSubmit={handleFormSubmit}
+              initialCustomerId={customerId}
+              loading={loading}
+            />
+          </>
         )}
       </ScrollView>
     </Layout>
@@ -201,52 +170,7 @@ const styles = StyleSheet.create({
   headerSpacer: {
     width: 40,
   },
-  tabBar: {
-    flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
-  },
-  tab: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    marginHorizontal: 4,
-  },
-  activeTab: {
-    backgroundColor: '#FFF5F0',
-  },
-  tabText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#8E8E93',
-    marginLeft: 6,
-  },
-  activeTabText: {
-    color: '#FF6B35',
-  },
-  disabledTab: {
-    color: '#D1D1D6',
-  },
   content: {
     flex: 1,
-  },
-  uploadPlaceholder: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 48,
-  },
-  placeholderText: {
-    fontSize: 16,
-    color: '#8E8E93',
-    marginTop: 16,
-    textAlign: 'center',
   },
 });

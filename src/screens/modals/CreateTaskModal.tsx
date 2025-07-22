@@ -9,6 +9,7 @@ import { Layout } from '@/components/common/Layout';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { TaskForm } from '@/components/forms/TaskForm';
 import { VoiceTaskInput } from '@/components/input/VoiceTaskInput';
+import { InputMethodLink } from '@/components/modals/InputMethodLink';
 import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
 import { createTask } from '@/services/firebase/tasks';
@@ -25,18 +26,27 @@ type RouteParams = {
 };
 
 export const CreateTaskModal: React.FC = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const route = useRoute<RouteProp<RouteParams, 'CreateTaskModal'>>();
   const { user } = useAuth();
   const { currentOrganization, currentTeam } = useOrganization();
   
-  // 從路由參數獲取模式，預設為表單
-  const initialMode = route.params?.mode || 'form';
+  // 從路由參數獲取模式，預設為語音（根據 ActionPopover 的設定）
+  const mode = route.params?.mode || 'voice';
   const customerId = route.params?.customerId;
   const recordId = route.params?.recordId;
   
-  const [mode, setMode] = useState<'voice' | 'form'>(initialMode);
   const [loading, setLoading] = useState(false);
+  
+  // 切換到表格填寫模式
+  const switchToForm = useCallback(() => {
+    navigation.setParams({ mode: 'form' });
+  }, [navigation]);
+  
+  // 切換到語音輸入模式
+  const switchToVoice = useCallback(() => {
+    navigation.setParams({ mode: 'voice' });
+  }, [navigation]);
 
   // 處理表單提交
   const handleFormSubmit = useCallback(async (data: TaskCreateRequest) => {
@@ -107,55 +117,36 @@ export const CreateTaskModal: React.FC = () => {
         <View style={styles.headerSpacer} />
       </View>
 
-      {/* 模式切換標籤 */}
-      <View style={styles.tabBar}>
-        <TouchableOpacity 
-          style={[styles.tab, mode === 'form' && styles.activeTab]}
-          onPress={() => setMode('form')}
-        >
-          <Ionicons 
-            name="list" 
-            size={20} 
-            color={mode === 'form' ? '#FF6B35' : '#8E8E93'} 
-          />
-          <Text style={[styles.tabText, mode === 'form' && styles.activeTabText]}>
-            表格填寫
-          </Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity 
-          style={[styles.tab, mode === 'voice' && styles.activeTab]}
-          onPress={() => setMode('voice')}
-        >
-          <Ionicons 
-            name="mic" 
-            size={20} 
-            color={mode === 'voice' ? '#FF6B35' : '#8E8E93'} 
-          />
-          <Text style={[styles.tabText, mode === 'voice' && styles.activeTabText]}>
-            語音輸入
-          </Text>
-        </TouchableOpacity>
-      </View>
-
       {/* 內容區域 */}
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {mode === 'form' && (
-          <TaskForm 
-            onSubmit={handleFormSubmit}
-            initialCustomerId={customerId}
-            initialRecordId={recordId}
-            loading={loading}
-          />
-        )}
-        
-        {mode === 'voice' && (
-          <VoiceTaskInput 
-            onComplete={handleVoiceComplete}
-            initialCustomerId={customerId}
-            initialRecordId={recordId}
-            disabled={loading}
-          />
+        {mode === 'voice' ? (
+          <>
+            {/* 切換到表格填寫的連結 */}
+            <InputMethodLink
+              targetLabel="改用表格填寫 →"
+              onSwitch={switchToForm}
+            />
+            <VoiceTaskInput 
+              onComplete={handleVoiceComplete}
+              initialCustomerId={customerId}
+              initialRecordId={recordId}
+              disabled={loading}
+            />
+          </>
+        ) : (
+          <>
+            {/* 切換到語音輸入的連結 */}
+            <InputMethodLink
+              targetLabel="改用語音輸入 →"
+              onSwitch={switchToVoice}
+            />
+            <TaskForm 
+              onSubmit={handleFormSubmit}
+              initialCustomerId={customerId}
+              initialRecordId={recordId}
+              loading={loading}
+            />
+          </>
         )}
       </ScrollView>
     </Layout>
@@ -188,36 +179,6 @@ const styles = StyleSheet.create({
   },
   headerSpacer: {
     width: 40,
-  },
-  tabBar: {
-    flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
-  },
-  tab: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    marginHorizontal: 4,
-  },
-  activeTab: {
-    backgroundColor: '#FFF5F0',
-  },
-  tabText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#8E8E93',
-    marginLeft: 6,
-  },
-  activeTabText: {
-    color: '#FF6B35',
   },
   content: {
     flex: 1,
