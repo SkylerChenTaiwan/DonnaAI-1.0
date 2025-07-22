@@ -12,6 +12,7 @@ import {
   SafeAreaView,
   FlatList,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import { Layout } from '@/components/common/Layout';
 import { ModeToggle } from '@/components/common/ModeToggle';
@@ -25,6 +26,9 @@ import { useCustomerStore } from '@/stores/customerStore';
 import { TaskDoc } from '@/types/task';
 import { CustomerDoc } from '@/types/customer';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '@/types/navigation';
 
 type DashboardSection = 
   | { type: 'header' }
@@ -36,6 +40,7 @@ type DashboardSection =
   | { type: 'empty_customers' };
 
 export const EnhancedDashboardV2: React.FC = () => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const { user: authUser } = useAuth();
   const { currentOrganization, currentTeam, loading: orgLoading } = useOrganization();
   const { user, mode, toggleMode } = useAuthStore();
@@ -228,7 +233,12 @@ export const EnhancedDashboardV2: React.FC = () => {
                          task.priority === 'low' ? '#6B7280' : '#3B82F6';
     
     return (
-      <View key={task.id} style={styles.taskItem}>
+      <TouchableOpacity 
+        key={task.id} 
+        style={styles.taskItem}
+        onPress={() => navigation.navigate('TaskDetail', { taskId: task.id })}
+        activeOpacity={0.7}
+      >
         <View style={styles.checkbox}>
           <Ionicons name="square-outline" size={24} color="#D1D5DB" />
         </View>
@@ -252,14 +262,19 @@ export const EnhancedDashboardV2: React.FC = () => {
             )}
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
   // 渲染客戶項目
   const renderCustomerItem = (customer: CustomerDoc) => {
     return (
-      <View key={customer.id} style={styles.customerItem}>
+      <TouchableOpacity 
+        key={customer.id} 
+        style={styles.customerItem}
+        onPress={() => navigation.navigate('CustomerDetail', { customerId: customer.id })}
+        activeOpacity={0.7}
+      >
         <View style={styles.customerAvatar}>
           <Text style={styles.customerInitial}>
             {customer.name.charAt(0).toUpperCase()}
@@ -270,7 +285,7 @@ export const EnhancedDashboardV2: React.FC = () => {
           <Text style={styles.customerCompany}>{customer.company}</Text>
         </View>
         <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
-      </View>
+      </TouchableOpacity>
     );
   };
 
