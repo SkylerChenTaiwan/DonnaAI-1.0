@@ -315,23 +315,21 @@ export const TaskForm: React.FC<TaskFormProps> = ({
           )}
         />
 
-            {/* 標籤 */}
-            <Controller
-              control={control}
-              name="tags"
-              render={({ field: { onChange, value } }) => (
-                <FormField
-                  label="標籤"
-                  type="tags"
-                  value={value}
-                  onValueChange={onChange}
-                  error={errors.tags?.message}
-                  placeholder="添加標籤..."
-                />
-              )}
+        {/* 標籤 */}
+        <Controller
+          control={control}
+          name="tags"
+          render={({ field: { onChange, value } }) => (
+            <FormField
+              label="標籤"
+              type="tags"
+              value={value}
+              onValueChange={onChange}
+              error={errors.tags?.message}
+              placeholder="添加標籤..."
             />
-          </>
-        )}
+          )}
+        />
       </ScrollView>
 
       {/* 底部按鈕 */}
@@ -339,7 +337,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
         <Button
           title="重置"
           variant="secondary"
-          onPress={handleReset}
+          onPress={() => reset()}
           style={styles.footerButton}
           icon="refresh"
         />
