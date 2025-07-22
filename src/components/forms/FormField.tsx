@@ -54,6 +54,8 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
   
   // 日期選擇器的狀態
   const [showDatePicker, setShowDatePicker] = useState(false);
+  // 下拉選單的狀態
+  const [showPicker, setShowPicker] = useState(false);
   
   // 處理日期選擇器變更
   const handleDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
@@ -142,24 +144,80 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
         );
         
       case 'select':
+        // 找出當前選中的選項
+        const selectedOption = options.find(opt => opt.value === value);
+        
         return (
-          <View style={[styles.input, styles.pickerContainer, error && styles.inputError]}>
-            <Picker
-              selectedValue={value}
-              onValueChange={onValueChange}
-              enabled={!disabled}
-              style={styles.picker}
+          <>
+            <TouchableOpacity
+              style={[styles.input, styles.selectInput, error && styles.inputError]}
+              onPress={() => setShowPicker(true)}
+              disabled={disabled}
             >
-              <Picker.Item label={placeholder || '請選擇'} value="" />
-              {options.map((option, index) => (
-                <Picker.Item 
-                  key={index} 
-                  label={option.label} 
-                  value={option.value} 
-                />
-              ))}
-            </Picker>
-          </View>
+              <Text style={[styles.selectText, !value && styles.placeholderText]}>
+                {selectedOption?.label || placeholder || '請選擇'}
+              </Text>
+              <Ionicons name="chevron-down-outline" size={20} color="#7A7A7A" />
+            </TouchableOpacity>
+            
+            {Platform.OS === 'ios' ? (
+              <Modal
+                transparent={true}
+                animationType="slide"
+                visible={showPicker}
+                onRequestClose={() => setShowPicker(false)}
+              >
+                <View style={styles.modalContainer}>
+                  <View style={styles.pickerModalContainer}>
+                    <View style={styles.pickerHeader}>
+                      <TouchableOpacity onPress={() => setShowPicker(false)}>
+                        <Text style={styles.cancelButton}>取消</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => setShowPicker(false)}>
+                        <Text style={styles.confirmButton}>確定</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <Picker
+                      selectedValue={value}
+                      onValueChange={onValueChange}
+                      style={styles.modalPicker}
+                    >
+                      <Picker.Item label={placeholder || '請選擇'} value="" />
+                      {options.map((option, index) => (
+                        <Picker.Item 
+                          key={index} 
+                          label={option.label} 
+                          value={option.value} 
+                        />
+                      ))}
+                    </Picker>
+                  </View>
+                </View>
+              </Modal>
+            ) : (
+              showPicker && (
+                <View style={[styles.input, styles.pickerContainer, error && styles.inputError]}>
+                  <Picker
+                    selectedValue={value}
+                    onValueChange={(newValue) => {
+                      onValueChange?.(newValue);
+                      setShowPicker(false);
+                    }}
+                    style={styles.picker}
+                  >
+                    <Picker.Item label={placeholder || '請選擇'} value="" />
+                    {options.map((option, index) => (
+                      <Picker.Item 
+                        key={index} 
+                        label={option.label} 
+                        value={option.value} 
+                      />
+                    ))}
+                  </Picker>
+                </View>
+              )
+            )}
+          </>
         );
         
       case 'textarea':
@@ -273,7 +331,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'transparent', // 移除黑色遮罩
   },
   datePickerContainer: {
     backgroundColor: '#FFFFFF',
@@ -298,5 +356,32 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#FF6B6B',
     fontWeight: '600',
+  },
+  // 下拉選單樣式
+  selectInput: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  selectText: {
+    fontSize: 16,
+    color: '#1A1A1A',
+  },
+  pickerModalContainer: {
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  pickerHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E3E1DC',
+  },
+  modalPicker: {
+    height: 200,
   },
 });

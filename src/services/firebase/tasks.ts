@@ -70,7 +70,7 @@ export async function createTask(
     const taskId = `task_${Date.now()}`;
     
     // 建立任務文件
-    const taskDoc: TaskDoc = {
+    const taskDoc: any = {
       ...task,
       id: taskId,
       status: 'todo',
@@ -78,10 +78,22 @@ export async function createTask(
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
       createdBy: userId,
-      // 轉換日期為 Timestamp
-      scheduledAt: task.scheduledAt ? Timestamp.fromDate(task.scheduledAt) : undefined,
-      dueDate: task.dueDate ? Timestamp.fromDate(task.dueDate) : undefined
     };
+    
+    // 只有在有值時才添加日期欄位
+    if (task.scheduledAt) {
+      taskDoc.scheduledAt = Timestamp.fromDate(task.scheduledAt);
+    }
+    if (task.dueDate) {
+      taskDoc.dueDate = Timestamp.fromDate(task.dueDate);
+    }
+    
+    // 移除所有 undefined 值
+    Object.keys(taskDoc).forEach(key => {
+      if (taskDoc[key] === undefined) {
+        delete taskDoc[key];
+      }
+    });
     
     // 儲存到 Firestore
     await setDoc(
