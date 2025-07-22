@@ -36,10 +36,10 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
   useEffect(() => {
     console.log(`SimplifiedAudioInput mounted: ${instanceId}`);
     
-    // 組件掛載時確保沒有殘留的錄音
-    recordingManager.stopCurrentRecording().catch(error => {
-      console.warn('初始化時清理錄音失敗:', error);
-    });
+    // 組件掛載時不要自動停止錄音，以免影響正在進行的錄音
+    // recordingManager.stopCurrentRecording().catch(error => {
+    //   console.warn('初始化時清理錄音失敗:', error);
+    // });
     
     return () => {
       console.log(`SimplifiedAudioInput unmounted: ${instanceId}`);
@@ -164,13 +164,22 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
       setDuration(0);
       
       // 開始計時器
+      console.log('開始計時器...');
       durationTimerRef.current = setInterval(() => {
-        setDuration(prev => prev + 1);
+        setDuration(prev => {
+          console.log('計時器更新:', prev + 1);
+          return prev + 1;
+        });
       }, 1000);
 
       // 開始動畫
+      console.log('開始動畫...');
       startPulseAnimation();
       startWaveformAnimation();
+      
+      // 檢查錄音狀態
+      const status = await newRecording.getStatusAsync();
+      console.log('錄音狀態:', status);
     } catch (error) {
       console.error('開始錄音失敗:', error);
       setRecordingStatus('idle');
@@ -180,33 +189,50 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
 
   // 暫停錄音
   const pauseRecording = useCallback(async () => {
-    if (!recording || recordingStatus !== 'recording') return;
+    console.log('嘗試暫停錄音...', { recording: !!recording, status: recordingStatus });
+    
+    // 使用全局管理器獲取當前錄音
+    const currentRecording = recordingManager.getCurrentRecording();
+    if (!currentRecording || recordingStatus !== 'recording') {
+      console.warn('無法暫停：沒有活躍的錄音');
+      return;
+    }
 
     try {
-      await recording.pauseAsync();
-      setRecordingStatus('paused');
+      const status = await currentRecording.getStatusAsync();
+      console.log('暫停前錄音狀態:', status);
       
-      // 停止計時器
-      if (durationTimerRef.current) {
-        clearInterval(durationTimerRef.current);
-        durationTimerRef.current = null;
-      }
+      if (status.isRecording) {
+        await currentRecording.pauseAsync();
+        setRecordingStatus('paused');
+        
+        // 停止計時器
+        if (durationTimerRef.current) {
+          clearInterval(durationTimerRef.current);
+          durationTimerRef.current = null;
+        }
 
-      // 停止動畫
-      stopPulseAnimation();
-      stopWaveformAnimation();
+        // 停止動畫
+        stopPulseAnimation();
+        stopWaveformAnimation();
+        
+        console.log('錄音已暫停');
+      } else {
+        console.warn('錄音不在錄製狀態，無法暫停');
+      }
     } catch (error) {
       console.error('暫停錄音失敗:', error);
       Alert.alert('暫停失敗', '無法暫停錄音');
     }
-  }, [recording, recordingStatus, stopPulseAnimation, stopWaveformAnimation]);
+  }, [recordingStatus, stopPulseAnimation, stopWaveformAnimation]);
 
   // 恢復錄音
   const resumeRecording = useCallback(async () => {
-    if (!recording || recordingStatus !== 'paused') return;
+    const currentRecording = recordingManager.getCurrentRecording();
+    if (!currentRecording || recordingStatus !== 'paused') return;
 
     try {
-      await recording.startAsync();
+      await currentRecording.startAsync();
       setRecordingStatus('recording');
       
       // 重新開始計時器
@@ -221,13 +247,14 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
       console.error('恢復錄音失敗:', error);
       Alert.alert('恢復失敗', '無法恢復錄音');
     }
-  }, [recording, recordingStatus, startPulseAnimation, startWaveformAnimation]);
+  }, [recordingStatus, startPulseAnimation, startWaveformAnimation]);
 
   // 停止錄音
   const stopRecording = useCallback(async () => {
-    if (!recording) return;
+    const currentRecording = recordingManager.getCurrentRecording();
+    if (!currentRecording && !recording) return;
 
-    const recordingToStop = recording;
+    const recordingToStop = currentRecording || recording;
     setRecording(null); // 立即清空，防止重複調用
 
     try {
