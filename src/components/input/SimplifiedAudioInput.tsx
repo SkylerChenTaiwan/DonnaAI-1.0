@@ -35,6 +35,12 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
   
   useEffect(() => {
     console.log(`SimplifiedAudioInput mounted: ${instanceId}`);
+    
+    // 組件掛載時確保沒有殘留的錄音
+    recordingManager.stopCurrentRecording().catch(error => {
+      console.warn('初始化時清理錄音失敗:', error);
+    });
+    
     return () => {
       console.log(`SimplifiedAudioInput unmounted: ${instanceId}`);
     };

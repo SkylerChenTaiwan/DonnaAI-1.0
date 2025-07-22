@@ -23,7 +23,10 @@ class RecordingManager {
   async stopCurrentRecording(): Promise<void> {
     if (this.currentRecording) {
       try {
-        await this.currentRecording.stopAndUnloadAsync();
+        const status = await this.currentRecording.getStatusAsync();
+        if (status.isRecording) {
+          await this.currentRecording.stopAndUnloadAsync();
+        }
         await Audio.setAudioModeAsync({ allowsRecordingIOS: false });
       } catch (error) {
         console.warn('停止現有錄音時出錯:', error);
@@ -55,8 +58,19 @@ class RecordingManager {
       // 先停止任何現有的錄音
       await this.stopCurrentRecording();
       
+      // 重置音頻模式
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+        staysActiveInBackground: false,
+        interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+        interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+        shouldDuckAndroid: false,
+        playThroughEarpieceAndroid: false,
+      });
+      
       // 添加延遲以確保資源釋放
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 200));
 
       // 創建新的錄音
       console.log('RecordingManager: 創建新錄音...');
