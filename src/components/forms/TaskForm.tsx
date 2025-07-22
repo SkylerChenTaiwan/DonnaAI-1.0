@@ -32,15 +32,16 @@ export interface TaskFormProps {
 }
 
 
-export const TaskForm = forwardRef<any, TaskFormProps>(({
-  onSubmit,
-  onCancel,
-  initialData,
-  isSubmitting = false,
-  userId,
-  organizationId,
-  teamId,
-}, ref) => {
+export const TaskForm = forwardRef<any, TaskFormProps>((props, ref) => {
+  const {
+    onSubmit,
+    onCancel,
+    initialData,
+    isSubmitting = false,
+    userId,
+    organizationId,
+    teamId,
+  } = props;
   const [inputMode, setInputMode] = useState<'text' | 'voice'>('text');
 
   const {
@@ -286,7 +287,6 @@ export const TaskForm = forwardRef<any, TaskFormProps>(({
         />
           </>
         ) : (
-          {/* 語音輸入內容 */}
           <View style={styles.voiceInputContainer}>
             <Ionicons name="mic" size={48} color="#B91C1C" />
             <Text style={styles.voiceTitle}>語音轉任務</Text>
