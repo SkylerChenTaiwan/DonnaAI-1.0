@@ -148,7 +148,7 @@ export const CreateRecordModal: React.FC = () => {
             activeOpacity={0.7}
           >
             <Text style={styles.linkText}>使用文字輸入</Text>
-            <Ionicons name="arrow-forward" size={16} color="#FF6B35" />
+            <Ionicons name="arrow-forward" size={16} color="#7A7A7A" />
           </TouchableOpacity>
           
           {/* 簡化的錄音介面 */}
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
   },
   linkText: {
     fontSize: 14,
-    color: '#FF6B35',
+    color: '#7A7A7A',
     fontWeight: '500',
   },
 });

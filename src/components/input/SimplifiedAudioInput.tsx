@@ -23,7 +23,7 @@ export interface SimplifiedAudioInputProps {
   disabled?: boolean;
 }
 
-type RecordingStatus = 'idle' | 'recording' | 'loading';
+type RecordingStatus = 'idle' | 'recording' | 'paused' | 'loading';
 
 export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
   onComplete,
@@ -164,6 +164,51 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
     }
   }, [checkPermissions, initializeAudio, startPulseAnimation, startWaveformAnimation]);
 
+  // 暫停錄音
+  const pauseRecording = useCallback(async () => {
+    if (!recording || recordingStatus !== 'recording') return;
+
+    try {
+      await recording.pauseAsync();
+      setRecordingStatus('paused');
+      
+      // 停止計時器
+      if (durationTimerRef.current) {
+        clearInterval(durationTimerRef.current);
+        durationTimerRef.current = null;
+      }
+
+      // 停止動畫
+      stopPulseAnimation();
+      stopWaveformAnimation();
+    } catch (error) {
+      console.error('暫停錄音失敗:', error);
+      Alert.alert('暫停失敗', '無法暫停錄音');
+    }
+  }, [recording, recordingStatus, stopPulseAnimation, stopWaveformAnimation]);
+
+  // 恢復錄音
+  const resumeRecording = useCallback(async () => {
+    if (!recording || recordingStatus !== 'paused') return;
+
+    try {
+      await recording.startAsync();
+      setRecordingStatus('recording');
+      
+      // 重新開始計時器
+      durationTimerRef.current = setInterval(() => {
+        setDuration(prev => prev + 1);
+      }, 1000);
+
+      // 重新開始動畫
+      startPulseAnimation();
+      startWaveformAnimation();
+    } catch (error) {
+      console.error('恢復錄音失敗:', error);
+      Alert.alert('恢復失敗', '無法恢復錄音');
+    }
+  }, [recording, recordingStatus, startPulseAnimation, startWaveformAnimation]);
+
   // 停止錄音
   const stopRecording = useCallback(async () => {
     if (!recording) return;
@@ -216,9 +261,11 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
     if (recordingStatus === 'idle') {
       startRecording();
     } else if (recordingStatus === 'recording') {
-      stopRecording();
+      pauseRecording();
+    } else if (recordingStatus === 'paused') {
+      resumeRecording();
     }
-  }, [disabled, recordingStatus, startRecording, stopRecording]);
+  }, [disabled, recordingStatus, startRecording, pauseRecording, resumeRecording]);
 
   // 清理定時器
   useEffect(() => {
@@ -255,7 +302,7 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
     <View style={styles.container}>
       {/* 波形顯示區域 */}
       <View style={styles.visualizationArea}>
-        {recordingStatus === 'recording' && renderWaveform()}
+        {(recordingStatus === 'recording' || recordingStatus === 'paused') && renderWaveform()}
       </View>
 
       {/* 計時器 */}
@@ -272,6 +319,7 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
           style={[
             styles.recordButton,
             recordingStatus === 'recording' && styles.recordingButton,
+            recordingStatus === 'paused' && styles.pausedButton,
             {
               transform: [{ scale: pulseAnim }],
             },
@@ -281,7 +329,11 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
             <LoadingSpinner size="large" color="#FFFFFF" />
           ) : (
             <Ionicons
-              name={recordingStatus === 'recording' ? 'stop' : 'mic'}
+              name={
+                recordingStatus === 'recording' ? 'pause' : 
+                recordingStatus === 'paused' ? 'play' : 
+                'mic'
+              }
               size={40}
               color="#FFFFFF"
             />
@@ -297,9 +349,23 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
         {recordingStatus === 'loading'
           ? '處理中...'
           : recordingStatus === 'recording'
-          ? '點擊停止錄音'
+          ? '點擊暫停錄音'
+          : recordingStatus === 'paused'
+          ? '點擊繼續錄音'
           : '點擊開始錄音'}
       </Text>
+      
+      {/* 停止按鈕 - 只在錄音或暫停時顯示 */}
+      {(recordingStatus === 'recording' || recordingStatus === 'paused') && (
+        <TouchableOpacity
+          style={styles.stopButton}
+          onPress={stopRecording}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="stop-circle" size={48} color="#DC2626" />
+          <Text style={styles.stopText}>停止</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -355,6 +421,9 @@ const styles = StyleSheet.create({
   recordingButton: {
     backgroundColor: '#DC2626',
   },
+  pausedButton: {
+    backgroundColor: '#F59E0B',
+  },
   recordingIndicator: {
     position: 'absolute',
     top: -8,
@@ -368,5 +437,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#7A7A7A',
     textAlign: 'center',
+    marginBottom: 20,
+  },
+  stopButton: {
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  stopText: {
+    fontSize: 14,
+    color: '#DC2626',
+    marginTop: 4,
+    fontWeight: '500',
   },
 });
