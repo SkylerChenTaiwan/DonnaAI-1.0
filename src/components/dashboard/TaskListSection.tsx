@@ -87,7 +87,7 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
         return;
       }
       setLoading(true);
-      await fetchTasks(userId, { organizationId, teamId }).finally(() => setLoading(false));
+      await fetchTasks(userId, { teamId }).finally(() => setLoading(false));
     };
     loadTasks();
   }, [fetchTasks, userId, organizationId, teamId]);
@@ -96,12 +96,20 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
   const handleRefresh = useCallback(async () => {
     if (!userId || !organizationId || !teamId) return;
     setRefreshing(true);
-    await fetchTasks(userId, { organizationId, teamId });
+    await fetchTasks(userId, { teamId });
     setRefreshing(false);
   }, [fetchTasks, userId, organizationId, teamId]);
 
   // 切換任務狀態
   const toggleTaskStatus = useCallback(async (task: TaskDoc) => {
+    console.log('Toggle task status called:', { taskId: task.id, title: task.title, currentStatus: task.status });
+    
+    if (!task.id) {
+      console.error('Task ID is missing!', task);
+      showToast('error', '任務 ID 遺失，無法更新狀態');
+      return;
+    }
+    
     if (updatingTaskIds.has(task.id)) return;
 
     setUpdatingTaskIds(prev => new Set(prev).add(task.id));
@@ -114,7 +122,7 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
       }, userId);
       
       showToast('success', `任務已標記為${newStatus === 'completed' ? '完成' : '待辦'}`);
-      await fetchTasks(userId, { organizationId, teamId }); // 重新載入以更新列表
+      await fetchTasks(userId, { teamId }); // 重新載入以更新列表
     } catch (error) {
       console.error('更新任務狀態失敗:', error);
       showToast('error', '更新任務狀態失敗');
@@ -130,12 +138,16 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
   // 過濾並分組任務
   const getTaskSections = useCallback((): TaskSection[] => {
     const now = new Date();
+    
+    console.log('All tasks from store:', tasks.length, tasks);
 
     // 過濾屬於當前用戶的任務
     const userTasks = tasks.filter(task => 
       task.assigneeId === userId &&
       task.status !== 'completed'
     );
+    
+    console.log('User tasks after filter:', userTasks.length, userTasks);
 
     // 分組任務
     const overdueTasks = userTasks.filter(task => {
@@ -154,6 +166,8 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
     const otherTasks = userTasks.filter(task => {
       return !task.dueDate; // 只顯示沒有截止日期的任務
     });
+    
+    console.log('Tasks without due date:', otherTasks.length, otherTasks);
 
     const sections: TaskSection[] = [];
 
