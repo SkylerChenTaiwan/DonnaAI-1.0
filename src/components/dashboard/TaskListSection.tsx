@@ -156,10 +156,21 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
     console.log('All tasks from store:', tasks.length, tasks);
 
     // 過濾屬於當前用戶的任務
-    const userTasks = tasks.filter(task => 
-      task.assigneeId === userId &&
-      task.status !== 'completed'
-    );
+    // 包含未完成的任務，以及今天完成的任務
+    const userTasks = tasks.filter(task => {
+      if (task.assigneeId !== userId) return false;
+      
+      // 未完成的任務都顯示
+      if (task.status !== 'completed') return true;
+      
+      // 已完成的任務，只顯示今天完成的
+      if (task.completedAt) {
+        const completedDate = task.completedAt.toDate();
+        return completedDate.toDateString() === now.toDateString();
+      }
+      
+      return false;
+    });
     
     console.log('User tasks after filter:', userTasks.length, userTasks);
 

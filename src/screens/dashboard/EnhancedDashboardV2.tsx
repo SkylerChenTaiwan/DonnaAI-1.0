@@ -108,10 +108,22 @@ export const EnhancedDashboardV2: React.FC = () => {
       currentTeamId: currentTeam?.id
     });
     
-    const userTasks = tasks.filter(task => 
-      task.assigneeId === authUser?.uid &&
-      task.status !== 'completed'
-    );
+    // 過濾屬於當前用戶的任務
+    // 包含未完成的任務，以及今天完成的任務
+    const userTasks = tasks.filter(task => {
+      if (task.assigneeId !== authUser?.uid) return false;
+      
+      // 未完成的任務都顯示
+      if (task.status !== 'completed') return true;
+      
+      // 已完成的任務，只顯示今天完成的
+      if (task.completedAt) {
+        const completedDate = task.completedAt.toDate();
+        return completedDate.toDateString() === now.toDateString();
+      }
+      
+      return false;
+    });
     
     console.log('EnhancedDashboardV2 - User tasks:', {
       userTasksCount: userTasks.length,
@@ -300,7 +312,12 @@ export const EnhancedDashboardV2: React.FC = () => {
           onPress={() => navigation.navigate('TaskDetail', { taskId: task.id })}
           activeOpacity={0.7}
         >
-          <Text style={styles.taskTitle}>{task.title}</Text>
+          <Text style={[
+            styles.taskTitle,
+            task.status === 'completed' && styles.taskCompleted
+          ]}>
+            {task.title}
+          </Text>
           <View style={styles.taskMeta}>
             {task.dueDate && (
               <Text style={styles.taskDue}>
@@ -484,6 +501,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#1A1A1A',
     marginBottom: 4,
+  },
+  taskCompleted: {
+    textDecorationLine: 'line-through',
+    color: '#9CA3AF',
   },
   taskMeta: {
     flexDirection: 'row',
