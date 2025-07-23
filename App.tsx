@@ -3,6 +3,9 @@
  * 主要應用程式入口點
  */
 
+// 導入 Metro runtime 以支援 Web 版的 HMR
+import '@expo/metro-runtime';
+
 import React, { useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { AppWithDeveloperMenu } from '@/navigation/AppWithDeveloperMenu';
