@@ -102,11 +102,12 @@ export const EnhancedDashboardV2: React.FC = () => {
   // 處理任務資料
   const taskSections = useMemo(() => {
     const now = new Date();
-    console.log('EnhancedDashboardV2 - Processing tasks:', {
-      totalTasks: tasks.length,
-      authUserId: authUser?.uid,
-      currentTeamId: currentTeam?.id
-    });
+    // 移除 console.log 以避免 Web 版無限重載
+    // console.log('EnhancedDashboardV2 - Processing tasks:', {
+    //   totalTasks: tasks.length,
+    //   authUserId: authUser?.uid,
+    //   currentTeamId: currentTeam?.id
+    // });
     
     // 過濾屬於當前用戶的任務
     // 包含未完成的任務，以及今天完成的任務
@@ -125,16 +126,17 @@ export const EnhancedDashboardV2: React.FC = () => {
       return false;
     });
     
-    console.log('EnhancedDashboardV2 - User tasks:', {
-      userTasksCount: userTasks.length,
-      taskDetails: userTasks.map(t => ({ 
-        id: t.id, 
-        title: t.title, 
-        assigneeId: t.assigneeId,
-        teamId: t.teamId,
-        dueDate: t.dueDate ? 'has date' : 'no date'
-      }))
-    });
+    // 移除 console.log 以避免 Web 版無限重載
+    // console.log('EnhancedDashboardV2 - User tasks:', {
+    //   userTasksCount: userTasks.length,
+    //   taskDetails: userTasks.map(t => ({ 
+    //     id: t.id, 
+    //     title: t.title, 
+    //     assigneeId: t.assigneeId,
+    //     teamId: t.teamId,
+    //     dueDate: t.dueDate ? 'has date' : 'no date'
+    //   }))
+    // });
 
     const overdueTasks = userTasks.filter(task => {
       if (!task.dueDate) return false;
@@ -153,11 +155,12 @@ export const EnhancedDashboardV2: React.FC = () => {
     // 無日期的任務
     const noDueDateTasks = userTasks.filter(task => !task.dueDate);
     
-    console.log('Task sections:', {
-      overdue: overdueTasks.length,
-      today: todayTasks.length,
-      noDate: noDueDateTasks.length
-    });
+    // 移除 console.log 以避免 Web 版無限重載
+    // console.log('Task sections:', {
+    //   overdue: overdueTasks.length,
+    //   today: todayTasks.length,
+    //   noDate: noDueDateTasks.length
+    // });
 
     return { overdueTasks, todayTasks, noDueDateTasks };
   }, [tasks, authUser]);
