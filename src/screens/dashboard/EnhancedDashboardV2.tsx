@@ -23,6 +23,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
 import { useTaskStore } from '@/stores/taskStore';
 import { useCustomerStore } from '@/stores/customerStore';
+import { showToast } from '@/utils/toast';
 import { TaskDoc } from '@/types/task';
 import { CustomerDoc } from '@/types/customer';
 import { Ionicons } from '@expo/vector-icons';
@@ -44,7 +45,7 @@ export const EnhancedDashboardV2: React.FC = () => {
   const { user: authUser } = useAuth();
   const { currentOrganization, currentTeam, loading: orgLoading } = useOrganization();
   const { user, mode, toggleMode } = useAuthStore();
-  const { tasks, fetchTasks } = useTaskStore();
+  const { tasks, fetchTasks, updateTask } = useTaskStore();
   const { customers, fetchCustomers } = useCustomerStore();
   const [refreshing, setRefreshing] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
@@ -58,7 +59,6 @@ export const EnhancedDashboardV2: React.FC = () => {
       try {
         await Promise.all([
           fetchTasks(authUser.uid, { 
-            organizationId: currentOrganization.id, 
             teamId: currentTeam.id 
           }),
           fetchCustomers(authUser, { 
@@ -84,7 +84,6 @@ export const EnhancedDashboardV2: React.FC = () => {
     try {
       await Promise.all([
         fetchTasks(authUser.uid, { 
-          organizationId: currentOrganization.id, 
           teamId: currentTeam.id 
         }),
         fetchCustomers(authUser, { 
@@ -217,17 +216,40 @@ export const EnhancedDashboardV2: React.FC = () => {
     const priorityColor = task.priority === 'high' ? '#EF4444' : 
                          task.priority === 'low' ? '#6B7280' : '#3B82F6';
     
+    const toggleTaskStatus = async () => {
+      try {
+        const newStatus = task.status === 'completed' ? 'todo' : 'completed';
+        await updateTask(task.id!, { 
+          status: newStatus,
+          completedAt: newStatus === 'completed' ? new Date() : null,
+        }, authUser.uid);
+        
+        showToast('success', `任務已標記為${newStatus === 'completed' ? '完成' : '待辦'}`);
+        await fetchTasks(authUser.uid, { teamId: currentTeam.id });
+      } catch (error) {
+        console.error('更新任務狀態失敗:', error);
+        showToast('error', '更新任務狀態失敗');
+      }
+    };
+    
     return (
-      <TouchableOpacity 
-        key={task.id} 
-        style={styles.taskItem}
-        onPress={() => navigation.navigate('TaskDetail', { taskId: task.id })}
-        activeOpacity={0.7}
-      >
-        <View style={styles.checkbox}>
-          <Ionicons name="square-outline" size={24} color="#D1D5DB" />
-        </View>
-        <View style={styles.taskContent}>
+      <View key={task.id} style={styles.taskItem}>
+        <TouchableOpacity
+          style={styles.checkbox}
+          onPress={toggleTaskStatus}
+          activeOpacity={0.7}
+        >
+          {task.status === 'completed' ? (
+            <Ionicons name="checkmark-square" size={24} color="#10B981" />
+          ) : (
+            <Ionicons name="square-outline" size={24} color="#D1D5DB" />
+          )}
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.taskContent}
+          onPress={() => navigation.navigate('TaskDetail', { taskId: task.id })}
+          activeOpacity={0.7}
+        >
           <Text style={styles.taskTitle}>{task.title}</Text>
           <View style={styles.taskMeta}>
             {task.dueDate && (
@@ -246,8 +268,8 @@ export const EnhancedDashboardV2: React.FC = () => {
               </View>
             )}
           </View>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </View>
     );
   };
 

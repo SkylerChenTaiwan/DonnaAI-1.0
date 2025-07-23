@@ -222,6 +222,7 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
 
   // 渲染任務項目
   const renderTaskItem = ({ item }: { item: TaskDoc }) => {
+    console.log('Rendering task item:', { id: item.id, title: item.title, hasId: !!item.id });
     const isUpdating = updatingTaskIds.has(item.id);
     const priorityColor = getPriorityColor(item.priority);
 
