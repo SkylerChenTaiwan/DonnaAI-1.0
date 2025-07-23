@@ -443,6 +443,15 @@ export async function getTasksOptimized(
     });
     if (filter?.teamId) {
       console.log('- In specified team:', allTasks.filter(t => t.teamId === filter.teamId).length);
+      console.log('- NOT in specified team:', allTasks.filter(t => t.teamId !== filter.teamId).length);
+      
+      // 調試：顯示不在指定團隊的無日期任務
+      const tasksNotInTeam = allTasks.filter(t => !t.dueDate && t.teamId !== filter.teamId);
+      if (tasksNotInTeam.length > 0) {
+        console.log(`⚠️ Found ${tasksNotInTeam.length} no-date tasks in other teams:`, 
+          tasksNotInTeam.map(t => ({ title: t.title, teamId: t.teamId, assigneeId: t.assigneeId }))
+        );
+      }
     }
     return allTasks;
     
