@@ -1,7 +1,8 @@
-// 調試環境變數
-console.log('📱 app.config.js 載入中...');
-console.log('EXPO_PUBLIC_FIREBASE_API_KEY:', process.env.EXPO_PUBLIC_FIREBASE_API_KEY ? '已設定' : '未設定');
-console.log('EXPO_PUBLIC_FIREBASE_PROJECT_ID:', process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID || '未設定');
+// 調試環境變數（僅在非 Web 環境）
+// 注意：在 app.config.js 中無法直接檢測平台，所以暫時註解掉
+// console.log('📱 app.config.js 載入中...');
+// console.log('EXPO_PUBLIC_FIREBASE_API_KEY:', process.env.EXPO_PUBLIC_FIREBASE_API_KEY ? '已設定' : '未設定');
+// console.log('EXPO_PUBLIC_FIREBASE_PROJECT_ID:', process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID || '未設定');
 
 export default {
   expo: {

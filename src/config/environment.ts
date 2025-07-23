@@ -57,8 +57,8 @@ class EnvironmentManager {
    * @throws {Error} 如果缺少必要的環境變數
    */
   private validateEnvironment(): void {
-    // 在開發環境顯示詳細的環境資訊
-    if (__DEV__) {
+    // 在開發環境顯示詳細的環境資訊（僅限原生平台）
+    if (__DEV__ && Platform.OS !== 'web') {
       console.log('🔍 驗證環境變數...');
       console.log('Constants.expoConfig:', Constants.expoConfig);
       console.log('process.env.EXPO_PUBLIC_FIREBASE_API_KEY:', process.env.EXPO_PUBLIC_FIREBASE_API_KEY ? '***' : 'undefined');
@@ -85,8 +85,8 @@ class EnvironmentManager {
     if (missing.length > 0 && !hasProcessEnv) {
       const errorMsg = `缺少必要的 Firebase 配置: ${missing.join(', ')}\n請檢查 app.config.js 和 .env 檔案是否正確設定。`;
       
-      // 在開發環境顯示詳細錯誤
-      if (__DEV__) {
+      // 在開發環境顯示詳細錯誤（僅限原生平台）
+      if (__DEV__ && Platform.OS !== 'web') {
         console.error(errorMsg);
         console.log('目前的配置:', Constants.expoConfig?.extra);
       }
@@ -154,8 +154,8 @@ class EnvironmentManager {
    * 取得 Firebase 配置
    */
   getFirebaseConfig() {
-    // 調試輸出
-    if (__DEV__) {
+    // 調試輸出（僅限原生平台）
+    if (__DEV__ && Platform.OS !== 'web') {
       console.log('🔥 getFirebaseConfig 被調用');
       console.log('Constants.expoConfig?.extra:', Constants.expoConfig?.extra);
     }
@@ -177,14 +177,16 @@ class EnvironmentManager {
              '1:748876929238:web:fbbe5fd030a68765ea9177'
     };
 
-    // 檢查配置是否完整
+    // 檢查配置是否完整（僅在原生平台輸出錯誤）
     if (!config.apiKey || !config.projectId) {
-      console.error('Firebase 配置不完整');
-      console.error('Constants.expoConfig.extra:', Constants.expoConfig?.extra);
-      console.error('process.env:', {
-        apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY ? '***' : 'missing',
-        projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID || 'missing'
-      });
+      if (Platform.OS !== 'web') {
+        console.error('Firebase 配置不完整');
+        console.error('Constants.expoConfig.extra:', Constants.expoConfig?.extra);
+        console.error('process.env:', {
+          apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY ? '***' : 'missing',
+          projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID || 'missing'
+        });
+      }
     }
 
     return config;
@@ -235,8 +237,8 @@ export const isDevelopment = () => environmentManager.isDevelopment();
 export const isProduction = () => environmentManager.isProduction();
 export const getFirebaseConfig = () => environmentManager.getFirebaseConfig();
 
-// 在開發環境輸出配置摘要
-if (__DEV__) {
+// 在開發環境輸出配置摘要（僅限原生平台）
+if (__DEV__ && Platform.OS !== 'web') {
   console.log('🔧 環境配置已載入:');
   console.log(environmentManager.getSummary());
 }
