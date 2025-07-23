@@ -377,6 +377,11 @@ export async function getTasksOptimized(
           if (!priorities.includes(task.priority)) return false;
         }
         
+        // 團隊過濾
+        if (filter.teamId && task.teamId !== filter.teamId) {
+          return false;
+        }
+        
         // 負責人過濾
         if (filter.assigneeId && task.assigneeId !== filter.assigneeId) {
           return false;
@@ -427,6 +432,17 @@ export async function getTasksOptimized(
     });
     
     console.log(`✅ 獲取到 ${allTasks.length} 個任務（優化版）`);
+    console.log('Filter applied:', filter);
+    console.log('Tasks breakdown:');
+    console.log('- With due date:', allTasks.filter(t => t.dueDate).length);
+    console.log('- Without due date:', allTasks.filter(t => !t.dueDate).length);
+    console.log('- By status:', {
+      todo: allTasks.filter(t => t.status === 'todo').length,
+      completed: allTasks.filter(t => t.status === 'completed').length
+    });
+    if (filter?.teamId) {
+      console.log('- In specified team:', allTasks.filter(t => t.teamId === filter.teamId).length);
+    }
     return allTasks;
     
   } catch (error) {
