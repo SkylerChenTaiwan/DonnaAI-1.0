@@ -187,7 +187,7 @@ service cloud.firestore {
                        isOrgMember(request.resource.data.organizationId) &&
                        request.resource.data.type in ['scheduled', 'unscheduled', 'pending'] &&
                        request.resource.data.priority in ['low', 'medium', 'high', 'urgent'] &&
-                       request.resource.data.status in ['todo', 'in_progress', 'completed', 'cancelled'] &&
+                       request.resource.data.status in ['todo', 'completed'] &&
                        request.resource.data.source in ['manual', 'ai_extracted', 'calendar_sync', 'voice'] &&
                        isValidString(request.resource.data.title, 200) &&
                        request.resource.data.createdAt != null &&

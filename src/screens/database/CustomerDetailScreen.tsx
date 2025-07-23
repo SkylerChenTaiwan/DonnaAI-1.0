@@ -41,10 +41,6 @@ const getTaskStatusText = (status: string) => {
   switch (status) {
     case 'completed':
       return '已完成';
-    case 'in_progress':
-      return '進行中';
-    case 'cancelled':
-      return '已取消';
     case 'todo':
       return '待開始';
     default:

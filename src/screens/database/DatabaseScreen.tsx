@@ -64,10 +64,6 @@ const getTaskStatusText = (status: string) => {
   switch (status) {
     case 'completed':
       return '已完成';
-    case 'in_progress':
-      return '進行中';
-    case 'cancelled':
-      return '已取消';
     case 'todo':
       return '待開始';
     default:
@@ -361,9 +357,7 @@ export const DatabaseScreen: React.FC = () => {
         return [
           { key: 'status', label: '狀態', type: 'select' as const, options: [
             { label: '待辦', value: 'todo' },
-            { label: '進行中', value: 'in_progress' },
             { label: '已完成', value: 'completed' },
-            { label: '已取消', value: 'cancelled' },
           ]},
           { key: 'assigneeId', label: '負責人', type: 'select' as const, options: teamMembers },
           { key: 'priority', label: '優先級', type: 'select' as const, options: [

@@ -77,7 +77,7 @@ export const FilterForm: React.FC<FilterFormProps> = ({
   // 根據不同的 tabType 和欄位提供預設選項
   const getPresetOptions = (columnKey: string): string[] => {
     if (tabType === 'tasks' && columnKey === 'status') {
-      return ['todo', 'in_progress', 'completed', 'cancelled'];
+      return ['todo', 'completed'];
     }
     if (tabType === 'records' && columnKey === 'type') {
       return ['meeting', 'call'];
@@ -152,9 +152,7 @@ export const FilterForm: React.FC<FilterFormProps> = ({
                 if (tabType === 'tasks' && condition.key === 'status') {
                   label = {
                     todo: '待開始',
-                    in_progress: '進行中',
                     completed: '已完成',
-                    cancelled: '已取消',
                   }[option] || option;
                 } else if (tabType === 'records' && condition.key === 'type') {
                   label = option === 'meeting' ? '會議' : '通話';

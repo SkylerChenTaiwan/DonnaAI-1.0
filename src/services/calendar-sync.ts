@@ -11,7 +11,7 @@ import {
 } from 'firebase/auth';
 import { doc, updateDoc, getDoc, setDoc } from 'firebase/firestore';
 import { getFirebaseDb, getFirebaseAuth } from './firebase/config';
-import { TaskDoc, TaskStatus } from '../types/task';
+import { TaskDoc } from '../types/task';
 import { RecordDoc } from '../types/record';
 import { createTask, updateTask, getTasks } from './firebase/tasks';
 import { createRecord, updateRecord } from './firebase/records';
@@ -357,9 +357,9 @@ async function updateTaskFromCalendarEvent(
     scheduledAt: startDate
   };
   
-  // 如果事件已取消，更新任務狀態
+  // 如果事件已取消，標記任務為已完成
   if (event.status === 'cancelled') {
-    updates.status = 'cancelled';
+    updates.status = 'completed';
   }
   
   await updateTask(taskId, updates, userId);

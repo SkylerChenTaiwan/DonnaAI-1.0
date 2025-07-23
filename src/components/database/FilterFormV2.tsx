@@ -81,9 +81,7 @@ export const FilterForm: React.FC<FilterFormProps> = ({
     if (tabType === 'tasks' && columnKey === 'status') {
       return [
         { value: 'todo', label: '待開始' },
-        { value: 'in_progress', label: '進行中' },
         { value: 'completed', label: '已完成' },
-        { value: 'cancelled', label: '已取消' },
       ];
     }
     if (tabType === 'records' && columnKey === 'type') {

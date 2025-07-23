@@ -514,10 +514,8 @@ export async function getTaskStats(
       totalCount: 0,
       byStatus: {
         todo: 0,
-        in_progress: 0,
-        completed: 0,
-        cancelled: 0
-      },
+        completed: 0
+      } as Record<TaskStatus, number>,
       byPriority: {
         low: 0,
         medium: 0,
@@ -555,8 +553,7 @@ export async function getTaskStats(
       // 過期任務
       if (task.dueDate && 
           task.dueDate.toDate() < now && 
-          task.status !== 'completed' && 
-          task.status !== 'cancelled') {
+          task.status !== 'completed') {
         stats.overdueTasks++;
       }
       
@@ -570,8 +567,7 @@ export async function getTaskStats(
       if (task.scheduledAt && 
           task.scheduledAt.toDate() > now &&
           task.scheduledAt.toDate() < new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000) &&
-          task.status !== 'completed' && 
-          task.status !== 'cancelled') {
+          task.status !== 'completed') {
         stats.upcomingTasks++;
       }
     }
@@ -602,7 +598,7 @@ export async function getTasksByCustomer(
       q = query(
         collection(getFirebaseDb(), TASKS_COLLECTION),
         where('customerIds', 'array-contains', customerId),
-        where('status', 'in', ['todo', 'in_progress']),
+        where('status', '==', 'todo'),
         orderBy('updatedAt', 'desc')
       );
     }

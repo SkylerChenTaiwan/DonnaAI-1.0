@@ -41,7 +41,7 @@ export async function getTeamDashboardData(
       }),
       getTasks(userId, {
         teamId,
-        status: ['todo', 'in_progress']
+        status: ['todo']
       })
     ]);
 
@@ -216,9 +216,7 @@ export async function getUserWorkloadStats(
     // 統計任務狀態
     const tasksByStatus: Record<TaskStatus, number> = {
       todo: 0,
-      in_progress: 0,
-      completed: 0,
-      cancelled: 0
+      completed: 0
     };
 
     let overdueTasks = 0;
@@ -229,7 +227,7 @@ export async function getUserWorkloadStats(
     tasks.forEach(task => {
       tasksByStatus[task.status]++;
       
-      if (task.dueDate && task.status !== 'completed' && task.status !== 'cancelled') {
+      if (task.dueDate && task.status !== 'completed') {
         const dueDate = task.dueDate.toDate();
         if (dueDate < now) {
           overdueTasks++;

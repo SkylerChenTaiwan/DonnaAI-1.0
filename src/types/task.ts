@@ -12,7 +12,7 @@ export type TaskType = 'scheduled' | 'unscheduled' | 'pending';
 export type TaskPriority = 'low' | 'medium' | 'high' | 'urgent';
 
 // 任務狀態
-export type TaskStatus = 'todo' | 'in_progress' | 'completed' | 'cancelled';
+export type TaskStatus = 'todo' | 'completed';
 
 // 任務來源
 export type TaskSource = 'manual' | 'ai_extracted' | 'calendar_sync';

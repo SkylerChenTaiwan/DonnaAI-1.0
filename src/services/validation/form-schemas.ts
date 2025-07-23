@@ -31,7 +31,7 @@ export const RecordFormSchema = z.object({
   duration: z.number().optional(),
   location: z.string().optional(),
   priority: z.enum(['low', 'medium', 'high', 'urgent']).default('medium'),
-  status: z.enum(['draft', 'pending', 'in_progress', 'completed', 'archived']).default('draft'),
+  status: z.enum(['draft', 'pending', 'completed', 'archived']).default('draft'),
   tags: z.array(z.string()).default([]),
   audioUri: z.string().optional(),
   processingPreference: z.enum(['immediate', 'edit_first', 'manual']).default('immediate')
@@ -46,7 +46,7 @@ export const TaskFormSchema = z.object({
   description: z.string().optional(),
   customerId: z.string().optional(),
   priority: z.enum(['低', '中', '高']).default('中'),
-  status: z.enum(['待處理', '進行中', '已完成', '已取消']).default('待處理'),
+  status: z.enum(['待處理', '已完成']).default('待處理'),
   assignedTo: z.string().optional(),
   tags: z.array(z.string()).default([])
 });

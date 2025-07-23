@@ -50,20 +50,14 @@ export const TaskDetailScreen: React.FC = () => {
     
     setIsUpdating(true);
     try {
-      const statusFlow = ['todo', 'in_progress', 'completed'];
-      const currentIndex = statusFlow.indexOf(task.status);
-      const nextIndex = (currentIndex + 1) % statusFlow.length;
-      const newStatus = statusFlow[nextIndex];
+      const newStatus = task.status === 'completed' ? 'todo' : 'completed';
       
       await updateTask(task.id!, { 
         status: newStatus as any,
         completedAt: newStatus === 'completed' ? new Date() : null,
       }, user.uid);
       
-      showToast('success', `狀態已更新為${
-        newStatus === 'completed' ? '已完成' : 
-        newStatus === 'in_progress' ? '進行中' : '待開始'
-      }`);
+      showToast('success', `任務已標記為${newStatus === 'completed' ? '已完成' : '待開始'}`);
     } catch (error) {
       console.error('更新狀態失敗:', error);
       showToast('error', '更新狀態失敗');
@@ -84,16 +78,7 @@ export const TaskDetailScreen: React.FC = () => {
   }
 
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return styles.statusCompleted;
-      case 'in_progress':
-        return styles.statusInProgress;
-      case 'cancelled':
-        return styles.statusCancelled;
-      default:
-        return styles.statusTodo;
-    }
+    return status === 'completed' ? styles.statusCompleted : styles.statusTodo;
   };
 
   const getPriorityIcon = (priority?: string) => {
@@ -141,9 +126,7 @@ export const TaskDetailScreen: React.FC = () => {
               <ActivityIndicator size="small" color="#FFFFFF" />
             ) : (
               <Text style={styles.statusText}>
-                {task.status === 'completed' ? '已完成' : 
-                 task.status === 'in_progress' ? '進行中' : 
-                 task.status === 'cancelled' ? '已取消' : '待開始'}
+                {task.status === 'completed' ? '已完成' : '待開始'}
               </Text>
             )}
           </TouchableOpacity>
@@ -219,52 +202,6 @@ export const TaskDetailScreen: React.FC = () => {
           </View>
         )}
 
-        {/* 進度追蹤區塊 */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>進度追蹤</Text>
-          <View style={styles.progressContainer}>
-            <View style={styles.progressBar}>
-              <View 
-                style={[
-                  styles.progressFill, 
-                  { width: task.status === 'completed' ? '100%' : 
-                           task.status === 'in_progress' ? '50%' : '0%' }
-                ]} 
-              />
-            </View>
-            <Text style={styles.progressText}>
-              {task.status === 'completed' ? '100%' : 
-               task.status === 'in_progress' ? '50%' : '0%'}
-            </Text>
-          </View>
-        </View>
-
-        {/* 時間資訊 */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>時間資訊</Text>
-          <View style={styles.infoRow}>
-            <Text style={styles.label}>建立時間</Text>
-            <Text style={styles.value}>
-              {new Date(task.createdAt.seconds * 1000).toLocaleString('zh-TW')}
-            </Text>
-          </View>
-          {task.updatedAt && (
-            <View style={styles.infoRow}>
-              <Text style={styles.label}>最後更新</Text>
-              <Text style={styles.value}>
-                {new Date(task.updatedAt.seconds * 1000).toLocaleString('zh-TW')}
-              </Text>
-            </View>
-          )}
-          {task.completedAt && (
-            <View style={styles.infoRow}>
-              <Text style={styles.label}>完成時間</Text>
-              <Text style={styles.value}>
-                {new Date(task.completedAt.seconds * 1000).toLocaleString('zh-TW')}
-              </Text>
-            </View>
-          )}
-        </View>
       </ScrollView>
     </Layout>
   );
@@ -369,14 +306,8 @@ const styles = StyleSheet.create({
   statusTodo: {
     backgroundColor: '#FEF3E2',
   },
-  statusInProgress: {
-    backgroundColor: '#E8F0FF',
-  },
   statusCompleted: {
     backgroundColor: '#E3F2E6',
-  },
-  statusCancelled: {
-    backgroundColor: '#FFE5E5',
   },
   statusText: {
     fontSize: 14,
@@ -415,24 +346,5 @@ const styles = StyleSheet.create({
   tagText: {
     fontSize: 14,
     color: '#1C1C1E',
-  },
-  progressContainer: {
-    paddingHorizontal: 16,
-    gap: 8,
-  },
-  progressBar: {
-    height: 8,
-    backgroundColor: '#E5E5EA',
-    borderRadius: 4,
-    overflow: 'hidden',
-  },
-  progressFill: {
-    height: '100%',
-    backgroundColor: '#007AFF',
-  },
-  progressText: {
-    fontSize: 14,
-    color: '#8E8E93',
-    textAlign: 'center',
   },
 });

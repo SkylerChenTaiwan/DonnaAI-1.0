@@ -37,7 +37,7 @@ export const EditTaskModal: React.FC = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    status: 'todo' as 'todo' | 'in_progress' | 'completed' | 'cancelled',
+    status: 'todo' as 'todo' | 'completed',
     priority: 'medium' as 'low' | 'medium' | 'high' | 'urgent',
     type: 'unscheduled' as 'scheduled' | 'unscheduled' | 'pending',
   });
@@ -137,9 +137,7 @@ export const EditTaskModal: React.FC = () => {
             <View style={styles.optionContainer}>
               {[
                 { value: 'todo', label: '待辦' },
-                { value: 'in_progress', label: '進行中' },
                 { value: 'completed', label: '已完成' },
-                { value: 'cancelled', label: '已取消' },
               ].map((status) => (
                 <TouchableOpacity
                   key={status.value}

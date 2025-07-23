@@ -398,8 +398,7 @@ export async function getTasksOptimized(
         if (filter.overdue) {
           if (!task.dueDate || 
               task.dueDate.toDate() >= now || 
-              task.status === 'completed' ||
-              task.status === 'cancelled') {
+              task.status === 'completed') {
             return false;
           }
         }
@@ -721,10 +720,8 @@ export async function getTaskStats(
       totalCount: tasks.length,
       byStatus: {
         todo: 0,
-        in_progress: 0,
-        completed: 0,
-        cancelled: 0
-      },
+        completed: 0
+      } as Record<TaskStatus, number>,
       byPriority: {
         low: 0,
         medium: 0,
@@ -754,8 +751,7 @@ export async function getTaskStats(
       // 過期任務
       if (task.dueDate && 
           task.dueDate.toDate() < now && 
-          task.status !== 'completed' && 
-          task.status !== 'cancelled') {
+          task.status !== 'completed') {
         stats.overdueTasks++;
       }
       
@@ -769,8 +765,7 @@ export async function getTaskStats(
       if (task.scheduledAt && 
           task.scheduledAt.toDate() > now &&
           task.scheduledAt.toDate() < new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000) &&
-          task.status !== 'completed' && 
-          task.status !== 'cancelled') {
+          task.status !== 'completed') {
         stats.upcomingTasks++;
       }
     });
@@ -805,7 +800,7 @@ export async function getTasksByCustomerOptimized(
     }
     
     if (!includeCompleted) {
-      constraints.push(where('status', 'in', ['todo', 'in_progress']));
+      constraints.push(where('status', '==', 'todo'));
     }
     
     constraints.push(orderBy('updatedAt', 'desc'));

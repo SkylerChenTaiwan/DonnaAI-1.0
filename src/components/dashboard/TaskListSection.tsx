@@ -150,11 +150,9 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
       return isToday(dueDate);
     });
 
-    // 新增：所有其他待辦任務（沒有截止日期或未來的任務）
+    // 新增：所有其他待辦任務（只包含沒有截止日期的任務，排除未來的任務）
     const otherTasks = userTasks.filter(task => {
-      if (!task.dueDate) return true; // 沒有截止日期的任務
-      const dueDate = task.dueDate!.toDate();
-      return !isPast(dueDate) && !isToday(dueDate); // 未來的任務
+      return !task.dueDate; // 只顯示沒有截止日期的任務
     });
 
     const sections: TaskSection[] = [];
@@ -185,13 +183,7 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
         title: `待辦任務 (${otherTasks.length})`,
         type: 'today', // 使用 'today' 類型以保持樣式一致
         data: otherTasks.sort((a, b) => {
-          // 有截止日期的排前面
-          if (a.dueDate && !b.dueDate) return -1;
-          if (!a.dueDate && b.dueDate) return 1;
-          if (a.dueDate && b.dueDate) {
-            return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
-          }
-          // 都沒有截止日期，按建立時間排序
+          // 按建立時間排序，新的在前面
           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
         }),
       });

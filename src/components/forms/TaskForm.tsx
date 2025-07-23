@@ -88,9 +88,7 @@ export const TaskForm = forwardRef<any, TaskFormProps>((props, ref) => {
   // 狀態選項
   const statusOptions = [
     { label: '待處理', value: '待處理' },
-    { label: '進行中', value: '進行中' },
     { label: '已完成', value: '已完成' },
-    { label: '已取消', value: '已取消' },
   ];
 
   // 暴露方法給父組件
