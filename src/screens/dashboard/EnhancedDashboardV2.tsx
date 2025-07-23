@@ -35,6 +35,7 @@ type DashboardSection =
   | { type: 'header' }
   | { type: 'overdue_tasks'; tasks: TaskDoc[] }
   | { type: 'today_tasks'; tasks: TaskDoc[] }
+  | { type: 'no_due_date_tasks'; tasks: TaskDoc[] }
   | { type: 'customers_header' }
   | { type: 'customer'; customer: CustomerDoc }
   | { type: 'empty_tasks' }
@@ -136,8 +137,17 @@ export const EnhancedDashboardV2: React.FC = () => {
       const dueDate = task.dueDate!.toDate();
       return dueDate.toDateString() === now.toDateString();
     });
+    
+    // 無日期的任務
+    const noDueDateTasks = userTasks.filter(task => !task.dueDate);
+    
+    console.log('Task sections:', {
+      overdue: overdueTasks.length,
+      today: todayTasks.length,
+      noDate: noDueDateTasks.length
+    });
 
-    return { overdueTasks, todayTasks };
+    return { overdueTasks, todayTasks, noDueDateTasks };
   }, [tasks, authUser]);
 
   // 建立渲染資料
@@ -151,7 +161,12 @@ export const EnhancedDashboardV2: React.FC = () => {
     if (taskSections.todayTasks.length > 0) {
       items.push({ type: 'today_tasks', tasks: taskSections.todayTasks });
     }
-    if (taskSections.overdueTasks.length === 0 && taskSections.todayTasks.length === 0) {
+    if (taskSections.noDueDateTasks.length > 0) {
+      items.push({ type: 'no_due_date_tasks', tasks: taskSections.noDueDateTasks });
+    }
+    if (taskSections.overdueTasks.length === 0 && 
+        taskSections.todayTasks.length === 0 && 
+        taskSections.noDueDateTasks.length === 0) {
       items.push({ type: 'empty_tasks' });
     }
 
@@ -189,6 +204,18 @@ export const EnhancedDashboardV2: React.FC = () => {
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>
                 今日任務 ({item.tasks.length})
+              </Text>
+            </View>
+            {item.tasks.map(task => renderTaskItem(task))}
+          </View>
+        );
+        
+      case 'no_due_date_tasks':
+        return (
+          <View>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>
+                待辦任務 ({item.tasks.length})
               </Text>
             </View>
             {item.tasks.map(task => renderTaskItem(task))}

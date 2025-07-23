@@ -355,6 +355,28 @@ export async function getTasksOptimized(
       console.log(`User ${user.id} - Found ${allTasks.length} tasks before filtering`);
     }
     
+    // 在過濾前先統計原始數據
+    const beforeFilterStats = {
+      total: allTasks.length,
+      byTeam: {} as Record<string, number>,
+      noTeamId: 0,
+      byStatus: {
+        todo: allTasks.filter(t => t.status === 'todo').length,
+        completed: allTasks.filter(t => t.status === 'completed').length
+      },
+      noDueDate: allTasks.filter(t => !t.dueDate).length
+    };
+    
+    allTasks.forEach(task => {
+      if (task.teamId) {
+        beforeFilterStats.byTeam[task.teamId] = (beforeFilterStats.byTeam[task.teamId] || 0) + 1;
+      } else {
+        beforeFilterStats.noTeamId++;
+      }
+    });
+    
+    console.log('Tasks before filtering:', beforeFilterStats);
+    
     // 客戶端過濾
     if (filter) {
       const now = new Date();
@@ -443,15 +465,6 @@ export async function getTasksOptimized(
     });
     if (filter?.teamId) {
       console.log('- In specified team:', allTasks.filter(t => t.teamId === filter.teamId).length);
-      console.log('- NOT in specified team:', allTasks.filter(t => t.teamId !== filter.teamId).length);
-      
-      // 調試：顯示不在指定團隊的無日期任務
-      const tasksNotInTeam = allTasks.filter(t => !t.dueDate && t.teamId !== filter.teamId);
-      if (tasksNotInTeam.length > 0) {
-        console.log(`⚠️ Found ${tasksNotInTeam.length} no-date tasks in other teams:`, 
-          tasksNotInTeam.map(t => ({ title: t.title, teamId: t.teamId, assigneeId: t.assigneeId }))
-        );
-      }
     }
     return allTasks;
     
