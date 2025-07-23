@@ -12,9 +12,12 @@ import {
   SectionList,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { TaskDoc } from '@/types/task';
 import { useTaskStore } from '@/stores/taskStore';
 import { showToast } from '@/utils/toast';
+import { RootStackParamList } from '@/types/navigation';
 // TODO: Install date-fns for better date formatting
 // import { format, isToday, isPast, startOfDay } from 'date-fns';
 // import { zhTW } from 'date-fns/locale';
@@ -74,6 +77,7 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
   organizationId,
   teamId,
 }) => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const { tasks, fetchTasks, updateTask } = useTaskStore();
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -134,6 +138,16 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
       });
     }
   }, [updatingTaskIds, updateTask, fetchTasks, userId, organizationId, teamId]);
+
+  // 導航到任務詳情
+  const handleTaskPress = useCallback((task: TaskDoc) => {
+    if (!task.id) {
+      console.error('Task ID is missing!', task);
+      showToast('error', '無法開啟任務詳情');
+      return;
+    }
+    navigation.navigate('TaskDetail', { taskId: task.id });
+  }, [navigation]);
 
   // 過濾並分組任務
   const getTaskSections = useCallback((): TaskSection[] => {
@@ -212,13 +226,13 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
     const priorityColor = getPriorityColor(item.priority);
 
     return (
-      <TouchableOpacity
-        style={styles.taskItem}
-        onPress={() => toggleTaskStatus(item)}
-        disabled={isUpdating}
-        activeOpacity={0.7}
-      >
-        <View style={styles.checkboxContainer}>
+      <View style={styles.taskItem}>
+        <TouchableOpacity
+          style={styles.checkboxContainer}
+          onPress={() => toggleTaskStatus(item)}
+          disabled={isUpdating}
+          activeOpacity={0.7}
+        >
           {isUpdating ? (
             <ActivityIndicator size="small" color="#FF6B6B" />
           ) : (
@@ -228,9 +242,13 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
               )}
             </View>
           )}
-        </View>
+        </TouchableOpacity>
 
-        <View style={styles.taskContent}>
+        <TouchableOpacity 
+          style={styles.taskContent}
+          onPress={() => handleTaskPress(item)}
+          activeOpacity={0.7}
+        >
           <Text style={[styles.taskTitle, item.status === 'completed' && styles.taskTitleCompleted]}>
             {item.title}
           </Text>
@@ -248,8 +266,8 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
               </View>
             )}
           </View>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </View>
     );
   };
 
