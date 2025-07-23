@@ -352,6 +352,7 @@ export async function getTasksOptimized(
       });
       
       allTasks = Array.from(taskMap.values());
+      console.log(`User ${user.id} - Found ${allTasks.length} tasks before filtering`);
     }
     
     // 客戶端過濾

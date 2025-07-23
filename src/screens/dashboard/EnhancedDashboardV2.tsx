@@ -101,10 +101,27 @@ export const EnhancedDashboardV2: React.FC = () => {
   // 處理任務資料
   const taskSections = useMemo(() => {
     const now = new Date();
+    console.log('EnhancedDashboardV2 - Processing tasks:', {
+      totalTasks: tasks.length,
+      authUserId: authUser?.uid,
+      currentTeamId: currentTeam?.id
+    });
+    
     const userTasks = tasks.filter(task => 
       task.assigneeId === authUser?.uid &&
       task.status !== 'completed'
     );
+    
+    console.log('EnhancedDashboardV2 - User tasks:', {
+      userTasksCount: userTasks.length,
+      taskDetails: userTasks.map(t => ({ 
+        id: t.id, 
+        title: t.title, 
+        assigneeId: t.assigneeId,
+        teamId: t.teamId,
+        dueDate: t.dueDate ? 'has date' : 'no date'
+      }))
+    });
 
     const overdueTasks = userTasks.filter(task => {
       if (!task.dueDate) return false;
@@ -217,9 +234,15 @@ export const EnhancedDashboardV2: React.FC = () => {
                          task.priority === 'low' ? '#6B7280' : '#3B82F6';
     
     const toggleTaskStatus = async () => {
+      if (!authUser || !task.id) {
+        console.error('Missing authUser or task.id', { authUser, taskId: task.id });
+        showToast('error', '無法更新任務狀態');
+        return;
+      }
+      
       try {
         const newStatus = task.status === 'completed' ? 'todo' : 'completed';
-        await updateTask(task.id!, { 
+        await updateTask(task.id, { 
           status: newStatus,
           completedAt: newStatus === 'completed' ? new Date() : null,
         }, authUser.uid);
