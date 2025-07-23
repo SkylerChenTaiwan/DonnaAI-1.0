@@ -28,7 +28,7 @@
 | 22v  | ui-adjustments-voice-first.md | ✅ 已完成 | UI 調整語音優先介面 - Task 標籤取代+按鈕、語音輸入為主、簡化首頁、任務列表、近期客戶 | 2025-07-22 |
 | 23v  | fix-prp22-navigation-and-loading.md | ✅ 已完成 | 修復 PRP-22 導航架構和載入狀態 - 恢復+按鈕、CreateTaskModal 預設語音、修復首頁載入檢查 | 2025-07-22 |
 | 24v  | fix-task-creation-ui-and-validation.md | ✅ 已完成 | 修復任務建立介面和驗證 - 移除重複標籤、實作日期選擇器和下拉選單、修復任務類型驗證 | 2025-07-22 |
-| 25   | task-system-simplification.md | 📋 待執行 | 任務系統簡化 - 二元狀態（完成/未完成）、移除進度追蹤、優化首頁過濾邏輯 | - |
+| 25v  | task-system-simplification.md | ✅ 已完成 | 任務系統簡化 - 二元狀態（完成/未完成）、移除進度追蹤、優化首頁過濾邏輯 | 2025-07-23 |
 
 ## 命名規則
 
