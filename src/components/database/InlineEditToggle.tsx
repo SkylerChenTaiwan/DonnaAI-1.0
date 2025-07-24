@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { DataTable } from '@/components/common/DataTable';
 import { EditableDataTable } from '@/components/common/EditableDataTable';
 import { TableProps, TableColumn } from '@/types/table';
+import { colors } from '@/theme/colors';
 
 // 擴展 TableColumn 以支援編輯配置
 interface EditableTableColumn extends TableColumn {
@@ -124,7 +125,7 @@ export const InlineEditToggle: React.FC<InlineEditToggleProps> = ({
           <Ionicons
             name={isEditMode ? 'create' : 'create-outline'}
             size={20}
-            color={isEditMode ? '#FFFFFF' : '#1A1A1A'}
+            color={isEditMode ? colors.orange : '#1A1A1A'}
           />
         </TouchableOpacity>
       </View>
@@ -174,6 +175,6 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   editToggleButtonActive: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: colors.orangeBackground,
   },
 });

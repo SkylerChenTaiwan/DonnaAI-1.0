@@ -148,9 +148,17 @@ export function TableView({
           <Text style={styles.emptySubtitle}>
             當有成員指定您為上級主管時，他們將會顯示在這裡
           </Text>
-          <TouchableOpacity style={styles.refreshButton} onPress={onRefresh}>
-            <Text style={styles.refreshButtonText}>重新整理</Text>
-          </TouchableOpacity>
+          <View style={styles.emptyButtonContainer}>
+            <TouchableOpacity style={styles.refreshButton} onPress={onRefresh}>
+              <Text style={styles.refreshButtonText}>重新整理</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.addButton} onPress={() => {
+              console.log('新增下屬功能暫未實現');
+              // TODO: 實現新增下屬功能
+            }}>
+              <Text style={styles.addButtonText}>新增下屬</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
@@ -287,6 +295,11 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     marginBottom: 24,
   },
+  emptyButtonContainer: {
+    flexDirection: 'row',
+    gap: 12,
+    justifyContent: 'center',
+  },
   refreshButton: {
     paddingHorizontal: 24,
     paddingVertical: 12,
@@ -297,5 +310,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: DesignSystem.colors.white,
+  },
+  addButton: {
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    backgroundColor: '#FF5C00',
+    borderRadius: 8,
+  },
+  addButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
 });

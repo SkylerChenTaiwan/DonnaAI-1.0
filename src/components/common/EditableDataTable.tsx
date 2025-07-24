@@ -16,6 +16,7 @@ import {
 import { FlashList } from '@shopify/flash-list';
 import { Ionicons } from '@expo/vector-icons';
 import { EditableCell } from './EditableCell';
+import { AddRowButton } from './AddRowButton';
 import { SearchBar } from './SearchBar';
 import { useTableData } from '@/hooks/useTableData';
 import { TableProps, TableData, TableColumn } from '@/types/table';
@@ -30,8 +31,11 @@ interface EditableTableProps extends Omit<TableProps, 'columns'> {
   columns: EditableTableColumn[];
   onSave?: (changes: Array<{ id: string; field: string; value: any }>) => Promise<void>;
   onRowSave?: (id: string, changes: Record<string, any>) => Promise<void>;
+  onAddRow?: () => void; // 新增記錄的回調
   saveMode?: 'batch' | 'realtime'; // 批次儲存或即時儲存
   showSaveButton?: boolean;
+  showAddButton?: boolean; // 是否顯示新增按鈕
+  addButtonText?: string; // 新增按鈕的文字
   readOnly?: boolean;
 }
 
@@ -58,8 +62,11 @@ export const EditableDataTable: React.FC<EditableTableProps> = ({
   sortConfig: externalSortConfig,
   onSave,
   onRowSave,
+  onAddRow,
   saveMode = 'batch',
   showSaveButton = true,
+  showAddButton = true,
+  addButtonText = '新增記錄',
   readOnly = false,
 }) => {
   const [editingCell, setEditingCell] = useState<string | null>(null); // "id:field"
@@ -314,6 +321,19 @@ export const EditableDataTable: React.FC<EditableTableProps> = ({
     </View>
   );
 
+  // 渲染新增按鈕
+  const renderAddButton = () => {
+    return (
+      <AddRowButton
+        onPress={onAddRow || (() => {})}
+        isVisible={showAddButton && !readOnly && processedData.length > 0}
+        buttonText={addButtonText}
+        style={styles.addButtonContainer}
+        disabled={!onAddRow}
+      />
+    );
+  };
+
   // 渲染行
   const renderItem = useCallback(
     ({ item }: { item: TableData }) => {
@@ -447,6 +467,7 @@ export const EditableDataTable: React.FC<EditableTableProps> = ({
       <ScrollView horizontal showsHorizontalScrollIndicator={true}>
         <View style={styles.tableContainer}>
           {renderHeader()}
+          {renderAddButton()}
           <FlashList
             data={processedData}
             renderItem={renderItem}
@@ -466,6 +487,16 @@ export const EditableDataTable: React.FC<EditableTableProps> = ({
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
                 <Text style={styles.emptyText}>沒有找到資料</Text>
+                {showAddButton && !readOnly && onAddRow && (
+                  <TouchableOpacity
+                    style={styles.emptyAddButton}
+                    onPress={onAddRow}
+                    activeOpacity={0.7}
+                  >
+                    <Ionicons name="add-circle-outline" size={24} color="#FF5C00" />
+                    <Text style={styles.emptyAddButtonText}>{addButtonText}</Text>
+                  </TouchableOpacity>
+                )}
               </View>
             }
           />
@@ -627,5 +658,25 @@ const styles = StyleSheet.create({
   savingText: {
     fontSize: 12,
     color: '#FFFFFF',
+  },
+  addButtonContainer: {
+    backgroundColor: '#FFFFFF',
+    borderBottomWidth: 1,
+    borderBottomColor: '#F0F0F0',
+  },
+  emptyAddButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: 'rgba(255, 92, 0, 0.1)',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 8,
+    marginTop: 16,
+  },
+  emptyAddButtonText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#FF5C00',
   },
 });

@@ -41,6 +41,12 @@ export const colors = {
   // 中性色系 - 直接使用設計系統的灰階
   gray: DesignSystem.colors.gray,
 
+  // 橘色系統 - 用於編輯模式和特殊操作
+  orange: '#FF5C00',                           // 主要橘色
+  orangeBackground: 'rgba(255, 92, 0, 0.1)',   // 橘色背景（與多選按鈕一致）
+  orangeLight: 'rgba(255, 92, 0, 0.05)',       // 更淺的橘色背景
+  orangeDark: '#E55100',                       // 較深的橘色
+
   // 圖表專用顏色 - 使用更柔和的灰階變化
   chart: {
     colors: [

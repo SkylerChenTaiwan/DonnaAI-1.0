@@ -186,15 +186,7 @@ export const EditableCell: React.FC<EditableCellProps> = ({
             {formatDisplayValue(value)}
           </Text>
         )}
-        {!disabled && (
-          <View style={styles.editIcon}>
-            <Ionicons 
-              name="create-outline" 
-              size={12} 
-              color="#999999" 
-            />
-          </View>
-        )}
+        {/* 編輯圖標已移除以簡化介面 */}
       </View>
       {error && (
         <View style={styles.errorIndicator}>
@@ -259,7 +251,6 @@ const styles = StyleSheet.create({
     position: 'relative',
     minHeight: 40,
     justifyContent: 'center',
-    paddingRight: 20, // 為編輯圖標留空間
   },
   cellError: {
     backgroundColor: 'rgba(220, 53, 69, 0.1)',
@@ -278,12 +269,6 @@ const styles = StyleSheet.create({
   },
   cellTextError: {
     color: '#DC3545',
-  },
-  editIcon: {
-    position: 'absolute',
-    top: 4,
-    right: 0,
-    opacity: 0.5,
   },
   errorIndicator: {
     position: 'absolute',
