@@ -54,7 +54,7 @@ export const ManagerDashboard: React.FC = () => {
               activeOpacity={0.7}
             >
               <Ionicons name="megaphone-outline" size={24} color={colors.background} />
-              <Text style={styles.quickActionText}>佈達</Text>
+              <Text style={styles.quickActionText}>資訊佈達</Text>
             </TouchableOpacity>
             
             <TouchableOpacity 
@@ -63,7 +63,7 @@ export const ManagerDashboard: React.FC = () => {
               activeOpacity={0.7}
             >
               <Ionicons name="person-add-outline" size={24} color={colors.background} />
-              <Text style={styles.quickActionText}>指派</Text>
+              <Text style={styles.quickActionText}>任務指派</Text>
             </TouchableOpacity>
           </View>
 
