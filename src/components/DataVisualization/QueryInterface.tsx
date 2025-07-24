@@ -20,7 +20,8 @@ import { ClarificationForm } from './ClarificationForm';
 import { ChartDisplay } from '../charts/ChartDisplay';
 import { QuerySuggestions } from './QuerySuggestions';
 import { useAuth } from '../../hooks/useAuth';
-// 移除不存在的 colors 模組引用
+import { colors } from '../../theme/colors';
+import { DesignSystem } from '../../theme/designSystem';
 
 export const QueryInterface: React.FC = () => {
   const [queryText, setQueryText] = useState('');
@@ -132,7 +133,7 @@ export const QueryInterface: React.FC = () => {
     if (isLoading || currentSession?.status === 'processing' || currentSession?.status === 'generating') {
       return (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#FF5C00" />
+          <ActivityIndicator size="large" color={colors.primary} />
           <Text style={styles.loadingText}>
             {currentSession?.status === 'processing' ? '正在理解您的查詢...' :
              currentSession?.status === 'generating' ? '正在生成圖表...' :
@@ -179,11 +180,7 @@ export const QueryInterface: React.FC = () => {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <View style={styles.content}>
-        {renderContent()}
-      </View>
-
-      {/* 查詢輸入區域 */}
+      {/* 查詢輸入區域 - 移到頂部 */}
       {(!currentSession || currentSession.status === 'error') && (
         <View style={styles.inputContainer}>
           <View style={styles.inputWrapper}>
@@ -191,10 +188,10 @@ export const QueryInterface: React.FC = () => {
               style={styles.textInput}
               value={queryText}
               onChangeText={setQueryText}
-              placeholder="詢問您想查看的資料..."
-              placeholderTextColor="#999"
+              placeholder="詢問您想查看的資料，例如：本月銷售表現如何？團隊任務完成率？客戶分佈情況？"
+              placeholderTextColor={colors.textTertiary}
               multiline
-              maxLength={200}
+              maxLength={500}
               returnKeyType="search"
               onSubmitEditing={handleSubmitQuery}
             />
@@ -210,19 +207,23 @@ export const QueryInterface: React.FC = () => {
                 styles.submitButtonText,
                 (!queryText.trim() || isLoading) && styles.submitButtonTextDisabled
               ]}>
-                查詢
+                分析
               </Text>
             </TouchableOpacity>
           </View>
           
           {/* 字數限制提示 */}
-          {queryText.length > 150 && (
+          {queryText.length > 400 && (
             <Text style={styles.charCount}>
-              {queryText.length}/200
+              {queryText.length}/500
             </Text>
           )}
         </View>
       )}
+      
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        {renderContent()}
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
@@ -230,117 +231,118 @@ export const QueryInterface: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa'
+    backgroundColor: colors.backgroundSecondary
   },
   content: {
     flex: 1
   },
   inputContainer: {
-    padding: 15,
-    backgroundColor: 'white',
-    borderTopWidth: 1,
-    borderTopColor: '#e0e0e0'
+    padding: DesignSystem.spacing.md,
+    backgroundColor: colors.background,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+    ...DesignSystem.shadows.sm
   },
   inputWrapper: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
-    gap: 10
+    alignItems: 'flex-start',
+    gap: DesignSystem.spacing.sm
   },
   textInput: {
     flex: 1,
     borderWidth: 1,
-    borderColor: '#e0e0e0',
-    borderRadius: 20,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    fontSize: 16,
-    maxHeight: 100,
-    backgroundColor: '#f5f5f5'
+    borderColor: colors.border,
+    borderRadius: DesignSystem.borderRadius.md,
+    paddingHorizontal: DesignSystem.spacing.md,
+    paddingVertical: DesignSystem.spacing.md,
+    ...DesignSystem.typography.body,
+    minHeight: 120,
+    maxHeight: 200,
+    backgroundColor: colors.backgroundTertiary,
+    textAlignVertical: 'top'
   },
   submitButton: {
-    backgroundColor: '#FF5C00',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 20,
-    minWidth: 60,
-    alignItems: 'center'
+    backgroundColor: colors.primary,
+    paddingHorizontal: DesignSystem.spacing.lg,
+    paddingVertical: DesignSystem.spacing.md,
+    borderRadius: DesignSystem.borderRadius.sm,
+    minWidth: 80,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 44
   },
   submitButtonDisabled: {
-    backgroundColor: '#ccc'
+    backgroundColor: colors.gray[300]
   },
   submitButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600'
+    color: colors.background,
+    ...DesignSystem.typography.button
   },
   submitButtonTextDisabled: {
-    color: '#999'
+    color: colors.textTertiary
   },
   charCount: {
-    fontSize: 12,
-    color: '#999',
+    ...DesignSystem.typography.caption,
+    color: colors.textTertiary,
     textAlign: 'right',
-    marginTop: 5
+    marginTop: DesignSystem.spacing.xs
   },
   chartContainer: {
     flex: 1
   },
   newQueryButton: {
-    margin: 15,
-    backgroundColor: '#FF5C00',
-    paddingVertical: 12,
-    borderRadius: 8,
+    margin: DesignSystem.spacing.md,
+    backgroundColor: colors.primary,
+    paddingVertical: DesignSystem.spacing.sm,
+    borderRadius: DesignSystem.borderRadius.sm,
     alignItems: 'center'
   },
   newQueryButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600'
+    color: colors.background,
+    ...DesignSystem.typography.button
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20
+    padding: DesignSystem.spacing.lg
   },
   loadingText: {
-    marginTop: 15,
-    fontSize: 16,
-    color: '#666',
+    marginTop: DesignSystem.spacing.md,
+    ...DesignSystem.typography.body,
+    color: colors.textSecondary,
     textAlign: 'center'
   },
   errorContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20
+    padding: DesignSystem.spacing.lg
   },
   errorTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#FF3B30',
-    marginBottom: 10
+    ...DesignSystem.typography.h4,
+    color: colors.error,
+    marginBottom: DesignSystem.spacing.sm
   },
   errorMessage: {
-    fontSize: 14,
-    color: '#666',
+    ...DesignSystem.typography.bodySmall,
+    color: colors.textSecondary,
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: DesignSystem.spacing.lg,
     lineHeight: 20
   },
   errorButtons: {
     flexDirection: 'row',
-    gap: 10
+    gap: DesignSystem.spacing.sm
   },
   retryButton: {
-    backgroundColor: '#FF5C00',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8
+    backgroundColor: colors.primary,
+    paddingHorizontal: DesignSystem.spacing.lg,
+    paddingVertical: DesignSystem.spacing.sm,
+    borderRadius: DesignSystem.borderRadius.sm
   },
   retryButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600'
+    color: colors.background,
+    ...DesignSystem.typography.button
   }
 });
