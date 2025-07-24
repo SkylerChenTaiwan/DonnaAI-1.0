@@ -11,7 +11,7 @@ import {
   serverTimestamp,
   Timestamp 
 } from 'firebase/firestore';
-import { auth, db } from '../config/firebase';
+import { getFirebaseAuth, getFirebaseDb } from './firebase/config';
 import { UserSettings, SettingsService as ISettingsService } from '../types/settings';
 import { STORAGE_KEYS } from '../config/constants';
 import Constants from 'expo-constants';
@@ -55,6 +55,7 @@ class SettingsServiceImpl implements ISettingsService {
         }
         
         // 2. 背景同步 Firebase（如果使用者已登入）
+        const auth = getFirebaseAuth();
         if (auth.currentUser && !this.syncInProgress) {
           this.syncWithFirebase().catch(error => {
             console.error('背景同步失敗:', error);
@@ -65,6 +66,7 @@ class SettingsServiceImpl implements ISettingsService {
       }
       
       // 3. 如果本地沒有，從 Firebase 載入
+      const auth = getFirebaseAuth();
       if (auth.currentUser) {
         const fbSettings = await this.loadFromFirebase();
         if (fbSettings) {
@@ -104,6 +106,7 @@ class SettingsServiceImpl implements ISettingsService {
       );
       
       // 2. 背景同步到 Firebase（如果使用者已登入）
+      const auth = getFirebaseAuth();
       if (auth.currentUser && !this.syncInProgress) {
         this.syncToFirebase(updatedSettings).catch(error => {
           console.error('同步到 Firebase 失敗:', error);
@@ -120,10 +123,12 @@ class SettingsServiceImpl implements ISettingsService {
    */
   private async loadFromFirebase(): Promise<UserSettings | null> {
     try {
+      const auth = getFirebaseAuth();
       const user = auth.currentUser;
       if (!user) return null;
       
       // 假設使用者屬於某個組織
+      const db = getFirebaseDb();
       const userDoc = await getDoc(doc(db, 'users', user.uid));
       const userData = userDoc.data();
       if (!userData?.organizationId) return null;
@@ -161,12 +166,14 @@ class SettingsServiceImpl implements ISettingsService {
    */
   private async syncToFirebase(settings: UserSettings): Promise<void> {
     try {
+      const auth = getFirebaseAuth();
       const user = auth.currentUser;
       if (!user) return;
       
       this.syncInProgress = true;
       
       // 獲取使用者組織
+      const db = getFirebaseDb();
       const userDoc = await getDoc(doc(db, 'users', user.uid));
       const userData = userDoc.data();
       if (!userData?.organizationId) {
