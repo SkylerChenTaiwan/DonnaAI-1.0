@@ -59,39 +59,36 @@ export const PersonnelScreen: React.FC = () => {
   const { currentTeam } = useOrganization();
   const { mode, toggleMode } = useAuthStore();
 
-  // 獲取團隊成員
-  const fetchTeamMembers = async () => {
-    if (!user || !currentTeam) return;
+  // 獲取下屬成員
+  const fetchSubordinates = async () => {
+    if (!user) return;
 
     try {
       setLoading(true);
       
-      // 獲取用戶權限上下文
-      const permissionContext = await getUserPermissionContext(user.uid);
-      
-      // 查詢團隊成員
       const db = getFirebaseDb();
       
-      // 先確保用戶有組織ID
+      // 確保用戶有組織ID
       if (!user.organizationId) {
         console.error('用戶缺少組織ID');
         setLoading(false);
         return;
       }
       
+      // 查詢以當前用戶為上級的所有成員
       const usersRef = collection(db, 'users');
       const q = query(
         usersRef,
         where('organizationId', '==', user.organizationId),
-        where('teamIds', 'array-contains', currentTeam.id)
+        where('supervisorId', '==', user.id)
       );
       
       const snapshot = await getDocs(q);
-      const members: TeamMember[] = [];
+      const subordinates: TeamMember[] = [];
       
       snapshot.forEach((doc) => {
         const data = doc.data();
-        members.push({
+        subordinates.push({
           id: doc.id,
           name: data.name || '未命名',
           email: data.email,
@@ -109,10 +106,11 @@ export const PersonnelScreen: React.FC = () => {
         });
       });
       
-      setTeamMembers(members);
+      console.log(`找到 ${subordinates.length} 位下屬`);
+      setTeamMembers(subordinates);
     } catch (error) {
-      console.error('獲取團隊成員失敗:', error);
-      showToast('error', '無法載入團隊成員資料');
+      console.error('獲取下屬成員失敗:', error);
+      showToast('error', '無法載入下屬成員資料');
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -120,13 +118,13 @@ export const PersonnelScreen: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchTeamMembers();
-  }, [user, currentTeam]);
+    fetchSubordinates();
+  }, [user]);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    fetchTeamMembers();
-  }, []);
+    fetchSubordinates();
+  }, [user]);
 
   // 處理檢視切換
   const handleViewChange = (view: 'tree' | 'table') => {
