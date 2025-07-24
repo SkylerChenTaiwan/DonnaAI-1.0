@@ -9,6 +9,15 @@ export type RootStackParamList = {
   CreateCustomerModal: { mode?: 'form' | 'csv' } | undefined;
   CreateRecordModal: { mode?: 'audio' | 'text'; customerId?: string } | undefined;
   CreateTaskModal: { mode?: 'voice' | 'form'; customerId?: string; recordId?: string } | undefined;
+  AddRecordModal: { 
+    tableType: 'customers' | 'records' | 'tasks';
+    columns: any[];
+    onSubmit: (data: Record<string, any>) => Promise<void>;
+  } | undefined;
+  AddUserModal: { 
+    teamId?: string;
+    onUserCreated?: () => void;
+  } | undefined;
   // 編輯頁面
   EditCustomer: { customerId: string };
   EditRecord: { recordId: string };

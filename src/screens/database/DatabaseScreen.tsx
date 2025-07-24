@@ -37,6 +37,10 @@ import { TableColumn } from '@/types/table';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@/types/navigation';
+import { createCustomer } from '@/services/firebase/customers';
+import { createRecord } from '@/services/firebase/records';
+import { createTask } from '@/services/firebase/tasks';
+import { showToast } from '@/utils/toast';
 
 type TabType = 'customers' | 'records' | 'tasks';
 
@@ -241,6 +245,76 @@ export const DatabaseScreen: React.FC = () => {
       }
     }
   }, [multiSelectMode, activeTab, navigation]);
+
+  const handleAddRow = useCallback(() => {
+    // 根據當前標籤取得對應的欄位定義
+    let columns: TableColumn[] = [];
+    let onSubmit: (data: Record<string, any>) => Promise<void>;
+    
+    switch (activeTab) {
+      case 'customers':
+        columns = customerColumns;
+        onSubmit = async (data) => {
+          try {
+            await createCustomer({
+              ...data,
+              organizationId: user?.organizationId || '',
+              createdBy: user?.uid || '',
+            });
+            await handleRefresh();
+          } catch (error) {
+            console.error('Error creating customer:', error);
+            throw error;
+          }
+        };
+        break;
+        
+      case 'records':
+        columns = recordColumns;
+        onSubmit = async (data) => {
+          try {
+            await createRecord({
+              ...data,
+              organizationId: user?.organizationId || '',
+              createdBy: user?.uid || '',
+            });
+            await handleRefresh();
+          } catch (error) {
+            console.error('Error creating record:', error);
+            throw error;
+          }
+        };
+        break;
+        
+      case 'tasks':
+        columns = taskColumns;
+        onSubmit = async (data) => {
+          try {
+            await createTask({
+              ...data,
+              type: 'unscheduled',
+              priority: 'medium',
+              organizationId: user?.organizationId || '',
+              teamId: user?.teamId || '',
+              assigneeId: user?.uid || '',
+              source: 'manual',
+            }, user?.uid || '');
+            await handleRefresh();
+          } catch (error) {
+            console.error('Error creating task:', error);
+            throw error;
+          }
+        };
+        break;
+    }
+    
+    // 導航到新增記錄 Modal
+    navigation.navigate('AddRecordModal' as any, {
+      tableType: activeTab,
+      columns,
+      onSubmit,
+    });
+  }, [activeTab, navigation, user, customerColumns, recordColumns, taskColumns, handleRefresh]);
 
   const handleSelect = useCallback((selectedIds: string[]) => {
     setSelectedItems(selectedIds);
@@ -797,8 +871,11 @@ export const DatabaseScreen: React.FC = () => {
                 onRefresh={handleRefresh}
                 onSave={handleInlineEditSave}
                 onRowSave={handleInlineEditRowSave}
-                saveMode="batch"
-                showSaveButton={true}
+                onAddRow={handleAddRow}
+                saveMode="realtime"
+                showSaveButton={false}
+                showAddButton={true}
+                addButtonText="新增記錄"
                 readOnly={false}
               />
             ) : (

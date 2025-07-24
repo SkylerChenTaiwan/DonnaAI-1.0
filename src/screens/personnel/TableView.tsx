@@ -17,6 +17,8 @@ import { DesignSystem } from '@/theme/designSystem';
 import { TableColumn } from '@/types/table';
 import { EnhancedUser } from '@/types/personnel';
 import { FilterCondition } from '@/components/common/FilterBadge';
+import { useNavigation } from '@react-navigation/native';
+import { useOrganization } from '@/hooks/useOrganization';
 
 interface TableViewProps {
   teamMembers: TeamMember[];
@@ -41,6 +43,8 @@ export function TableView({
   activeFilters = [],
   isEditMode = false
 }: TableViewProps) {
+  const navigation = useNavigation<any>();
+  const { currentTeam } = useOrganization();
   const [internalSelectedIds, setInternalSelectedIds] = useState<string[]>([]);
   
   // 使用 props 或內部狀態
@@ -153,8 +157,10 @@ export function TableView({
               <Text style={styles.refreshButtonText}>重新整理</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.addButton} onPress={() => {
-              console.log('新增下屬功能暫未實現');
-              // TODO: 實現新增下屬功能
+              navigation.navigate('AddUserModal' as any, {
+                teamId: currentTeam?.id,
+                onUserCreated: onRefresh,
+              });
             }}>
               <Text style={styles.addButtonText}>新增下屬</Text>
             </TouchableOpacity>

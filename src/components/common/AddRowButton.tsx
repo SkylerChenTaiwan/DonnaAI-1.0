@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.orangeLight,
     borderStyle: 'dashed',
-    minHeight: 44, // 確保最小觸控目標尺寸
+    minHeight: 22, // 高度減半
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 4, // 調整垂直內邊距以配合新高度
   },
   addButtonText: {
     fontSize: 16,
