@@ -25,6 +25,13 @@ service cloud.firestore {
              get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
     
+    // 檢查使用者是否為主管或以上權限
+    function isManagerOrAdmin() {
+      return isAuthenticated() && 
+             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['manager', 'admin'];
+    }
+    
     // 檢查使用者是否屬於指定團隊
     function isTeamMember(teamId) {
       return isAuthenticated() &&
@@ -303,6 +310,61 @@ service cloud.firestore {
       allow delete: if isOwner(resource.data.userId);
     }
     
+    // ====== 公告集合 ======
+    
+    match /announcements/{announcementId} {
+      // 讀取：只有目標用戶可以讀取
+      allow read: if isAuthenticated() && 
+                     (request.auth.uid in resource.data.targetUsers ||
+                      isTeamMember(resource.data.teamId));
+      
+      // 建立：只有主管和管理員可以建立
+      allow create: if isManagerOrAdmin() &&
+                       // 驗證必填欄位
+                       request.resource.data.keys().hasAll(['title', 'content', 'createdBy', 'targetUsers', 'priority', 'organizationId']) &&
+                       isValidString(request.resource.data.title, 200) &&
+                       isValidString(request.resource.data.content, 5000) &&
+                       request.resource.data.createdBy == request.auth.uid &&
+                       request.resource.data.targetUsers is list &&
+                       request.resource.data.priority in ['high', 'normal', 'low'];
+      
+      // 更新：只能更新已讀狀態
+      allow update: if isAuthenticated() &&
+                       request.auth.uid in resource.data.targetUsers &&
+                       request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isRead']) &&
+                       request.resource.data.isRead[request.auth.uid] == true;
+      
+      // 刪除：只有創建者或管理員可以刪除
+      allow delete: if isOwner(resource.data.createdBy) || isOrgAdmin();
+    }
+    
+    // ====== 保存的報表集合 ======
+    
+    match /savedReports/{reportId} {
+      // 讀取：創建者或公開報表可讀取
+      allow read: if isAuthenticated() &&
+                     (isOwner(resource.data.createdBy) ||
+                      resource.data.isPublic == true ||
+                      (resource.data.teamId != null && isTeamMember(resource.data.teamId)));
+      
+      // 建立：任何認證用戶都可以建立
+      allow create: if isAuthenticated() &&
+                       // 驗證必填欄位
+                       request.resource.data.keys().hasAll(['name', 'query', 'chartType', 'chartData', 'createdBy', 'organizationId', 'isPublic']) &&
+                       isValidString(request.resource.data.name, 200) &&
+                       isValidString(request.resource.data.query, 1000) &&
+                       request.resource.data.createdBy == request.auth.uid &&
+                       request.resource.data.isPublic is bool;
+      
+      // 更新：只有創建者可以更新
+      allow update: if isOwner(resource.data.createdBy) &&
+                       // 不能修改創建者
+                       request.resource.data.createdBy == resource.data.createdBy;
+      
+      // 刪除：只有創建者或管理員可以刪除
+      allow delete: if isOwner(resource.data.createdBy) || isOrgAdmin();
+    }
+
     // ====== 系統配置集合（僅管理員可存取）======
     
     match /systemConfig/{configId} {

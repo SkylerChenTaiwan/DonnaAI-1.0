@@ -18,6 +18,7 @@ import { Layout } from '@/components/common/Layout';
 import { ModeToggle } from '@/components/common/ModeToggle';
 import { TaskListSection } from '@/components/dashboard/TaskListSection';
 import { RecentCustomersSection } from '@/components/dashboard/RecentCustomersSection';
+import { ManagerDashboard } from './ManagerDashboard';
 import { useAuthStore } from '@/stores/authStore';
 import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
@@ -393,6 +394,12 @@ export const EnhancedDashboardV2: React.FC = () => {
     );
   }
 
+  // 主管模式：顯示 ManagerDashboard
+  if (mode === 'manager') {
+    return <ManagerDashboard />;
+  }
+
+  // 業務模式：顯示原本的內容
   return (
     <Layout style={styles.container} scrollable={false}>
       <SafeAreaView style={styles.safeArea}>

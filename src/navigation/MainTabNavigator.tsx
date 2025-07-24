@@ -12,6 +12,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { EnhancedDashboardV2 } from '@/screens/dashboard/EnhancedDashboardV2';
 import { DatabaseScreen } from '@/screens/database/DatabaseScreen';
 import { ToolsScreen } from '@/screens/tools/ToolsScreen';
+import { PersonnelScreen } from '@/screens/personnel/PersonnelScreen';
 import { SettingsScreen } from '@/screens/settings/SettingsScreen';
 import { ActionPopover } from '@/components/common/ActionPopover';
 import { MainTabParamList, RootStackParamList } from '@/types/navigation';
@@ -21,7 +22,7 @@ type NavigationProp = StackNavigationProp<RootStackParamList>;
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
 export const MainTabNavigator = () => {
-  const { user } = useAuthStore();
+  const { user, mode } = useAuthStore();
   const navigation = useNavigation<NavigationProp>();
   const [showActionModal, setShowActionModal] = useState(false);
   const addButtonRef = useRef<View>(null);
@@ -42,6 +43,11 @@ export const MainTabNavigator = () => {
         navigation.navigate('CreateTaskModal');
         break;
     }
+  };
+
+  const handleManagerActionPress = () => {
+    // 主管模式下點擊中間按鈕，導航到智能分析頁面
+    navigation.navigate('SmartAnalytics');
   };
 
   return (
@@ -67,6 +73,15 @@ export const MainTabNavigator = () => {
                   iconName = focused ? 'people' : 'people-outline';
                   break;
                 case 'AddAction':
+                  if (mode === 'manager') {
+                    return (
+                      <View style={styles.addButtonContainer} ref={addButtonRef}>
+                        <View style={[styles.addButton, { backgroundColor: '#007AFF' }]}>
+                          <Ionicons name="help-circle" size={24} color="#FFFFFF" />
+                        </View>
+                      </View>
+                    );
+                  }
                   return (
                     <View style={styles.addButtonContainer} ref={addButtonRef}>
                       <View style={styles.addButton}>
@@ -78,7 +93,12 @@ export const MainTabNavigator = () => {
                     </View>
                   );
                 case 'Tools':
-                  iconName = focused ? 'build' : 'build-outline';
+                  // 主管模式下顯示人事圖標
+                  if (mode === 'manager') {
+                    iconName = focused ? 'people-circle' : 'people-circle-outline';
+                  } else {
+                    iconName = focused ? 'build' : 'build-outline';
+                  }
                   break;
                 case 'Settings':
                   iconName = focused ? 'person' : 'person-outline';
@@ -147,16 +167,20 @@ export const MainTabNavigator = () => {
             listeners={{
               tabPress: (e) => {
                 e.preventDefault();
-                setShowActionModal(true);
+                if (mode === 'manager') {
+                  handleManagerActionPress();
+                } else {
+                  setShowActionModal(true);
+                }
               },
             }}
           />
 
           <Tab.Screen
             name="Tools"
-            component={ToolsScreen}
+            component={mode === 'manager' ? PersonnelScreen : ToolsScreen}
             options={{
-              title: '小工具',
+              title: mode === 'manager' ? '人事' : '小工具',
               headerShown: false,
             }}
           />

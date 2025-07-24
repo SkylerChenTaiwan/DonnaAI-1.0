@@ -2,18 +2,29 @@
  * 主管儀表板
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Layout } from '@/components/common/Layout';
+import { ModeToggle } from '@/components/common/ModeToggle';
+import { useAuthStore } from '@/stores/authStore';
+import { useAuth } from '@/hooks/useAuth';
+import { AnnouncementModal } from '@/screens/manager/AnnouncementModal';
+import { TaskAssignmentModal } from '@/screens/manager/TaskAssignmentModal';
+import { SavedReportsGrid } from '@/components/manager/SavedReportsGrid';
 
 export const ManagerDashboard: React.FC = () => {
+  const { user: authUser } = useAuth();
+  const { user, mode, toggleMode } = useAuthStore();
+  const [showAnnouncementModal, setShowAnnouncementModal] = useState(false);
+  const [showTaskAssignmentModal, setShowTaskAssignmentModal] = useState(false);
 
   const managementActions = [
     {
@@ -73,16 +84,41 @@ export const ManagerDashboard: React.FC = () => {
 
   return (
     <Layout scrollable={false}>
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        {/* 歡迎區塊 */}
-        <View style={styles.welcomeSection}>
-          <Text style={styles.welcomeText}>
-            主管面板 📊
-          </Text>
-          <Text style={styles.welcomeSubtext}>
-            管理您的團隊，掌握業務動態
-          </Text>
+      <SafeAreaView style={styles.safeArea}>
+        {/* 固定頭部 */}
+        <View style={styles.header}>
+          <View style={styles.userInfo}>
+            <Text style={styles.userName}>{user?.name || authUser?.displayName || '使用者'}</Text>
+            <Text style={styles.userEmail}>{user?.email || authUser?.email}</Text>
+          </View>
+          <ModeToggle
+            value={mode}
+            onToggle={toggleMode}
+            label={mode === 'business' ? '業務模式' : '主管模式'}
+          />
         </View>
+        
+        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+          {/* 快速操作按鈕 */}
+          <View style={styles.quickActions}>
+            <TouchableOpacity 
+              style={[styles.quickActionButton, styles.announcementButton]}
+              onPress={() => setShowAnnouncementModal(true)}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="megaphone-outline" size={24} color="#FFFFFF" />
+              <Text style={styles.quickActionText}>佈達</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={[styles.quickActionButton, styles.assignButton]}
+              onPress={() => setShowTaskAssignmentModal(true)}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="person-add-outline" size={24} color="#FFFFFF" />
+              <Text style={styles.quickActionText}>指派</Text>
+            </TouchableOpacity>
+          </View>
 
         {/* 團隊統計 */}
         <View style={styles.statsContainer}>
@@ -183,7 +219,25 @@ export const ManagerDashboard: React.FC = () => {
             </Text>
           </View>
         </View>
+        
+        {/* 統計報表區塊 */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>統計報表</Text>
+          <SavedReportsGrid limit={6} />
+        </View>
       </ScrollView>
+      </SafeAreaView>
+      
+      {/* 模態框 */}
+      <AnnouncementModal
+        visible={showAnnouncementModal}
+        onClose={() => setShowAnnouncementModal(false)}
+      />
+      
+      <TaskAssignmentModal
+        visible={showTaskAssignmentModal}
+        onClose={() => setShowTaskAssignmentModal(false)}
+      />
     </Layout>
   );
 };
@@ -192,6 +246,62 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F8F9FA',
+  },
+  safeArea: {
+    flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    backgroundColor: '#FFFFFF',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
+  },
+  userInfo: {
+    flex: 1,
+  },
+  userName: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#1A1A1A',
+    marginBottom: 2,
+  },
+  userEmail: {
+    fontSize: 14,
+    color: '#6B7280',
+  },
+  quickActions: {
+    flexDirection: 'row',
+    padding: 16,
+    gap: 12,
+  },
+  quickActionButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 16,
+    borderRadius: 12,
+    gap: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  announcementButton: {
+    backgroundColor: '#FF6B6B',
+  },
+  assignButton: {
+    backgroundColor: '#34C759',
+  },
+  quickActionText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
   welcomeSection: {
     padding: 24,
