@@ -8,10 +8,13 @@ import {
   Text,
   StyleSheet,
   ActivityIndicator,
+  TouchableOpacity,
+  Alert,
 } from 'react-native';
 import { Layout } from '@/components/common/Layout';
 import { SearchBar } from '@/components/common/SearchBar';
 import { ToolbarIcons } from '@/components/common/ToolbarIcons';
+import { Ionicons } from '@expo/vector-icons';
 import { FilterModal } from '@/components/common/FilterModal';
 import { ColumnSettingsModal } from '@/components/common/ColumnSettingsModal';
 import { FilterBadge, FilterCondition } from '@/components/common/FilterBadge';
@@ -53,6 +56,7 @@ export const PersonnelScreen: React.FC = () => {
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [showColumnSettings, setShowColumnSettings] = useState(false);
   const [activeFilters, setActiveFilters] = useState<FilterCondition[]>([]);
+  const [isEditMode, setIsEditMode] = useState(false);
   const { user: authStoreUser, mode, toggleMode } = useAuthStore();
   const { currentTeam } = useOrganization();
   
@@ -208,6 +212,34 @@ export const PersonnelScreen: React.FC = () => {
               onColumnsPress={() => setShowColumnSettings(true)}
               onModeToggle={toggleMode}
             />
+            {/* 編輯模式切換按鈕 */}
+            <TouchableOpacity
+              style={[
+                styles.iconButton,
+                isEditMode && styles.iconButtonActive,
+              ]}
+              onPress={() => {
+                if (!user) {
+                  Alert.alert('無權限', '您沒有編輯資料的權限');
+                  return;
+                }
+                // 切換編輯模式時關閉多選模式
+                if (!isEditMode) {
+                  setMultiSelectMode(false);
+                  setSelectedIds([]);
+                }
+                setIsEditMode(!isEditMode);
+              }}
+              activeOpacity={0.7}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              testID="edit-button"
+            >
+              <Ionicons
+                name={isEditMode ? 'create' : 'create-outline'}
+                size={20}
+                color={isEditMode ? "#1A1A1A" : "#6B6B6B"}
+              />
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -232,6 +264,7 @@ export const PersonnelScreen: React.FC = () => {
               selectedIds={selectedIds}
               onSelectionChange={setSelectedIds}
               activeFilters={activeFilters}
+              isEditMode={isEditMode}
             />
           ) : (
             <TreeView
@@ -316,5 +349,12 @@ const styles = StyleSheet.create({
   },
   contentArea: {
     flex: 1,
+  },
+  iconButton: {
+    padding: 8,
+    borderRadius: 6,
+  },
+  iconButtonActive: {
+    backgroundColor: 'rgba(255, 92, 0, 0.1)',
   },
 });

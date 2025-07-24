@@ -27,6 +27,7 @@ interface TableViewProps {
   selectedIds?: string[];
   onSelectionChange?: (ids: string[]) => void;
   activeFilters?: FilterCondition[];
+  isEditMode?: boolean;
 }
 
 export function TableView({ 
@@ -37,7 +38,8 @@ export function TableView({
   multiSelectMode = false,
   selectedIds: propSelectedIds = [],
   onSelectionChange,
-  activeFilters = []
+  activeFilters = [],
+  isEditMode = false
 }: TableViewProps) {
   const [internalSelectedIds, setInternalSelectedIds] = useState<string[]>([]);
   
