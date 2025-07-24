@@ -32,3 +32,7 @@ export interface ApiResponse<T> {
   error?: string;
   message?: string;
 }
+
+// 匯出其他類型定義
+export * from './personnel';
+export * from './organization';
