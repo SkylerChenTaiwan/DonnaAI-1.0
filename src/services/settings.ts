@@ -58,6 +58,11 @@ class SettingsServiceImpl implements ISettingsService {
         const auth = getFirebaseAuth();
         if (auth.currentUser && !this.syncInProgress) {
           this.syncWithFirebase().catch(error => {
+            // 如果是權限錯誤，靜默處理
+            if (error instanceof Error && error.message.includes('Missing or insufficient permissions')) {
+              console.log('Firebase 設定同步暫時無法使用，使用本地儲存');
+              return;
+            }
             console.error('背景同步失敗:', error);
           });
         }
@@ -109,6 +114,11 @@ class SettingsServiceImpl implements ISettingsService {
       const auth = getFirebaseAuth();
       if (auth.currentUser && !this.syncInProgress) {
         this.syncToFirebase(updatedSettings).catch(error => {
+          // 如果是權限錯誤，靜默處理
+          if (error instanceof Error && error.message.includes('Missing or insufficient permissions')) {
+            console.log('Firebase 設定同步暫時無法使用，使用本地儲存');
+            return;
+          }
           console.error('同步到 Firebase 失敗:', error);
         });
       }
@@ -156,6 +166,11 @@ class SettingsServiceImpl implements ISettingsService {
         lastSynced: data.lastSynced?.toDate() || new Date()
       } as UserSettings;
     } catch (error) {
+      // 如果是權限錯誤，靜默處理
+      if (error instanceof Error && error.message.includes('Missing or insufficient permissions')) {
+        console.log('Firebase 設定同步暫時無法使用，使用本地儲存');
+        return null;
+      }
       console.error('從 Firebase 載入設定失敗:', error);
       return null;
     }
@@ -205,6 +220,11 @@ class SettingsServiceImpl implements ISettingsService {
       
       await setDoc(settingsRef, dataToSave, { merge: true });
     } catch (error) {
+      // 如果是權限錯誤，靜默處理
+      if (error instanceof Error && error.message.includes('Missing or insufficient permissions')) {
+        console.log('Firebase 設定同步暫時無法使用，使用本地儲存');
+        return;
+      }
       console.error('同步到 Firebase 失敗:', error);
       throw error;
     } finally {
@@ -244,6 +264,11 @@ class SettingsServiceImpl implements ISettingsService {
         );
       }
     } catch (error) {
+      // 如果是權限錯誤，靜默處理（避免過多錯誤訊息）
+      if (error instanceof Error && error.message.includes('Missing or insufficient permissions')) {
+        console.log('Firebase 設定同步暫時無法使用，使用本地儲存');
+        return;
+      }
       console.error('同步失敗:', error);
       throw error;
     }

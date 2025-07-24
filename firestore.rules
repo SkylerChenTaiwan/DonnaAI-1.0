@@ -364,6 +364,34 @@ service cloud.firestore {
       allow delete: if isOwner(resource.data.createdBy) || isOrgAdmin();
     }
 
+    // ====== 使用者設定集合 ======
+    
+    match /organizations/{orgId}/settings/{userId} {
+      // 讀取：使用者只能讀取自己的設定
+      allow read: if isAuthenticated() && 
+                     isOrgMember(orgId) && 
+                     isOwner(userId);
+      
+      // 建立：使用者只能建立自己的設定
+      allow create: if isAuthenticated() && 
+                       isOrgMember(orgId) &&
+                       isOwner(userId) &&
+                       request.resource.data.userId == request.auth.uid &&
+                       request.resource.data.updatedAt != null;
+      
+      // 更新：使用者只能更新自己的設定
+      allow update: if isAuthenticated() && 
+                       isOrgMember(orgId) &&
+                       isOwner(userId) &&
+                       // 確保不能修改 userId
+                       request.resource.data.userId == resource.data.userId;
+      
+      // 刪除：使用者可以刪除自己的設定
+      allow delete: if isAuthenticated() && 
+                       isOrgMember(orgId) &&
+                       isOwner(userId);
+    }
+    
     // ====== 系統配置集合（僅管理員可存取）======
     
     match /systemConfig/{configId} {
