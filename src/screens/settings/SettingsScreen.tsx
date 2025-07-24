@@ -229,11 +229,6 @@ export const SettingsScreen: React.FC = () => {
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* 使用者資訊 */}
         <View style={styles.userInfo}>
-          <View style={styles.avatar}>
-            <Text style={styles.avatarText}>
-              {user?.name?.charAt(0).toUpperCase() || 'U'}
-            </Text>
-          </View>
           <View style={styles.userDetails}>
             <Text style={styles.userName}>{user?.name || '使用者'}</Text>
             <Text style={styles.userEmail}>{user?.email || ''}</Text>
@@ -269,27 +264,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
   },
   userInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
     backgroundColor: '#FFFFFF',
     padding: 20,
     marginBottom: 32,
     borderBottomWidth: 1,
     borderBottomColor: '#E5E5EA',
-  },
-  avatar: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: '#007AFF',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 16,
-  },
-  avatarText: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: '#FFFFFF',
   },
   userDetails: {
     flex: 1,
