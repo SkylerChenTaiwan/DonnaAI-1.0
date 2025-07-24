@@ -119,44 +119,49 @@ export const EditableCell: React.FC<EditableCellProps> = ({
 
   if (isEditing) {
     return (
-      <View style={styles.editingContainer}>
-        <TextInput
-          ref={inputRef}
-          style={[
-            styles.input,
-            inputType === 'multiline' && styles.multilineInput,
-            error && styles.inputError,
-          ]}
-          value={editValue}
-          onChangeText={setEditValue}
-          onSubmitEditing={handleSubmitEdit}
-          onBlur={handleSubmitEdit}
-          placeholder={placeholder}
-          keyboardType={getKeyboardType()}
-          multiline={inputType === 'multiline'}
-          maxLength={maxLength}
-          selectTextOnFocus
-          returnKeyType="done"
-        />
-        <View style={styles.editingButtons}>
+      <View style={styles.floatingEditContainer}>
+        {/* 放大的編輯框 */}
+        <View style={styles.expandedEditField}>
+          <TextInput
+            ref={inputRef}
+            style={[
+              styles.floatingInput,
+              inputType === 'multiline' && styles.multilineFloatingInput,
+              error && styles.inputError,
+            ]}
+            value={editValue}
+            onChangeText={setEditValue}
+            onSubmitEditing={handleSubmitEdit}
+            onBlur={handleSubmitEdit}
+            placeholder={placeholder}
+            keyboardType={getKeyboardType()}
+            multiline={inputType === 'multiline'}
+            maxLength={maxLength}
+            selectTextOnFocus
+            returnKeyType="done"
+          />
+          {error && (
+            <Text style={styles.errorText}>{error}</Text>
+          )}
+        </View>
+        
+        {/* 右側漂浮的操作按鈕 */}
+        <View style={styles.floatingActions}>
           <TouchableOpacity
-            style={styles.editingButton}
+            style={styles.actionButton}
             onPress={handleSubmitEdit}
             activeOpacity={0.7}
           >
-            <Ionicons name="checkmark" size={16} color="#28A745" />
+            <Ionicons name="checkmark" size={18} color="#28A745" />
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.editingButton}
+            style={styles.actionButton}
             onPress={handleCancelEdit}
             activeOpacity={0.7}
           >
-            <Ionicons name="close" size={16} color="#DC3545" />
+            <Ionicons name="close" size={18} color="#DC3545" />
           </TouchableOpacity>
         </View>
-        {error && (
-          <Text style={styles.errorText}>{error}</Text>
-        )}
       </View>
     );
   }
@@ -170,7 +175,7 @@ export const EditableCell: React.FC<EditableCellProps> = ({
       onPress={disabled ? onPress : onStartEdit}
       disabled={disabled}
       activeOpacity={disabled ? 1 : 0.7}
-      delayPressIn={disabled ? 0 : 200} // 長按才進入編輯模式，避免誤觸
+      delayPressIn={disabled ? 0 : 100} // 漂浮編輯框更直觀，減少延遲
     >
       <View style={styles.cellContent}>
         {render ? (
@@ -198,47 +203,58 @@ export const EditableCell: React.FC<EditableCellProps> = ({
 };
 
 const styles = StyleSheet.create({
-  editingContainer: {
-    position: 'relative',
-    minHeight: 40,
+  floatingEditContainer: {
+    position: 'absolute',
+    top: -8,
+    left: -8,
+    right: -60,
+    zIndex: 1000,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  input: {
+  expandedEditField: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
     borderWidth: 2,
     borderColor: '#007AFF',
-    borderRadius: 6,
-    paddingHorizontal: 8,
-    paddingVertical: 8,
-    fontSize: 16,
-    backgroundColor: '#FFFFFF',
-    color: '#1A1A1A',
-    minHeight: 40,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 4,
   },
-  multilineInput: {
+  floatingInput: {
+    fontSize: 16,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    minHeight: 44,
+    color: '#1A1A1A',
+  },
+  multilineFloatingInput: {
     minHeight: 80,
     textAlignVertical: 'top',
   },
   inputError: {
     borderColor: '#DC3545',
   },
-  editingButtons: {
-    position: 'absolute',
-    top: 4,
-    right: 4,
+  floatingActions: {
     flexDirection: 'row',
+    marginLeft: 8,
     gap: 4,
   },
-  editingButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderRadius: 12,
-    width: 24,
-    height: 24,
+  actionButton: {
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderRadius: 20,
+    width: 36,
+    height: 36,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
     shadowRadius: 2,
-    elevation: 2,
+    elevation: 3,
   },
   errorText: {
     fontSize: 12,

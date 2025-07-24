@@ -312,14 +312,16 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.white,
   },
   addButton: {
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    backgroundColor: '#FF5C00',
-    borderRadius: 8,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: DesignSystem.colors.background.elevated,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: DesignSystem.colors.border.default,
   },
   addButtonText: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#FFFFFF',
+    fontWeight: '500',
+    color: DesignSystem.colors.text.secondary,
   },
 });

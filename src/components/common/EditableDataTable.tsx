@@ -299,9 +299,6 @@ export const EditableDataTable: React.FC<EditableTableProps> = ({
             column.editable && styles.editableHeaderText
           ]}>
             {column.title}
-            {column.editable && !readOnly && (
-              <Text style={styles.editableIndicator}> ✏️</Text>
-            )}
           </Text>
           {column.sortable !== false && (
             <Ionicons
@@ -330,6 +327,8 @@ export const EditableDataTable: React.FC<EditableTableProps> = ({
         buttonText={addButtonText}
         style={styles.addButtonContainer}
         disabled={!onAddRow}
+        alignment="left"
+        showGuideIcon={true}
       />
     );
   };
@@ -593,9 +592,6 @@ const styles = StyleSheet.create({
   },
   editableHeaderText: {
     color: '#1A1A1A',
-  },
-  editableIndicator: {
-    fontSize: 12,
   },
   row: {
     flexDirection: 'row',

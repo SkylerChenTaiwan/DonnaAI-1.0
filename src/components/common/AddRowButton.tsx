@@ -20,6 +20,8 @@ interface AddRowButtonProps {
   style?: ViewStyle;
   buttonText?: string;
   disabled?: boolean;
+  alignment?: 'left' | 'center';
+  showGuideIcon?: boolean;
 }
 
 export const AddRowButton: React.FC<AddRowButtonProps> = ({
@@ -28,11 +30,17 @@ export const AddRowButton: React.FC<AddRowButtonProps> = ({
   style,
   buttonText = '新增記錄',
   disabled = false,
+  alignment = 'center',
+  showGuideIcon = false,
 }) => {
   if (!isVisible) return null;
 
   return (
-    <View style={[styles.container, style]}>
+    <View style={[
+      styles.container, 
+      alignment === 'left' && styles.leftAligned,
+      style
+    ]}>
       <TouchableOpacity
         style={[
           styles.addButton,
@@ -44,6 +52,13 @@ export const AddRowButton: React.FC<AddRowButtonProps> = ({
         testID="add-row-button"
       >
         <View style={styles.buttonContent}>
+          {showGuideIcon && alignment === 'left' && (
+            <Ionicons 
+              name="chevron-forward" 
+              size={16} 
+              color={disabled ? colors.textTertiary : colors.textSecondary} 
+            />
+          )}
           <Ionicons 
             name="add" 
             size={20} 
@@ -66,6 +81,9 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
     backgroundColor: colors.background,
+  },
+  leftAligned: {
+    alignItems: 'flex-start',
   },
   addButton: {
     backgroundColor: colors.orangeBackground,
