@@ -32,7 +32,7 @@
 | 26v  | manager-mode-implementation.md | ✅ 已完成 | 主管模式實作 - 模式切換UI、公告指派功能、人事管理、數據視覺化整合 | 2025-07-24 |
 | 27v  | smart-analytics-dialog-redesign.md | ✅ 已完成 | 智能分析對話框重設計 - 從導航欄延伸的對話式覆蓋層、簡化介面、快速保存功能 | 2025-07-24 |
 | 28v  | manager-ui-cleanup-and-reports.md | ✅ 已完成 | 主管模式UI清理和預設報表 - 單色灰階設計系統、報表為主要內容、6個預設報表模板 | 2025-07-24 |
-| 29   | ui-color-system-redesign.md | 📋 待執行 | UI 色彩系統重新設計 - 藍色按鈕系統、搜索按鈕設計、移除快速統計區塊 | - |
+| 29   | ui-color-system-redesign.md | 📋 待執行 | UI 灰階按鈕優化 - 調淺按鈕顏色、搜索按鈕設計、移除快速統計區塊 | - |
 
 ## 命名規則
 
