@@ -34,6 +34,23 @@ export type RootStackParamList = {
   // 設定相關頁面
   HelpSupport: undefined;
   PrivacyPolicy: undefined;
+  
+  // Super Admin 頁面
+  SuperAdminDashboard: undefined;
+  OrganizationsScreen: undefined;
+  CreateOrganizationScreen: undefined;
+  OrganizationDetailScreen: { organizationId: string };
+  PlatformDashboard: undefined;
+  
+  // Enterprise Admin 頁面
+  AdminDashboard: undefined;
+  UserManagementScreen: undefined;
+  ToolManagementScreen: undefined;
+  DataImportScreen: undefined;
+  UsageReportsScreen: undefined;
+  
+  // Admin 通用頁面
+  AdminSettings: undefined;
 };
 
 export type MainTabParamList = {

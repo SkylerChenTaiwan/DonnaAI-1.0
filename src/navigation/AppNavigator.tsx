@@ -28,6 +28,24 @@ import { HelpSupportScreen } from '@/screens/settings/HelpSupportScreen';
 import { PrivacyPolicyScreen } from '@/screens/settings/PrivacyPolicyScreen';
 import { environmentManager } from '@/config/environment';
 
+// Admin 頁面導入
+// Super Admin 頁面
+import { SuperAdminDashboard } from '@/screens/superadmin/SuperAdminDashboard';
+import { OrganizationsScreen } from '@/screens/superadmin/OrganizationsScreen';
+import { CreateOrganizationScreen } from '@/screens/superadmin/CreateOrganizationScreen';
+import { OrganizationDetailScreen } from '@/screens/superadmin/OrganizationDetailScreen';
+import { PlatformDashboard } from '@/screens/superadmin/PlatformDashboard';
+
+// Enterprise Admin 頁面
+import { AdminDashboard } from '@/screens/admin/AdminDashboard';
+import { UserManagementScreen } from '@/screens/admin/UserManagementScreen';
+import { ToolManagementScreen } from '@/screens/admin/ToolManagementScreen';
+import { DataImportScreen } from '@/screens/admin/DataImportScreen';
+import { UsageReportsScreen } from '@/screens/admin/UsageReportsScreen';
+
+// Admin 通用頁面
+import { AdminSettings } from '@/screens/admin/AdminSettings';
+
 const Stack = createStackNavigator<RootStackParamList>();
 
 export const AppNavigator = () => {
@@ -104,6 +122,123 @@ export const AppNavigator = () => {
               options={{ 
                 headerShown: true,
                 title: '隱私權政策',
+                headerTintColor: '#1A1A1A',
+                headerBackTitleVisible: false,
+              }}
+            />
+            
+            {/* Admin 頁面路由 */}
+            {/* Super Admin 頁面 */}
+            <Stack.Screen
+              name="SuperAdminDashboard"
+              component={SuperAdminDashboard}
+              options={{ 
+                headerShown: true,
+                title: 'Super Admin 控制台',
+                headerTintColor: '#1A1A1A',
+                headerBackTitleVisible: false,
+              }}
+            />
+            <Stack.Screen
+              name="OrganizationsScreen"
+              component={OrganizationsScreen}
+              options={{ 
+                headerShown: true,
+                title: '組織管理',
+                headerTintColor: '#1A1A1A',
+                headerBackTitleVisible: false,
+              }}
+            />
+            <Stack.Screen
+              name="CreateOrganizationScreen"
+              component={CreateOrganizationScreen}
+              options={{ 
+                headerShown: true,
+                title: '建立組織',
+                headerTintColor: '#1A1A1A',
+                headerBackTitleVisible: false,
+              }}
+            />
+            <Stack.Screen
+              name="OrganizationDetailScreen"
+              component={OrganizationDetailScreen}
+              options={{ 
+                headerShown: true,
+                title: '組織詳情',
+                headerTintColor: '#1A1A1A',
+                headerBackTitleVisible: false,
+              }}
+            />
+            <Stack.Screen
+              name="PlatformDashboard"
+              component={PlatformDashboard}
+              options={{ 
+                headerShown: true,
+                title: '平台統計',
+                headerTintColor: '#1A1A1A',
+                headerBackTitleVisible: false,
+              }}
+            />
+            
+            {/* Enterprise Admin 頁面 */}
+            <Stack.Screen
+              name="AdminDashboard"
+              component={AdminDashboard}
+              options={{ 
+                headerShown: true,
+                title: '管理中心',
+                headerTintColor: '#1A1A1A',
+                headerBackTitleVisible: false,
+              }}
+            />
+            <Stack.Screen
+              name="UserManagementScreen"
+              component={UserManagementScreen}
+              options={{ 
+                headerShown: true,
+                title: '用戶管理',
+                headerTintColor: '#1A1A1A',
+                headerBackTitleVisible: false,
+              }}
+            />
+            <Stack.Screen
+              name="ToolManagementScreen"
+              component={ToolManagementScreen}
+              options={{ 
+                headerShown: true,
+                title: '工具管理',
+                headerTintColor: '#1A1A1A',
+                headerBackTitleVisible: false,
+              }}
+            />
+            <Stack.Screen
+              name="DataImportScreen"
+              component={DataImportScreen}
+              options={{ 
+                headerShown: true,
+                title: '資料匯入',
+                headerTintColor: '#1A1A1A',
+                headerBackTitleVisible: false,
+              }}
+            />
+            <Stack.Screen
+              name="UsageReportsScreen"
+              component={UsageReportsScreen}
+              options={{ 
+                headerShown: true,
+                title: '使用報表',
+                headerTintColor: '#1A1A1A',
+                headerBackTitleVisible: false,
+              }}
+            />
+            
+            {/* Admin 通用頁面 */}
+            <Stack.Screen
+              name="AdminSettings"
+              component={AdminSettings}
+              options={{ 
+                headerShown: true,
+                title: '管理員設定',
                 headerTintColor: '#1A1A1A',
                 headerBackTitleVisible: false,
               }}

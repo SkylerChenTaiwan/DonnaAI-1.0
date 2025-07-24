@@ -18,6 +18,13 @@ service cloud.firestore {
       return request.auth.uid == userId;
     }
     
+    // 檢查使用者是否為平台管理員（Super Admin）
+    function isSuperAdmin() {
+      return isAuthenticated() && 
+             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin';
+    }
+    
     // 檢查使用者是否為組織管理員
     function isOrgAdmin() {
       return isAuthenticated() && 
@@ -30,6 +37,21 @@ service cloud.firestore {
       return isAuthenticated() && 
              exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
              get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['manager', 'admin'];
+    }
+    
+    // 檢查使用者是否為企業管理員（包含組織管理員）
+    function isEnterpriseAdmin() {
+      return isOrgAdmin() || isSuperAdmin();
+    }
+    
+    // 取得使用者的組織 ID
+    function getUserOrgId() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.organizationId;
+    }
+    
+    // 檢查是否正在修改角色
+    function isChangingRole(data) {
+      return 'role' in data && data.role != resource.data.role;
     }
     
     // 檢查使用者是否屬於指定團隊
@@ -414,6 +436,108 @@ service cloud.firestore {
     match /meetings/{meetingId} {
       allow read: if isTeamMember(resource.data.teamId);
       allow write: if false; // 停用寫入，引導使用新的 records 集合
+    }
+    
+    // ====== Admin 管理系統集合 ======
+    
+    // 企業配置集合
+    match /enterprise_configs/{configId} {
+      // 讀取：Super Admin 或該組織的管理員可以讀取
+      allow read: if isSuperAdmin() || 
+                     (isEnterpriseAdmin() && resource.data.organizationId == getUserOrgId());
+      
+      // 寫入：只有 Super Admin 可以寫入
+      allow create, update, delete: if isSuperAdmin();
+    }
+    
+    // 使用統計集合
+    match /usage_metrics/{orgId}/{period}/{date} {
+      // 讀取：Super Admin 或該組織的管理員可以讀取
+      allow read: if isSuperAdmin() || 
+                     (isEnterpriseAdmin() && orgId == getUserOrgId());
+      
+      // 寫入：只允許系統寫入（通過 Cloud Functions）
+      allow write: if false;
+    }
+    
+    // 平台管理員集合
+    match /platform_admins/{adminId} {
+      // 只有 Super Admin 可以讀寫
+      allow read, write: if isSuperAdmin();
+    }
+    
+    // 資料匯入任務集合
+    match /import_jobs/{jobId} {
+      // 讀取：Super Admin 或該組織的管理員可以讀取
+      allow read: if isSuperAdmin() || 
+                     (isEnterpriseAdmin() && resource.data.organizationId == getUserOrgId());
+      
+      // 建立：企業管理員可以建立匯入任務
+      allow create: if isEnterpriseAdmin() &&
+                       request.resource.data.organizationId == getUserOrgId() &&
+                       request.resource.data.createdBy == request.auth.uid &&
+                       request.resource.data.status == 'pending';
+      
+      // 更新：只能更新狀態和進度
+      allow update: if isSuperAdmin() || 
+                       (isEnterpriseAdmin() && 
+                        resource.data.organizationId == getUserOrgId() &&
+                        request.resource.data.diff(resource.data).affectedKeys()
+                          .hasOnly(['status', 'progress', 'result', 'completedAt']));
+      
+      // 刪除：只有 Super Admin 可以刪除
+      allow delete: if isSuperAdmin();
+    }
+    
+    // 組織集合更新（允許 Super Admin 完全控制）
+    match /organizations/{orgId} {
+      // Super Admin 可以讀取所有組織
+      allow read: if isSuperAdmin() || isOrgMember(orgId);
+      
+      // Super Admin 可以建立、更新、刪除任何組織
+      allow create: if isSuperAdmin() || 
+                       (isAuthenticated() &&
+                        isValidString(request.resource.data.name, 200) &&
+                        request.resource.data.createdBy == request.auth.uid &&
+                        request.resource.data.createdAt == request.time);
+      
+      allow update: if isSuperAdmin() || 
+                       (isOrgAdmin() && isOrgMember(orgId));
+      
+      allow delete: if isSuperAdmin();
+    }
+    
+    // 使用者集合更新（允許 Super Admin 和 Enterprise Admin 管理用戶）
+    match /users/{userId} {
+      // Super Admin 可以讀取所有用戶
+      allow read: if isSuperAdmin() ||
+                     isOwner(userId) || 
+                     (isAuthenticated() && isOrgMember(resource.data.organizationId));
+      
+      // 建立用戶的權限
+      allow create: if isSuperAdmin() ||
+                       (isOwner(userId) &&
+                        isValidEmail(request.resource.data.email) &&
+                        isValidString(request.resource.data.name, 100) &&
+                        request.resource.data.organizationId is string &&
+                        request.resource.data.createdAt == request.time &&
+                        request.resource.data.updatedAt == request.time) ||
+                       (isEnterpriseAdmin() && 
+                        request.resource.data.organizationId == getUserOrgId());
+      
+      // 更新用戶的權限
+      allow update: if isSuperAdmin() ||
+                       (isOwner(userId) && 
+                        request.resource.data.email == resource.data.email &&
+                        request.resource.data.organizationId == resource.data.organizationId &&
+                        !isChangingRole(request.resource.data)) ||
+                       (isEnterpriseAdmin() && 
+                        isOrgMember(resource.data.organizationId) &&
+                        request.resource.data.organizationId == resource.data.organizationId);
+      
+      // 刪除用戶的權限
+      allow delete: if isSuperAdmin() ||
+                       (isEnterpriseAdmin() && isOrgMember(resource.data.organizationId));
     }
   }
 }
