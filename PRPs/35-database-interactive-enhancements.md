@@ -1,20 +1,24 @@
 # PRP-35: 資料庫互動功能增強
 
 ## Goal
-實現資料庫和人事管理頁面的完整互動功能，包括編輯狀態視覺回饋、動態表單生成、權限檢查和使用者建立功能，提升整體使用體驗和功能完整性。
+實現資料庫和人事管理頁面的完整互動功能，包括編輯狀態視覺回饋、即時儲存機制、動態表單生成、權限檢查和使用者建立功能，同時修正編輯模式的視覺問題，提升整體使用體驗和功能完整性。
 
 ## Why
 - **功能完整性問題**: 現有按鈕缺乏實際功能，影響使用者體驗
 - **視覺回饋不足**: 編輯狀態缺乏明確的視覺指示
 - **權限管理需求**: 確保只有授權使用者能執行敏感操作
 - **工作流程中斷**: 使用者無法完成新增記錄和管理下屬的基本任務
+- **儲存流程冗餘**: 批次儲存模式需要額外步驟，影響編輯效率
+- **編輯視覺問題**: 編輯模式會改變儲存格寬度，造成佈局跳動
 
 ## What
-實現四個核心功能增強：
+實現六個核心功能增強：
 1. 編輯按鈕互動時顯示橘色背景，提供清晰的視覺回饋
 2. 優化新增記錄按鈕尺寸，並實現動態表單生成功能
 3. 實現人事頁面新增下屬功能，包含權限檢查和使用者建立流程
 4. 統一所有資料庫頁面的互動體驗
+5. 改為即時儲存模式，編輯完成後立即儲存，移除批次儲存按鈕
+6. 修正編輯模式儲存格寬度變化問題，保持表格佈局穩定
 
 ### Success Criteria
 - [ ] 所有資料庫的編輯按鈕在按下時顯示橘色背景
@@ -24,6 +28,8 @@
 - [ ] 權限檢查：無權限使用者看到適當的錯誤提示
 - [ ] 所有表單支援驗證、儲存和錯誤處理
 - [ ] 新建記錄成功後自動重新整理列表
+- [ ] 編輯儲存格後按下確認（✓）立即儲存，無需額外點擊儲存按鈕
+- [ ] 編輯模式不改變儲存格寬度，表格佈局保持穩定
 
 ## All Needed Context
 
@@ -37,7 +43,10 @@
   why: 需要調整高度並加入點擊功能
 
 - file: /Users/skyler/coding/DonnaAI-1.0/src/components/common/EditableDataTable.tsx
-  why: 表格欄位定義，用於動態表單生成
+  why: 表格欄位定義，用於動態表單生成，包含儲存模式設定
+
+- file: /Users/skyler/coding/DonnaAI-1.0/src/screens/database/DatabaseScreen.tsx
+  why: 資料庫頁面實現，需要切換儲存模式從batch到realtime
 
 - file: /Users/skyler/coding/DonnaAI-1.0/src/screens/personnel/TableView.tsx
   why: 人事頁面「新增下屬」按鈕實現
@@ -95,6 +104,30 @@ const customerColumns: TableColumn[] = [
 <TouchableOpacity style={styles.addButton} onPress={() => {
   console.log('新增下屬功能暫未實現');  // 僅有 console.log
 }}>
+
+// 問題 5: 批次儲存模式需要額外步驟
+// 位置: DatabaseScreen.tsx line 800
+saveMode="batch"  // 使用批次儲存，產生額外的儲存按鈕步驟
+// EditableDataTable.tsx line 427-452
+{saveMode === 'batch' && showSaveButton && pendingChanges.size > 0 && (
+  <View style={styles.saveBar}>  // 黃色儲存提示條
+    <Text>1 個未儲存的變更</Text>
+    <TouchableOpacity onPress={handleBatchSave}>
+      <Text>儲存</Text>
+    </TouchableOpacity>
+  </View>
+)}
+
+// 問題 6: 編輯模式改變儲存格寬度
+// 位置: EditableCell.tsx line 206-213
+floatingEditContainer: {
+  position: 'absolute',
+  top: -8,
+  left: -8,
+  right: -60,  // 預留操作按鈕空間，影響寬度
+  zIndex: 1000,
+  // 絕對定位脫離文檔流，造成佈局跳動
+}
 ```
 
 ### Desired Codebase Changes
@@ -131,6 +164,16 @@ src/utils/formGenerator.ts                  # 新建：表格轉表單工具
 
 // GOTCHA: AddRowButton 支援 left/center alignment
 // 高度調整不能破壞現有的對齊邏輯
+
+// CRITICAL: 儲存模式切換需要考慮現有邏輯
+// 位置: EditableDataTable - saveMode prop 影響多個元件行為
+// 批次模式: 顯示儲存條、累積變更、批次提交
+// 即時模式: 每次編輯後立即儲存、顯示小型儲存指示器
+
+// GOTCHA: 漂浮編輯框的絕對定位問題
+// 使用 position: 'absolute' 會脫離文檔流
+// right: -60 會影響父容器的計算寬度
+// 需要確保編輯框不影響表格佈局
 ```
 
 ## Implementation Blueprint
@@ -187,14 +230,29 @@ Task 2 - 調整新增記錄按鈕高度:
     - ENSURE paddingVertical 相應調整保持視覺平衡
     - PRESERVE 所有現有的 alignment 和 showGuideIcon 功能
 
-Task 3 - 建立表格轉表單工具:
+Task 3 - 切換至即時儲存模式:
+  MODIFY src/screens/database/DatabaseScreen.tsx:
+    - FIND saveMode="batch" 在 line 800
+    - CHANGE 從 "batch" 到 "realtime"
+    - ENSURE 所有三個 EditableDataTable 使用即時儲存
+    - VERIFY onSave 回調正確處理即時儲存
+
+Task 4 - 修正編輯模式儲存格寬度問題:
+  MODIFY src/components/common/EditableCell.tsx:
+    - MODIFY floatingEditContainer 樣式
+    - REMOVE right: -60 避免影響父容器寬度
+    - ADJUST 漂浮編輯框定位策略
+    - ENSURE 操作按鈕仍然可見且不被遮擋
+    - PRESERVE 現有的視覺層次和 z-index
+
+Task 5 - 建立表格轉表單工具:
   CREATE src/utils/formGenerator.ts:
     - IMPLEMENT columnToFormField 轉換函數
     - SUPPORT 常見欄位類型映射 (name->text, email->email, date->date)
     - INCLUDE 預設驗證規則 (email格式, 必填欄位)
     - HANDLE 特殊欄位類型 (select, textarea)
 
-Task 4 - 建立動態新增記錄Modal:
+Task 6 - 建立動態新增記錄Modal:
   CREATE src/components/database/AddRecordModal.tsx:
     - MIRROR 模式來自 CreateTaskModal.tsx
     - USE React Navigation modal 模式
@@ -202,7 +260,7 @@ Task 4 - 建立動態新增記錄Modal:
     - IMPLEMENT 表單驗證和提交邏輯
     - HANDLE 載入狀態和錯誤提示
 
-Task 5 - 建立新增使用者Modal:
+Task 7 - 建立新增使用者Modal:
   CREATE src/components/personnel/AddUserModal.tsx:
     - MIRROR 模式來自 AddRecordModal.tsx
     - INCLUDE 使用者特定欄位 (email, name, role)
@@ -210,14 +268,14 @@ Task 5 - 建立新增使用者Modal:
     - IMPLEMENT Firebase Auth 和 Firestore 建立流程
     - HANDLE 權限錯誤和建立失敗情況
 
-Task 6 - 整合資料庫頁面新增功能:
+Task 8 - 整合資料庫頁面新增功能:
   MODIFY src/screens/database/DatabaseScreen.tsx:
     - ADD AddRecordModal 狀態管理
     - IMPLEMENT onAddRow 回調函數  
     - CONNECT 表格欄位定義到 Modal
     - ENSURE 新增成功後重新整理列表
 
-Task 7 - 整合人事頁面新增下屬功能:
+Task 9 - 整合人事頁面新增下屬功能:
   MODIFY src/screens/personnel/TableView.tsx:
     - REPLACE console.log 在 addButton onPress
     - ADD AddUserModal 狀態管理
@@ -225,11 +283,12 @@ Task 7 - 整合人事頁面新增下屬功能:
     - SHOW 權限錯誤Alert或Modal狀態
     - HANDLE 新增成功後重新整理團隊列表
 
-Task 8 - 更新 EditableDataTable 整合:
+Task 10 - 更新 EditableDataTable 整合:
   MODIFY src/components/common/EditableDataTable.tsx:
     - CONNECT AddRowButton onPress 到父元件回調
     - ENSURE 所有使用 EditableDataTable 的地方支援新增功能
     - MAINTAIN 向後相容性與現有 API
+    - REMOVE 批次儲存相關的UI元素（儲存條）
 ```
 
 ### Per Task Implementation Details
@@ -260,7 +319,37 @@ const styles = StyleSheet.create({
   },
 });
 
-// Task 3 - 表格轉表單工具
+// Task 3 - 切換至即時儲存模式
+// DatabaseScreen.tsx
+<EditableDataTable
+  data={filteredData}
+  columns={columns}
+  onSave={handleSave}
+  saveMode="realtime"  // 改為即時儲存
+  showSaveButton={false}  // 不顯示儲存按鈕
+  // ... 其他 props
+/>
+
+// Task 4 - 修正編輯模式寬度問題
+const styles = StyleSheet.create({
+  floatingEditContainer: {
+    position: 'absolute',
+    top: -8,
+    left: -8,
+    width: '100%',  // 使用固定寬度而非 right: -60
+    zIndex: 1000,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  floatingActions: {
+    position: 'absolute',
+    right: -50,  // 將按鈕定位在編輯框外部
+    flexDirection: 'row',
+    gap: 4,
+  },
+});
+
+// Task 5 - 表格轉表單工具
 export const columnToFormField = (column: TableColumn): FormFieldConfig => {
   const fieldType = inferFieldType(column.key, column.title);
   return {
@@ -273,7 +362,7 @@ export const columnToFormField = (column: TableColumn): FormFieldConfig => {
   };
 };
 
-// Task 4 - Modal 實現模式
+// Task 6 - Modal 實現模式
 const AddRecordModal = ({ tableType, columns, onSubmit }) => {
   const formFields = useMemo(() => 
     columns.map(columnToFormField), [columns]
@@ -369,6 +458,9 @@ npm run test                   # 確保沒有破壞現有功能
 - [ ] 錯誤處理完善，網路問題或驗證錯誤都有適當回饋
 - [ ] 無障礙性符合標準，觸控目標足夠大
 - [ ] 不破壞現有功能和API相容性
+- [ ] 編輯完成後按下✓立即儲存，不再顯示批次儲存條
+- [ ] 編輯模式不改變儲存格寬度，表格佈局保持穩定
+- [ ] 即時儲存模式正常運作，顯示小型儲存指示器
 
 ---
 
@@ -379,6 +471,9 @@ npm run test                   # 確保沒有破壞現有功能
 - ❌ 不要忽略載入和錯誤狀態 - 使用者需要清楚的回饋
 - ❌ 不要破壞現有的EditableCell漂浮編輯框 - 橘色狀態不能影響定位
 - ❌ 不要讓按鈕高度調整影響觸控目標 - 確保仍符合無障礙標準
+- ❌ 不要保留批次儲存相關的UI元素 - 即時儲存不需要儲存條
+- ❌ 不要使用會影響父容器的絕對定位 - 使用固定寬度而非負值right
+- ❌ 不要忽略即時儲存的錯誤處理 - 網路失敗時需要適當回饋
 
-## Quality Score: 8/10
-**信心等級**: 高度信心。所有必要的模式和服務都已存在於專案中，主要是整合和擴展現有功能。最大挑戰是動態表單生成的正確實現和權限系統的整合，但都有清楚的實現路徑和參考範例。
+## Quality Score: 9/10
+**信心等級**: 極高信心。所有必要的模式和服務都已存在於專案中，主要是整合和擴展現有功能。儲存模式切換和寬度修正都是簡單的配置更改。最大挑戰是動態表單生成的正確實現和權限系統的整合，但都有清楚的實現路徑和參考範例。新增的即時儲存和寬度修正使整體實現更加簡潔高效。
