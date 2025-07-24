@@ -69,8 +69,16 @@ export const PersonnelScreen: React.FC = () => {
       // 獲取用戶權限上下文
       const permissionContext = await getUserPermissionContext(user.uid);
       
-      // 查詢團隊成員 - 加入組織過濾以符合 Security Rules
+      // 查詢團隊成員
       const db = getFirebaseDb();
+      
+      // 先確保用戶有組織ID
+      if (!user.organizationId) {
+        console.error('用戶缺少組織ID');
+        setLoading(false);
+        return;
+      }
+      
       const usersRef = collection(db, 'users');
       const q = query(
         usersRef,
