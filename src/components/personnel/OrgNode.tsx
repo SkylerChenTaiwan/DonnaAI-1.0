@@ -10,7 +10,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { OrgNode } from '@/types/organization';
+import { OrgNode, DragDropEvent } from '@/types/organization';
 import { StatusIndicator } from './StatusIndicator';
 import { PermissionBadge } from './PermissionBadge';
 import { DragDropHandler } from './DragDropHandler';
@@ -22,7 +22,7 @@ interface OrgNodeComponentProps {
   onExpand?: () => void;
   draggable?: boolean;
   onDragStart?: (node: OrgNode) => void;
-  onDrop?: (sourceNode: OrgNode, targetNode: OrgNode) => void;
+  onDrop?: (event: DragDropEvent) => void;
 }
 
 export function OrgNodeComponent({ 

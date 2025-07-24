@@ -27,7 +27,7 @@ interface DragDropHandlerProps {
   node: OrgNode;
   onDragStart?: (node: OrgNode) => void;
   onDragEnd?: (event: DragDropEvent) => void;
-  onDrop?: (sourceNode: OrgNode, targetNode: OrgNode) => void;
+  onDrop?: (event: DragDropEvent) => void;
   enabled?: boolean;
 }
 
@@ -84,8 +84,11 @@ export function DragDropHandler({
     })
     .onEnd((event) => {
       const dropEvent: DragDropEvent = {
-        sourceNode: node,
-        targetNode: null, // TODO: 需要實作碰撞檢測
+        source: {
+          nodeId: node.id,
+          position: node.position || { x: 0, y: 0 },
+        },
+        target: null, // TODO: 需要實作碰撞檢測
         position: {
           x: event.absoluteX,
           y: event.absoluteY,
@@ -156,11 +159,9 @@ export function DragDropProvider({ children }: { children: React.ReactNode }) {
 
 // 放置目標指示器
 export function DropTarget({
-  node,
   isActive,
   children,
 }: {
-  node: OrgNode;
   isActive: boolean;
   children: React.ReactNode;
 }) {

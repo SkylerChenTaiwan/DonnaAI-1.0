@@ -11,7 +11,7 @@ import {
   Dimensions,
 } from 'react-native';
 import Svg, { Line, G } from 'react-native-svg';
-import { OrgNode } from '@/types/organization';
+import { OrgNode, DragDropEvent } from '@/types/organization';
 import { TeamMember } from '@/screens/personnel/PersonnelScreen';
 import { OrgNodeComponent } from './OrgNode';
 import { DragDropProvider } from './DragDropHandler';
@@ -43,8 +43,8 @@ export function OrgChart({
   };
   
   // 處理放置
-  const handleDrop = (sourceNode: OrgNode, targetNode: OrgNode) => {
-    console.log('放置節點:', sourceNode.user.name, '->', targetNode.user.name);
+  const handleDrop = (event: DragDropEvent) => {
+    console.log('放置事件:', event);
     // TODO: 實作組織結構更新邏輯
   };
   // 構建組織樹結構
