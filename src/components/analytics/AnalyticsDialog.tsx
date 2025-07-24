@@ -18,6 +18,8 @@ import { useQueryStore, useCurrentChart } from '../../stores/queryStore';
 import { saveReport } from '../../services/firebase/managerActions';
 import { useAuthStore } from '../../stores/authStore';
 import { toast } from '../../utils/toast';
+import { colors } from '../../theme/colors';
+import { DesignSystem } from '../../theme/designSystem';
 
 interface AnalyticsDialogProps {
   visible: boolean;
@@ -205,42 +207,35 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#000',
+    backgroundColor: colors.text, // 使用深灰黑色
   },
   dialog: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: 'white',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: -3,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 20,
+    backgroundColor: colors.background,
+    borderTopLeftRadius: DesignSystem.borderRadius.lg,
+    borderTopRightRadius: DesignSystem.borderRadius.lg,
+    ...DesignSystem.shadows.lg,
   },
   handleContainer: {
     alignItems: 'center',
-    paddingTop: 12,
-    paddingBottom: 8,
+    paddingTop: DesignSystem.spacing.sm,
+    paddingBottom: DesignSystem.spacing.sm,
   },
   handle: {
     width: 40,
     height: 4,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: colors.border,
     borderRadius: 2,
   },
   content: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: DesignSystem.spacing.lg,
   },
   chartContainer: {
-    marginTop: 16,
+    marginTop: DesignSystem.spacing.md,
     marginBottom: 80, // 為保存按鈕留空間
   },
 });

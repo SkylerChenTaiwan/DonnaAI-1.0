@@ -57,6 +57,11 @@ export interface SavedReport {
   teamId?: string;
   organizationId: string;
   tags?: string[];
+  isDefault?: boolean;     // 是否為預設報表
+  isEditable?: boolean;    // 是否可編輯/刪除
+  description?: string;    // 報表描述
+  updatedAt?: Timestamp;   // 更新時間
+  userId?: string;         // 報表擁有者 ID
 }
 
 /**

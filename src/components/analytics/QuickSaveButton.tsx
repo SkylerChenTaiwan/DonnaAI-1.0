@@ -11,6 +11,8 @@ import {
   Switch,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '../../theme/colors';
+import { DesignSystem } from '../../theme/designSystem';
 
 interface QuickSaveButtonProps {
   onSave: (name: string, isPublic: boolean) => Promise<void>;
@@ -101,8 +103,8 @@ export default function QuickSaveButton({ onSave }: QuickSaveButtonProps) {
                 value={isPublic}
                 onValueChange={setIsPublic}
                 disabled={isSaving}
-                trackColor={{ false: '#E0E0E0', true: '#81C784' }}
-                thumbColor={isPublic ? '#4CAF50' : '#F5F5F5'}
+                trackColor={{ false: colors.border, true: colors.success }}
+                thumbColor={isPublic ? colors.success : colors.backgroundSecondary}
               />
             </View>
             
@@ -143,73 +145,64 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     right: 20,
-    backgroundColor: '#007AFF',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 25,
+    backgroundColor: colors.primary,
+    paddingHorizontal: DesignSystem.spacing.lg,
+    paddingVertical: DesignSystem.spacing.sm,
+    borderRadius: DesignSystem.borderRadius.full,
     flexDirection: 'row',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    ...DesignSystem.shadows.md,
   },
   floatingButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-    marginLeft: 6,
+    color: colors.background,
+    ...DesignSystem.typography.button,
+    marginLeft: DesignSystem.spacing.xs,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(26, 26, 26, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   dialogContainer: {
-    backgroundColor: 'white',
-    borderRadius: 16,
-    padding: 24,
+    backgroundColor: colors.background,
+    borderRadius: DesignSystem.borderRadius.lg,
+    padding: DesignSystem.spacing.lg,
     width: '85%',
     maxWidth: 400,
   },
   dialogTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 20,
+    ...DesignSystem.typography.h4,
+    color: colors.text,
+    marginBottom: DesignSystem.spacing.lg,
     textAlign: 'center',
   },
   inputContainer: {
-    marginBottom: 16,
+    marginBottom: DesignSystem.spacing.md,
   },
   label: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 8,
+    ...DesignSystem.typography.bodySmall,
+    color: colors.textSecondary,
+    marginBottom: DesignSystem.spacing.sm,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#E0E0E0',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    color: '#333',
+    borderColor: colors.border,
+    borderRadius: DesignSystem.borderRadius.sm,
+    padding: DesignSystem.spacing.sm,
+    ...DesignSystem.typography.body,
+    color: colors.text,
   },
   publicContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: DesignSystem.spacing.sm,
   },
   hint: {
-    fontSize: 12,
-    color: '#999',
-    marginBottom: 20,
+    ...DesignSystem.typography.caption,
+    color: colors.textTertiary,
+    marginBottom: DesignSystem.spacing.lg,
   },
   buttonRow: {
     flexDirection: 'row',
@@ -217,29 +210,27 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    paddingVertical: 12,
-    borderRadius: 8,
+    paddingVertical: DesignSystem.spacing.sm,
+    borderRadius: DesignSystem.borderRadius.sm,
     alignItems: 'center',
   },
   cancelButton: {
-    backgroundColor: '#F5F5F5',
-    marginRight: 8,
+    backgroundColor: colors.backgroundSecondary,
+    marginRight: DesignSystem.spacing.sm,
   },
   saveButton: {
-    backgroundColor: '#007AFF',
-    marginLeft: 8,
+    backgroundColor: colors.primary,
+    marginLeft: DesignSystem.spacing.sm,
   },
   disabledButton: {
     opacity: 0.6,
   },
   cancelButtonText: {
-    color: '#666',
-    fontSize: 16,
-    fontWeight: '500',
+    color: colors.textSecondary,
+    ...DesignSystem.typography.button,
   },
   saveButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
+    color: colors.background,
+    ...DesignSystem.typography.button,
   },
 });

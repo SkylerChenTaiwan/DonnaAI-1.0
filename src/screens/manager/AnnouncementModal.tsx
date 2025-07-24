@@ -21,6 +21,8 @@ import { createAnnouncement } from '@/services/firebase/managerActions';
 import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
 import { showToast } from '@/utils/toast';
+import { colors } from '@/theme/colors';
+import { DesignSystem } from '@/theme/designSystem';
 
 interface AnnouncementModalProps {
   visible: boolean;
@@ -115,9 +117,9 @@ export const AnnouncementModal: React.FC<AnnouncementModalProps> = ({
   };
 
   const priorityOptions = [
-    { value: 'high', label: '高', color: '#FF3B30' },
-    { value: 'normal', label: '中', color: '#FF9500' },
-    { value: 'low', label: '低', color: '#34C759' },
+    { value: 'high', label: '高', color: colors.error },
+    { value: 'normal', label: '中', color: colors.warning },
+    { value: 'low', label: '低', color: colors.success },
   ];
 
   return (
@@ -367,7 +369,7 @@ const styles = StyleSheet.create({
     color: '#666666',
   },
   submitButton: {
-    backgroundColor: '#FF6B6B',
+    backgroundColor: colors.primary,
   },
   submitButtonText: {
     fontSize: 16,

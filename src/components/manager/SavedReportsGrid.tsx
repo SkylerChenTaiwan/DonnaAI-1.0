@@ -1,5 +1,6 @@
 /**
  * 保存的報表網格組件
+ * 支援預設報表顯示和單色灰階設計系統
  */
 
 import React, { useState, useEffect } from 'react';
@@ -15,30 +16,80 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
-import { getSavedReports, SavedReport } from '@/services/firebase/managerActions';
+import { getSavedReports, SavedReport, saveReport } from '@/services/firebase/managerActions';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@/types/navigation';
 import { showToast } from '@/utils/toast';
+import { colors } from '@/theme/colors';
+import { DesignSystem } from '@/theme/designSystem';
+import {
+  defaultReportTemplates,
+  createDefaultReport,
+  hasDefaultReports,
+} from '@/services/reports/defaultReports';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 interface SavedReportsGridProps {
   limit?: number;
   onReportPress?: (report: SavedReport) => void;
+  fullScreen?: boolean;
+  showDefault?: boolean;
 }
 
 export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
   limit = 6,
   onReportPress,
+  fullScreen = false,
+  showDefault = true,
 }) => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [reports, setReports] = useState<SavedReport[]>([]);
+  const [initializingDefaults, setInitializingDefaults] = useState(false);
   
   const { user } = useAuth();
-  const { currentTeam } = useOrganization();
+  const { currentTeam, organization } = useOrganization();
   const navigation = useNavigation<NavigationProp>();
+
+  // 初始化預設報表
+  const initializeDefaultReports = async () => {
+    if (!user || !organization) return;
+    
+    setInitializingDefaults(true);
+    try {
+      // 創建所有預設報表
+      const promises = defaultReportTemplates.map(async (template) => {
+        const reportData = createDefaultReport(
+          template,
+          organization.id,
+          currentTeam?.id
+        );
+        
+        return saveReport(
+          {
+            ...reportData,
+            createdByName: 'DonnaAI 系統',
+            userId: user.uid,
+          },
+          user.uid,
+          'DonnaAI 系統'
+        );
+      });
+      
+      await Promise.all(promises);
+      showToast('success', '已載入預設報表');
+      
+      // 重新獲取報表
+      await fetchReports();
+    } catch (error) {
+      console.error('初始化預設報表失敗:', error);
+      showToast('error', '無法創建預設報表');
+    } finally {
+      setInitializingDefaults(false);
+    }
+  };
 
   // 獲取保存的報表
   const fetchReports = async () => {
@@ -47,14 +98,25 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
     try {
       const savedReports = await getSavedReports(user.uid, {
         teamId: currentTeam?.id,
-        limit,
+        limit: fullScreen ? undefined : limit,
       });
       
-      setReports(savedReports);
+      // 檢查是否需要初始化預設報表
+      if (showDefault && savedReports.length === 0 && !hasDefaultReports(savedReports)) {
+        // 不等待初始化完成，先顯示空狀態
+        setReports([]);
+        setLoading(false);
+        setRefreshing(false);
+        // 背景初始化預設報表
+        initializeDefaultReports();
+      } else {
+        setReports(savedReports);
+        setLoading(false);
+        setRefreshing(false);
+      }
     } catch (error) {
       console.error('獲取報表失敗:', error);
       showToast('error', '無法載入報表');
-    } finally {
       setLoading(false);
       setRefreshing(false);
     }
@@ -100,35 +162,30 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
     }
   };
 
-  // 獲取圖表類型顏色
-  const getChartColor = (chartType: string): string => {
-    switch (chartType) {
-      case 'bar':
-        return '#007AFF';
-      case 'line':
-        return '#34C759';
-      case 'pie':
-        return '#FF9500';
-      case 'scatter':
-        return '#AF52DE';
-      default:
-        return '#5856D6';
+  // 獲取圖表類型顏色 - 使用灰階系統
+  const getChartColor = (chartType: string, isDefault?: boolean): string => {
+    // 預設報表使用較淺的灰色
+    if (isDefault) {
+      return colors.gray[600];
     }
+    
+    // 用戶報表使用深灰黑
+    return colors.primary;
   };
 
-  if (loading) {
+  if (loading && !initializingDefaults) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#FF6B6B" />
+      <View style={[styles.loadingContainer, fullScreen && styles.fullScreenContainer]}>
+        <ActivityIndicator size="large" color={colors.primary} />
         <Text style={styles.loadingText}>載入報表...</Text>
       </View>
     );
   }
 
-  if (reports.length === 0) {
+  if (reports.length === 0 && !initializingDefaults) {
     return (
-      <View style={styles.emptyContainer}>
-        <Ionicons name="bar-chart-outline" size={48} color="#D1D5DB" />
+      <View style={[styles.emptyContainer, fullScreen && styles.fullScreenEmptyContainer]}>
+        <Ionicons name="bar-chart-outline" size={48} color={colors.border} />
         <Text style={styles.emptyText}>還沒有保存的報表</Text>
         <TouchableOpacity
           style={styles.createButton}
@@ -140,25 +197,38 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
       </View>
     );
   }
+  
+  if (initializingDefaults) {
+    return (
+      <View style={[styles.loadingContainer, fullScreen && styles.fullScreenContainer]}>
+        <ActivityIndicator size="large" color={colors.primary} />
+        <Text style={styles.loadingText}>正在載入預設報表...</Text>
+      </View>
+    );
+  }
 
+  const containerStyle = fullScreen ? styles.fullScreenGrid : styles.reportsGrid;
+  
   return (
     <ScrollView
       style={styles.container}
-      horizontal
+      horizontal={!fullScreen}
       showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
-      <View style={styles.reportsGrid}>
+      <View style={containerStyle}>
         {reports.map((report) => {
           const chartIcon = getChartIcon(report.chartType);
-          const chartColor = getChartColor(report.chartType);
+          const chartColor = getChartColor(report.chartType, report.isDefault);
+          const cardStyle = fullScreen ? styles.fullScreenReportCard : styles.reportCard;
           
           return (
             <TouchableOpacity
               key={report.id}
-              style={styles.reportCard}
+              style={[cardStyle, report.isDefault && styles.defaultReportCard]}
               onPress={() => handleReportPress(report)}
               activeOpacity={0.7}
             >
@@ -175,9 +245,16 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
                 />
               </View>
               
-              <Text style={styles.reportName} numberOfLines={2}>
-                {report.name}
-              </Text>
+              <View style={styles.reportHeader}>
+                <Text style={styles.reportName} numberOfLines={2}>
+                  {report.name}
+                </Text>
+                {report.isDefault && (
+                  <View style={styles.defaultBadge}>
+                    <Text style={styles.defaultBadgeText}>預設</Text>
+                  </View>
+                )}
+              </View>
               
               <View style={styles.reportMeta}>
                 <Text style={styles.reportDate}>
@@ -208,16 +285,18 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
           );
         })}
         
-        {/* 查看更多按鈕 */}
-        <TouchableOpacity
-          style={styles.viewMoreCard}
-          // @ts-ignore - Navigation type not updated
-          onPress={() => navigation.navigate('SmartAnalytics', { showSaved: true })}
-          activeOpacity={0.7}
-        >
-          <Ionicons name="arrow-forward-circle" size={48} color="#007AFF" />
-          <Text style={styles.viewMoreText}>查看全部</Text>
-        </TouchableOpacity>
+        {/* 查看更多按鈕 - 只在非全屏模式顯示 */}
+        {!fullScreen && (
+          <TouchableOpacity
+            style={styles.viewMoreCard}
+            // @ts-ignore - Navigation type not updated
+            onPress={() => navigation.navigate('SmartAnalytics', { showSaved: true })}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="arrow-forward-circle" size={48} color={colors.primary} />
+            <Text style={styles.viewMoreText}>查看全部</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </ScrollView>
   );
@@ -228,123 +307,161 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   loadingContainer: {
-    padding: 48,
+    padding: DesignSystem.spacing.xl,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  fullScreenContainer: {
+    minHeight: 300,
   },
   loadingText: {
-    marginTop: 12,
-    fontSize: 16,
-    color: '#6B7280',
+    marginTop: DesignSystem.spacing.sm,
+    ...DesignSystem.typography.body,
+    color: colors.textSecondary,
   },
   emptyContainer: {
-    padding: 48,
+    padding: DesignSystem.spacing.xl,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  fullScreenEmptyContainer: {
+    minHeight: 300,
+  },
   emptyText: {
-    fontSize: 16,
-    color: '#6B7280',
-    marginTop: 12,
-    marginBottom: 16,
+    ...DesignSystem.typography.body,
+    color: colors.textSecondary,
+    marginTop: DesignSystem.spacing.sm,
+    marginBottom: DesignSystem.spacing.md,
   },
   createButton: {
-    paddingHorizontal: 24,
-    paddingVertical: 10,
-    backgroundColor: '#007AFF',
-    borderRadius: 20,
+    paddingHorizontal: DesignSystem.spacing.lg,
+    paddingVertical: DesignSystem.spacing.sm,
+    backgroundColor: colors.primary,
+    borderRadius: DesignSystem.borderRadius.full,
   },
   createButtonText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#FFFFFF',
+    ...DesignSystem.typography.buttonSmall,
+    color: colors.background,
   },
   reportsGrid: {
     flexDirection: 'row',
-    paddingVertical: 8,
-    gap: 12,
+    paddingVertical: DesignSystem.spacing.sm,
+    gap: DesignSystem.spacing.sm,
+  },
+  fullScreenGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    padding: DesignSystem.spacing.sm,
+    gap: DesignSystem.spacing.sm,
   },
   reportCard: {
     width: 160,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
+    backgroundColor: colors.background,
+    borderRadius: DesignSystem.borderRadius.md,
+    padding: DesignSystem.spacing.md,
+    ...DesignSystem.shadows.sm,
+  },
+  fullScreenReportCard: {
+    width: '48%',
+    backgroundColor: colors.background,
+    borderRadius: DesignSystem.borderRadius.md,
+    padding: DesignSystem.spacing.md,
+    ...DesignSystem.shadows.sm,
+  },
+  defaultReportCard: {
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderStyle: 'dashed',
   },
   chartIconContainer: {
     width: 64,
     height: 64,
-    borderRadius: 32,
+    borderRadius: DesignSystem.borderRadius.full,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 12,
+    marginBottom: DesignSystem.spacing.sm,
     alignSelf: 'center',
   },
-  reportName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1C1C1E',
-    marginBottom: 8,
+  reportHeader: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    marginBottom: DesignSystem.spacing.sm,
     minHeight: 40,
+  },
+  reportName: {
+    ...DesignSystem.typography.body,
+    fontWeight: '600',
+    color: colors.text,
+    flex: 1,
+  },
+  defaultBadge: {
+    backgroundColor: colors.gray[200],
+    paddingHorizontal: DesignSystem.spacing.sm,
+    paddingVertical: 2,
+    borderRadius: DesignSystem.borderRadius.sm,
+    marginLeft: DesignSystem.spacing.xs,
+  },
+  defaultBadgeText: {
+    ...DesignSystem.typography.caption,
+    color: colors.textSecondary,
+    fontSize: 10,
   },
   reportMeta: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 8,
+    marginBottom: DesignSystem.spacing.sm,
   },
   reportDate: {
-    fontSize: 12,
-    color: '#8E8E93',
+    ...DesignSystem.typography.caption,
+    color: colors.textTertiary,
   },
   publicBadge: {
     width: 20,
     height: 20,
     borderRadius: 10,
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
   tagsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 4,
+    gap: DesignSystem.spacing.xs,
   },
   tag: {
-    backgroundColor: '#F3F4F6',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
+    backgroundColor: colors.gray[100],
+    paddingHorizontal: DesignSystem.spacing.sm,
+    paddingVertical: DesignSystem.spacing.xs,
+    borderRadius: DesignSystem.borderRadius.sm,
   },
   tagText: {
+    ...DesignSystem.typography.caption,
     fontSize: 10,
-    color: '#666666',
+    color: colors.textSecondary,
   },
   moreTagsText: {
+    ...DesignSystem.typography.caption,
     fontSize: 10,
-    color: '#8E8E93',
-    paddingHorizontal: 4,
-    paddingVertical: 4,
+    color: colors.textTertiary,
+    paddingHorizontal: DesignSystem.spacing.xs,
+    paddingVertical: DesignSystem.spacing.xs,
   },
   viewMoreCard: {
     width: 160,
-    backgroundColor: '#F8F9FA',
-    borderRadius: 16,
-    padding: 16,
+    backgroundColor: colors.backgroundSecondary,
+    borderRadius: DesignSystem.borderRadius.md,
+    padding: DesignSystem.spacing.md,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.border,
     borderStyle: 'dashed',
   },
   viewMoreText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#007AFF',
-    marginTop: 8,
+    ...DesignSystem.typography.buttonSmall,
+    color: colors.primary,
+    marginTop: DesignSystem.spacing.sm,
   },
 });
