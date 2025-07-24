@@ -24,6 +24,8 @@ import { StateInspector } from '@/components/developer/StateInspector';
 import { ErrorLogsScreen } from '@/screens/developer/ErrorLogsScreen';
 import { PerformanceMonitorScreen } from '@/screens/developer/PerformanceMonitorScreen';
 import { TestScreen } from '@/screens/developer/TestScreen';
+import { HelpSupportScreen } from '@/screens/settings/HelpSupportScreen';
+import { PrivacyPolicyScreen } from '@/screens/settings/PrivacyPolicyScreen';
 import { environmentManager } from '@/config/environment';
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -84,6 +86,27 @@ export const AppNavigator = () => {
               name="TaskDetail"
               component={TaskDetailScreen}
               options={{ headerShown: false }}
+            />
+            {/* 設定相關頁面 */}
+            <Stack.Screen
+              name="HelpSupport"
+              component={HelpSupportScreen}
+              options={{ 
+                headerShown: true,
+                title: '說明與支援',
+                headerTintColor: '#1A1A1A',
+                headerBackTitleVisible: false,
+              }}
+            />
+            <Stack.Screen
+              name="PrivacyPolicy"
+              component={PrivacyPolicyScreen}
+              options={{ 
+                headerShown: true,
+                title: '隱私權政策',
+                headerTintColor: '#1A1A1A',
+                headerBackTitleVisible: false,
+              }}
             />
             <Stack.Group screenOptions={{ 
               presentation: 'modal', 

@@ -5,18 +5,25 @@
 
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
-import { Platform } from 'react-native';
+import { Platform, Linking, Alert } from 'react-native';
 import { doc, setDoc, getDoc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { getFirebaseDb } from './firebase/config';
 import { MeetingReminder } from '../types/record';
+import { settingsService } from './settings';
 
-// 設定通知處理器
+// 設定通知處理器 - 檢查設定決定是否顯示通知
 Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-  }),
+  handleNotification: async () => {
+    // 檢查使用者設定
+    const settings = await settingsService.loadSettings();
+    const notificationsEnabled = settings.notifications.enabled;
+    
+    return {
+      shouldShowAlert: notificationsEnabled,
+      shouldPlaySound: notificationsEnabled,
+      shouldSetBadge: notificationsEnabled,
+    };
+  },
 });
 
 export interface NotificationData {
@@ -395,6 +402,150 @@ class NotificationService {
       throw error;
     }
   }
+
+  /**
+   * 啟用推播通知
+   * 檢查權限並引導使用者授權
+   */
+  async enableNotifications(): Promise<boolean> {
+    try {
+      // 檢查設備是否支持推送通知
+      if (!Device.isDevice) {
+        Alert.alert(
+          '不支援推播通知',
+          '推播通知只能在實體設備上運行',
+          [{ text: '確定' }]
+        );
+        return false;
+      }
+
+      // 檢查當前權限狀態
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      
+      if (existingStatus === 'granted') {
+        // 已有權限，直接返回成功
+        return true;
+      }
+
+      if (existingStatus === 'denied') {
+        // 權限被拒絕，引導使用者到系統設定
+        Alert.alert(
+          '需要通知權限',
+          '請在系統設定中允許此應用程式發送通知',
+          [
+            { text: '取消', style: 'cancel' },
+            { 
+              text: '前往設定', 
+              onPress: () => {
+                if (Platform.OS === 'ios') {
+                  Linking.openURL('app-settings:');
+                } else {
+                  Linking.openSettings();
+                }
+              }
+            }
+          ]
+        );
+        return false;
+      }
+
+      // 請求權限
+      const { status } = await Notifications.requestPermissionsAsync();
+      
+      if (status !== 'granted') {
+        Alert.alert(
+          '通知權限被拒絕',
+          '您將無法收到會議提醒和其他重要通知',
+          [{ text: '確定' }]
+        );
+        return false;
+      }
+
+      // 初始化通知服務（如果尚未初始化）
+      if (!this.isInitialized) {
+        await this.initialize();
+      }
+
+      return true;
+    } catch (error) {
+      console.error('啟用通知失敗:', error);
+      Alert.alert(
+        '啟用通知失敗',
+        '請稍後再試',
+        [{ text: '確定' }]
+      );
+      return false;
+    }
+  }
+
+  /**
+   * 停用推播通知
+   * 取消所有排程的通知但保留權限
+   */
+  async disableNotifications(): Promise<void> {
+    try {
+      // 取消所有排程的通知
+      await this.cancelAllScheduledNotifications();
+      
+      // 注意：我們不撤銷系統權限，只是在應用層面停用通知
+      // 使用者可以隨時在設定中重新啟用
+      console.log('推播通知已停用');
+    } catch (error) {
+      console.error('停用通知失敗:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * 檢查通知權限狀態
+   */
+  async checkNotificationPermissions(): Promise<{
+    granted: boolean;
+    canAskAgain: boolean;
+  }> {
+    try {
+      const { status, canAskAgain } = await Notifications.getPermissionsAsync();
+      
+      return {
+        granted: status === 'granted',
+        canAskAgain: canAskAgain ?? false,
+      };
+    } catch (error) {
+      console.error('檢查通知權限失敗:', error);
+      return {
+        granted: false,
+        canAskAgain: false,
+      };
+    }
+  }
+
+  /**
+   * 獲取通知設定狀態
+   */
+  async getNotificationStatus(): Promise<{
+    permissionGranted: boolean;
+    notificationsEnabled: boolean;
+    scheduledCount: number;
+  }> {
+    try {
+      const { granted } = await this.checkNotificationPermissions();
+      const settings = await settingsService.loadSettings();
+      const scheduledNotifications = await this.getAllScheduledNotifications();
+      
+      return {
+        permissionGranted: granted,
+        notificationsEnabled: settings.notifications.enabled,
+        scheduledCount: scheduledNotifications.length,
+      };
+    } catch (error) {
+      console.error('獲取通知狀態失敗:', error);
+      return {
+        permissionGranted: false,
+        notificationsEnabled: false,
+        scheduledCount: 0,
+      };
+    }
+  }
 }
 
 // 匯出單例實例
@@ -410,3 +561,9 @@ export const scheduleMeetingReminder = (
   meetingTime: Date,
   reminderMinutes?: number
 ) => notificationService.scheduleMeetingReminder(meetingId, userId, meetingTitle, meetingTime, reminderMinutes);
+
+// 新增的通知控制函數
+export const enableNotifications = () => notificationService.enableNotifications();
+export const disableNotifications = () => notificationService.disableNotifications();
+export const checkNotificationPermissions = () => notificationService.checkNotificationPermissions();
+export const getNotificationStatus = () => notificationService.getNotificationStatus();

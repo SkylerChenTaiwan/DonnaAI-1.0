@@ -56,7 +56,10 @@ export const STORAGE_KEYS = {
   USER_PREFERENCES: '@donna_ai/user_preferences',
   
   // 使用者模式（業務/主管）
-  USER_MODE: '@donna_ai/user_mode'
+  USER_MODE: '@donna_ai/user_mode',
+  
+  // 使用者設定（通知、音效等）
+  USER_SETTINGS: '@donna_ai/user_settings'
 } as const;
 
 /**

@@ -31,6 +31,9 @@ export type RootStackParamList = {
   ErrorLogs: undefined;
   PerformanceMonitor: undefined;
   TestScreen: undefined;
+  // 設定相關頁面
+  HelpSupport: undefined;
+  PrivacyPolicy: undefined;
 };
 
 export type MainTabParamList = {
