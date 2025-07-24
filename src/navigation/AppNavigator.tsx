@@ -88,7 +88,12 @@ export const AppNavigator = () => {
             <Stack.Screen
               name="SmartAnalytics"
               component={SmartAnalyticsScreen}
-              options={{ headerShown: false }}
+              options={{ 
+                headerShown: true,
+                title: '智能分析',
+                headerTintColor: '#1A1A1A',
+                headerBackTitleVisible: false,
+              }}
             />
             <Stack.Group screenOptions={{ 
               presentation: 'modal', 
