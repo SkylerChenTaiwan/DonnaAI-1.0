@@ -34,11 +34,11 @@ export const FilterModal: React.FC<FilterModalProps> = ({
   onApply,
   tabType,
 }) => {
-  const [conditions, setConditions] = useState<FilterCondition[]>(filters);
+  const [conditions, setConditions] = useState<FilterCondition[]>(filters || []);
 
   // 同步外部篩選條件
   useEffect(() => {
-    setConditions(filters);
+    setConditions(filters || []);
   }, [filters]);
 
   const handleAddCondition = () => {
@@ -51,22 +51,22 @@ export const FilterModal: React.FC<FilterModalProps> = ({
       label: filterableColumns[0].title,
       value: '',
     };
-    setConditions([...conditions, newCondition]);
+    setConditions([...(conditions || []), newCondition]);
   };
 
   const handleUpdateCondition = (index: number, condition: FilterCondition) => {
-    const newConditions = [...conditions];
+    const newConditions = [...(conditions || [])];
     newConditions[index] = condition;
     setConditions(newConditions);
   };
 
   const handleRemoveCondition = (index: number) => {
-    setConditions(conditions.filter((_, i) => i !== index));
+    setConditions((conditions || []).filter((_, i) => i !== index));
   };
 
   const handleApply = () => {
     // 過濾掉空值條件
-    const validConditions = conditions.filter(c => c.value && c.value.trim() !== '');
+    const validConditions = (conditions || []).filter(c => c.value && c.value.trim() !== '');
     onApply(validConditions);
     onClose();
   };
@@ -99,7 +99,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
 
         <ScrollView style={styles.content}>
           {/* 篩選條件列表 */}
-          {conditions.map((condition, index) => (
+          {(conditions || []).map((condition, index) => (
             <FilterForm
               key={index}
               condition={condition}

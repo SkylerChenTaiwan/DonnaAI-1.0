@@ -217,12 +217,13 @@ export const PersonnelScreen: React.FC = () => {
           setActiveFilters(filters);
           setShowFilterModal(false);
         }}
-        currentFilters={activeFilters}
-        availableColumns={[
+        filters={activeFilters}
+        columns={[
           { key: 'status', title: '狀態' },
           { key: 'role', title: '角色' },
           { key: 'department', title: '部門' },
         ]}
+        tabType="customers"
       />
       
       <ColumnSettingsModal
