@@ -274,33 +274,73 @@ export const getSavedReports = async (
 ): Promise<SavedReport[]> => {
   try {
     const db = getFirebaseDb();
-    const constraints = [orderBy('createdAt', 'desc')];
+    const reports: SavedReport[] = [];
 
-    // 獲取用戶可以查看的報表（自己創建的或公開的）
-    if (options.isPublic !== undefined) {
-      constraints.push(where('isPublic', '==', options.isPublic));
-    }
+    // 查詢1: 獲取用戶自己創建的報表
+    const myReportsConstraints = [
+      where('createdBy', '==', userId),
+      orderBy('createdAt', 'desc')
+    ];
 
     if (options.teamId) {
-      constraints.push(where('teamId', '==', options.teamId));
+      myReportsConstraints.push(where('teamId', '==', options.teamId));
     }
 
     if (options.limit) {
-      constraints.push(limit(options.limit));
+      myReportsConstraints.push(limit(options.limit));
     }
 
-    const q = query(collection(db, 'savedReports'), ...constraints);
-    const snapshot = await getDocs(q);
-
-    // 過濾出用戶有權限查看的報表
-    const reports = snapshot.docs
-      .map((doc) => ({
+    const myReportsQuery = query(collection(db, 'savedReports'), ...myReportsConstraints);
+    const myReportsSnapshot = await getDocs(myReportsQuery);
+    
+    myReportsSnapshot.docs.forEach((doc) => {
+      reports.push({
         id: doc.id,
         ...doc.data(),
-      }))
-      .filter((report: any) => {
-        return report.createdBy === userId || report.isPublic;
-      }) as SavedReport[];
+      } as SavedReport);
+    });
+
+    // 查詢2: 獲取公開的報表（如果不是只查詢私有報表）
+    if (options.isPublic !== false) {
+      const publicReportsConstraints = [
+        where('isPublic', '==', true),
+        orderBy('createdAt', 'desc')
+      ];
+
+      if (options.teamId) {
+        publicReportsConstraints.push(where('teamId', '==', options.teamId));
+      }
+
+      // 限制公開報表數量，避免重複太多
+      const publicLimit = options.limit ? Math.max(options.limit - reports.length, 0) : 10;
+      if (publicLimit > 0) {
+        publicReportsConstraints.push(limit(publicLimit));
+
+        const publicReportsQuery = query(collection(db, 'savedReports'), ...publicReportsConstraints);
+        const publicReportsSnapshot = await getDocs(publicReportsQuery);
+        
+        publicReportsSnapshot.docs.forEach((doc) => {
+          // 避免重複（如果用戶的公開報表已經在第一個查詢中）
+          if (!reports.find(r => r.id === doc.id)) {
+            reports.push({
+              id: doc.id,
+              ...doc.data(),
+            } as SavedReport);
+          }
+        });
+      }
+    }
+
+    // 按創建時間排序並限制數量
+    reports.sort((a, b) => {
+      const aTime = a.createdAt?.toMillis() || 0;
+      const bTime = b.createdAt?.toMillis() || 0;
+      return bTime - aTime;
+    });
+
+    if (options.limit) {
+      return reports.slice(0, options.limit);
+    }
 
     return reports;
   } catch (error) {
