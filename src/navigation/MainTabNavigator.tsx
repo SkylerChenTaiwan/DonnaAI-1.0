@@ -2,11 +2,12 @@
  * 主要標籤導航器
  */
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { View, StyleSheet } from 'react-native';
 import { useAuthStore } from '@/stores/authStore';
+import { useAnalyticsStore } from '@/stores/analyticsStore';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { EnhancedDashboardV2 } from '@/screens/dashboard/EnhancedDashboardV2';
@@ -24,9 +25,9 @@ const Tab = createBottomTabNavigator<MainTabParamList>();
 
 export const MainTabNavigator = () => {
   const { user, mode } = useAuthStore();
+  const { isDialogOpen, openDialog, closeDialog } = useAnalyticsStore();
   const navigation = useNavigation<NavigationProp>();
   const [showActionModal, setShowActionModal] = useState(false);
-  const [showAnalyticsDialog, setShowAnalyticsDialog] = useState(false);
   const addButtonRef = useRef<View>(null);
   const tabBarRef = useRef<View>(null);
   const [tabBarHeight, setTabBarHeight] = useState(88);
@@ -49,7 +50,7 @@ export const MainTabNavigator = () => {
 
   const handleManagerActionPress = () => {
     // 主管模式下點擊中間按鈕，顯示智能分析對話框
-    setShowAnalyticsDialog(true);
+    openDialog();
   };
 
   return (
@@ -207,8 +208,8 @@ export const MainTabNavigator = () => {
       />
       
       <AnalyticsDialog
-        visible={showAnalyticsDialog}
-        onClose={() => setShowAnalyticsDialog(false)}
+        visible={isDialogOpen}
+        onClose={closeDialog}
       />
     </>
   );

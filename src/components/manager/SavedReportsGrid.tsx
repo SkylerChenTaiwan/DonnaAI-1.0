@@ -23,6 +23,7 @@ import { RootStackParamList } from '@/types/navigation';
 import { showToast } from '@/utils/toast';
 import { colors } from '@/theme/colors';
 import { DesignSystem } from '@/theme/designSystem';
+import { useAnalyticsStore } from '@/stores/analyticsStore';
 import {
   defaultReportTemplates,
   createDefaultReport,
@@ -52,6 +53,7 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
   const { user } = useAuth();
   const { currentTeam, organization } = useOrganization();
   const navigation = useNavigation<NavigationProp>();
+  const { openDialog } = useAnalyticsStore();
 
   // 初始化預設報表
   const initializeDefaultReports = async () => {
@@ -136,9 +138,10 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
     if (onReportPress) {
       onReportPress(report);
     } else {
-      // 顯示報表詳情
-      // TODO: 實現報表詳情檢視功能
-      showToast('info', '點擊報表功能開發中');
+      // 打開智能分析對話框並載入報表
+      openDialog();
+      // TODO: 未來可以預載入報表數據到對話框
+      showToast('info', '已開啟智能分析');
     }
   };
 
@@ -183,7 +186,13 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
       <View style={[styles.emptyContainer, fullScreen && styles.fullScreenEmptyContainer]}>
         <Ionicons name="bar-chart-outline" size={48} color={colors.border} />
         <Text style={styles.emptyText}>還沒有保存的報表</Text>
-        <Text style={styles.emptyHint}>使用底部導航欄的 AI 按鈕來創建報表</Text>
+        <TouchableOpacity
+          style={styles.createButton}
+          onPress={openDialog}
+          activeOpacity={0.7}
+        >
+          <Text style={styles.createButtonText}>創建報表</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -275,6 +284,17 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
           );
         })}
         
+        {/* 查看更多按鈕 - 只在非全屏模式顯示 */}
+        {!fullScreen && reports.length >= limit && (
+          <TouchableOpacity
+            style={styles.viewMoreCard}
+            onPress={openDialog}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="add-circle" size={48} color={colors.primary} />
+            <Text style={styles.viewMoreText}>創建新報表</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </ScrollView>
   );
@@ -311,10 +331,16 @@ const styles = StyleSheet.create({
     marginTop: DesignSystem.spacing.sm,
     marginBottom: DesignSystem.spacing.sm,
   },
-  emptyHint: {
-    ...DesignSystem.typography.bodySmall,
-    color: colors.textTertiary,
-    marginTop: DesignSystem.spacing.xs,
+  createButton: {
+    backgroundColor: colors.primary,
+    paddingHorizontal: DesignSystem.spacing.lg,
+    paddingVertical: DesignSystem.spacing.sm,
+    borderRadius: DesignSystem.borderRadius.full,
+    marginTop: DesignSystem.spacing.md,
+  },
+  createButtonText: {
+    color: colors.background,
+    ...DesignSystem.typography.button,
   },
   reportsGrid: {
     flexDirection: 'row',
@@ -420,5 +446,21 @@ const styles = StyleSheet.create({
     color: colors.textTertiary,
     paddingHorizontal: DesignSystem.spacing.xs,
     paddingVertical: DesignSystem.spacing.xs,
+  },
+  viewMoreCard: {
+    width: 160,
+    backgroundColor: colors.backgroundSecondary,
+    borderRadius: DesignSystem.borderRadius.md,
+    padding: DesignSystem.spacing.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderStyle: 'dashed',
+  },
+  viewMoreText: {
+    ...DesignSystem.typography.buttonSmall,
+    color: colors.primary,
+    marginTop: DesignSystem.spacing.sm,
   },
 });
