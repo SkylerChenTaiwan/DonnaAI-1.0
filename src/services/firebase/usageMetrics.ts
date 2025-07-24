@@ -20,7 +20,6 @@ import {
 } from 'firebase/firestore';
 import { getFirebaseDb } from './config';
 import { UsageMetrics, PlatformStatistics, ToolUsageStats } from '@/types/admin';
-import { logOperation, logError } from '@/utils/logger';
 
 // 記錄使用統計
 export async function recordUsageMetrics(
@@ -44,7 +43,7 @@ export async function recordUsageMetrics(
       recordMetricsForPeriod(orgId, 'monthly', monthStr, metrics),
     ]);
   } catch (error) {
-    logError('recordUsageMetrics', error as Error);
+    console.error('recordUsageMetrics 錯誤:', error);
     throw error;
   }
 }
@@ -91,7 +90,7 @@ async function recordMetricsForPeriod(
       });
     }
   } catch (error) {
-    logError('recordMetricsForPeriod', error as Error);
+    console.error('recordMetricsForPeriod 錯誤:', error);
     throw error;
   }
 }
@@ -119,7 +118,7 @@ export async function getOrganizationMetrics(
       ...doc.data(),
     })) as UsageMetrics[];
   } catch (error) {
-    logError('getOrganizationMetrics', error as Error);
+    console.error('getOrganizationMetrics 錯誤:', error);
     throw error;
   }
 }
@@ -188,7 +187,7 @@ export async function trackToolUsage(
       },
     });
   } catch (error) {
-    logError('trackToolUsage', error as Error);
+    console.error('trackToolUsage 錯誤:', error);
     throw error;
   }
 }
@@ -256,7 +255,7 @@ export async function getPlatformStatistics(): Promise<PlatformStatistics> {
     
     return statistics;
   } catch (error) {
-    logError('getPlatformStatistics', error as Error);
+    console.error('getPlatformStatistics 錯誤:', error);
     throw error;
   }
 }
@@ -292,7 +291,7 @@ export async function getTopTools(limit: number = 10): Promise<Array<{
       };
     });
   } catch (error) {
-    logError('getTopTools', error as Error);
+    console.error('getTopTools 錯誤:', error);
     return [];
   }
 }

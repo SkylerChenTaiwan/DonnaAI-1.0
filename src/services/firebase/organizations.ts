@@ -22,7 +22,6 @@ import {
 import { getFirebaseDb } from './config';
 import { Organization } from '@/types/user';
 import { OrganizationDetails, EnterpriseConfig } from '@/types/admin';
-import { logOperation, logError } from '@/utils/logger';
 
 // 建立新組織
 export async function createOrganization(
@@ -43,19 +42,13 @@ export async function createOrganization(
 
     await setDoc(orgRef, orgData);
 
-    logOperation('create_organization', {
-      organizationId: orgRef.id,
-      name: data.name,
-      plan: data.subscriptionPlan,
-    });
-
     return {
       id: orgRef.id,
       ...data,
       createdAt: new Date(),
     };
   } catch (error) {
-    logError('createOrganization', error as Error);
+    console.error('createOrganization 錯誤:', error);
     throw error;
   }
 }
@@ -100,7 +93,7 @@ export async function getOrganization(orgId: string): Promise<OrganizationDetail
       config: configDoc || undefined,
     };
   } catch (error) {
-    logError('getOrganization', error as Error);
+    console.error('getOrganization 錯誤:', error);
     throw error;
   }
 }
@@ -126,7 +119,7 @@ export async function getAllOrganizations(
       createdAt: (doc.data().createdAt as Timestamp)?.toDate() || new Date(),
     })) as Organization[];
   } catch (error) {
-    logError('getAllOrganizations', error as Error);
+    console.error('getAllOrganizations 錯誤:', error);
     throw error;
   }
 }
@@ -144,13 +137,8 @@ export async function updateOrganization(
       ...data,
       updatedAt: serverTimestamp(),
     });
-
-    logOperation('update_organization', {
-      organizationId: orgId,
-      updatedFields: Object.keys(data),
-    });
   } catch (error) {
-    logError('updateOrganization', error as Error);
+    console.error('updateOrganization 錯誤:', error);
     throw error;
   }
 }
@@ -166,12 +154,8 @@ export async function deleteOrganization(orgId: string): Promise<void> {
       status: 'cancelled',
       updatedAt: serverTimestamp(),
     });
-
-    logOperation('delete_organization', {
-      organizationId: orgId,
-    });
   } catch (error) {
-    logError('deleteOrganization', error as Error);
+    console.error('deleteOrganization 錯誤:', error);
     throw error;
   }
 }
@@ -197,7 +181,7 @@ export async function getEnterpriseConfig(orgId: string): Promise<EnterpriseConf
       ...doc.data(),
     } as EnterpriseConfig;
   } catch (error) {
-    logError('getEnterpriseConfig', error as Error);
+    console.error('getEnterpriseConfig 錯誤:', error);
     throw error;
   }
 }
@@ -228,7 +212,7 @@ export async function saveEnterpriseConfig(
       updatedAt: new Date(),
     };
   } catch (error) {
-    logError('saveEnterpriseConfig', error as Error);
+    console.error('saveEnterpriseConfig 錯誤:', error);
     throw error;
   }
 }
@@ -245,7 +229,7 @@ async function getUserCount(orgId: string): Promise<number> {
     const snapshot = await getDocs(usersQuery);
     return snapshot.size;
   } catch (error) {
-    logError('getUserCount', error as Error);
+    console.error('getUserCount 錯誤:', error);
     return 0;
   }
 }
@@ -262,7 +246,7 @@ async function getTeamCount(orgId: string): Promise<number> {
     const snapshot = await getDocs(teamsQuery);
     return snapshot.size;
   } catch (error) {
-    logError('getTeamCount', error as Error);
+    console.error('getTeamCount 錯誤:', error);
     return 0;
   }
 }
@@ -326,11 +310,6 @@ export async function createOrganizationWithAdmin(
     // 執行批量操作
     await batch.commit();
 
-    logOperation('create_organization_with_admin', {
-      organizationId: orgRef.id,
-      adminEmail: adminUserData.email,
-    });
-
     return {
       organization: {
         id: orgRef.id,
@@ -348,7 +327,7 @@ export async function createOrganizationWithAdmin(
       } : undefined,
     };
   } catch (error) {
-    logError('createOrganizationWithAdmin', error as Error);
+    console.error('createOrganizationWithAdmin 錯誤:', error);
     throw error;
   }
 }

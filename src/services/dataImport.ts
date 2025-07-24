@@ -20,7 +20,6 @@ import { createTask } from './firebase/tasks';
 import { createRecord } from './firebase/records';
 import { doc, setDoc, updateDoc, serverTimestamp, collection } from 'firebase/firestore';
 import { getFirebaseDb } from './firebase/config';
-import { logOperation, logError } from '@/utils/logger';
 
 export interface ParsedData {
   headers: string[];
@@ -309,7 +308,7 @@ export class DataImportService {
         completedAt: serverTimestamp(),
       });
 
-      logOperation('data_import_completed', {
+      // logOperation('data_import_completed', {
         jobId,
         type: data.type,
         succeeded: result.totalSucceeded,
@@ -326,7 +325,7 @@ export class DataImportService {
         completedAt: serverTimestamp(),
       });
 
-      logError('importBatch', error as Error);
+      console.error('importBatch 錯誤:', error);
       throw error;
     }
   }
@@ -360,7 +359,7 @@ export class DataImportService {
 
     await setDoc(jobRef, job);
     
-    logOperation('create_import_job', {
+    // logOperation('create_import_job', {
       jobId: jobRef.id,
       type,
       sourceType: source.type,
