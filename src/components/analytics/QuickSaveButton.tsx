@@ -145,13 +145,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     right: 20,
-    backgroundColor: colors.primary,
+    backgroundColor: DesignSystem.colors.button.primary.default,
     paddingHorizontal: DesignSystem.spacing.lg,
     paddingVertical: DesignSystem.spacing.sm,
     borderRadius: DesignSystem.borderRadius.full,
     flexDirection: 'row',
     alignItems: 'center',
-    ...DesignSystem.shadows.md,
+    ...DesignSystem.shadows.none,
   },
   floatingButtonText: {
     color: colors.background,
@@ -211,15 +211,15 @@ const styles = StyleSheet.create({
   button: {
     flex: 1,
     paddingVertical: DesignSystem.spacing.sm,
-    borderRadius: DesignSystem.borderRadius.sm,
+    borderRadius: DesignSystem.borderRadius.button,
     alignItems: 'center',
   },
   cancelButton: {
-    backgroundColor: colors.backgroundSecondary,
+    backgroundColor: DesignSystem.colors.button.secondary.default,
     marginRight: DesignSystem.spacing.sm,
   },
   saveButton: {
-    backgroundColor: colors.primary,
+    backgroundColor: DesignSystem.colors.button.primary.default,
     marginLeft: DesignSystem.spacing.sm,
   },
   disabledButton: {

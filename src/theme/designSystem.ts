@@ -5,14 +5,47 @@
 
 export const DesignSystem = {
   colors: {
-    // 主色調 - 中等灰色用於按鈕和互動元素（優化視覺舒適度）
-    primary: '#525252',
+    // 主色調 - 深灰色用於按鈕和互動元素（Linear 風格）
+    primary: '#2C2C2C',
     
     // 背景色
     background: {
       primary: '#F5F5F5',  // 主背景 - 淺灰白色
       surface: '#FFFFFF',  // 卡片背景 - 純白
       elevated: '#FAFAFA', // 提升的背景
+    },
+    
+    // 按鈕專用色彩系統
+    button: {
+      // 主要按鈕
+      primary: {
+        default: '#2C2C2C',
+        hover: '#3C3C3C',
+        pressed: '#1C1C1C',
+      },
+      // 次要按鈕
+      secondary: {
+        default: '#F7F7F7',
+        hover: '#ECECEC',
+        pressed: '#E0E0E0',
+      },
+      // 輪廓按鈕
+      outline: {
+        border: '#D0D0D0',
+        borderHover: '#A0A0A0',
+        background: 'transparent',
+        backgroundHover: 'rgba(0, 0, 0, 0.03)',
+      },
+      // Ghost 按鈕
+      ghost: {
+        background: 'transparent',
+        backgroundHover: 'rgba(0, 0, 0, 0.05)',
+      },
+      // 文字按鈕
+      text: {
+        color: '#2C2C2C',
+        underline: 'rgba(44, 44, 44, 0.3)',
+      },
     },
     
     // 文字色
@@ -66,15 +99,23 @@ export const DesignSystem = {
   
   // 圓角系統
   borderRadius: {
-    sm: 8,   // 按鈕、小元素
-    md: 12,  // 卡片、容器
-    lg: 16,  // 大卡片、模態框
-    xl: 24,  // 特大圓角
+    button: 6,  // 按鈕專用 - 更細膩的圓角
+    sm: 8,      // 小元素
+    md: 12,     // 卡片、容器
+    lg: 16,     // 大卡片、模態框
+    xl: 24,     // 特大圓角
     full: 9999, // 完全圓角
   },
   
   // 陰影系統
   shadows: {
+    none: {
+      shadowColor: 'transparent',
+      shadowOffset: { width: 0, height: 0 },
+      shadowOpacity: 0,
+      shadowRadius: 0,
+      elevation: 0,
+    },
     sm: {
       shadowColor: '#000',
       shadowOffset: { width: 0, height: 1 },
@@ -143,13 +184,18 @@ export const DesignSystem = {
     
     // 按鈕
     button: {
-      fontSize: 16,
+      fontSize: 14,
       lineHeight: 20,
       fontWeight: '500' as const,
     },
     buttonSmall: {
-      fontSize: 14,
+      fontSize: 13,
       lineHeight: 18,
+      fontWeight: '500' as const,
+    },
+    buttonLarge: {
+      fontSize: 16,
+      lineHeight: 22,
       fontWeight: '500' as const,
     },
   },
@@ -163,58 +209,72 @@ export const DesignSystem = {
 };
 
 // 輔助函數：生成一致的按鈕樣式
-export const getButtonStyle = (variant: 'primary' | 'secondary' | 'ghost' | 'search' = 'primary') => {
+export const getButtonStyle = (
+  variant: 'primary' | 'secondary' | 'outline' | 'ghost' | 'text' = 'primary',
+  size: 'small' | 'medium' | 'large' = 'medium'
+) => {
+  // 基礎樣式 - 無陰影
   const base = {
-    paddingHorizontal: DesignSystem.spacing.md,
-    paddingVertical: DesignSystem.spacing.sm,
-    borderRadius: DesignSystem.borderRadius.sm,
-    ...DesignSystem.typography.button,
+    borderRadius: DesignSystem.borderRadius.button,
+    alignItems: 'center' as const,
+    justifyContent: 'center' as const,
+    flexDirection: 'row' as const,
+    borderWidth: 0,
+    ...DesignSystem.shadows.none,
   };
   
-  switch (variant) {
-    case 'primary':
-      return {
-        ...base,
-        backgroundColor: DesignSystem.colors.primary,
-        color: DesignSystem.colors.text.inverse,
-        // 新增狀態顏色
-        hoverColor: DesignSystem.colors.gray[500], // #737373
-        pressedColor: DesignSystem.colors.gray[700], // #404040
-        disabledColor: DesignSystem.colors.gray[300], // #D4D4D4
-      };
-    case 'secondary':
-      return {
-        ...base,
-        backgroundColor: DesignSystem.colors.background.surface,
-        borderWidth: 1,
-        borderColor: DesignSystem.colors.border.default,
-        color: DesignSystem.colors.text.primary,
-        // 新增狀態顏色
-        hoverColor: DesignSystem.colors.gray[100], // #F5F5F5
-        pressedColor: DesignSystem.colors.gray[200], // #E5E5E5
-        disabledColor: DesignSystem.colors.gray[100], // #F5F5F5
-      };
-    case 'ghost':
-      return {
-        ...base,
-        backgroundColor: 'transparent',
-        color: DesignSystem.colors.text.primary,
-        // 新增狀態顏色
-        hoverColor: 'rgba(82, 82, 82, 0.1)', // 半透明灰色
-        pressedColor: 'rgba(82, 82, 82, 0.2)', // 較深半透明灰色
-        disabledColor: 'transparent',
-      };
-    case 'search':
-      return {
-        ...base,
-        backgroundColor: DesignSystem.colors.gray[700], // #404040 用於搜索按鈕
-        color: DesignSystem.colors.text.inverse,
-        // 新增狀態顏色
-        hoverColor: DesignSystem.colors.gray[600], // #525252
-        pressedColor: DesignSystem.colors.gray[800], // #262626
-        disabledColor: DesignSystem.colors.gray[400], // #A3A3A3
-      };
-  }
+  // 尺寸樣式
+  const sizeStyles = {
+    small: {
+      paddingHorizontal: 12,
+      paddingVertical: 6,
+      ...DesignSystem.typography.buttonSmall,
+    },
+    medium: {
+      paddingHorizontal: 16,
+      paddingVertical: 8,
+      ...DesignSystem.typography.button,
+    },
+    large: {
+      paddingHorizontal: 20,
+      paddingVertical: 10,
+      ...DesignSystem.typography.buttonLarge,
+    },
+  };
+  
+  // 變體樣式
+  const variantStyles = {
+    primary: {
+      backgroundColor: DesignSystem.colors.button.primary.default,
+      color: DesignSystem.colors.text.inverse,
+    },
+    secondary: {
+      backgroundColor: DesignSystem.colors.button.secondary.default,
+      color: DesignSystem.colors.primary,
+    },
+    outline: {
+      backgroundColor: DesignSystem.colors.button.outline.background,
+      borderWidth: 1,
+      borderColor: DesignSystem.colors.button.outline.border,
+      color: DesignSystem.colors.primary,
+    },
+    ghost: {
+      backgroundColor: DesignSystem.colors.button.ghost.background,
+      color: DesignSystem.colors.primary,
+    },
+    text: {
+      backgroundColor: 'transparent',
+      paddingHorizontal: 0,
+      paddingVertical: 0,
+      color: DesignSystem.colors.button.text.color,
+    },
+  };
+  
+  return {
+    ...base,
+    ...sizeStyles[size],
+    ...variantStyles[variant],
+  };
 };
 
 // 輔助函數：生成一致的卡片樣式

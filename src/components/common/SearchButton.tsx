@@ -30,19 +30,19 @@ export const SearchButton: React.FC<SearchButtonProps> = ({
 }) => {
   const sizeStyles = {
     small: {
-      width: 36,
-      height: 36,
-      iconSize: 18,
+      width: 32,
+      height: 32,
+      iconSize: 16,
     },
     medium: {
-      width: 44,
-      height: 44,
-      iconSize: 20,
+      width: 40,
+      height: 40,
+      iconSize: 18,
     },
     large: {
-      width: 52,
-      height: 52,
-      iconSize: 24,
+      width: 48,
+      height: 48,
+      iconSize: 22,
     },
   };
 
@@ -76,25 +76,15 @@ export const SearchButton: React.FC<SearchButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: 999, // 完全圓形
-    backgroundColor: DesignSystem.colors.gray[700], // #404040 深灰色以保持辨識度
+    borderRadius: DesignSystem.borderRadius.full, // 完全圓形
+    backgroundColor: DesignSystem.colors.button.primary.default, // 使用新的主按鈕顏色
     alignItems: 'center',
     justifyContent: 'center',
-    // 陰影效果 - 較輕以配合灰色調
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.08,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 3,
-      },
-    }),
+    // 無陰影 - 扁平化設計
+    ...DesignSystem.shadows.none,
   },
   disabled: {
     backgroundColor: DesignSystem.colors.gray[400], // #A3A3A3
-    opacity: 0.7,
+    opacity: 0.5,
   },
 });

@@ -41,41 +41,41 @@ export const IconButton: React.FC<IconButtonProps> = ({
   loading = false,
   accessibilityLabel,
 }) => {
-  // 尺寸配置
+  // 尺寸配置 - 更精緻的尺寸
   const sizeConfig = {
     sm: {
-      button: 32,
-      icon: 16,
-      padding: 8,
+      button: 28,
+      icon: 14,
+      padding: 7,
     },
     md: {
-      button: 40,
-      icon: 20,
-      padding: 10,
+      button: 36,
+      icon: 18,
+      padding: 9,
     },
     lg: {
-      button: 48,
-      icon: 24,
-      padding: 12,
+      button: 44,
+      icon: 22,
+      padding: 11,
     },
   };
 
   const currentSize = sizeConfig[size];
 
-  // 顏色配置
+  // 顏色配置 - 使用新的按鈕色彩系統
   const getColors = () => {
     const variantColors = {
       primary: {
-        background: backgroundColor || DesignSystem.colors.primary,
+        background: backgroundColor || DesignSystem.colors.button.primary.default,
         icon: iconColor || DesignSystem.colors.text.inverse,
       },
       secondary: {
-        background: backgroundColor || DesignSystem.colors.background.surface,
-        icon: iconColor || DesignSystem.colors.text.primary,
+        background: backgroundColor || DesignSystem.colors.button.secondary.default,
+        icon: iconColor || DesignSystem.colors.primary,
       },
       ghost: {
-        background: backgroundColor || 'transparent',
-        icon: iconColor || DesignSystem.colors.text.primary,
+        background: backgroundColor || DesignSystem.colors.button.ghost.background,
+        icon: iconColor || DesignSystem.colors.primary,
       },
     };
 
@@ -121,34 +121,14 @@ export const IconButton: React.FC<IconButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: DesignSystem.borderRadius.sm,
+    borderRadius: DesignSystem.borderRadius.button,
     alignItems: 'center',
     justifyContent: 'center',
-    // 陰影效果
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.05,
-        shadowRadius: 2,
-      },
-      android: {
-        elevation: 2,
-      },
-    }),
+    // 無陰影 - 扁平化設計
+    ...DesignSystem.shadows.none,
   },
   secondaryBorder: {
-    borderWidth: 1,
-    borderColor: DesignSystem.colors.border.default,
-    // 移除陰影
-    ...Platform.select({
-      ios: {
-        shadowOpacity: 0,
-      },
-      android: {
-        elevation: 0,
-      },
-    }),
+    borderWidth: 0, // 次要按鈕不需要邊框
   },
   disabled: {
     opacity: 0.5,

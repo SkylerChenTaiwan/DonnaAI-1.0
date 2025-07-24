@@ -17,7 +17,7 @@ import { DesignSystem } from '@/theme/designSystem';
 interface ButtonProps {
   title: string;
   onPress: () => void;
-  variant?: 'primary' | 'secondary' | 'outline';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'text';
   size?: 'small' | 'medium' | 'large';
   disabled?: boolean;
   loading?: boolean;
@@ -60,7 +60,10 @@ export const Button = ({
     >
       {loading ? (
         <ActivityIndicator 
-          color={variant === 'primary' ? '#FFFFFF' : DesignSystem.colors.primary} 
+          color={variant === 'primary' 
+            ? DesignSystem.colors.text.inverse 
+            : DesignSystem.colors.primary
+          } 
           size="small" 
         />
       ) : (
@@ -72,104 +75,93 @@ export const Button = ({
 
 const styles = StyleSheet.create({
   base: {
-    borderRadius: DesignSystem.borderRadius.sm,
+    borderRadius: DesignSystem.borderRadius.button,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    // 較輕的陰影以配合新的灰色調
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.08,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 2,
-      },
-    }),
+    // 無陰影 - 扁平化設計
+    ...DesignSystem.shadows.none,
   },
   
   // 變體樣式
   primary: {
-    backgroundColor: DesignSystem.colors.primary, // #525252 - 新的中等灰色
+    backgroundColor: DesignSystem.colors.button.primary.default,
   },
   secondary: {
-    backgroundColor: DesignSystem.colors.gray[100], // #F5F5F5
-    borderWidth: 1,
-    borderColor: DesignSystem.colors.border.default,
-    // 移除陰影
-    ...Platform.select({
-      ios: {
-        shadowOpacity: 0,
-      },
-      android: {
-        elevation: 0,
-      },
-    }),
+    backgroundColor: DesignSystem.colors.button.secondary.default,
+    borderWidth: 0,
   },
   outline: {
-    backgroundColor: 'transparent',
+    backgroundColor: DesignSystem.colors.button.outline.background,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.primary,
-    // 移除陰影
-    ...Platform.select({
-      ios: {
-        shadowOpacity: 0,
-      },
-      android: {
-        elevation: 0,
-      },
-    }),
+    borderColor: DesignSystem.colors.button.outline.border,
+  },
+  ghost: {
+    backgroundColor: DesignSystem.colors.button.ghost.background,
+    borderWidth: 0,
+  },
+  text: {
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
   },
   
-  // 尺寸樣式
+  // 尺寸樣式 - 更緊湊
   small: {
     paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingVertical: 6,
   },
   medium: {
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 8,
   },
   large: {
-    paddingHorizontal: 24,
-    paddingVertical: 16,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
   
   // 停用狀態
   disabled: {
-    backgroundColor: DesignSystem.colors.gray[200], // #E5E5E5
-    borderColor: DesignSystem.colors.gray[200],
-    opacity: 0.7,
+    opacity: 0.5,
   },
   
   // 文字樣式
   text: {
-    fontWeight: '600',
+    fontWeight: '500', // 從 600 改為 500
   },
   primaryText: {
-    color: DesignSystem.colors.text.inverse, // #FFFFFF
+    color: DesignSystem.colors.text.inverse,
   },
   secondaryText: {
-    color: DesignSystem.colors.text.primary,
+    color: DesignSystem.colors.primary,
   },
   outlineText: {
     color: DesignSystem.colors.primary,
   },
+  ghostText: {
+    color: DesignSystem.colors.primary,
+  },
+  textText: {
+    color: DesignSystem.colors.button.text.color,
+    fontWeight: '400',
+    textDecorationLine: 'underline',
+    textDecorationStyle: 'solid',
+    textDecorationColor: DesignSystem.colors.button.text.underline,
+  },
   
   // 尺寸文字
   smallText: {
-    fontSize: 14,
+    fontSize: 13,
   },
   mediumText: {
-    fontSize: 16,
+    fontSize: 14,
   },
   largeText: {
-    fontSize: 18,
+    fontSize: 16,
   },
   
   disabledText: {
-    color: DesignSystem.colors.text.tertiary,
+    color: DesignSystem.colors.text.disabled,
   },
 });
