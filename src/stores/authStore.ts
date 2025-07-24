@@ -66,7 +66,10 @@ export const useAuthStore = create<AuthState>((set) => ({
           // 從 Firestore 取得使用者檔案
           const userDoc = await getDoc(doc(getFirebaseDb(), 'users', firebaseUser.uid));
           if (userDoc.exists()) {
-            const userData = userDoc.data() as User;
+            const userData = {
+              ...userDoc.data(),
+              id: firebaseUser.uid  // 確保有 id 欄位
+            } as User;
             set({ 
               user: userData, 
               isAuthenticated: true, 

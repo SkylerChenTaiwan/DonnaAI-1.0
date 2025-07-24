@@ -18,9 +18,7 @@ import { FilterBadge, FilterCondition } from '@/components/common/FilterBadge';
 import { PersonnelTabs } from './PersonnelTabs';
 import { TableView } from './TableView';
 import { TreeView } from './TreeView';
-import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
-import { getUserPermissionContext } from '@/services/firebase/permissions-v2';
 import { getFirebaseDb } from '@/services/firebase/config';
 import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { showToast } from '@/utils/toast';
@@ -55,9 +53,11 @@ export const PersonnelScreen: React.FC = () => {
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [showColumnSettings, setShowColumnSettings] = useState(false);
   const [activeFilters, setActiveFilters] = useState<FilterCondition[]>([]);
-  const { user } = useAuth();
+  const { user: authStoreUser, mode, toggleMode } = useAuthStore();
   const { currentTeam } = useOrganization();
-  const { mode, toggleMode } = useAuthStore();
+  
+  // 使用 authStore 的 user，因為它有正確的資料結構
+  const user = authStoreUser;
 
   // 獲取下屬成員
   const fetchSubordinates = async () => {
@@ -76,6 +76,7 @@ export const PersonnelScreen: React.FC = () => {
         console.error('用戶缺少組織ID:', {
           userId: user.id,
           userEmail: user.email,
+          userRole: user.role,
           userData: user
         });
         
