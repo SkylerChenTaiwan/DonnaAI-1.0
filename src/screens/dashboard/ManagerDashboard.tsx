@@ -135,12 +135,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: DesignSystem.spacing.md,
-    borderRadius: DesignSystem.borderRadius.sm,
+    borderRadius: DesignSystem.borderRadius.button,
     gap: DesignSystem.spacing.sm,
-    ...DesignSystem.shadows.md,
+    ...DesignSystem.shadows.none,
   },
   primaryButton: {
-    backgroundColor: DesignSystem.colors.primary,
+    backgroundColor: DesignSystem.colors.button.primary.default,
   },
   quickActionText: {
     ...DesignSystem.typography.button,
