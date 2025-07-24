@@ -134,13 +134,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: DesignSystem.spacing.md,
-    borderRadius: DesignSystem.borderRadius.button,
+    paddingVertical: 12,
+    paddingHorizontal: DesignSystem.spacing.md,
+    borderRadius: 12,
     gap: DesignSystem.spacing.sm,
     ...DesignSystem.shadows.none,
   },
   primaryButton: {
-    backgroundColor: DesignSystem.colors.button.primary.default,
+    backgroundColor: DesignSystem.colors.gray[600], // 使用較淺的灰色
   },
   quickActionText: {
     ...DesignSystem.typography.button,
