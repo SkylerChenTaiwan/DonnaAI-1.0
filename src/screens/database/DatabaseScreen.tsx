@@ -829,7 +829,8 @@ export const DatabaseScreen: React.FC = () => {
             <Ionicons
               name={isEditMode ? 'create' : 'create-outline'}
               size={20}
-              color={isEditMode ? "#1A1A1A" : "#6B6B6B"}
+              color={isEditMode ? "#FF5C00" : "#6B6B6B"}
+              style={isEditMode ? { fontWeight: 'bold' } : undefined}
             />
           </TouchableOpacity>
         </View>
@@ -875,7 +876,7 @@ export const DatabaseScreen: React.FC = () => {
                 saveMode="realtime"
                 showSaveButton={false}
                 showAddButton={true}
-                addButtonText="新增記錄"
+                addButtonText="新增"
                 readOnly={false}
               />
             ) : (
@@ -1053,7 +1054,9 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   iconButtonActive: {
-    backgroundColor: 'rgba(26, 26, 26, 0.1)',
+    backgroundColor: '#FFF5E6', // 橘色背景，與多選模式保持一致
+    borderColor: '#FFE4B5',
+    borderWidth: 1,
   },
   tabContainer: {
     flexDirection: 'row',

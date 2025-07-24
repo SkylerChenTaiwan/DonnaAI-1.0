@@ -13,7 +13,6 @@ import {
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
 
 export interface EditableCellProps {
   value: any;
@@ -45,7 +44,6 @@ export const EditableCell: React.FC<EditableCellProps> = ({
   disabled = false,
 }) => {
   const [editValue, setEditValue] = useState(String(value || ''));
-  const [isPressed, setIsPressed] = useState(false);
   const inputRef = useRef<TextInput>(null);
 
   // 當開始編輯時聚焦輸入框
@@ -173,11 +171,8 @@ export const EditableCell: React.FC<EditableCellProps> = ({
       style={[
         styles.cellContainer,
         error && styles.cellError,
-        isPressed && styles.pressedCellContainer,
       ]}
       onPress={disabled ? onPress : onStartEdit}
-      onPressIn={() => setIsPressed(true)}
-      onPressOut={() => setIsPressed(false)}
       disabled={disabled}
       activeOpacity={disabled ? 1 : 0.7}
       delayPressIn={disabled ? 0 : 100} // 漂浮編輯框更直觀，減少延遲
@@ -276,10 +271,6 @@ const styles = StyleSheet.create({
   },
   cellError: {
     backgroundColor: 'rgba(220, 53, 69, 0.1)',
-    borderRadius: 4,
-  },
-  pressedCellContainer: {
-    backgroundColor: colors.orangeBackground,
     borderRadius: 4,
   },
   cellContent: {
