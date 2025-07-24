@@ -7,6 +7,8 @@ import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { getFirebaseAuth, getFirebaseDb } from '@/services/firebase/config';
 import { User } from '@/types/user';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { STORAGE_KEYS } from '@/config/constants';
 
 interface AuthState {
   user: User | null;
@@ -36,11 +38,25 @@ export const useAuthStore = create<AuthState>((set) => ({
   setUser: (user) => set({ user, isAuthenticated: !!user }),
   setLoading: (loading) => set({ isLoading: loading }),
   setError: (error) => set({ error }),
-  toggleMode: () => set((state) => ({ 
-    mode: state.mode === 'business' ? 'manager' : 'business' 
-  })),
+  toggleMode: () => set((state) => { 
+    const newMode = state.mode === 'business' ? 'manager' : 'business';
+    // 持久化模式到 AsyncStorage
+    AsyncStorage.setItem(STORAGE_KEYS.USER_MODE, newMode).catch(error => {
+      console.error('儲存使用者模式失敗:', error);
+    });
+    return { mode: newMode };
+  }),
   
   initializeAuth: () => {
+    // 載入持久化的模式
+    AsyncStorage.getItem(STORAGE_KEYS.USER_MODE).then(savedMode => {
+      if (savedMode === 'manager' || savedMode === 'business') {
+        set({ mode: savedMode });
+      }
+    }).catch(error => {
+      console.error('載入使用者模式失敗:', error);
+    });
+    
     // 訂閱認證狀態變更
     const unsubscribe = onAuthStateChanged(getFirebaseAuth(), async (firebaseUser) => {
       set({ firebaseUser, isLoading: true, error: null });
@@ -92,11 +108,14 @@ export const useAuthStore = create<AuthState>((set) => ({
   signOut: async () => {
     try {
       await getFirebaseAuth().signOut();
+      // 清除持久化的模式
+      await AsyncStorage.removeItem(STORAGE_KEYS.USER_MODE);
       set({ 
         user: null, 
         firebaseUser: null, 
         isAuthenticated: false, 
-        error: null 
+        error: null,
+        mode: 'business' // 重置為預設模式
       });
     } catch (error) {
       console.error('登出時發生錯誤:', error);

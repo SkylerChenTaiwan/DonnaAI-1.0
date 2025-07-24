@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Layout } from '@/components/common/Layout';
 import { SearchBar } from '@/components/common/SearchBar';
+import { ToolbarIcons } from '@/components/common/ToolbarIcons';
 import { PersonnelTabs } from './PersonnelTabs';
 import { TableView } from './TableView';
 import { TreeView } from './TreeView';
@@ -21,6 +22,7 @@ import { db } from '@/services/firebase/config';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { showToast } from '@/utils/toast';
 import { DesignSystem } from '@/theme/designSystem';
+import { useAuthStore } from '@/stores/authStore';
 
 export interface TeamMember {
   id: string;
@@ -47,6 +49,7 @@ export const PersonnelScreen: React.FC = () => {
   const [activeView, setActiveView] = useState<'tree' | 'table'>('table');
   const { user } = useAuth();
   const { currentTeam } = useOrganization();
+  const { mode, toggleMode } = useAuthStore();
 
   // 獲取團隊成員
   const fetchTeamMembers = async () => {
@@ -132,13 +135,27 @@ export const PersonnelScreen: React.FC = () => {
           onViewChange={handleViewChange} 
         />
         
-        {/* 搜尋欄 */}
-        <View style={styles.searchContainer}>
-          <SearchBar
-            placeholder="搜尋成員姓名、電子郵件或角色..."
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
+        {/* 整合工具列和搜尋欄 */}
+        <View style={styles.toolbar}>
+          <View style={styles.searchWrapper}>
+            <SearchBar
+              placeholder="搜尋成員姓名、電子郵件或角色..."
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+              style={styles.searchBar}
+            />
+          </View>
+          <View style={styles.toolbarButtons}>
+            <ToolbarIcons
+              showFilter={false}
+              showSort={false}
+              showMultiSelect={false}
+              showColumns={false}
+              showModeToggle={true}
+              currentMode={mode}
+              onModeToggle={toggleMode}
+            />
+          </View>
         </View>
 
         {/* 內容區域 */}
@@ -179,13 +196,26 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: DesignSystem.colors.text.secondary,
   },
-  searchContainer: {
+  toolbar: {
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 20,
     paddingTop: 20,
     paddingBottom: 12,
     backgroundColor: DesignSystem.colors.surface,
     borderBottomWidth: 1,
     borderBottomColor: DesignSystem.colors.border.light,
+    gap: 12,
+  },
+  searchWrapper: {
+    flex: 1,
+  },
+  searchBar: {
+    flex: 1,
+  },
+  toolbarButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   contentArea: {
     flex: 1,

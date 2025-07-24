@@ -126,32 +126,6 @@ export function TableView({
 
   return (
     <View style={styles.container}>
-      {/* 統計資訊 */}
-      <View style={styles.statsContainer}>
-        <View style={styles.statCard}>
-          <Text style={styles.statValue}>{teamMembers.length}</Text>
-          <Text style={styles.statLabel}>總人數</Text>
-        </View>
-        <View style={styles.statCard}>
-          <Text style={[styles.statValue, { color: '#34C759' }]}>
-            {teamMembers.filter(m => m.status === 'active').length}
-          </Text>
-          <Text style={styles.statLabel}>在職</Text>
-        </View>
-        <View style={styles.statCard}>
-          <Text style={[styles.statValue, { color: '#FF9500' }]}>
-            {teamMembers.filter(m => m.status === 'on_leave').length}
-          </Text>
-          <Text style={styles.statLabel}>請假</Text>
-        </View>
-        <View style={styles.statCard}>
-          <Text style={[styles.statValue, { color: '#007AFF' }]}>
-            {enhancedMembers.filter(m => m.isOnline).length}
-          </Text>
-          <Text style={styles.statLabel}>線上</Text>
-        </View>
-      </View>
-
       {/* 表格區域 */}
       <View style={styles.tableContainer}>
         <DataTable
@@ -194,34 +168,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: DesignSystem.colors.background,
-  },
-  statsContainer: {
-    flexDirection: 'row',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    gap: 12,
-  },
-  statCard: {
-    flex: 1,
-    backgroundColor: DesignSystem.colors.surface,
-    padding: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  statValue: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: DesignSystem.colors.text.primary,
-    marginBottom: 4,
-  },
-  statLabel: {
-    fontSize: 12,
-    color: DesignSystem.colors.text.secondary,
   },
   tableContainer: {
     flex: 1,

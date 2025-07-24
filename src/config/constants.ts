@@ -53,7 +53,10 @@ export const STORAGE_KEYS = {
   ENV_OVERRIDE: '@donna_ai/env_override',
   
   // 使用者偏好
-  USER_PREFERENCES: '@donna_ai/user_preferences'
+  USER_PREFERENCES: '@donna_ai/user_preferences',
+  
+  // 使用者模式（業務/主管）
+  USER_MODE: '@donna_ai/user_mode'
 } as const;
 
 /**

@@ -169,6 +169,15 @@
    - ✅ 更新 AnnouncementModal 和 TaskAssignmentModal - 統一顏色主題
    - **結果**：成功將主管模式UI從多彩iOS風格轉換為單色灰階設計系統，報表成為主要內容，新用戶可看到6個預設報表
 
+2. **實現人事管理頁面的模式切換功能**
+   - ✅ 擴充 ToolbarIcons 元件支援模式切換按鈕
+   - ✅ 在 PersonnelScreen 中整合工具列與搜尋欄
+   - ✅ 移除 TableView 中的統計資訊區塊
+   - ✅ 新增 USER_MODE 常數到 STORAGE_KEYS
+   - ✅ 更新 authStore 支援模式狀態持久化（AsyncStorage）
+   - ✅ 實現登出時清除模式設定
+   - **結果**：成功在人事管理頁面加入模式切換按鈕，並將模式狀態持久化到本地儲存
+
 ### 🔄 進行中的任務
 - （無）
 

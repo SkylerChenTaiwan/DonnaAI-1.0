@@ -16,11 +16,14 @@ interface ToolbarIconsProps {
   showSort?: boolean;
   showMultiSelect?: boolean;
   showColumns?: boolean;
+  showModeToggle?: boolean;
   multiSelectMode?: boolean;
+  currentMode?: 'business' | 'manager';
   onFilterPress?: () => void;
   onSortPress?: () => void;
   onMultiSelectPress?: () => void;
   onColumnsPress?: () => void;
+  onModeToggle?: () => void;
   style?: ViewStyle;
 }
 
@@ -29,11 +32,14 @@ export const ToolbarIcons: React.FC<ToolbarIconsProps> = ({
   showSort = true,
   showMultiSelect = true,
   showColumns = true,
+  showModeToggle = false,
   multiSelectMode = false,
+  currentMode = 'business',
   onFilterPress,
   onSortPress,
   onMultiSelectPress,
   onColumnsPress,
+  onModeToggle,
   style,
 }) => {
   return (
@@ -87,6 +93,24 @@ export const ToolbarIcons: React.FC<ToolbarIconsProps> = ({
           testID="columns-button"
         >
           <Ionicons name="list" size={20} color="#6B6B6B" />
+        </TouchableOpacity>
+      )}
+      {showModeToggle && (
+        <TouchableOpacity
+          style={[
+            styles.iconButton,
+            currentMode === 'manager' && styles.iconButtonActive,
+          ]}
+          onPress={onModeToggle}
+          activeOpacity={0.7}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          testID="mode-toggle-button"
+        >
+          <Ionicons 
+            name={currentMode === 'business' ? 'briefcase' : 'people'} 
+            size={20} 
+            color={currentMode === 'manager' ? "#1A1A1A" : "#6B6B6B"} 
+          />
         </TouchableOpacity>
       )}
     </View>
