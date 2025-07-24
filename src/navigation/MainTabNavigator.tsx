@@ -18,6 +18,7 @@ import { SettingsScreen } from '@/screens/settings/SettingsScreen';
 import { ActionPopover } from '@/components/common/ActionPopover';
 import AnalyticsDialog from '@/components/analytics/AnalyticsDialog';
 import { MainTabParamList, RootStackParamList } from '@/types/navigation';
+import { DesignSystem } from '@/theme/designSystem';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -79,8 +80,8 @@ export const MainTabNavigator = () => {
                   if (mode === 'manager') {
                     return (
                       <View style={styles.addButtonContainer} ref={addButtonRef}>
-                        <View style={[styles.addButton, { backgroundColor: '#007AFF' }]}>
-                          <Ionicons name="help-circle" size={24} color="#FFFFFF" />
+                        <View style={[styles.searchButton]}>
+                          <Ionicons name="search" size={20} color={DesignSystem.colors.text.inverse} />
                         </View>
                       </View>
                     );
@@ -112,7 +113,7 @@ export const MainTabNavigator = () => {
 
               return <Ionicons name={iconName} size={size} color={color} />;
             },
-            tabBarActiveTintColor: '#1A1A1A',
+            tabBarActiveTintColor: DesignSystem.colors.text.primary,
             tabBarInactiveTintColor: '#999999',
             tabBarStyle: {
               height: 88,
@@ -227,7 +228,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#1A1A1A',
+    backgroundColor: DesignSystem.colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 6,
@@ -235,6 +236,20 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.25,
     shadowRadius: 5,
+  },
+  searchButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: DesignSystem.colors.gray[700], // #404040 深灰色以保持辨識度
+    alignItems: 'center',
+    justifyContent: 'center',
+    // 較輕的陰影以配合灰色調
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
   },
   plusIcon: {
     width: 20,
