@@ -38,6 +38,7 @@
 | 32v  | personnel-table-toolbar-and-mode-persistence.md | ✅ 已完成 | 人事表格工具列與模式持久化 - 移除統計列、加入工具列功能、實作模式持久化 | 2025-07-24 |
 | 33v  | database-ui-editing-improvements.md | ✅ 已完成 | 資料庫編輯介面改進 - 新增列按鈕、清理編輯圖標、橘色按鈕統一、優化空狀態 | 2025-07-24 |
 | 34v  | database-editing-ui-refinements.md | ✅ 已完成 | 資料庫編輯介面細化調整 - 淺色下屬按鈕、移除表頭鉛筆、左對齊新增按鈕、漂浮編輯框 | 2025-07-24 |
+| 35   | database-interactive-enhancements.md | 📋 待執行 | 資料庫互動功能增強 - 橘色編輯按鈕、動態表單生成、新增下屬功能、權限檢查 | - |
 
 ## 命名規則
 
@@ -53,7 +54,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：35**
+**下一個新建的 PRP 應使用編號：36**
 
 ## PRP 類型說明
 
