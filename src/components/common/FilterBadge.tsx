@@ -29,9 +29,9 @@ const getOperatorLabel = (operator?: string): string => {
 
 export interface FilterCondition {
   key: string;
-  label: string;
+  label?: string;
   value: string;
-  operator?: string;
+  operator?: 'equals' | 'contains' | 'startsWith' | 'endsWith';
 }
 
 interface FilterBadgeProps {
@@ -41,11 +41,11 @@ interface FilterBadgeProps {
 }
 
 export const FilterBadge: React.FC<FilterBadgeProps> = ({
-  filters,
+  filters = [],
   onRemoveFilter,
   onClearAll,
 }) => {
-  if (filters.length === 0) {
+  if (!filters || filters.length === 0) {
     return null;
   }
 
@@ -60,7 +60,7 @@ export const FilterBadge: React.FC<FilterBadgeProps> = ({
           {filters.map((filter) => (
             <View key={filter.key} style={styles.filterItem}>
               <Text style={styles.filterText} numberOfLines={1}>
-                {filter.label} {getOperatorLabel(filter.operator)} {filter.value}
+                {filter.label || filter.key} {getOperatorLabel(filter.operator)} {filter.value}
               </Text>
               <TouchableOpacity
                 onPress={() => onRemoveFilter(filter.key)}

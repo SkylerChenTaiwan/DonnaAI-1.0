@@ -21,7 +21,7 @@ import { TreeView } from './TreeView';
 import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
 import { getUserPermissionContext } from '@/services/firebase/permissions-v2';
-import { db } from '@/services/firebase/config';
+import { getFirebaseDb } from '@/services/firebase/config';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { showToast } from '@/utils/toast';
 import { DesignSystem } from '@/theme/designSystem';
@@ -70,6 +70,7 @@ export const PersonnelScreen: React.FC = () => {
       const permissionContext = await getUserPermissionContext(user.uid);
       
       // 查詢團隊成員
+      const db = getFirebaseDb();
       const usersRef = collection(db, 'users');
       const q = query(
         usersRef,
