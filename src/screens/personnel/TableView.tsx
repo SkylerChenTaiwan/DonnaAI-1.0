@@ -143,7 +143,9 @@ export function TableView({
       <View style={styles.container}>
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyTitle}>您目前沒有下屬</Text>
-          <Text style={styles.emptySubtitle}>當有成員指定您為上級主管時，他們將會顯示在這裡</Text>
+          <Text style={styles.emptySubtitle}>
+            當有成員指定您為上級主管時，他們將會顯示在這裡
+          </Text>
           <TouchableOpacity style={styles.refreshButton} onPress={onRefresh}>
             <Text style={styles.refreshButtonText}>重新整理</Text>
           </TouchableOpacity>

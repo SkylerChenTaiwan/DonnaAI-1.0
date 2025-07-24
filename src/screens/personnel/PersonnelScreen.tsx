@@ -22,7 +22,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
 import { getUserPermissionContext } from '@/services/firebase/permissions-v2';
 import { getFirebaseDb } from '@/services/firebase/config';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { showToast } from '@/utils/toast';
 import { DesignSystem } from '@/theme/designSystem';
 import { useAuthStore } from '@/stores/authStore';
@@ -61,7 +61,10 @@ export const PersonnelScreen: React.FC = () => {
 
   // 獲取下屬成員
   const fetchSubordinates = async () => {
-    if (!user) return;
+    if (!user) {
+      console.log('等待用戶資料載入...');
+      return;
+    }
 
     try {
       setLoading(true);
@@ -70,9 +73,33 @@ export const PersonnelScreen: React.FC = () => {
       
       // 確保用戶有組織ID
       if (!user.organizationId) {
-        console.error('用戶缺少組織ID');
-        setLoading(false);
-        return;
+        console.error('用戶缺少組織ID:', {
+          userId: user.id,
+          userEmail: user.email,
+          userData: user
+        });
+        
+        // 嘗試從 Firestore 重新載入用戶資料
+        try {
+          const userDoc = await getDoc(doc(db, 'users', user.id));
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            if (!userData.organizationId) {
+              showToast('error', '您的帳號尚未設定組織，請聯繡管理員');
+              setLoading(false);
+              return;
+            }
+            // 使用重新載入的組織ID
+            user.organizationId = userData.organizationId;
+          }
+        } catch (error) {
+          console.error('重新載入用戶資料失敗:', error);
+        }
+        
+        if (!user.organizationId) {
+          setLoading(false);
+          return;
+        }
       }
       
       // 查詢以當前用戶為上級的所有成員
