@@ -2,18 +2,20 @@
  * 人事管理表格檢視
  */
 
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   View,
   Text,
-  ScrollView,
-  TouchableOpacity,
   StyleSheet,
-  RefreshControl,
+  TouchableOpacity,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { DataTable } from '@/components/common/DataTable';
+import { StatusIndicator } from '@/components/personnel/StatusIndicator';
+import { PermissionBadge } from '@/components/personnel/PermissionBadge';
 import { TeamMember } from './PersonnelScreen';
 import { DesignSystem } from '@/theme/DesignSystem';
+import { TableColumn } from '@/types/table';
+import { EnhancedUser } from '@/types/personnel';
 
 interface TableViewProps {
   teamMembers: TeamMember[];
@@ -28,63 +30,102 @@ export function TableView({
   refreshing, 
   onRefresh 
 }: TableViewProps) {
-  // 過濾成員
-  const filteredMembers = teamMembers.filter((member) =>
-    member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    member.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    member.role.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  // 將 TeamMember 轉換為 EnhancedUser 格式
+  const enhancedMembers: Partial<EnhancedUser>[] = useMemo(() => {
+    return teamMembers.map(member => ({
+      ...member,
+      isOnline: member.status === 'active' && member.lastActive && 
+        (new Date().getTime() - member.lastActive.getTime()) < 15 * 60 * 1000, // 15分鐘內活躍
+      lastActiveAt: member.lastActive,
+      permissions: {
+        modules: [],
+        actions: [],
+        dataAccess: member.role === 'admin' ? 'organization' : 
+                   member.role === 'manager' ? 'team' : 'own',
+      },
+      subordinates: member.role === 'manager' ? [] : undefined,
+    }));
+  }, [teamMembers]);
 
-  // 狀態顏色
-  const getStatusColor = (status: TeamMember['status']) => {
-    switch (status) {
-      case 'active':
-        return '#34C759';
-      case 'inactive':
-        return '#8E8E93';
-      case 'on_leave':
-        return '#FF9500';
-      default:
-        return '#8E8E93';
-    }
+  // 定義表格欄位
+  const columns: TableColumn[] = useMemo(() => [
+    {
+      key: 'name',
+      title: '姓名',
+      sortable: true,
+      render: (value, item) => (
+        <View style={styles.nameCell}>
+          <Text style={styles.nameText}>{value}</Text>
+          <Text style={styles.emailText}>{item.email}</Text>
+        </View>
+      ),
+    },
+    {
+      key: 'status',
+      title: '狀態',
+      width: 100,
+      render: (value, item) => (
+        <StatusIndicator user={item} size="small" />
+      ),
+    },
+    {
+      key: 'role',
+      title: '角色權限',
+      width: 150,
+      render: (value, item) => (
+        <PermissionBadge user={item} />
+      ),
+    },
+    {
+      key: 'department',
+      title: '部門',
+      sortable: true,
+      render: (value) => value || '未設定',
+    },
+    {
+      key: 'performance',
+      title: '績效指標',
+      width: 200,
+      render: (value) => (
+        <View style={styles.performanceCell}>
+          <View style={styles.performanceItem}>
+            <Text style={styles.performanceValue}>{value?.meetings || 0}</Text>
+            <Text style={styles.performanceLabel}>會議</Text>
+          </View>
+          <View style={styles.performanceItem}>
+            <Text style={styles.performanceValue}>{value?.customers || 0}</Text>
+            <Text style={styles.performanceLabel}>客戶</Text>
+          </View>
+          <View style={styles.performanceItem}>
+            <Text style={styles.performanceValue}>{value?.deals || 0}</Text>
+            <Text style={styles.performanceLabel}>成交</Text>
+          </View>
+        </View>
+      ),
+    },
+    {
+      key: 'joinDate',
+      title: '入職日期',
+      sortable: true,
+      render: (value) => value ? new Date(value).toLocaleDateString('zh-TW') : '-',
+    },
+  ], []);
+
+  // 處理行點擊
+  const handleRowPress = (item: any) => {
+    console.log('查看成員詳情:', item.id);
+    // TODO: 導航到成員詳情頁
   };
 
-  // 狀態文字
-  const getStatusText = (status: TeamMember['status']) => {
-    switch (status) {
-      case 'active':
-        return '在職';
-      case 'inactive':
-        return '離職';
-      case 'on_leave':
-        return '請假';
-      default:
-        return '未知';
-    }
-  };
-
-  // 角色文字
-  const getRoleText = (role: string) => {
-    switch (role) {
-      case 'admin':
-        return '管理員';
-      case 'manager':
-        return '主管';
-      case 'salesperson':
-        return '業務';
-      default:
-        return role;
-    }
+  // 處理選擇變更
+  const handleSelectionChange = (ids: string[]) => {
+    setSelectedIds(ids);
+    console.log('選擇的成員:', ids);
   };
 
   return (
-    <ScrollView
-      style={styles.container}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-      showsVerticalScrollIndicator={false}
-    >
+    <View style={styles.container}>
       {/* 統計資訊 */}
       <View style={styles.statsContainer}>
         <View style={styles.statCard}>
@@ -103,84 +144,49 @@ export function TableView({
           </Text>
           <Text style={styles.statLabel}>請假</Text>
         </View>
+        <View style={styles.statCard}>
+          <Text style={[styles.statValue, { color: '#007AFF' }]}>
+            {enhancedMembers.filter(m => m.isOnline).length}
+          </Text>
+          <Text style={styles.statLabel}>線上</Text>
+        </View>
       </View>
 
-      {/* 成員列表 */}
-      <View style={styles.membersList}>
-        {filteredMembers.length === 0 ? (
-          <View style={styles.emptyState}>
-            <Ionicons name="people-outline" size={48} color="#D1D5DB" />
-            <Text style={styles.emptyTitle}>沒有找到成員</Text>
-            <Text style={styles.emptyDescription}>
-              {searchQuery ? '請嘗試其他搜尋條件' : '目前沒有團隊成員'}
-            </Text>
-          </View>
-        ) : (
-          filteredMembers.map((member) => (
-            <TouchableOpacity
-              key={member.id}
-              style={styles.memberCard}
-              activeOpacity={0.7}
-              onPress={() => {
-                // TODO: 導航到成員詳情頁
-                console.log('查看成員詳情:', member.id);
-              }}
-            >
-              <View style={styles.memberHeader}>
-                <View style={styles.memberInfo}>
-                  <View style={styles.nameRow}>
-                    <Text style={styles.memberName}>{member.name}</Text>
-                    <View
-                      style={[
-                        styles.statusBadge,
-                        { backgroundColor: getStatusColor(member.status) },
-                      ]}
-                    >
-                      <Text style={styles.statusText}>
-                        {getStatusText(member.status)}
-                      </Text>
-                    </View>
-                  </View>
-                  <Text style={styles.memberRole}>{getRoleText(member.role)}</Text>
-                  <Text style={styles.memberEmail}>{member.email}</Text>
-                </View>
-                <TouchableOpacity
-                  style={styles.actionButton}
-                  onPress={() => {
-                    // TODO: 顯示快速操作選單
-                    console.log('快速操作:', member.id);
-                  }}
-                >
-                  <Ionicons name="ellipsis-vertical" size={20} color="#8E8E93" />
-                </TouchableOpacity>
-              </View>
+      {/* 表格區域 */}
+      <View style={styles.tableContainer}>
+        <DataTable
+          data={enhancedMembers}
+          columns={columns}
+          searchable={false} // 搜尋功能已在上層實作
+          selectable={true}
+          showCheckboxes={true}
+          onSelect={handleSelectionChange}
+          onRowPress={handleRowPress}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          filters={searchQuery ? [
+            { key: 'search', value: searchQuery }
+          ] : undefined}
+        />
+      </View>
 
-              {/* 績效指標 */}
-              <View style={styles.performanceRow}>
-                <View style={styles.performanceItem}>
-                  <Ionicons name="calendar-outline" size={16} color="#8E8E93" />
-                  <Text style={styles.performanceText}>
-                    {member.performance?.meetings || 0} 會議
-                  </Text>
-                </View>
-                <View style={styles.performanceItem}>
-                  <Ionicons name="people-outline" size={16} color="#8E8E93" />
-                  <Text style={styles.performanceText}>
-                    {member.performance?.customers || 0} 客戶
-                  </Text>
-                </View>
-                <View style={styles.performanceItem}>
-                  <Ionicons name="trophy-outline" size={16} color="#8E8E93" />
-                  <Text style={styles.performanceText}>
-                    {member.performance?.deals || 0} 成交
-                  </Text>
-                </View>
-              </View>
+      {/* 批次操作工具列 */}
+      {selectedIds.length > 0 && (
+        <View style={styles.batchActions}>
+          <Text style={styles.selectedCount}>
+            已選擇 {selectedIds.length} 位成員
+          </Text>
+          <View style={styles.actionButtons}>
+            <TouchableOpacity style={styles.actionButton}>
+              <Text style={styles.actionButtonText}>匯出</Text>
             </TouchableOpacity>
-          ))
-        )}
-      </View>
-    </ScrollView>
+            <TouchableOpacity style={styles.actionButton}>
+              <Text style={styles.actionButtonText}>設定權限</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+    </View>
   );
 }
 
@@ -217,93 +223,69 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: DesignSystem.colors.text.secondary,
   },
-  membersList: {
-    padding: 16,
-  },
-  memberCard: {
-    backgroundColor: DesignSystem.colors.surface,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  memberHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 12,
-  },
-  memberInfo: {
+  tableContainer: {
     flex: 1,
+    paddingHorizontal: 16,
   },
-  nameRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 4,
-    gap: 8,
+  // 表格內容樣式
+  nameCell: {
+    paddingVertical: 4,
   },
-  memberName: {
-    fontSize: 18,
+  nameText: {
+    fontSize: 14,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-  },
-  statusBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 12,
-  },
-  statusText: {
-    fontSize: 10,
-    color: '#FFFFFF',
-    fontWeight: '600',
-  },
-  memberRole: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#007AFF',
     marginBottom: 2,
   },
-  memberEmail: {
-    fontSize: 14,
-    color: DesignSystem.colors.text.secondary,
-  },
-  actionButton: {
-    padding: 8,
-  },
-  performanceRow: {
-    flexDirection: 'row',
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: DesignSystem.colors.border.light,
-    gap: 16,
-  },
-  performanceItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  performanceText: {
+  emailText: {
     fontSize: 12,
     color: DesignSystem.colors.text.secondary,
   },
-  emptyState: {
-    paddingVertical: 60,
+  performanceCell: {
+    flexDirection: 'row',
+    gap: 16,
+  },
+  performanceItem: {
     alignItems: 'center',
   },
-  emptyTitle: {
-    fontSize: 18,
+  performanceValue: {
+    fontSize: 16,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginTop: 16,
-    marginBottom: 8,
   },
-  emptyDescription: {
+  performanceLabel: {
+    fontSize: 10,
+    color: DesignSystem.colors.text.tertiary,
+    marginTop: 2,
+  },
+  // 批次操作工具列
+  batchActions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: DesignSystem.colors.surface,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderTopWidth: 1,
+    borderTopColor: DesignSystem.colors.border.light,
+  },
+  selectedCount: {
     fontSize: 14,
     color: DesignSystem.colors.text.secondary,
-    textAlign: 'center',
+  },
+  actionButtons: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  actionButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: DesignSystem.colors.primary,
+    borderRadius: 8,
+  },
+  actionButtonText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#FFFFFF',
   },
 });
