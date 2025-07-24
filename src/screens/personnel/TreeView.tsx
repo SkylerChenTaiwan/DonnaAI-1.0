@@ -101,6 +101,7 @@ export function TreeView({
           searchQuery={searchQuery}
           onNodePress={handleNodePress}
           onNodeExpand={handleNodeExpand}
+          draggable={true}
         />
       </View>
     </View>

@@ -14,6 +14,7 @@ import Svg, { Line, G } from 'react-native-svg';
 import { OrgNode } from '@/types/organization';
 import { TeamMember } from '@/screens/personnel/PersonnelScreen';
 import { OrgNodeComponent } from './OrgNode';
+import { DragDropProvider } from './DragDropHandler';
 import { DesignSystem } from '@/theme/DesignSystem';
 
 interface OrgChartProps {
@@ -21,6 +22,7 @@ interface OrgChartProps {
   searchQuery?: string;
   onNodePress?: (node: OrgNode) => void;
   onNodeExpand?: (nodeId: string) => void;
+  draggable?: boolean;
 }
 
 const NODE_WIDTH = 220;
@@ -32,8 +34,19 @@ export function OrgChart({
   teamMembers, 
   searchQuery = '',
   onNodePress,
-  onNodeExpand
+  onNodeExpand,
+  draggable = false
 }: OrgChartProps) {
+  // 處理拖放開始
+  const handleDragStart = (node: OrgNode) => {
+    console.log('開始拖動:', node.user.name);
+  };
+  
+  // 處理放置
+  const handleDrop = (sourceNode: OrgNode, targetNode: OrgNode) => {
+    console.log('放置節點:', sourceNode.user.name, '->', targetNode.user.name);
+    // TODO: 實作組織結構更新邏輯
+  };
   // 構建組織樹結構
   const orgTree = useMemo(() => {
     // 找出所有主管和管理員
@@ -199,6 +212,9 @@ export function OrgChart({
           node={node}
           onPress={() => onNodePress?.(node)}
           onExpand={() => onNodeExpand?.(node.id)}
+          draggable={draggable}
+          onDragStart={handleDragStart}
+          onDrop={handleDrop}
         />
       </View>
     );
@@ -221,7 +237,7 @@ export function OrgChart({
     );
   }
 
-  return (
+  const content = (
     <ScrollView
       style={styles.container}
       horizontal
@@ -249,6 +265,13 @@ export function OrgChart({
       </ScrollView>
     </ScrollView>
   );
+  
+  // 如果啟用拖放，包裹 DragDropProvider
+  if (draggable) {
+    return <DragDropProvider>{content}</DragDropProvider>;
+  }
+  
+  return content;
 }
 
 const styles = StyleSheet.create({

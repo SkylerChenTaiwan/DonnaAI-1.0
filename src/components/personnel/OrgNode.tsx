@@ -13,23 +13,30 @@ import { Ionicons } from '@expo/vector-icons';
 import { OrgNode } from '@/types/organization';
 import { StatusIndicator } from './StatusIndicator';
 import { PermissionBadge } from './PermissionBadge';
+import { DragDropHandler } from './DragDropHandler';
 import { DesignSystem } from '@/theme/DesignSystem';
 
 interface OrgNodeComponentProps {
   node: OrgNode;
   onPress?: () => void;
   onExpand?: () => void;
+  draggable?: boolean;
+  onDragStart?: (node: OrgNode) => void;
+  onDrop?: (sourceNode: OrgNode, targetNode: OrgNode) => void;
 }
 
 export function OrgNodeComponent({ 
   node, 
   onPress,
-  onExpand 
+  onExpand,
+  draggable = false,
+  onDragStart,
+  onDrop
 }: OrgNodeComponentProps) {
   const user = node.user;
   const hasChildren = node.children.length > 0;
   
-  return (
+  const nodeContent = (
     <TouchableOpacity
       style={styles.container}
       onPress={onPress}
@@ -90,6 +97,22 @@ export function OrgNodeComponent({
       </View>
     </TouchableOpacity>
   );
+  
+  // 如果可拖動，包裹 DragDropHandler
+  if (draggable) {
+    return (
+      <DragDropHandler
+        node={node}
+        onDragStart={onDragStart}
+        onDrop={onDrop}
+        enabled={draggable}
+      >
+        {nodeContent}
+      </DragDropHandler>
+    );
+  }
+  
+  return nodeContent;
 }
 
 // 角色文字轉換
