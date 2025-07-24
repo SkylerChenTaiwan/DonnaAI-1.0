@@ -12,6 +12,9 @@ import {
 import { Layout } from '@/components/common/Layout';
 import { SearchBar } from '@/components/common/SearchBar';
 import { ToolbarIcons } from '@/components/common/ToolbarIcons';
+import { FilterModal } from '@/components/common/FilterModal';
+import { ColumnSettingsModal } from '@/components/common/ColumnSettingsModal';
+import { FilterBadge, FilterCondition } from '@/components/common/FilterBadge';
 import { PersonnelTabs } from './PersonnelTabs';
 import { TableView } from './TableView';
 import { TreeView } from './TreeView';
@@ -47,6 +50,11 @@ export const PersonnelScreen: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [activeView, setActiveView] = useState<'tree' | 'table'>('table');
+  const [multiSelectMode, setMultiSelectMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [showColumnSettings, setShowColumnSettings] = useState(false);
+  const [activeFilters, setActiveFilters] = useState<FilterCondition[]>([]);
   const { user } = useAuth();
   const { currentTeam } = useOrganization();
   const { mode, toggleMode } = useAuthStore();
@@ -147,16 +155,34 @@ export const PersonnelScreen: React.FC = () => {
           </View>
           <View style={styles.toolbarButtons}>
             <ToolbarIcons
-              showFilter={false}
+              multiSelectMode={multiSelectMode}
               showSort={false}
-              showMultiSelect={false}
-              showColumns={false}
+              showFilter={true}
+              showMultiSelect={true}
+              showColumns={true}
               showModeToggle={true}
               currentMode={mode}
+              onFilterPress={() => setShowFilterModal(true)}
+              onMultiSelectPress={() => {
+                setMultiSelectMode(!multiSelectMode);
+                if (!multiSelectMode) {
+                  setSelectedIds([]);
+                }
+              }}
+              onColumnsPress={() => setShowColumnSettings(true)}
               onModeToggle={toggleMode}
             />
           </View>
         </View>
+
+        {/* 篩選條件顯示 */}
+        <FilterBadge
+          filters={activeFilters}
+          onRemoveFilter={(key: string) => {
+            setActiveFilters(prev => prev.filter(f => f.key !== key));
+          }}
+          onClearAll={() => setActiveFilters([])}
+        />
 
         {/* 內容區域 */}
         <View style={styles.contentArea}>
@@ -166,6 +192,10 @@ export const PersonnelScreen: React.FC = () => {
               searchQuery={searchQuery}
               refreshing={refreshing}
               onRefresh={onRefresh}
+              multiSelectMode={multiSelectMode}
+              selectedIds={selectedIds}
+              onSelectionChange={setSelectedIds}
+              activeFilters={activeFilters}
             />
           ) : (
             <TreeView
@@ -177,6 +207,36 @@ export const PersonnelScreen: React.FC = () => {
           )}
         </View>
       </View>
+
+      {/* Modal 元件 */}
+      <FilterModal
+        visible={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
+        onApply={(filters) => {
+          setActiveFilters(filters);
+          setShowFilterModal(false);
+        }}
+        currentFilters={activeFilters}
+        availableColumns={[
+          { key: 'status', title: '狀態' },
+          { key: 'role', title: '角色' },
+          { key: 'department', title: '部門' },
+        ]}
+      />
+      
+      <ColumnSettingsModal
+        visible={showColumnSettings}
+        onClose={() => setShowColumnSettings(false)}
+        tableName="personnel"
+        columns={[
+          { key: 'name', title: '姓名', required: true },
+          { key: 'status', title: '狀態' },
+          { key: 'role', title: '角色權限' },
+          { key: 'department', title: '部門' },
+          { key: 'performance', title: '績效指標' },
+          { key: 'joinDate', title: '入職日期' },
+        ]}
+      />
     </Layout>
   );
 };

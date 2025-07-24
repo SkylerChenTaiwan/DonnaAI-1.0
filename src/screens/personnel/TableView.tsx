@@ -16,21 +16,34 @@ import { TeamMember } from './PersonnelScreen';
 import { DesignSystem } from '@/theme/designSystem';
 import { TableColumn } from '@/types/table';
 import { EnhancedUser } from '@/types/personnel';
+import { FilterCondition } from '@/components/common/FilterBadge';
 
 interface TableViewProps {
   teamMembers: TeamMember[];
   searchQuery: string;
   refreshing: boolean;
   onRefresh: () => void;
+  multiSelectMode?: boolean;
+  selectedIds?: string[];
+  onSelectionChange?: (ids: string[]) => void;
+  activeFilters?: FilterCondition[];
 }
 
 export function TableView({ 
   teamMembers, 
   searchQuery, 
   refreshing, 
-  onRefresh 
+  onRefresh,
+  multiSelectMode = false,
+  selectedIds: propSelectedIds = [],
+  onSelectionChange,
+  activeFilters = []
 }: TableViewProps) {
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [internalSelectedIds, setInternalSelectedIds] = useState<string[]>([]);
+  
+  // 使用 props 或內部狀態
+  const selectedIds = propSelectedIds.length > 0 ? propSelectedIds : internalSelectedIds;
+  const setSelectedIds = onSelectionChange || setInternalSelectedIds;
   // 將 TeamMember 轉換為 EnhancedUser 格式
   const enhancedMembers: Partial<EnhancedUser>[] = useMemo(() => {
     return teamMembers.map(member => ({
@@ -133,14 +146,15 @@ export function TableView({
           columns={columns}
           searchable={false} // 搜尋功能已在上層實作
           selectable={true}
-          showCheckboxes={true}
+          showCheckboxes={multiSelectMode}
           onSelect={handleSelectionChange}
           onRowPress={handleRowPress}
           refreshing={refreshing}
           onRefresh={onRefresh}
-          filters={searchQuery ? [
-            { key: 'search', value: searchQuery }
-          ] : undefined}
+          filters={[
+            ...(searchQuery ? [{ key: 'search', value: searchQuery }] : []),
+            ...activeFilters
+          ]}
         />
       </View>
 
