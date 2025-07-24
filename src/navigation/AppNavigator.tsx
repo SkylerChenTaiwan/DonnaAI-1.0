@@ -22,7 +22,6 @@ import { StateInspector } from '@/components/developer/StateInspector';
 import { ErrorLogsScreen } from '@/screens/developer/ErrorLogsScreen';
 import { PerformanceMonitorScreen } from '@/screens/developer/PerformanceMonitorScreen';
 import { TestScreen } from '@/screens/developer/TestScreen';
-import { SmartAnalyticsScreen } from '@/screens/analytics/SmartAnalyticsScreen';
 import { environmentManager } from '@/config/environment';
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -83,17 +82,6 @@ export const AppNavigator = () => {
               name="TaskDetail"
               component={TaskDetailScreen}
               options={{ headerShown: false }}
-            />
-            {/* 智能分析頁面 */}
-            <Stack.Screen
-              name="SmartAnalytics"
-              component={SmartAnalyticsScreen}
-              options={{ 
-                headerShown: true,
-                title: '智能分析',
-                headerTintColor: '#1A1A1A',
-                headerBackTitleVisible: false,
-              }}
             />
             <Stack.Group screenOptions={{ 
               presentation: 'modal', 

@@ -136,13 +136,9 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
     if (onReportPress) {
       onReportPress(report);
     } else {
-      // 導航到智能分析頁面並顯示報表
-      // @ts-ignore - Navigation type not updated
-      navigation.navigate('SmartAnalytics', {
-        savedReportId: report.id,
-        query: report.query,
-        chartData: report.chartData,
-      });
+      // 顯示報表詳情
+      // TODO: 實現報表詳情檢視功能
+      showToast('info', '點擊報表功能開發中');
     }
   };
 
@@ -187,13 +183,7 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
       <View style={[styles.emptyContainer, fullScreen && styles.fullScreenEmptyContainer]}>
         <Ionicons name="bar-chart-outline" size={48} color={colors.border} />
         <Text style={styles.emptyText}>還沒有保存的報表</Text>
-        <TouchableOpacity
-          style={styles.createButton}
-          onPress={() => navigation.navigate('SmartAnalytics')}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.createButtonText}>創建報表</Text>
-        </TouchableOpacity>
+        <Text style={styles.emptyHint}>使用底部導航欄的 AI 按鈕來創建報表</Text>
       </View>
     );
   }
@@ -285,18 +275,6 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
           );
         })}
         
-        {/* 查看更多按鈕 - 只在非全屏模式顯示 */}
-        {!fullScreen && (
-          <TouchableOpacity
-            style={styles.viewMoreCard}
-            // @ts-ignore - Navigation type not updated
-            onPress={() => navigation.navigate('SmartAnalytics', { showSaved: true })}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="arrow-forward-circle" size={48} color={colors.primary} />
-            <Text style={styles.viewMoreText}>查看全部</Text>
-          </TouchableOpacity>
-        )}
       </View>
     </ScrollView>
   );
@@ -331,17 +309,12 @@ const styles = StyleSheet.create({
     ...DesignSystem.typography.body,
     color: colors.textSecondary,
     marginTop: DesignSystem.spacing.sm,
-    marginBottom: DesignSystem.spacing.md,
+    marginBottom: DesignSystem.spacing.sm,
   },
-  createButton: {
-    paddingHorizontal: DesignSystem.spacing.lg,
-    paddingVertical: DesignSystem.spacing.sm,
-    backgroundColor: colors.primary,
-    borderRadius: DesignSystem.borderRadius.full,
-  },
-  createButtonText: {
-    ...DesignSystem.typography.buttonSmall,
-    color: colors.background,
+  emptyHint: {
+    ...DesignSystem.typography.bodySmall,
+    color: colors.textTertiary,
+    marginTop: DesignSystem.spacing.xs,
   },
   reportsGrid: {
     flexDirection: 'row',
@@ -447,21 +420,5 @@ const styles = StyleSheet.create({
     color: colors.textTertiary,
     paddingHorizontal: DesignSystem.spacing.xs,
     paddingVertical: DesignSystem.spacing.xs,
-  },
-  viewMoreCard: {
-    width: 160,
-    backgroundColor: colors.backgroundSecondary,
-    borderRadius: DesignSystem.borderRadius.md,
-    padding: DesignSystem.spacing.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderStyle: 'dashed',
-  },
-  viewMoreText: {
-    ...DesignSystem.typography.buttonSmall,
-    color: colors.primary,
-    marginTop: DesignSystem.spacing.sm,
   },
 });
