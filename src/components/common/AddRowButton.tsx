@@ -62,7 +62,7 @@ export const AddRowButton: React.FC<AddRowButtonProps> = ({
           <Ionicons 
             name="add" 
             size={20} 
-            color={disabled ? colors.textTertiary : colors.orange} 
+            color={disabled ? colors.textTertiary : colors.textSecondary} 
           />
           <Text style={[
             styles.addButtonText,
@@ -86,10 +86,10 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   addButton: {
-    backgroundColor: colors.orangeBackground,
+    backgroundColor: colors.backgroundSecondary,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: colors.orangeLight,
+    borderColor: colors.border,
     borderStyle: 'dashed',
     minHeight: 22, // 高度減半
     justifyContent: 'center',
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   addButtonText: {
     fontSize: 16,
     fontWeight: '500',
-    color: colors.orange,
+    color: colors.textSecondary,
   },
   addButtonTextDisabled: {
     color: colors.textTertiary,
