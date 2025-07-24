@@ -1,212 +1,433 @@
 # PRP-31: 人事管理頁面增強
 
-## 概述
-此 PRP 定義了人事管理頁面的增強功能，包括新增樹狀圖檢視（組織架構圖）和表格檢視的雙標籤切換，以及使用狀態和權限設定的顯示。
+name: "人事管理頁面增強 - 樹狀圖與表格雙檢視"
+description: |
 
 ## 目標
-1. 提供雙重檢視模式：樹狀圖（組織架構）和表格（銷售人員資料）
-2. 清楚顯示每個成員的使用狀態
-3. 實現權限設定的視覺化管理
-4. 支援組織架構的拖放調整功能
+建立強大的人事管理頁面，包含兩種檢視模式：
+1. **樹狀圖檢視**：視覺化組織架構，支援拖放調整
+2. **表格檢視**：詳細的業務人員資料管理
+同時整合使用狀態追蹤和權限管理功能。
+
+## 為什麼
+- **商業價值**：提升管理層對組織結構的掌握度，優化人員配置
+- **整合現有功能**：擴展現有的 PersonnelScreen，加入更豐富的管理功能
+- **解決問題**：當前只有簡單表格檢視，無法直觀理解組織層級和即時狀態
 
 ## 功能需求
 
-### 1. 標籤切換檢視
-- **樹狀圖檢視**：顯示組織架構圖
-- **表格檢視**：顯示銷售人員詳細資料
-- 使用類似 DatabaseScreen 的標籤切換設計
+### 成功標準
+- [ ] 樹狀圖能清楚顯示組織階層關係
+- [ ] 拖放功能流暢，支援組織架構調整
+- [ ] 表格檢視顯示完整的業務資訊和使用狀態
+- [ ] 權限設定介面直觀易用
+- [ ] 大量人員資料（>100人）渲染效能良好
+- [ ] 行動裝置上操作體驗順暢
 
-### 2. 樹狀圖檢視（組織架構圖）
-- 顯示階層式組織結構
-- 每個節點顯示：
-  - 姓名和職稱
-  - 部門
-  - 使用狀態指示器（活躍/非活躍）
-  - 團隊成員數量（如果是主管）
-- 支援展開/收合子節點
-- 拖放功能調整組織架構（需要管理員權限）
+## 所有必要的上下文
 
-### 3. 表格檢視（銷售人員資料）
-- 擴展現有的 PersonnelScreen 表格功能
-- 新增欄位：
-  - 使用狀態（最後活躍時間）
-  - 權限等級
-  - 管理的團隊
-  - 績效指標（可展開詳情）
-- 支援排序、篩選和搜尋
-- 批量操作：權限調整、狀態更新
+### 文檔與參考資料
+```yaml
+# 必讀 - 實作時需要參考的資源
+- file: src/screens/personnel/PersonnelScreen.tsx
+  why: 現有人事頁面實作，需要擴展其功能
+  
+- file: src/screens/database/DatabaseScreen.tsx
+  why: 標籤切換模式參考，包含 View Toggle 實作
+  pattern: 第 124-142 行的標籤切換邏輯
+  
+- file: src/components/common/DataTable.tsx
+  why: 現有表格元件，支援排序、篩選、多選
+  critical: 使用 FlashList 優化長列表效能
+  
+- file: src/services/firebase/permissions-v2.ts
+  why: 權限系統實作，包含角色檢查和快取機制
+  
+- file: src/theme/DesignSystem.ts
+  why: 統一的設計系統，確保 UI 一致性
 
-### 4. 使用狀態顯示
-- 即時活躍狀態（線上/離線）
-- 最後登入時間
-- 30天內活躍度圖表
-- 系統使用統計
+- url: https://github.com/chenglou/react-native-draggable-tree
+  why: React Native 樹狀圖拖放元件參考
+  section: Tree component with drag and drop
+  
+- url: https://react-native-svg.github.io/react-native-svg/
+  why: SVG 繪製組織架構連接線
+  section: Path and Line elements
+  
+- url: https://docs.swmansion.com/react-native-reanimated/
+  why: 動畫效果實作，提升拖放體驗
+  section: Gesture Handler integration
+```
 
-### 5. 權限設定介面
-- 視覺化權限矩陣
-- 快速權限範本（業務、主管、管理員）
-- 自訂權限設定
-- 權限變更歷史記錄
+### 現有程式碼樹狀結構
+```bash
+./src
+├── screens
+│   └── personnel
+│       └── PersonnelScreen.tsx        # 現有人事頁面
+├── components
+│   ├── common
+│   │   ├── DataTable.tsx             # 表格元件
+│   │   ├── EditableDataTable.tsx     # 可編輯表格
+│   │   └── Layout.tsx                # 頁面佈局
+│   └── ui
+│       └── TouchableOpacity.tsx      # 觸控元件
+├── services
+│   └── firebase
+│       ├── permissions-v2.ts         # 權限系統
+│       └── userService.ts            # 使用者服務
+├── stores
+│   ├── userStore.ts                  # 使用者狀態管理
+│   └── teamStore.ts                  # 團隊狀態管理
+└── types
+    ├── user.ts                       # 使用者類型定義
+    └── organization.ts               # 組織類型定義
+```
 
-## 技術實現
+### 期望的程式碼樹狀結構（新增檔案）
+```bash
+./src
+├── screens
+│   └── personnel
+│       ├── PersonnelScreen.tsx        # 主頁面（修改）
+│       ├── PersonnelTabs.tsx          # 標籤切換元件（新增）
+│       ├── TreeView.tsx               # 樹狀圖檢視（新增）
+│       └── TableView.tsx              # 表格檢視（新增）
+├── components
+│   ├── personnel
+│   │   ├── OrgChart.tsx              # 組織圖元件（新增）
+│   │   ├── OrgNode.tsx               # 組織節點元件（新增）
+│   │   ├── DragDropHandler.tsx       # 拖放處理器（新增）
+│   │   ├── StatusIndicator.tsx       # 狀態指示器（新增）
+│   │   ├── PermissionBadge.tsx       # 權限標籤（新增）
+│   │   └── ActivityChart.tsx         # 活動圖表（新增）
+│   └── modals
+│       ├── PermissionModal.tsx        # 權限設定彈窗（新增）
+│       └── ActivityModal.tsx          # 活動詳情彈窗（新增）
+├── stores
+│   └── personnelStore.ts              # 人事狀態管理（新增）
+└── hooks
+    └── useOrgStructure.ts             # 組織結構 Hook（新增）
+```
 
-### 1. 資料結構擴展
-
+### 已知的程式庫限制和注意事項
 ```typescript
-// 擴展 User 介面
-interface EnhancedUser extends User {
+// 重要：FlashList 在動態高度項目時需要特殊處理
+// 參考：src/components/common/DataTable.tsx 第 89-95 行
+
+// 重要：Firebase 權限檢查有快取，更新後需要清除
+// 參考：src/services/firebase/permissions-v2.ts 第 45-50 行
+
+// 重要：React Native 不支援原生 HTML 拖放 API
+// 需要使用 PanGestureHandler 實作拖放功能
+
+// 重要：SVG 在 React Native 需要使用 react-native-svg
+// 不能使用標準的 SVG 元素
+```
+
+## 實作藍圖
+
+### 資料模型和結構
+
+擴展現有的使用者和組織模型：
+```typescript
+// types/personnel.ts
+export interface EnhancedUser extends User {
   // 使用狀態
   isOnline?: boolean;
   lastActiveAt?: Date;
   activityStats?: {
-    dailyLogins: number[];  // 30天登入記錄
-    totalActions: number;   // 總操作次數
-    lastActions: string[];  // 最近操作記錄
+    dailyLogins: number[];    // 30天登入記錄
+    totalActions: number;     // 總操作次數
+    lastActions: string[];    // 最近操作記錄
   };
   
   // 組織結構
-  reportingTo?: string;     // 直屬主管 ID
-  subordinates?: string[];  // 下屬 ID 列表
-  level?: number;          // 組織層級
+  reportingTo?: string;       // 直屬主管 ID
+  subordinates?: string[];    // 下屬 ID 列表
+  level?: number;            // 組織層級
   
   // 詳細權限
   permissions?: {
-    modules: string[];      // 可訪問模組
-    actions: string[];      // 可執行動作
+    modules: string[];        // 可訪問模組
+    actions: string[];        // 可執行動作
     dataAccess: 'own' | 'team' | 'organization';
     customPermissions?: Record<string, boolean>;
   };
 }
 
-// 組織節點介面（用於樹狀圖）
-interface OrgNode {
+// types/organization.ts
+export interface OrgNode {
   id: string;
   user: EnhancedUser;
   children: OrgNode[];
   expanded?: boolean;
-  position?: { x: number; y: number };  // 用於拖放
+  position?: { x: number; y: number };
 }
 ```
 
-### 2. 元件架構
+### 實作任務清單（按順序完成）
 
-```typescript
-// 主要元件結構
-PersonnelScreen (已存在)
-├── PersonnelTabs (新增)
-│   ├── TreeView
-│   │   ├── OrgChart
-│   │   ├── OrgNode
-│   │   └── DragDropHandler
-│   └── TableView
-│       ├── EnhancedDataTable
-│       ├── StatusIndicator
-│       └── PermissionBadge
-├── PermissionModal (新增)
-│   ├── PermissionMatrix
-│   ├── PermissionTemplates
-│   └── PermissionHistory
-└── ActivityModal (新增)
-    ├── ActivityChart
-    └── ActivityLog
+```yaml
+任務 1: 建立基礎架構和標籤切換
+修改 src/screens/personnel/PersonnelScreen.tsx:
+  - 找到模式: "export default function PersonnelScreen"
+  - 保留現有邏輯但改為條件渲染
+  - 新增標籤切換狀態管理
+
+建立 src/screens/personnel/PersonnelTabs.tsx:
+  - 參考模式: src/screens/database/DatabaseScreen.tsx 第 124-142 行
+  - 修改為: TreeView 和 TableView 切換
+  - 保持相同的動畫效果
+
+任務 2: 實作表格檢視增強
+建立 src/screens/personnel/TableView.tsx:
+  - 複製現有 PersonnelScreen 的表格邏輯
+  - 新增欄位: 使用狀態、權限等級、管理團隊
+  - 整合 StatusIndicator 和 PermissionBadge 元件
+
+建立 src/components/personnel/StatusIndicator.tsx:
+  - 顯示線上/離線狀態
+  - 使用 DesignSystem 顏色
+  - 包含最後活躍時間
+
+任務 3: 建立樹狀圖基礎
+建立 src/screens/personnel/TreeView.tsx:
+  - 使用 react-native-svg 繪製
+  - 整合 OrgChart 元件
+  - 處理滾動和縮放
+
+建立 src/components/personnel/OrgChart.tsx:
+  - 遞迴渲染組織節點
+  - 計算節點位置
+  - 繪製連接線
+
+任務 4: 實作組織節點
+建立 src/components/personnel/OrgNode.tsx:
+  - 顯示使用者資訊卡片
+  - 展開/收合功能
+  - 整合狀態指示器
+
+任務 5: 新增拖放功能
+建立 src/components/personnel/DragDropHandler.tsx:
+  - 使用 PanGestureHandler
+  - 實作拖動預覽
+  - 處理放置邏輯
+
+任務 6: 實作權限管理
+建立 src/components/modals/PermissionModal.tsx:
+  - 視覺化權限矩陣
+  - 權限範本選擇
+  - 整合 permissions-v2.ts
+
+任務 7: 新增活動追蹤
+建立 src/components/modals/ActivityModal.tsx:
+  - 使用 victory-native 顯示圖表
+  - 顯示活動日誌
+  - 整合 Firebase 資料
+
+任務 8: 狀態管理整合
+建立 src/stores/personnelStore.ts:
+  - 管理人員資料狀態
+  - 處理組織結構更新
+  - 整合權限變更
+
+任務 9: 效能優化
+優化 src/screens/personnel/TreeView.tsx:
+  - 實作虛擬化渲染
+  - 添加漸進式載入
+  - 優化重繪邏輯
+
+任務 10: 測試和文檔
+建立測試檔案:
+  - 元件單元測試
+  - 整合測試
+  - 更新文檔
 ```
 
-### 3. 狀態管理
+### 任務虛擬碼範例
 
-建立新的 store：
 ```typescript
-// stores/personnelStore.ts
-interface PersonnelState {
-  users: EnhancedUser[];
-  orgStructure: OrgNode;
-  activeView: 'tree' | 'table';
-  selectedUser: string | null;
-  isLoading: boolean;
+// 任務 1: PersonnelTabs.tsx
+export function PersonnelTabs() {
+  // 模式：遵循 DatabaseScreen 的標籤切換模式
+  const [activeView, setActiveView] = useState<'tree' | 'table'>('table');
   
-  // Actions
-  fetchPersonnel: (teamId: string) => Promise<void>;
-  updateUserPermissions: (userId: string, permissions: any) => Promise<void>;
-  updateOrgStructure: (structure: OrgNode) => Promise<void>;
-  toggleView: () => void;
+  // 重要：使用 Animated API 實現平滑過渡
+  const slideAnim = useRef(new Animated.Value(0)).current;
+  
+  return (
+    <View style={styles.container}>
+      {/* 模式：使用 TouchableOpacity 實現標籤 */}
+      <View style={styles.tabContainer}>
+        <TouchableOpacity onPress={() => switchView('tree')}>
+          {/* 使用 DesignSystem.colors */}
+        </TouchableOpacity>
+      </View>
+      
+      {/* 條件渲染不同檢視 */}
+      {activeView === 'tree' ? <TreeView /> : <TableView />}
+    </View>
+  );
+}
+
+// 任務 4: OrgNode.tsx
+export function OrgNode({ node, onDrag }: Props) {
+  // 關鍵：整合 PanGestureHandler 實現拖放
+  const gestureHandler = useAnimatedGestureHandler({
+    onStart: (_, ctx) => {
+      // 模式：參考 react-native-reanimated 範例
+      ctx.startX = node.position.x;
+    },
+    onActive: (event, ctx) => {
+      // 重要：使用 worklet 確保在 UI 線程執行
+      'worklet';
+      node.position.x = ctx.startX + event.translationX;
+    }
+  });
+  
+  // 模式：使用現有的卡片樣式
+  return (
+    <PanGestureHandler onGestureEvent={gestureHandler}>
+      <Animated.View style={[styles.card, animatedStyle]}>
+        <StatusIndicator user={node.user} />
+        {/* 遵循現有的使用者資訊顯示模式 */}
+      </Animated.View>
+    </PanGestureHandler>
+  );
 }
 ```
 
-### 4. Firebase 整合
-
-新增 Collections/Documents：
-```typescript
-// Firestore 結構
-users (現有)
-├── activityStats (子集合)
-│   └── daily: { date, loginTime, actions }
-└── permissions (子集合)
-    └── current: { modules, actions, dataAccess }
-
-organizations (現有)
-└── structure (新文檔)
-    └── tree: { nodes, relationships }
+### 整合點
+```yaml
+路由:
+  - 位置: src/navigation/MainTabNavigator.tsx
+  - 確保: PersonnelScreen 已在管理員模式下可見
+  
+Firebase:
+  - 集合: users/{userId}/activity
+  - 新增: 活動追蹤子集合
+  - 索引: 在 lastActiveAt 上建立索引
+  
+權限:
+  - 檔案: src/services/firebase/permissions-v2.ts  
+  - 新增: canEditOrgStructure 權限檢查
+  - 模式: 遵循現有的權限檢查模式
+  
+狀態管理:
+  - 整合: 使用 zustand 建立 personnelStore
+  - 模式: 參考 userStore.ts 的實作方式
 ```
 
-### 5. UI/UX 設計原則
+## 驗證迴圈
 
-- 遵循現有的 DesignSystem 顏色和樣式
-- 樹狀圖使用 SVG 或 Canvas 繪製連接線
-- 表格檢視保持與 DatabaseScreen 一致的設計
-- 使用動畫過渡效果提升體驗
-- 響應式設計支援平板橫屏顯示
+### 層級 1: 語法和樣式檢查
+```bash
+# 首先執行這些命令 - 修正任何錯誤後再繼續
+npm run lint                          # ESLint 檢查
+npm run type-check                    # TypeScript 類型檢查
 
-## 實施計劃
+# 預期：無錯誤。如有錯誤，閱讀錯誤訊息並修正。
+```
 
-### 第一階段：基礎架構
-1. 建立 PersonnelTabs 元件
-2. 實現標籤切換功能
-3. 擴展現有表格檢視
+### 層級 2: 單元測試
+```typescript
+// 建立 src/screens/personnel/__tests__/PersonnelTabs.test.tsx
+describe('PersonnelTabs', () => {
+  it('應該正確切換檢視', () => {
+    const { getByText } = render(<PersonnelTabs />);
+    fireEvent.press(getByText('樹狀圖'));
+    expect(getByTestId('tree-view')).toBeTruthy();
+  });
+  
+  it('應該保持標籤狀態', () => {
+    // 測試標籤切換後資料是否保留
+  });
+});
 
-### 第二階段：樹狀圖檢視
-1. 實現 OrgChart 元件
-2. 建立節點渲染邏輯
-3. 添加展開/收合功能
+// 建立 src/components/personnel/__tests__/OrgNode.test.tsx
+describe('OrgNode', () => {
+  it('應該顯示使用者資訊', () => {
+    const mockUser = { name: '測試使用者', role: 'manager' };
+    const { getByText } = render(<OrgNode user={mockUser} />);
+    expect(getByText('測試使用者')).toBeTruthy();
+  });
+  
+  it('應該處理拖放事件', () => {
+    // 測試拖放功能
+  });
+});
+```
 
-### 第三階段：使用狀態
-1. 實現即時狀態追蹤
-2. 建立活動統計功能
-3. 添加狀態指示器
+```bash
+# 執行測試並迭代直到通過：
+npm run test
+# 如果失敗：閱讀錯誤，理解根本原因，修正程式碼，重新執行
+```
 
-### 第四階段：權限管理
-1. 建立權限設定介面
-2. 實現權限矩陣視覺化
-3. 添加權限變更追蹤
+### 層級 3: 整合測試
+```bash
+# 啟動開發環境
+npm start
 
-### 第五階段：進階功能
-1. 實現拖放調整組織架構
-2. 添加批量操作功能
-3. 優化效能和使用體驗
+# 手動測試流程：
+1. 登入管理員帳號
+2. 導航到人事頁面
+3. 測試標籤切換
+4. 測試樹狀圖拖放
+5. 測試權限設定
+6. 檢查效能（滾動流暢度）
 
-## 相依性
+# 預期：所有功能正常運作，無崩潰或卡頓
+```
 
-- 現有的 PersonnelScreen 元件
-- Firebase Auth 和 Firestore
-- React Native 拖放函式庫（如 react-native-draggable-flatlist）
-- 圖表函式庫（用於活動統計）
+## 最終驗證清單
+- [ ] 所有測試通過：`npm run test`
+- [ ] 無 lint 錯誤：`npm run lint`
+- [ ] 無類型錯誤：`npm run type-check`
+- [ ] 樹狀圖正確顯示組織層級
+- [ ] 拖放功能在觸控裝置上運作良好
+- [ ] 大量資料（>100筆）效能良好
+- [ ] 權限變更即時生效
+- [ ] 錯誤處理完善，無崩潰情況
+- [ ] 符合現有設計系統風格
 
-## 測試重點
+## 需要避免的反模式
+- ❌ 不要建立新的設計模式，使用現有的 DesignSystem
+- ❌ 不要在渲染函數中進行複雜計算，使用 useMemo
+- ❌ 不要忽略 FlashList 的效能優化建議
+- ❌ 不要直接操作 DOM，使用 React Native 元件
+- ❌ 不要硬編碼顏色值，使用 theme 系統
+- ❌ 不要忽略觸控目標大小（最小 44x44）
+- ❌ 不要在主線程執行繁重計算，使用 worklet
 
-1. 標籤切換的流暢性
-2. 大量人員資料的渲染效能
-3. 權限更新的即時性
-4. 拖放操作的準確性
-5. 離線狀態的處理
+## 外部函式庫建議
 
-## 安全考量
+### 樹狀圖和拖放
+1. **react-native-draggable-flatlist** (如果要簡單列表拖放)
+   - 文檔：https://github.com/computerjazz/react-native-draggable-flatlist
+   - 適合：簡單的垂直列表拖放
+   
+2. **自行實作使用 react-native-reanimated + gesture-handler**
+   - 更靈活，適合複雜的樹狀圖拖放
+   - 已在專案中安裝
 
-1. 權限變更需要雙重確認
-2. 操作日誌記錄
-3. 敏感資料的存取控制
-4. 防止未授權的組織架構修改
+### 圖表顯示
+- **victory-native**：已安裝，用於活動統計圖表
 
-## 效能優化
+### 最佳實踐參考
+- React Native 拖放範例：https://docs.swmansion.com/react-native-gesture-handler/docs/examples
+- 組織圖最佳實踐：https://www.nngroup.com/articles/organization-charts/
 
-1. 虛擬化長列表
-2. 樹狀圖的漸進式載入
-3. 使用狀態的輪詢優化
-4. 圖片和頭像的懶載入
+---
+
+## PRP 信心評分：8/10
+
+降分原因：
+- 樹狀圖拖放在 React Native 較複雜，可能需要多次迭代
+- 大量資料的效能優化可能需要額外調整
+
+成功關鍵：
+- 充分利用現有元件和模式
+- 分階段實施，先完成基礎功能
+- 持續測試效能，及早發現問題
