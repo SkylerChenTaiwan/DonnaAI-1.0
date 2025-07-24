@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 12,
     paddingHorizontal: DesignSystem.spacing.md,
-    borderRadius: 12,
+    borderRadius: 20,
     gap: DesignSystem.spacing.sm,
     ...DesignSystem.shadows.none,
   },
