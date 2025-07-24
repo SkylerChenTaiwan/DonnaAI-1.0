@@ -29,7 +29,7 @@
 | 23v  | fix-prp22-navigation-and-loading.md | ✅ 已完成 | 修復 PRP-22 導航架構和載入狀態 - 恢復+按鈕、CreateTaskModal 預設語音、修復首頁載入檢查 | 2025-07-22 |
 | 24v  | fix-task-creation-ui-and-validation.md | ✅ 已完成 | 修復任務建立介面和驗證 - 移除重複標籤、實作日期選擇器和下拉選單、修復任務類型驗證 | 2025-07-22 |
 | 25v  | task-system-simplification.md | ✅ 已完成 | 任務系統簡化 - 二元狀態（完成/未完成）、移除進度追蹤、優化首頁過濾邏輯 | 2025-07-23 |
-| 26   | manager-mode-implementation.md | 📋 待執行 | 主管模式實作 - 模式切換UI、公告指派功能、人事管理、數據視覺化整合 | - |
+| 26v  | manager-mode-implementation.md | ✅ 已完成 | 主管模式實作 - 模式切換UI、公告指派功能、人事管理、數據視覺化整合 | 2025-07-24 |
 
 ## 命名規則
 
