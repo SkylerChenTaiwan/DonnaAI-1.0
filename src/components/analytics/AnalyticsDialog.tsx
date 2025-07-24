@@ -113,15 +113,15 @@ export default function AnalyticsDialog({ visible, onClose }: AnalyticsDialogPro
         query: currentSession.originalQuery || '',
         chartType: chartData.type,
         chartData: chartData,
-        createdBy: user.id,
-        createdByName: user.displayName,
         isPublic,
+        createdBy: user.id,
+        createdByName: user.name,
         teamId: user.teamIds?.[0] || '',
         organizationId: user.organizationId || '',
         tags: ['智能分析'],
       };
 
-      await saveReport(reportData, user.id, user.displayName);
+      await saveReport(reportData, user.id, user.name);
       toast.success('報表已保存到主頁');
       handleClose();
     } catch (error) {

@@ -7,8 +7,6 @@ import {
   Text,
   ActivityIndicator,
   StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useQueryStore } from '../../stores/queryStore';
@@ -36,9 +34,20 @@ export default function QueryChat() {
   // 監聽查詢狀態變化
   useEffect(() => {
     if (currentSession?.status === 'completed' && currentSession.interpretation) {
+      const interpretation = currentSession.interpretation;
+      const metrics = interpretation.entities.metrics.join('、');
+      const dimensions = interpretation.entities.dimensions.join('、');
+      const chartType = interpretation.suggestedChartType;
+      
+      let message = `已理解您的查詢。將分析 ${metrics}`;
+      if (dimensions.length > 0) {
+        message += `，按 ${dimensions} 分組`;
+      }
+      message += `，建議使用${chartType}圖表呈現。`;
+      
       addMessage({
         type: 'assistant',
-        text: currentSession.interpretation,
+        text: message,
       });
     } else if (currentSession?.status === 'error') {
       addMessage({
@@ -77,7 +86,7 @@ export default function QueryChat() {
     
     // 建構用戶上下文
     const userContext = {
-      userId: user.uid,
+      userId: user.id,
       role: user.role || 'manager',
       organizationId: user.organizationId || '',
       teamIds: user.teamIds || [],
