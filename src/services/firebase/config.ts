@@ -28,16 +28,24 @@ if (typeof global !== 'undefined') {
     vendorSub: ''
   };
   // @ts-ignore
-  global.location = {
-    href: 'http://localhost',
-    protocol: 'http:',
-    host: 'localhost',
-    hostname: 'localhost',
-    port: '',
-    pathname: '/',
-    search: '',
-    hash: ''
-  };
+  // 檢查 location 是否可寫，避免 Hermes 引擎錯誤
+  if (!global.location || Object.getOwnPropertyDescriptor(global, 'location')?.configurable !== false) {
+    try {
+      global.location = {
+        href: 'http://localhost',
+        protocol: 'http:',
+        host: 'localhost',
+        hostname: 'localhost',
+        port: '',
+        pathname: '/',
+        search: '',
+        hash: ''
+      };
+    } catch (e) {
+      // 在 Hermes 中，location 可能是只讀的，忽略錯誤
+      console.warn('無法設定 global.location (Hermes 引擎限制):', e.message);
+    }
+  }
 }
 
 // 延遲初始化的實例
