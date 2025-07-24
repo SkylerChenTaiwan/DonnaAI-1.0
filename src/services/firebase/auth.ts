@@ -6,9 +6,12 @@ import {
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword,
   updateProfile,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  updateEmail as firebaseUpdateEmail,
+  reauthenticateWithCredential,
+  EmailAuthProvider
 } from 'firebase/auth';
-import { doc, setDoc, Timestamp } from 'firebase/firestore';
+import { doc, setDoc, updateDoc, Timestamp, serverTimestamp } from 'firebase/firestore';
 import { getFirebaseAuth, getFirebaseDb } from './config';
 import { User, Organization, Team } from '@/types/user';
 
@@ -149,6 +152,57 @@ const createDefaultTeam = async (organizationId: string, userName: string): Prom
 };
 
 /**
+ * 更新用戶名稱
+ */
+export const updateUserName = async (name: string): Promise<void> => {
+  const user = getFirebaseAuth().currentUser;
+  if (!user) throw new Error('用戶未登入');
+  
+  try {
+    // 更新 Firebase Auth
+    await updateProfile(user, { displayName: name });
+    
+    // 更新 Firestore
+    const userRef = doc(getFirebaseDb(), 'users', user.uid);
+    await updateDoc(userRef, { 
+      name,
+      updatedAt: serverTimestamp()
+    });
+  } catch (error) {
+    console.error('更新用戶名稱失敗:', error);
+    throw new Error(getAuthErrorMessage(error));
+  }
+};
+
+/**
+ * 更新用戶電子郵件
+ * 需要重新驗證用戶
+ */
+export const updateUserEmail = async (newEmail: string, currentPassword: string): Promise<void> => {
+  const user = getFirebaseAuth().currentUser;
+  if (!user || !user.email) throw new Error('用戶未登入');
+  
+  try {
+    // 重新驗證用戶
+    const credential = EmailAuthProvider.credential(user.email, currentPassword);
+    await reauthenticateWithCredential(user, credential);
+    
+    // 更新 Firebase Auth
+    await firebaseUpdateEmail(user, newEmail);
+    
+    // 更新 Firestore
+    const userRef = doc(getFirebaseDb(), 'users', user.uid);
+    await updateDoc(userRef, { 
+      email: newEmail,
+      updatedAt: serverTimestamp()
+    });
+  } catch (error) {
+    console.error('更新用戶電子郵件失敗:', error);
+    throw new Error(getAuthErrorMessage(error));
+  }
+};
+
+/**
  * 轉換 Firebase 錯誤訊息為使用者友善的中文訊息
  */
 const getAuthErrorMessage = (error: any): string => {
@@ -167,6 +221,8 @@ const getAuthErrorMessage = (error: any): string => {
       return '嘗試次數過多，請稍後再試';
     case 'auth/network-request-failed':
       return '網路連線失敗，請檢查網路設定';
+    case 'auth/requires-recent-login':
+      return '為了安全考量，請重新登入後再嘗試更新';
     default:
       return error.message || '發生未知錯誤，請稍後再試';
   }

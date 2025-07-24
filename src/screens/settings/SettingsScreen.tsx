@@ -25,6 +25,7 @@ import Constants from 'expo-constants';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@/types/navigation';
+import { Ionicons } from '@expo/vector-icons';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -236,6 +237,12 @@ export const SettingsScreen: React.FC = () => {
               {mode === 'manager' ? '主管模式' : '業務模式'}
             </Text>
           </View>
+          <TouchableOpacity 
+            style={styles.editButton}
+            onPress={() => navigation.navigate('EditProfileModal' as any)}
+          >
+            <Ionicons name="pencil" size={20} color="#007AFF" />
+          </TouchableOpacity>
         </View>
 
         {/* 設定區塊 */}
@@ -269,9 +276,18 @@ const styles = StyleSheet.create({
     marginBottom: 32,
     borderBottomWidth: 1,
     borderBottomColor: '#E5E5EA',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   userDetails: {
     flex: 1,
+  },
+  editButton: {
+    padding: 8,
+    borderRadius: 20,
+    backgroundColor: '#F0F0F0',
+    marginLeft: 12,
   },
   userName: {
     fontSize: 18,

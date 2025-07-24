@@ -25,6 +25,7 @@ interface AuthState {
   toggleMode: () => void;
   initializeAuth: () => () => void; // 返回取消訂閱函數
   signOut: () => Promise<void>;
+  refreshUser: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -124,6 +125,41 @@ export const useAuthStore = create<AuthState>((set) => ({
       console.error('登出時發生錯誤:', error);
       set({ 
         error: error instanceof Error ? error.message : '登出時發生錯誤' 
+      });
+    }
+  },
+  
+  refreshUser: async () => {
+    const currentUser = getFirebaseAuth().currentUser;
+    if (!currentUser) {
+      console.warn('refreshUser: 沒有登入的用戶');
+      return;
+    }
+    
+    try {
+      const userDoc = await getDoc(doc(getFirebaseDb(), 'users', currentUser.uid));
+      if (userDoc.exists()) {
+        const userData = {
+          ...userDoc.data(),
+          id: currentUser.uid
+        } as User;
+        
+        set({ 
+          user: userData,
+          firebaseUser: currentUser,
+          isAuthenticated: true,
+          error: null
+        });
+      } else {
+        console.error('refreshUser: 找不到用戶檔案');
+        set({ 
+          error: '找不到用戶檔案' 
+        });
+      }
+    } catch (error) {
+      console.error('refreshUser 錯誤:', error);
+      set({ 
+        error: error instanceof Error ? error.message : '重新載入用戶資料時發生錯誤' 
       });
     }
   }

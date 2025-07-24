@@ -309,11 +309,11 @@ export class DataImportService {
       });
 
       // logOperation('data_import_completed', {
-        jobId,
-        type: data.type,
-        succeeded: result.totalSucceeded,
-        failed: result.totalFailed,
-      });
+      //   jobId,
+      //   type: data.type,
+      //   succeeded: result.totalSucceeded,
+      //   failed: result.totalFailed,
+      // });
 
       return result;
     } catch (error) {
@@ -360,10 +360,10 @@ export class DataImportService {
     await setDoc(jobRef, job);
     
     // logOperation('create_import_job', {
-      jobId: jobRef.id,
-      type,
-      sourceType: source.type,
-    });
+    //   jobId: jobRef.id,
+    //   type,
+    //   sourceType: source.type,
+    // });
 
     return jobRef.id;
   }

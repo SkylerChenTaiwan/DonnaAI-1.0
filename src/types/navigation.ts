@@ -22,6 +22,7 @@ export type RootStackParamList = {
   EditCustomer: { customerId: string };
   EditRecord: { recordId: string };
   EditTask: { taskId: string };
+  EditProfileModal: undefined;
   // 詳細檢視頁面
   CustomerDetail: { customerId: string };
   RecordDetail: { recordId: string };

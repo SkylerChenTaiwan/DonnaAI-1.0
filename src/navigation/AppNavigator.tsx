@@ -15,6 +15,7 @@ import { CreateTaskModal } from '@/screens/modals/CreateTaskModal';
 import { EditCustomerModal } from '@/screens/modals/EditCustomerModal';
 import { EditRecordModal } from '@/screens/modals/EditRecordModal';
 import { EditTaskModal } from '@/screens/modals/EditTaskModal';
+import { EditProfileModal } from '@/screens/modals/EditProfileModal';
 import { AddRecordModal } from '@/components/database/AddRecordModal';
 import { AddUserModal } from '@/components/personnel/AddUserModal';
 import { CustomerDetailScreen } from '@/screens/database/CustomerDetailScreen';
@@ -278,6 +279,11 @@ export const AppNavigator = () => {
                 name="EditTask"
                 component={EditTaskModal}
                 options={{ title: '編輯任務' }}
+              />
+              <Stack.Screen
+                name="EditProfileModal"
+                component={EditProfileModal}
+                options={{ title: '編輯個人資料' }}
               />
               <Stack.Screen
                 name="AddRecordModal"
