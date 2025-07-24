@@ -57,7 +57,7 @@ export const PersonnelScreen: React.FC = () => {
   const [showColumnSettings, setShowColumnSettings] = useState(false);
   const [activeFilters, setActiveFilters] = useState<FilterCondition[]>([]);
   const [isEditMode, setIsEditMode] = useState(false);
-  const { user: authStoreUser, mode, toggleMode } = useAuthStore();
+  const { user: authStoreUser } = useAuthStore();
   const { currentTeam } = useOrganization();
   
   // 使用 authStore 的 user，因為它有正確的資料結構
@@ -200,8 +200,7 @@ export const PersonnelScreen: React.FC = () => {
               showFilter={true}
               showMultiSelect={true}
               showColumns={true}
-              showModeToggle={true}
-              currentMode={mode}
+              showModeToggle={false}
               onFilterPress={() => setShowFilterModal(true)}
               onMultiSelectPress={() => {
                 setMultiSelectMode(!multiSelectMode);
@@ -210,7 +209,6 @@ export const PersonnelScreen: React.FC = () => {
                 }
               }}
               onColumnsPress={() => setShowColumnSettings(true)}
-              onModeToggle={toggleMode}
             />
             {/* 編輯模式切換按鈕 */}
             <TouchableOpacity
