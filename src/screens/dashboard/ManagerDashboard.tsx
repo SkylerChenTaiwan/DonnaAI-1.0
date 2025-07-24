@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Layout } from '@/components/common/Layout';
-import { SearchButton } from '@/components/common/SearchButton';
+import { ModeToggle } from '@/components/common/ModeToggle';
 import { useAuthStore } from '@/stores/authStore';
 import { useAuth } from '@/hooks/useAuth';
 import { AnnouncementModal } from '@/screens/manager/AnnouncementModal';
@@ -28,13 +28,6 @@ export const ManagerDashboard: React.FC = () => {
   const { user, mode, toggleMode } = useAuthStore();
   const [showAnnouncementModal, setShowAnnouncementModal] = useState(false);
   const [showTaskAssignmentModal, setShowTaskAssignmentModal] = useState(false);
-  const [showAnalyticsDialog, setShowAnalyticsDialog] = useState(false);
-
-  // 處理搜索按鈕點擊
-  const handleSearchPress = () => {
-    // TODO: 實現數據分析對話框或導航到分析頁面
-    setShowAnalyticsDialog(true);
-  };
 
   return (
     <Layout scrollable={false}>
@@ -45,9 +38,10 @@ export const ManagerDashboard: React.FC = () => {
             <Text style={styles.userName}>{user?.name || authUser?.displayName || '使用者'}</Text>
             <Text style={styles.userEmail}>{user?.email || authUser?.email}</Text>
           </View>
-          <SearchButton
-            onPress={handleSearchPress}
-            accessibilityLabel="數據分析"
+          <ModeToggle
+            value={mode}
+            onToggle={toggleMode}
+            label={mode === 'business' ? '業務模式' : '主管模式'}
           />
         </View>
         
