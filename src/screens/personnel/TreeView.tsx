@@ -13,7 +13,7 @@ import {
 import { OrgChart } from '@/components/personnel/OrgChart';
 import { OrgNode } from '@/types/organization';
 import { TeamMember } from './PersonnelScreen';
-import { DesignSystem } from '@/theme/DesignSystem';
+import { DesignSystem } from '@/theme/designSystem';
 import { Ionicons } from '@expo/vector-icons';
 
 interface TreeViewProps {

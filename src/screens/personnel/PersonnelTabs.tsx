@@ -11,7 +11,7 @@ import {
   Animated,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { DesignSystem } from '@/theme/DesignSystem';
+import { DesignSystem } from '@/theme/designSystem';
 
 interface Tab {
   id: 'tree' | 'table';

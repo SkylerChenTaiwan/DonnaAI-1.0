@@ -5,7 +5,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { DesignSystem } from '@/theme/DesignSystem';
+import { DesignSystem } from '@/theme/designSystem';
 import { EnhancedUser } from '@/types/personnel';
 
 interface StatusIndicatorProps {

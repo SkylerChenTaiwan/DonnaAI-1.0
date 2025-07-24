@@ -14,7 +14,7 @@ import { OrgNode } from '@/types/organization';
 import { StatusIndicator } from './StatusIndicator';
 import { PermissionBadge } from './PermissionBadge';
 import { DragDropHandler } from './DragDropHandler';
-import { DesignSystem } from '@/theme/DesignSystem';
+import { DesignSystem } from '@/theme/designSystem';
 
 interface OrgNodeComponentProps {
   node: OrgNode;

@@ -15,7 +15,7 @@ import { OrgNode } from '@/types/organization';
 import { TeamMember } from '@/screens/personnel/PersonnelScreen';
 import { OrgNodeComponent } from './OrgNode';
 import { DragDropProvider } from './DragDropHandler';
-import { DesignSystem } from '@/theme/DesignSystem';
+import { DesignSystem } from '@/theme/designSystem';
 
 interface OrgChartProps {
   teamMembers: TeamMember[];

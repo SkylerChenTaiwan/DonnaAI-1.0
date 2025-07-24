@@ -13,7 +13,7 @@ import { DataTable } from '@/components/common/DataTable';
 import { StatusIndicator } from '@/components/personnel/StatusIndicator';
 import { PermissionBadge } from '@/components/personnel/PermissionBadge';
 import { TeamMember } from './PersonnelScreen';
-import { DesignSystem } from '@/theme/DesignSystem';
+import { DesignSystem } from '@/theme/designSystem';
 import { TableColumn } from '@/types/table';
 import { EnhancedUser } from '@/types/personnel';
 

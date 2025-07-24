@@ -20,7 +20,7 @@ import { getUserPermissionContext } from '@/services/firebase/permissions-v2';
 import { db } from '@/services/firebase/config';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { showToast } from '@/utils/toast';
-import { DesignSystem } from '@/theme/DesignSystem';
+import { DesignSystem } from '@/theme/designSystem';
 
 export interface TeamMember {
   id: string;

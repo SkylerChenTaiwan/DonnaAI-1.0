@@ -20,7 +20,7 @@ import Animated, {
   interpolate,
 } from 'react-native-reanimated';
 import { OrgNode, DragDropEvent } from '@/types/organization';
-import { DesignSystem } from '@/theme/DesignSystem';
+import { DesignSystem } from '@/theme/designSystem';
 
 interface DragDropHandlerProps {
   children: React.ReactNode;
