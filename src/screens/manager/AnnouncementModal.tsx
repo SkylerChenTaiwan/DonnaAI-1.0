@@ -138,7 +138,7 @@ export const AnnouncementModal: React.FC<AnnouncementModalProps> = ({
           <View style={styles.header}>
             <Text style={styles.headerTitle}>發佈公告</Text>
             <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
-              <Ionicons name="close" size={24} color="#666666" />
+              <Ionicons name="close" size={24} color={DesignSystem.colors.text.secondary} />
             </TouchableOpacity>
           </View>
 
@@ -155,7 +155,7 @@ export const AnnouncementModal: React.FC<AnnouncementModalProps> = ({
                 value={title}
                 onChangeText={setTitle}
                 placeholder="輸入公告標題..."
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={DesignSystem.colors.text.tertiary}
                 maxLength={100}
               />
             </View>
@@ -168,7 +168,7 @@ export const AnnouncementModal: React.FC<AnnouncementModalProps> = ({
                 value={content}
                 onChangeText={setContent}
                 placeholder="輸入公告內容..."
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={DesignSystem.colors.text.tertiary}
                 multiline
                 numberOfLines={4}
                 textAlignVertical="top"
@@ -213,7 +213,7 @@ export const AnnouncementModal: React.FC<AnnouncementModalProps> = ({
                 value={expiresInDays}
                 onChangeText={setExpiresInDays}
                 placeholder="留空表示永不過期"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={DesignSystem.colors.text.tertiary}
                 keyboardType="number-pad"
               />
             </View>
@@ -251,7 +251,7 @@ export const AnnouncementModal: React.FC<AnnouncementModalProps> = ({
               activeOpacity={0.7}
             >
               {isSubmitting ? (
-                <ActivityIndicator size="small" color="#FFFFFF" />
+                <ActivityIndicator size="small" color={DesignSystem.colors.text.inverse} />
               ) : (
                 <>
                   <Ionicons name="megaphone" size={20} color="#FFFFFF" />
@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: DesignSystem.colors.background.surface,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '90%',
@@ -286,12 +286,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: DesignSystem.colors.border.light,
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1A1A1A',
+    color: DesignSystem.colors.text.primary,
   },
   closeButton: {
     padding: 4,
@@ -306,18 +306,18 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1A1A1A',
+    color: DesignSystem.colors.text.primary,
     marginBottom: 8,
   },
   input: {
-    backgroundColor: '#F8F9FA',
+    backgroundColor: DesignSystem.colors.gray[50],
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 16,
-    color: '#1A1A1A',
+    color: DesignSystem.colors.text.primary,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: DesignSystem.colors.border.light,
   },
   textArea: {
     minHeight: 100,
@@ -332,16 +332,16 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: DesignSystem.colors.border.light,
     alignItems: 'center',
   },
   priorityText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#666666',
+    color: DesignSystem.colors.text.secondary,
   },
   priorityTextActive: {
-    color: '#FFFFFF',
+    color: DesignSystem.colors.text.inverse,
   },
   footer: {
     flexDirection: 'row',
@@ -361,12 +361,12 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   cancelButton: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: DesignSystem.colors.gray[100],
   },
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#666666',
+    color: DesignSystem.colors.text.secondary,
   },
   submitButton: {
     backgroundColor: colors.primary,
@@ -374,7 +374,7 @@ const styles = StyleSheet.create({
   submitButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: DesignSystem.colors.text.inverse,
   },
   disabledButton: {
     opacity: 0.6,

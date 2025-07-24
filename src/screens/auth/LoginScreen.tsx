@@ -14,6 +14,7 @@ import { Layout } from '@/components/common/Layout';
 import { TextInput } from '@/components/common/TextInput';
 import { Button } from '@/components/common/Button';
 import { signIn } from '@/services/firebase/auth';
+import { DesignSystem } from '@/theme/designSystem';
 
 interface LoginScreenProps {
   onNavigateToRegister: () => void;
@@ -147,14 +148,13 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   title: {
-    fontSize: 32,
-    fontWeight: '700',
-    color: '#1A1A1A',
+    ...DesignSystem.typography.h1,
+    color: DesignSystem.colors.text.primary,
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 18,
-    color: '#7A7A7A',
+    color: DesignSystem.colors.text.secondary,
   },
   form: {
     width: '100%',
@@ -169,12 +169,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   footerText: {
-    fontSize: 16,
-    color: '#7A7A7A',
+    ...DesignSystem.typography.body,
+    color: DesignSystem.colors.text.secondary,
   },
   errorText: {
-    fontSize: 14,
-    color: '#A94438',
+    ...DesignSystem.typography.bodySmall,
+    color: DesignSystem.colors.status.error,
     textAlign: 'center',
     marginBottom: 16,
   },

@@ -5,8 +5,8 @@
 
 export const DesignSystem = {
   colors: {
-    // 主色調 - 深灰黑色用於按鈕和互動元素
-    primary: '#1A1A1A',
+    // 主色調 - 中等灰色用於按鈕和互動元素（優化視覺舒適度）
+    primary: '#525252',
     
     // 背景色
     background: {
@@ -163,7 +163,7 @@ export const DesignSystem = {
 };
 
 // 輔助函數：生成一致的按鈕樣式
-export const getButtonStyle = (variant: 'primary' | 'secondary' | 'ghost' = 'primary') => {
+export const getButtonStyle = (variant: 'primary' | 'secondary' | 'ghost' | 'search' = 'primary') => {
   const base = {
     paddingHorizontal: DesignSystem.spacing.md,
     paddingVertical: DesignSystem.spacing.sm,
@@ -177,6 +177,10 @@ export const getButtonStyle = (variant: 'primary' | 'secondary' | 'ghost' = 'pri
         ...base,
         backgroundColor: DesignSystem.colors.primary,
         color: DesignSystem.colors.text.inverse,
+        // 新增狀態顏色
+        hoverColor: DesignSystem.colors.gray[500], // #737373
+        pressedColor: DesignSystem.colors.gray[700], // #404040
+        disabledColor: DesignSystem.colors.gray[300], // #D4D4D4
       };
     case 'secondary':
       return {
@@ -185,12 +189,30 @@ export const getButtonStyle = (variant: 'primary' | 'secondary' | 'ghost' = 'pri
         borderWidth: 1,
         borderColor: DesignSystem.colors.border.default,
         color: DesignSystem.colors.text.primary,
+        // 新增狀態顏色
+        hoverColor: DesignSystem.colors.gray[100], // #F5F5F5
+        pressedColor: DesignSystem.colors.gray[200], // #E5E5E5
+        disabledColor: DesignSystem.colors.gray[100], // #F5F5F5
       };
     case 'ghost':
       return {
         ...base,
         backgroundColor: 'transparent',
         color: DesignSystem.colors.text.primary,
+        // 新增狀態顏色
+        hoverColor: 'rgba(82, 82, 82, 0.1)', // 半透明灰色
+        pressedColor: 'rgba(82, 82, 82, 0.2)', // 較深半透明灰色
+        disabledColor: 'transparent',
+      };
+    case 'search':
+      return {
+        ...base,
+        backgroundColor: DesignSystem.colors.gray[700], // #404040 用於搜索按鈕
+        color: DesignSystem.colors.text.inverse,
+        // 新增狀態顏色
+        hoverColor: DesignSystem.colors.gray[600], // #525252
+        pressedColor: DesignSystem.colors.gray[800], // #262626
+        disabledColor: DesignSystem.colors.gray[400], // #A3A3A3
       };
   }
 };

@@ -10,7 +10,9 @@ import {
   ActivityIndicator,
   ViewStyle,
   TextStyle,
+  Platform,
 } from 'react-native';
+import { DesignSystem } from '@/theme/designSystem';
 
 interface ButtonProps {
   title: string;
@@ -54,11 +56,11 @@ export const Button = ({
       style={buttonStyle}
       onPress={onPress}
       disabled={disabled || loading}
-      activeOpacity={0.8}
+      activeOpacity={0.7}
     >
       {loading ? (
         <ActivityIndicator 
-          color={variant === 'primary' ? '#FFFFFF' : '#1A1A1A'} 
+          color={variant === 'primary' ? '#FFFFFF' : DesignSystem.colors.primary} 
           size="small" 
         />
       ) : (
@@ -70,23 +72,55 @@ export const Button = ({
 
 const styles = StyleSheet.create({
   base: {
-    borderRadius: 8,
+    borderRadius: DesignSystem.borderRadius.sm,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
+    // 較輕的陰影以配合新的灰色調
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.08,
+        shadowRadius: 3,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
   },
   
   // 變體樣式
   primary: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: DesignSystem.colors.primary, // #525252 - 新的中等灰色
   },
   secondary: {
-    backgroundColor: '#F0F0F0',
+    backgroundColor: DesignSystem.colors.gray[100], // #F5F5F5
+    borderWidth: 1,
+    borderColor: DesignSystem.colors.border.default,
+    // 移除陰影
+    ...Platform.select({
+      ios: {
+        shadowOpacity: 0,
+      },
+      android: {
+        elevation: 0,
+      },
+    }),
   },
   outline: {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: '#1A1A1A',
+    borderColor: DesignSystem.colors.primary,
+    // 移除陰影
+    ...Platform.select({
+      ios: {
+        shadowOpacity: 0,
+      },
+      android: {
+        elevation: 0,
+      },
+    }),
   },
   
   // 尺寸樣式
@@ -105,8 +139,9 @@ const styles = StyleSheet.create({
   
   // 停用狀態
   disabled: {
-    backgroundColor: '#F0F0F0',
-    borderColor: '#F0F0F0',
+    backgroundColor: DesignSystem.colors.gray[200], // #E5E5E5
+    borderColor: DesignSystem.colors.gray[200],
+    opacity: 0.7,
   },
   
   // 文字樣式
@@ -114,13 +149,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   primaryText: {
-    color: '#F7F6F3',
+    color: DesignSystem.colors.text.inverse, // #FFFFFF
   },
   secondaryText: {
-    color: '#1A1A1A',
+    color: DesignSystem.colors.text.primary,
   },
   outlineText: {
-    color: '#1A1A1A',
+    color: DesignSystem.colors.primary,
   },
   
   // 尺寸文字
@@ -135,6 +170,6 @@ const styles = StyleSheet.create({
   },
   
   disabledText: {
-    color: '#999999',
+    color: DesignSystem.colors.text.tertiary,
   },
 });

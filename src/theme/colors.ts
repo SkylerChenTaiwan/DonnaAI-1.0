@@ -8,9 +8,9 @@ import { DesignSystem } from './designSystem';
 
 export const colors = {
   // 主要品牌色 - 映射到新設計系統
-  primary: DesignSystem.colors.primary,           // 深灰黑色 #1A1A1A
-  primaryDark: DesignSystem.colors.gray[900],     // 更深的灰黑 #171717
-  primaryLight: DesignSystem.colors.gray[600],    // 較淺的灰 #525252
+  primary: DesignSystem.colors.primary,           // 中等灰色 #525252
+  primaryDark: DesignSystem.colors.gray[700],     // 較深的灰 #404040
+  primaryLight: DesignSystem.colors.gray[500],    // 較淺的灰 #737373
 
   // 次要顏色 - 保留功能色
   secondary: DesignSystem.colors.status.success,    // 綠色 #34C759
@@ -44,7 +44,7 @@ export const colors = {
   // 圖表專用顏色 - 使用更柔和的灰階變化
   chart: {
     colors: [
-      DesignSystem.colors.primary,        // 深灰黑 #1A1A1A
+      DesignSystem.colors.primary,        // 中等灰 #525252
       DesignSystem.colors.gray[600],      // #525252
       DesignSystem.colors.gray[500],      // #737373
       DesignSystem.colors.gray[400],      // #A3A3A3

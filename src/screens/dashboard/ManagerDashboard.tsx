@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Layout } from '@/components/common/Layout';
-import { ModeToggle } from '@/components/common/ModeToggle';
+import { SearchButton } from '@/components/common/SearchButton';
 import { useAuthStore } from '@/stores/authStore';
 import { useAuth } from '@/hooks/useAuth';
 import { AnnouncementModal } from '@/screens/manager/AnnouncementModal';
@@ -28,14 +28,13 @@ export const ManagerDashboard: React.FC = () => {
   const { user, mode, toggleMode } = useAuthStore();
   const [showAnnouncementModal, setShowAnnouncementModal] = useState(false);
   const [showTaskAssignmentModal, setShowTaskAssignmentModal] = useState(false);
+  const [showAnalyticsDialog, setShowAnalyticsDialog] = useState(false);
 
-  // 簡化的團隊統計 - 使用灰階顏色
-  const teamStats = [
-    { label: '團隊成員', value: '8', color: colors.text },
-    { label: '本月會議', value: '45', color: colors.textSecondary },
-    { label: '活躍客戶', value: '32', color: colors.text },
-    { label: 'AI 使用量', value: '156min', color: colors.textSecondary },
-  ];
+  // 處理搜索按鈕點擊
+  const handleSearchPress = () => {
+    // TODO: 實現數據分析對話框或導航到分析頁面
+    setShowAnalyticsDialog(true);
+  };
 
   return (
     <Layout scrollable={false}>
@@ -46,10 +45,9 @@ export const ManagerDashboard: React.FC = () => {
             <Text style={styles.userName}>{user?.name || authUser?.displayName || '使用者'}</Text>
             <Text style={styles.userEmail}>{user?.email || authUser?.email}</Text>
           </View>
-          <ModeToggle
-            value={mode}
-            onToggle={toggleMode}
-            label={mode === 'business' ? '業務模式' : '主管模式'}
+          <SearchButton
+            onPress={handleSearchPress}
+            accessibilityLabel="數據分析"
           />
         </View>
         
@@ -83,21 +81,6 @@ export const ManagerDashboard: React.FC = () => {
             {/* 報表網格 - 作為主要內容 */}
             <View style={styles.reportsContainer}>
               <SavedReportsGrid fullScreen={true} />
-            </View>
-          </View>
-          
-          {/* 團隊統計 - 移到次要位置 */}
-          <View style={styles.statsSection}>
-            <Text style={styles.statsSectionTitle}>快速統計</Text>
-            <View style={styles.statsContainer}>
-              {teamStats.map((stat, index) => (
-                <View key={index} style={styles.statCard}>
-                  <Text style={[styles.statValue, { color: stat.color }]}>
-                    {stat.value}
-                  </Text>
-                  <Text style={styles.statLabel}>{stat.label}</Text>
-                </View>
-              ))}
             </View>
           </View>
         </ScrollView>
@@ -184,35 +167,5 @@ const styles = StyleSheet.create({
   },
   reportsContainer: {
     minHeight: 400,
-  },
-  statsSection: {
-    padding: DesignSystem.spacing.md,
-    paddingTop: 0,
-  },
-  statsSectionTitle: {
-    ...DesignSystem.typography.h4,
-    color: DesignSystem.colors.text.primary,
-    marginBottom: DesignSystem.spacing.md,
-  },
-  statsContainer: {
-    flexDirection: 'row',
-    gap: DesignSystem.spacing.sm,
-  },
-  statCard: {
-    flex: 1,
-    backgroundColor: DesignSystem.colors.background.surface,
-    padding: DesignSystem.spacing.md,
-    borderRadius: DesignSystem.borderRadius.sm,
-    alignItems: 'center',
-    ...DesignSystem.shadows.sm,
-  },
-  statValue: {
-    ...DesignSystem.typography.h3,
-    marginBottom: DesignSystem.spacing.xs,
-  },
-  statLabel: {
-    ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.text.tertiary,
-    textAlign: 'center',
   },
 });
