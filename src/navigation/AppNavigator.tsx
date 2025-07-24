@@ -283,7 +283,10 @@ export const AppNavigator = () => {
               <Stack.Screen
                 name="EditProfileModal"
                 component={EditProfileModal}
-                options={{ title: '編輯個人資料' }}
+                options={{ 
+                  title: '編輯個人資料',
+                  headerShown: false  // 隱藏預設 header，使用自定義 header
+                }}
               />
               <Stack.Screen
                 name="AddRecordModal"

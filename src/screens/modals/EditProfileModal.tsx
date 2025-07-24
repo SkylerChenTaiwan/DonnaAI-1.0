@@ -155,7 +155,7 @@ export const EditProfileModal: React.FC = () => {
 
   return (
     <Layout style={styles.container} scrollable={false}>
-      {/* 標題列 */}
+      {/* 簡化的標題列 */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerButton}>
           <Ionicons name="close" size={24} color={DesignSystem.colors.text.primary} />
