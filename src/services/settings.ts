@@ -35,6 +35,10 @@ const DEFAULT_SETTINGS: UserSettings = {
 class SettingsServiceImpl implements ISettingsService {
   private readonly STORAGE_KEY = STORAGE_KEYS.USER_SETTINGS;
   private syncInProgress = false;
+  private lastFirebaseAttempt = 0;
+  private firebaseFailureCount = 0;
+  private readonly FIREBASE_RETRY_DELAY = 30000; // 30 秒後才能重試
+  private readonly MAX_FIREBASE_FAILURES = 3;
 
   /**
    * 載入使用者設定
@@ -137,6 +141,19 @@ class SettingsServiceImpl implements ISettingsService {
       const user = auth.currentUser;
       if (!user) return null;
       
+      // 檢查是否應該跳過 Firebase（離線保護）
+      const now = Date.now();
+      if (this.firebaseFailureCount >= this.MAX_FIREBASE_FAILURES) {
+        if (now - this.lastFirebaseAttempt < this.FIREBASE_RETRY_DELAY) {
+          console.log('Firebase 暫時離線，使用本地設定');
+          return null;
+        }
+        // 重置失敗計數
+        this.firebaseFailureCount = 0;
+      }
+      
+      this.lastFirebaseAttempt = now;
+      
       // 假設使用者屬於某個組織
       const db = getFirebaseDb();
       const userDoc = await getDoc(doc(db, 'users', user.uid));
@@ -156,6 +173,9 @@ class SettingsServiceImpl implements ISettingsService {
       
       const data = settingsDoc.data();
       
+      // 成功時重置失敗計數
+      this.firebaseFailureCount = 0;
+      
       // 轉換 Firestore Timestamp 為 Date
       return {
         ...data,
@@ -166,12 +186,19 @@ class SettingsServiceImpl implements ISettingsService {
         lastSynced: data.lastSynced?.toDate() || new Date()
       } as UserSettings;
     } catch (error) {
+      // 增加失敗計數
+      this.firebaseFailureCount++;
+      
       // 如果是權限錯誤，靜默處理
       if (error instanceof Error && error.message.includes('Missing or insufficient permissions')) {
         console.log('Firebase 設定同步暫時無法使用，使用本地儲存');
         return null;
       }
-      console.error('從 Firebase 載入設定失敗:', error);
+      
+      // 只在未達到失敗上限時才記錄錯誤
+      if (this.firebaseFailureCount < this.MAX_FIREBASE_FAILURES) {
+        console.error(`從 Firebase 載入設定失敗 (${this.firebaseFailureCount}/${this.MAX_FIREBASE_FAILURES}):`, error);
+      }
       return null;
     }
   }
@@ -239,6 +266,16 @@ class SettingsServiceImpl implements ISettingsService {
   async syncWithFirebase(): Promise<void> {
     try {
       if (this.syncInProgress) return;
+      
+      // 檢查是否應該跳過同步（離線保護）
+      const now = Date.now();
+      if (this.firebaseFailureCount >= this.MAX_FIREBASE_FAILURES) {
+        if (now - this.lastFirebaseAttempt < this.FIREBASE_RETRY_DELAY) {
+          return; // 靜默跳過
+        }
+      }
+      
+      this.syncInProgress = true;
       
       const localSettings = await this.loadSettings();
       const remoteSettings = await this.loadFromFirebase();
