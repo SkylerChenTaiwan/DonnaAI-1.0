@@ -13,23 +13,8 @@ config.resolver.unstable_enablePackageExports = false;
 // 確保支援所有圖片格式
 config.resolver.assetExts = [...(config.resolver.assetExts || []), 'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'];
 
-// 效能優化：啟用快取
-config.cacheStores = [
-  require('metro-cache/src/stores/FileStore')({
-    root: require('path').join(__dirname, 'tmp', 'metro-cache'),
-  }),
-];
-
-// Transformer 優化
-config.transformer = {
-  ...config.transformer,
-  minifierConfig: {
-    keep_fnames: true,
-    mangle: {
-      keep_fnames: true,
-    },
-  },
-};
+// 簡化配置以確保正常啟動
+// 快取配置暫時移除，避免配置問題
 
 // 除錯用：列出所有支援的資源副檔名
 // 註解掉以避免 Web 版無限重載
