@@ -92,11 +92,11 @@ export const OrganizationDetailScreen: React.FC = () => {
           status: orgData.status || 'active',
         });
         
-        // 載入計費資訊
-        loadBillingData(organizationId);
+        // TODO: 載入計費資訊（暫時停用，等實際有資料時再啟用）
+        // loadBillingData(organizationId);
         
-        // 載入工具使用統計
-        loadToolUsageData(organizationId);
+        // TODO: 載入工具使用統計（暫時停用，等實際有資料時再啟用）
+        // loadToolUsageData(organizationId);
         
         // 設定功能開關
         if (orgData.features) {
@@ -388,7 +388,7 @@ export const OrganizationDetailScreen: React.FC = () => {
               </View>
             </View>
             
-            {/* 工具使用統計 */}
+            {/* TODO: 工具使用統計（暫時隱藏，等有實際資料時再顯示）
             {toolUsageStats.length > 0 && (
               <View style={styles.toolUsageSection}>
                 <Text style={styles.subSectionTitle}>工具使用統計（本月）</Text>
@@ -402,60 +402,24 @@ export const OrganizationDetailScreen: React.FC = () => {
                 ))}
               </View>
             )}
+            */}
           </View>
         )}
         
-        {/* 計費管理分頁 */}
+        {/* 計費管理分頁 - 暫時顯示開發中狀態 */}
         {selectedTab === 'billing' && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>計費管理</Text>
             
-            {/* 當月計費摘要 */}
-            {billingSummary && (
-              <View style={styles.billingCard}>
-                <Text style={styles.billingCardTitle}>當月計費摘要</Text>
-                <View style={styles.billingRow}>
-                  <Text style={styles.billingLabel}>活躍用戶數</Text>
-                  <Text style={styles.billingValue}>{billingSummary.activeUsers}</Text>
-                </View>
-                <View style={styles.billingRow}>
-                  <Text style={styles.billingLabel}>贈送人數</Text>
-                  <Text style={styles.billingValue}>-{billingSummary.giftedSeats}</Text>
-                </View>
-                <View style={styles.billingRow}>
-                  <Text style={styles.billingLabel}>計費用戶數</Text>
-                  <Text style={styles.billingValue}>{billingSummary.billableUsers}</Text>
-                </View>
-                <View style={[styles.billingRow, styles.totalRow]}>
-                  <Text style={styles.totalLabel}>月費總額</Text>
-                  <Text style={styles.totalValue}>NT$ {billingSummary.monthlyAmount}</Text>
-                </View>
-                {billingSummary.trialDaysLeft !== undefined && (
-                  <View style={styles.trialInfo}>
-                    <Text style={styles.trialText}>
-                      試用期還剩 {billingSummary.trialDaysLeft} 天
-                    </Text>
-                  </View>
-                )}
-              </View>
-            )}
-            
-            {/* 計費歷史 */}
-            {billingHistory.length > 0 && (
-              <View style={styles.historySection}>
-                <Text style={styles.subSectionTitle}>計費歷史</Text>
-                {billingHistory.slice(0, 3).map((record) => (
-                  <View key={record.id} style={styles.historyRow}>
-                    <Text style={styles.historyPeriod}>{record.period}</Text>
-                    <Text style={styles.historyUsers}>{record.activeUsers} 用戶</Text>
-                    <Text style={styles.historyAmount}>NT$ {record.totalAmount}</Text>
-                    <View style={[styles.historyStatus, { backgroundColor: getStatusColor(record.status) }]}>
-                      <Text style={styles.historyStatusText}>{record.status}</Text>
-                    </View>
-                  </View>
-                ))}
-              </View>
-            )}
+            <View style={styles.developmentNotice}>
+              <Text style={styles.developmentTitle}>🚧 功能開發中</Text>
+              <Text style={styles.developmentText}>
+                計費統計功能正在開發中，將在後續版本中提供：{'\n'}
+                • 月度使用統計{'\n'}
+                • 計費記錄查看{'\n'}
+                • 使用趨勢分析
+              </Text>
+            </View>
           </View>
         )}
         
@@ -848,6 +812,25 @@ const styles = StyleSheet.create({
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.inverse,
     fontWeight: '500',
+  },
+  developmentNotice: {
+    backgroundColor: DesignSystem.colors.warning + '20',
+    padding: DesignSystem.spacing.lg,
+    borderRadius: DesignSystem.borderRadius.md,
+    borderWidth: 1,
+    borderColor: DesignSystem.colors.warning + '40',
+    alignItems: 'center',
+  },
+  developmentTitle: {
+    ...DesignSystem.typography.h4,
+    color: DesignSystem.colors.warning,
+    marginBottom: DesignSystem.spacing.sm,
+  },
+  developmentText: {
+    ...DesignSystem.typography.body,
+    color: DesignSystem.colors.text.secondary,
+    textAlign: 'center',
+    lineHeight: 20,
   },
   featureRow: {
     flexDirection: 'row',

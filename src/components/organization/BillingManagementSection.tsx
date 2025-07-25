@@ -44,11 +44,12 @@ export const BillingManagementSection: React.FC<BillingManagementSectionProps> =
 }) => {
   const [billingSummary, setBillingSummary] = useState<BillingSummary | null>(null);
   const [billingHistory, setBillingHistory] = useState<BillingRecord[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
-    loadBillingData();
+    // TODO: 暫時停用計費資料載入，等有實際資料時再啟用
+    // loadBillingData();
   }, [organization.id]);
 
   const loadBillingData = async () => {
@@ -143,17 +144,21 @@ export const BillingManagementSection: React.FC<BillingManagementSectionProps> =
     return statusMap[status] || status;
   };
 
-  if (isLoading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Text style={styles.loadingText}>載入計費資訊...</Text>
-      </View>
-    );
-  }
-
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* 當月計費摘要 */}
+      {/* 開發中通知 */}
+      <View style={styles.developmentNotice}>
+        <Text style={styles.developmentTitle}>🚧 計費功能開發中</Text>
+        <Text style={styles.developmentText}>
+          計費統計功能將在後續版本中提供，包括：{'\n'}
+          • 即時計費摘要{'\n'}
+          • 使用量統計{'\n'}
+          • 歷史帳單記錄{'\n'}
+          • 自動計費管理
+        </Text>
+      </View>
+      
+      {/* TODO: 當月計費摘要（暫時隱藏）
       {billingSummary && (
         <View style={styles.summaryCard}>
           <View style={styles.summaryHeader}>
@@ -312,6 +317,9 @@ export const BillingManagementSection: React.FC<BillingManagementSectionProps> =
           </Text>
         </View>
       </View>
+      
+      {/* 結束註解標記 */}
+      {/* */ }
     </ScrollView>
   );
 };
@@ -578,5 +586,25 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.secondary,
     flex: 1,
     lineHeight: 18,
+  },
+  developmentNotice: {
+    backgroundColor: DesignSystem.colors.warning + '20',
+    padding: DesignSystem.spacing.lg,
+    borderRadius: DesignSystem.borderRadius.md,
+    borderWidth: 1,
+    borderColor: DesignSystem.colors.warning + '40',
+    alignItems: 'center',
+    marginBottom: DesignSystem.spacing.lg,
+  },
+  developmentTitle: {
+    ...DesignSystem.typography.h4,
+    color: DesignSystem.colors.warning,
+    marginBottom: DesignSystem.spacing.sm,
+  },
+  developmentText: {
+    ...DesignSystem.typography.body,
+    color: DesignSystem.colors.text.secondary,
+    textAlign: 'center',
+    lineHeight: 20,
   },
 });
