@@ -145,8 +145,8 @@ export const SettingsScreen: React.FC = () => {
 
   const handleOpenAdmin = () => {
     if (isSuperAdmin) {
-      // 系統管理員導航到 Super Admin Dashboard
-      navigation.navigate('SuperAdminDashboard' as any);
+      // 系統管理員導航到組織管理頁面
+      navigation.navigate('OrganizationsScreen' as any);
     } else {
       // 企業管理員導航到 Enterprise Admin Dashboard
       navigation.navigate('AdminDashboard' as any);
