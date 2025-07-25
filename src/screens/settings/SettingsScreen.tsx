@@ -234,7 +234,7 @@ export const SettingsScreen: React.FC = () => {
             <Text style={styles.userName}>{user?.name || '使用者'}</Text>
             <Text style={styles.userEmail}>{user?.email || ''}</Text>
             <Text style={styles.userRole}>
-              {mode === 'manager' ? '主管模式' : '業務模式'}
+              {isSuperAdmin ? 'Super Admin' : isEnterpriseAdmin ? '企業管理員' : mode === 'manager' ? '主管模式' : '業務模式'}
             </Text>
           </View>
           <TouchableOpacity 

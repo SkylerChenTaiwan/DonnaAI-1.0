@@ -1,0 +1,390 @@
+/**
+ * Admin 狀態管理 Store
+ * 管理組織、使用統計和企業配置等管理員相關資料
+ */
+
+import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
+import { Organization } from '@/types/user';
+import { EnterpriseConfig, UsageMetrics, Period } from '@/types/admin';
+import {
+  getOrganizations,
+  getOrganization,
+  createOrganization,
+  updateOrganization,
+  deleteOrganization,
+  updateOrganizationStats,
+  OrganizationFilters,
+  CreateOrganizationData,
+  getUsageReport,
+  getRealtimeStats,
+  UsageReport,
+  getEnterpriseConfig,
+  updateEnterpriseConfig,
+  toggleTool,
+  updateSubscriptionDetails,
+  updateCustomSettings
+} from '@/services/firebase/admin';
+
+interface AdminState {
+  // 組織管理
+  organizations: Organization[];
+  selectedOrganization: Organization | null;
+  organizationFilters: OrganizationFilters;
+  
+  // 使用統計
+  usageReport: UsageReport | null;
+  realtimeStats: {
+    onlineUsers: number;
+    todaySessions: number;
+    todayAIMinutes: number;
+  } | null;
+  
+  // 企業配置
+  enterpriseConfig: EnterpriseConfig | null;
+  
+  // 狀態
+  isLoading: boolean;
+  error: string | null;
+  
+  // 組織管理動作
+  fetchOrganizations: (filters?: OrganizationFilters) => Promise<void>;
+  selectOrganization: (orgId: string) => Promise<void>;
+  createOrganization: (data: CreateOrganizationData) => Promise<Organization>;
+  updateOrganization: (orgId: string, updates: Partial<Organization>) => Promise<void>;
+  deleteOrganization: (orgId: string) => Promise<void>;
+  updateOrganizationStats: (orgId: string, stats: Partial<Organization['stats']>) => Promise<void>;
+  setOrganizationFilters: (filters: OrganizationFilters) => void;
+  
+  // 使用統計動作
+  fetchUsageReport: (orgId: string, period: Period, startDate?: Date, endDate?: Date) => Promise<void>;
+  fetchRealtimeStats: (orgId: string) => Promise<void>;
+  
+  // 企業配置動作
+  fetchEnterpriseConfig: (orgId: string) => Promise<void>;
+  updateEnterpriseConfig: (configId: string, updates: Partial<EnterpriseConfig>) => Promise<void>;
+  toggleTool: (configId: string, toolId: string, enabled: boolean) => Promise<void>;
+  updateSubscriptionDetails: (configId: string, updates: Partial<EnterpriseConfig['subscriptionDetails']>) => Promise<void>;
+  updateCustomSettings: (configId: string, settings: Partial<EnterpriseConfig['customSettings']>) => Promise<void>;
+  
+  // 工具動作
+  clearError: () => void;
+  reset: () => void;
+}
+
+const initialState = {
+  organizations: [],
+  selectedOrganization: null,
+  organizationFilters: {},
+  usageReport: null,
+  realtimeStats: null,
+  enterpriseConfig: null,
+  isLoading: false,
+  error: null
+};
+
+export const useAdminStore = create<AdminState>()(
+  devtools(
+    (set, get) => ({
+      ...initialState,
+      
+      // 組織管理動作
+      fetchOrganizations: async (filters?: OrganizationFilters) => {
+        set({ isLoading: true, error: null });
+        
+        try {
+          const orgs = await getOrganizations(filters || get().organizationFilters);
+          set({ organizations: orgs, isLoading: false });
+        } catch (error) {
+          set({ 
+            error: error instanceof Error ? error.message : '獲取組織列表失敗',
+            isLoading: false 
+          });
+          throw error;
+        }
+      },
+      
+      selectOrganization: async (orgId: string) => {
+        set({ isLoading: true, error: null });
+        
+        try {
+          const org = await getOrganization(orgId);
+          if (org) {
+            set({ selectedOrganization: org });
+            
+            // 同時載入相關資料
+            await Promise.all([
+              get().fetchEnterpriseConfig(orgId),
+              get().fetchRealtimeStats(orgId)
+            ]);
+          } else {
+            set({ error: '找不到指定的組織' });
+          }
+          
+          set({ isLoading: false });
+        } catch (error) {
+          set({ 
+            error: error instanceof Error ? error.message : '獲取組織詳情失敗',
+            isLoading: false 
+          });
+        }
+      },
+      
+      createOrganization: async (data: CreateOrganizationData) => {
+        set({ isLoading: true, error: null });
+        
+        try {
+          const newOrg = await createOrganization(data);
+          set(state => ({
+            organizations: [newOrg, ...state.organizations],
+            isLoading: false
+          }));
+          return newOrg;
+        } catch (error) {
+          set({ 
+            error: error instanceof Error ? error.message : '建立組織失敗',
+            isLoading: false 
+          });
+          throw error;
+        }
+      },
+      
+      updateOrganization: async (orgId: string, updates: Partial<Organization>) => {
+        set({ isLoading: true, error: null });
+        
+        try {
+          await updateOrganization(orgId, updates);
+          
+          // 更新本地狀態
+          set(state => ({
+            organizations: state.organizations.map(org => 
+              org.id === orgId ? { ...org, ...updates } : org
+            ),
+            selectedOrganization: state.selectedOrganization?.id === orgId 
+              ? { ...state.selectedOrganization, ...updates }
+              : state.selectedOrganization,
+            isLoading: false
+          }));
+        } catch (error) {
+          set({ 
+            error: error instanceof Error ? error.message : '更新組織失敗',
+            isLoading: false 
+          });
+          throw error;
+        }
+      },
+      
+      deleteOrganization: async (orgId: string) => {
+        set({ isLoading: true, error: null });
+        
+        try {
+          await deleteOrganization(orgId);
+          
+          // 更新本地狀態
+          set(state => ({
+            organizations: state.organizations.filter(org => org.id !== orgId),
+            selectedOrganization: state.selectedOrganization?.id === orgId 
+              ? null 
+              : state.selectedOrganization,
+            isLoading: false
+          }));
+        } catch (error) {
+          set({ 
+            error: error instanceof Error ? error.message : '刪除組織失敗',
+            isLoading: false 
+          });
+          throw error;
+        }
+      },
+      
+      updateOrganizationStats: async (orgId: string, stats: Partial<Organization['stats']>) => {
+        try {
+          await updateOrganizationStats(orgId, stats);
+          
+          // 更新本地狀態
+          set(state => ({
+            organizations: state.organizations.map(org => 
+              org.id === orgId 
+                ? { ...org, stats: { ...org.stats, ...stats } }
+                : org
+            ),
+            selectedOrganization: state.selectedOrganization?.id === orgId 
+              ? { ...state.selectedOrganization, stats: { ...state.selectedOrganization.stats, ...stats } }
+              : state.selectedOrganization
+          }));
+        } catch (error) {
+          console.error('更新組織統計失敗:', error);
+        }
+      },
+      
+      setOrganizationFilters: (filters: OrganizationFilters) => {
+        set({ organizationFilters: filters });
+      },
+      
+      // 使用統計動作
+      fetchUsageReport: async (orgId: string, period: Period, startDate?: Date, endDate?: Date) => {
+        set({ isLoading: true, error: null });
+        
+        try {
+          const report = await getUsageReport(orgId, period, startDate, endDate);
+          set({ usageReport: report, isLoading: false });
+        } catch (error) {
+          set({ 
+            error: error instanceof Error ? error.message : '獲取使用報表失敗',
+            isLoading: false 
+          });
+        }
+      },
+      
+      fetchRealtimeStats: async (orgId: string) => {
+        try {
+          const stats = await getRealtimeStats(orgId);
+          set({ realtimeStats: stats });
+        } catch (error) {
+          console.error('獲取即時統計失敗:', error);
+        }
+      },
+      
+      // 企業配置動作
+      fetchEnterpriseConfig: async (orgId: string) => {
+        try {
+          const config = await getEnterpriseConfig(orgId);
+          set({ enterpriseConfig: config });
+        } catch (error) {
+          console.error('獲取企業配置失敗:', error);
+        }
+      },
+      
+      updateEnterpriseConfig: async (configId: string, updates: Partial<EnterpriseConfig>) => {
+        set({ isLoading: true, error: null });
+        
+        try {
+          await updateEnterpriseConfig(configId, updates);
+          
+          // 更新本地狀態
+          set(state => ({
+            enterpriseConfig: state.enterpriseConfig?.id === configId
+              ? { ...state.enterpriseConfig, ...updates }
+              : state.enterpriseConfig,
+            isLoading: false
+          }));
+        } catch (error) {
+          set({ 
+            error: error instanceof Error ? error.message : '更新企業配置失敗',
+            isLoading: false 
+          });
+          throw error;
+        }
+      },
+      
+      toggleTool: async (configId: string, toolId: string, enabled: boolean) => {
+        set({ isLoading: true, error: null });
+        
+        try {
+          await toggleTool(configId, toolId, enabled);
+          
+          // 更新本地狀態
+          set(state => {
+            if (!state.enterpriseConfig || state.enterpriseConfig.id !== configId) {
+              return { isLoading: false };
+            }
+            
+            const updatedTools = state.enterpriseConfig.enabledTools.map(tool =>
+              tool.id === toolId ? { ...tool, enabled } : tool
+            );
+            
+            return {
+              enterpriseConfig: {
+                ...state.enterpriseConfig,
+                enabledTools: updatedTools
+              },
+              isLoading: false
+            };
+          });
+        } catch (error) {
+          set({ 
+            error: error instanceof Error ? error.message : '切換工具狀態失敗',
+            isLoading: false 
+          });
+          throw error;
+        }
+      },
+      
+      updateSubscriptionDetails: async (configId: string, updates: Partial<EnterpriseConfig['subscriptionDetails']>) => {
+        set({ isLoading: true, error: null });
+        
+        try {
+          await updateSubscriptionDetails(configId, updates);
+          
+          // 更新本地狀態
+          set(state => {
+            if (!state.enterpriseConfig || state.enterpriseConfig.id !== configId) {
+              return { isLoading: false };
+            }
+            
+            return {
+              enterpriseConfig: {
+                ...state.enterpriseConfig,
+                subscriptionDetails: {
+                  ...state.enterpriseConfig.subscriptionDetails,
+                  ...updates
+                }
+              },
+              isLoading: false
+            };
+          });
+        } catch (error) {
+          set({ 
+            error: error instanceof Error ? error.message : '更新訂閱詳情失敗',
+            isLoading: false 
+          });
+          throw error;
+        }
+      },
+      
+      updateCustomSettings: async (configId: string, settings: Partial<EnterpriseConfig['customSettings']>) => {
+        set({ isLoading: true, error: null });
+        
+        try {
+          await updateCustomSettings(configId, settings);
+          
+          // 更新本地狀態
+          set(state => {
+            if (!state.enterpriseConfig || state.enterpriseConfig.id !== configId) {
+              return { isLoading: false };
+            }
+            
+            return {
+              enterpriseConfig: {
+                ...state.enterpriseConfig,
+                customSettings: {
+                  ...state.enterpriseConfig.customSettings,
+                  ...settings
+                }
+              },
+              isLoading: false
+            };
+          });
+        } catch (error) {
+          set({ 
+            error: error instanceof Error ? error.message : '更新自訂設定失敗',
+            isLoading: false 
+          });
+          throw error;
+        }
+      },
+      
+      // 工具動作
+      clearError: () => {
+        set({ error: null });
+      },
+      
+      reset: () => {
+        set(initialState);
+      }
+    }),
+    {
+      name: 'admin-store'
+    }
+  )
+);
