@@ -18,45 +18,33 @@ import { Layout } from '@/components/common/Layout';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@/types/navigation';
-import { useAdminStore } from '@/stores/adminStore';
+import { useAuthStore } from '@/stores/authStore';
 import { DesignSystem } from '@/theme/designSystem';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 export const SuperAdminDashboard: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
-  const { 
-    organizations, 
-    fetchOrganizations, 
-    isLoading,
-    error 
-  } = useAdminStore();
+  const { user } = useAuthStore();
   const [refreshing, setRefreshing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
+  // 系統管理員不需要載入業務資料
   useEffect(() => {
-    fetchOrganizations();
+    // 不執行任何資料載入
   }, []);
 
   const handleRefresh = async () => {
     setRefreshing(true);
-    await fetchOrganizations();
-    setRefreshing(false);
+    // 模擬 refresh，但不實際載入資料
+    setTimeout(() => setRefreshing(false), 500);
   };
 
-  // 計算總計數據
-  const totalOrganizations = organizations.length;
-  const activeOrganizations = organizations.filter(org => org.status === 'active').length;
-  const totalUsers = organizations.reduce((sum, org) => sum + (org.stats?.totalUsers || 0), 0);
-  const totalRevenue = organizations.reduce((sum, org) => {
-    // 根據訂閱方案計算收入
-    const planPrices = {
-      trial: 0,
-      basic: 299,
-      professional: 999,
-      enterprise: 2999
-    };
-    return sum + (planPrices[org.subscription?.plan as keyof typeof planPrices] || 0);
-  }, 0);
+  // 系統管理員專用的模擬統計資料
+  const totalOrganizations = 0;
+  const activeOrganizations = 0;
+  const totalUsers = 0;
+  const totalRevenue = 0;
 
   const quickStats = [
     {
@@ -95,28 +83,28 @@ export const SuperAdminDashboard: React.FC = () => {
 
   const quickActions = [
     {
-      id: 'add-org',
-      title: '新增組織',
-      icon: 'add-circle-outline',
-      route: 'CreateOrganizationScreen'
-    },
-    {
-      id: 'view-orgs',
-      title: '組織管理',
-      icon: 'business-outline',
-      route: 'OrganizationsScreen'
-    },
-    {
       id: 'platform-stats',
-      title: '平台統計',
+      title: '平台監控',
       icon: 'analytics-outline',
-      route: 'PlatformDashboard'
+      action: () => console.log('平台監控功能開發中')
+    },
+    {
+      id: 'system-logs',
+      title: '系統日誌',
+      icon: 'document-text-outline',
+      action: () => console.log('系統日誌功能開發中')
+    },
+    {
+      id: 'backup',
+      title: '資料備份',
+      icon: 'cloud-download-outline',
+      action: () => console.log('資料備份功能開發中')
     },
     {
       id: 'settings',
-      title: '平台設定',
+      title: '系統設定',
       icon: 'settings-outline',
-      route: 'AdminSettings'
+      action: () => console.log('系統設定功能開發中')
     }
   ];
 
@@ -167,7 +155,7 @@ export const SuperAdminDashboard: React.FC = () => {
               <TouchableOpacity
                 key={action.id}
                 style={styles.actionCard}
-                onPress={() => navigation.navigate(action.route as any)}
+                onPress={action.action}
               >
                 <Ionicons 
                   name={action.icon as any} 
@@ -180,39 +168,28 @@ export const SuperAdminDashboard: React.FC = () => {
           </View>
         </View>
 
-        {/* 最近組織 */}
+        {/* 系統資訊 */}
         <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>最近組織</Text>
-            <TouchableOpacity 
-              onPress={() => navigation.navigate('OrganizationsScreen')}
-            >
-              <Text style={styles.viewAllLink}>查看全部</Text>
-            </TouchableOpacity>
-          </View>
+          <Text style={styles.sectionTitle}>系統狀態</Text>
           
-          {organizations.slice(0, 3).map((org) => (
-            <TouchableOpacity
-              key={org.id}
-              style={styles.orgCard}
-              onPress={() => navigation.navigate('OrganizationDetailScreen', { organizationId: org.id })}
-            >
-              <View style={styles.orgInfo}>
-                <Text style={styles.orgName}>{org.name}</Text>
-                <Text style={styles.orgPlan}>
-                  {org.subscription?.plan || 'trial'} 方案 · {org.stats?.totalUsers || 0} 用戶
-                </Text>
-              </View>
-              <View style={[
-                styles.orgStatus,
-                { backgroundColor: org.status === 'active' ? DesignSystem.colors.success : DesignSystem.colors.error }
-              ]}>
-                <Text style={styles.orgStatusText}>
-                  {org.status === 'active' ? '活躍' : '停用'}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          ))}
+          <View style={styles.systemInfoCard}>
+            <View style={styles.systemInfoRow}>
+              <Text style={styles.systemInfoLabel}>當前用戶角色：</Text>
+              <Text style={styles.systemInfoValue}>系統管理員</Text>
+            </View>
+            <View style={styles.systemInfoRow}>
+              <Text style={styles.systemInfoLabel}>登入帳號：</Text>
+              <Text style={styles.systemInfoValue}>{user?.email}</Text>
+            </View>
+            <View style={styles.systemInfoRow}>
+              <Text style={styles.systemInfoLabel}>權限範圍：</Text>
+              <Text style={styles.systemInfoValue}>系統管理功能</Text>
+            </View>
+            <View style={styles.systemInfoRow}>
+              <Text style={styles.systemInfoLabel}>資料存取：</Text>
+              <Text style={styles.systemInfoValue}>無業務資料存取權限</Text>
+            </View>
+          </View>
         </View>
 
         <View style={styles.footer} />
@@ -313,6 +290,13 @@ const styles = StyleSheet.create({
   actionCard: {
     width: '50%',
     padding: 8,
+    backgroundColor: DesignSystem.colors.background.surface,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 80,
+    borderWidth: 1,
+    borderColor: DesignSystem.colors.border.light,
   },
   actionTitle: {
     fontSize: 14,
@@ -357,5 +341,33 @@ const styles = StyleSheet.create({
   },
   footer: {
     height: 20,
+  },
+  systemInfoCard: {
+    backgroundColor: DesignSystem.colors.background.surface,
+    borderRadius: 8,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: DesignSystem.colors.border.light,
+  },
+  systemInfoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: DesignSystem.colors.border.light,
+  },
+  systemInfoLabel: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: DesignSystem.colors.text.secondary,
+    flex: 1,
+  },
+  systemInfoValue: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: DesignSystem.colors.text.primary,
+    flex: 1,
+    textAlign: 'right',
   },
 });
