@@ -7,6 +7,7 @@ import { TouchableOpacity, Text, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { DesignSystem } from '@/theme/designSystem';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Ionicons } from '@expo/vector-icons';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { useAuthStore } from '@/stores/authStore';
 import { AuthNavigator } from './AuthNavigator';
@@ -148,12 +149,28 @@ export const AppNavigator = () => {
             <Stack.Screen
               name="OrganizationsScreen"
               component={OrganizationsScreen}
-              options={{ 
+              options={({ navigation }) => ({ 
                 headerShown: true,
                 title: '組織管理',
                 headerTintColor: '#1A1A1A',
                 headerBackTitleVisible: false,
-              }}
+                headerRight: () => (
+                  <TouchableOpacity
+                    style={{
+                      marginRight: 16,
+                      width: 32,
+                      height: 32,
+                      borderRadius: 16,
+                      backgroundColor: DesignSystem.colors.primary,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                    onPress={() => navigation.navigate('CreateOrganizationScreen')}
+                  >
+                    <Ionicons name="add" size={20} color={DesignSystem.colors.text.inverse} />
+                  </TouchableOpacity>
+                ),
+              })}
             />
             <Stack.Screen
               name="CreateOrganizationScreen"
