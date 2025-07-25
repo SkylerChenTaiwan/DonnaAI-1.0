@@ -150,7 +150,7 @@ export const OrganizationsScreen: React.FC = () => {
       <View style={styles.orgHeader}>
         <View style={styles.orgInfo}>
           <Text style={styles.orgName}>{item.name}</Text>
-          <Text style={styles.orgPlan}>{item.subscriptionPlan.toUpperCase()}</Text>
+          <Text style={styles.orgPlan}>{(item.subscriptionPlan || 'basic').toUpperCase()}</Text>
         </View>
         <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
           <Text style={styles.statusText}>{item.status || 'active'}</Text>
@@ -161,13 +161,13 @@ export const OrganizationsScreen: React.FC = () => {
         <View style={styles.detailRow}>
           <Ionicons name="people-outline" size={16} color={DesignSystem.colors.gray[600]} />
           <Text style={styles.detailText}>
-            {item.maxUsers || '∞'} 用戶
+            {item.maxUsers || 0} 用戶
           </Text>
         </View>
         <View style={styles.detailRow}>
           <Ionicons name="time-outline" size={16} color={DesignSystem.colors.gray[600]} />
           <Text style={styles.detailText}>
-            {item.aiMinutesUsed} / {item.aiMinutesQuota} AI 分鐘
+            {item.aiMinutesUsed || 0} / {item.aiMinutesQuota || 0} AI 分鐘
           </Text>
         </View>
       </View>
