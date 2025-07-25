@@ -37,6 +37,8 @@ import { Organization, BillingRecord, ToolUsageStats } from '@/types/entities';
 import { RootStackParamList } from '@/types/navigation';
 import { DesignSystem } from '@/theme/designSystem';
 import { toast } from '@/utils/toast';
+import { AddUserToOrganizationModal } from '@/components/organization/AddUserToOrganizationModal';
+import { BulkImportUsersModal } from '@/components/organization/BulkImportUsersModal';
 
 type RouteParams = RouteProp<RootStackParamList, 'OrganizationDetailScreen'>;
 type NavigationProp = StackNavigationProp<RootStackParamList, 'OrganizationDetailScreen'>;
@@ -64,7 +66,11 @@ export const OrganizationDetailScreen: React.FC = () => {
   const [billingSummary, setBillingSummary] = useState<any>(null);
   const [billingHistory, setBillingHistory] = useState<BillingRecord[]>([]);
   const [toolUsageStats, setToolUsageStats] = useState<ToolUsageStats[]>([]);
-  const [selectedTab, setSelectedTab] = useState<'overview' | 'billing' | 'permissions' | 'assistance'>('overview');
+  const [selectedTab, setSelectedTab] = useState<'overview' | 'users' | 'billing' | 'permissions' | 'assistance'>('overview');
+  
+  // 用戶管理 Modal 狀態
+  const [showAddUserModal, setShowAddUserModal] = useState(false);
+  const [showBulkImportModal, setShowBulkImportModal] = useState(false);
 
   // 功能開關狀態
   const [features, setFeatures] = useState({
@@ -349,6 +355,7 @@ export const OrganizationDetailScreen: React.FC = () => {
         <View style={styles.tabContainer}>
           {[
             { key: 'overview', label: '概覽' },
+            { key: 'users', label: '用戶管理' },
             { key: 'billing', label: '計費管理' },
             { key: 'permissions', label: '權限管理' },
             { key: 'assistance', label: '用戶協助' },
@@ -403,6 +410,42 @@ export const OrganizationDetailScreen: React.FC = () => {
               </View>
             )}
             */}
+          </View>
+        )}
+        
+        {/* 用戶管理分頁 */}
+        {selectedTab === 'users' && (
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>用戶管理</Text>
+              <View style={styles.userActionButtons}>
+                <TouchableOpacity
+                  style={styles.addUserButton}
+                  onPress={() => setShowAddUserModal(true)}
+                >
+                  <Ionicons name="person-add-outline" size={16} color={DesignSystem.colors.primary} />
+                  <Text style={styles.addUserButtonText}>新增用戶</Text>
+                </TouchableOpacity>
+                
+                <TouchableOpacity
+                  style={styles.bulkImportButton}
+                  onPress={() => setShowBulkImportModal(true)}
+                >
+                  <Ionicons name="cloud-upload-outline" size={16} color={DesignSystem.colors.success} />
+                  <Text style={styles.bulkImportButtonText}>批量匯入</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            
+            <View style={styles.userInfoCard}>
+              <Text style={styles.userInfoTitle}>用戶管理說明</Text>
+              <Text style={styles.userInfoText}>
+                • 新增用戶：為組織新增單個用戶{"\n"}
+                • 批量匯入：使用 CSV 檔案批量新增多個用戶{"\n"}
+                • 用戶會自動獲得 Firebase Auth 帳號{"\n"}
+                • 用戶可以設定為一般用戶或管理員角色
+              </Text>
+            </View>
           </View>
         )}
         
@@ -545,6 +588,31 @@ export const OrganizationDetailScreen: React.FC = () => {
           </View>
         )}
       </ScrollView>
+      
+      {/* 用戶管理 Modal */}
+      <AddUserToOrganizationModal
+        visible={showAddUserModal}
+        organization={organization}
+        onClose={() => setShowAddUserModal(false)}
+        onUserAdded={() => {
+          setShowAddUserModal(false);
+          toast.success('用戶新增成功');
+        }}
+      />
+      
+      <BulkImportUsersModal
+        visible={showBulkImportModal}
+        organization={organization}
+        onClose={() => setShowBulkImportModal(false)}
+        onImportComplete={(result) => {
+          setShowBulkImportModal(false);
+          if (result.success) {
+            toast.success(`成功匯入 ${result.imported} 個用戶`);
+          } else {
+            toast.error('批量匯入完成，但有部分失敗');
+          }
+        }}
+      />
     </Layout>
   );
 };
@@ -887,5 +955,59 @@ const styles = StyleSheet.create({
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.error,
     fontWeight: '500',
+  },
+  userActionButtons: {
+    flexDirection: 'row',
+    gap: DesignSystem.spacing.sm,
+  },
+  addUserButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: DesignSystem.spacing.xs,
+    paddingHorizontal: DesignSystem.spacing.md,
+    paddingVertical: DesignSystem.spacing.sm,
+    borderWidth: 1,
+    borderColor: DesignSystem.colors.primary,
+    borderRadius: DesignSystem.borderRadius.sm,
+    backgroundColor: DesignSystem.colors.background.surface,
+  },
+  addUserButtonText: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.primary,
+    fontWeight: '500',
+  },
+  bulkImportButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: DesignSystem.spacing.xs,
+    paddingHorizontal: DesignSystem.spacing.md,
+    paddingVertical: DesignSystem.spacing.sm,
+    borderWidth: 1,
+    borderColor: DesignSystem.colors.success,
+    borderRadius: DesignSystem.borderRadius.sm,
+    backgroundColor: DesignSystem.colors.background.surface,
+  },
+  bulkImportButtonText: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.success,
+    fontWeight: '500',
+  },
+  userInfoCard: {
+    backgroundColor: DesignSystem.colors.primary + '10',
+    padding: DesignSystem.spacing.lg,
+    borderRadius: DesignSystem.borderRadius.sm,
+    borderWidth: 1,
+    borderColor: DesignSystem.colors.primary + '20',
+  },
+  userInfoTitle: {
+    ...DesignSystem.typography.body,
+    color: DesignSystem.colors.text.primary,
+    fontWeight: '600',
+    marginBottom: DesignSystem.spacing.sm,
+  },
+  userInfoText: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.secondary,
+    lineHeight: 18,
   },
 });
