@@ -3,7 +3,7 @@
  * 提供統一的 AI 處理 HTTP 端點
  */
 
-import * as functions from "firebase-functions";
+import { onRequest } from "firebase-functions/v2/https";
 import * as admin from "firebase-admin";
 import * as cors from "cors";
 import OpenAI from "openai";
@@ -16,14 +16,6 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 const corsHandler = cors({origin: true});
-
-// 從環境變數獲取 API 金鑰
-const openaiApiKey = functions.config().openai?.api_key;
-const anthropicApiKey = functions.config().anthropic?.api_key;
-
-// 初始化 AI 客戶端
-const openai = openaiApiKey ? new OpenAI({apiKey: openaiApiKey}) : null;
-const anthropic = anthropicApiKey ? new Anthropic({apiKey: anthropicApiKey}) : null;
 
 export interface AIProcessingRequest {
   action: "analyze" | "extract" | "summarize" | "interpret";

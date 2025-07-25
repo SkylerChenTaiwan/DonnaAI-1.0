@@ -3,12 +3,12 @@
  * 處理上傳的音訊檔案，轉換為文字並進行 AI 分析
  */
 
-import * as functions from "firebase-functions";
+import { onObjectFinalized } from "firebase-functions/v2/storage";
 import * as admin from "firebase-admin";
-import {SpeechClient} from "@google-cloud/speech";
-import {Storage} from "@google-cloud/storage";
-import {analyzeTranscription} from "./ai-analysis";
-import {extractFieldsFromTranscription} from "./field-extraction-internal";
+import { SpeechClient } from "@google-cloud/speech";
+import { Storage } from "@google-cloud/storage";
+import { analyzeTranscription } from "./ai-analysis";
+import { extractFieldsFromTranscription } from "./field-extraction-internal";
 
 // 初始化服務
 if (!admin.apps.length) {
@@ -23,9 +23,15 @@ const speechClient = new SpeechClient();
  * 音訊檔案處理觸發器
  * 當音訊檔案上傳到 Storage 時自動觸發
  */
-export const processAudioFile = functions.storage
-  .object()
-  .onFinalize(async (object) => {
+export const processAudioFile = onObjectFinalized(
+  {
+    region: 'asia-east1',
+    memory: '2GiB',
+    timeoutSeconds: 540,
+    secrets: ['OPENAI_API_KEY', 'CLAUDE_API_KEY', 'GEMINI_API_KEY']
+  },
+  async (event) => {
+    const object = event.data;
     try {
       const filePath = object.name;
       const contentType = object.contentType;
