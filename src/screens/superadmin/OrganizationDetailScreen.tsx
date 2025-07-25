@@ -361,17 +361,22 @@ export const OrganizationDetailScreen: React.FC = () => {
         <View style={styles.tabContainer}>
           {[
             { key: 'overview', label: '概覽' },
-            { key: 'users', label: '用戶管理' },
-            { key: 'billing', label: '計費管理' },
-            { key: 'permissions', label: '權限管理' },
-            { key: 'assistance', label: '用戶協助' },
+            { key: 'users', label: '用戶' },
+            { key: 'billing', label: '計費' },
+            { key: 'permissions', label: '權限' },
+            { key: 'assistance', label: '協助' },
           ].map((tab) => (
             <TouchableOpacity
               key={tab.key}
               style={[styles.tab, selectedTab === tab.key && styles.activeTab]}
               onPress={() => setSelectedTab(tab.key as any)}
             >
-              <Text style={[styles.tabText, selectedTab === tab.key && styles.activeTabText]}>
+              <Text 
+                style={[styles.tabText, selectedTab === tab.key && styles.activeTabText]}
+                numberOfLines={1}
+                adjustsFontSizeToFit={true}
+                minimumFontScale={0.8}
+              >
                 {tab.label}
               </Text>
             </TouchableOpacity>
@@ -726,9 +731,10 @@ const styles = StyleSheet.create({
   tab: {
     flex: 1,
     paddingVertical: DesignSystem.spacing.sm,
-    paddingHorizontal: DesignSystem.spacing.md,
+    paddingHorizontal: DesignSystem.spacing.xs,
     borderRadius: DesignSystem.borderRadius.sm,
     alignItems: 'center',
+    minWidth: 0, // 允許收縮
   },
   activeTab: {
     backgroundColor: DesignSystem.colors.primary,
@@ -737,6 +743,7 @@ const styles = StyleSheet.create({
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
     fontWeight: '500',
+    textAlign: 'center',
   },
   activeTabText: {
     color: DesignSystem.colors.text.inverse,
