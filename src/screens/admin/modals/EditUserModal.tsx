@@ -26,7 +26,7 @@ import { useAdminStore } from '@/stores/adminStore';
 import { showToast } from '@/utils/toast';
 import { Ionicons } from '@expo/vector-icons';
 import { DesignSystem } from '@/theme/designSystem';
-import { User } from '@/types/user';
+import { User } from '@/types/entities';
 
 type RouteParams = {
   EditUserModal: {

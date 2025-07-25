@@ -17,7 +17,7 @@ import {
 import { getFirebaseDb } from '../config';
 import { getAuth, deleteUser as deleteAuthUser } from 'firebase/auth';
 import { getFunctions, httpsCallable } from 'firebase/functions';
-import { User } from '@/types/user';
+import { User } from '@/types/entities';
 import { isOrgAdmin } from '../permissions';
 
 /**

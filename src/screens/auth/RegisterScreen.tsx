@@ -15,7 +15,7 @@ import { Layout } from '@/components/common/Layout';
 import { TextInput } from '@/components/common/TextInput';
 import { Button } from '@/components/common/Button';
 import { signUp } from '@/services/firebase/auth';
-import { UserRole } from '@/types/user';
+import { UserRole } from '@/types/entities';
 
 interface RegisterScreenProps {
   onNavigateToLogin: () => void;

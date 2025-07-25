@@ -13,7 +13,7 @@ import {
 } from 'firebase/auth';
 import { doc, setDoc, updateDoc, Timestamp, serverTimestamp } from 'firebase/firestore';
 import { getFirebaseAuth, getFirebaseDb } from './config';
-import { User, Organization, Team } from '@/types/user';
+import { User, Organization, Team } from '@/types/entities';
 
 export interface SignUpData {
   email: string;

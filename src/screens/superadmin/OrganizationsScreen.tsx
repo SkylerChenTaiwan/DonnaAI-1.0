@@ -21,7 +21,7 @@ import { SearchBar } from '@/components/common/SearchBar';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { getAllOrganizations, updateOrganization } from '@/services/firebase/organizations';
-import { Organization } from '@/types/user';
+import { Organization } from '@/types/entities';
 import { RootStackParamList } from '@/types/navigation';
 import { DesignSystem } from '@/theme/designSystem';
 import { showToast } from '@/utils/toast';

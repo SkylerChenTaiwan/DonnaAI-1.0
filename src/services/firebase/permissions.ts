@@ -4,7 +4,7 @@
 
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { getFirebaseDb } from './config';
-import { User, Team } from '@/types/user';
+import { User, Team } from '@/types/entities';
 
 /**
  * 檢查使用者是否是特定團隊的主管

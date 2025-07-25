@@ -20,7 +20,7 @@ import {
   writeBatch,
 } from 'firebase/firestore';
 import { getFirebaseDb } from './config';
-import { Organization } from '@/types/user';
+import { Organization } from '@/types/entities';
 import { OrganizationDetails, EnterpriseConfig } from '@/types/admin';
 
 // 建立新組織

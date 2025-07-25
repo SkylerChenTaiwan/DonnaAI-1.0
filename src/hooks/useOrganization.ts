@@ -8,31 +8,8 @@ import { doc, getDoc, getDocs, collection, query, where, onSnapshot } from 'fire
 import { getFirebaseDb, getFirebaseAuth } from '@/services/firebase/config';
 import { useAuth } from './useAuth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-export interface Organization {
-  id: string;
-  name: string;
-  description?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  ownerId: string;
-  settings?: {
-    defaultLanguage?: string;
-    timezone?: string;
-    features?: string[];
-  };
-}
-
-export interface Team {
-  id: string;
-  name: string;
-  organizationId: string;
-  description?: string;
-  memberCount?: number;
-  leaderId?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+import { Organization, Team } from '@/types/entities';
+import { organizationFromFirestore, teamFromFirestore } from '@/utils/validators';
 
 export interface OrganizationState {
   currentOrganization: Organization | null;
@@ -105,10 +82,7 @@ export function useOrganization(): OrganizationState {
       const orgDoc = await getDoc(doc(db, 'organizations', organizationId));
       
       if (orgDoc.exists()) {
-        return {
-          id: orgDoc.id,
-          ...orgDoc.data()
-        } as Organization;
+        return organizationFromFirestore(orgDoc);
       }
       
       return null;
@@ -125,10 +99,7 @@ export function useOrganization(): OrganizationState {
       const teamDoc = await getDoc(doc(db, 'teams', teamId));
       
       if (teamDoc.exists()) {
-        return {
-          id: teamDoc.id,
-          ...teamDoc.data()
-        } as Team;
+        return teamFromFirestore(teamDoc);
       }
       
       return null;
@@ -199,10 +170,9 @@ export function useOrganization(): OrganizationState {
       );
       
       const snapshot = await getDocs(teamsQuery);
-      return snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      } as Team));
+      return snapshot.docs
+        .map(doc => teamFromFirestore(doc))
+        .filter((team): team is Team => team !== null);
     } catch (error) {
       console.error('Error fetching organization teams:', error);
       return []; // 返回空陣列而不是拋出錯誤

@@ -15,7 +15,7 @@ import {
 import { getFirebaseDb } from '../config';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { Customer, Record, Task } from '@/types/firebase';
-import { User } from '@/types/user';
+import { User } from '@/types/entities';
 import { isOrgAdmin } from '../permissions';
 import * as Papa from 'papaparse';
 import * as XLSX from 'xlsx';

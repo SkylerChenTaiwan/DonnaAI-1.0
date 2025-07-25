@@ -5,7 +5,7 @@
 
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { Organization, User } from '@/types/user';
+import { Organization, User } from '@/types/entities';
 import { EnterpriseConfig, UsageMetrics, Period } from '@/types/admin';
 import {
   getOrganizations,

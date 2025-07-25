@@ -18,7 +18,7 @@ import {
   Timestamp
 } from 'firebase/firestore';
 import { getFirebaseDb } from '@/services/firebase/config';
-import { Organization } from '@/types/user';
+import { Organization } from '@/types/entities';
 
 export interface OrganizationFilters {
   search?: string;

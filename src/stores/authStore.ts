@@ -6,7 +6,7 @@ import { create } from 'zustand';
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { getFirebaseAuth, getFirebaseDb } from '@/services/firebase/config';
-import { User } from '@/types/user';
+import { User } from '@/types/entities';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { STORAGE_KEYS } from '@/config/constants';
 

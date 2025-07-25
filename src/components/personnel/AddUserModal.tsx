@@ -27,7 +27,7 @@ import { useOrganization } from '@/hooks/useOrganization';
 import { showToast } from '@/utils/toast';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/theme/colors';
-import { User } from '@/types/user';
+import { User } from '@/types/entities';
 
 type RouteParams = {
   AddUserModal: {

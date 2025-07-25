@@ -4,7 +4,7 @@
  */
 
 import { useAuthStore } from '@/stores/authStore';
-import { User } from '@/types/user';
+import { User } from '@/types/entities';
 import { EnterpriseAdminPermissions } from '@/types/admin';
 import { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
