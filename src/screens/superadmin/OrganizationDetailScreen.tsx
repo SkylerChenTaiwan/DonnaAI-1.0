@@ -29,7 +29,7 @@ import {
 import { Organization } from '@/types/entities';
 import { RootStackParamList } from '@/types/navigation';
 import { DesignSystem } from '@/theme/designSystem';
-import { showToast } from '@/utils/toast';
+import { toast } from '@/utils/toast';
 
 type RouteParams = RouteProp<RootStackParamList, 'OrganizationDetailScreen'>;
 type NavigationProp = StackNavigationProp<RootStackParamList, 'OrganizationDetailScreen'>;
@@ -91,12 +91,12 @@ export const OrganizationDetailScreen: React.FC = () => {
           });
         }
       } else {
-        showToast.error('找不到組織資料');
+        toast.error('找不到組織資料');
         navigation.goBack();
       }
     } catch (error) {
       console.error('載入組織資料失敗:', error);
-      showToast.error('載入失敗');
+      toast.error('載入失敗');
     } finally {
       setIsLoading(false);
     }
@@ -120,12 +120,12 @@ export const OrganizationDetailScreen: React.FC = () => {
         features,
       });
 
-      showToast.success('組織資料已更新');
+      toast.success('組織資料已更新');
       setIsEditing(false);
       await loadOrganizationData();
     } catch (error) {
       console.error('更新組織失敗:', error);
-      showToast.error('更新失敗');
+      toast.error('更新失敗');
     } finally {
       setIsSaving(false);
     }
@@ -143,11 +143,11 @@ export const OrganizationDetailScreen: React.FC = () => {
           onPress: async () => {
             try {
               await deleteOrganization(organizationId);
-              showToast.success('組織已刪除');
+              toast.success('組織已刪除');
               navigation.goBack();
             } catch (error) {
               console.error('刪除組織失敗:', error);
-              showToast.error('刪除失敗');
+              toast.error('刪除失敗');
             }
           },
         },

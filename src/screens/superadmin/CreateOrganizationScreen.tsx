@@ -21,7 +21,7 @@ import { Button } from '@/components/common/Button';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { createOrganization } from '@/services/firebase/admin/organizationService';
 import { DesignSystem } from '@/theme/designSystem';
-import { showToast } from '@/utils/toast';
+import { toast } from '@/utils/toast';
 
 export const CreateOrganizationScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -46,23 +46,23 @@ export const CreateOrganizationScreen: React.FC = () => {
 
   const validateForm = () => {
     if (!orgName.trim()) {
-      showToast.error('請輸入組織名稱');
+      toast.error('請輸入組織名稱');
       return false;
     }
     if (!orgEmail.trim() || !orgEmail.includes('@')) {
-      showToast.error('請輸入有效的組織電子郵件');
+      toast.error('請輸入有效的組織電子郵件');
       return false;
     }
     if (!adminName.trim()) {
-      showToast.error('請輸入管理員姓名');
+      toast.error('請輸入管理員姓名');
       return false;
     }
     if (!adminEmail.trim() || !adminEmail.includes('@')) {
-      showToast.error('請輸入有效的管理員電子郵件');
+      toast.error('請輸入有效的管理員電子郵件');
       return false;
     }
     if (!seats || parseInt(seats) < 1) {
-      showToast.error('座位數必須大於 0');
+      toast.error('座位數必須大於 0');
       return false;
     }
     return true;
@@ -89,13 +89,13 @@ export const CreateOrganizationScreen: React.FC = () => {
         seats: parseInt(seats),
       });
 
-      showToast.success('組織建立成功！管理員帳號資訊將發送至指定信箱。');
+      toast.success('組織建立成功！管理員帳號資訊將發送至指定信箱。');
       
       // 導航回組織列表
       navigation.goBack();
     } catch (error: any) {
       console.error('建立組織失敗:', error);
-      showToast.error('建立組織失敗：' + (error.message || '未知錯誤'));
+      toast.error('建立組織失敗：' + (error.message || '未知錯誤'));
     } finally {
       setIsLoading(false);
     }

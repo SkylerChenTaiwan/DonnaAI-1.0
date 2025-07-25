@@ -24,7 +24,7 @@ import { getAllOrganizations, updateOrganization } from '@/services/firebase/org
 import { Organization } from '@/types/entities';
 import { RootStackParamList } from '@/types/navigation';
 import { DesignSystem } from '@/theme/designSystem';
-import { showToast } from '@/utils/toast';
+import { toast } from '@/utils/toast';
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'OrganizationsScreen'>;
 
@@ -80,7 +80,7 @@ export const OrganizationsScreen: React.FC = () => {
       setFilteredOrgs(orgs);
     } catch (error) {
       console.error('載入組織失敗:', error);
-      showToast.error('載入組織列表失敗');
+      toast.error('載入組織列表失敗');
     } finally {
       setIsLoading(false);
     }
@@ -113,10 +113,10 @@ export const OrganizationsScreen: React.FC = () => {
             try {
               await updateOrganization(org.id, { status: newStatus });
               await loadOrganizations();
-              showToast.success(`已${action}組織`);
+              toast.success(`已${action}組織`);
             } catch (error) {
               console.error('更新組織狀態失敗:', error);
-              showToast.error(`${action}失敗`);
+              toast.error(`${action}失敗`);
             }
           }
         }
