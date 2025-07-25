@@ -1,11 +1,12 @@
 /**
  * 可重用的長條圖元件
  * 用於顯示比較資料
- * 注意：Victory Native v41+ API 需要進一步研究實作
+ * 使用 Victory Native v41+ CartesianChart API
  */
 
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { CartesianChart, Bar } from 'victory-native';
 import { DesignSystem } from '@/theme/designSystem';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -38,14 +39,24 @@ export const BarChart: React.FC<BarChartProps> = ({
     <View style={styles.container}>
       {title && <Text style={styles.title}>{title}</Text>}
       
-      {/* 暫時佔位符 - Victory Native v41 API 需要進一步研究 */}
-      <View style={[styles.placeholder, { height, width }]}>
-        <Text style={styles.placeholderText}>
-          長條圖
-        </Text>
-        <Text style={styles.placeholderSubtext}>
-          {data.length} 個資料點
-        </Text>
+      <View style={{ height, width }}>
+        {/* @ts-ignore - Victory Native v41 TypeScript 類型定義不完善 */}
+        <CartesianChart
+          data={data}
+          xKey="x"
+          yKeys={["y"]}
+          domainPadding={{ left: 50, right: 50, top: 20, bottom: 20 }}
+        >
+          {/* @ts-ignore */}
+          {({ points, chartBounds }) => (
+            <Bar
+              points={points.y}
+              chartBounds={chartBounds}
+              color={color}
+              roundedCorners={{ topLeft: 4, topRight: 4 }}
+            />
+          )}
+        </CartesianChart>
       </View>
       
       {xAxisLabel && <Text style={styles.xLabel}>{xAxisLabel}</Text>}
@@ -69,24 +80,6 @@ const styles = StyleSheet.create({
     ...DesignSystem.typography.h3,
     color: DesignSystem.colors.text.primary,
     marginBottom: 16,
-  },
-  placeholder: {
-    backgroundColor: DesignSystem.colors.background.primary,
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: DesignSystem.colors.border.light,
-    borderStyle: 'dashed',
-  },
-  placeholderText: {
-    ...DesignSystem.typography.h4,
-    color: DesignSystem.colors.text.secondary,
-    marginBottom: 4,
-  },
-  placeholderSubtext: {
-    ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.text.disabled,
   },
   xLabel: {
     ...DesignSystem.typography.caption,

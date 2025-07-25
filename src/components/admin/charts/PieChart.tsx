@@ -1,11 +1,12 @@
 /**
  * 可重用的圓餅圖元件
  * 用於顯示比例資料
- * 注意：Victory Native v41+ API 需要進一步研究實作
+ * 使用 Victory Native v41+ PolarChart API
  */
 
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { PolarChart, Pie } from 'victory-native';
 import { DesignSystem } from '@/theme/designSystem';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -53,14 +54,16 @@ export const PieChart: React.FC<PieChartProps> = ({
       {title && <Text style={styles.title}>{title}</Text>}
       
       <View style={styles.chartContainer}>
-        {/* 暫時佔位符 - Victory Native v41 API 需要進一步研究 */}
-        <View style={[styles.placeholder, { height, width }]}>
-          <Text style={styles.placeholderText}>
-            圓餅圖
-          </Text>
-          <Text style={styles.placeholderSubtext}>
-            {data.length} 個資料點
-          </Text>
+        <View style={{ height, width }}>
+          {/* @ts-ignore - Victory Native v41 TypeScript 類型定義不完善 */}
+          <PolarChart
+            data={pieData}
+            labelKey="label"
+            valueKey="value"
+            colorKey="color"
+          >
+            <Pie.Chart innerRadius={innerRadius} />
+          </PolarChart>
         </View>
       </View>
       
@@ -103,24 +106,6 @@ const styles = StyleSheet.create({
   },
   chartContainer: {
     alignItems: 'center',
-  },
-  placeholder: {
-    backgroundColor: DesignSystem.colors.background.primary,
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: DesignSystem.colors.border.light,
-    borderStyle: 'dashed',
-  },
-  placeholderText: {
-    ...DesignSystem.typography.h4,
-    color: DesignSystem.colors.text.secondary,
-    marginBottom: 4,
-  },
-  placeholderSubtext: {
-    ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.text.disabled,
   },
   legend: {
     flexDirection: 'row',

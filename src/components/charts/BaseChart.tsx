@@ -1,15 +1,14 @@
 /**
  * 基礎圖表元件
  * 提供所有圖表的共用功能和配置
+ * 
+ * 注意：此檔案已棄用，請使用 src/components/admin/charts/ 目錄下的新版圖表元件
+ * Victory Native v41+ 不再支援舊版 API
  */
 
 import React from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
-import { VictoryContainer, VictoryTheme } from 'victory-native';
+import { Text, View } from 'react-native';
 import { ChartConfig } from '../../types/data-visualization';
-import { colors } from '../../theme/colors';
-
-const { width: screenWidth } = Dimensions.get('window');
 
 interface BaseChartProps {
   config?: ChartConfig;
@@ -22,76 +21,20 @@ export const BaseChart: React.FC<BaseChartProps> = ({
   children,
   containerComponent
 }) => {
-  // 預設配置
-  const defaultConfig: ChartConfig = {
-    width: config?.width || screenWidth - 40,
-    height: config?.height || 300,
-    padding: config?.padding || { top: 20, right: 20, bottom: 60, left: 60 },
-    theme: config?.theme || 'light',
-    animate: config?.animate !== false,
-    animationDuration: config?.animationDuration || 500,
-    enableTooltip: config?.enableTooltip !== false,
-    enableLegend: config?.enableLegend !== false
-  };
-
-  // 根據主題選擇顏色
-  const theme = defaultConfig.theme === 'dark' ? 
-    VictoryTheme.material : 
-    VictoryTheme.material;
-
-  // 預設顏色方案
-  const defaultColorScale = [
-    colors.primary,
-    colors.secondary,
-    '#34C759',  // 綠色
-    '#007AFF',  // 藍色
-    '#FF9500',  // 橘色
-    '#AF52DE',  // 紫色
-    '#FF3B30',  // 紅色
-    '#5856D6'   // 靛藍色
-  ];
-
-  const colorScale = config?.colorScale || defaultColorScale;
-
-  // 容器元件配置
-  const defaultContainer = (
-    <VictoryContainer
-      width={defaultConfig.width}
-      height={defaultConfig.height}
-      style={styles.container}
-    />
-  );
-
   return (
-    <View style={styles.chartWrapper}>
-      {React.cloneElement(containerComponent || defaultContainer, {
-        theme,
-        width: defaultConfig.width,
-        height: defaultConfig.height,
-        padding: defaultConfig.padding,
-        colorScale,
-        animate: defaultConfig.animate ? {
-          duration: defaultConfig.animationDuration,
-          onLoad: { duration: 300 }
-        } : undefined,
-        children
-      })}
+    <View style={{ padding: 20, alignItems: 'center' }}>
+      <Text style={{ textAlign: 'center', fontSize: 16, color: '#666' }}>
+        基礎圖表元件已棄用
+      </Text>
+      <Text style={{ textAlign: 'center', fontSize: 14, color: '#999', marginTop: 8 }}>
+        請使用 src/components/admin/charts/ 目錄下的新版圖表元件
+      </Text>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  chartWrapper: {
-    alignItems: 'center',
-    marginVertical: 10
-  },
-  container: {
-    backgroundColor: 'transparent'
-  }
-});
-
 /**
- * 通用圖表工具函數
+ * 通用圖表工具函數（保留供向後相容）
  */
 
 // 格式化日期標籤

@@ -1,14 +1,16 @@
 /**
  * 圖表顯示元件
  * 根據圖表類型動態渲染相應的圖表
+ * 
+ * 注意：已更新為使用新版 Victory Native v41+ API
  */
 
 import React from 'react';
 import { View, StyleSheet, ActivityIndicator, Text } from 'react-native';
 import { ChartData } from '../../types/data-visualization';
-import { BarChart } from './BarChart';
-import { LineChart } from './LineChart';
-import { PieChart } from './PieChart';
+import { BarChart } from '../admin/charts/BarChart';
+import { LineChart } from '../admin/charts/LineChart';
+import { PieChart } from '../admin/charts/PieChart';
 import { colors } from '../../theme/colors';
 
 interface ChartDisplayProps {
@@ -53,21 +55,53 @@ export const ChartDisplay: React.FC<ChartDisplayProps> = ({
 
   // 根據圖表類型渲染
   const renderChart = () => {
+    // 轉換舊版 ChartData 為新版介面格式
+    const convertToNewFormat = () => {
+      if (!chartData?.data) return [];
+      
+      return chartData.data.map((item: any) => ({
+        x: item.x || item.label,
+        y: item.y || item.value
+      }));
+    };
+
+    const newFormatData = convertToNewFormat();
+    
     switch (chartData.type) {
       case 'bar':
-        return <BarChart data={chartData} variant="single" />;
-      
       case 'grouped-bar':
-        return <BarChart data={chartData} variant="grouped" />;
-      
       case 'stacked-bar':
-        return <BarChart data={chartData} variant="stacked" />;
+        return (
+          <BarChart 
+            data={newFormatData}
+            title={chartData.metadata.title}
+            color={chartData.config?.colorScale?.[0]}
+          />
+        );
       
       case 'line':
-        return <LineChart data={chartData} />;
+        return (
+          <LineChart 
+            data={newFormatData}
+            title={chartData.metadata.title}
+            color={chartData.config?.colorScale?.[0]}
+          />
+        );
       
       case 'pie':
-        return <PieChart data={chartData} />;
+        // PieChart 需要特殊格式
+        const pieData = chartData.data.map((item: any) => ({
+          label: item.x || item.label,
+          value: item.y || item.value
+        }));
+        
+        return (
+          <PieChart 
+            data={pieData}
+            title={chartData.metadata.title}
+            colorScale={chartData.config?.colorScale}
+          />
+        );
       
       case 'scatter':
         // TODO: 實作散點圖
