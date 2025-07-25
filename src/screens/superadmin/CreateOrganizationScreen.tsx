@@ -1,6 +1,7 @@
 /**
  * 新增組織頁面（Super Admin）
  * 建立新組織和設定管理員
+ * 支援新的按用戶計費模式和簡化的訂閱方案
  */
 
 import React, { useState } from 'react';
@@ -19,7 +20,8 @@ import { Layout } from '@/components/common/Layout';
 import { TextInput } from '@/components/common/TextInput';
 import { Button } from '@/components/common/Button';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
-import { createOrganization } from '@/services/firebase/admin/organizationService';
+import { createOrganization, CreateOrganizationData } from '@/services/firebase/admin/organizationService';
+import { BILLING_CONFIG } from '@/config/billing';
 import { DesignSystem } from '@/theme/designSystem';
 import { toast } from '@/utils/toast';
 
@@ -30,18 +32,31 @@ export const CreateOrganizationScreen: React.FC = () => {
   // 組織資料
   const [orgName, setOrgName] = useState('');
   const [orgEmail, setOrgEmail] = useState('');
-  const [selectedPlan, setSelectedPlan] = useState<'trial' | 'basic' | 'professional' | 'enterprise'>('trial');
-  const [seats, setSeats] = useState('5');
+  const [selectedPlan, setSelectedPlan] = useState<'trial' | 'pro'>('trial');
+  const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
+  const [giftedSeats, setGiftedSeats] = useState('0');
   
   // 管理員資料
   const [adminName, setAdminName] = useState('');
   const [adminEmail, setAdminEmail] = useState('');
 
   const plans = [
-    { id: 'trial', name: '試用版', seats: 5, duration: '30天', aiMinutes: 60 },
-    { id: 'basic', name: '基礎版', seats: 10, duration: '月付', aiMinutes: 300 },
-    { id: 'professional', name: '專業版', seats: 50, duration: '月付', aiMinutes: 1200 },
-    { id: 'enterprise', name: '企業版', seats: '無限制', duration: '年付', aiMinutes: '無限制' },
+    { 
+      id: 'trial', 
+      name: '試用版', 
+      duration: `${BILLING_CONFIG.TRIAL_DAYS}天免費`, 
+      price: '免費',
+      features: ['AI 助手', '語音記錄', '任務管理', '客戶管理'],
+      limitations: ['功能有限', '無自訂欄位', '無 API 存取']
+    },
+    { 
+      id: 'pro', 
+      name: 'Pro 版', 
+      duration: '按月或按年計費', 
+      price: `NT$ ${BILLING_CONFIG.PRICE_PER_USER}/人/月`,
+      features: ['所有基礎功能', '資料匯入/匯出', '自訂欄位', 'API 存取', '進階分析'],
+      limitations: []
+    },
   ];
 
   const validateForm = () => {
@@ -61,8 +76,12 @@ export const CreateOrganizationScreen: React.FC = () => {
       toast.error('請輸入有效的管理員電子郵件');
       return false;
     }
-    if (!seats || parseInt(seats) < 1) {
-      toast.error('座位數必須大於 0');
+    if (giftedSeats && parseInt(giftedSeats) < 0) {
+      toast.error('贈送人數不能為負數');
+      return false;
+    }
+    if (giftedSeats && parseInt(giftedSeats) > BILLING_CONFIG.MAX_GIFTED_SEATS) {
+      toast.error(`贈送人數不能超過 ${BILLING_CONFIG.MAX_GIFTED_SEATS}`);
       return false;
     }
     return true;
@@ -80,14 +99,17 @@ export const CreateOrganizationScreen: React.FC = () => {
     setIsLoading(true);
     try {
       // 建立組織
-      const organization = await createOrganization({
+      const organizationData: CreateOrganizationData = {
         name: orgName,
         email: orgEmail,
-        plan: selectedPlan,
+        subscriptionPlan: selectedPlan,
         adminEmail: adminEmail,
         adminName: adminName,
-        seats: parseInt(seats),
-      });
+        billingCycle: selectedPlan === 'pro' ? billingCycle : 'monthly',
+        giftedSeats: parseInt(giftedSeats) || 0,
+      };
+      
+      const organization = await createOrganization(organizationData);
 
       toast.success('組織建立成功！管理員帳號資訊將發送至指定信箱。');
       
@@ -154,32 +176,97 @@ export const CreateOrganizationScreen: React.FC = () => {
                     ]}
                     onPress={() => setSelectedPlan(plan.id as any)}
                   >
-                    <Text style={[
-                      styles.planName,
-                      selectedPlan === plan.id && styles.planNameActive
-                    ]}>
-                      {plan.name}
+                    <View style={styles.planHeader}>
+                      <Text style={[
+                        styles.planName,
+                        selectedPlan === plan.id && styles.planNameActive
+                      ]}>
+                        {plan.name}
+                      </Text>
+                      <Text style={[
+                        styles.planPrice,
+                        selectedPlan === plan.id && styles.planPriceActive
+                      ]}>
+                        {plan.price}
+                      </Text>
+                    </View>
+                    
+                    <Text style={styles.planDuration}>
+                      {plan.duration}
                     </Text>
-                    <Text style={styles.planDetail}>
-                      座位數：{plan.seats}
-                    </Text>
-                    <Text style={styles.planDetail}>
-                      期限：{plan.duration}
-                    </Text>
-                    <Text style={styles.planDetail}>
-                      AI：{typeof plan.aiMinutes === 'number' ? `${plan.aiMinutes}分鐘` : plan.aiMinutes}
-                    </Text>
+                    
+                    <View style={styles.planFeatures}>
+                      <Text style={styles.featuresTitle}>功能包含：</Text>
+                      {plan.features.map((feature, index) => (
+                        <Text key={index} style={styles.featureItem}>• {feature}</Text>
+                      ))}
+                    </View>
+                    
+                    {plan.limitations.length > 0 && (
+                      <View style={styles.planLimitations}>
+                        <Text style={styles.limitationsTitle}>限制：</Text>
+                        {plan.limitations.map((limitation, index) => (
+                          <Text key={index} style={styles.limitationItem}>• {limitation}</Text>
+                        ))}
+                      </View>
+                    )}
                   </TouchableOpacity>
                 ))}
               </View>
             </View>
 
+            {/* 計費週期選擇 */}
+            {selectedPlan === 'pro' && (
+              <View style={styles.billingCycleSection}>
+                <Text style={styles.inputLabel}>
+                  計費週期 <Text style={styles.required}>*</Text>
+                </Text>
+                <View style={styles.cycleOptions}>
+                  <TouchableOpacity
+                    style={[
+                      styles.cycleOption,
+                      billingCycle === 'monthly' && styles.cycleOptionActive
+                    ]}
+                    onPress={() => setBillingCycle('monthly')}
+                  >
+                    <Text style={[
+                      styles.cycleText,
+                      billingCycle === 'monthly' && styles.cycleTextActive
+                    ]}>
+                      月付
+                    </Text>
+                    <Text style={styles.cyclePrice}>NT$ {BILLING_CONFIG.PRICE_PER_USER}/人/月</Text>
+                  </TouchableOpacity>
+                  
+                  <TouchableOpacity
+                    style={[
+                      styles.cycleOption,
+                      billingCycle === 'yearly' && styles.cycleOptionActive
+                    ]}
+                    onPress={() => setBillingCycle('yearly')}
+                  >
+                    <Text style={[
+                      styles.cycleText,
+                      billingCycle === 'yearly' && styles.cycleTextActive
+                    ]}>
+                      年付
+                    </Text>
+                    <Text style={styles.cyclePrice}>
+                      NT$ {Math.round(BILLING_CONFIG.PRICE_PER_USER * (1 - BILLING_CONFIG.YEARLY_DISCOUNT))}/人/月
+                    </Text>
+                    <Text style={styles.cycleDiscount}>(節省 {Math.round(BILLING_CONFIG.YEARLY_DISCOUNT * 100)}%)</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
+
             <TextInput
-              label="座位數"
-              value={seats}
-              onChangeText={setSeats}
-              placeholder="5"
+              label="贈送人數"
+              value={giftedSeats}
+              onChangeText={setGiftedSeats}
+              placeholder="0"
               keyboardType="number-pad"
+              helperText="不計費的用戶人數，最多 ${BILLING_CONFIG.MAX_GIFTED_SEATS} 人"
             />
           </View>
 
@@ -260,11 +347,12 @@ const styles = StyleSheet.create({
   planCard: {
     flex: 1,
     minWidth: '45%',
-    padding: DesignSystem.spacing.md,
+    padding: DesignSystem.spacing.lg,
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: DesignSystem.borderRadius.md,
     borderWidth: 2,
     borderColor: DesignSystem.colors.border.light,
+    minHeight: 200,
   },
   planCardActive: {
     borderColor: DesignSystem.colors.primary,
@@ -278,10 +366,89 @@ const styles = StyleSheet.create({
   planNameActive: {
     color: DesignSystem.colors.primary,
   },
-  planDetail: {
+  planHeader: {
+    marginBottom: DesignSystem.spacing.sm,
+  },
+  planPrice: {
+    ...DesignSystem.typography.body,
+    color: DesignSystem.colors.text.secondary,
+    fontWeight: '600',
+    marginTop: DesignSystem.spacing.xs,
+  },
+  planPriceActive: {
+    color: DesignSystem.colors.primary,
+  },
+  planDuration: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginTop: DesignSystem.spacing.xs,
+    marginBottom: DesignSystem.spacing.md,
+  },
+  planFeatures: {
+    marginBottom: DesignSystem.spacing.sm,
+  },
+  featuresTitle: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.primary,
+    fontWeight: '600',
+    marginBottom: DesignSystem.spacing.xs,
+  },
+  featureItem: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.success,
+    marginBottom: DesignSystem.spacing.xs / 2,
+  },
+  planLimitations: {
+    marginTop: DesignSystem.spacing.sm,
+  },
+  limitationsTitle: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.secondary,
+    fontWeight: '600',
+    marginBottom: DesignSystem.spacing.xs,
+  },
+  limitationItem: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.secondary,
+    marginBottom: DesignSystem.spacing.xs / 2,
+  },
+  billingCycleSection: {
+    marginBottom: DesignSystem.spacing.md,
+  },
+  cycleOptions: {
+    flexDirection: 'row',
+    gap: DesignSystem.spacing.sm,
+  },
+  cycleOption: {
+    flex: 1,
+    padding: DesignSystem.spacing.md,
+    backgroundColor: DesignSystem.colors.background.surface,
+    borderRadius: DesignSystem.borderRadius.sm,
+    borderWidth: 2,
+    borderColor: DesignSystem.colors.border.light,
+    alignItems: 'center',
+  },
+  cycleOptionActive: {
+    borderColor: DesignSystem.colors.primary,
+    backgroundColor: DesignSystem.colors.primary + '10',
+  },
+  cycleText: {
+    ...DesignSystem.typography.body,
+    color: DesignSystem.colors.text.primary,
+    fontWeight: '600',
+    marginBottom: DesignSystem.spacing.xs,
+  },
+  cycleTextActive: {
+    color: DesignSystem.colors.primary,
+  },
+  cyclePrice: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.secondary,
+  },
+  cycleDiscount: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.success,
+    fontWeight: '600',
+    marginTop: DesignSystem.spacing.xs / 2,
   },
   actions: {
     gap: DesignSystem.spacing.md,

@@ -158,6 +158,81 @@ service cloud.firestore {
       allow write: if false; // 只由 Cloud Functions 寫入
     }
     
+    // 計費記錄集合
+    match /billing_records/{recordId} {
+      // Super Admin 可以讀寫所有計費記錄
+      allow read, write: if isSuperAdmin();
+      // 組織管理員可以讀取自己組織的計費記錄
+      allow read: if request.auth != null && 
+        getUserData().role == 'admin' &&
+        getUserData().organizationId == resource.data.organizationId;
+      // 組織成員可以讀取自己組織的計費記錄（唯讀）
+      allow read: if request.auth != null && 
+        getUserData().organizationId == resource.data.organizationId;
+    }
+    
+    // 工具使用記錄集合
+    match /tool_usage/{usageId} {
+      // Super Admin 可以讀取所有使用記錄（用於系統分析）
+      allow read: if isSuperAdmin();
+      // 用戶可以建立自己的使用記錄
+      allow create: if request.auth != null && 
+        request.auth.uid == request.resource.data.userId;
+      // 組織管理員可以讀取組織內的使用記錄
+      allow read: if request.auth != null && 
+        getUserData().role == 'admin' &&
+        getUserData().organizationId == resource.data.organizationId;
+    }
+    
+    // 工具使用每日統計集合
+    match /tool_usage_daily_stats/{statId} {
+      // Super Admin 可以讀寫所有統計
+      allow read, write: if isSuperAdmin();
+      // 系統可以建立和更新統計（由 Cloud Functions 或使用 service account）
+      allow create, update: if request.auth != null;
+      // 組織管理員可以讀取自己組織的統計
+      allow read: if request.auth != null && 
+        getUserData().role == 'admin' &&
+        getUserData().organizationId == resource.data.organizationId;
+    }
+    
+    // 自訂欄位配置集合
+    match /custom_field_configs/{configId} {
+      // Super Admin 可以讀寫所有配置
+      allow read, write: if isSuperAdmin();
+      // 組織管理員可以管理自己組織的配置
+      allow read, write: if request.auth != null && 
+        getUserData().role == 'admin' &&
+        getUserData().organizationId == resource.data.organizationId;
+      // 組織成員可以讀取自己組織的配置
+      allow read: if request.auth != null && 
+        getUserData().organizationId == resource.data.organizationId;
+    }
+    
+    // 資料匯入日誌集合
+    match /import_logs/{logId} {
+      // Super Admin 可以讀取所有日誌
+      allow read: if isSuperAdmin();
+      // 系統可以建立日誌
+      allow create: if request.auth != null;
+      // 組織管理員可以讀取自己組織的日誌
+      allow read: if request.auth != null && 
+        getUserData().role == 'admin' &&
+        getUserData().organizationId == resource.data.organizationId;
+    }
+    
+    // 自訂欄位日誌集合
+    match /custom_field_logs/{logId} {
+      // Super Admin 可以讀取所有日誌
+      allow read: if isSuperAdmin();
+      // 系統可以建立日誌
+      allow create: if request.auth != null;
+      // 組織管理員可以讀取自己組織的日誌
+      allow read: if request.auth != null && 
+        getUserData().role == 'admin' &&
+        getUserData().organizationId == resource.data.organizationId;
+    }
+    
     // 預設拒絕所有其他存取
     match /{document=**} {
       allow read, write: if false;

@@ -1,6 +1,7 @@
 /**
  * 組織詳情頁面（Super Admin）
  * 檢視和編輯組織設定
+ * 支援新的按用戶計費模式和簡化的訂閱方案
  */
 
 import React, { useState, useEffect } from 'react';
@@ -24,9 +25,15 @@ import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { 
   getOrganization, 
   updateOrganization,
-  deleteOrganization 
+  deleteOrganization,
+  upgradeOrganizationPlan,
+  updateGiftedSeats,
+  getOrganizationBillingSummary,
+  isTrialActive
 } from '@/services/firebase/admin/organizationService';
-import { Organization } from '@/types/entities';
+import { getUsageHistory } from '@/services/firebase/admin/billingService';
+import { getToolUsageStats } from '@/services/firebase/admin/toolUsageService';
+import { Organization, BillingRecord, ToolUsageStats } from '@/types/entities';
 import { RootStackParamList } from '@/types/navigation';
 import { DesignSystem } from '@/theme/designSystem';
 import { toast } from '@/utils/toast';
@@ -48,11 +55,16 @@ export const OrganizationDetailScreen: React.FC = () => {
   // 編輯表單狀態
   const [formData, setFormData] = useState({
     name: '',
-    contactEmail: '',
-    maxUsers: '',
-    aiMinutesQuota: '',
+    email: '',
+    giftedSeats: '',
     status: 'active' as 'active' | 'suspended' | 'cancelled',
   });
+  
+  // 計費資訊
+  const [billingSummary, setBillingSummary] = useState<any>(null);
+  const [billingHistory, setBillingHistory] = useState<BillingRecord[]>([]);
+  const [toolUsageStats, setToolUsageStats] = useState<ToolUsageStats[]>([]);
+  const [selectedTab, setSelectedTab] = useState<'overview' | 'billing' | 'permissions' | 'assistance'>('overview');
 
   // 功能開關狀態
   const [features, setFeatures] = useState({
@@ -75,11 +87,16 @@ export const OrganizationDetailScreen: React.FC = () => {
         setOrganization(orgData);
         setFormData({
           name: orgData.name,
-          contactEmail: orgData.contactEmail || '',
-          maxUsers: String(orgData.maxUsers || 0),
-          aiMinutesQuota: String(orgData.aiMinutesQuota || 0),
+          email: orgData.email || '',
+          giftedSeats: String(orgData.giftedSeats || 0),
           status: orgData.status || 'active',
         });
+        
+        // 載入計費資訊
+        loadBillingData(organizationId);
+        
+        // 載入工具使用統計
+        loadToolUsageData(organizationId);
         
         // 設定功能開關
         if (orgData.features) {
@@ -108,17 +125,44 @@ export const OrganizationDetailScreen: React.FC = () => {
     setRefreshing(false);
   };
 
+  const loadBillingData = async (orgId: string) => {
+    try {
+      const [summary, history] = await Promise.all([
+        getOrganizationBillingSummary(orgId),
+        getUsageHistory(orgId, 6)
+      ]);
+      setBillingSummary(summary);
+      setBillingHistory(history);
+    } catch (error) {
+      console.error('載入計費資訊失敗:', error);
+    }
+  };
+  
+  const loadToolUsageData = async (orgId: string) => {
+    try {
+      const currentMonth = new Date().toISOString().slice(0, 7);
+      const stats = await getToolUsageStats(orgId, currentMonth);
+      setToolUsageStats(stats);
+    } catch (error) {
+      console.error('載入工具使用統計失敗:', error);
+    }
+  };
+
   const handleSaveChanges = async () => {
     setIsSaving(true);
     try {
       await updateOrganization(organizationId, {
         name: formData.name,
-        contactEmail: formData.contactEmail,
-        maxUsers: parseInt(formData.maxUsers) || 0,
-        aiMinutesQuota: parseInt(formData.aiMinutesQuota) || 0,
+        email: formData.email,
         status: formData.status,
-        features,
+        settings: features,
       });
+      
+      // 更新贈送人數
+      const newGiftedSeats = parseInt(formData.giftedSeats) || 0;
+      if (newGiftedSeats !== (organization?.giftedSeats || 0)) {
+        await updateGiftedSeats(organizationId, newGiftedSeats);
+      }
 
       toast.success('組織資料已更新');
       setIsEditing(false);
@@ -129,6 +173,29 @@ export const OrganizationDetailScreen: React.FC = () => {
     } finally {
       setIsSaving(false);
     }
+  };
+  
+  const handleUpgradePlan = async () => {
+    Alert.alert(
+      '升級到 Pro 方案',
+      '確定要將此組織升級到 Pro 方案嗎？',
+      [
+        { text: '取消', style: 'cancel' },
+        {
+          text: '升級',
+          onPress: async () => {
+            try {
+              await upgradeOrganizationPlan(organizationId, 'pro');
+              toast.success('已升級到 Pro 方案');
+              await loadOrganizationData();
+            } catch (error) {
+              console.error('升級方案失敗:', error);
+              toast.error('升級失敗');
+            }
+          },
+        },
+      ]
+    );
   };
 
   const handleDeleteOrganization = () => {
@@ -214,24 +281,18 @@ export const OrganizationDetailScreen: React.FC = () => {
               />
               <TextInput
                 label="聯絡信箱"
-                value={formData.contactEmail}
-                onChangeText={(text) => setFormData({ ...formData, contactEmail: text })}
+                value={formData.email}
+                onChangeText={(text) => setFormData({ ...formData, email: text })}
                 placeholder="contact@company.com"
                 keyboardType="email-address"
               />
               <TextInput
-                label="最大用戶數"
-                value={formData.maxUsers}
-                onChangeText={(text) => setFormData({ ...formData, maxUsers: text })}
-                placeholder="10"
+                label="贈送人數"
+                value={formData.giftedSeats}
+                onChangeText={(text) => setFormData({ ...formData, giftedSeats: text })}
+                placeholder="0"
                 keyboardType="number-pad"
-              />
-              <TextInput
-                label="AI 分鐘配額"
-                value={formData.aiMinutesQuota}
-                onChangeText={(text) => setFormData({ ...formData, aiMinutesQuota: text })}
-                placeholder="1000"
-                keyboardType="number-pad"
+                helperText="不計費的用戶人數"
               />
             </>
           ) : (
@@ -246,13 +307,33 @@ export const OrganizationDetailScreen: React.FC = () => {
               </View>
               <View style={styles.infoRow}>
                 <Text style={styles.label}>聯絡信箱</Text>
-                <Text style={styles.value}>{organization.contactEmail || '未設定'}</Text>
+                <Text style={styles.value}>{organization.email || '未設定'}</Text>
               </View>
               <View style={styles.infoRow}>
                 <Text style={styles.label}>訂閱方案</Text>
+                <View style={styles.planContainer}>
+                  <Text style={[styles.value, { textTransform: 'uppercase' }]}>
+                    {organization.subscriptionPlan}
+                  </Text>
+                  {organization.subscriptionPlan === 'trial' && isTrialActive(organization) && (
+                    <TouchableOpacity
+                      style={styles.upgradeButton}
+                      onPress={handleUpgradePlan}
+                    >
+                      <Text style={styles.upgradeButtonText}>升級到 Pro</Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+              </View>
+              <View style={styles.infoRow}>
+                <Text style={styles.label}>計費週期</Text>
                 <Text style={styles.value}>
-                  {(organization.subscriptionPlan || 'basic').toUpperCase()}
+                  {organization.billingCycle === 'yearly' ? '年付' : '月付'}
                 </Text>
+              </View>
+              <View style={styles.infoRow}>
+                <Text style={styles.label}>贈送人數</Text>
+                <Text style={styles.value}>{organization.giftedSeats || 0}</Text>
               </View>
               <View style={styles.infoRow}>
                 <Text style={styles.label}>狀態</Text>
@@ -264,81 +345,209 @@ export const OrganizationDetailScreen: React.FC = () => {
           )}
         </View>
 
-        {/* 使用統計 */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>使用統計</Text>
-          <View style={styles.statsGrid}>
-            <View style={styles.statCard}>
-              <Text style={styles.statValue}>{organization.currentUsers || 0}</Text>
-              <Text style={styles.statLabel}>目前用戶</Text>
-            </View>
-            <View style={styles.statCard}>
-              <Text style={styles.statValue}>{organization.maxUsers || 0}</Text>
-              <Text style={styles.statLabel}>用戶上限</Text>
-            </View>
-            <View style={styles.statCard}>
-              <Text style={styles.statValue}>{organization.aiMinutesUsed || 0}</Text>
-              <Text style={styles.statLabel}>已用 AI 分鐘</Text>
-            </View>
-            <View style={styles.statCard}>
-              <Text style={styles.statValue}>{organization.aiMinutesQuota || 0}</Text>
-              <Text style={styles.statLabel}>AI 分鐘配額</Text>
-            </View>
-          </View>
+        {/* 分頁標籤 */}
+        <View style={styles.tabContainer}>
+          {[
+            { key: 'overview', label: '概覽' },
+            { key: 'billing', label: '計費管理' },
+            { key: 'permissions', label: '權限管理' },
+            { key: 'assistance', label: '用戶協助' },
+          ].map((tab) => (
+            <TouchableOpacity
+              key={tab.key}
+              style={[styles.tab, selectedTab === tab.key && styles.activeTab]}
+              onPress={() => setSelectedTab(tab.key as any)}
+            >
+              <Text style={[styles.tabText, selectedTab === tab.key && styles.activeTabText]}>
+                {tab.label}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
-
-        {/* 功能設定 */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>功能設定</Text>
-          
-          <View style={styles.featureRow}>
-            <View style={styles.featureInfo}>
-              <Text style={styles.featureName}>資料匯入</Text>
-              <Text style={styles.featureDesc}>允許匯入 CSV/Excel 檔案</Text>
+        
+        {/* 概覽分頁 */}
+        {selectedTab === 'overview' && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>使用統計</Text>
+            <View style={styles.statsGrid}>
+              <View style={styles.statCard}>
+                <Text style={styles.statValue}>{billingSummary?.activeUsers || 0}</Text>
+                <Text style={styles.statLabel}>活躍用戶</Text>
+              </View>
+              <View style={styles.statCard}>
+                <Text style={styles.statValue}>{billingSummary?.billableUsers || 0}</Text>
+                <Text style={styles.statLabel}>計費用戶</Text>
+              </View>
+              <View style={styles.statCard}>
+                <Text style={styles.statValue}>{organization.giftedSeats || 0}</Text>
+                <Text style={styles.statLabel}>贈送人數</Text>
+              </View>
+              <View style={styles.statCard}>
+                <Text style={styles.statValue}>NT$ {billingSummary?.monthlyAmount || 0}</Text>
+                <Text style={styles.statLabel}>月費</Text>
+              </View>
             </View>
-            <Switch
-              value={features.allowDataImport}
-              onValueChange={(value) => setFeatures({ ...features, allowDataImport: value })}
-              disabled={!isEditing}
-            />
+            
+            {/* 工具使用統計 */}
+            {toolUsageStats.length > 0 && (
+              <View style={styles.toolUsageSection}>
+                <Text style={styles.subSectionTitle}>工具使用統計（本月）</Text>
+                {toolUsageStats.map((tool) => (
+                  <View key={tool.toolId} style={styles.toolUsageRow}>
+                    <Text style={styles.toolName}>{tool.toolName}</Text>
+                    <Text style={styles.toolUsage}>
+                      {Array.isArray(tool.uniqueUsers) ? tool.uniqueUsers.length : 0} 用戶
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            )}
           </View>
-
-          <View style={styles.featureRow}>
-            <View style={styles.featureInfo}>
-              <Text style={styles.featureName}>資料匯出</Text>
-              <Text style={styles.featureDesc}>允許匯出資料為 CSV/Excel</Text>
+        )}
+        
+        {/* 計費管理分頁 */}
+        {selectedTab === 'billing' && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>計費管理</Text>
+            
+            {/* 當月計費摘要 */}
+            {billingSummary && (
+              <View style={styles.billingCard}>
+                <Text style={styles.billingCardTitle}>當月計費摘要</Text>
+                <View style={styles.billingRow}>
+                  <Text style={styles.billingLabel}>活躍用戶數</Text>
+                  <Text style={styles.billingValue}>{billingSummary.activeUsers}</Text>
+                </View>
+                <View style={styles.billingRow}>
+                  <Text style={styles.billingLabel}>贈送人數</Text>
+                  <Text style={styles.billingValue}>-{billingSummary.giftedSeats}</Text>
+                </View>
+                <View style={styles.billingRow}>
+                  <Text style={styles.billingLabel}>計費用戶數</Text>
+                  <Text style={styles.billingValue}>{billingSummary.billableUsers}</Text>
+                </View>
+                <View style={[styles.billingRow, styles.totalRow]}>
+                  <Text style={styles.totalLabel}>月費總額</Text>
+                  <Text style={styles.totalValue}>NT$ {billingSummary.monthlyAmount}</Text>
+                </View>
+                {billingSummary.trialDaysLeft !== undefined && (
+                  <View style={styles.trialInfo}>
+                    <Text style={styles.trialText}>
+                      試用期還剩 {billingSummary.trialDaysLeft} 天
+                    </Text>
+                  </View>
+                )}
+              </View>
+            )}
+            
+            {/* 計費歷史 */}
+            {billingHistory.length > 0 && (
+              <View style={styles.historySection}>
+                <Text style={styles.subSectionTitle}>計費歷史</Text>
+                {billingHistory.slice(0, 3).map((record) => (
+                  <View key={record.id} style={styles.historyRow}>
+                    <Text style={styles.historyPeriod}>{record.period}</Text>
+                    <Text style={styles.historyUsers}>{record.activeUsers} 用戶</Text>
+                    <Text style={styles.historyAmount}>NT$ {record.totalAmount}</Text>
+                    <View style={[styles.historyStatus, { backgroundColor: getStatusColor(record.status) }]}>
+                      <Text style={styles.historyStatusText}>{record.status}</Text>
+                    </View>
+                  </View>
+                ))}
+              </View>
+            )}
+          </View>
+        )}
+        
+        {/* 權限管理分頁 */}
+        {selectedTab === 'permissions' && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>權限管理</Text>
+            
+            <View style={styles.featureRow}>
+              <View style={styles.featureInfo}>
+                <Text style={styles.featureName}>資料匯入</Text>
+                <Text style={styles.featureDesc}>允許匯入 CSV/Excel 檔案</Text>
+              </View>
+              <Switch
+                value={features.allowDataImport}
+                onValueChange={(value) => setFeatures({ ...features, allowDataImport: value })}
+                disabled={!isEditing}
+              />
             </View>
-            <Switch
-              value={features.allowDataExport}
-              onValueChange={(value) => setFeatures({ ...features, allowDataExport: value })}
-              disabled={!isEditing}
-            />
-          </View>
-
-          <View style={styles.featureRow}>
-            <View style={styles.featureInfo}>
-              <Text style={styles.featureName}>自訂欄位</Text>
-              <Text style={styles.featureDesc}>允許建立客戶自訂欄位</Text>
+            
+            <View style={styles.featureRow}>
+              <View style={styles.featureInfo}>
+                <Text style={styles.featureName}>資料匯出</Text>
+                <Text style={styles.featureDesc}>允許匯出資料為 CSV/Excel</Text>
+              </View>
+              <Switch
+                value={features.allowDataExport}
+                onValueChange={(value) => setFeatures({ ...features, allowDataExport: value })}
+                disabled={!isEditing}
+              />
             </View>
-            <Switch
-              value={features.allowCustomFields}
-              onValueChange={(value) => setFeatures({ ...features, allowCustomFields: value })}
-              disabled={!isEditing}
-            />
-          </View>
-
-          <View style={styles.featureRow}>
-            <View style={styles.featureInfo}>
-              <Text style={styles.featureName}>API 存取</Text>
-              <Text style={styles.featureDesc}>允許使用 API 整合</Text>
+            
+            <View style={styles.featureRow}>
+              <View style={styles.featureInfo}>
+                <Text style={styles.featureName}>自訂欄位</Text>
+                <Text style={styles.featureDesc}>允許建立客戶自訂欄位</Text>
+              </View>
+              <Switch
+                value={features.allowCustomFields}
+                onValueChange={(value) => setFeatures({ ...features, allowCustomFields: value })}
+                disabled={!isEditing || organization?.subscriptionPlan === 'trial'}
+              />
             </View>
-            <Switch
-              value={features.allowAPIAccess}
-              onValueChange={(value) => setFeatures({ ...features, allowAPIAccess: value })}
-              disabled={!isEditing}
-            />
+            
+            <View style={styles.featureRow}>
+              <View style={styles.featureInfo}>
+                <Text style={styles.featureName}>API 存取</Text>
+                <Text style={styles.featureDesc}>允許使用 API 整合</Text>
+              </View>
+              <Switch
+                value={features.allowAPIAccess}
+                onValueChange={(value) => setFeatures({ ...features, allowAPIAccess: value })}
+                disabled={!isEditing || organization?.subscriptionPlan === 'trial'}
+              />
+            </View>
           </View>
-        </View>
+        )}
+        
+        {/* 用戶協助分頁 */}
+        {selectedTab === 'assistance' && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>用戶協助</Text>
+            
+            <View style={styles.assistanceCard}>
+              <Ionicons name="cloud-upload-outline" size={24} color={DesignSystem.colors.primary} />
+              <Text style={styles.assistanceTitle}>資料匯入協助</Text>
+              <Text style={styles.assistanceDesc}>協助組織匯入 CSV/Excel 資料</Text>
+              <TouchableOpacity style={styles.assistanceButton}>
+                <Text style={styles.assistanceButtonText}>開始匯入</Text>
+              </TouchableOpacity>
+            </View>
+            
+            <View style={styles.assistanceCard}>
+              <Ionicons name="settings-outline" size={24} color={DesignSystem.colors.primary} />
+              <Text style={styles.assistanceTitle}>自訂欄位設定</Text>
+              <Text style={styles.assistanceDesc}>協助設定客戶自訂欄位</Text>
+              <TouchableOpacity style={styles.assistanceButton}>
+                <Text style={styles.assistanceButtonText}>設定欄位</Text>
+              </TouchableOpacity>
+            </View>
+            
+            <View style={styles.assistanceCard}>
+              <Ionicons name="sync-outline" size={24} color={DesignSystem.colors.primary} />
+              <Text style={styles.assistanceTitle}>舊系統遷移</Text>
+              <Text style={styles.assistanceDesc}>從舊 CRM 系統遷移資料</Text>
+              <TouchableOpacity style={styles.assistanceButton}>
+                <Text style={styles.assistanceButtonText}>開始遷移</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+
 
         {/* 操作按鈕 */}
         {isEditing && (
@@ -449,6 +658,196 @@ const styles = StyleSheet.create({
   statLabel: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    marginBottom: DesignSystem.spacing.lg,
+    backgroundColor: DesignSystem.colors.background.surface,
+    borderRadius: DesignSystem.borderRadius.md,
+    padding: DesignSystem.spacing.xs,
+  },
+  tab: {
+    flex: 1,
+    paddingVertical: DesignSystem.spacing.sm,
+    paddingHorizontal: DesignSystem.spacing.md,
+    borderRadius: DesignSystem.borderRadius.sm,
+    alignItems: 'center',
+  },
+  activeTab: {
+    backgroundColor: DesignSystem.colors.primary,
+  },
+  tabText: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.secondary,
+    fontWeight: '500',
+  },
+  activeTabText: {
+    color: DesignSystem.colors.text.inverse,
+  },
+  planContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: DesignSystem.spacing.sm,
+  },
+  upgradeButton: {
+    backgroundColor: DesignSystem.colors.success,
+    paddingHorizontal: DesignSystem.spacing.sm,
+    paddingVertical: DesignSystem.spacing.xs,
+    borderRadius: DesignSystem.borderRadius.sm,
+  },
+  upgradeButtonText: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.inverse,
+    fontWeight: '600',
+  },
+  toolUsageSection: {
+    marginTop: DesignSystem.spacing.lg,
+  },
+  subSectionTitle: {
+    ...DesignSystem.typography.h4,
+    color: DesignSystem.colors.text.primary,
+    marginBottom: DesignSystem.spacing.md,
+  },
+  toolUsageRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: DesignSystem.spacing.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: DesignSystem.colors.border.light,
+  },
+  toolName: {
+    ...DesignSystem.typography.body,
+    color: DesignSystem.colors.text.primary,
+  },
+  toolUsage: {
+    ...DesignSystem.typography.body,
+    color: DesignSystem.colors.text.secondary,
+  },
+  billingCard: {
+    backgroundColor: DesignSystem.colors.background.primary,
+    padding: DesignSystem.spacing.lg,
+    borderRadius: DesignSystem.borderRadius.md,
+    marginBottom: DesignSystem.spacing.md,
+  },
+  billingCardTitle: {
+    ...DesignSystem.typography.h4,
+    color: DesignSystem.colors.text.primary,
+    marginBottom: DesignSystem.spacing.md,
+  },
+  billingRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: DesignSystem.spacing.sm,
+  },
+  billingLabel: {
+    ...DesignSystem.typography.body,
+    color: DesignSystem.colors.text.secondary,
+  },
+  billingValue: {
+    ...DesignSystem.typography.body,
+    color: DesignSystem.colors.text.primary,
+    fontWeight: '500',
+  },
+  totalRow: {
+    borderTopWidth: 1,
+    borderTopColor: DesignSystem.colors.border.light,
+    marginTop: DesignSystem.spacing.sm,
+    paddingTop: DesignSystem.spacing.md,
+  },
+  totalLabel: {
+    ...DesignSystem.typography.body,
+    color: DesignSystem.colors.text.primary,
+    fontWeight: '600',
+  },
+  totalValue: {
+    ...DesignSystem.typography.h4,
+    color: DesignSystem.colors.primary,
+    fontWeight: '600',
+  },
+  trialInfo: {
+    marginTop: DesignSystem.spacing.md,
+    padding: DesignSystem.spacing.md,
+    backgroundColor: DesignSystem.colors.warning + '20',
+    borderRadius: DesignSystem.borderRadius.sm,
+  },
+  trialText: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.warning,
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  historySection: {
+    marginTop: DesignSystem.spacing.lg,
+  },
+  historyRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: DesignSystem.spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: DesignSystem.colors.border.light,
+  },
+  historyPeriod: {
+    ...DesignSystem.typography.body,
+    color: DesignSystem.colors.text.primary,
+    fontWeight: '500',
+    flex: 1,
+  },
+  historyUsers: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.secondary,
+    flex: 1,
+    textAlign: 'center',
+  },
+  historyAmount: {
+    ...DesignSystem.typography.body,
+    color: DesignSystem.colors.text.primary,
+    fontWeight: '500',
+    flex: 1,
+    textAlign: 'right',
+  },
+  historyStatus: {
+    paddingHorizontal: DesignSystem.spacing.sm,
+    paddingVertical: DesignSystem.spacing.xs,
+    borderRadius: DesignSystem.borderRadius.sm,
+    marginLeft: DesignSystem.spacing.sm,
+  },
+  historyStatusText: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.inverse,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+  },
+  assistanceCard: {
+    backgroundColor: DesignSystem.colors.background.primary,
+    padding: DesignSystem.spacing.lg,
+    borderRadius: DesignSystem.borderRadius.md,
+    marginBottom: DesignSystem.spacing.md,
+    alignItems: 'center',
+  },
+  assistanceTitle: {
+    ...DesignSystem.typography.h4,
+    color: DesignSystem.colors.text.primary,
+    marginTop: DesignSystem.spacing.sm,
+    marginBottom: DesignSystem.spacing.xs,
+  },
+  assistanceDesc: {
+    ...DesignSystem.typography.body,
+    color: DesignSystem.colors.text.secondary,
+    textAlign: 'center',
+    marginBottom: DesignSystem.spacing.md,
+  },
+  assistanceButton: {
+    backgroundColor: DesignSystem.colors.primary,
+    paddingHorizontal: DesignSystem.spacing.lg,
+    paddingVertical: DesignSystem.spacing.sm,
+    borderRadius: DesignSystem.borderRadius.sm,
+  },
+  assistanceButtonText: {
+    ...DesignSystem.typography.body,
+    color: DesignSystem.colors.text.inverse,
+    fontWeight: '500',
   },
   featureRow: {
     flexDirection: 'row',
