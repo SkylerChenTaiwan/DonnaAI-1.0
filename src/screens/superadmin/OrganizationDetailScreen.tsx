@@ -39,6 +39,8 @@ import { DesignSystem } from '@/theme/designSystem';
 import { toast } from '@/utils/toast';
 import { AddUserToOrganizationModal } from '@/components/organization/AddUserToOrganizationModal';
 import { BulkImportUsersModal } from '@/components/organization/BulkImportUsersModal';
+import { DataImportAssistModal } from '@/components/organization/DataImportAssistModal';
+import { CustomFieldsModal } from '@/components/organization/CustomFieldsModal';
 
 type RouteParams = RouteProp<RootStackParamList, 'OrganizationDetailScreen'>;
 type NavigationProp = StackNavigationProp<RootStackParamList, 'OrganizationDetailScreen'>;
@@ -71,6 +73,10 @@ export const OrganizationDetailScreen: React.FC = () => {
   // 用戶管理 Modal 狀態
   const [showAddUserModal, setShowAddUserModal] = useState(false);
   const [showBulkImportModal, setShowBulkImportModal] = useState(false);
+  
+  // 用戶協助 Modal 狀態
+  const [showDataImportModal, setShowDataImportModal] = useState(false);
+  const [showCustomFieldsModal, setShowCustomFieldsModal] = useState(false);
 
   // 功能開關狀態
   const [features, setFeatures] = useState({
@@ -530,27 +536,33 @@ export const OrganizationDetailScreen: React.FC = () => {
               <Ionicons name="cloud-upload-outline" size={24} color={DesignSystem.colors.primary} />
               <Text style={styles.assistanceTitle}>資料匯入協助</Text>
               <Text style={styles.assistanceDesc}>協助組織匯入 CSV/Excel 資料</Text>
-              <TouchableOpacity style={styles.assistanceButton}>
+              <TouchableOpacity 
+                style={styles.assistanceButton}
+                onPress={() => setShowDataImportModal(true)}
+              >
                 <Text style={styles.assistanceButtonText}>開始匯入</Text>
               </TouchableOpacity>
             </View>
             
             <View style={styles.assistanceCard}>
-              <Ionicons name="settings-outline" size={24} color={DesignSystem.colors.primary} />
-              <Text style={styles.assistanceTitle}>自訂欄位設定</Text>
-              <Text style={styles.assistanceDesc}>協助設定客戶自訂欄位</Text>
-              <TouchableOpacity style={styles.assistanceButton}>
-                <Text style={styles.assistanceButtonText}>設定欄位</Text>
+              <Ionicons name="database-outline" size={24} color={DesignSystem.colors.primary} />
+              <Text style={styles.assistanceTitle}>自訂欄位查看</Text>
+              <Text style={styles.assistanceDesc}>查看各資料庫的自訂欄位配置</Text>
+              <TouchableOpacity 
+                style={styles.assistanceButton}
+                onPress={() => setShowCustomFieldsModal(true)}
+              >
+                <Text style={styles.assistanceButtonText}>查看欄位</Text>
               </TouchableOpacity>
             </View>
             
-            <View style={styles.assistanceCard}>
-              <Ionicons name="sync-outline" size={24} color={DesignSystem.colors.primary} />
-              <Text style={styles.assistanceTitle}>舊系統遷移</Text>
-              <Text style={styles.assistanceDesc}>從舊 CRM 系統遷移資料</Text>
-              <TouchableOpacity style={styles.assistanceButton}>
-                <Text style={styles.assistanceButtonText}>開始遷移</Text>
-              </TouchableOpacity>
+            <View style={[styles.assistanceCard, styles.disabledCard]}>
+              <Ionicons name="sync-outline" size={24} color={DesignSystem.colors.text.secondary} />
+              <Text style={[styles.assistanceTitle, styles.disabledTitle]}>舊系統遷移</Text>
+              <Text style={styles.assistanceDesc}>功能開發中，即將推出</Text>
+              <View style={[styles.assistanceButton, styles.disabledButton]}>
+                <Text style={[styles.assistanceButtonText, styles.disabledButtonText]}>開發中</Text>
+              </View>
             </View>
           </View>
         )}
@@ -612,6 +624,19 @@ export const OrganizationDetailScreen: React.FC = () => {
             toast.error('批量匯入完成，但有部分失敗');
           }
         }}
+      />
+      
+      {/* 用戶協助 Modal */}
+      <DataImportAssistModal
+        visible={showDataImportModal}
+        organization={organization}
+        onClose={() => setShowDataImportModal(false)}
+      />
+      
+      <CustomFieldsModal
+        visible={showCustomFieldsModal}
+        organization={organization}
+        onClose={() => setShowCustomFieldsModal(false)}
       />
     </Layout>
   );
@@ -1009,5 +1034,17 @@ const styles = StyleSheet.create({
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
     lineHeight: 18,
+  },
+  disabledCard: {
+    opacity: 0.6,
+  },
+  disabledTitle: {
+    color: DesignSystem.colors.text.secondary,
+  },
+  disabledButton: {
+    backgroundColor: DesignSystem.colors.gray[300],
+  },
+  disabledButtonText: {
+    color: DesignSystem.colors.text.secondary,
   },
 });
