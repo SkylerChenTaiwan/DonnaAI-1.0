@@ -1,27 +1,17 @@
 /**
  * 可重用的線型圖元件
  * 用於顯示趨勢資料
+ * 注意：Victory Native v41+ API 需要進一步研究實作
  */
 
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
-// Note: Victory Native v41+ has a different API
-// TODO: Update to use CartesianChart from victory-native-xl
-// For now, these imports are commented out to avoid type errors
-// import {
-//   VictoryChart,
-//   VictoryLine,
-//   VictoryAxis,
-//   VictoryTheme,
-//   VictoryArea,
-//   VictoryLabel,
-// } from 'victory-native';
 import { DesignSystem } from '@/theme/designSystem';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 interface DataPoint {
-  x: number | string | Date;
+  x: number | string;
   y: number;
 }
 
@@ -31,11 +21,8 @@ interface LineChartProps {
   width?: number;
   height?: number;
   color?: string;
-  showArea?: boolean;
   yAxisLabel?: string;
   xAxisLabel?: string;
-  formatXAxis?: (value: any) => string;
-  formatYAxis?: (value: any) => string;
 }
 
 export const LineChart: React.FC<LineChartProps> = ({
@@ -44,22 +31,25 @@ export const LineChart: React.FC<LineChartProps> = ({
   width = screenWidth - 40,
   height = 250,
   color = DesignSystem.colors.primary,
-  showArea = true,
   yAxisLabel,
   xAxisLabel,
-  formatXAxis,
-  formatYAxis,
 }) => {
   return (
     <View style={styles.container}>
       {title && <Text style={styles.title}>{title}</Text>}
       
-      {/* TODO: Implement chart using CartesianChart from victory-native-xl */}
-      <View style={{ height, width, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ color: DesignSystem.colors.text.secondary }}>
-          圖表元件需要更新以支援 Victory Native v41+
+      {/* 暫時佔位符 - Victory Native v41 API 需要進一步研究 */}
+      <View style={[styles.placeholder, { height, width }]}>
+        <Text style={styles.placeholderText}>
+          線型圖
+        </Text>
+        <Text style={styles.placeholderSubtext}>
+          {data.length} 個資料點
         </Text>
       </View>
+      
+      {xAxisLabel && <Text style={styles.xLabel}>{xAxisLabel}</Text>}
+      {yAxisLabel && <Text style={styles.yLabel}>{yAxisLabel}</Text>}
     </View>
   );
 };
@@ -79,5 +69,37 @@ const styles = StyleSheet.create({
     ...DesignSystem.typography.h3,
     color: DesignSystem.colors.text.primary,
     marginBottom: 16,
+  },
+  placeholder: {
+    backgroundColor: DesignSystem.colors.background.primary,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: DesignSystem.colors.border.light,
+    borderStyle: 'dashed',
+  },
+  placeholderText: {
+    ...DesignSystem.typography.h4,
+    color: DesignSystem.colors.text.secondary,
+    marginBottom: 4,
+  },
+  placeholderSubtext: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.disabled,
+  },
+  xLabel: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.secondary,
+    textAlign: 'center',
+    marginTop: 8,
+  },
+  yLabel: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.secondary,
+    position: 'absolute',
+    left: 16,
+    top: '50%',
+    transform: [{ rotate: '-90deg' }],
   },
 });

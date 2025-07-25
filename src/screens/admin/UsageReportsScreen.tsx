@@ -21,16 +21,7 @@ import { useAuthStore } from '@/stores/authStore';
 import { useAdminStore } from '@/stores/adminStore';
 import { showToast } from '@/utils/toast';
 import { DesignSystem } from '@/theme/designSystem';
-import {
-  VictoryChart,
-  VictoryLine,
-  VictoryBar,
-  VictoryAxis,
-  VictoryTheme,
-  VictoryContainer,
-  VictoryLabel,
-  VictoryArea,
-} from 'victory-native';
+import { LineChart, BarChart } from '@/components/admin/charts';
 import { Period } from '@/types/admin';
 import { 
   ExportFormat, 
@@ -264,98 +255,27 @@ export const UsageReportsScreen: React.FC = () => {
         
         {/* 主要圖表 */}
         <View style={styles.chartContainer}>
-          <Text style={styles.chartTitle}>
-            {metricOptions.find(m => m.id === selectedMetric)?.label} - {periodOptions.find(p => p.id === selectedPeriod)?.label}趨勢
-          </Text>
-          <VictoryChart
-            width={chartWidth}
+          <LineChart
+            data={getChartData()}
+            title={`${metricOptions.find(m => m.id === selectedMetric)?.label} - ${periodOptions.find(p => p.id === selectedPeriod)?.label}趨勢`}
+            color={DesignSystem.colors.primary}
             height={250}
-            theme={VictoryTheme.material}
-            padding={{ left: 50, top: 20, right: 30, bottom: 50 }}
-          >
-            <VictoryAxis
-              dependentAxis
-              style={{
-                axis: { stroke: DesignSystem.colors.border.light },
-                tickLabels: { 
-                  fontSize: 12, 
-                  fill: DesignSystem.colors.text.secondary,
-                  padding: 5
-                },
-                grid: { stroke: DesignSystem.colors.border.light, strokeDasharray: "3,3" },
-              }}
-            />
-            <VictoryAxis
-              style={{
-                axis: { stroke: DesignSystem.colors.border.light },
-                tickLabels: { 
-                  fontSize: 12, 
-                  fill: DesignSystem.colors.text.secondary,
-                  padding: 5
-                },
-              }}
-            />
-            <VictoryArea
-              data={getChartData()}
-              style={{
-                data: { 
-                  fill: DesignSystem.colors.primary + "30",
-                  stroke: DesignSystem.colors.primary,
-                  strokeWidth: 2
-                },
-              }}
-              interpolation="catmullRom"
-            />
-          </VictoryChart>
+          />
         </View>
         
         {/* 次要圖表 - 長條圖 */}
         <View style={styles.chartContainer}>
-          <Text style={styles.chartTitle}>各部門使用量分布</Text>
-          <VictoryChart
-            width={chartWidth}
+          <BarChart
+            data={[
+              { x: "業務部", y: 65 },
+              { x: "行銷部", y: 45 },
+              { x: "客服部", y: 38 },
+              { x: "研發部", y: 28 },
+            ]}
+            title="各部門使用量分布"
+            color={DesignSystem.colors.primary}
             height={200}
-            theme={VictoryTheme.material}
-            padding={{ left: 80, top: 20, right: 30, bottom: 50 }}
-            domainPadding={{ x: 20 }}
-          >
-            <VictoryAxis
-              dependentAxis
-              style={{
-                axis: { stroke: DesignSystem.colors.border.light },
-                tickLabels: { 
-                  fontSize: 12, 
-                  fill: DesignSystem.colors.text.secondary,
-                  padding: 5
-                },
-                grid: { stroke: DesignSystem.colors.border.light, strokeDasharray: "3,3" },
-              }}
-            />
-            <VictoryAxis
-              style={{
-                axis: { stroke: DesignSystem.colors.border.light },
-                tickLabels: { 
-                  fontSize: 12, 
-                  fill: DesignSystem.colors.text.secondary,
-                  padding: 5,
-                  angle: -45,
-                  textAnchor: 'end'
-                },
-              }}
-              fixLabelOverlap={true}
-            />
-            <VictoryBar
-              data={[
-                { x: "業務部", y: 65 },
-                { x: "行銷部", y: 45 },
-                { x: "客服部", y: 38 },
-                { x: "研發部", y: 28 },
-              ]}
-              style={{
-                data: { fill: DesignSystem.colors.primary },
-              }}
-            />
-          </VictoryChart>
+          />
         </View>
       </ScrollView>
       

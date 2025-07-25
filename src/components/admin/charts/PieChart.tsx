@@ -1,25 +1,18 @@
 /**
  * 可重用的圓餅圖元件
  * 用於顯示比例資料
+ * 注意：Victory Native v41+ API 需要進一步研究實作
  */
 
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
-// Note: Victory Native v41+ has a different API
-// TODO: Update to use PieChart from victory-native-xl
-// For now, these imports are commented out to avoid type errors
-// import {
-//   VictoryPie,
-//   VictoryLabel,
-//   VictoryContainer,
-// } from 'victory-native';
 import { DesignSystem } from '@/theme/designSystem';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 interface PieData {
-  x: string;
-  y: number;
+  label: string;
+  value: number;
 }
 
 interface PieChartProps {
@@ -28,10 +21,7 @@ interface PieChartProps {
   width?: number;
   height?: number;
   innerRadius?: number;
-  padAngle?: number;
   colorScale?: string[];
-  showLabels?: boolean;
-  labelRadius?: number;
 }
 
 export const PieChart: React.FC<PieChartProps> = ({
@@ -40,7 +30,6 @@ export const PieChart: React.FC<PieChartProps> = ({
   width = screenWidth - 40,
   height = 300,
   innerRadius = 0,
-  padAngle = 2,
   colorScale = [
     DesignSystem.colors.primary,
     DesignSystem.colors.status.success,
@@ -51,14 +40,12 @@ export const PieChart: React.FC<PieChartProps> = ({
     '#1ABC9C',
     '#F39C12',
   ],
-  showLabels = true,
-  labelRadius = 90,
 }) => {
-  // 計算總和和百分比
-  const total = data.reduce((sum, item) => sum + item.y, 0);
-  const dataWithPercentage = data.map(item => ({
+  const total = data.reduce((sum, item) => sum + item.value, 0);
+  const pieData = data.map((item, index) => ({
     ...item,
-    percentage: ((item.y / total) * 100).toFixed(1),
+    percentage: ((item.value / total) * 100).toFixed(1),
+    color: colorScale[index % colorScale.length],
   }));
 
   return (
@@ -66,26 +53,29 @@ export const PieChart: React.FC<PieChartProps> = ({
       {title && <Text style={styles.title}>{title}</Text>}
       
       <View style={styles.chartContainer}>
-        {/* TODO: Implement chart using PieChart from victory-native-xl */}
-        <View style={{ height, width, justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={{ color: DesignSystem.colors.text.secondary }}>
-            圖表元件需要更新以支援 Victory Native v41+
+        {/* 暫時佔位符 - Victory Native v41 API 需要進一步研究 */}
+        <View style={[styles.placeholder, { height, width }]}>
+          <Text style={styles.placeholderText}>
+            圓餅圖
+          </Text>
+          <Text style={styles.placeholderSubtext}>
+            {data.length} 個資料點
           </Text>
         </View>
       </View>
       
       {/* 圖例 */}
       <View style={styles.legend}>
-        {dataWithPercentage.map((item, index) => (
+        {pieData.map((item, index) => (
           <View key={index} style={styles.legendItem}>
             <View 
               style={[
                 styles.legendColor, 
-                { backgroundColor: colorScale[index % colorScale.length] }
+                { backgroundColor: item.color }
               ]} 
             />
             <Text style={styles.legendText}>
-              {item.x} ({item.percentage}%)
+              {item.label} ({item.percentage}%)
             </Text>
           </View>
         ))}
@@ -113,6 +103,24 @@ const styles = StyleSheet.create({
   },
   chartContainer: {
     alignItems: 'center',
+  },
+  placeholder: {
+    backgroundColor: DesignSystem.colors.background.primary,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: DesignSystem.colors.border.light,
+    borderStyle: 'dashed',
+  },
+  placeholderText: {
+    ...DesignSystem.typography.h4,
+    color: DesignSystem.colors.text.secondary,
+    marginBottom: 4,
+  },
+  placeholderSubtext: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.disabled,
   },
   legend: {
     flexDirection: 'row',
