@@ -20,7 +20,6 @@ import { TextInput } from '@/components/common/TextInput';
 import { Button } from '@/components/common/Button';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { createOrganization } from '@/services/firebase/admin/organizationService';
-import { createUserWithCustomClaims } from '@/services/firebase/auth';
 import { DesignSystem } from '@/theme/designSystem';
 import { showToast } from '@/utils/toast';
 
@@ -37,7 +36,6 @@ export const CreateOrganizationScreen: React.FC = () => {
   // 管理員資料
   const [adminName, setAdminName] = useState('');
   const [adminEmail, setAdminEmail] = useState('');
-  const [adminPassword, setAdminPassword] = useState('');
 
   const plans = [
     { id: 'trial', name: '試用版', seats: 5, duration: '30天', aiMinutes: 60 },
@@ -63,10 +61,6 @@ export const CreateOrganizationScreen: React.FC = () => {
       showToast.error('請輸入有效的管理員電子郵件');
       return false;
     }
-    if (adminPassword.length < 6) {
-      showToast.error('密碼至少需要 6 個字元');
-      return false;
-    }
     if (!seats || parseInt(seats) < 1) {
       showToast.error('座位數必須大於 0');
       return false;
@@ -75,11 +69,17 @@ export const CreateOrganizationScreen: React.FC = () => {
   };
 
   const handleCreateOrganization = async () => {
-    if (!validateForm()) return;
+    console.log('建立組織按鈕被點擊');
+    
+    if (!validateForm()) {
+      console.log('表單驗證失敗');
+      return;
+    }
 
+    console.log('開始建立組織...');
     setIsLoading(true);
     try {
-      // 1. 建立組織
+      // 建立組織
       const organization = await createOrganization({
         name: orgName,
         email: orgEmail,
@@ -89,28 +89,13 @@ export const CreateOrganizationScreen: React.FC = () => {
         seats: parseInt(seats),
       });
 
-      // 2. 建立管理員帳號
-      await createUserWithCustomClaims(adminEmail, adminPassword, {
-        role: 'admin',
-        organizationId: organization.id,
-        organizationName: orgName,
-        displayName: adminName,
-      });
-
-      showToast.success('組織建立成功！');
+      showToast.success('組織建立成功！管理員帳號資訊將發送至指定信箱。');
       
       // 導航回組織列表
       navigation.goBack();
     } catch (error: any) {
       console.error('建立組織失敗:', error);
-      
-      if (error.code === 'auth/email-already-in-use') {
-        showToast.error('此電子郵件已被使用');
-      } else if (error.code === 'auth/weak-password') {
-        showToast.error('密碼強度不足');
-      } else {
-        showToast.error('建立組織失敗：' + (error.message || '未知錯誤'));
-      }
+      showToast.error('建立組織失敗：' + (error.message || '未知錯誤'));
     } finally {
       setIsLoading(false);
     }
@@ -218,13 +203,6 @@ export const CreateOrganizationScreen: React.FC = () => {
               autoCapitalize="none"
             />
 
-            <TextInput
-              label="管理員密碼"
-              value={adminPassword}
-              onChangeText={setAdminPassword}
-              placeholder="至少 6 個字元"
-              secureTextEntry
-            />
           </View>
 
           {/* 操作按鈕 */}
