@@ -48,6 +48,7 @@
 | 42v  | admin-features-completion.md | ✅ 已完成 | Admin 系統進階功能 - 用戶 Modal、批量 API、資料匯入整合、圖表元件庫 | 2025-07-25 |
 | 43v  | development-tooling-victory-upgrade.md | ✅ 已完成 | 開發工具優化與 Victory Native 升級 - TypeScript 配置、ESLint 修復、圖表 API 升級 | 2025-07-25 |
 | 44v  | typescript-interface-organization.md | ✅ 已完成 | TypeScript 介面統一與組織重構 - 解決重複定義、建立單一真實來源、類型安全改進 | 2025-07-25 |
+| 45   | organization-management-redesign.md | 📋 待執行 | 組織管理系統重新設計 - 簡化訂閱方案、按使用人數計費、權限管理強化 | - |
 
 ## 命名規則
 
@@ -63,7 +64,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：45**
+**下一個新建的 PRP 應使用編號：46**
 
 ## PRP 類型說明
 
