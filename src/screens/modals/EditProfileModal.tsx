@@ -2,7 +2,7 @@
  * 編輯個人資料 Modal
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import {
   View,
   Text,
@@ -41,6 +41,7 @@ export const EditProfileModal: React.FC = () => {
     email?: string;
     currentPassword?: string;
   }>({});
+
 
   useEffect(() => {
     if (user) {
@@ -153,26 +154,27 @@ export const EditProfileModal: React.FC = () => {
     );
   }
 
-  return (
-    <Layout style={styles.container} scrollable={false}>
-      {/* 簡化的標題列 */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerButton}>
-          <Ionicons name="close" size={24} color={DesignSystem.colors.text.primary} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>編輯個人資料</Text>
+  // 設定導航標題列
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
         <TouchableOpacity 
           onPress={handleSave} 
-          style={styles.headerButton}
+          style={{ marginRight: 16 }}
           disabled={isSaving}
         >
           {isSaving ? (
             <ActivityIndicator size="small" color={DesignSystem.colors.primary} />
           ) : (
-            <Text style={styles.saveButtonText}>儲存</Text>
+            <Text style={{ fontSize: 16, fontWeight: '600', color: DesignSystem.colors.primary }}>儲存</Text>
           )}
         </TouchableOpacity>
-      </View>
+      ),
+    });
+  }, [navigation, isSaving, handleSave]);
+
+  return (
+    <Layout style={styles.container} scrollable={false}>
 
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <View style={styles.form}>
@@ -267,29 +269,6 @@ const styles = StyleSheet.create({
     marginTop: 12,
     fontSize: 16,
     color: DesignSystem.colors.text.secondary,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: DesignSystem.colors.background.surface,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
-  headerButton: {
-    padding: 4,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: DesignSystem.colors.text.primary,
-  },
-  saveButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: DesignSystem.colors.primary,
   },
   scrollView: {
     flex: 1,

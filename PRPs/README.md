@@ -43,6 +43,7 @@
 | 37   | app-completeness-review.md | ✅ 已完成 | 應用程式完整性檢查報告 - 檢查核心功能完成度、缺失分析、生產環境準備 | 2025-07-24 |
 | 38   | admin-management-system.md | 📋 待執行 | Admin 管理系統 - Super Admin 平台管理、Enterprise Admin 企業管理 | - |
 | 39v  | user-profile-editing.md | ✅ 已完成 | 用戶個人資料編輯功能 - 編輯名稱、更新電子郵件、密碼驗證 | 2025-07-24 |
+| 40   | admin-ui-access-implementation.md | 📋 待執行 | Admin UI 進入點實作 - 管理員面板入口、權限整合、導航流程 | - |
 
 ## 命名規則
 
@@ -58,7 +59,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：40**
+**下一個新建的 PRP 應使用編號：41**
 
 ## PRP 類型說明
 

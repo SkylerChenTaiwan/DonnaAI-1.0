@@ -3,6 +3,9 @@
  */
 
 import React, { useEffect, useState } from 'react';
+import { TouchableOpacity, Text, ActivityIndicator } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { DesignSystem } from '@/theme/designSystem';
 import { createStackNavigator } from '@react-navigation/stack';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { useAuthStore } from '@/stores/authStore';
@@ -284,8 +287,7 @@ export const AppNavigator = () => {
                 name="EditProfileModal"
                 component={EditProfileModal}
                 options={{ 
-                  title: '編輯個人資料',
-                  headerShown: false  // 隱藏預設 header，使用自定義 header
+                  title: '編輯個人資料'
                 }}
               />
               <Stack.Screen
