@@ -83,6 +83,12 @@ export const SuperAdminDashboard: React.FC = () => {
 
   const quickActions = [
     {
+      id: 'organizations',
+      title: '組織管理',
+      icon: 'business-outline',
+      action: () => navigation.navigate('OrganizationsScreen')
+    },
+    {
       id: 'platform-stats',
       title: '平台監控',
       icon: 'analytics-outline',
