@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Dimensions,
+  Modal,
 } from 'react-native';
 import { Layout } from '@/components/common/Layout';
 import { Ionicons } from '@expo/vector-icons';
@@ -31,6 +32,11 @@ import {
   VictoryArea,
 } from 'victory-native';
 import { Period } from '@/types/admin';
+import { 
+  ExportFormat, 
+  exportUsageReport,
+  generateReportSummary,
+} from '@/services/firebase/admin/reportExportService';
 
 const { width: screenWidth } = Dimensions.get('window');
 const chartWidth = screenWidth - 40;
@@ -41,6 +47,9 @@ export const UsageReportsScreen: React.FC = () => {
   const { usageReport, fetchUsageReport, isLoading } = useAdminStore();
   const [selectedPeriod, setSelectedPeriod] = useState<Period>('daily');
   const [selectedMetric, setSelectedMetric] = useState<'ai' | 'users' | 'storage' | 'records'>('ai');
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [exportFormat, setExportFormat] = useState<ExportFormat>('excel');
+  const [isExporting, setIsExporting] = useState(false);
   
   // 載入報表資料
   useEffect(() => {
@@ -81,8 +90,36 @@ export const UsageReportsScreen: React.FC = () => {
   
   // 匯出報表
   const handleExport = () => {
-    showToast('info', '此功能尚未完成');
-    // TODO: 實作匯出功能
+    if (!usageReport) {
+      showToast('error', '沒有可匯出的報表資料');
+      return;
+    }
+    setShowExportModal(true);
+  };
+  
+  // 執行匯出
+  const performExport = async () => {
+    if (!usageReport) return;
+    
+    setIsExporting(true);
+    try {
+      await exportUsageReport(
+        usageReport,
+        `${selectedPeriod}_${new Date().toLocaleDateString('zh-TW')}`,
+        {
+          format: exportFormat,
+          includeCharts: false, // 暫時不支援圖表匯出
+          includeDetails: true,
+        }
+      );
+      
+      showToast('success', '報表匯出成功');
+      setShowExportModal(false);
+    } catch (error) {
+      showToast('error', `匯出失敗: ${error instanceof Error ? error.message : '未知錯誤'}`);
+    } finally {
+      setIsExporting(false);
+    }
   };
   
   // 統計卡片資料
@@ -321,6 +358,132 @@ export const UsageReportsScreen: React.FC = () => {
           </VictoryChart>
         </View>
       </ScrollView>
+      
+      {/* 匯出選項 Modal */}
+      <Modal
+        visible={showExportModal}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setShowExportModal(false)}
+      >
+        <TouchableOpacity 
+          style={styles.modalOverlay} 
+          activeOpacity={1}
+          onPress={() => setShowExportModal(false)}
+        >
+          <View style={styles.modalContent} onStartShouldSetResponder={() => true}>
+            <Text style={styles.modalTitle}>匯出報表</Text>
+            
+            {/* 格式選擇 */}
+            <View style={styles.exportOptions}>
+              <TouchableOpacity
+                style={[
+                  styles.exportOption,
+                  exportFormat === 'csv' && styles.exportOptionActive,
+                ]}
+                onPress={() => setExportFormat('csv')}
+              >
+                <Ionicons 
+                  name="document-text-outline" 
+                  size={24} 
+                  color={exportFormat === 'csv' ? DesignSystem.colors.primary : DesignSystem.colors.text.secondary} 
+                />
+                <Text style={[
+                  styles.exportOptionText,
+                  exportFormat === 'csv' && styles.exportOptionTextActive,
+                ]}>
+                  CSV
+                </Text>
+                <Text style={styles.exportOptionDesc}>
+                  適合資料分析
+                </Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity
+                style={[
+                  styles.exportOption,
+                  exportFormat === 'excel' && styles.exportOptionActive,
+                ]}
+                onPress={() => setExportFormat('excel')}
+              >
+                <Ionicons 
+                  name="grid-outline" 
+                  size={24} 
+                  color={exportFormat === 'excel' ? DesignSystem.colors.primary : DesignSystem.colors.text.secondary} 
+                />
+                <Text style={[
+                  styles.exportOptionText,
+                  exportFormat === 'excel' && styles.exportOptionTextActive,
+                ]}>
+                  Excel
+                </Text>
+                <Text style={styles.exportOptionDesc}>
+                  包含多個工作表
+                </Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity
+                style={[
+                  styles.exportOption,
+                  exportFormat === 'pdf' && styles.exportOptionActive,
+                  { opacity: 0.5 }, // 暫時停用
+                ]}
+                onPress={() => showToast('info', 'PDF 匯出即將推出')}
+                disabled
+              >
+                <Ionicons 
+                  name="document-outline" 
+                  size={24} 
+                  color={DesignSystem.colors.text.disabled} 
+                />
+                <Text style={[styles.exportOptionText, { color: DesignSystem.colors.text.disabled }]}>
+                  PDF
+                </Text>
+                <Text style={[styles.exportOptionDesc, { color: DesignSystem.colors.text.disabled }]}>
+                  即將推出
+                </Text>
+              </TouchableOpacity>
+            </View>
+            
+            {/* 報表預覽 */}
+            {usageReport && (
+              <View style={styles.previewContainer}>
+                <Text style={styles.previewTitle}>報表內容預覽</Text>
+                <ScrollView style={styles.previewContent}>
+                  <Text style={styles.previewText}>
+                    {generateReportSummary(usageReport).slice(0, 200)}...
+                  </Text>
+                </ScrollView>
+              </View>
+            )}
+            
+            {/* 操作按鈕 */}
+            <View style={styles.modalActions}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={() => setShowExportModal(false)}
+              >
+                <Text style={styles.cancelButtonText}>取消</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity
+                style={[styles.modalButton, styles.exportButton]}
+                onPress={performExport}
+                disabled={isExporting}
+              >
+                {isExporting ? (
+                  <ActivityIndicator color={DesignSystem.colors.white} size="small" />
+                ) : (
+                  <>
+                    <Ionicons name="download" size={20} color={DesignSystem.colors.white} />
+                    <Text style={styles.exportButtonText}>匯出</Text>
+                  </>
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </Layout>
   );
 };
@@ -472,5 +635,107 @@ const styles = StyleSheet.create({
     ...DesignSystem.typography.h3,
     color: DesignSystem.colors.text.primary,
     marginBottom: 16,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+  },
+  modalContent: {
+    backgroundColor: DesignSystem.colors.background.surface,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingTop: 24,
+    paddingHorizontal: 24,
+    paddingBottom: 40,
+    maxHeight: '80%',
+  },
+  modalTitle: {
+    ...DesignSystem.typography.h2,
+    color: DesignSystem.colors.text.primary,
+    textAlign: 'center',
+    marginBottom: 24,
+  },
+  exportOptions: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 24,
+  },
+  exportOption: {
+    flex: 1,
+    padding: 16,
+    alignItems: 'center',
+    backgroundColor: DesignSystem.colors.background.elevated,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: DesignSystem.colors.border.light,
+  },
+  exportOptionActive: {
+    borderColor: DesignSystem.colors.primary,
+    backgroundColor: DesignSystem.colors.primary + '10',
+  },
+  exportOptionText: {
+    ...DesignSystem.typography.body,
+    color: DesignSystem.colors.text.primary,
+    fontWeight: '600',
+    marginTop: 8,
+  },
+  exportOptionTextActive: {
+    color: DesignSystem.colors.primary,
+  },
+  exportOptionDesc: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.secondary,
+    marginTop: 4,
+    textAlign: 'center',
+  },
+  previewContainer: {
+    backgroundColor: DesignSystem.colors.background.elevated,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 24,
+  },
+  previewTitle: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.secondary,
+    marginBottom: 8,
+  },
+  previewContent: {
+    maxHeight: 100,
+  },
+  previewText: {
+    ...DesignSystem.typography.body,
+    color: DesignSystem.colors.text.primary,
+    lineHeight: 20,
+  },
+  modalActions: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  modalButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 14,
+    borderRadius: 12,
+    gap: 8,
+  },
+  cancelButton: {
+    backgroundColor: DesignSystem.colors.background.elevated,
+    borderWidth: 1,
+    borderColor: DesignSystem.colors.border.default,
+  },
+  cancelButtonText: {
+    ...DesignSystem.typography.button,
+    color: DesignSystem.colors.text.primary,
+  },
+  exportButton: {
+    backgroundColor: DesignSystem.colors.primary,
+  },
+  exportButtonText: {
+    ...DesignSystem.typography.button,
+    color: DesignSystem.colors.white,
+    fontWeight: '600',
   },
 });

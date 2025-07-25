@@ -19,22 +19,24 @@ import { useNavigation } from '@react-navigation/native';
 import { showToast } from '@/utils/toast';
 import { DesignSystem } from '@/theme/designSystem';
 import * as DocumentPicker from 'expo-document-picker';
-
-type ImportType = 'customers' | 'records' | 'tasks' | 'users';
-
-interface ImportStatus {
-  total: number;
-  success: number;
-  failed: number;
-  errors: string[];
-}
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
+import {
+  ImportType,
+  ImportResult,
+  ImportProgress,
+  parseImportFile,
+  importData,
+  generateImportTemplate,
+} from '@/services/firebase/admin/dataImportService';
 
 export const DataImportScreen: React.FC = () => {
   const navigation = useNavigation();
   const [selectedType, setSelectedType] = useState<ImportType>('customers');
   const [selectedFile, setSelectedFile] = useState<any>(null);
   const [importing, setImporting] = useState(false);
-  const [importStatus, setImportStatus] = useState<ImportStatus | null>(null);
+  const [importStatus, setImportStatus] = useState<ImportResult | null>(null);
+  const [importProgress, setImportProgress] = useState<ImportProgress | null>(null);
   const [previewData, setPreviewData] = useState<any[]>([]);
   
   // 匯入類型選項
@@ -55,13 +57,26 @@ export const DataImportScreen: React.FC = () => {
       
       if (result.type === 'success') {
         setSelectedFile(result);
-        // TODO: 讀取和預覽檔案內容
-        setPreviewData([
-          { 姓名: '張三', 公司: 'ABC公司', 電子郵件: 'zhang@abc.com' },
-          { 姓名: '李四', 公司: 'XYZ公司', 電子郵件: 'li@xyz.com' },
-          { 姓名: '王五', 公司: '123公司', 電子郵件: 'wang@123.com' },
-        ]);
         setImportStatus(null);
+        setImportProgress(null);
+        
+        try {
+          // 解析檔案內容
+          const data = await parseImportFile(result.uri, result.mimeType || '');
+          
+          if (data.length === 0) {
+            showToast('error', '檔案是空的或格式不正確');
+            setPreviewData([]);
+            return;
+          }
+          
+          // 設定預覽資料（最多顯示前 5 筆）
+          setPreviewData(data.slice(0, 5));
+          showToast('success', `成功讀取 ${data.length} 筆資料`);
+        } catch (parseError) {
+          showToast('error', `檔案解析失敗: ${parseError instanceof Error ? parseError.message : '未知錯誤'}`);
+          setPreviewData([]);
+        }
       }
     } catch (error) {
       showToast('error', '選擇檔案失敗');
@@ -75,33 +90,55 @@ export const DataImportScreen: React.FC = () => {
       return;
     }
     
+    if (previewData.length === 0) {
+      showToast('error', '沒有可匯入的資料');
+      return;
+    }
+    
     Alert.alert(
       '確認匯入',
-      `確定要匯入 ${previewData.length} 筆${getTypeLabel(selectedType)}嗎？`,
+      `確定要匯入${getTypeLabel(selectedType)}嗎？\n\n總共 ${previewData.length} 筆資料`,
       [
         { text: '取消', style: 'cancel' },
         {
           text: '確定',
           onPress: async () => {
             setImporting(true);
+            setImportProgress({
+              current: 0,
+              total: previewData.length,
+              status: 'parsing',
+              message: '準備匯入資料...',
+            });
             
             try {
-              // TODO: 實作實際的匯入邏輯
-              // 模擬匯入過程
-              await new Promise(resolve => setTimeout(resolve, 2000));
+              // 重新解析完整檔案（預覽可能只是部分資料）
+              const fullData = await parseImportFile(selectedFile.uri, selectedFile.mimeType || '');
               
-              // 模擬匯入結果
-              const status: ImportStatus = {
-                total: previewData.length,
-                success: previewData.length - 1,
-                failed: 1,
-                errors: ['第3列: 電子郵件格式錯誤'],
-              };
+              // 執行匯入，並追蹤進度
+              const result = await importData(
+                selectedType,
+                fullData,
+                (progress) => {
+                  setImportProgress(progress);
+                }
+              );
               
-              setImportStatus(status);
-              showToast('success', `匯入完成：成功 ${status.success} 筆，失敗 ${status.failed} 筆`);
+              setImportStatus(result);
+              
+              if (result.failed === 0) {
+                showToast('success', `成功匯入所有 ${result.success} 筆資料`);
+              } else {
+                showToast('warning', `匯入完成：成功 ${result.success} 筆，失敗 ${result.failed} 筆`);
+              }
             } catch (error) {
-              showToast('error', '匯入失敗');
+              showToast('error', `匯入失敗: ${error instanceof Error ? error.message : '未知錯誤'}`);
+              setImportProgress({
+                current: 0,
+                total: previewData.length,
+                status: 'error',
+                message: error instanceof Error ? error.message : '匯入失敗',
+              });
             } finally {
               setImporting(false);
             }
@@ -117,9 +154,31 @@ export const DataImportScreen: React.FC = () => {
   };
   
   // 下載範本
-  const handleDownloadTemplate = () => {
-    showToast('info', '此功能尚未完成');
-    // TODO: 實作下載範本功能
+  const handleDownloadTemplate = async () => {
+    try {
+      // 產生範本內容
+      const templateContent = generateImportTemplate(selectedType);
+      const fileName = `${getTypeLabel(selectedType)}_匯入範本.csv`;
+      const fileUri = FileSystem.documentDirectory + fileName;
+      
+      // 寫入檔案
+      await FileSystem.writeAsStringAsync(fileUri, templateContent, {
+        encoding: FileSystem.EncodingType.UTF8,
+      });
+      
+      // 分享檔案
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(fileUri, {
+          mimeType: 'text/csv',
+          dialogTitle: '下載匯入範本',
+        });
+      } else {
+        showToast('error', '您的裝置不支援檔案分享功能');
+      }
+    } catch (error) {
+      showToast('error', '下載範本失敗');
+      console.error('下載範本錯誤:', error);
+    }
   };
   
   return (
@@ -190,7 +249,7 @@ export const DataImportScreen: React.FC = () => {
         {/* 資料預覽 */}
         {previewData.length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>資料預覽 (前 3 筆)</Text>
+            <Text style={styles.sectionTitle}>資料預覽 (前 {Math.min(5, previewData.length)} 筆)</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <View style={styles.previewTable}>
                 {/* 表頭 */}
@@ -200,7 +259,7 @@ export const DataImportScreen: React.FC = () => {
                   ))}
                 </View>
                 {/* 資料列 */}
-                {previewData.slice(0, 3).map((row, index) => (
+                {previewData.slice(0, 5).map((row, index) => (
                   <View key={index} style={styles.previewRow}>
                     {Object.values(row).map((value: any, i) => (
                       <Text key={i} style={styles.previewCell}>{value}</Text>
@@ -238,10 +297,38 @@ export const DataImportScreen: React.FC = () => {
                 <View style={styles.errorContainer}>
                   <Text style={styles.errorTitle}>錯誤訊息:</Text>
                   {importStatus.errors.map((error, index) => (
-                    <Text key={index} style={styles.errorItem}>• {error}</Text>
+                    <Text key={index} style={styles.errorItem}>
+                      • 第 {error.row} 列: {error.message}
+                    </Text>
                   ))}
                 </View>
               )}
+            </View>
+          </View>
+        )}
+        
+        {/* 匯入進度 */}
+        {importProgress && importing && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>匯入進度</Text>
+            <View style={styles.progressContainer}>
+              <Text style={styles.progressText}>{importProgress.message}</Text>
+              <View style={styles.progressBar}>
+                <View 
+                  style={[
+                    styles.progressFill, 
+                    { 
+                      width: `${(importProgress.current / importProgress.total) * 100}%`,
+                      backgroundColor: importProgress.status === 'error' 
+                        ? DesignSystem.colors.error 
+                        : DesignSystem.colors.primary 
+                    }
+                  ]} 
+                />
+              </View>
+              <Text style={styles.progressCount}>
+                {importProgress.current} / {importProgress.total}
+              </Text>
             </View>
           </View>
         )}
@@ -438,5 +525,29 @@ const styles = StyleSheet.create({
     ...DesignSystem.typography.button,
     color: DesignSystem.colors.white,
     fontWeight: '600',
+  },
+  progressContainer: {
+    gap: 12,
+  },
+  progressText: {
+    ...DesignSystem.typography.body,
+    color: DesignSystem.colors.text.secondary,
+    textAlign: 'center',
+  },
+  progressBar: {
+    height: 8,
+    backgroundColor: DesignSystem.colors.background.elevated,
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    borderRadius: 4,
+    transition: 'width 0.3s ease',
+  },
+  progressCount: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.secondary,
+    textAlign: 'center',
   },
 });

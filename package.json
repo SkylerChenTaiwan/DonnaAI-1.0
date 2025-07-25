@@ -23,6 +23,7 @@
   "dependencies": {
     "@babel/runtime": "^7.27.6",
     "@expo/config-plugins": "~10.1.1",
+    "@expo/metro-runtime": "~5.0.4",
     "@expo/vector-icons": "^14.1.0",
     "@google/genai": "^1.10.0",
     "@hookform/resolvers": "^5.1.1",
@@ -63,12 +64,12 @@
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.11.1",
     "react-native-svg": "15.11.2",
+    "react-native-web": "^0.20.0",
     "typescript": "~5.8.3",
     "victory-native": "^41.17.4",
+    "xlsx": "^0.18.5",
     "zod": "^3.23.8",
-    "zustand": "^4.5.2",
-    "react-native-web": "^0.20.0",
-    "@expo/metro-runtime": "~5.0.4"
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",

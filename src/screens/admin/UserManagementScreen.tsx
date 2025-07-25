@@ -33,7 +33,7 @@ import { User } from '@/types/firebase';
 export const UserManagementScreen: React.FC = () => {
   const navigation = useNavigation<any>();
   const { user: currentUser } = useAuthStore();
-  const { users, loading, refreshUsers } = useAdminStore();
+  const { users, loading, refreshUsers, batchUpdateStatus, batchDelete, validateDeletable } = useAdminStore();
   
   const [searchQuery, setSearchQuery] = useState('');
   const [refreshing, setRefreshing] = useState(false);
@@ -165,16 +165,57 @@ export const UserManagementScreen: React.FC = () => {
   
   // 處理行點擊
   const handleRowPress = (user: any) => {
-    // TODO: 導航到用戶詳情或編輯頁面
-    console.log('查看用戶詳情:', user.id);
+    navigation.navigate('EditUserModal', {
+      userId: user.id,
+      userData: user,
+      onUserUpdated: () => {
+        refreshUsers();
+      }
+    });
   };
   
   // 處理批量操作
-  const handleBatchAction = (action: 'enable' | 'disable' | 'delete') => {
+  const handleBatchAction = async (action: 'enable' | 'disable' | 'delete') => {
     if (selectedIds.length === 0) return;
     
     const actionText = action === 'enable' ? '啟用' : 
                       action === 'disable' ? '停用' : '刪除';
+    
+    // 如果是刪除操作，先驗證
+    if (action === 'delete') {
+      try {
+        const validation = await validateDeletable(selectedIds);
+        if (validation.undeletableIds.length > 0) {
+          let message = '以下用戶無法刪除：\n';
+          validation.undeletableIds.forEach(id => {
+            const user = users.find(u => u.id === id);
+            message += `\n• ${user?.name || id}: ${validation.reasons[id]}`;
+          });
+          
+          if (validation.deletableIds.length === 0) {
+            Alert.alert('無法刪除', message);
+            return;
+          } else {
+            Alert.alert(
+              '部分用戶無法刪除',
+              message + `\n\n是否繼續刪除其他 ${validation.deletableIds.length} 個用戶？`,
+              [
+                { text: '取消', style: 'cancel' },
+                {
+                  text: '繼續刪除',
+                  style: 'destructive',
+                  onPress: () => performBatchAction(action, validation.deletableIds)
+                }
+              ]
+            );
+            return;
+          }
+        }
+      } catch (error) {
+        showToast('error', '驗證失敗');
+        return;
+      }
+    }
     
     Alert.alert(
       `確認${actionText}`,
@@ -184,26 +225,54 @@ export const UserManagementScreen: React.FC = () => {
         {
           text: '確定',
           style: action === 'delete' ? 'destructive' : 'default',
-          onPress: async () => {
-            try {
-              // TODO: 實作批量操作 API
-              showToast('success', `已${actionText} ${selectedIds.length} 個用戶`);
-              setSelectedIds([]);
-              setMultiSelectMode(false);
-              await refreshUsers();
-            } catch (error) {
-              showToast('error', `${actionText}失敗`);
-            }
-          },
+          onPress: () => performBatchAction(action, selectedIds)
         },
       ]
     );
   };
   
+  // 執行批量操作
+  const performBatchAction = async (action: 'enable' | 'disable' | 'delete', ids: string[]) => {
+    const actionText = action === 'enable' ? '啟用' : 
+                      action === 'disable' ? '停用' : '刪除';
+    
+    try {
+      let result;
+      if (action === 'enable') {
+        result = await batchUpdateStatus(ids, true);
+      } else if (action === 'disable') {
+        result = await batchUpdateStatus(ids, false);
+      } else {
+        result = await batchDelete(ids);
+      }
+      
+      if (result.success > 0) {
+        showToast('success', `成功${actionText} ${result.success} 個用戶`);
+      }
+      
+      if (result.failed > 0) {
+        showToast('error', `${result.failed} 個用戶${actionText}失敗`);
+        if (result.errors.length > 0) {
+          console.error('批量操作錯誤:', result.errors);
+        }
+      }
+      
+      setSelectedIds([]);
+      setMultiSelectMode(false);
+      await refreshUsers();
+    } catch (error) {
+      showToast('error', `${actionText}失敗`);
+      console.error('批量操作錯誤:', error);
+    }
+  };
+  
   // 處理新增用戶
   const handleAddUser = () => {
-    // TODO: 導航到新增用戶頁面
-    console.log('新增用戶');
+    navigation.navigate('CreateUserModal', {
+      onUserCreated: () => {
+        refreshUsers();
+      }
+    });
   };
   
   if (loading && users.length === 0) {

@@ -28,6 +28,12 @@ import {
 import { getFirebaseDb } from '@/services/firebase/config';
 import { collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore';
 import { getAuthStore } from '@/services/getStores';
+import {
+  batchUpdateUserStatus,
+  batchUpdateUserRole,
+  batchDeleteUsers,
+  validateDeletableUsers
+} from '@/services/firebase/admin/userManagementService';
 
 interface AdminState {
   // 組織管理
@@ -78,6 +84,10 @@ interface AdminState {
   refreshUsers: () => Promise<void>;
   updateUserStatus: (userId: string, isActive: boolean) => Promise<void>;
   updateUserRole: (userId: string, role: string) => Promise<void>;
+  batchUpdateStatus: (userIds: string[], isActive: boolean) => Promise<{ success: number; failed: number; errors: string[] }>;
+  batchUpdateRole: (userIds: string[], role: 'salesperson' | 'manager' | 'admin') => Promise<{ success: number; failed: number; errors: string[] }>;
+  batchDelete: (userIds: string[]) => Promise<{ success: number; failed: number; errors: string[] }>;
+  validateDeletable: (userIds: string[]) => Promise<{ deletableIds: string[]; undeletableIds: string[]; reasons: Record<string, string> }>;
   
   // 工具動作
   clearError: () => void;
@@ -499,6 +509,89 @@ export const useAdminStore = create<AdminState>()(
             error: error instanceof Error ? error.message : '更新用戶角色失敗',
             loading: false 
           });
+          throw error;
+        }
+      },
+      
+      batchUpdateStatus: async (userIds: string[], isActive: boolean) => {
+        set({ loading: true, error: null });
+        
+        try {
+          const result = await batchUpdateUserStatus(userIds, isActive);
+          
+          // 更新本地狀態
+          set(state => ({
+            users: state.users.map(user => 
+              userIds.includes(user.id) ? { ...user, isActive } : user
+            ),
+            loading: false
+          }));
+          
+          return result;
+        } catch (error) {
+          set({ 
+            error: error instanceof Error ? error.message : '批量更新用戶狀態失敗',
+            loading: false 
+          });
+          throw error;
+        }
+      },
+      
+      batchUpdateRole: async (userIds: string[], role: 'salesperson' | 'manager' | 'admin') => {
+        set({ loading: true, error: null });
+        
+        try {
+          const result = await batchUpdateUserRole(userIds, role);
+          
+          // 更新本地狀態
+          set(state => ({
+            users: state.users.map(user => 
+              userIds.includes(user.id) ? { ...user, role } : user
+            ),
+            loading: false
+          }));
+          
+          return result;
+        } catch (error) {
+          set({ 
+            error: error instanceof Error ? error.message : '批量更新用戶角色失敗',
+            loading: false 
+          });
+          throw error;
+        }
+      },
+      
+      batchDelete: async (userIds: string[]) => {
+        set({ loading: true, error: null });
+        
+        try {
+          const result = await batchDeleteUsers(userIds);
+          
+          // 更新本地狀態
+          if (result.success > 0) {
+            set(state => ({
+              users: state.users.filter(user => !userIds.includes(user.id)),
+              loading: false
+            }));
+          } else {
+            set({ loading: false });
+          }
+          
+          return result;
+        } catch (error) {
+          set({ 
+            error: error instanceof Error ? error.message : '批量刪除用戶失敗',
+            loading: false 
+          });
+          throw error;
+        }
+      },
+      
+      validateDeletable: async (userIds: string[]) => {
+        try {
+          return await validateDeletableUsers(userIds);
+        } catch (error) {
+          console.error('驗證可刪除用戶失敗:', error);
           throw error;
         }
       },

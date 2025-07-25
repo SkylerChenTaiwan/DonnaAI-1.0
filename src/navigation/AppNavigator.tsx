@@ -21,6 +21,8 @@ import { EditTaskModal } from '@/screens/modals/EditTaskModal';
 import { EditProfileModal } from '@/screens/modals/EditProfileModal';
 import { AddRecordModal } from '@/components/database/AddRecordModal';
 import { AddUserModal } from '@/components/personnel/AddUserModal';
+import { CreateUserModal } from '@/screens/admin/modals/CreateUserModal';
+import { EditUserModal } from '@/screens/admin/modals/EditUserModal';
 import { CustomerDetailScreen } from '@/screens/database/CustomerDetailScreen';
 import { RecordDetailScreen } from '@/screens/database/RecordDetailScreen';
 import { TaskDetailScreen } from '@/screens/database/TaskDetailScreen';
@@ -299,6 +301,18 @@ export const AppNavigator = () => {
                 name="AddUserModal"
                 component={AddUserModal}
                 options={{ title: '新增下屬' }}
+              />
+              
+              {/* Admin Modals */}
+              <Stack.Screen
+                name="CreateUserModal"
+                component={CreateUserModal}
+                options={{ title: '建立新用戶' }}
+              />
+              <Stack.Screen
+                name="EditUserModal"
+                component={EditUserModal}
+                options={{ title: '編輯用戶' }}
               />
             </Stack.Group>
             

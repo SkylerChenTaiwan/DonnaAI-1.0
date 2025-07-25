@@ -52,6 +52,16 @@ export type RootStackParamList = {
   
   // Admin 通用頁面
   AdminSettings: undefined;
+  
+  // Admin Modals
+  CreateUserModal: { 
+    onUserCreated?: () => void;
+  } | undefined;
+  EditUserModal: { 
+    userId: string;
+    userData: any; // User type
+    onUserUpdated?: () => void;
+  } | undefined;
 };
 
 export type MainTabParamList = {
