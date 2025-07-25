@@ -10,8 +10,7 @@ import { useAuthStore } from '@/stores/authStore';
 import { useAnalyticsStore } from '@/stores/analyticsStore';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { EnhancedDashboardV2 } from '@/screens/dashboard/EnhancedDashboardV2';
-import { SuperAdminDashboard } from '@/screens/superadmin/SuperAdminDashboard';
+import { HomeScreen } from '@/screens/home/HomeScreen';
 import { DatabaseScreen } from '@/screens/database/DatabaseScreen';
 import { ToolsScreen } from '@/screens/tools/ToolsScreen';
 import { PersonnelScreen } from '@/screens/personnel/PersonnelScreen';
@@ -20,7 +19,6 @@ import { ActionPopover } from '@/components/common/ActionPopover';
 import AnalyticsDialog from '@/components/analytics/AnalyticsDialog';
 import { MainTabParamList, RootStackParamList } from '@/types/navigation';
 import { DesignSystem } from '@/theme/designSystem';
-import { useAdminAuth } from '@/hooks/useAdminAuth';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -28,7 +26,6 @@ const Tab = createBottomTabNavigator<MainTabParamList>();
 
 export const MainTabNavigator = () => {
   const { user, mode } = useAuthStore();
-  const { isSuperAdmin } = useAdminAuth();
   const { isDialogOpen, openDialog, closeDialog } = useAnalyticsStore();
   const navigation = useNavigation<NavigationProp>();
   const [showActionModal, setShowActionModal] = useState(false);
@@ -148,7 +145,7 @@ export const MainTabNavigator = () => {
         >
           <Tab.Screen
             name="Home"
-            component={isSuperAdmin ? SuperAdminDashboard : EnhancedDashboardV2}
+            component={HomeScreen}
             options={{
               title: '首頁',
               headerShown: false,

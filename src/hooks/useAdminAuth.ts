@@ -27,8 +27,8 @@ export function useAdminAuth() {
   const [permissions, setPermissions] = useState<EnterpriseAdminPermissions | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   
-  // 基本角色檢查
-  const isSuperAdmin = user?.role === 'super_admin';
+  // 基本角色檢查 - 支援兩種系統管理員角色名稱
+  const isSuperAdmin = user?.role === 'super_admin' || user?.role === 'system-admin';
   const isEnterpriseAdmin = user?.role === 'admin';
   const isManager = user?.role === 'manager';
   const canAccessAdminPanel = isSuperAdmin || isEnterpriseAdmin;
