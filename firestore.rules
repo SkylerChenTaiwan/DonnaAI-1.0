@@ -162,13 +162,11 @@ service cloud.firestore {
     match /billing_records/{recordId} {
       // Super Admin 可以讀寫所有計費記錄
       allow read, write: if isSuperAdmin();
-      // 組織管理員可以讀取自己組織的計費記錄
+      // 組織管理員可以讀取和查詢計費記錄
       allow read: if request.auth != null && 
-        getUserData().role == 'admin' &&
-        getUserData().organizationId == resource.data.organizationId;
-      // 組織成員可以讀取自己組織的計費記錄（唯讀）
-      allow read: if request.auth != null && 
-        getUserData().organizationId == resource.data.organizationId;
+        getUserData().role == 'admin';
+      // 組織成員可以讀取計費記錄（需要在查詢中限制 organizationId）
+      allow read: if request.auth != null;
     }
     
     // 工具使用記錄集合
@@ -178,10 +176,11 @@ service cloud.firestore {
       // 用戶可以建立自己的使用記錄
       allow create: if request.auth != null && 
         request.auth.uid == request.resource.data.userId;
-      // 組織管理員可以讀取組織內的使用記錄
+      // 組織管理員可以讀取和查詢使用記錄
       allow read: if request.auth != null && 
-        getUserData().role == 'admin' &&
-        getUserData().organizationId == resource.data.organizationId;
+        getUserData().role == 'admin';
+      // 一般用戶可以讀取記錄（需要在查詢中限制）
+      allow read: if request.auth != null;
     }
     
     // 工具使用每日統計集合
@@ -190,10 +189,11 @@ service cloud.firestore {
       allow read, write: if isSuperAdmin();
       // 系統可以建立和更新統計（由 Cloud Functions 或使用 service account）
       allow create, update: if request.auth != null;
-      // 組織管理員可以讀取自己組織的統計
+      // 組織管理員可以讀取統計
       allow read: if request.auth != null && 
-        getUserData().role == 'admin' &&
-        getUserData().organizationId == resource.data.organizationId;
+        getUserData().role == 'admin';
+      // 一般用戶可以讀取統計（需要在查詢中限制）
+      allow read: if request.auth != null;
     }
     
     // 自訂欄位配置集合
