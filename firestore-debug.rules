@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 調試版本 - 只處理 Super Admin 存取組織的問題
+    // 警告：這是最小權限的調試版本
+    
+    // 組織集合 - 調試規則
+    match /organizations/{orgId} {
+      // 方案1：如果用戶文檔中有 role = 'system-admin'
+      allow read: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'system-admin';
+      
+      // 方案2：如果 Auth Token 中有自定義聲明
+      allow read: if request.auth != null && 
+        request.auth.token.role == 'system-admin';
+      
+      // 方案3：特定 email (臨時調試用)
+      allow read: if request.auth != null && 
+        request.auth.token.email == 'admin@donnaai-app.com';
+        
+      // 禁止所有寫入（安全起見）
+      allow write: if false;
+    }
+    
+    // 用戶集合 - 最小權限
+    match /users/{userId} {
+      // 只允許讀取自己的資料
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false;
+    }
+    
+    // 其他所有集合 - 全部禁止
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
