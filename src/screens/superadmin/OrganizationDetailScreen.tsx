@@ -18,7 +18,7 @@ import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import { Layout } from '@/components/common/Layout';
-import { Input } from '@/components/common/Input';
+import { TextInput } from '@/components/common/TextInput';
 import { Button } from '@/components/common/Button';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { 
@@ -206,27 +206,27 @@ export const OrganizationDetailScreen: React.FC = () => {
 
           {isEditing ? (
             <>
-              <Input
+              <TextInput
                 label="組織名稱"
                 value={formData.name}
                 onChangeText={(text) => setFormData({ ...formData, name: text })}
                 placeholder="組織名稱"
               />
-              <Input
+              <TextInput
                 label="聯絡信箱"
                 value={formData.contactEmail}
                 onChangeText={(text) => setFormData({ ...formData, contactEmail: text })}
                 placeholder="contact@company.com"
                 keyboardType="email-address"
               />
-              <Input
+              <TextInput
                 label="最大用戶數"
                 value={formData.maxUsers}
                 onChangeText={(text) => setFormData({ ...formData, maxUsers: text })}
                 placeholder="10"
                 keyboardType="number-pad"
               />
-              <Input
+              <TextInput
                 label="AI 分鐘配額"
                 value={formData.aiMinutesQuota}
                 onChangeText={(text) => setFormData({ ...formData, aiMinutesQuota: text })}

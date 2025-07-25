@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Layout } from '@/components/common/Layout';
-import { Input } from '@/components/common/Input';
+import { TextInput } from '@/components/common/TextInput';
 import { Button } from '@/components/common/Button';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { createOrganization } from '@/services/firebase/admin/organizationService';
@@ -138,22 +138,20 @@ export const CreateOrganizationScreen: React.FC = () => {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>組織資訊</Text>
             
-            <Input
+            <TextInput
               label="組織名稱"
               value={orgName}
               onChangeText={setOrgName}
               placeholder="例：XX 企業"
-              required
             />
 
-            <Input
+            <TextInput
               label="組織電子郵件"
               value={orgEmail}
               onChangeText={setOrgEmail}
               placeholder="contact@company.com"
               keyboardType="email-address"
               autoCapitalize="none"
-              required
             />
 
             {/* 訂閱方案選擇 */}
@@ -191,13 +189,12 @@ export const CreateOrganizationScreen: React.FC = () => {
               </View>
             </View>
 
-            <Input
+            <TextInput
               label="座位數"
               value={seats}
               onChangeText={setSeats}
               placeholder="5"
               keyboardType="number-pad"
-              required
             />
           </View>
 
@@ -205,31 +202,28 @@ export const CreateOrganizationScreen: React.FC = () => {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>管理員資訊</Text>
             
-            <Input
+            <TextInput
               label="管理員姓名"
               value={adminName}
               onChangeText={setAdminName}
               placeholder="王小明"
-              required
             />
 
-            <Input
+            <TextInput
               label="管理員電子郵件"
               value={adminEmail}
               onChangeText={setAdminEmail}
               placeholder="admin@company.com"
               keyboardType="email-address"
               autoCapitalize="none"
-              required
             />
 
-            <Input
+            <TextInput
               label="管理員密碼"
               value={adminPassword}
               onChangeText={setAdminPassword}
               placeholder="至少 6 個字元"
               secureTextEntry
-              required
             />
           </View>
 
