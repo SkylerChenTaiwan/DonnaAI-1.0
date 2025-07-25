@@ -6,7 +6,7 @@ export interface User {
   id: string;
   email: string;
   name: string;
-  role: 'salesperson' | 'manager' | 'admin' | 'super_admin';
+  role: 'salesperson' | 'manager' | 'admin' | 'super_admin' | 'system-admin';
   organizationId: string;
   teamIds?: string[]; // 可屬於多個團隊
   managedTeamIds?: string[]; // 管理的團隊

@@ -7,7 +7,7 @@ import { User } from '../../types/user';
 
 interface UserPermissionContext {
   userId: string;
-  role: 'salesperson' | 'manager' | 'admin';
+  role: 'salesperson' | 'manager' | 'admin' | 'system-admin';
   organizationId: string;
   teamIds: string[];
   managedTeamIds: string[];
@@ -64,6 +64,11 @@ export function buildQueryConstraints(context: UserPermissionContext, dataType: 
   const constraints = [];
   
   switch (context.role) {
+    case 'system-admin':
+      // 系統管理員：不應該看到任何業務資料，返回一個永遠不匹配的條件
+      constraints.push(['id', '==', '__SYSTEM_ADMIN_NO_DATA__']);
+      break;
+      
     case 'admin':
       // 管理員：看組織內所有資料
       constraints.push(['organizationId', '==', context.organizationId]);
@@ -125,6 +130,12 @@ export async function batchCheckPermissions(
   _dataType: 'customers' | 'records' | 'tasks'
 ): Promise<Map<string, boolean>> {
   const results = new Map<string, boolean>();
+  
+  // 系統管理員不能看任何業務資料
+  if (context.role === 'system-admin') {
+    items.forEach(item => results.set(item.id, false));
+    return results;
+  }
   
   // 管理員可以看所有
   if (context.role === 'admin') {
