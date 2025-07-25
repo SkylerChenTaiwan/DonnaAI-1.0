@@ -7,12 +7,14 @@
 import '@expo/metro-runtime';
 
 import React, { useEffect } from 'react';
+import { View, StyleSheet } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import { AppWithDeveloperMenu } from '@/navigation/AppWithDeveloperMenu';
 import { ErrorBoundary } from '@/services/error/ErrorBoundary';
 import { errorLogger } from '@/services/error/ErrorLogger';
 import { environmentManager } from '@/config/environment';
 import { initializeMonitoring } from '@/services/firebase/monitoring';
+import { NetworkStatusBar } from '@/components/NetworkStatusBar';
 
 
 // 開發模式下載入除錯工具
@@ -108,7 +110,16 @@ export default function App() {
         }
       }}
     >
-      <AppWithDeveloperMenu />
+      <View style={styles.container}>
+        <NetworkStatusBar />
+        <AppWithDeveloperMenu />
+      </View>
     </ErrorBoundary>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

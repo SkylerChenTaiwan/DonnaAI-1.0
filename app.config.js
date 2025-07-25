@@ -27,8 +27,9 @@ export default {
       googleServicesFile: process.env.GOOGLE_SERVICES_PLIST || "./GoogleService-Info.plist",
       infoPlist: {
         UIBackgroundModes: ["audio"],
-        NSMicrophoneUsageDescription: "此應用需要錄音權限來記錄會議內容，協助您進行會議記錄和智能分析。",
-        NSCameraUsageDescription: "此應用需要相機權限來拍攝會議相關照片。",
+        NSMicrophoneUsageDescription: "DonnaAI 需要您的錄音權限來記錄會議音訊，並透過 AI 技術自動轉換為文字筆記。您的錄音將安全儲存且僅在您主動使用錄音功能時才會存取麥克風。",
+        NSCameraUsageDescription: "DonnaAI 需要相機權限來拍攝會議相關照片和掃描名片資料。您的照片將安全儲存且僅在您主動使用相機功能時才會存取相機。",
+        NSPhotoLibraryUsageDescription: "DonnaAI 需要相簿權限來選取會議相關照片。您的照片將安全處理且不會未經同意分享給第三方。",
         ITSAppUsesNonExemptEncryption: false
       },
       config: {
