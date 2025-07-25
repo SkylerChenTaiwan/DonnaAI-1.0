@@ -2,101 +2,35 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // 輔助函數：檢查用戶是否已登入
-    function isSignedIn() {
-      return request.auth != null;
-    }
+    // 調試版本 - 只處理 Super Admin 存取組織的問題
+    // 警告：這是最小權限的調試版本
     
-    // 輔助函數：檢查是否為系統管理員
-    function isSuperAdmin() {
-      return isSignedIn() && 
-        (request.auth.token.role == 'super_admin' || 
-         request.auth.token.role == 'system-admin' ||
-         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'system-admin');
-    }
-    
-    // 輔助函數：檢查是否為企業管理員
-    function isOrgAdmin(orgId) {
-      return isSignedIn() && 
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' &&
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.organizationId == orgId;
-    }
-    
-    // 輔助函數：檢查用戶是否屬於特定組織
-    function belongsToOrg(orgId) {
-      return isSignedIn() && 
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.organizationId == orgId;
-    }
-    
-    // 組織集合規則
+    // 組織集合 - 調試規則
     match /organizations/{orgId} {
-      // Super Admin 可以讀取和寫入所有組織
-      allow read, write: if isSuperAdmin();
+      // 方案1：如果用戶文檔中有 role = 'system-admin'
+      allow read: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'system-admin';
       
-      // 組織成員可以讀取自己的組織資料
-      allow read: if belongsToOrg(orgId);
+      // 方案2：如果 Auth Token 中有自定義聲明
+      allow read: if request.auth != null && 
+        request.auth.token.role == 'system-admin';
       
-      // 企業管理員可以更新自己的組織
-      allow update: if isOrgAdmin(orgId);
-      
-      // 組織內的子集合
-      match /{subcollection}/{document=**} {
-        // Super Admin 擁有完全權限
-        allow read, write: if isSuperAdmin();
+      // 方案3：特定 email (臨時調試用)
+      allow read: if request.auth != null && 
+        request.auth.token.email == 'admin@donnaai-app.com';
         
-        // 組織成員的權限取決於子集合類型
-        allow read: if belongsToOrg(orgId);
-        allow write: if belongsToOrg(orgId) && subcollection != 'admin_permissions';
-      }
+      // 禁止所有寫入（安全起見）
+      allow write: if false;
     }
     
-    // 用戶集合規則
+    // 用戶集合 - 最小權限
     match /users/{userId} {
-      // Super Admin 可以讀取和寫入所有用戶
-      allow read, write: if isSuperAdmin();
-      
-      // 用戶可以讀取自己的資料
-      allow read: if request.auth.uid == userId;
-      
-      // 用戶可以更新自己的部分資料（排除角色等敏感欄位）
-      allow update: if request.auth.uid == userId && 
-        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'organizationId']);
-      
-      // 企業管理員可以管理同組織的用戶
-      allow read, update: if isSignedIn() && 
-        isOrgAdmin(resource.data.organizationId) &&
-        resource.data.role != 'admin'; // 不能管理其他管理員
+      // 只允許讀取自己的資料
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false;
     }
     
-    // 團隊集合規則
-    match /teams/{teamId} {
-      // Super Admin 擁有完全權限
-      allow read, write: if isSuperAdmin();
-      
-      // 團隊成員可以讀取
-      allow read: if isSignedIn() && 
-        request.auth.uid in resource.data.memberIds;
-    }
-    
-    // 客戶集合規則
-    match /customers/{customerId} {
-      // Super Admin 不應該看到客戶資料（業務隔離）
-      allow read, write: if false;
-    }
-    
-    // 任務集合規則
-    match /tasks/{taskId} {
-      // Super Admin 不應該看到任務資料（業務隔離）
-      allow read, write: if false;
-    }
-    
-    // 會議記錄集合規則
-    match /records/{recordId} {
-      // Super Admin 不應該看到會議記錄（業務隔離）
-      allow read, write: if false;
-    }
-    
-    // 預設規則：拒絕所有其他請求
+    // 其他所有集合 - 全部禁止
     match /{document=**} {
       allow read, write: if false;
     }
