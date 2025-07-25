@@ -27,7 +27,7 @@ import {
 } from '@/services/firebase/admin';
 import { getFirebaseDb } from '@/services/firebase/config';
 import { collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore';
-import { getAuthStore } from '@/services/getStores';
+import { useAuthStore } from '@/stores/authStore';
 import {
   batchUpdateUserStatus,
   batchUpdateUserRole,
@@ -404,8 +404,7 @@ export const useAdminStore = create<AdminState>()(
         
         try {
           const db = getFirebaseDb();
-          const authStore = getAuthStore();
-          const currentUser = authStore.getState().user;
+          const currentUser = useAuthStore.getState().user;
           
           if (!currentUser?.organizationId) {
             throw new Error('無法獲取組織資訊');
