@@ -1,72 +1,11 @@
 /**
  * 核心使用者和組織型別定義
+ * 
+ * @deprecated 請使用 '@/types/entities' 匯入
+ * 此檔案保留是為了向後相容，將在未來版本中移除
  */
 
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-  role: 'salesperson' | 'manager' | 'admin' | 'super_admin' | 'system-admin';
-  organizationId: string;
-  teamIds?: string[]; // 可屬於多個團隊
-  managedTeamIds?: string[]; // 管理的團隊
-  createdAt: Date;
-  lastLoginAt: Date;
-  // CRM 相關欄位
-  department?: string;          // 部門
-  jobTitle?: string;           // 職稱
-  supervisorId?: string;       // 上級主管 ID
-  phoneNumber?: string;        // 電話號碼
-  avatar?: string;             // 頭像 URL
-  // Admin 相關欄位
-  isSuperAdmin?: boolean;      // 是否為平台管理員
-  platformPermissions?: string[]; // 平台權限（僅 super_admin）
-  // 其他欄位
-  isActive?: boolean;          // 用戶是否啟用
-  phone?: string;              // 電話
-  personalGoals?: {            // 個人目標
-    monthly?: number;
-    quarterly?: number;
-    yearly?: number;
-  };
-}
-
-export interface Organization {
-  id: string;
-  name: string;
-  subscriptionPlan: 'trial' | 'basic' | 'professional' | 'enterprise';
-  aiMinutesQuota: number; // 每月 AI 處理分鐘數
-  aiMinutesUsed: number;
-  createdAt: Date;
-  updatedAt?: Date;
-  // Admin 相關欄位
-  status?: 'active' | 'suspended' | 'cancelled' | 'expired';
-  domain?: string; // 企業網域
-  contactEmail?: string; // 主要聯絡信箱
-  maxUsers?: number; // 最大用戶數限制
-  // 統計資訊
-  stats?: {
-    totalUsers: number;
-    activeUsers: number;
-    totalRecords: number;
-    totalTasks: number;
-    totalCustomers: number;
-    storageUsed: number; // in MB
-  };
-}
-
-export interface Team {
-  id: string;
-  name: string;
-  organizationId: string;
-  parentTeamId?: string; // 用於樹狀結構
-  managerIds?: string[];
-  memberIds?: string[];
-}
-
-export type UserRole = User['role'];
-
-export interface UserWithTeams extends User {
-  teams: Team[];
-  managedTeams?: Team[];
-}
+// 重新匯出所有實體類型以保持向後相容
+export * from './entities/user';
+export * from './entities/organization';
+export * from './entities/team';
