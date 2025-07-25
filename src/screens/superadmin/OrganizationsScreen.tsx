@@ -30,7 +30,7 @@ type NavigationProp = StackNavigationProp<RootStackParamList, 'OrganizationsScre
 
 export const OrganizationsScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
-  const { isSuperAdmin, checkPermission } = useAdminAuth();
+  const { isSuperAdmin, checkPermission, user } = useAdminAuth();
   
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [filteredOrgs, setFilteredOrgs] = useState<Organization[]>([]);
@@ -49,6 +49,13 @@ export const OrganizationsScreen: React.FC = () => {
 
   // 載入組織列表
   useEffect(() => {
+    // 偵錯：檢查用戶資訊
+    console.log('🔍 OrganizationsScreen - 用戶資訊:', {
+      email: user?.email,
+      role: user?.role,
+      isSuperAdmin,
+      uid: user?.id
+    });
     loadOrganizations();
   }, []);
 
