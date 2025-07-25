@@ -21,6 +21,14 @@ export interface User {
   // Admin 相關欄位
   isSuperAdmin?: boolean;      // 是否為平台管理員
   platformPermissions?: string[]; // 平台權限（僅 super_admin）
+  // 其他欄位
+  isActive?: boolean;          // 用戶是否啟用
+  phone?: string;              // 電話
+  personalGoals?: {            // 個人目標
+    monthly?: number;
+    quarterly?: number;
+    yearly?: number;
+  };
 }
 
 export interface Organization {
@@ -36,6 +44,15 @@ export interface Organization {
   domain?: string; // 企業網域
   contactEmail?: string; // 主要聯絡信箱
   maxUsers?: number; // 最大用戶數限制
+  // 統計資訊
+  stats?: {
+    totalUsers: number;
+    activeUsers: number;
+    totalRecords: number;
+    totalTasks: number;
+    totalCustomers: number;
+    storageUsed: number; // in MB
+  };
 }
 
 export interface Team {

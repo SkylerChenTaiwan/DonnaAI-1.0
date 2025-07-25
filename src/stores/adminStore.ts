@@ -5,7 +5,7 @@
 
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { Organization } from '@/types/user';
+import { Organization, User } from '@/types/user';
 import { EnterpriseConfig, UsageMetrics, Period } from '@/types/admin';
 import {
   getOrganizations,
@@ -25,12 +25,19 @@ import {
   updateSubscriptionDetails,
   updateCustomSettings
 } from '@/services/firebase/admin';
+import { getFirebaseDb } from '@/services/firebase/config';
+import { collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { getAuthStore } from '@/services/getStores';
 
 interface AdminState {
   // 組織管理
   organizations: Organization[];
   selectedOrganization: Organization | null;
   organizationFilters: OrganizationFilters;
+  
+  // 用戶管理
+  users: User[];
+  loading: boolean;
   
   // 使用統計
   usageReport: UsageReport | null;
@@ -67,6 +74,11 @@ interface AdminState {
   updateSubscriptionDetails: (configId: string, updates: Partial<EnterpriseConfig['subscriptionDetails']>) => Promise<void>;
   updateCustomSettings: (configId: string, settings: Partial<EnterpriseConfig['customSettings']>) => Promise<void>;
   
+  // 用戶管理動作
+  refreshUsers: () => Promise<void>;
+  updateUserStatus: (userId: string, isActive: boolean) => Promise<void>;
+  updateUserRole: (userId: string, role: string) => Promise<void>;
+  
   // 工具動作
   clearError: () => void;
   reset: () => void;
@@ -76,6 +88,8 @@ const initialState = {
   organizations: [],
   selectedOrganization: null,
   organizationFilters: {},
+  users: [],
+  loading: false,
   usageReport: null,
   realtimeStats: null,
   enterpriseConfig: null,
@@ -369,6 +383,121 @@ export const useAdminStore = create<AdminState>()(
           set({ 
             error: error instanceof Error ? error.message : '更新自訂設定失敗',
             isLoading: false 
+          });
+          throw error;
+        }
+      },
+      
+      // 用戶管理動作
+      refreshUsers: async () => {
+        set({ loading: true, error: null });
+        
+        try {
+          const db = getFirebaseDb();
+          const authStore = getAuthStore();
+          const currentUser = authStore.getState().user;
+          
+          if (!currentUser?.organizationId) {
+            throw new Error('無法獲取組織資訊');
+          }
+          
+          // 獲取組織內的所有用戶
+          const usersRef = collection(db, 'users');
+          const q = query(
+            usersRef,
+            where('organizationId', '==', currentUser.organizationId)
+          );
+          
+          const snapshot = await getDocs(q);
+          const users: User[] = [];
+          
+          snapshot.forEach((doc) => {
+            const data = doc.data();
+            users.push({
+              id: doc.id,
+              email: data.email,
+              name: data.name,
+              role: data.role,
+              organizationId: data.organizationId,
+              department: data.department,
+              phone: data.phone,
+              createdAt: data.createdAt?.toDate(),
+              lastLoginAt: data.lastLoginAt?.toDate(),
+              isActive: data.isActive !== false, // 預設為 true
+              supervisorId: data.supervisorId,
+              teamIds: data.teamIds || [],
+              personalGoals: data.personalGoals || {}
+            } as User);
+          });
+          
+          // 按建立時間排序
+          users.sort((a, b) => {
+            const dateA = a.createdAt?.getTime() || 0;
+            const dateB = b.createdAt?.getTime() || 0;
+            return dateB - dateA;
+          });
+          
+          set({ users, loading: false });
+        } catch (error) {
+          set({ 
+            error: error instanceof Error ? error.message : '獲取用戶列表失敗',
+            loading: false 
+          });
+          throw error;
+        }
+      },
+      
+      updateUserStatus: async (userId: string, isActive: boolean) => {
+        set({ loading: true, error: null });
+        
+        try {
+          const db = getFirebaseDb();
+          const userRef = doc(db, 'users', userId);
+          
+          await updateDoc(userRef, {
+            isActive,
+            updatedAt: new Date()
+          });
+          
+          // 更新本地狀態
+          set(state => ({
+            users: state.users.map(user => 
+              user.id === userId ? { ...user, isActive } : user
+            ),
+            loading: false
+          }));
+        } catch (error) {
+          set({ 
+            error: error instanceof Error ? error.message : '更新用戶狀態失敗',
+            loading: false 
+          });
+          throw error;
+        }
+      },
+      
+      updateUserRole: async (userId: string, role: string) => {
+        set({ loading: true, error: null });
+        
+        try {
+          const db = getFirebaseDb();
+          const userRef = doc(db, 'users', userId);
+          
+          await updateDoc(userRef, {
+            role,
+            updatedAt: new Date()
+          });
+          
+          // 更新本地狀態
+          set(state => ({
+            users: state.users.map(user => 
+              user.id === userId ? { ...user, role } : user
+            ),
+            loading: false
+          }));
+        } catch (error) {
+          set({ 
+            error: error instanceof Error ? error.message : '更新用戶角色失敗',
+            loading: false 
           });
           throw error;
         }
