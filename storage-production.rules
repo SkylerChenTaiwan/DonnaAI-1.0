@@ -1,0 +1,69 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // 全域輔助函數
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function hasOrgAccess(orgId) {
+      return isAuthenticated() && 
+        firestore.exists(/databases/(default)/documents/users/$(request.auth.uid)) &&
+        firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.organizationId == orgId;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // 音訊檔案存儲
+    match /audio/{organizationId}/{userId}/{fileName} {
+      allow read: if hasOrgAccess(organizationId);
+      allow write: if isOwner(userId) && hasOrgAccess(organizationId) &&
+        request.resource.size < 100 * 1024 * 1024 && // 100MB 限制
+        request.resource.contentType.matches('audio/.*');
+      allow delete: if isOwner(userId) && hasOrgAccess(organizationId);
+    }
+    
+    // 用戶頭像
+    match /avatars/{userId}/{fileName} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId) &&
+        request.resource.size < 5 * 1024 * 1024 && // 5MB 限制
+        request.resource.contentType.matches('image/.*');
+      allow delete: if isOwner(userId);
+    }
+    
+    // 組織標誌
+    match /organizations/{organizationId}/logo/{fileName} {
+      allow read: if true; // 公開讀取
+      allow write: if hasOrgAccess(organizationId) &&
+        request.resource.size < 10 * 1024 * 1024 && // 10MB 限制
+        request.resource.contentType.matches('image/.*');
+      allow delete: if hasOrgAccess(organizationId);
+    }
+    
+    // 匯出檔案
+    match /exports/{organizationId}/{fileName} {
+      allow read: if hasOrgAccess(organizationId);
+      allow write: if hasOrgAccess(organizationId) &&
+        request.resource.size < 50 * 1024 * 1024; // 50MB 限制
+      allow delete: if hasOrgAccess(organizationId);
+    }
+    
+    // 暫存檔案（24小時後自動刪除）
+    match /temp/{organizationId}/{userId}/{fileName} {
+      allow read, write: if isOwner(userId) && hasOrgAccess(organizationId) &&
+        request.resource.size < 20 * 1024 * 1024; // 20MB 限制
+      allow delete: if isOwner(userId) && hasOrgAccess(organizationId);
+    }
+    
+    // 會議附件
+    match /attachments/{organizationId}/{recordId}/{fileName} {
+      allow read: if hasOrgAccess(organizationId);
+      allow write: if hasOrgAccess(organizationId) &&
+        request.resource.size < 25 * 1024 * 1024; // 25MB 限制
+      allow delete: if hasOrgAccess(organizationId);
+    }
+  }
+}

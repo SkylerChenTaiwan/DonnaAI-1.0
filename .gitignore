@@ -58,3 +58,5 @@ firebase-debug.log
 .firebase/
 service-account-key.json
 scripts/seed-data/service-account-key.json
+GoogleService-Info.plist
+google-services.json

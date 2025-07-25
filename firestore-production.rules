@@ -1,0 +1,116 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 全域輔助函數
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function hasOrgAccess(orgId) {
+      return isAuthenticated() && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.organizationId == orgId;
+    }
+    
+    function hasManagerAccess(orgId) {
+      return hasOrgAccess(orgId) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['manager', 'admin'];
+    }
+    
+    function isSystemAdmin() {
+      return isAuthenticated() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'system-admin';
+    }
+    
+    // 用戶資料
+    match /users/{userId} {
+      allow read: if isOwner(userId) || 
+        (hasOrgAccess(resource.data.organizationId) && request.auth.uid != userId) ||
+        isSystemAdmin();
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      allow update: if isOwner(userId) || isSystemAdmin();
+      allow delete: if isSystemAdmin();
+    }
+    
+    // 組織資料
+    match /organizations/{orgId} {
+      allow read: if hasOrgAccess(orgId) || isSystemAdmin();
+      allow create: if isSystemAdmin();
+      allow update: if hasManagerAccess(orgId) || isSystemAdmin();
+      allow delete: if isSystemAdmin();
+    }
+    
+    // 客戶資料
+    match /customers/{customerId} {
+      allow read: if hasOrgAccess(resource.data.organizationId);
+      allow create: if hasOrgAccess(request.resource.data.organizationId) &&
+        request.resource.data.createdBy == request.auth.uid;
+      allow update: if hasOrgAccess(resource.data.organizationId) &&
+        (resource.data.createdBy == request.auth.uid || hasManagerAccess(resource.data.organizationId));
+      allow delete: if hasOrgAccess(resource.data.organizationId) &&
+        (resource.data.createdBy == request.auth.uid || hasManagerAccess(resource.data.organizationId));
+    }
+    
+    // 會議記錄
+    match /records/{recordId} {
+      allow read: if hasOrgAccess(resource.data.organizationId);
+      allow create: if hasOrgAccess(request.resource.data.organizationId) &&
+        request.resource.data.createdBy == request.auth.uid;
+      allow update: if hasOrgAccess(resource.data.organizationId) &&
+        (resource.data.createdBy == request.auth.uid || hasManagerAccess(resource.data.organizationId));
+      allow delete: if hasOrgAccess(resource.data.organizationId) &&
+        hasManagerAccess(resource.data.organizationId);
+    }
+    
+    // 任務資料
+    match /tasks/{taskId} {
+      allow read: if hasOrgAccess(resource.data.organizationId);
+      allow create: if hasOrgAccess(request.resource.data.organizationId);
+      allow update: if hasOrgAccess(resource.data.organizationId) &&
+        (resource.data.assignedTo == request.auth.uid || 
+         resource.data.createdBy == request.auth.uid ||
+         hasManagerAccess(resource.data.organizationId));
+      allow delete: if hasOrgAccess(resource.data.organizationId) &&
+        hasManagerAccess(resource.data.organizationId);
+    }
+    
+    // AI 確認資料
+    match /ai_confirmations/{confirmationId} {
+      allow read: if hasOrgAccess(resource.data.organizationId);
+      allow create: if hasOrgAccess(request.resource.data.organizationId);
+      allow update: if hasOrgAccess(resource.data.organizationId) &&
+        resource.data.userId == request.auth.uid;
+      allow delete: if false; // 禁止刪除確認記錄
+    }
+    
+    // 儲存的報表
+    match /saved_reports/{reportId} {
+      allow read: if hasOrgAccess(resource.data.organizationId);
+      allow create: if hasOrgAccess(request.resource.data.organizationId) &&
+        request.resource.data.createdBy == request.auth.uid;
+      allow update: if hasOrgAccess(resource.data.organizationId) &&
+        resource.data.createdBy == request.auth.uid;
+      allow delete: if hasOrgAccess(resource.data.organizationId) &&
+        (resource.data.createdBy == request.auth.uid || hasManagerAccess(resource.data.organizationId));
+    }
+    
+    // 自訂欄位定義
+    match /custom_fields/{fieldId} {
+      allow read: if hasOrgAccess(resource.data.organizationId);
+      allow create, update: if hasManagerAccess(request.resource.data.organizationId);
+      allow delete: if hasManagerAccess(resource.data.organizationId);
+    }
+    
+    // 活動日誌（唯讀）
+    match /activity_logs/{logId} {
+      allow read: if hasOrgAccess(resource.data.organizationId);
+      allow create: if false; // 只能由 Cloud Functions 建立
+      allow update, delete: if false;
+    }
+  }
+}

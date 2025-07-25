@@ -12,6 +12,7 @@ import { AppWithDeveloperMenu } from '@/navigation/AppWithDeveloperMenu';
 import { ErrorBoundary } from '@/services/error/ErrorBoundary';
 import { errorLogger } from '@/services/error/ErrorLogger';
 import { environmentManager } from '@/config/environment';
+import { initializeMonitoring } from '@/services/firebase/monitoring';
 
 
 // 開發模式下載入除錯工具
@@ -77,6 +78,9 @@ export default function App() {
       try {
         // 驗證環境配置
         environmentManager.getConfig();
+        
+        // 初始化監控服務（Crashlytics 和 Performance）
+        await initializeMonitoring();
         
         // 隱藏啟動畫面
         await SplashScreen.hideAsync();

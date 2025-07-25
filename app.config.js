@@ -24,10 +24,15 @@ export default {
       supportsTablet: true,
       bundleIdentifier: "com.donnaai.app",
       buildNumber: "1.0.0",
+      googleServicesFile: process.env.GOOGLE_SERVICES_PLIST || "./GoogleService-Info.plist",
       infoPlist: {
         UIBackgroundModes: ["audio"],
         NSMicrophoneUsageDescription: "此應用需要錄音權限來記錄會議內容，協助您進行會議記錄和智能分析。",
-        NSCameraUsageDescription: "此應用需要相機權限來拍攝會議相關照片。"
+        NSCameraUsageDescription: "此應用需要相機權限來拍攝會議相關照片。",
+        ITSAppUsesNonExemptEncryption: false
+      },
+      config: {
+        usesNonExemptEncryption: false
       }
     },
     android: {
@@ -36,6 +41,7 @@ export default {
         backgroundColor: "#ffffff"
       },
       package: "com.donnaai.app",
+      googleServicesFile: process.env.GOOGLE_SERVICES_JSON || "./google-services.json",
       versionCode: 1,
       permissions: [
         "android.permission.RECORD_AUDIO",
@@ -58,6 +64,14 @@ export default {
       ["expo-notifications", {
         icon: "./assets/notification-icon.png",
         color: "#2563eb"
+      }],
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
+      "@react-native-firebase/crashlytics",
+      ["expo-build-properties", {
+        "ios": {
+          "useFrameworks": "static"
+        }
       }]
     ],
     extra: {
@@ -70,7 +84,10 @@ export default {
       firebaseMessagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
       firebaseAppId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
       env: process.env.EXPO_PUBLIC_ENV || 'development',
-      debug: process.env.EXPO_PUBLIC_DEBUG === 'true'
+      debug: process.env.EXPO_PUBLIC_DEBUG === 'true',
+      eas: {
+        projectId: "your-eas-project-id"
+      }
     },
     scheme: "donnaai",
     description: "DonnaAI - 您的 AI 業務助理平台，提供會議記錄、客戶管理、智能分析等功能。"
