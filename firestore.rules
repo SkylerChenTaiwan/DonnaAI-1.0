@@ -1,543 +1,104 @@
 rules_version = '2';
-
-// DonnaAI Firestore 安全規則
-// 支援企業級權限管理、自訂欄位和跨資料庫關聯
-
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // ====== 輔助函數 ======
-    
-    // 檢查使用者是否已認證
-    function isAuthenticated() {
+    // 輔助函數：檢查用戶是否已登入
+    function isSignedIn() {
       return request.auth != null;
     }
     
-    // 檢查使用者是否為文件擁有者
-    function isOwner(userId) {
-      return request.auth.uid == userId;
-    }
-    
-    // 檢查使用者是否為平台管理員（Super Admin）
+    // 輔助函數：檢查是否為系統管理員
     function isSuperAdmin() {
-      return isAuthenticated() && 
-             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin';
+      return isSignedIn() && 
+        (request.auth.token.role == 'super_admin' || 
+         request.auth.token.role == 'system-admin' ||
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'system-admin');
     }
     
-    // 檢查使用者是否為組織管理員
-    function isOrgAdmin() {
-      return isAuthenticated() && 
-             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    // 輔助函數：檢查是否為企業管理員
+    function isOrgAdmin(orgId) {
+      return isSignedIn() && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.organizationId == orgId;
     }
     
-    // 檢查使用者是否為主管或以上權限
-    function isManagerOrAdmin() {
-      return isAuthenticated() && 
-             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['manager', 'admin'];
+    // 輔助函數：檢查用戶是否屬於特定組織
+    function belongsToOrg(orgId) {
+      return isSignedIn() && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.organizationId == orgId;
     }
     
-    // 檢查使用者是否為企業管理員（包含組織管理員）
-    function isEnterpriseAdmin() {
-      return isOrgAdmin() || isSuperAdmin();
-    }
-    
-    // 取得使用者的組織 ID
-    function getUserOrgId() {
-      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.organizationId;
-    }
-    
-    // 檢查是否正在修改角色
-    function isChangingRole(data) {
-      return 'role' in data && data.role != resource.data.role;
-    }
-    
-    // 檢查使用者是否屬於指定團隊
-    function isTeamMember(teamId) {
-      return isAuthenticated() &&
-             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-             teamId in get(/databases/$(database)/documents/users/$(request.auth.uid)).data.teamIds;
-    }
-    
-    // 檢查使用者是否屬於指定組織
-    function isOrgMember(orgId) {
-      return isAuthenticated() &&
-             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.organizationId == orgId;
-    }
-    
-    // 檢查資料有效性
-    function isValidString(field, maxLength) {
-      return field is string && field.size() > 0 && field.size() <= maxLength;
-    }
-    
-    function isValidEmail(email) {
-      return email is string && email.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$');
-    }
-    
-    // ====== 使用者集合 ======
-    
-    match /users/{userId} {
-      // 讀取：使用者可以讀取自己的資料，或同組織的其他使用者資料
-      allow read: if isOwner(userId) || 
-                     (isAuthenticated() && isOrgMember(resource.data.organizationId));
-      
-      // 建立：只能建立自己的使用者資料
-      allow create: if isOwner(userId) &&
-                       isValidEmail(request.resource.data.email) &&
-                       isValidString(request.resource.data.name, 100) &&
-                       request.resource.data.organizationId is string &&
-                       request.resource.data.createdAt == request.time &&
-                       request.resource.data.updatedAt == request.time;
-      
-      // 更新：可以更新自己的資料，管理員可以更新同組織使用者資料
-      allow update: if (isOwner(userId) || 
-                       (isOrgAdmin() && isOrgMember(resource.data.organizationId))) &&
-                       // 不允許修改重要欄位
-                       request.resource.data.email == resource.data.email &&
-                       request.resource.data.organizationId == resource.data.organizationId;
-      
-      // 刪除：只有管理員可以刪除
-      allow delete: if isOrgAdmin() && isOrgMember(resource.data.organizationId);
-    }
-    
-    // ====== 組織集合 ======
-    
+    // 組織集合規則
     match /organizations/{orgId} {
-      // 讀取：組織成員可以讀取
-      allow read: if isOrgMember(orgId);
-      
-      // 建立：任何認證使用者都可以建立組織（通常用於註冊流程）
-      allow create: if isAuthenticated() &&
-                       isValidString(request.resource.data.name, 200) &&
-                       request.resource.data.createdBy == request.auth.uid &&
-                       request.resource.data.createdAt == request.time;
-      
-      // 更新：只有組織管理員可以更新
-      allow update: if isOrgAdmin() && isOrgMember(orgId);
-      
-      // 刪除：只有組織管理員可以刪除
-      allow delete: if isOrgAdmin() && isOrgMember(orgId);
-    }
-    
-    // ====== 團隊集合 ======
-    
-    match /teams/{teamId} {
-      // 讀取：團隊成員或組織成員可以讀取（允許按組織ID查詢）
-      allow read: if isTeamMember(teamId) || 
-                     (isAuthenticated() && 
-                      'organizationId' in resource.data &&
-                      isOrgMember(resource.data.organizationId));
-      
-      // 建立：組織管理員可以建立團隊
-      allow create: if isOrgAdmin() &&
-                       isOrgMember(request.resource.data.organizationId) &&
-                       isValidString(request.resource.data.name, 100) &&
-                       request.resource.data.createdBy == request.auth.uid;
-      
-      // 更新：組織管理員或團隊管理員可以更新
-      allow update: if (isOrgAdmin() || 
-                       request.auth.uid in resource.data.adminIds) &&
-                       isOrgMember(resource.data.organizationId);
-      
-      // 刪除：只有組織管理員可以刪除
-      allow delete: if isOrgAdmin() && isOrgMember(resource.data.organizationId);
-    }
-    
-    // ====== 客戶集合 ======
-    
-    match /customers/{customerId} {
-      // 讀取：認證使用者都可以讀取（查詢時會在應用層過濾）
-      allow read: if isAuthenticated();
-      
-      // 建立：團隊成員可以建立客戶
-      allow create: if isTeamMember(request.resource.data.teamId) &&
-                       isOrgMember(request.resource.data.organizationId) &&
-                       isValidString(request.resource.data.name, 100) &&
-                       isValidString(request.resource.data.company, 200) &&
-                       request.resource.data.createdBy == request.auth.uid &&
-                       request.resource.data.createdAt == request.time &&
-                       request.resource.data.updatedAt == request.time &&
-                       // 驗證自訂欄位（如果存在）
-                       (!('customFields' in request.resource.data) || 
-                        request.resource.data.customFields is map);
-      
-      // 更新：指派的負責人或管理員可以更新
-      allow update: if (isTeamMember(resource.data.teamId) &&
-                       (request.auth.uid == resource.data.assignedTo || 
-                        isOrgAdmin())) &&
-                       // 不允許修改組織和團隊
-                       request.resource.data.organizationId == resource.data.organizationId &&
-                       request.resource.data.teamId == resource.data.teamId;
-      
-      // 刪除：只有管理員可以刪除
-      allow delete: if isOrgAdmin() && isOrgMember(resource.data.organizationId);
-    }
-    
-    // ====== 紀錄集合 ======
-    
-    match /records/{recordId} {
-      // 讀取：認證使用者都可以讀取（查詢時會在應用層過濾）
-      allow read: if isAuthenticated();
-      
-      // 建立：團隊成員可以建立紀錄
-      allow create: if isTeamMember(request.resource.data.teamId) &&
-                       isOrgMember(request.resource.data.organizationId) &&
-                       request.resource.data.type in ['meeting', 'call', 'note', 'other'] &&
-                       isValidString(request.resource.data.title, 200) &&
-                       request.resource.data.status in ['draft', 'processing', 'completed'] &&
-                       request.resource.data.createdBy == request.auth.uid &&
-                       request.resource.data.createdAt == request.time &&
-                       request.resource.data.updatedAt == request.time;
-      
-      // 更新：建立者或參與者可以更新
-      allow update: if isTeamMember(resource.data.teamId) &&
-                       (request.auth.uid == resource.data.createdBy ||
-                        request.auth.uid in resource.data.participantIds ||
-                        isOrgAdmin()) &&
-                       // 不允許修改建立者
-                       request.resource.data.createdBy == resource.data.createdBy;
-      
-      // 刪除：建立者或管理員可以刪除
-      allow delete: if isTeamMember(resource.data.teamId) &&
-                       (request.auth.uid == resource.data.createdBy || isOrgAdmin());
-    }
-    
-    // ====== 任務集合 ======
-    
-    match /tasks/{taskId} {
-      // 讀取：認證使用者都可以讀取（查詢時會在應用層過濾）
-      allow read: if isAuthenticated();
-      
-      // 建立：團隊成員可以建立任務
-      allow create: if isTeamMember(request.resource.data.teamId) &&
-                       isOrgMember(request.resource.data.organizationId) &&
-                       request.resource.data.type in ['scheduled', 'unscheduled', 'pending'] &&
-                       request.resource.data.priority in ['low', 'medium', 'high', 'urgent'] &&
-                       request.resource.data.status in ['todo', 'completed'] &&
-                       request.resource.data.source in ['manual', 'ai_extracted', 'calendar_sync', 'voice'] &&
-                       isValidString(request.resource.data.title, 200) &&
-                       request.resource.data.createdAt != null &&
-                       request.resource.data.updatedAt != null &&
-                       request.resource.data.createdBy == request.auth.uid;
-      
-      // 更新：指派的負責人、指派者或管理員可以更新
-      allow update: if isTeamMember(resource.data.teamId) &&
-                       (request.auth.uid == resource.data.assigneeId ||
-                        request.auth.uid == resource.data.assignerId ||
-                        isOrgAdmin());
-      
-      // 刪除：指派者或管理員可以刪除
-      allow delete: if isTeamMember(resource.data.teamId) &&
-                       (request.auth.uid == resource.data.assignerId || isOrgAdmin());
-    }
-    
-    // ====== 自訂欄位定義集合 ======
-    
-    match /customFieldDefinitions/{fieldId} {
-      // 讀取：組織成員可以讀取
-      allow read: if isOrgMember(resource.data.organizationId);
-      
-      // 建立：管理員或有權限的使用者可以建立
-      allow create: if isOrgMember(request.resource.data.organizationId) &&
-                       (isOrgAdmin() || 
-                        request.auth.uid in request.resource.data.permissions.canEdit) &&
-                       request.resource.data.fieldType in ['text', 'number', 'date', 'select', 'multiselect', 'boolean'] &&
-                       request.resource.data.entityType in ['customer', 'record'] &&
-                       isValidString(request.resource.data.fieldKey, 50) &&
-                       isValidString(request.resource.data.fieldName, 100) &&
-                       request.resource.data.createdBy == request.auth.uid &&
-                       request.resource.data.createdAt == request.time;
-      
-      // 更新：建立者或有權限的使用者可以更新
-      allow update: if isOrgMember(resource.data.organizationId) &&
-                       (request.auth.uid == resource.data.createdBy ||
-                        request.auth.uid in resource.data.permissions.canEdit ||
-                        isOrgAdmin()) &&
-                       // 不允許修改關鍵欄位
-                       request.resource.data.fieldKey == resource.data.fieldKey &&
-                       request.resource.data.organizationId == resource.data.organizationId &&
-                       request.resource.data.entityType == resource.data.entityType;
-      
-      // 刪除：建立者或管理員可以刪除
-      allow delete: if isOrgMember(resource.data.organizationId) &&
-                       (request.auth.uid == resource.data.createdBy || isOrgAdmin());
-    }
-    
-    // ====== AI 確認請求集合 ======
-    
-    match /aiConfirmations/{confirmationId} {
-      // 讀取：組織成員可以讀取
-      allow read: if isOrgMember(resource.data.organizationId);
-      
-      // 建立：系統自動建立（通過 Cloud Functions）
-      allow create: if isAuthenticated() &&
-                       request.resource.data.status in ['pending', 'confirmed', 'rejected', 'modified'] &&
-                       request.resource.data.createdAt == request.time;
-      
-      // 更新：任何組織成員都可以審核確認請求
-      allow update: if isOrgMember(resource.data.organizationId) &&
-                       request.resource.data.status in ['confirmed', 'rejected', 'modified'] &&
-                       // 記錄審核者和時間
-                       request.resource.data.reviewedBy == request.auth.uid &&
-                       request.resource.data.reviewedAt == request.time;
-      
-      // 刪除：管理員可以刪除
-      allow delete: if isOrgAdmin() && isOrgMember(resource.data.organizationId);
-    }
-    
-    // ====== 行事曆同步設定集合 ======
-    
-    match /calendarSyncSettings/{userId} {
-      // 只有使用者自己可以存取同步設定
-      allow read, write: if isOwner(userId);
-    }
-    
-    match /calendarSync/{userId} {
-      // 只有使用者自己可以存取同步狀態
-      allow read, write: if isOwner(userId);
-    }
-    
-    // ====== AI 使用記錄集合 ======
-    
-    match /aiUsageLogs/{logId} {
-      // 讀取：管理員可以查看使用記錄
-      allow read: if isOrgAdmin();
-      
-      // 建立：系統自動記錄（通過 Cloud Functions）
-      allow create: if isAuthenticated();
-      
-      // 更新和刪除：不允許
-      allow update, delete: if false;
-    }
-    
-    // ====== 通知集合 ======
-    
-    match /notifications/{notificationId} {
-      // 讀取：只有通知接收者可以讀取
-      allow read: if isOwner(resource.data.userId);
-      
-      // 建立：系統自動建立
-      allow create: if isAuthenticated();
-      
-      // 更新：只能標記為已讀
-      allow update: if isOwner(resource.data.userId) &&
-                       request.resource.data.keys().hasOnly(['read', 'readAt']) &&
-                       request.resource.data.read == true &&
-                       request.resource.data.readAt == request.time;
-      
-      // 刪除：接收者可以刪除自己的通知
-      allow delete: if isOwner(resource.data.userId);
-    }
-    
-    // ====== 公告集合 ======
-    
-    match /announcements/{announcementId} {
-      // 讀取：只有目標用戶可以讀取
-      allow read: if isAuthenticated() && 
-                     (request.auth.uid in resource.data.targetUsers ||
-                      isTeamMember(resource.data.teamId));
-      
-      // 建立：只有主管和管理員可以建立
-      allow create: if isManagerOrAdmin() &&
-                       // 驗證必填欄位
-                       request.resource.data.keys().hasAll(['title', 'content', 'createdBy', 'targetUsers', 'priority', 'organizationId']) &&
-                       isValidString(request.resource.data.title, 200) &&
-                       isValidString(request.resource.data.content, 5000) &&
-                       request.resource.data.createdBy == request.auth.uid &&
-                       request.resource.data.targetUsers is list &&
-                       request.resource.data.priority in ['high', 'normal', 'low'];
-      
-      // 更新：只能更新已讀狀態
-      allow update: if isAuthenticated() &&
-                       request.auth.uid in resource.data.targetUsers &&
-                       request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isRead']) &&
-                       request.resource.data.isRead[request.auth.uid] == true;
-      
-      // 刪除：只有創建者或管理員可以刪除
-      allow delete: if isOwner(resource.data.createdBy) || isOrgAdmin();
-    }
-    
-    // ====== 保存的報表集合 ======
-    
-    match /savedReports/{reportId} {
-      // 讀取：認證用戶都可以讀取（查詢時會在應用層過濾）
-      // 注意：這裡採用與其他集合相同的模式，允許認證用戶讀取，
-      // 實際的權限過濾在查詢條件中實現（createdBy == userId 或 isPublic == true）
-      allow read: if isAuthenticated();
-      
-      // 建立：任何認證用戶都可以建立
-      allow create: if isAuthenticated() &&
-                       // 驗證必填欄位
-                       request.resource.data.keys().hasAll(['name', 'query', 'chartType', 'chartData', 'createdBy', 'organizationId', 'isPublic']) &&
-                       isValidString(request.resource.data.name, 200) &&
-                       isValidString(request.resource.data.query, 1000) &&
-                       request.resource.data.createdBy == request.auth.uid &&
-                       request.resource.data.isPublic is bool;
-      
-      // 更新：只有創建者可以更新
-      allow update: if isOwner(resource.data.createdBy) &&
-                       // 不能修改創建者
-                       request.resource.data.createdBy == resource.data.createdBy;
-      
-      // 刪除：只有創建者或管理員可以刪除
-      allow delete: if isOwner(resource.data.createdBy) || isOrgAdmin();
-    }
-
-    // ====== 使用者設定集合 ======
-    
-    match /organizations/{orgId}/settings/{userId} {
-      // 讀取：使用者只能讀取自己的設定
-      allow read: if isAuthenticated() && 
-                     isOrgMember(orgId) && 
-                     isOwner(userId);
-      
-      // 建立：使用者只能建立自己的設定
-      allow create: if isAuthenticated() && 
-                       isOrgMember(orgId) &&
-                       isOwner(userId) &&
-                       request.resource.data.userId == request.auth.uid &&
-                       request.resource.data.updatedAt != null;
-      
-      // 更新：使用者只能更新自己的設定
-      allow update: if isAuthenticated() && 
-                       isOrgMember(orgId) &&
-                       isOwner(userId) &&
-                       // 確保不能修改 userId
-                       request.resource.data.userId == resource.data.userId;
-      
-      // 刪除：使用者可以刪除自己的設定
-      allow delete: if isAuthenticated() && 
-                       isOrgMember(orgId) &&
-                       isOwner(userId);
-    }
-    
-    // ====== 系統配置集合（僅管理員可存取）======
-    
-    match /systemConfig/{configId} {
-      allow read, write: if isOrgAdmin();
-    }
-    
-    // ====== 審計日誌集合（僅讀取）======
-    
-    match /auditLogs/{logId} {
-      // 只有管理員可以查看審計日誌
-      allow read: if isOrgAdmin();
-      
-      // 只允許系統寫入，不允許用戶端修改
-      allow write: if false;
-    }
-    
-    // ====== 舊版集合（向後相容）======
-    
-    // 保留舊的 meetings 集合規則以便遷移
-    match /meetings/{meetingId} {
-      allow read: if isTeamMember(resource.data.teamId);
-      allow write: if false; // 停用寫入，引導使用新的 records 集合
-    }
-    
-    // ====== Admin 管理系統集合 ======
-    
-    // 企業配置集合
-    match /enterprise_configs/{configId} {
-      // 讀取：Super Admin 或該組織的管理員可以讀取
-      allow read: if isSuperAdmin() || 
-                     (isEnterpriseAdmin() && resource.data.organizationId == getUserOrgId());
-      
-      // 寫入：只有 Super Admin 可以寫入
-      allow create, update, delete: if isSuperAdmin();
-    }
-    
-    // 使用統計集合
-    match /usage_metrics/{orgId}/{period}/{date} {
-      // 讀取：Super Admin 或該組織的管理員可以讀取
-      allow read: if isSuperAdmin() || 
-                     (isEnterpriseAdmin() && orgId == getUserOrgId());
-      
-      // 寫入：只允許系統寫入（通過 Cloud Functions）
-      allow write: if false;
-    }
-    
-    // 平台管理員集合
-    match /platform_admins/{adminId} {
-      // 只有 Super Admin 可以讀寫
+      // Super Admin 可以讀取和寫入所有組織
       allow read, write: if isSuperAdmin();
+      
+      // 組織成員可以讀取自己的組織資料
+      allow read: if belongsToOrg(orgId);
+      
+      // 企業管理員可以更新自己的組織
+      allow update: if isOrgAdmin(orgId);
+      
+      // 組織內的子集合
+      match /{subcollection}/{document=**} {
+        // Super Admin 擁有完全權限
+        allow read, write: if isSuperAdmin();
+        
+        // 組織成員的權限取決於子集合類型
+        allow read: if belongsToOrg(orgId);
+        allow write: if belongsToOrg(orgId) && subcollection != 'admin_permissions';
+      }
     }
     
-    // 資料匯入任務集合
-    match /import_jobs/{jobId} {
-      // 讀取：Super Admin 或該組織的管理員可以讀取
-      allow read: if isSuperAdmin() || 
-                     (isEnterpriseAdmin() && resource.data.organizationId == getUserOrgId());
-      
-      // 建立：企業管理員可以建立匯入任務
-      allow create: if isEnterpriseAdmin() &&
-                       request.resource.data.organizationId == getUserOrgId() &&
-                       request.resource.data.createdBy == request.auth.uid &&
-                       request.resource.data.status == 'pending';
-      
-      // 更新：只能更新狀態和進度
-      allow update: if isSuperAdmin() || 
-                       (isEnterpriseAdmin() && 
-                        resource.data.organizationId == getUserOrgId() &&
-                        request.resource.data.diff(resource.data).affectedKeys()
-                          .hasOnly(['status', 'progress', 'result', 'completedAt']));
-      
-      // 刪除：只有 Super Admin 可以刪除
-      allow delete: if isSuperAdmin();
-    }
-    
-    // 組織集合更新（允許 Super Admin 完全控制）
-    match /organizations/{orgId} {
-      // Super Admin 可以讀取所有組織
-      allow read: if isSuperAdmin() || isOrgMember(orgId);
-      
-      // Super Admin 可以建立、更新、刪除任何組織
-      allow create: if isSuperAdmin() || 
-                       (isAuthenticated() &&
-                        isValidString(request.resource.data.name, 200) &&
-                        request.resource.data.createdBy == request.auth.uid &&
-                        request.resource.data.createdAt == request.time);
-      
-      allow update: if isSuperAdmin() || 
-                       (isOrgAdmin() && isOrgMember(orgId));
-      
-      allow delete: if isSuperAdmin();
-    }
-    
-    // 使用者集合更新（允許 Super Admin 和 Enterprise Admin 管理用戶）
+    // 用戶集合規則
     match /users/{userId} {
-      // Super Admin 可以讀取所有用戶
-      allow read: if isSuperAdmin() ||
-                     isOwner(userId) || 
-                     (isAuthenticated() && isOrgMember(resource.data.organizationId));
+      // Super Admin 可以讀取和寫入所有用戶
+      allow read, write: if isSuperAdmin();
       
-      // 建立用戶的權限
-      allow create: if isSuperAdmin() ||
-                       (isOwner(userId) &&
-                        isValidEmail(request.resource.data.email) &&
-                        isValidString(request.resource.data.name, 100) &&
-                        request.resource.data.organizationId is string &&
-                        request.resource.data.createdAt == request.time &&
-                        request.resource.data.updatedAt == request.time) ||
-                       (isEnterpriseAdmin() && 
-                        request.resource.data.organizationId == getUserOrgId());
+      // 用戶可以讀取自己的資料
+      allow read: if request.auth.uid == userId;
       
-      // 更新用戶的權限
-      allow update: if isSuperAdmin() ||
-                       (isOwner(userId) && 
-                        request.resource.data.email == resource.data.email &&
-                        request.resource.data.organizationId == resource.data.organizationId &&
-                        !isChangingRole(request.resource.data)) ||
-                       (isEnterpriseAdmin() && 
-                        isOrgMember(resource.data.organizationId) &&
-                        request.resource.data.organizationId == resource.data.organizationId);
+      // 用戶可以更新自己的部分資料（排除角色等敏感欄位）
+      allow update: if request.auth.uid == userId && 
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'organizationId']);
       
-      // 刪除用戶的權限
-      allow delete: if isSuperAdmin() ||
-                       (isEnterpriseAdmin() && isOrgMember(resource.data.organizationId));
+      // 企業管理員可以管理同組織的用戶
+      allow read, update: if isSignedIn() && 
+        isOrgAdmin(resource.data.organizationId) &&
+        resource.data.role != 'admin'; // 不能管理其他管理員
+    }
+    
+    // 團隊集合規則
+    match /teams/{teamId} {
+      // Super Admin 擁有完全權限
+      allow read, write: if isSuperAdmin();
+      
+      // 團隊成員可以讀取
+      allow read: if isSignedIn() && 
+        request.auth.uid in resource.data.memberIds;
+    }
+    
+    // 客戶集合規則
+    match /customers/{customerId} {
+      // Super Admin 不應該看到客戶資料（業務隔離）
+      allow read, write: if false;
+    }
+    
+    // 任務集合規則
+    match /tasks/{taskId} {
+      // Super Admin 不應該看到任務資料（業務隔離）
+      allow read, write: if false;
+    }
+    
+    // 會議記錄集合規則
+    match /records/{recordId} {
+      // Super Admin 不應該看到會議記錄（業務隔離）
+      allow read, write: if false;
+    }
+    
+    // 預設規則：拒絕所有其他請求
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

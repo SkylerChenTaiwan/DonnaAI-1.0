@@ -199,7 +199,7 @@ export const OrganizationsScreen: React.FC = () => {
   }
 
   return (
-    <Layout style={styles.container}>
+    <Layout style={styles.container} scrollable={false}>
       <View style={styles.header}>
         <Text style={styles.title}>組織管理</Text>
         <TouchableOpacity
