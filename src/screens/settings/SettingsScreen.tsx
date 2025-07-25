@@ -36,6 +36,10 @@ export const SettingsScreen: React.FC = () => {
   const { enabled: notificationsEnabled, toggleNotifications } = useNotificationSettings();
   const { enabled: soundsEnabled, toggleSounds } = useSoundSettings();
 
+  // 計算用戶權限
+  const isSuperAdmin = user?.isSuperAdmin || user?.role === 'super_admin';
+  const isEnterpriseAdmin = user?.role === 'admin';
+
   // 初始化音效管理器
   useEffect(() => {
     soundManager.initialize().catch(console.error);
@@ -129,8 +133,27 @@ export const SettingsScreen: React.FC = () => {
     navigation.navigate('PrivacyPolicy');
   };
 
+  const handleOpenAdmin = () => {
+    navigation.navigate('AdminScreen' as any);
+  };
+
   // 設定區塊
   const sections: SettingSectionType[] = [
+    // Admin 管理區塊（僅限管理員）
+    ...(isSuperAdmin || isEnterpriseAdmin ? [{
+      id: 'admin',
+      title: '管理功能',
+      items: [
+        {
+          id: 'admin-panel',
+          title: isSuperAdmin ? '系統管理' : '企業管理',
+          subtitle: isSuperAdmin ? '管理所有組織和用戶' : '管理組織用戶和設定',
+          type: 'navigation' as const,
+          icon: 'settings-outline' as const,
+          action: handleOpenAdmin,
+        },
+      ],
+    }] : []),
     {
       id: 'general',
       title: '一般設定',
