@@ -140,6 +140,18 @@ service cloud.firestore {
       allow write: if isOrgAdmin(orgId) || isSuperAdmin();
     }
     
+    // 企業配置集合
+    match /enterprise_configs/{configId} {
+      // Super Admin 可以讀寫所有配置
+      allow read, write: if isSuperAdmin();
+      // 組織管理員可以讀取和更新自己組織的配置
+      allow read: if request.auth != null && 
+        getUserData().organizationId == resource.data.organizationId;
+      allow update: if request.auth != null && 
+        getUserData().role == 'admin' &&
+        getUserData().organizationId == resource.data.organizationId;
+    }
+    
     // 系統統計（只有 Super Admin 可以存取）
     match /systemStats/{statId} {
       allow read: if isSuperAdmin();
