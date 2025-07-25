@@ -37,8 +37,18 @@ export const SettingsScreen: React.FC = () => {
   const { enabled: soundsEnabled, toggleSounds } = useSoundSettings();
 
   // 計算用戶權限
-  const isSuperAdmin = user?.isSuperAdmin || user?.role === 'super_admin';
+  const isSuperAdmin = user?.isSuperAdmin || user?.role === 'super_admin' || user?.role === 'system-admin';
   const isEnterpriseAdmin = user?.role === 'admin';
+
+  // 除錯：檢查用戶權限狀況
+  console.log('🔍 SettingsScreen 權限檢查:', {
+    userEmail: user?.email,
+    userRole: user?.role,
+    isSuperAdmin: user?.isSuperAdmin,
+    calculatedIsSuperAdmin: isSuperAdmin,
+    calculatedIsEnterpriseAdmin: isEnterpriseAdmin,
+    hasAdminAccess: isSuperAdmin || isEnterpriseAdmin
+  });
 
   // 初始化音效管理器
   useEffect(() => {
@@ -134,7 +144,13 @@ export const SettingsScreen: React.FC = () => {
   };
 
   const handleOpenAdmin = () => {
-    navigation.navigate('AdminScreen' as any);
+    if (isSuperAdmin) {
+      // 系統管理員導航到 Super Admin Dashboard
+      navigation.navigate('SuperAdminDashboard' as any);
+    } else {
+      // 企業管理員導航到 Enterprise Admin Dashboard
+      navigation.navigate('AdminDashboard' as any);
+    }
   };
 
   // 設定區塊
