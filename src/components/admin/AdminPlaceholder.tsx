@@ -4,8 +4,7 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Layout } from '@/components/common/Layout';
 import { DesignSystem } from '@/theme/designSystem';
@@ -21,16 +20,8 @@ export const AdminPlaceholder: React.FC<AdminPlaceholderProps> = ({
   description,
   icon = 'construct-outline'
 }) => {
-  const navigation = useNavigation();
-
   return (
-    <Layout 
-      style={styles.container}
-      headerProps={{
-        title: title,
-        showBack: true
-      }}
-    >
+    <Layout style={styles.container}>
       <View style={styles.content}>
         <View style={styles.iconContainer}>
           <Ionicons name={icon} size={64} color={DesignSystem.colors.gray[400]} />

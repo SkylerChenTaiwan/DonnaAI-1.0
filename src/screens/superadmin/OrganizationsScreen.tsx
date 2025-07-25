@@ -206,21 +206,17 @@ export const OrganizationsScreen: React.FC = () => {
   }
 
   return (
-    <Layout 
-      style={styles.container} 
-      scrollable={false}
-      headerProps={{
-        title: '組織管理',
-        rightComponent: (
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={handleCreateOrganization}
-          >
-            <Ionicons name="add" size={24} color={DesignSystem.colors.text.inverse} />
-          </TouchableOpacity>
-        )
-      }}
-    >
+    <Layout style={styles.container} scrollable={false}>
+      <View style={styles.header}>
+        <Text style={styles.title}>組織管理</Text>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={handleCreateOrganization}
+        >
+          <Ionicons name="add" size={24} color={DesignSystem.colors.text.inverse} />
+        </TouchableOpacity>
+      </View>
+      
       <View style={styles.searchContainer}>
         <SearchBar
           value={searchQuery}
@@ -277,6 +273,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: DesignSystem.colors.background.primary,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: DesignSystem.spacing.lg,
+    backgroundColor: DesignSystem.colors.background.surface,
+    borderBottomWidth: 1,
+    borderBottomColor: DesignSystem.colors.border.light,
+  },
+  title: {
+    ...DesignSystem.typography.h1,
+    color: DesignSystem.colors.text.primary,
   },
   addButton: {
     width: 40,
