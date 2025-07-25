@@ -24,17 +24,13 @@ export const AdminPlaceholder: React.FC<AdminPlaceholderProps> = ({
   const navigation = useNavigation();
 
   return (
-    <Layout style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="arrow-back" size={24} color={DesignSystem.colors.text.primary} />
-        </TouchableOpacity>
-        <Text style={styles.title}>{title}</Text>
-      </View>
-
+    <Layout 
+      style={styles.container}
+      headerProps={{
+        title: title,
+        showBack: true
+      }}
+    >
       <View style={styles.content}>
         <View style={styles.iconContainer}>
           <Ionicons name={icon} size={64} color={DesignSystem.colors.gray[400]} />
@@ -50,21 +46,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: DesignSystem.colors.background.primary,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: DesignSystem.spacing.lg,
-    backgroundColor: DesignSystem.colors.background.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
-  backButton: {
-    marginRight: DesignSystem.spacing.md,
-  },
-  title: {
-    ...DesignSystem.typography.h1,
-    color: DesignSystem.colors.text.primary,
   },
   content: {
     flex: 1,

@@ -92,6 +92,12 @@
 - **Always confirm file paths and module names** exist before referencing them in code or tests.
 - **Never delete or overwrite existing code** unless explicitly instructed to or if part of a task from `TASK.md`.
 
+### 🎨 UI/UX 開發原則
+- **避免重複的標題區塊** - 如果 Layout 元件已經提供 header 功能，不要在內容中再建立一個標題區塊
+- **善用 Layout headerProps** - 使用 `headerProps` 屬性設定標題、返回按鈕、右側元件等
+- **保持一致的導航體驗** - 不要在不同頁面使用不同的 header 樣式
+- **避免重複實作導航元件** - 使用統一的 Layout 元件管理所有頁面的 header、返回按鈕等
+
 ### 🚨 Error Analysis Protocol
 - **NEVER fix errors immediately** - create an analysis report first at `/docs/error-reports/[date]-[error-description].md`
 - **Error report must include**: root cause analysis, multiple solution options, impact assessment
