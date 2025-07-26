@@ -7,6 +7,11 @@ import * as admin from "firebase-admin";
 import OpenAI from "openai";
 import * as functions from "firebase-functions";
 
+// 初始化 Firebase Admin
+if (!admin.apps.length) {
+  admin.initializeApp();
+}
+
 const db = admin.firestore();
 const openaiApiKey = functions.config().openai?.api_key;
 const openai = openaiApiKey ? new OpenAI({apiKey: openaiApiKey}) : null;

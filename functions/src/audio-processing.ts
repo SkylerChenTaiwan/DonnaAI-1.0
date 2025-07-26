@@ -25,10 +25,10 @@ const speechClient = new SpeechClient();
  */
 export const processAudioFile = onObjectFinalized(
   {
-    region: 'asia-east1',
-    memory: '2GiB',
+    region: "asia-east1",
+    memory: "2GiB",
     timeoutSeconds: 540,
-    secrets: ['OPENAI_API_KEY', 'CLAUDE_API_KEY', 'GEMINI_API_KEY']
+    secrets: ["OPENAI_API_KEY", "CLAUDE_API_KEY", "GEMINI_API_KEY"]
   },
   async (event) => {
     const object = event.data;
@@ -122,7 +122,7 @@ export const processAudioFile = onObjectFinalized(
 
       // 計算音訊時長（分鐘）
       const duration = Math.ceil(
-        (response.results?.[0]?.resultEndTime?.seconds || 0) / 60
+        Number(response.results?.[0]?.resultEndTime?.seconds || 0) / 60
       );
 
       // 從轉錄文字中提取自訂欄位

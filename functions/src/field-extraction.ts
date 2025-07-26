@@ -13,8 +13,7 @@ if (!admin.apps.length) {
   admin.initializeApp();
 }
 
-const db = admin.firestore();
-const corsHandler = cors({origin: true});
+const corsHandler = cors.default({origin: true});
 
 // 從環境變數獲取 API 金鑰
 const openaiApiKey = functions.config().openai?.api_key;

@@ -4,13 +4,13 @@
 
 export const productionConfig = {
   // 區域設定
-  region: 'asia-east1',
+  region: "asia-east1",
   
   // 記憶體配置
   memory: {
-    default: '1GiB',
-    aiProcessing: '2GiB',
-    batchProcessing: '4GiB'
+    default: "1GiB",
+    aiProcessing: "2GiB",
+    batchProcessing: "4GiB"
   },
   
   // 逾時設定
@@ -28,25 +28,25 @@ export const productionConfig = {
   
   // CORS 設定
   corsOrigins: [
-    'https://donnaai.app',
-    'https://donnaai-production.web.app',
-    'https://donnaai-production.firebaseapp.com'
+    "https://donnaai.app",
+    "https://donnaai-production.web.app",
+    "https://donnaai-production.firebaseapp.com"
   ],
   
   // AI 模型配置
   aiModels: {
     openai: {
-      defaultModel: 'gpt-4',
+      defaultModel: "gpt-4",
       temperature: 0.7,
       maxTokens: 2000
     },
     claude: {
-      defaultModel: 'claude-3-sonnet-20240229',
+      defaultModel: "claude-3-sonnet-20240229",
       temperature: 0.7,
       maxTokens: 2000
     },
     gemini: {
-      defaultModel: 'gemini-pro',
+      defaultModel: "gemini-pro",
       temperature: 0.7,
       maxTokens: 2000
     }

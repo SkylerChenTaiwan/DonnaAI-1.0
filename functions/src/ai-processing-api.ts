@@ -3,7 +3,7 @@
  * 提供統一的 AI 處理 HTTP 端點
  */
 
-import { onRequest } from "firebase-functions/v2/https";
+import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import * as cors from "cors";
 import OpenAI from "openai";
@@ -15,7 +15,11 @@ if (!admin.apps.length) {
 }
 
 const db = admin.firestore();
-const corsHandler = cors({origin: true});
+const corsHandler = cors.default({origin: true});
+
+// 初始化 AI 客戶端
+let openai: OpenAI | null = null;
+let anthropic: Anthropic | null = null;
 
 export interface AIProcessingRequest {
   action: "analyze" | "extract" | "summarize" | "interpret";
@@ -43,7 +47,15 @@ export interface AIProcessingResponse {
 /**
  * 統一的 AI 處理 API
  */
-export const aiProcessingAPI = functions.https.onRequest(async (req, res) => {
+export const aiProcessingAPI = functions.https.onRequest(async (req: functions.Request, res: functions.Response) => {
+  // 初始化 AI 客戶端（如果尚未初始化）
+  if (!openai && process.env.OPENAI_API_KEY) {
+    openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  }
+  if (!anthropic && process.env.CLAUDE_API_KEY) {
+    anthropic = new Anthropic({ apiKey: process.env.CLAUDE_API_KEY });
+  }
+  
   corsHandler(req, res, async () => {
     try {
       // 驗證請求方法
@@ -114,16 +126,16 @@ async function processAIRequest(
   await logAIUsage(userId, request.action);
 
   switch (request.action) {
-    case "analyze":
-      return await analyzeContent(request);
-    case "extract":
-      return await extractInformation(request);
-    case "summarize":
-      return await summarizeContent(request);
-    case "interpret":
-      return await interpretFieldDescription(request);
-    default:
-      throw new Error(`不支援的動作: ${request.action}`);
+  case "analyze":
+    return await analyzeContent(request);
+  case "extract":
+    return await extractInformation(request);
+  case "summarize":
+    return await summarizeContent(request);
+  case "interpret":
+    return await interpretFieldDescription(request);
+  default:
+    throw new Error(`不支援的動作: ${request.action}`);
   }
 }
 

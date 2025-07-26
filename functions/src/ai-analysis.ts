@@ -173,17 +173,17 @@ function getContextDescription(context: AnalysisContext): string {
   let description = "";
 
   switch (context.type) {
-    case "meeting":
-      description = "會議";
-      break;
-    case "call":
-      description = "通話";
-      break;
-    case "note":
-      description = "筆記";
-      break;
-    default:
-      description = "對話";
+  case "meeting":
+    description = "會議";
+    break;
+  case "call":
+    description = "通話";
+    break;
+  case "note":
+    description = "筆記";
+    break;
+  default:
+    description = "對話";
   }
 
   if (context.customerName) {
