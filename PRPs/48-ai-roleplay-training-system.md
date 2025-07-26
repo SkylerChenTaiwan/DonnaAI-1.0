@@ -102,6 +102,7 @@ src/
 │   ├── api/
 │   │   └── gemini-integration.ts  # [修改] 擴展支援 RolePlay
 │   └── roleplay/                # [新增] RolePlay 核心邏輯
+│       ├── promptTemplates.ts   # Prompt 模板管理（集中修改）
 │       ├── stateManager.ts      # 狀態機管理
 │       ├── dialogueCompressor.ts # 對話壓縮
 │       ├── responseCache.ts     # 回應快取
@@ -242,32 +243,39 @@ CREATE src/services/roleplay/customerPersonas.ts:
   - ADD personality traits
   - SPECIFY triggers and pain points
 
-Task 7: 建立 WebApp 介面
+Task 7: 建立 Prompt 模板管理系統
+CREATE src/services/roleplay/promptTemplates.ts:
+  - CENTRALIZE all prompts in one file
+  - MAKE prompts easily editable
+  - SUPPORT template variables
+  - EXPORT typed prompt functions
+
+Task 8: 建立 WebApp 介面
 CREATE src/webapps/apps/ai-roleplay/index.html:
   - BUILD chat interface
   - ADD scenario selection
   - IMPLEMENT real-time hints
   - INCLUDE performance metrics
 
-Task 8: 更新 WebApp 載入器
+Task 9: 更新 WebApp 載入器
 MODIFY src/webapps/webAppLoader.ts:
   - ADD ai-roleplay to webApps collection
   - EXPORT for tool integration
 
-Task 9: 整合到小工具頁面
+Task 10: 整合到小工具頁面
 MODIFY src/screens/tools/ToolsScreen.tsx:
   - ADD AI training tool entry
   - SET proper icon and color
   - CONFIGURE WebApp source
 
-Task 10: 實作核心對話邏輯
+Task 11: 實作核心對話邏輯
 CREATE src/services/roleplay/dialogueEngine.ts:
   - ORCHESTRATE all components
   - HANDLE user input processing
   - MANAGE AI responses
   - TRACK session progress
 
-Task 11: 建立測試套件
+Task 12: 建立測試套件
 CREATE src/__tests__/roleplay/:
   - TEST state transitions
   - VERIFY compression efficiency
@@ -278,6 +286,103 @@ CREATE src/__tests__/roleplay/:
 ### Per task pseudocode
 
 ```python
+# Task 7: Prompt Template Management System
+// src/services/roleplay/promptTemplates.ts
+
+export const ROLEPLAY_PROMPTS = {
+  // 狀態分析 Prompt（易於修改）
+  stateAnalysis: {
+    template: `
+你是一個銷售對話分析專家。請根據以下對話歷史，判斷客戶當前的心理狀態。
+
+# 對話摘要
+- 已進行回合：{{turnCount}}
+- 信任程度：{{trustLevel}}/10
+- 關鍵事件：{{keyEvents}}
+
+# 最近對話
+{{recentDialogue}}
+
+# 業務最新發言
+{{userInput}}
+
+# 可選狀態
+{{availableStates}}
+
+請分析客戶最可能處於哪個狀態，並說明原因。
+`,
+    variables: ['turnCount', 'trustLevel', 'keyEvents', 'recentDialogue', 'userInput', 'availableStates']
+  },
+  
+  // 客戶回應 Prompt - 完整版
+  customerResponseFull: {
+    template: `
+# 角色設定
+你現在是{{personaName}}，{{position}}，在{{industry}}產業工作。
+
+# 個性特徵
+{{personalityDescription}}
+
+# 目前心理狀態：{{stateName}}
+{{stateDescription}}
+
+# 行為準則
+- 開放程度：{{openness}}/10
+- 耐心程度：{{patience}}/10
+- 信任程度：{{trust}}/10
+- 防禦心理：{{defensiveness}}/10
+
+# 你的痛點
+{{painPoints}}
+
+# 內心想法（不要直接說出來）
+{{hiddenThoughts}}
+
+業務剛說：「{{userInput}}」
+
+請以{{personaName}}的身份，用1-2句話回應。記住你現在的心理狀態是{{stateName}}。
+`,
+    variables: [/* ... */]
+  },
+  
+  // 客戶回應 Prompt - 精簡版
+  customerResponseQuick: {
+    template: `
+你是{{personaName}}，正處於{{stateName}}狀態。
+語氣：{{mood}}
+業務說：「{{userInput}}」
+用1句話回應（20-40字）。
+`,
+    variables: ['personaName', 'stateName', 'mood', 'userInput']
+  }
+};
+
+// Prompt 生成函數（類型安全）
+export function generatePrompt(
+  promptKey: keyof typeof ROLEPLAY_PROMPTS,
+  variables: Record<string, any>
+): string {
+  const prompt = ROLEPLAY_PROMPTS[promptKey];
+  let result = prompt.template;
+  
+  // 替換變數
+  for (const [key, value] of Object.entries(variables)) {
+    result = result.replace(new RegExp(`{{${key}}}`, 'g'), String(value));
+  }
+  
+  return result;
+}
+
+// 使用範例
+const stateAnalysisPrompt = generatePrompt('stateAnalysis', {
+  turnCount: 5,
+  trustLevel: 6,
+  keyEvents: '客戶提到預算有限',
+  recentDialogue: '...',
+  userInput: '我們有完整的培訓計畫',
+  availableStates: '1. INITIAL 2. INTERESTED ...'
+});
+
 # Task 2: Gemini RolePlay Integration
 async def callGeminiRolePlay(prompt: str, options: RolePlayOptions):
     # PATTERN: 使用現有 SDK（已驗證可用）
