@@ -18,6 +18,18 @@ import {
   serverTimestamp,
   Timestamp
 } from 'firebase/firestore';
+import * as dotenv from 'dotenv';
+import * as path from 'path';
+
+// 載入生產環境變數
+dotenv.config({ path: path.join(__dirname, '..', '.env.production') });
+
+// 驗證環境變數
+if (!process.env.EXPO_PUBLIC_FIREBASE_API_KEY) {
+  console.error('❌ 錯誤：無法找到 Firebase 配置');
+  console.log('請確保 .env.production 檔案已正確設定');
+  process.exit(1);
+}
 
 // 使用生產環境配置
 const firebaseConfig = {

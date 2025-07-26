@@ -50,6 +50,7 @@
 | 44v  | typescript-interface-organization.md | ✅ 已完成 | TypeScript 介面統一與組織重構 - 解決重複定義、建立單一真實來源、類型安全改進 | 2025-07-25 |
 | 45   | organization-management-redesign.md | 📋 待執行 | 組織管理系統重新設計 - 簡化訂閱方案、按使用人數計費、權限管理強化 | - |
 | 46v  | gcp-production-deployment-and-ios-app-store-submission.md | ✅ 已完成 | GCP 生產環境部署與 iOS App Store 上架 - Firebase 生產配置、EAS Build、隱私合規、監控系統 | 2025-07-25 |
+| 47   | ios-production-build-testflight-submission.md | 📋 待執行 | iOS 生產版本建置與 TestFlight 提交 - EAS 生產建置、測試帳號準備、TestFlight 上傳 | - |
 
 ## 命名規則
 
@@ -65,7 +66,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：47**
+**下一個新建的 PRP 應使用編號：48**
 
 ## PRP 類型說明
 
