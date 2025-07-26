@@ -35,6 +35,9 @@ service cloud.firestore {
     match /organizations/{orgId} {
       // Super Admin 可以讀寫所有組織
       allow read, write: if isSuperAdmin();
+      // 用戶可以建立組織（初次註冊時）
+      allow create: if request.auth != null && 
+        request.resource.data.adminUserId == request.auth.uid;
       // 組織成員可以讀取自己的組織
       allow read: if isOrgMember(orgId);
       // 組織管理員可以更新組織
@@ -45,6 +48,8 @@ service cloud.firestore {
     match /users/{userId} {
       // 用戶可以讀取自己的資料
       allow read: if request.auth != null && request.auth.uid == userId;
+      // 用戶可以建立自己的資料（初次註冊）
+      allow create: if request.auth != null && request.auth.uid == userId;
       // Super Admin 可以讀寫所有用戶
       allow read, write: if isSuperAdmin();
       // 組織管理員可以讀取同組織的用戶

@@ -48,35 +48,10 @@ const REVIEW_ACCOUNT = {
   displayName: 'Apple Reviewer'
 };
 
-async function createReviewAccount() {
-  console.log('🚀 開始準備 App Store 審核測試帳號...');
-  
-  // 初始化 Firebase
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-  
-  try {
-    // 1. 建立測試帳號
-    console.log('📧 建立測試帳號...');
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      REVIEW_ACCOUNT.email,
-      REVIEW_ACCOUNT.password
-    );
-    
-    const user = userCredential.user;
-    
-    // 更新顯示名稱
-    await updateProfile(user, {
-      displayName: REVIEW_ACCOUNT.displayName
-    });
-    
-    console.log('✅ 測試帳號建立成功:', user.uid);
-    
-    // 2. 建立用戶資料
-    console.log('👤 建立用戶資料...');
-    await setDoc(doc(db, 'users', user.uid), {
+async function createTestData(user: any, db: any) {
+  // 2. 建立用戶資料
+  console.log('👤 建立用戶資料...');
+  await setDoc(doc(db, 'users', user.uid), {
       email: REVIEW_ACCOUNT.email,
       displayName: REVIEW_ACCOUNT.displayName,
       role: 'user',
@@ -339,10 +314,59 @@ async function createReviewAccount() {
     console.log('- 3 個會議記錄');
     console.log('- 3 個任務');
     console.log('- 2 個 AI 分析報告');
+}
+
+async function createReviewAccount() {
+  console.log('🚀 開始準備 App Store 審核測試帳號...');
+  
+  // 初始化 Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  
+  try {
+    // 1. 建立測試帳號
+    console.log('📧 建立測試帳號...');
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      REVIEW_ACCOUNT.email,
+      REVIEW_ACCOUNT.password
+    );
+    
+    const user = userCredential.user;
+    
+    // 更新顯示名稱
+    await updateProfile(user, {
+      displayName: REVIEW_ACCOUNT.displayName
+    });
+    
+    console.log('✅ 測試帳號建立成功:', user.uid);
+    
+    // 建立測試資料
+    await createTestData(user, db);
     
   } catch (error: any) {
     if (error.code === 'auth/email-already-in-use') {
-      console.log('⚠️ 測試帳號已存在，跳過建立');
+      console.log('⚠️ 測試帳號已存在，嘗試使用現有帳號...');
+      
+      // 使用 signInWithEmailAndPassword 來取得現有用戶
+      try {
+        const { signInWithEmailAndPassword } = await import('firebase/auth');
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          REVIEW_ACCOUNT.email,
+          REVIEW_ACCOUNT.password
+        );
+        
+        const user = userCredential.user;
+        console.log('✅ 使用現有測試帳號:', user.uid);
+        
+        // 繼續建立測試資料
+        await createTestData(user, db);
+        
+      } catch (signInError) {
+        console.error('❌ 無法登入現有帳號:', signInError);
+      }
     } else {
       console.error('❌ 錯誤:', error);
     }
