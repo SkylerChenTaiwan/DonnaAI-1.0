@@ -51,6 +51,7 @@
 | 45   | organization-management-redesign.md | 📋 待執行 | 組織管理系統重新設計 - 簡化訂閱方案、按使用人數計費、權限管理強化 | - |
 | 46v  | gcp-production-deployment-and-ios-app-store-submission.md | ✅ 已完成 | GCP 生產環境部署與 iOS App Store 上架 - Firebase 生產配置、EAS Build、隱私合規、監控系統 | 2025-07-25 |
 | 47   | ios-production-build-testflight-submission.md | 📋 待執行 | iOS 生產版本建置與 TestFlight 提交 - EAS 生產建置、測試帳號準備、TestFlight 上傳 | - |
+| 48   | ai-roleplay-training-system.md | 📋 待執行 | AI 業務訓練 RolePlay 系統 - AI 客戶角色扮演、狀態機、對話壓縮、成本優化 | - |
 
 ## 命名規則
 
@@ -66,7 +67,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：48**
+**下一個新建的 PRP 應使用編號：49**
 
 ## PRP 類型說明
 
