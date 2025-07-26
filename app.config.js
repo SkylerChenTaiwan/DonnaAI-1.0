@@ -87,7 +87,7 @@ export default {
       env: process.env.EXPO_PUBLIC_ENV || 'development',
       debug: process.env.EXPO_PUBLIC_DEBUG === 'true',
       eas: {
-        projectId: "your-eas-project-id"
+        projectId: "b31bfd36-13ff-4557-918a-bb0009da7828"
       }
     },
     scheme: "donnaai",
