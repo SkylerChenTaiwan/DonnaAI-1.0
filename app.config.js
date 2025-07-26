@@ -1,8 +1,8 @@
-// 調試環境變數（僅在非 Web 環境）
-// 注意：在 app.config.js 中無法直接檢測平台，所以暫時註解掉
-// console.log('📱 app.config.js 載入中...');
-// console.log('EXPO_PUBLIC_FIREBASE_API_KEY:', process.env.EXPO_PUBLIC_FIREBASE_API_KEY ? '已設定' : '未設定');
-// console.log('EXPO_PUBLIC_FIREBASE_PROJECT_ID:', process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID || '未設定');
+// 取得應用程式變體（development 或 production）
+const APP_VARIANT = process.env.EXPO_PUBLIC_APP_VARIANT || 'development';
+
+console.log('📱 app.config.js 載入中...');
+console.log('🎯 應用程式變體:', APP_VARIANT);
 
 export default {
   expo: {
@@ -24,7 +24,7 @@ export default {
       supportsTablet: true,
       bundleIdentifier: "com.donnaai.app",
       buildNumber: "1.0.0",
-      googleServicesFile: process.env.GOOGLE_SERVICES_PLIST || "./GoogleService-Info.plist",
+      googleServicesFile: `./config/firebase/${APP_VARIANT}/GoogleService-Info.plist`,
       infoPlist: {
         UIBackgroundModes: ["audio"],
         NSMicrophoneUsageDescription: "DonnaAI 需要您的錄音權限來記錄會議音訊，並透過 AI 技術自動轉換為文字筆記。您的錄音將安全儲存且僅在您主動使用錄音功能時才會存取麥克風。",
@@ -42,7 +42,7 @@ export default {
         backgroundColor: "#ffffff"
       },
       package: "com.donnaai.app",
-      googleServicesFile: process.env.GOOGLE_SERVICES_JSON || "./google-services.json",
+      googleServicesFile: `./config/firebase/${APP_VARIANT}/google-services.json`,
       versionCode: 1,
       permissions: [
         "android.permission.RECORD_AUDIO",
@@ -85,6 +85,7 @@ export default {
       firebaseMessagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
       firebaseAppId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
       env: process.env.EXPO_PUBLIC_ENV || 'development',
+      appVariant: APP_VARIANT,
       debug: process.env.EXPO_PUBLIC_DEBUG === 'true',
       eas: {
         projectId: "b31bfd36-13ff-4557-918a-bb0009da7828"

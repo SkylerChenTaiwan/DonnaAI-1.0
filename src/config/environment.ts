@@ -154,38 +154,49 @@ class EnvironmentManager {
    * 取得 Firebase 配置
    */
   getFirebaseConfig() {
+    // 取得應用程式變體（development 或 production）
+    const appVariant = Constants.expoConfig?.extra?.appVariant || 
+                      process.env.EXPO_PUBLIC_APP_VARIANT || 
+                      'development';
+    
     // 調試輸出（僅限原生平台）
     if (__DEV__ && Platform.OS !== 'web') {
       console.log('🔥 getFirebaseConfig 被調用');
+      console.log('應用程式變體:', appVariant);
       console.log('Constants.expoConfig?.extra:', Constants.expoConfig?.extra);
     }
     
-    // 優先從 Constants.expoConfig.extra 讀取，如果沒有則使用 process.env 作為備用
-    // 注意：在 React Native 中，process.env 變數在編譯時被替換為字串字面值
-    const config = {
-      apiKey: Constants.expoConfig?.extra?.firebaseApiKey || 
-              'AIzaSyAxEU8MuVZdZqXd6dDpBYL6Iu-TRD3vblI',  // 直接使用字串作為備用
-      authDomain: Constants.expoConfig?.extra?.firebaseAuthDomain || 
-                  'donnaai-5e601.firebaseapp.com',
-      projectId: Constants.expoConfig?.extra?.firebaseProjectId || 
-                 'donnaai-5e601',
-      storageBucket: Constants.expoConfig?.extra?.firebaseStorageBucket || 
-                     'donnaai-5e601.firebasestorage.app',
-      messagingSenderId: Constants.expoConfig?.extra?.firebaseMessagingSenderId || 
-                        '748876929238',
-      appId: Constants.expoConfig?.extra?.firebaseAppId || 
-             '1:748876929238:web:fbbe5fd030a68765ea9177'
+    // 根據環境選擇不同的 Firebase 配置
+    const firebaseConfigs = {
+      development: {
+        apiKey: 'AIzaSyAxEU8MuVZdZqXd6dDpBYL6Iu-TRD3vblI',
+        authDomain: 'donnaai-5e601.firebaseapp.com',
+        projectId: 'donnaai-5e601',
+        storageBucket: 'donnaai-5e601.firebasestorage.app',
+        messagingSenderId: '748876929238',
+        appId: '1:748876929238:web:fbbe5fd030a68765ea9177'
+      },
+      production: {
+        // 生產環境配置 - donnaai-production
+        apiKey: 'AIzaSyDsD6ejZwtcWvc-Etio7YWbn7-Kh_gy9B8',
+        authDomain: 'donnaai-production.firebaseapp.com',
+        projectId: 'donnaai-production',
+        storageBucket: 'donnaai-production.firebasestorage.app',
+        messagingSenderId: '624326785342',
+        appId: '1:624326785342:ios:0c2b45aab7e0e94838546f'
+      }
     };
+    
+    // 選擇對應的配置
+    const config = appVariant === 'production' ? 
+                  firebaseConfigs.production : 
+                  firebaseConfigs.development;
 
     // 檢查配置是否完整（僅在原生平台輸出錯誤）
     if (!config.apiKey || !config.projectId) {
       if (Platform.OS !== 'web') {
-        console.error('Firebase 配置不完整');
-        console.error('Constants.expoConfig.extra:', Constants.expoConfig?.extra);
-        console.error('process.env:', {
-          apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY ? '***' : 'missing',
-          projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID || 'missing'
-        });
+        console.error(`Firebase ${appVariant} 配置不完整`);
+        console.error('目前配置:', config);
       }
     }
 

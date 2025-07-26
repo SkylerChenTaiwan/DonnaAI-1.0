@@ -22,18 +22,27 @@
     "preview": {
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_ENV": "staging"
+        "EXPO_PUBLIC_ENV": "staging",
+        "EXPO_PUBLIC_APP_VARIANT": "development"
       },
       "ios": {
         "resourceClass": "m-medium"
       },
       "android": {
         "buildType": "apk"
+      },
+      "hooks": {
+        "eas": {
+          "build": {
+            "onStart": "node scripts/setup-firebase-env.js"
+          }
+        }
       }
     },
     "production": {
       "env": {
-        "EXPO_PUBLIC_ENV": "production"
+        "EXPO_PUBLIC_ENV": "production",
+        "EXPO_PUBLIC_APP_VARIANT": "production"
       },
       "ios": {
         "resourceClass": "m-medium",
@@ -41,6 +50,13 @@
       },
       "android": {
         "autoIncrement": true
+      },
+      "hooks": {
+        "eas": {
+          "build": {
+            "onStart": "node scripts/setup-firebase-env.js"
+          }
+        }
       }
     }
   },
