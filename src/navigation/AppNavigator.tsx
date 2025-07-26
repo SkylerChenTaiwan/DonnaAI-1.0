@@ -53,6 +53,9 @@ import { UsageReportsScreen } from '@/screens/admin/UsageReportsScreen';
 // Admin 通用頁面
 import { AdminSettings } from '@/screens/admin/AdminSettings';
 
+// WebApp 容器
+import { WebAppContainer } from '@/screens/tools/WebAppContainer';
+
 const Stack = createStackNavigator<RootStackParamList>();
 
 export const AppNavigator = () => {
@@ -266,6 +269,16 @@ export const AppNavigator = () => {
                 headerBackTitleVisible: false,
               }}
             />
+            
+            {/* WebApp 容器 */}
+            <Stack.Screen
+              name="WebApp"
+              component={WebAppContainer}
+              options={{ 
+                headerShown: false, // WebAppContainer 已有自己的 header
+              }}
+            />
+            
             <Stack.Group screenOptions={{ 
               presentation: 'modal', 
               headerShown: true,

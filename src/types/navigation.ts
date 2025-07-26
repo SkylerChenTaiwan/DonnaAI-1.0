@@ -62,6 +62,13 @@ export type RootStackParamList = {
     userData: any; // User type
     onUserUpdated?: () => void;
   } | undefined;
+  
+  // WebApp 容器
+  WebApp: {
+    toolId: string;
+    title: string;
+    source: { html?: string; uri?: string };
+  };
 };
 
 export type MainTabParamList = {

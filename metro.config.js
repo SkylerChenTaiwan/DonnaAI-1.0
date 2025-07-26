@@ -13,6 +13,7 @@ config.resolver.unstable_enablePackageExports = false;
 // 確保支援所有圖片格式
 config.resolver.assetExts = [...(config.resolver.assetExts || []), 'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'];
 
+
 // 簡化配置以確保正常啟動
 // 快取配置暫時移除，避免配置問題
 

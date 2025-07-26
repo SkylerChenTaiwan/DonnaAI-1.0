@@ -14,6 +14,10 @@ import { Layout } from '@/components/common/Layout';
 import { SearchBar } from '@/components/common/SearchBar';
 import { ToolCard } from '@/components/common/ToolCard';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '@/types/navigation';
+import { getWebAppHTML } from '@/webapps/webAppLoader';
 
 interface Tool {
   id: string;
@@ -22,11 +26,18 @@ interface Tool {
   icon: keyof typeof Ionicons.glyphMap;
   color: string;
   category: string;
+  webApp?: {
+    type: 'local' | 'remote';
+    source: string;
+  };
 }
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export const ToolsScreen: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [refreshing, setRefreshing] = useState(false);
+  const navigation = useNavigation<NavigationProp>();
 
   // 小工具資料（placeholder）
   const tools: Tool[] = [
@@ -53,6 +64,10 @@ export const ToolsScreen: React.FC = () => {
       icon: 'calculator-outline',
       color: '#34C759',
       category: '銷售工具',
+      webApp: {
+        type: 'local',
+        source: 'calculator',
+      },
     },
     {
       id: '4',
@@ -124,7 +139,31 @@ export const ToolsScreen: React.FC = () => {
 
   const handleToolPress = (tool: Tool) => {
     console.log('Tool pressed:', tool.title);
-    // 實作工具功能
+    
+    // 如果工具有 WebApp，導航到 WebApp 容器
+    if (tool.webApp) {
+      if (tool.webApp.type === 'local') {
+        const html = getWebAppHTML(tool.webApp.source);
+        if (html) {
+          navigation.navigate('WebApp', {
+            toolId: tool.id,
+            title: tool.title,
+            source: { html }
+          });
+        } else {
+          console.error('找不到 WebApp:', tool.webApp.source);
+        }
+      } else {
+        navigation.navigate('WebApp', {
+          toolId: tool.id,
+          title: tool.title,
+          source: { uri: tool.webApp.source }
+        });
+      }
+    } else {
+      // 其他工具的處理邏輯
+      console.log('此工具尚未實作');
+    }
   };
 
   return (
