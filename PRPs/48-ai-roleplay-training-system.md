@@ -18,14 +18,14 @@
 5. 追蹤個人進步和弱點改善
 
 ### 技術需求
-1. 混合 AI 架構：GPT-3.5 為主、關鍵時刻用 GPT-4
+1. 混合 AI 架構：Gemini Flash 為主、關鍵時刻用 Gemini Pro
 2. 對話壓縮技術：減少 90% token 使用
 3. 狀態機管理客戶心理狀態
 4. 智慧快取系統避免重複 API 呼叫
 5. WebApp 架構整合到現有小工具系統
 
 ### Success Criteria
-- [ ] 每次對話成本控制在 $0.03 美元以內
+- [ ] 每次對話成本控制在 $0.01 美元以內（Gemini 更便宜）
 - [ ] AI 客戶行為真實度達到資深業務認可
 - [ ] 提供至少 10 種客戶原型
 - [ ] 即時回饋延遲小於 2 秒
@@ -36,14 +36,14 @@
 ### Documentation & References
 ```yaml
 # AI API 文檔
-- url: https://platform.openai.com/docs/guides/function-calling
-  why: GPT-3.5/4 function calling 用於結構化輸出
+- url: https://ai.google.dev/gemini-api/docs/function-calling
+  why: Gemini function calling 用於結構化輸出
   
-- url: https://platform.openai.com/docs/guides/prompt-engineering
-  why: Prompt 優化技巧，特別是 role-playing 部分
+- url: https://ai.google.dev/gemini-api/docs/prompting-strategies
+  why: Gemini prompt 優化技巧，特別是角色扮演
 
-- url: https://docs.anthropic.com/claude/docs/prompt-engineering
-  why: Claude 的角色扮演最佳實踐（備選方案）
+- url: https://ai.google.dev/pricing
+  why: Gemini 定價資訊 - Flash $0.075/百萬字元，Pro $0.30/百萬字元
 
 # 現有程式碼參考
 - file: src/services/api/gemini-integration.ts
@@ -100,8 +100,7 @@ src/
 │   └── webAppLoader.ts          # [修改] 新增載入器
 ├── services/
 │   ├── api/
-│   │   ├── gemini-integration.ts
-│   │   └── openai-integration.ts # [新增] OpenAI API 整合
+│   │   └── gemini-integration.ts  # [修改] 擴展支援 RolePlay
 │   └── roleplay/                # [新增] RolePlay 核心邏輯
 │       ├── stateManager.ts      # 狀態機管理
 │       ├── dialogueCompressor.ts # 對話壓縮
@@ -114,9 +113,9 @@ src/
 
 ### Known Gotchas & Library Quirks
 ```typescript
-// CRITICAL: OpenAI API 在 React Native 需要特殊處理
-// 不能直接 import openai，需要使用 fetch API
-// 參考：https://github.com/openai/openai-node/issues/18
+// CRITICAL: Gemini API 在 React Native 使用
+// 可以直接使用 @google/generative-ai SDK
+// 已在 gemini-integration.ts 中有成功案例
 
 // CRITICAL: WebView 中的 JavaScript Bridge 限制
 // postMessage 只能傳送可序列化的資料
@@ -124,16 +123,21 @@ src/
 
 // CRITICAL: React Native 環境變數
 // 必須使用 EXPO_PUBLIC_ 前綴
-// 例如：EXPO_PUBLIC_OPENAI_API_KEY
+// 例如：EXPO_PUBLIC_GEMINI_API_KEY
 
-// GOTCHA: Token 計算
-// GPT-3.5: ~4 字元 = 1 token（英文）
-// 中文：~2 字元 = 1 token
-// 系統需要預估 token 使用量
+// GOTCHA: 字元計算（Gemini 更優惠）
+// Gemini Flash: $0.075/百萬字元（約 $0.00003/千字）
+// Gemini Pro: $0.30/百萬字元（約 $0.0001/千字）
+// 比 GPT-3.5 便宜約 50-80%
 
 // GOTCHA: API 速率限制
-// OpenAI: 3500 RPM (GPT-3.5), 500 RPM (GPT-4)
+// Gemini Flash: 1000 RPM
+// Gemini Pro: 360 RPM
 // 需要實作速率限制和重試機制
+
+// GOTCHA: Gemini function calling
+// 使用 generationConfig 和 tools 參數
+// 參考現有 gemini-integration.ts 實作
 ```
 
 ## Implementation Blueprint
@@ -203,12 +207,12 @@ CREATE src/types/roleplay.ts:
   - INCLUDE persona, state, dialogue types
   - EXPORT for use across modules
 
-Task 2: 實作 OpenAI API 整合
-CREATE src/services/api/openai-integration.ts:
-  - MIRROR pattern from: src/services/api/gemini-integration.ts
-  - IMPLEMENT function calling for structured output
-  - ADD retry logic and rate limiting
-  - USE environment variables with EXPO_PUBLIC_ prefix
+Task 2: 擴展 Gemini API 整合
+MODIFY src/services/api/gemini-integration.ts:
+  - ADD RolePlay specific functions
+  - IMPLEMENT dual model support (Flash/Pro)
+  - OPTIMIZE for character limit vs token
+  - REUSE existing retry and cache logic
 
 Task 3: 建立狀態機管理器
 CREATE src/services/roleplay/stateManager.ts:
@@ -274,47 +278,43 @@ CREATE src/__tests__/roleplay/:
 ### Per task pseudocode
 
 ```python
-# Task 2: OpenAI Integration
-async def callOpenAI(prompt: str, options: CallOptions):
-    # PATTERN: 使用 fetch 而非 SDK（React Native 限制）
-    headers = {
-        'Authorization': f'Bearer {EXPO_PUBLIC_OPENAI_API_KEY}',
-        'Content-Type': 'application/json'
-    }
+# Task 2: Gemini RolePlay Integration
+async def callGeminiRolePlay(prompt: str, options: RolePlayOptions):
+    # PATTERN: 使用現有 SDK（已驗證可用）
+    const model = getGeminiClient().getGenerativeModel({
+        model: options.useAdvanced ? 'gemini-1.5-pro' : 'gemini-1.5-flash',
+        systemInstruction: options.systemPrompt
+    })
     
     # CRITICAL: Function calling for structured output
-    body = {
-        'model': options.model || 'gpt-3.5-turbo',
-        'messages': messages,
-        'functions': [{
-            'name': 'analyzeState',
-            'parameters': {
-                'type': 'object',
-                'properties': {
-                    'state': {'type': 'string'},
-                    'confidence': {'type': 'number'},
-                    'reason': {'type': 'string'}
-                }
+    const stateAnalysisFunction = {
+        name: 'analyzeCustomerState',
+        description: '分析客戶心理狀態',
+        parametersJsonSchema: {
+            type: 'object',
+            properties: {
+                state: {
+                    type: 'string',
+                    enum: ['INITIAL', 'INTERESTED', 'SKEPTICAL', 'PRICE_SHOCK', 'CLOSING']
+                },
+                confidence: { type: 'number' },
+                reason: { type: 'string' },
+                suggestedResponse: { type: 'string' }
             }
-        }],
-        'temperature': 0.8,
-        'max_tokens': options.maxTokens || 150
+        }
     }
     
-    # PATTERN: Retry with exponential backoff
-    @retry(attempts=3, backoff=exponential)
-    async def makeRequest():
-        response = await fetch(OPENAI_API_URL, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(body)
-        })
-        
-        if response.status === 429:  # Rate limit
-            await delay(1000)
-            throw new Error('Rate limited')
-        
-        return response.json()
+    # PATTERN: 使用 generationConfig 優化
+    const result = await model.generateContent({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+            temperature: 0.8,      # 角色扮演需要變化性
+            topK: 40,
+            topP: 0.95,
+            maxOutputTokens: 500   # Gemini 用字元計價，可以大方一點
+        },
+        tools: [{ functionDeclarations: [stateAnalysisFunction] }]
+    })
 
 # Task 4: Dialogue Compression
 def compressDialogue(history: Dialogue[]):
@@ -353,11 +353,11 @@ class ResponseCache:
         return None
     
     def rewriteResponse(original: str):
-        # Use GPT-3.5 for quick rewrite
+        # Use Gemini Flash for quick rewrite (超便宜)
         prompt = f"換個方式說（保持{state}語氣）：{original}"
-        return await callOpenAI(prompt, {
-            model: 'gpt-3.5-turbo',
-            maxTokens: 50,
+        return await callGeminiRolePlay(prompt, {
+            model: 'gemini-1.5-flash',
+            maxOutputTokens: 100,
             temperature: 0.7
         })
 ```
@@ -366,7 +366,7 @@ class ResponseCache:
 ```yaml
 ENVIRONMENT:
   - add to: .env
-  - pattern: "EXPO_PUBLIC_OPENAI_API_KEY=sk-..."
+  - pattern: "EXPO_PUBLIC_GEMINI_API_KEY=..." # 已有現成的
   
 NAVIGATION:
   - Already supports WebApp navigation
@@ -462,14 +462,15 @@ npm start
 ```typescript
 // 測試成本計算
 describe('Cost Optimization', () => {
-  test('單次對話成本應低於 $0.03', async () => {
+  test('單次對話成本應低於 $0.01', async () => {
     const session = await runMockSession(20); // 20 turns
     
     const cost = calculateSessionCost(session);
-    expect(cost).toBeLessThan(0.03);
+    expect(cost).toBeLessThan(0.01); // Gemini 更便宜
     
     console.log(`Session cost: $${cost.toFixed(4)}`);
-    console.log(`Tokens used: ${session.totalTokens}`);
+    console.log(`Characters used: ${session.totalCharacters}`);
+    console.log(`Flash calls: ${session.flashCalls}, Pro calls: ${session.proCalls}`);
   });
 });
 ```
@@ -477,7 +478,7 @@ describe('Cost Optimization', () => {
 ## Final Validation Checklist
 - [ ] TypeScript 編譯無錯誤
 - [ ] 所有測試通過
-- [ ] 單次對話成本 < $0.03
+- [ ] 單次對話成本 < $0.01（Gemini 優勢）
 - [ ] AI 回應延遲 < 2 秒
 - [ ] 對話壓縮率 > 85%
 - [ ] 快取命中率 > 30%
@@ -486,11 +487,11 @@ describe('Cost Optimization', () => {
 - [ ] 資深業務測試認可真實度
 
 ## Anti-Patterns to Avoid
-- ❌ 不要直接傳送完整對話歷史給 AI（太貴）
+- ❌ 不要直接傳送完整對話歷史給 AI（浪費字元）
 - ❌ 不要讓 AI 自由發揮角色（會太配合）
 - ❌ 不要忽略速率限制（會被封鎖）
 - ❌ 不要在前端儲存 API 金鑰（使用環境變數）
-- ❌ 不要每次都呼叫 GPT-4（用 GPT-3.5 為主）
+- ❌ 不要每次都呼叫 Gemini Pro（用 Flash 為主）
 - ❌ 不要忽略快取機會（相似問題很多）
 
 ---
@@ -506,6 +507,9 @@ describe('Cost Optimization', () => {
 - 成本可控，適合大規模使用
 - 整合現有系統，使用體驗一致
 
-**信心評分**: 8/10
-- 扣分原因：OpenAI API 在 React Native 的整合可能有額外挑戰
-- 加分原因：現有 WebApp 架構完善，AI 整合模式清楚
+**信心評分**: 9/10
+- 扣分原因：狀態機設計需要精心調校才能真實
+- 加分原因：
+  - Gemini API 已有成功整合經驗
+  - 成本大幅降低（比 GPT 便宜 70%）
+  - 現有架構完善，風險低
