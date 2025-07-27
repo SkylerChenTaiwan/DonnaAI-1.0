@@ -545,6 +545,9 @@ export const WebAppContainer: React.FC = () => {
           javaScriptEnabled={true}
           domStorageEnabled={true}
           startInLoadingState={true}
+          // iOS 特定設定
+          hideKeyboardAccessoryView={true}
+          keyboardDisplayRequiresUserAction={false}
           allowsInlineMediaPlayback={true}
           mediaPlaybackRequiresUserAction={false}
           // 限制只能在 WebView 內導航
