@@ -3,7 +3,7 @@
  * 所有 AI 相關操作都在後端執行，保護 API Key
  */
 
-import { functions } from '@/config/firebase';
+import { getFirebaseFunctions } from '@/services/firebase/config';
 import { httpsCallable } from 'firebase/functions';
 import {
   CustomerPersona,
@@ -15,6 +15,9 @@ import {
 } from '@/types/roleplay';
 import { generateSystemPrompt, generateStateAnalysisPrompt } from './promptTemplates';
 import { customerPersonas } from './customerPersonas';
+
+// 初始化 Firebase Functions
+const functions = getFirebaseFunctions();
 
 // Cloud Functions
 const analyzeCustomerStateFn = httpsCallable(functions, 'analyzeCustomerState');
