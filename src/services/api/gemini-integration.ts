@@ -26,33 +26,7 @@ const GEMINI_MODEL = 'gemini-2.0-flash-001';
 const GEMINI_FLASH_MODEL = 'gemini-1.5-flash';
 const GEMINI_PRO_MODEL = 'gemini-1.5-pro';
 
-// 延遲初始化 Gemini AI 客戶端
-let genAI: any | null = null;
-
-// 獲取 Gemini AI 客戶端（延遲初始化）
-function getGeminiClient(): any {
-  if (!genAI) {
-    // 在 React Native 中，使用 EXPO_PUBLIC_ 前綴
-    const apiKey = process.env.EXPO_PUBLIC_GEMINI_API_KEY || 
-                   process.env.VITE_GEMINI_API_KEY || 
-                   '';
-    
-    if (!apiKey) {
-      console.warn('Gemini API Key 未設定，自然語言查詢功能將無法使用');
-      // 返回一個 mock 客戶端，避免應用程式崩潰
-      return {
-        getGenerativeModel: () => ({
-          generateContent: async () => {
-            throw new Error('Gemini API Key 未設定，請在 .env 中設定 EXPO_PUBLIC_GEMINI_API_KEY');
-          }
-        })
-      } as any;
-    }
-    
-    genAI = new GoogleGenAI({ apiKey });
-  }
-  return genAI;
-}
+// 注意：Gemini AI 現在透過 Cloud Functions 呼叫，不再需要前端 API Key
 
 /**
  * 使用 Gemini 解析自然語言查詢
