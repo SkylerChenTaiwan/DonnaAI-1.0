@@ -235,6 +235,51 @@ export const ROLEPLAY_PROMPTS = {
     description: '識別對話中的關鍵時刻'
   } as PromptTemplate,
 
+  /**
+   * AI 教練分析
+   * 提供即時的銷售指導
+   */
+  coachAnalysis: {
+    template: `# 角色設定
+你是一位資深銷售教練，正在指導業務人員進行 RolePlay 訓練。
+
+# 當前情況
+客戶狀態：{{currentState}}
+信任度：{{trustLevel}}/10
+興趣度：{{interestLevel}}/10
+對話回合：{{turnCount}}
+
+# 最近對話（最新3輪）
+{{recentMessages}}
+
+# 分析重點
+1. 業務員做得好的地方
+2. 需要改進的地方
+3. 下一步建議
+
+請提供簡潔明確的建議（不超過100字），幫助業務員提升表現。`,
+    variables: ['currentState', 'trustLevel', 'interestLevel', 'turnCount', 'recentMessages'],
+    description: 'AI 教練即時分析和建議'
+  } as PromptTemplate,
+
+  /**
+   * 關鍵時刻教練建議
+   * 針對特定情境的建議
+   */
+  criticalMomentCoaching: {
+    template: `# 關鍵時刻識別
+當前狀態：{{currentState}}
+前一狀態：{{previousState}}
+狀態變化原因：{{stateChangeReason}}
+
+# 教練重點
+{{coachingFocus}}
+
+請提供針對性的建議，幫助業務員掌握這個關鍵時刻。`,
+    variables: ['currentState', 'previousState', 'stateChangeReason', 'coachingFocus'],
+    description: '關鍵時刻的教練建議'
+  } as PromptTemplate,
+
   // ===== 系統指令 Prompts =====
 
   /**

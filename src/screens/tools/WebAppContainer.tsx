@@ -12,14 +12,15 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { WebView } from 'react-native-webview';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Layout } from '@/components/common/Layout';
 import { useAuthStore } from '@/stores/authStore';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/types/navigation';
 import { RouteProp } from '@react-navigation/native';
-import { DialogueEngine } from '@/services/roleplay/dialogueEngine';
-import { customerPersonas } from '@/services/roleplay/customerPersonas';
+import { dialogueEngine } from '@/services/roleplay/dialogueEngine';
+import { customerPersonas, getPersonaById } from '@/services/roleplay/customerPersonas';
 
 type WebAppRouteProp = RouteProp<RootStackParamList, 'WebApp'>;
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -34,8 +35,8 @@ export const WebAppContainer: React.FC = () => {
   const { toolId, title, source } = route.params;
   
   // RolePlay 會話狀態
-  const [rolePlayEngine, setRolePlayEngine] = useState<DialogueEngine | null>(null);
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
 
   // JavaScript 注入腳本，建立與原生應用的通訊橋接
   const injectedJavaScript = `
@@ -96,13 +97,11 @@ export const WebAppContainer: React.FC = () => {
           break;
           
         case 'saveData':
-          // 儲存資料到本地或 Firebase
-          console.log('保存資料:', message.data);
+          handleSaveData(message.data);
           break;
           
         case 'getData':
-          // 讀取資料並回傳給 WebApp
-          console.log('讀取資料:', message.data.key);
+          handleGetData(message.data);
           break;
           
         case 'navigate':
@@ -145,6 +144,18 @@ export const WebAppContainer: React.FC = () => {
           
         case 'endSession':
           result = await endRolePlaySession();
+          break;
+          
+        case 'pauseSession':
+          result = await pauseRolePlaySession();
+          break;
+          
+        case 'resumeSession':
+          result = await resumeRolePlaySession(data.data);
+          break;
+          
+        case 'getCoachAdvice':
+          result = await getCoachAdvice(data.data);
           break;
           
         default:
@@ -192,22 +203,26 @@ export const WebAppContainer: React.FC = () => {
   // 開始 RolePlay 會話
   const startRolePlaySession = async (data: { personaId: string }) => {
     const { personaId } = data;
-    const sessionId = `session_${Date.now()}`;
     
-    // 建立新的對話引擎
-    const engine = new DialogueEngine();
-    const initResult = await engine.initializeSession(personaId, sessionId);
+    // 初始化對話引擎會話
+    const session = await dialogueEngine.initializeSession(
+      user?.uid || 'anonymous',
+      personaId
+    );
     
-    setRolePlayEngine(engine);
-    setCurrentSessionId(sessionId);
+    setCurrentSessionId(session.sessionId);
+    setIsPaused(false);
+    
+    // 獲取開場白
+    const greeting = await dialogueEngine.getInitialGreeting();
     
     return {
-      sessionId,
-      persona: customerPersonas.find(p => p.id === personaId),
-      greeting: initResult.message,
+      sessionId: session.sessionId,
+      persona: session.persona,
+      greeting,
       metrics: {
-        trust: 5,
-        interest: 5,
+        trust: session.currentState.behaviors.trust,
+        interest: session.currentState.behaviors.openness,
         turnCount: 0
       }
     };
@@ -215,44 +230,283 @@ export const WebAppContainer: React.FC = () => {
 
   // 處理 RolePlay 訊息
   const processRolePlayMessage = async (data: { content: string }) => {
-    if (!rolePlayEngine || !currentSessionId) {
+    if (!currentSessionId) {
       throw new Error('沒有活躍的會話');
     }
     
     const { content } = data;
     
     // 處理用戶訊息
-    const result = await rolePlayEngine.processUserMessage(content);
+    const result = await dialogueEngine.processUserInput(content);
+    
+    // 檢查是否達到終止狀態
+    const currentState = dialogueEngine.getCurrentState();
+    const isTerminalState = currentState?.currentState === 'WON' || currentState?.currentState === 'LOST';
+    
+    let report = null;
+    if (isTerminalState) {
+      // 自動生成訓練報告
+      const session = await dialogueEngine.endSession();
+      report = generateTrainingReport(session);
+    }
     
     return {
-      response: result.message,
+      response: result.customerResponse,
       hint: result.hint,
       metrics: {
-        trust: result.state.trust,
-        interest: result.state.interest,
-        turnCount: result.turnCount || 0
+        trust: currentState?.emotions?.trust || 5,
+        interest: currentState?.emotions?.interest || 5,
+        turnCount: currentState?.turns || 0
       },
-      stateChange: result.stateChange
+      stateChange: result.stateChange,
+      autoEnd: isTerminalState,
+      outcome: isTerminalState ? currentState?.currentState.toLowerCase() : undefined,
+      report
     };
   };
 
   // 結束 RolePlay 會話
   const endRolePlaySession = async () => {
-    if (rolePlayEngine && currentSessionId) {
+    if (currentSessionId) {
       // 結束會話並儲存記錄
-      const summary = await rolePlayEngine.endSession();
+      const session = await dialogueEngine.endSession();
+      
+      // 清理暫存資料
+      await AsyncStorage.removeItem(`@roleplay_current_session`);
       
       // 清理狀態
-      setRolePlayEngine(null);
       setCurrentSessionId(null);
+      setIsPaused(false);
       
       return {
         success: true,
-        summary
+        summary: generateTrainingReport(session)
       };
     }
     
     return { success: true };
+  };
+  
+  // 處理資料儲存
+  const handleSaveData = async (data: { key: string; value: any }) => {
+    try {
+      await AsyncStorage.setItem(
+        `@roleplay_${data.key}`,
+        JSON.stringify(data.value)
+      );
+      
+      // 回調成功
+      if (webViewRef.current) {
+        webViewRef.current.postMessage(JSON.stringify({
+          type: 'saveDataCallback',
+          key: data.key,
+          success: true
+        }));
+      }
+    } catch (error) {
+      console.error('儲存資料錯誤:', error);
+      // 回調錯誤
+      if (webViewRef.current) {
+        webViewRef.current.postMessage(JSON.stringify({
+          type: 'saveDataCallback',
+          key: data.key,
+          success: false,
+          error: '儲存失敗'
+        }));
+      }
+    }
+  };
+  
+  // 處理資料讀取
+  const handleGetData = async (data: { key: string }) => {
+    try {
+      const value = await AsyncStorage.getItem(`@roleplay_${data.key}`);
+      
+      if (webViewRef.current) {
+        webViewRef.current.postMessage(JSON.stringify({
+          type: 'getDataCallback',
+          key: data.key,
+          value: value ? JSON.parse(value) : null
+        }));
+      }
+    } catch (error) {
+      console.error('讀取資料錯誤:', error);
+      if (webViewRef.current) {
+        webViewRef.current.postMessage(JSON.stringify({
+          type: 'getDataCallback',
+          key: data.key,
+          value: null,
+          error: '讀取失敗'
+        }));
+      }
+    }
+  };
+  
+  // 暫停會話
+  const pauseRolePlaySession = async () => {
+    if (!currentSessionId) {
+      throw new Error('沒有活躍的會話');
+    }
+    
+    setIsPaused(true);
+    
+    return {
+      success: true,
+      sessionId: currentSessionId
+    };
+  };
+  
+  // 恢復會話
+  const resumeRolePlaySession = async (data: { sessionData: any }) => {
+    const { sessionData } = data;
+    
+    // 恢復會話狀態
+    setCurrentSessionId(sessionData.sessionId);
+    setIsPaused(false);
+    
+    // 重新初始化對話引擎
+    await dialogueEngine.initializeSession(
+      user?.uid || 'anonymous',
+      sessionData.personaId
+    );
+    
+    return {
+      success: true,
+      sessionId: sessionData.sessionId
+    };
+  };
+  
+  // 獲取 AI 教練建議
+  const getCoachAdvice = async (data: { 
+    recentMessages: any[];
+    currentState: string;
+    metrics: any;
+  }) => {
+    try {
+      // 獲取引擎狀態
+      const engineState = dialogueEngine.getCurrentState();
+      
+      // 準備最近對話的格式化字串
+      const formattedMessages = data.recentMessages
+        .map(msg => `${msg.sender === 'user' ? '業務' : '客戶'}: ${msg.content}`)
+        .join('\n');
+      
+      // 獲取專家分析
+      const analysis = dialogueEngine.getSessionAnalysis();
+      
+      // 識別關鍵情境
+      const keyScenarios = {
+        lowTrust: data.metrics.trust <= 3,
+        highDefense: engineState?.currentState === 'SKEPTICAL' || engineState?.currentState === 'OBJECTION',
+        priceShock: engineState?.currentState === 'PRICE_SHOCK',
+        readyToBuy: engineState?.currentState === 'READY_TO_BUY' || engineState?.currentState === 'CLOSING',
+        negotiating: engineState?.currentState === 'NEGOTIATING',
+        lost: engineState?.currentState === 'LOST'
+      };
+      
+      // 生成針對性建議
+      let content = '';
+      let advice = [];
+      
+      if (keyScenarios.lost) {
+        content = '🔴 客戶已經失去興趣';
+        advice = [
+          '分析失敗原因，記取教訓',
+          '回顧對話中的轉折點',
+          '練習異議處理技巧'
+        ];
+      } else if (keyScenarios.readyToBuy) {
+        content = '🟢 客戶準備購買！';
+        advice = [
+          '簡化流程，避免節外生枝',
+          '確認關鍵細節',
+          '保持熱情和專業'
+        ];
+      } else if (keyScenarios.priceShock) {
+        content = '💰 客戶對價格有疑慮';
+        advice = [
+          '強調價值和投資報酬',
+          '提供彈性方案',
+          '分享成功案例'
+        ];
+      } else if (keyScenarios.negotiating) {
+        content = '🤝 正在談判階段';
+        advice = [
+          '保持彈性但有原則',
+          '創造雙贏局面',
+          '了解客戶真正需求'
+        ];
+      } else if (keyScenarios.highDefense) {
+        content = '🚫 客戶防衛心很重';
+        advice = [
+          '放慢節奏，建立信任',
+          '傾聽理解，不要爭辯',
+          '提供證據和案例'
+        ];
+      } else if (keyScenarios.lowTrust) {
+        content = '⚠️ 信任度偏低';
+        advice = [
+          '展現真誠和專業',
+          '避免強勢推銷',
+          '分享其他客戶的正面經驗'
+        ];
+      } else {
+        // 一般建議
+        content = '💡 持續建立關係';
+        advice = analysis?.suggestions || [
+          '了解客戶需求',
+          '展示產品價值',
+          '保持專業態度'
+        ];
+      }
+      
+      // 加入動態建議
+      if (data.metrics.turnCount > 20) {
+        advice.push('對話太長，考慮加快推進');
+      }
+      
+      return {
+        type: 'analysis',
+        content: `${content}\n\n🎯 建議：\n${advice.map((a, i) => `${i + 1}. ${a}`).join('\n')}`,
+        context: {
+          currentState: data.currentState,
+          trustLevel: data.metrics.trust,
+          interestLevel: data.metrics.interest,
+          scenario: Object.keys(keyScenarios).find(key => keyScenarios[key]) || 'general'
+        }
+      };
+    } catch (error) {
+      console.error('AI 教練錯誤:', error);
+      return {
+        type: 'suggestion',
+        content: '正在分析中...請稍後再試。'
+      };
+    }
+  };
+  
+  // 生成訓練報告
+  const generateTrainingReport = (session: any) => {
+    const duration = session.endTime 
+      ? Math.round((new Date(session.endTime).getTime() - new Date(session.startTime).getTime()) / 1000)
+      : 0;
+      
+    return {
+      sessionId: session.sessionId,
+      duration,
+      outcome: session.metrics.finalOutcome || 'paused',
+      metrics: {
+        finalTrust: session.metrics.trustProgression[session.metrics.trustProgression.length - 1] || 5,
+        finalInterest: session.currentState.behaviors.openness || 5,
+        totalTurns: session.metrics.totalTurns,
+        stateChanges: session.metrics.stateChanges.length
+      },
+      keyMoments: session.metrics.keyMoments || [],
+      suggestions: [
+        '練習建立信任的開場白',
+        '學習處理價格異議的技巧',
+        '改善需求探索的提問方式'
+      ]
+    };
   };
 
   return (
