@@ -39,26 +39,10 @@ export const ToolsScreen: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation<NavigationProp>();
 
-  // 小工具資料（placeholder）
+  // 實際可用的工具
   const tools: Tool[] = [
     {
       id: '1',
-      title: '語音記錄',
-      description: '快速錄音並轉換為文字記錄',
-      icon: 'mic-outline',
-      color: '#FF3B30',
-      category: '記錄工具',
-    },
-    {
-      id: '2',
-      title: '拜訪計畫',
-      description: '規劃每日拜訪路線和行程',
-      icon: 'map-outline',
-      color: '#007AFF',
-      category: '行程管理',
-    },
-    {
-      id: '3',
       title: '銷售計算器',
       description: '計算佣金、折扣和報價',
       icon: 'calculator-outline',
@@ -70,44 +54,16 @@ export const ToolsScreen: React.FC = () => {
       },
     },
     {
-      id: '4',
-      title: '名片掃描',
-      description: '掃描名片自動建立客戶資料',
-      icon: 'camera-outline',
-      color: '#FF9500',
-      category: '客戶管理',
-    },
-    {
-      id: '5',
-      title: '報表產生器',
-      description: '自動產生月報和週報',
-      icon: 'bar-chart-outline',
-      color: '#5856D6',
-      category: '報表分析',
-    },
-    {
-      id: '6',
-      title: '合約範本',
-      description: '常用合約和文件範本',
-      icon: 'document-text-outline',
-      color: '#AF52DE',
-      category: '文件管理',
-    },
-    {
-      id: '7',
-      title: 'AI 助手',
-      description: '智能銷售建議和話術',
-      icon: 'bulb-outline',
-      color: '#32ADE6',
+      id: '2',
+      title: 'AI 業務訓練',
+      description: '與 AI 客戶進行角色扮演銷售訓練',
+      icon: 'people-outline',
+      color: '#FF3B30',
       category: 'AI 工具',
-    },
-    {
-      id: '8',
-      title: '競品分析',
-      description: '競爭對手產品比較表',
-      icon: 'analytics-outline',
-      color: '#FFCC00',
-      category: '市場分析',
+      webApp: {
+        type: 'local',
+        source: 'ai-roleplay',
+      },
     },
   ];
 
