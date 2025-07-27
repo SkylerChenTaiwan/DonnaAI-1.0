@@ -1124,7 +1124,13 @@ const aiRoleplayHTML = `<!DOCTYPE html>
         }
         
         // 初始化
+        let isInitialized = false;
         window.onDonnaAIReady = function() {
+            if (isInitialized) {
+                console.log('AI RolePlay WebApp 已經初始化過了');
+                return;
+            }
+            isInitialized = true;
             console.log('AI RolePlay WebApp 已就緒');
             checkSavedSession();
             loadPersonas();
@@ -1264,6 +1270,9 @@ const aiRoleplayHTML = `<!DOCTYPE html>
         // 載入客戶原型
         function loadPersonas() {
             const grid = document.getElementById('personaGrid');
+            
+            // 清空現有內容，避免重複
+            grid.innerHTML = '';
             
             // 暫時使用硬編碼資料，實際應透過 Native Bridge 載入
             customerPersonas.forEach(persona => {
