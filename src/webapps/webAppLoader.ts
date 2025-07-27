@@ -1328,7 +1328,26 @@ const aiRoleplayHTML = `<!DOCTYPE html>
             } else {
                 // 開發模式模擬
                 setTimeout(() => {
-                    addMessage('customer', '您好，我聽說您們有新的解決方案？不過我得先說，我們目前的系統運作得還不錯。');
+                    const callback = state.pendingCallbacks.get(callbackId);
+                    if (callback) {
+                        // 檢查是否有錯誤
+                        if (data.error) {
+                            showLoading(false);
+                            if (data.needsApiKey) {
+                                alert('需要設定 Gemini API Key\\n\\n請聯繫系統管理員設定 API Key，才能使用 AI 業務訓練功能。');
+                                handleBack();
+                            } else {
+                                alert('啟動訓練失敗：' + data.error);
+                            }
+                            state.pendingCallbacks.delete(callbackId);
+                            return;
+                        }
+                        
+                        if (data.greeting) {
+                            addMessage('customer', data.greeting);
+                        }
+                        state.pendingCallbacks.delete(callbackId);
+                    }
                 }, 500);
             }
         }
@@ -1617,7 +1636,18 @@ const aiRoleplayHTML = `<!DOCTYPE html>
                 if (message.type === 'roleplayCallback' && message.callbackId) {
                     const callback = state.pendingCallbacks.get(message.callbackId);
                     if (callback) {
-                        callback(message.data);
+                        // 檢查是否有錯誤
+                        if (!message.success && message.error) {
+                            showLoading(false);
+                            if (message.needsApiKey) {
+                                alert('需要設定 Gemini API Key\\n\\n請聯繫系統管理員設定 API Key，才能使用 AI 業務訓練功能。');
+                                handleBack();
+                            } else {
+                                alert('操作失敗：' + message.error);
+                            }
+                        } else {
+                            callback(message.data);
+                        }
                         state.pendingCallbacks.delete(message.callbackId);
                     }
                 } else if (message.type === 'saveDataCallback' || message.type === 'getDataCallback') {

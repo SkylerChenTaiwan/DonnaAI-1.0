@@ -174,11 +174,21 @@ export const WebAppContainer: React.FC = () => {
     } catch (error: any) {
       // 錯誤回調
       if (callbackId && webViewRef.current) {
+        // 檢查是否為 API Key 錯誤
+        let errorMessage = error.message || '處理失敗';
+        let needsApiKey = false;
+        
+        if (error.message?.includes('Gemini API Key')) {
+          errorMessage = '請先設定 Gemini API Key\n請聯繫管理員或查看設定說明';
+          needsApiKey = true;
+        }
+        
         webViewRef.current.postMessage(JSON.stringify({
           type: 'roleplayCallback',
           callbackId,
           success: false,
-          error: error.message || '處理失敗'
+          error: errorMessage,
+          needsApiKey
         }));
       }
     }
