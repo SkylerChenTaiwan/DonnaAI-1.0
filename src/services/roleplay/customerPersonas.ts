@@ -674,3 +674,5 @@ export function generatePersonaSummary(persona: CustomerPersona): {
     difficulty: difficultyLabels[persona.difficulty as keyof typeof difficultyLabels] || '中等'
   };
 }
+// 為了向後相容，導出小寫版本
+export const customerPersonas = CUSTOMER_PERSONAS;
