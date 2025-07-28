@@ -22,7 +22,7 @@ export default {
     ],
     ios: {
       supportsTablet: true,
-      bundleIdentifier: "com.donnaai.app",
+      bundleIdentifier: "com.skylerchen.donnaai",
       buildNumber: "1.0.0",
       googleServicesFile: `./config/firebase/${APP_VARIANT}/GoogleService-Info.plist`,
       infoPlist: {
@@ -41,7 +41,7 @@ export default {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#ffffff"
       },
-      package: "com.donnaai.app",
+      package: "com.skylerchen.donnaai",
       googleServicesFile: `./config/firebase/${APP_VARIANT}/google-services.json`,
       versionCode: 1,
       permissions: [
