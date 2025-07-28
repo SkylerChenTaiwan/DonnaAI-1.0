@@ -10,6 +10,24 @@ import { StateType, PromptTemplate, PromptVariables } from '../../types/roleplay
  * 集中在此處，方便未來優化和 A/B 測試
  */
 export const ROLEPLAY_PROMPTS = {
+  // ===== 基礎系統 Prompts =====
+  
+  /**
+   * 基礎系統提示
+   * 定義客戶角色的基本行為
+   */
+  baseSystemPrompt: {
+    template: `你現在扮演{{name}}，{{position}}，在{{industry}}工作。
+個性特點：{{personality}}
+態度傾向：{{attitude}}
+主要反對理由：{{objections}}
+感興趣的關鍵詞：{{buzzwords}}
+
+請根據這個角色設定，以自然、真實的方式與業務員對話。`,
+    variables: ['name', 'position', 'industry', 'personality', 'attitude', 'objections', 'buzzwords'],
+    description: '客戶角色的基礎設定'
+  } as PromptTemplate,
+  
   // ===== 狀態分析相關 Prompts =====
   
   /**
@@ -569,3 +587,72 @@ export class PromptABTester {
 
 // 匯出單例 A/B 測試器
 export const promptABTester = new PromptABTester();
+
+/**
+ * 生成系統提示詞
+ * @param persona 客戶角色
+ * @param currentState 當前狀態
+ * @param messages 對話歷史
+ * @returns 系統提示詞
+ */
+export function generateSystemPrompt(
+  persona: any,
+  currentState: any,
+  messages: any[]
+): string {
+  // 基礎系統提示
+  const basePrompt = generatePrompt('baseSystemPrompt', {
+    name: persona.name,
+    position: persona.profile.position || persona.position,
+    industry: persona.profile.industry || persona.industry,
+    personality: JSON.stringify(persona.profile.personality || {}),
+    attitude: persona.profile.attitude || '謹慎',
+    objections: persona.triggers?.negative?.join('、') || '',
+    buzzwords: persona.triggers?.positive?.join('、') || ''
+  });
+
+  // 狀態特定提示
+  const stateKey = `stateSpecificResponses.${currentState}`;
+  let statePrompt = '';
+  try {
+    statePrompt = generatePrompt(stateKey, {
+      trust: 5,
+      interest: 5
+    });
+  } catch (e) {
+    // 如果找不到狀態特定提示，使用預設
+    console.log(`找不到狀態提示: ${stateKey}`);
+  }
+
+  // 組合提示
+  return `${basePrompt}\n\n目前狀態: ${currentState}\n${statePrompt}`;
+}
+
+/**
+ * 生成狀態分析提示詞
+ * @param messages 對話歷史
+ * @param metrics 指標
+ * @returns 狀態分析提示詞
+ */
+export function generateStateAnalysisPrompt(
+  messages: any[],
+  metrics: any
+): string {
+  // 準備最近對話
+  const recentMessages = messages.slice(-5).map(msg => 
+    `${msg.sender === 'user' ? '業務員' : '客戶'}: ${msg.content}`
+  ).join('\n');
+
+  return `分析以下對話，判斷客戶的心理狀態：
+
+最近對話：
+${recentMessages}
+
+當前指標：
+- 信任度: ${metrics.trust}/10
+- 興趣度: ${metrics.interest}/10
+- 異議次數: ${metrics.objectionCount || 0}
+- 正面回應: ${metrics.positiveResponseCount || 0}
+
+請判斷客戶目前的狀態，並提供理由。`;
+}
