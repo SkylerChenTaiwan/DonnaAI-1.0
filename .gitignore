@@ -58,5 +58,5 @@ firebase-debug.log
 .firebase/
 service-account-key.json
 scripts/seed-data/service-account-key.json
-GoogleService-Info.plist
-google-services.json
+# GoogleService-Info.plist - 需要提交到 Git 以供 EAS Build 使用
+# google-services.json - 需要提交到 Git 以供 EAS Build 使用

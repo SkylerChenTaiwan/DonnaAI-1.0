@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "748876929238",
+    "project_id": "donnaai-5e601",
+    "storage_bucket": "donnaai-5e601.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:748876929238:android:8ed3d99d091bc43bea9177",
+        "android_client_info": {
+          "package_name": "com.donnaai.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBB-Bd2vFL7ZIp_QcSq2v_vp6OXXhT-s5E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
