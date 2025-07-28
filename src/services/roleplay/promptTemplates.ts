@@ -616,6 +616,7 @@ export function generateSystemPrompt(
   let statePrompt = '';
   try {
     statePrompt = generatePrompt(stateKey, {
+      userInput: '（業務員正在接近）',  // 預設值，實際對話時會被替換
       trust: 5,
       interest: 5
     });
