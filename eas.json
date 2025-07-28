@@ -31,13 +31,6 @@
       "android": {
         "buildType": "apk"
       },
-      "hooks": {
-        "eas": {
-          "build": {
-            "onStart": "node scripts/setup-firebase-env.js"
-          }
-        }
-      }
     },
     "production": {
       "env": {
@@ -51,13 +44,6 @@
       "android": {
         "autoIncrement": true
       },
-      "hooks": {
-        "eas": {
-          "build": {
-            "onStart": "node scripts/setup-firebase-env.js"
-          }
-        }
-      }
     }
   },
   "submit": {
