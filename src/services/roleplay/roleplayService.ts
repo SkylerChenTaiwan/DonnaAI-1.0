@@ -48,7 +48,7 @@ export async function startRolePlaySession(personaId: string): Promise<{
       personaId,
       startTime: new Date(),
       messages: [],
-      currentState: StateType.INITIAL_CONTACT,
+      currentState: StateType.INITIAL,
       metrics: {
         trust: 5,
         interest: 5,
@@ -169,7 +169,7 @@ export async function processUserMessage(
     // 檢查是否自動結束
     if (shouldAutoEnd()) {
       result.autoEnd = true;
-      result.outcome = currentSession.currentState === StateType.DEAL_CLOSED ? 'won' : 'lost';
+      result.outcome = currentSession.currentState === StateType.WON ? 'won' : 'lost';
       result.report = generateSessionReport();
     }
 
@@ -235,8 +235,8 @@ function shouldAutoEnd(): boolean {
   if (!currentSession) return false;
 
   // 達成交易或完全失去興趣
-  if (currentSession.currentState === StateType.DEAL_CLOSED ||
-      currentSession.currentState === StateType.LOST_INTEREST) {
+  if (currentSession.currentState === StateType.WON ||
+      currentSession.currentState === StateType.LOST) {
     return true;
   }
 
