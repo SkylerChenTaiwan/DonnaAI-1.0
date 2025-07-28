@@ -223,6 +223,8 @@ const getAuthErrorMessage = (error: any): string => {
       return '網路連線失敗，請檢查網路設定';
     case 'auth/requires-recent-login':
       return '為了安全考量，請重新登入後再嘗試更新';
+    case 'auth/invalid-credential':
+      return '認證資訊無效，請確認您的電子郵件和密碼';
     default:
       return error.message || '發生未知錯誤，請稍後再試';
   }

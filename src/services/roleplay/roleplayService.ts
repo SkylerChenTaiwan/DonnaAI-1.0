@@ -4,8 +4,7 @@
  */
 
 import { getFirebaseFunctions } from '@/services/firebase/config';
-import { httpsCallable, getFunctions } from 'firebase/functions';
-import { initializeApp, getApps } from 'firebase/app';
+import { httpsCallable } from 'firebase/functions';
 import {
   CustomerPersona,
   RolePlaySession,
@@ -18,19 +17,8 @@ import { generateSystemPrompt, generateStateAnalysisPrompt } from './promptTempl
 import { customerPersonas } from './customerPersonas';
 
 // 初始化 Firebase Functions
-// 暫時強制使用生產環境的 Functions（因為開發環境還未升級到 Blaze）
-const productionConfig = {
-  apiKey: 'AIzaSyDsD6ejZwtcWvc-Etio7YWbn7-Kh_gy9B8',
-  authDomain: 'donnaai-production.firebaseapp.com',
-  projectId: 'donnaai-production',
-  storageBucket: 'donnaai-production.firebasestorage.app',
-  messagingSenderId: '624326785342',
-  appId: '1:624326785342:ios:0c2b45aab7e0e94838546f'
-};
-
-const productionApp = getApps().find(app => app.name === 'production') || 
-                     initializeApp(productionConfig, 'production');
-const functions = getFunctions(productionApp, 'asia-east1');
+// 注意：開發環境需要升級到 Blaze 計畫才能使用 Cloud Functions
+const functions = getFirebaseFunctions();
 
 // Cloud Functions
 const analyzeCustomerStateFn = httpsCallable(functions, 'analyzeCustomerState');
