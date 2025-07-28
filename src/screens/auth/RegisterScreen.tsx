@@ -9,13 +9,12 @@ import {
   StyleSheet,
   Alert,
   Image,
+  Platform,
 } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
 import { Layout } from '@/components/common/Layout';
 import { TextInput } from '@/components/common/TextInput';
 import { Button } from '@/components/common/Button';
 import { signUp } from '@/services/firebase/auth';
-import { UserRole } from '@/types/entities';
 
 interface RegisterScreenProps {
   onNavigateToLogin: () => void;
@@ -30,7 +29,6 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
     confirmPassword: '',
     name: '',
     organizationName: '',
-    role: 'salesperson' as UserRole,
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{
@@ -89,7 +87,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
         password: formData.password,
         name: formData.name.trim(),
         organizationName: formData.organizationName.trim(),
-        role: formData.role,
+        role: 'salesperson', // 預設為業務員角色
       });
       // 成功註冊後，認證狀態會自動更新，導航會由父元件處理
       Alert.alert('註冊成功', '歡迎加入 DonnaAI！');
@@ -107,7 +105,10 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
   };
 
   return (
-    <Layout>
+    <Layout 
+      keyboardAvoidingEnabled={true}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+    >
       <View style={styles.container}>
         <View style={styles.header}>
           <Image 
@@ -147,21 +148,6 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
             placeholder="請輸入您的公司名稱"
             error={errors.organizationName}
           />
-
-          <View style={styles.pickerContainer}>
-            <Text style={styles.label}>職位角色</Text>
-            <View style={styles.pickerWrapper}>
-              <Picker
-                selectedValue={formData.role}
-                onValueChange={(value) => updateFormData('role', value)}
-                style={styles.picker}
-              >
-                <Picker.Item label="業務員" value="salesperson" />
-                <Picker.Item label="主管" value="manager" />
-                <Picker.Item label="管理員" value="admin" />
-              </Picker>
-            </View>
-          </View>
 
           <TextInput
             label="密碼"
@@ -238,24 +224,6 @@ const styles = StyleSheet.create({
   },
   form: {
     width: '100%',
-  },
-  pickerContainer: {
-    marginBottom: 16,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#1C1C1E',
-    marginBottom: 8,
-  },
-  pickerWrapper: {
-    borderWidth: 1,
-    borderColor: '#E5E5EA',
-    borderRadius: 8,
-    backgroundColor: '#FFFFFF',
-  },
-  picker: {
-    height: 50,
   },
   registerButton: {
     marginTop: 8,
