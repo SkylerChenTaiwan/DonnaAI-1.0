@@ -5,7 +5,7 @@
 
 import * as admin from "firebase-admin";
 import OpenAI from "openai";
-import * as functions from "firebase-functions";
+import { getOpenAIApiKey } from "./utils/api-key-helpers";
 
 // 初始化 Firebase Admin
 if (!admin.apps.length) {
@@ -13,8 +13,19 @@ if (!admin.apps.length) {
 }
 
 const db = admin.firestore();
-const openaiApiKey = functions.config().openai?.api_key;
-const openai = openaiApiKey ? new OpenAI({apiKey: openaiApiKey}) : null;
+
+// 初始化 OpenAI 客戶端
+let openai: OpenAI | null = null;
+
+function getOpenAI(): OpenAI | null {
+  if (!openai) {
+    const key = getOpenAIApiKey();
+    if (key) {
+      openai = new OpenAI({apiKey: key});
+    }
+  }
+  return openai;
+}
 
 interface FieldMapping {
   fieldKey: string;
@@ -108,7 +119,11 @@ ${JSON.stringify(fieldDescriptions, null, 2)}
 請以 JSON 陣列格式回應，每個元素包含 fieldKey、extractedValue、confidence、reason 和 requiresConfirmation。`;
 
   try {
-    const response = await openai.chat.completions.create({
+    const client = getOpenAI();
+    if (!client) {
+      throw new Error("OpenAI client not initialized");
+    }
+    const response = await client.chat.completions.create({
       model: "gpt-4-turbo-preview",
       messages: [
         {role: "system", content: systemPrompt},

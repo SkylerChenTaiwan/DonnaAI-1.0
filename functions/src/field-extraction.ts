@@ -7,6 +7,7 @@ import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import * as cors from "cors";
 import OpenAI from "openai";
+import { getOpenAIApiKey } from "./utils/api-key-helpers";
 
 // 初始化服務
 if (!admin.apps.length) {
@@ -15,9 +16,18 @@ if (!admin.apps.length) {
 
 const corsHandler = cors.default({origin: true});
 
-// 從環境變數獲取 API 金鑰
-const openaiApiKey = functions.config().openai?.api_key;
-const openai = openaiApiKey ? new OpenAI({apiKey: openaiApiKey}) : null;
+// 初始化 OpenAI 客戶端
+let openai: OpenAI | null = null;
+
+function getOpenAI(): OpenAI | null {
+  if (!openai) {
+    const key = getOpenAIApiKey();
+    if (key) {
+      openai = new OpenAI({apiKey: key});
+    }
+  }
+  return openai;
+}
 
 export interface FieldExtractionRequest {
   content: string;
@@ -144,7 +154,11 @@ async function performFieldExtraction(
   const userPrompt = buildUserPrompt(request);
 
   try {
-    const response = await openai.chat.completions.create({
+    const client = getOpenAI();
+    if (!client) {
+      throw new Error("OpenAI client not initialized");
+    }
+    const response = await client.chat.completions.create({
       model: "gpt-4-turbo-preview",
       messages: [
         {role: "system", content: systemPrompt},

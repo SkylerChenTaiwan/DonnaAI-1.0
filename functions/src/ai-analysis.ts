@@ -5,15 +5,32 @@
 
 import OpenAI from "openai";
 import Anthropic from "@anthropic-ai/sdk";
-import * as functions from "firebase-functions";
-
-// 從環境變數獲取 API 金鑰
-const openaiApiKey = functions.config().openai?.api_key;
-const anthropicApiKey = functions.config().anthropic?.api_key;
+import { getOpenAIApiKey } from "./utils/api-key-helpers";
 
 // 初始化 AI 客戶端
-const openai = openaiApiKey ? new OpenAI({apiKey: openaiApiKey}) : null;
-const anthropic = anthropicApiKey ? new Anthropic({apiKey: anthropicApiKey}) : null;
+let openai: OpenAI | null = null;
+let anthropic: Anthropic | null = null;
+
+function getOpenAI(): OpenAI | null {
+  if (!openai) {
+    const key = getOpenAIApiKey();
+    if (key) {
+      openai = new OpenAI({apiKey: key});
+    }
+  }
+  return openai;
+}
+
+// TODO: 未來使用 Anthropic 時再啟用
+// function getAnthropic(): Anthropic | null {
+//   if (!anthropic) {
+//     const key = getClaudeApiKey();
+//     if (key) {
+//       anthropic = new Anthropic({apiKey: key});
+//     }
+//   }
+//   return anthropic;
+// }
 
 export interface AnalysisResult {
   summary: string;
@@ -77,7 +94,11 @@ async function analyzeWithOpenAI(
 
 請以 JSON 格式回應。`;
 
-  const response = await openai.chat.completions.create({
+  const client = getOpenAI();
+  if (!client) {
+    throw new Error("OpenAI client not initialized");
+  }
+  const response = await client.chat.completions.create({
     model: "gpt-4-turbo-preview",
     messages: [
       {role: "system", content: systemPrompt},
