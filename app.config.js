@@ -8,7 +8,7 @@ export default {
   expo: {
     name: "DonnaAI",
     slug: "donnaai",
-    version: "1.0.0",
+    version: "1.0.1",
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "light",
@@ -23,7 +23,7 @@ export default {
     ios: {
       supportsTablet: true,
       bundleIdentifier: "com.skylerchen.donnaai",
-      buildNumber: "1.0.0",
+      buildNumber: "1.0.3",
       googleServicesFile: `./config/firebase/${APP_VARIANT}/GoogleService-Info.plist`,
       infoPlist: {
         UIBackgroundModes: ["audio"],
