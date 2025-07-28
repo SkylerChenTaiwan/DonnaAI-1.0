@@ -9,7 +9,7 @@ import { getOpenAIApiKey } from "./utils/api-key-helpers";
 
 // 初始化 AI 客戶端
 let openai: OpenAI | null = null;
-let anthropic: Anthropic | null = null;
+const anthropic: Anthropic | null = null;
 
 function getOpenAI(): OpenAI | null {
   if (!openai) {
