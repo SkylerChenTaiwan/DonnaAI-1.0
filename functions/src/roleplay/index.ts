@@ -148,8 +148,8 @@ export const processRolePlayDialogue = onCall({
 
 # 對話歷史
 ${conversationHistory?.slice(-5).map((msg: any) => 
-  `${msg.sender === 'user' ? '業務員' : '客戶'}: ${msg.content}`
-).join('\n') || '（首次對話）'}
+    `${msg.sender === "user" ? "業務員" : "客戶"}: ${msg.content}`
+  ).join("\n") || "（首次對話）"}
 
 # 業務員說
 ${userMessage}
@@ -196,7 +196,7 @@ ${userMessage}
     
     // 生成提示（如果啟用）
     if (enableHints) {
-      resultData.hint = generateHint(newState, conversationHistory);
+      resultData.hint = generateHint(newState);
     }
     
     return resultData;
@@ -230,8 +230,8 @@ export const getCoachAdvice = onCall({
     // 構建對話摘要
     const conversationSummary = recentMessages
       .slice(-5)
-      .map((msg: any) => `${msg.sender === 'user' ? '業務員' : '客戶'}: ${msg.content}`)
-      .join('\n');
+      .map((msg: any) => `${msg.sender === "user" ? "業務員" : "客戶"}: ${msg.content}`)
+      .join("\n");
 
     const prompt = `你是一位資深銷售教練，正在指導業務人員進行訓練。
 
@@ -263,7 +263,7 @@ ${conversationSummary}
 /**
  * 輔助函數：生成提示
  */
-function generateHint(state: string, conversationHistory: any[]): string {
+function generateHint(state: string): string {
   const hints: Record<string, string[]> = {
     "初次接觸": ["建立信任", "了解需求", "展現專業"],
     "產生興趣": ["深挖痛點", "展示價值", "案例分享"],

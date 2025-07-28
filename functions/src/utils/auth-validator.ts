@@ -3,8 +3,7 @@
  * 驗證 Cloud Functions 的用戶身份
  */
 
-import { CallableRequest } from "firebase-functions/v2/https";
-import { HttpsError } from "firebase-functions/v2/https";
+import { CallableRequest , HttpsError } from "firebase-functions/v2/https";
 
 /**
  * 驗證用戶認證
