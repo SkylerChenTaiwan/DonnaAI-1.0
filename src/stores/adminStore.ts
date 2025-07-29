@@ -7,6 +7,7 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { Organization, User } from '@/types/entities';
 import { EnterpriseConfig, UsageMetrics, Period } from '@/types/admin';
+import { SuperAdminStats } from '@/types/superadmin';
 import {
   getOrganizations,
   getOrganization,
@@ -34,6 +35,7 @@ import {
   batchDeleteUsers,
   validateDeletableUsers
 } from '@/services/firebase/admin/userManagementService';
+import { getPlatformStats } from '@/services/firebase/admin/statsService';
 
 interface AdminState {
   // 組織管理
@@ -55,6 +57,9 @@ interface AdminState {
   
   // 企業配置
   enterpriseConfig: EnterpriseConfig | null;
+  
+  // 平台統計 (Super Admin)
+  platformStats: SuperAdminStats | null;
   
   // 狀態
   isLoading: boolean;
@@ -89,6 +94,9 @@ interface AdminState {
   batchDelete: (userIds: string[]) => Promise<{ success: number; failed: number; errors: string[] }>;
   validateDeletable: (userIds: string[]) => Promise<{ deletableIds: string[]; undeletableIds: string[]; reasons: Record<string, string> }>;
   
+  // 平台統計動作 (Super Admin)
+  fetchPlatformStats: () => Promise<void>;
+  
   // 工具動作
   clearError: () => void;
   reset: () => void;
@@ -103,6 +111,7 @@ const initialState = {
   usageReport: null,
   realtimeStats: null,
   enterpriseConfig: null,
+  platformStats: null,
   isLoading: false,
   error: null
 };
@@ -591,6 +600,22 @@ export const useAdminStore = create<AdminState>()(
           return await validateDeletableUsers(userIds);
         } catch (error) {
           console.error('驗證可刪除用戶失敗:', error);
+          throw error;
+        }
+      },
+      
+      // 平台統計動作 (Super Admin)
+      fetchPlatformStats: async () => {
+        set({ isLoading: true, error: null });
+        
+        try {
+          const stats = await getPlatformStats();
+          set({ platformStats: stats, isLoading: false });
+        } catch (error) {
+          set({ 
+            error: error instanceof Error ? error.message : '獲取平台統計失敗',
+            isLoading: false 
+          });
           throw error;
         }
       },

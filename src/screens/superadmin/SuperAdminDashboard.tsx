@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   RefreshControl,
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Layout } from '@/components/common/Layout';
@@ -20,6 +21,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@/types/navigation';
 import { useAuthStore } from '@/stores/authStore';
 import { DesignSystem } from '@/theme/designSystem';
+import { useSuperAdminStats } from '@/hooks/useSuperAdminStats';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -27,24 +29,35 @@ export const SuperAdminDashboard: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
   const { user } = useAuthStore();
   const [refreshing, setRefreshing] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  
+  // 使用 Super Admin 統計 Hook
+  const { 
+    stats, 
+    isLoading, 
+    error, 
+    refreshStats,
+    topOrganizations 
+  } = useSuperAdminStats();
 
-  // 系統管理員不需要載入業務資料
+  // 處理錯誤
   useEffect(() => {
-    // 不執行任何資料載入
-  }, []);
+    if (error) {
+      Alert.alert('載入錯誤', error);
+    }
+  }, [error]);
 
   const handleRefresh = async () => {
     setRefreshing(true);
-    // 模擬 refresh，但不實際載入資料
-    setTimeout(() => setRefreshing(false), 500);
+    await refreshStats();
+    setRefreshing(false);
   };
 
-  // 系統管理員專用的模擬統計資料
-  const totalOrganizations = 0;
-  const activeOrganizations = 0;
-  const totalUsers = 0;
-  const totalRevenue = 0;
+  // 從統計資料取得實際數值
+  const totalOrganizations = stats?.totalOrganizations || 0;
+  const activeOrganizations = stats?.activeOrganizations || 0;
+  const totalUsers = stats?.totalUsers || 0;
+  const totalRevenue = stats?.monthlyRevenue || 0;
+  const growthRate = stats?.organizationGrowthRate || 0;
 
   const quickStats = [
     {
@@ -59,14 +72,14 @@ export const SuperAdminDashboard: React.FC = () => {
       id: 'users',
       title: '用戶總數',
       value: totalUsers.toString(),
-      subtitle: '跨所有組織',
+      subtitle: `${stats?.activeUsers || 0} 個活躍`,
       icon: 'people-outline',
       color: DesignSystem.colors.success
     },
     {
       id: 'revenue',
       title: '每月收入',
-      value: `$${totalRevenue.toLocaleString()}`,
+      value: `NT$${totalRevenue.toLocaleString('zh-TW')}`,
       subtitle: '預估收入',
       icon: 'cash-outline',
       color: DesignSystem.colors.warning
@@ -74,10 +87,10 @@ export const SuperAdminDashboard: React.FC = () => {
     {
       id: 'growth',
       title: '成長率',
-      value: '+23%',
+      value: growthRate > 0 ? `+${growthRate}%` : `${growthRate}%`,
       subtitle: '本月 vs 上月',
-      icon: 'trending-up-outline',
-      color: DesignSystem.colors.info
+      icon: growthRate >= 0 ? 'trending-up-outline' : 'trending-down-outline',
+      color: growthRate >= 0 ? DesignSystem.colors.success : DesignSystem.colors.error
     }
   ];
 
@@ -188,15 +201,42 @@ export const SuperAdminDashboard: React.FC = () => {
               <Text style={styles.systemInfoValue}>{user?.email}</Text>
             </View>
             <View style={styles.systemInfoRow}>
-              <Text style={styles.systemInfoLabel}>權限範圍：</Text>
-              <Text style={styles.systemInfoValue}>系統管理功能</Text>
+              <Text style={styles.systemInfoLabel}>平台總記錄數：</Text>
+              <Text style={styles.systemInfoValue}>{stats?.totalRecords.toLocaleString() || '0'}</Text>
             </View>
             <View style={styles.systemInfoRow}>
-              <Text style={styles.systemInfoLabel}>資料存取：</Text>
-              <Text style={styles.systemInfoValue}>無業務資料存取權限</Text>
+              <Text style={styles.systemInfoLabel}>AI 處理次數：</Text>
+              <Text style={styles.systemInfoValue}>{stats?.totalAIProcessing.toLocaleString() || '0'}</Text>
             </View>
           </View>
         </View>
+
+        {/* 收入排行榜 */}
+        {topOrganizations.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>收入排行榜（前10名）</Text>
+            {topOrganizations.map((org, index) => (
+              <TouchableOpacity 
+                key={org.organizationId} 
+                style={styles.orgCard}
+                onPress={() => navigation.navigate('OrganizationDetail', { organizationId: org.organizationId })}
+              >
+                <View style={styles.orgRank}>
+                  <Text style={styles.orgRankText}>{index + 1}</Text>
+                </View>
+                <View style={styles.orgInfo}>
+                  <Text style={styles.orgName}>{org.organizationName}</Text>
+                  <Text style={styles.orgStats}>
+                    {org.activeUsers} 位用戶 • {org.totalRecords} 筆記錄
+                  </Text>
+                </View>
+                <Text style={styles.orgRevenue}>
+                  NT${org.monthlyBill.toLocaleString('zh-TW')}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
 
         <View style={styles.footer} />
       </ScrollView>
@@ -322,6 +362,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: DesignSystem.colors.border.light,
   },
+  orgRank: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: DesignSystem.colors.primary + '15',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  orgRankText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: DesignSystem.colors.primary,
+  },
   orgInfo: {
     flex: 1,
   },
@@ -330,6 +384,15 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
     marginBottom: 4,
+  },
+  orgStats: {
+    fontSize: 12,
+    color: DesignSystem.colors.text.secondary,
+  },
+  orgRevenue: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: DesignSystem.colors.success,
   },
   orgPlan: {
     fontSize: 14,

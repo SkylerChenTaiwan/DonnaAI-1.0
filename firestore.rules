@@ -164,7 +164,7 @@ service cloud.firestore {
     }
     
     // 計費記錄集合
-    match /billing_records/{recordId} {
+    match /billingRecords/{recordId} {
       // Super Admin 可以讀寫所有計費記錄
       allow read, write: if isSuperAdmin();
       // 組織管理員可以讀取和查詢計費記錄

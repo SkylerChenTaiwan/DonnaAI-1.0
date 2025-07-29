@@ -48,8 +48,7 @@ export const BillingManagementSection: React.FC<BillingManagementSectionProps> =
   const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
-    // TODO: 暫時停用計費資料載入，等有實際資料時再啟用
-    // loadBillingData();
+    loadBillingData();
   }, [organization.id]);
 
   const loadBillingData = async () => {
@@ -146,19 +145,7 @@ export const BillingManagementSection: React.FC<BillingManagementSectionProps> =
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* 開發中通知 */}
-      <View style={styles.developmentNotice}>
-        <Text style={styles.developmentTitle}>🚧 計費功能開發中</Text>
-        <Text style={styles.developmentText}>
-          計費統計功能將在後續版本中提供，包括：{'\n'}
-          • 即時計費摘要{'\n'}
-          • 使用量統計{'\n'}
-          • 歷史帳單記錄{'\n'}
-          • 自動計費管理
-        </Text>
-      </View>
-      
-      {/* TODO: 當月計費摘要（暫時隱藏）
+      {/* 當月計費摘要 */}
       {billingSummary && (
         <View style={styles.summaryCard}>
           <View style={styles.summaryHeader}>
@@ -318,8 +305,6 @@ export const BillingManagementSection: React.FC<BillingManagementSectionProps> =
         </View>
       </View>
       
-      {/* 結束註解標記 */}
-      {/* */ }
     </ScrollView>
   );
 };

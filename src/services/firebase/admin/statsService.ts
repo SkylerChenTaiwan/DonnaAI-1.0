@@ -297,7 +297,7 @@ export async function getMonthlyRevenueStats(yearMonth: string): Promise<Platfor
  * 獲取組織使用統計列表
  */
 export async function getOrganizationUsageStats(
-  limit: number = 10,
+  maxResults: number = 10,
   orderByField: 'monthlyBill' | 'activeUsers' | 'totalRecords' = 'monthlyBill'
 ): Promise<OrganizationUsageStats[]> {
   const db = getFirebaseDb();
@@ -307,7 +307,7 @@ export async function getOrganizationUsageStats(
     where('status', '==', 'active'),
     where('subscriptionPlan', '==', 'pro'),
     orderBy(orderByField, 'desc'),
-    limit(limit)
+    limit(maxResults)
   );
   
   const orgsSnapshot = await getDocs(orgsQuery);
