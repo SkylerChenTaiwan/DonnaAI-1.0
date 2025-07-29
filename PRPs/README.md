@@ -54,7 +54,7 @@
 | 48v  | ai-roleplay-training-system.md | ✅ 已完成 | AI 業務訓練 RolePlay 系統 - AI 客戶角色扮演、狀態機、對話壓縮、成本優化 | 2025-07-26 |
 | 49v  | ai-roleplay-webapp-integration.md | ✅ 已完成 | AI RolePlay WebApp 整合 - 移除假工具、整合訓練系統為 WebApp、Native Bridge 通訊 | 2025-07-27 |
 | 50v  | ai-roleplay-ux-improvements.md | ✅ 已完成 | AI 業務訓練 UX 優化 - 修復導航、統一視覺設計、會話暫停/恢復、AI 教練、自動結束 | 2025-07-27 |
-| 51   | registration-keyboard-handling-fix.md | 📋 待執行 | 註冊頁面鍵盤處理修復 - KeyboardAvoidingView 實作、表單簡化、跨平台鍵盤處理 | - |
+| 51v  | registration-keyboard-handling-fix.md | ✅ 已完成 | 註冊頁面鍵盤處理修復 - KeyboardAvoidingView 實作、表單簡化、跨平台鍵盤處理 | 2025-07-29 |
 | 52   | super-admin-statistics-billing-fix.md | 📋 待執行 | 修復 Super Admin 統計數據與計費功能 - 真實統計數據、啟用計費系統、月度使用計算 | - |
 
 ## 命名規則
