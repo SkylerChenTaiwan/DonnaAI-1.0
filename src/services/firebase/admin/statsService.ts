@@ -259,38 +259,50 @@ export async function getMonthlyRevenueStats(yearMonth: string): Promise<Platfor
   const db = getFirebaseDb();
   const [year, month] = yearMonth.split('-').map(Number);
   
-  // 獲取該月份的計費記錄
-  const billingQuery = query(
-    collection(db, 'billingRecords'),
-    where('period', '==', yearMonth),
-    where('status', 'in', ['paid', 'pending'])
-  );
-  
-  const billingSnapshot = await getDocs(billingQuery);
-  
-  let totalRevenue = 0;
-  let paidOrganizations = 0;
-  let pendingPayments = 0;
-  
-  billingSnapshot.forEach(doc => {
-    const billing = doc.data();
-    if (billing.status === 'paid') {
-      totalRevenue += billing.amount;
-      paidOrganizations++;
-    } else {
-      pendingPayments += billing.amount;
-    }
-  });
-  
-  const averageRevenuePerOrg = paidOrganizations > 0 ? totalRevenue / paidOrganizations : 0;
-  
-  return {
-    period: yearMonth,
-    totalRevenue,
-    paidOrganizations,
-    pendingPayments,
-    averageRevenuePerOrg: Math.round(averageRevenuePerOrg)
-  };
+  try {
+    // 獲取該月份的計費記錄
+    const billingQuery = query(
+      collection(db, 'billingRecords'),
+      where('period', '==', yearMonth),
+      where('status', 'in', ['paid', 'pending'])
+    );
+    
+    const billingSnapshot = await getDocs(billingQuery);
+    
+    let totalRevenue = 0;
+    let paidOrganizations = 0;
+    let pendingPayments = 0;
+    
+    billingSnapshot.forEach(doc => {
+      const billing = doc.data();
+      if (billing.status === 'paid') {
+        totalRevenue += billing.amount;
+        paidOrganizations++;
+      } else {
+        pendingPayments += billing.amount;
+      }
+    });
+    
+    const averageRevenuePerOrg = paidOrganizations > 0 ? totalRevenue / paidOrganizations : 0;
+    
+    return {
+      period: yearMonth,
+      totalRevenue,
+      paidOrganizations,
+      pendingPayments,
+      averageRevenuePerOrg: Math.round(averageRevenuePerOrg)
+    };
+  } catch (error) {
+    console.error('獲取月度收入統計失敗:', error);
+    // 如果是權限錯誤或集合不存在，返回預設值
+    return {
+      period: yearMonth,
+      totalRevenue: 0,
+      paidOrganizations: 0,
+      pendingPayments: 0,
+      averageRevenuePerOrg: 0
+    };
+  }
 }
 
 /**
@@ -302,38 +314,87 @@ export async function getOrganizationUsageStats(
 ): Promise<OrganizationUsageStats[]> {
   const db = getFirebaseDb();
   
-  const orgsQuery = query(
-    collection(db, 'organizations'),
-    where('status', '==', 'active'),
-    where('subscriptionPlan', '==', 'pro'),
-    orderBy(orderByField, 'desc'),
-    limit(maxResults)
-  );
-  
-  const orgsSnapshot = await getDocs(orgsQuery);
-  const stats: OrganizationUsageStats[] = [];
-  
-  for (const doc of orgsSnapshot.docs) {
-    const org = doc.data() as Organization;
-    const activeUsers = org.monthlyUsage?.activeUsers || 0;
-    const giftedSeats = org.giftedSeats || 0;
-    
-    const monthlyBill = calculatePrice(
-      activeUsers,
-      org.billingCycle || 'monthly',
-      giftedSeats
-    );
-    
-    stats.push({
-      organizationId: doc.id,
-      organizationName: org.name,
-      activeUsers,
-      totalRecords: org.monthlyUsage?.recordCount || 0,
-      aiProcessingCount: org.monthlyUsage?.aiProcessingCount || 0,
-      monthlyBill: org.billingCycle === 'yearly' ? monthlyBill / 12 : monthlyBill,
-      lastActive: org.lastActive?.toDate() || new Date()
-    });
+  try {
+    // 注意：這個查詢需要複合索引
+    // 如果 orderByField 是 'monthlyBill'，我們需要改變策略
+    // 因為 monthlyBill 不是資料庫欄位
+    if (orderByField === 'monthlyBill') {
+      // 先獲取所有活躍的 pro 組織，然後在記憶體中排序
+      const orgsQuery = query(
+        collection(db, 'organizations'),
+        where('status', '==', 'active'),
+        where('subscriptionPlan', '==', 'pro'),
+        limit(maxResults * 2) // 獲取更多資料以便排序
+      );
+      
+      const orgsSnapshot = await getDocs(orgsQuery);
+      const stats: OrganizationUsageStats[] = [];
+      
+      for (const doc of orgsSnapshot.docs) {
+        const org = doc.data() as Organization;
+        const activeUsers = org.monthlyUsage?.activeUsers || 0;
+        const giftedSeats = org.giftedSeats || 0;
+        
+        const monthlyBill = calculatePrice(
+          activeUsers,
+          org.billingCycle || 'monthly',
+          giftedSeats
+        );
+        
+        stats.push({
+          organizationId: doc.id,
+          organizationName: org.name,
+          activeUsers,
+          totalRecords: org.monthlyUsage?.recordCount || 0,
+          aiProcessingCount: org.monthlyUsage?.aiProcessingCount || 0,
+          monthlyBill: org.billingCycle === 'yearly' ? monthlyBill / 12 : monthlyBill,
+          lastActive: org.lastActive?.toDate() || new Date()
+        });
+      }
+      
+      // 在記憶體中按月費排序
+      stats.sort((a, b) => b.monthlyBill - a.monthlyBill);
+      return stats.slice(0, maxResults);
+    } else {
+      // 對於其他欄位，使用資料庫排序
+      const orgsQuery = query(
+        collection(db, 'organizations'),
+        where('status', '==', 'active'),
+        where('subscriptionPlan', '==', 'pro'),
+        orderBy(`monthlyUsage.${orderByField === 'activeUsers' ? 'activeUsers' : 'recordCount'}`, 'desc'),
+        limit(maxResults)
+      );
+      
+      const orgsSnapshot = await getDocs(orgsQuery);
+      const stats: OrganizationUsageStats[] = [];
+      
+      for (const doc of orgsSnapshot.docs) {
+        const org = doc.data() as Organization;
+        const activeUsers = org.monthlyUsage?.activeUsers || 0;
+        const giftedSeats = org.giftedSeats || 0;
+        
+        const monthlyBill = calculatePrice(
+          activeUsers,
+          org.billingCycle || 'monthly',
+          giftedSeats
+        );
+        
+        stats.push({
+          organizationId: doc.id,
+          organizationName: org.name,
+          activeUsers,
+          totalRecords: org.monthlyUsage?.recordCount || 0,
+          aiProcessingCount: org.monthlyUsage?.aiProcessingCount || 0,
+          monthlyBill: org.billingCycle === 'yearly' ? monthlyBill / 12 : monthlyBill,
+          lastActive: org.lastActive?.toDate() || new Date()
+        });
+      }
+      
+      return stats;
+    }
+  } catch (error) {
+    console.error('獲取組織使用統計失敗:', error);
+    // 返回空陣列而不是拋出錯誤
+    return [];
   }
-  
-  return stats;
 }
