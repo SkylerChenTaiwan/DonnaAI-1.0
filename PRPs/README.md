@@ -56,6 +56,8 @@
 | 50v  | ai-roleplay-ux-improvements.md | ✅ 已完成 | AI 業務訓練 UX 優化 - 修復導航、統一視覺設計、會話暫停/恢復、AI 教練、自動結束 | 2025-07-27 |
 | 51v  | registration-keyboard-handling-fix.md | ✅ 已完成 | 註冊頁面鍵盤處理修復 - KeyboardAvoidingView 實作、表單簡化、跨平台鍵盤處理 | 2025-07-29 |
 | 52v  | super-admin-statistics-billing-fix.md | ✅ 已完成 | 修復 Super Admin 統計數據與計費功能 - 真實統計數據、啟用計費系統、月度使用計算 | 2025-07-29 |
+| 53   | legacy-data-import.md | 📋 待執行 | 舊系統資料導入功能 - 批量導入業務名單、客戶資料、訪談記錄，自動建立關聯 | - |
+| 53v2 | legacy-data-import-v2.md | 📋 待執行 | 舊系統資料導入功能 V2 - 新增業務代碼對照表，支援代碼到姓名的智慧轉換 | - |
 
 ## 命名規則
 
@@ -71,7 +73,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：53**
+**下一個新建的 PRP 應使用編號：54**
 
 ## PRP 類型說明
 
