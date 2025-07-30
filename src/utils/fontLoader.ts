@@ -33,7 +33,7 @@ export const preloadWebFonts = () => {
   style.textContent = `
     @font-face {
       font-family: 'Ionicons';
-      src: url('/_expo/static/media/Ionicons.6148e7019854f3bde85b633cb88f3c25.ttf') format('truetype');
+      src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.6148e7019854f3bde85b633cb88f3c25.ttf') format('truetype');
       font-display: swap;
     }
   `;
@@ -43,7 +43,7 @@ export const preloadWebFonts = () => {
   // 預載字體
   const link = document.createElement('link');
   link.rel = 'preload';
-  link.href = '/_expo/static/media/Ionicons.6148e7019854f3bde85b633cb88f3c25.ttf';
+  link.href = '/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.6148e7019854f3bde85b633cb88f3c25.ttf';
   link.as = 'font';
   link.type = 'font/ttf';
   link.crossOrigin = 'anonymous';

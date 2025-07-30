@@ -238,6 +238,12 @@ service cloud.firestore {
         getUserData().organizationId == resource.data.organizationId;
     }
     
+    // 組織統計集合（Super Admin 專用）
+    match /organizationStats/{statId} {
+      // 只有 Super Admin 可以讀寫
+      allow read, write: if isSuperAdmin();
+    }
+    
     // 預設拒絕所有其他存取
     match /{document=**} {
       allow read, write: if false;
