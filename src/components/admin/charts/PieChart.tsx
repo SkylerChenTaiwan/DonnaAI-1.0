@@ -8,21 +8,18 @@ import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { PolarChart, Pie } from 'victory-native';
 import { DesignSystem } from '@/theme/designSystem';
+import { PieDataPoint, toVictoryPolar, formatPercentage } from '@/types/charts';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-interface PieData {
-  label: string;
-  value: number;
-}
-
 interface PieChartProps {
-  data: PieData[];
+  data: PieDataPoint[];
   title?: string;
   width?: number;
   height?: number;
   innerRadius?: number;
   colorScale?: string[];
+  showPercentage?: boolean;
 }
 
 export const PieChart: React.FC<PieChartProps> = ({
@@ -41,13 +38,17 @@ export const PieChart: React.FC<PieChartProps> = ({
     '#1ABC9C',
     '#F39C12',
   ],
+  showPercentage = true,
 }) => {
   const total = data.reduce((sum, item) => sum + item.value, 0);
   const pieData = data.map((item, index) => ({
     ...item,
-    percentage: ((item.value / total) * 100).toFixed(1),
-    color: colorScale[index % colorScale.length],
+    percentage: formatPercentage(item.value / total),
+    color: item.color || colorScale[index % colorScale.length],
   }));
+  
+  // 轉換為 Victory Native 格式
+  const victoryData = toVictoryPolar(pieData);
 
   return (
     <View style={styles.container}>
@@ -57,7 +58,7 @@ export const PieChart: React.FC<PieChartProps> = ({
         <View style={{ height, width }}>
           {/* @ts-ignore - Victory Native v41 TypeScript 類型定義不完善 */}
           <PolarChart
-            data={pieData}
+            data={victoryData}
             labelKey="label"
             valueKey="value"
             colorKey="color"
@@ -78,7 +79,7 @@ export const PieChart: React.FC<PieChartProps> = ({
               ]} 
             />
             <Text style={styles.legendText}>
-              {item.label} ({item.percentage}%)
+              {item.label} {showPercentage && `(${item.percentage})`}
             </Text>
           </View>
         ))}

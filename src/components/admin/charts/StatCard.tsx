@@ -8,13 +8,9 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
+import { StatCardData } from '@/types/charts';
 
-interface StatCardProps {
-  label: string;
-  value: string | number;
-  unit?: string;
-  change?: string;
-  changeType?: 'positive' | 'negative' | 'neutral';
+interface StatCardProps extends StatCardData {
   icon?: keyof typeof Ionicons.glyphMap;
   color?: string;
   size?: 'small' | 'medium' | 'large';

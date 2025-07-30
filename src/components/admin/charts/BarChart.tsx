@@ -8,22 +8,19 @@ import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { CartesianChart, Bar } from 'victory-native';
 import { DesignSystem } from '@/theme/designSystem';
+import { ChartDataPoint, ChartSeries, isMultiSeries, flattenSeries } from '@/types/charts';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-interface BarData {
-  x: string | number;
-  y: number;
-}
-
 interface BarChartProps {
-  data: BarData[];
+  data: ChartDataPoint[] | ChartSeries[];
   title?: string;
   width?: number;
   height?: number;
   color?: string;
   yAxisLabel?: string;
   xAxisLabel?: string;
+  variant?: 'single' | 'grouped' | 'stacked';
 }
 
 export const BarChart: React.FC<BarChartProps> = ({
@@ -34,7 +31,10 @@ export const BarChart: React.FC<BarChartProps> = ({
   color = DesignSystem.colors.primary,
   yAxisLabel,
   xAxisLabel,
+  variant = 'single',
 }) => {
+  // 處理多系列資料
+  const chartData = isMultiSeries(data) ? flattenSeries(data) : data;
   return (
     <View style={styles.container}>
       {title && <Text style={styles.title}>{title}</Text>}
@@ -42,7 +42,7 @@ export const BarChart: React.FC<BarChartProps> = ({
       <View style={{ height, width }}>
         {/* @ts-ignore - Victory Native v41 TypeScript 類型定義不完善 */}
         <CartesianChart
-          data={data}
+          data={chartData}
           xKey="x"
           yKeys={["y"]}
           domainPadding={{ left: 50, right: 50, top: 20, bottom: 20 }}

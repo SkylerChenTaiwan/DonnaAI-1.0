@@ -36,3 +36,4 @@ export interface ApiResponse<T> {
 // 匯出其他類型定義
 export * from './personnel';
 export * from './organization';
+export * from './charts';

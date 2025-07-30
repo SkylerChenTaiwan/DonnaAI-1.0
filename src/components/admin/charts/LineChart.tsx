@@ -8,22 +8,21 @@ import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { CartesianChart, Line } from 'victory-native';
 import { DesignSystem } from '@/theme/designSystem';
+import { ChartDataPoint, ChartSeries, isMultiSeries, flattenSeries } from '@/types/charts';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-interface DataPoint {
-  x: number | string;
-  y: number;
-}
-
 interface LineChartProps {
-  data: DataPoint[];
+  data: ChartDataPoint[] | ChartSeries[];
   title?: string;
   width?: number;
   height?: number;
   color?: string;
   yAxisLabel?: string;
   xAxisLabel?: string;
+  curve?: 'linear' | 'smooth' | 'step';
+  showPoints?: boolean;
+  strokeWidth?: number;
 }
 
 export const LineChart: React.FC<LineChartProps> = ({
@@ -34,7 +33,12 @@ export const LineChart: React.FC<LineChartProps> = ({
   color = DesignSystem.colors.primary,
   yAxisLabel,
   xAxisLabel,
+  curve = 'linear',
+  showPoints = false,
+  strokeWidth = 2,
 }) => {
+  // 處理多系列資料
+  const chartData = isMultiSeries(data) ? flattenSeries(data) : data;
   return (
     <View style={styles.container}>
       {title && <Text style={styles.title}>{title}</Text>}
@@ -42,7 +46,7 @@ export const LineChart: React.FC<LineChartProps> = ({
       <View style={{ height, width }}>
         {/* @ts-ignore - Victory Native v41 TypeScript 類型定義不完善 */}
         <CartesianChart
-          data={data}
+          data={chartData}
           xKey="x"
           yKeys={["y"]}
           domainPadding={{ left: 50, right: 50, top: 20, bottom: 20 }}
@@ -52,7 +56,8 @@ export const LineChart: React.FC<LineChartProps> = ({
             <Line 
               points={points.y} 
               color={color} 
-              strokeWidth={2}
+              strokeWidth={strokeWidth}
+              curveType={curve}
             />
           )}
         </CartesianChart>
