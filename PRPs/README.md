@@ -63,6 +63,7 @@
 | 56v  | firebase-hosting-setup.md | ✅ 已完成 | Firebase Hosting 設定與部署 - 雲端託管、自動部署腳本、CDN 加速 | 2025-07-30 |
 | 57   | web-responsive-ui-layout.md | 📋 待執行 | Web 響應式 UI/UX 橫式佈局 - 側邊欄導航、響應式設計、桌面優化 | - |
 | 58v  | web-critical-fixes.md | ✅ 已完成 | Web 關鍵問題修復 - Modal 導航、Icon 顯示、CSV 上傳功能 | 2025-07-30 |
+| 59   | icon-display-fix-no-upgrade.md | 📋 待執行 | 修復 Icon 顯示問題（不升級版本）- Metro 配置、字體處理、Web Components 改進 | - |
 
 ## 命名規則
 
@@ -78,7 +79,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：59**
+**下一個新建的 PRP 應使用編號：60**
 
 ## PRP 類型說明
 
