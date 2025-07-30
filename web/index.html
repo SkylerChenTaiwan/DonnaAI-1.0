@@ -10,26 +10,7 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   
-  <!-- 使用 Ionicons Web Components -->
-  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-  
-  <!-- 確保自定義元素被正確註冊 -->
-  <script>
-    // 等待 DOM 載入完成
-    document.addEventListener('DOMContentLoaded', function() {
-      // 確保 ion-icon 元素被正確定義
-      if (!customElements.get('ion-icon')) {
-        // 如果尚未定義，創建一個臨時的自定義元素
-        class IonIconPlaceholder extends HTMLElement {
-          constructor() {
-            super();
-          }
-        }
-        customElements.define('ion-icon', IonIconPlaceholder);
-      }
-    });
-  </script>
+  <!-- Icon 字體現在透過 Metro 配置直接載入，不需要額外的 Web Components -->
   
   <style>
     /* 防止 FOUC (Flash of Unstyled Content) */

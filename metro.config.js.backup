@@ -10,33 +10,12 @@ config.resolver.sourceExts.push('cjs');
 // React Native 0.79 預設啟用的 package.json exports 功能與 Firebase SDK 不相容
 config.resolver.unstable_enablePackageExports = false;
 
-// 處理字體檔案的特殊配置
-// 首先移除字體副檔名（如果存在）
-const fontExts = ['ttf', 'otf', 'woff', 'woff2', 'eot'];
-config.resolver.assetExts = config.resolver.assetExts.filter(
-  ext => !fontExts.includes(ext)
-);
-
-// 重新加入字體副檔名，確保它們被視為資源
-config.resolver.assetExts.push(...fontExts);
-
 // 確保支援所有圖片格式
-const imageExts = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'];
-imageExts.forEach(ext => {
-  if (!config.resolver.assetExts.includes(ext)) {
-    config.resolver.assetExts.push(ext);
-  }
-});
+config.resolver.assetExts = [...(config.resolver.assetExts || []), 'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'];
 
 // Web 平台優化配置
 // 指定模組解析欄位順序，優先使用 react-native，其次是 browser，最後是 main
 config.resolver.resolverMainFields = ['react-native', 'browser', 'main'];
-
-// 自定義資源轉換器，處理字體檔案
-config.transformer.assetPlugins = [
-  ...(config.transformer.assetPlugins || []),
-  require.resolve('./fontAssetPlugin.js')
-];
 
 // 簡化配置以確保正常啟動
 // 快取配置暫時移除，避免配置問題
