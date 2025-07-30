@@ -3,7 +3,7 @@
  * 提供完整的 CSV 檔案上傳、驗證和導入功能
  */
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { 
   StyleSheet, 
   View, 
@@ -62,6 +62,19 @@ export function LegacyDataImportScreen({ navigation }: any) {
   const [importResult, setImportResult] = useState<ImportSessionResult | null>(null);
   const [session, setSession] = useState<LegacyImportSession | null>(null);
   const [activeStep, setActiveStep] = useState(0);
+
+  // 初始化 session
+  useEffect(() => {
+    if (organizationId && currentTeamId && user?.uid) {
+      const newSession = createImportSession(
+        organizationId,
+        currentTeamId,
+        user.uid
+      );
+      setSession(newSession);
+      console.log('建立新的導入 session:', newSession);
+    }
+  }, [organizationId, currentTeamId, user?.uid]);
 
   const steps = [
     { title: '上傳檔案', icon: 'cloud-upload-outline' },
@@ -176,49 +189,67 @@ export function LegacyDataImportScreen({ navigation }: any) {
   const validateFiles = async () => {
     if (!session || !organizationId || !currentTeamId || !user) {
       Alert.alert('錯誤', '缺少必要的組織資訊');
+      console.error('驗證失敗：缺少必要資訊', {
+        session: !!session,
+        organizationId: !!organizationId,
+        currentTeamId: !!currentTeamId,
+        user: !!user
+      });
       return false;
     }
 
     setActiveStep(1);
     let allValid = true;
 
-    for (const fileType of fileTypes) {
-      const file = files[fileType.key];
-      
-      if (fileType.required && !file) {
-        Alert.alert('錯誤', `請上傳${fileType.label}`);
-        return false;
-      }
+    try {
+      for (const fileType of fileTypes) {
+        const file = files[fileType.key];
+        
+        if (fileType.required && !file) {
+          Alert.alert('錯誤', `請上傳${fileType.label}`);
+          return false;
+        }
 
-      if (file && file.content) {
-        const validation = await loadAndValidateFile(
-          session,
-          fileType.key,
-          file.content,
-          file.name
-        );
+        if (file && file.content) {
+          console.log(`開始驗證 ${fileType.label}...`);
+          
+          const validation = await loadAndValidateFile(
+            session,
+            fileType.key,
+            file.content,
+            file.name
+          );
 
-        if (!validation.success) {
-          allValid = false;
-          setFiles(prev => ({
-            ...prev,
-            [fileType.key]: {
-              ...file,
-              validated: false,
-              errors: validation.errors,
-            },
-          }));
-        } else {
-          setFiles(prev => ({
-            ...prev,
-            [fileType.key]: {
-              ...file,
-              validated: true,
-              errors: undefined,
-            },
-          }));
+          console.log(`${fileType.label} 驗證結果:`, validation);
+
+          if (!validation.success) {
+            allValid = false;
+            setFiles(prev => ({
+              ...prev,
+              [fileType.key]: {
+                ...file,
+                validated: false,
+                errors: validation.errors,
+              },
+            }));
+            console.error(`${fileType.label} 驗證失敗:`, validation.errors);
+          } else {
+            setFiles(prev => ({
+              ...prev,
+              [fileType.key]: {
+                ...file,
+                validated: true,
+                errors: undefined,
+              },
+            }));
+            console.log(`${fileType.label} 驗證成功`);
+          }
         }
       }
+    } catch (error) {
+      console.error('驗證過程發生錯誤:', error);
+      Alert.alert('錯誤', `驗證過程發生錯誤: ${error.message}`);
+      return false;
     }
 
     return allValid;
