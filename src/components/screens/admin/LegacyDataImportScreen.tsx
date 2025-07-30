@@ -19,7 +19,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { Layout } from '@/components/common/Layout';
-import { theme } from '@/theme';
+import { DesignSystem } from '@/theme/designSystem';
 import { useAuthStore } from '@/stores/authStore';
 import { 
   createImportSession,
@@ -336,7 +336,7 @@ export function LegacyDataImportScreen({ navigation }: any) {
 
           {files[fileType.key] ? (
             <View style={styles.fileInfo}>
-              <Ionicons name="document-text" size={24} color={theme.colors.primary} />
+              <Ionicons name="document-text" size={24} color={DesignSystem.colors.primary} />
               <View style={styles.fileDetails}>
                 <Text style={styles.fileName}>{files[fileType.key]!.name}</Text>
                 <Text style={styles.fileSize}>
@@ -351,7 +351,7 @@ export function LegacyDataImportScreen({ navigation }: any) {
               <TouchableOpacity
                 onPress={() => setFiles(prev => ({ ...prev, [fileType.key]: undefined }))}
               >
-                <Ionicons name="close-circle" size={24} color={theme.colors.error} />
+                <Ionicons name="close-circle" size={24} color={DesignSystem.colors.status.error} />
               </TouchableOpacity>
             </View>
           ) : (
@@ -359,7 +359,7 @@ export function LegacyDataImportScreen({ navigation }: any) {
               style={styles.uploadButton}
               onPress={() => pickFile(fileType.key)}
             >
-              <Ionicons name="cloud-upload-outline" size={24} color={theme.colors.primary} />
+              <Ionicons name="cloud-upload-outline" size={24} color={DesignSystem.colors.primary} />
               <Text style={styles.uploadText}>選擇檔案</Text>
             </TouchableOpacity>
           )}
@@ -390,7 +390,7 @@ export function LegacyDataImportScreen({ navigation }: any) {
   const renderValidation = () => (
     <View style={styles.stepContent}>
       <Text style={styles.stepTitle}>正在驗證資料...</Text>
-      <ActivityIndicator size="large" color={theme.colors.primary} />
+      <ActivityIndicator size="large" color={DesignSystem.colors.primary} />
     </View>
   );
 
@@ -448,7 +448,7 @@ export function LegacyDataImportScreen({ navigation }: any) {
       <Ionicons 
         name={importResult?.success ? "checkmark-circle" : "alert-circle"} 
         size={64} 
-        color={importResult?.success ? theme.colors.success : theme.colors.warning} 
+        color={importResult?.success ? DesignSystem.colors.status.success : DesignSystem.colors.status.warning} 
       />
       
       <Text style={styles.completeTitle}>
@@ -520,7 +520,7 @@ export function LegacyDataImportScreen({ navigation }: any) {
                 <Ionicons 
                   name={step.icon as any} 
                   size={20} 
-                  color={index <= activeStep ? '#fff' : theme.colors.gray} 
+                  color={index <= activeStep ? '#fff' : DesignSystem.colors.gray} 
                 />
               </View>
               <Text style={[
@@ -549,7 +549,7 @@ export function LegacyDataImportScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background,
+    backgroundColor: DesignSystem.colors.background.primary,
   },
   stepIndicator: {
     flexDirection: 'row',
@@ -566,20 +566,20 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: theme.colors.lightGray,
+    backgroundColor: DesignSystem.colors.gray[200],
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 8,
   },
   stepCircleActive: {
-    backgroundColor: theme.colors.primary,
+    backgroundColor: DesignSystem.colors.primary,
   },
   stepLabel: {
     fontSize: 12,
-    color: theme.colors.gray,
+    color: DesignSystem.colors.gray[500],
   },
   stepLabelActive: {
-    color: theme.colors.text,
+    color: DesignSystem.colors.text.primary,
     fontWeight: '500',
   },
   stepLine: {
@@ -588,10 +588,10 @@ const styles = StyleSheet.create({
     left: '50%',
     right: '-50%',
     height: 2,
-    backgroundColor: theme.colors.lightGray,
+    backgroundColor: DesignSystem.colors.gray[200],
   },
   stepLineActive: {
-    backgroundColor: theme.colors.primary,
+    backgroundColor: DesignSystem.colors.primary,
   },
   stepContent: {
     padding: 16,
@@ -599,7 +599,7 @@ const styles = StyleSheet.create({
   stepTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: theme.colors.text,
+    color: DesignSystem.colors.text.primary,
     marginBottom: 24,
     textAlign: 'center',
   },
@@ -612,15 +612,15 @@ const styles = StyleSheet.create({
   fileLabel: {
     fontSize: 16,
     fontWeight: '500',
-    color: theme.colors.text,
+    color: DesignSystem.colors.text.primary,
     marginBottom: 4,
   },
   required: {
-    color: theme.colors.error,
+    color: DesignSystem.colors.status.error,
   },
   fileDescription: {
     fontSize: 14,
-    color: theme.colors.gray,
+    color: DesignSystem.colors.gray[500],
   },
   uploadButton: {
     flexDirection: 'row',
@@ -628,22 +628,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 16,
     borderWidth: 2,
-    borderColor: theme.colors.primary,
+    borderColor: DesignSystem.colors.primary,
     borderStyle: 'dashed',
     borderRadius: 8,
-    backgroundColor: theme.colors.lightGray + '20',
+    backgroundColor: 'rgba(229, 229, 229, 0.125)',
   },
   uploadText: {
     marginLeft: 8,
     fontSize: 16,
-    color: theme.colors.primary,
+    color: DesignSystem.colors.primary,
     fontWeight: '500',
   },
   fileInfo: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 12,
-    backgroundColor: theme.colors.lightGray + '40',
+    backgroundColor: 'rgba(229, 229, 229, 0.25)',
     borderRadius: 8,
   },
   fileDetails: {
@@ -653,33 +653,33 @@ const styles = StyleSheet.create({
   fileName: {
     fontSize: 14,
     fontWeight: '500',
-    color: theme.colors.text,
+    color: DesignSystem.colors.text.primary,
   },
   fileSize: {
     fontSize: 12,
-    color: theme.colors.gray,
+    color: DesignSystem.colors.gray[500],
     marginTop: 2,
   },
   fileRows: {
     fontSize: 12,
-    color: theme.colors.primary,
+    color: DesignSystem.colors.primary,
     marginTop: 2,
   },
   errorBox: {
     marginTop: 8,
     padding: 12,
-    backgroundColor: theme.colors.error + '10',
+    backgroundColor: 'rgba(255, 59, 48, 0.0625)',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: theme.colors.error + '20',
+    borderColor: 'rgba(255, 59, 48, 0.125)',
   },
   errorText: {
     fontSize: 14,
-    color: theme.colors.error,
+    color: DesignSystem.colors.status.error,
     marginBottom: 4,
   },
   actionButton: {
-    backgroundColor: theme.colors.primary,
+    backgroundColor: DesignSystem.colors.primary,
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 8,
@@ -687,22 +687,22 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   actionButtonText: {
-    color: '#fff',
+    color: DesignSystem.colors.text.inverse,
     fontSize: 16,
     fontWeight: '600',
   },
   disabledButton: {
-    backgroundColor: theme.colors.gray,
+    backgroundColor: DesignSystem.colors.gray[500],
     opacity: 0.5,
   },
   secondaryButton: {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: theme.colors.primary,
+    borderColor: DesignSystem.colors.primary,
     marginBottom: 12,
   },
   secondaryButtonText: {
-    color: theme.colors.primary,
+    color: DesignSystem.colors.primary,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -713,34 +713,34 @@ const styles = StyleSheet.create({
   progressPhase: {
     fontSize: 16,
     fontWeight: '500',
-    color: theme.colors.text,
+    color: DesignSystem.colors.text.primary,
     marginBottom: 16,
   },
   progressBar: {
     width: '100%',
     height: 8,
-    backgroundColor: theme.colors.lightGray,
+    backgroundColor: DesignSystem.colors.gray[200],
     borderRadius: 4,
     overflow: 'hidden',
     marginBottom: 12,
   },
   progressFill: {
     height: '100%',
-    backgroundColor: theme.colors.primary,
+    backgroundColor: DesignSystem.colors.primary,
   },
   progressText: {
     fontSize: 14,
-    color: theme.colors.gray,
+    color: DesignSystem.colors.gray[500],
     marginBottom: 8,
   },
   currentItem: {
     fontSize: 14,
-    color: theme.colors.text,
+    color: DesignSystem.colors.text.primary,
     marginTop: 8,
   },
   timeRemaining: {
     fontSize: 14,
-    color: theme.colors.gray,
+    color: DesignSystem.colors.gray[500],
     marginTop: 4,
   },
   issuesSummary: {
@@ -748,23 +748,23 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   errorCount: {
-    color: theme.colors.error,
+    color: DesignSystem.colors.status.error,
     marginRight: 16,
   },
   warningCount: {
-    color: theme.colors.warning,
+    color: DesignSystem.colors.status.warning,
   },
   completeTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: theme.colors.text,
+    color: DesignSystem.colors.text.primary,
     marginTop: 16,
     marginBottom: 24,
   },
   summarySection: {
     width: '100%',
     padding: 16,
-    backgroundColor: theme.colors.lightGray + '20',
+    backgroundColor: 'rgba(229, 229, 229, 0.125)',
     borderRadius: 8,
     marginBottom: 24,
   },
@@ -775,18 +775,18 @@ const styles = StyleSheet.create({
   },
   summaryLabel: {
     fontSize: 14,
-    color: theme.colors.gray,
+    color: DesignSystem.colors.gray[500],
   },
   summaryValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: theme.colors.text,
+    color: DesignSystem.colors.text.primary,
   },
   successText: {
-    color: theme.colors.success,
+    color: DesignSystem.colors.status.success,
   },
   warningText: {
-    color: theme.colors.warning,
+    color: DesignSystem.colors.status.warning,
   },
   completeActions: {
     width: '100%',
