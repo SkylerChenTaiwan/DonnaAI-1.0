@@ -13,6 +13,9 @@ config.resolver.unstable_enablePackageExports = false;
 // 確保支援所有圖片格式
 config.resolver.assetExts = [...(config.resolver.assetExts || []), 'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'];
 
+// Web 平台優化配置
+// 指定模組解析欄位順序，優先使用 react-native，其次是 browser，最後是 main
+config.resolver.resolverMainFields = ['react-native', 'browser', 'main'];
 
 // 簡化配置以確保正常啟動
 // 快取配置暫時移除，避免配置問題

@@ -3,7 +3,7 @@
  * 處理會議提醒、錄音通知和其他系統通知
  */
 
-import * as Notifications from 'expo-notifications';
+import { Notifications, AndroidImportance } from './notifications/NotificationService';
 import * as Device from 'expo-device';
 import { Platform, Linking, Alert } from 'react-native';
 import { doc, setDoc, getDoc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
@@ -89,14 +89,14 @@ class NotificationService {
       if (Platform.OS === 'android') {
         await Notifications.setNotificationChannelAsync('meeting-reminders', {
           name: '會議提醒',
-          importance: Notifications.AndroidImportance.HIGH,
+          importance: AndroidImportance.HIGH,
           vibrationPattern: [0, 250, 250, 250],
           lightColor: '#2563eb',
         });
 
         await Notifications.setNotificationChannelAsync('recording-reminders', {
           name: '錄音提醒',
-          importance: Notifications.AndroidImportance.HIGH,
+          importance: AndroidImportance.HIGH,
           vibrationPattern: [0, 250, 250, 250],
           lightColor: '#ef4444',
         });

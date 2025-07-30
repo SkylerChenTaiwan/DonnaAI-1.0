@@ -3,11 +3,11 @@
  * 確保整個應用程式只有一個錄音實例
  */
 
-import { Audio } from 'expo-av';
+import { Audio, IRecording } from './AudioService';
 
 class RecordingManager {
   private static instance: RecordingManager;
-  private currentRecording: Audio.Recording | null = null;
+  private currentRecording: IRecording | null = null;
   private isRecording: boolean = false;
   private isStarting: boolean = false;
 
@@ -41,7 +41,7 @@ class RecordingManager {
     }
   }
 
-  async startNewRecording(): Promise<Audio.Recording> {
+  async startNewRecording(): Promise<IRecording> {
     console.log('RecordingManager: 請求開始新錄音');
     
     // 如果正在啟動錄音，拋出錯誤
@@ -94,7 +94,7 @@ class RecordingManager {
     }
   }
 
-  getCurrentRecording(): Audio.Recording | null {
+  getCurrentRecording(): IRecording | null {
     return this.currentRecording;
   }
 

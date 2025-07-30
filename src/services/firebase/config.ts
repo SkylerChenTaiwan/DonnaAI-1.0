@@ -12,7 +12,8 @@ import { environmentManager, getFirebaseConfig } from '../../config/environment'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // 完整的環境 polyfill，確保 Firebase SDK 識別為 React Native
-if (typeof global !== 'undefined') {
+// 只在非 Web 平台執行 polyfill
+if (Platform.OS !== 'web' && typeof global !== 'undefined') {
   // @ts-ignore
   global.self = global;
   // @ts-ignore
@@ -102,10 +103,15 @@ export const getFirebaseAuth = (): Auth => {
   const firebaseApp = initializeFirebaseApp();
   
   try {
-    // 使用 initializeAuth 並設定 React Native 的持久化
-    auth = initializeAuth(firebaseApp, {
-      persistence: getReactNativePersistence(AsyncStorage)
-    });
+    if (Platform.OS === 'web') {
+      // Web 平台使用預設的瀏覽器持久化
+      auth = getAuth(firebaseApp);
+    } else {
+      // React Native 平台使用 AsyncStorage 持久化
+      auth = initializeAuth(firebaseApp, {
+        persistence: getReactNativePersistence(AsyncStorage)
+      });
+    }
   } catch (error) {
     // 如果已經初始化過，使用 getAuth
     auth = getAuth(firebaseApp);

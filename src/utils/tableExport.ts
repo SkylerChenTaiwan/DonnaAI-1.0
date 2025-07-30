@@ -3,9 +3,10 @@
  */
 
 import { TableData, TableColumn } from '@/types/table';
-import * as FileSystem from 'expo-file-system';
+import { FileSystem } from '@/services/filesystem/FileSystemService';
 import * as Sharing from 'expo-sharing';
 import * as MailComposer from 'expo-mail-composer';
+import { Platform } from 'react-native';
 
 export type ExportFormat = 'csv' | 'json';
 
@@ -101,7 +102,15 @@ export const exportTableData = async (
     });
 
     // 根據選項決定如何處理檔案
-    if (options.email && await MailComposer.isAvailableAsync()) {
+    if (Platform.OS === 'web') {
+      // Web 平台：直接下載
+      const mimeType = options.format === 'csv' ? 'text/csv' : 'application/json';
+      if (FileSystem.downloadToBrowser) {
+        FileSystem.downloadToBrowser(fullFilename, content, mimeType);
+      } else {
+        throw new Error('Web 平台下載功能不可用');
+      }
+    } else if (options.email && await MailComposer.isAvailableAsync()) {
       // 透過郵件發送
       await MailComposer.composeAsync({
         recipients: [options.email],
@@ -119,14 +128,16 @@ export const exportTableData = async (
       throw new Error('無法匯出檔案，裝置不支援分享功能');
     }
 
-    // 清理暫存檔案
-    setTimeout(async () => {
-      try {
-        await FileSystem.deleteAsync(fileUri, { idempotent: true });
-      } catch (error) {
-        console.error('清理暫存檔案失敗:', error);
-      }
-    }, 60000); // 1 分鐘後刪除
+    // 清理暫存檔案（Web 平台不需要）
+    if (Platform.OS !== 'web') {
+      setTimeout(async () => {
+        try {
+          await FileSystem.deleteAsync(fileUri, { idempotent: true });
+        } catch (error) {
+          console.error('清理暫存檔案失敗:', error);
+        }
+      }, 60000); // 1 分鐘後刪除
+    }
 
   } catch (error) {
     console.error('匯出資料失敗:', error);

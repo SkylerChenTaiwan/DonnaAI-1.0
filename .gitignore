@@ -12,6 +12,7 @@ __pycache__
 # Expo
 .expo/
 dist/
+dist-web/
 *.jks
 *.p8
 *.p12
