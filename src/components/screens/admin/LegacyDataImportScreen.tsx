@@ -100,34 +100,72 @@ export function LegacyDataImportScreen({ navigation }: any) {
   // 選擇檔案
   const pickFile = async (fileType: keyof ImportState) => {
     try {
-      const result = await DocumentPicker.getDocumentAsync({
-        type: ['text/csv', 'text/comma-separated-values', 'application/csv'],
-        copyToCacheDirectory: true,
-      });
-
-      if (!result.canceled && result.assets[0]) {
-        const asset = result.assets[0];
+      if (Platform.OS === 'web') {
+        // Web 平台使用 input 元素
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.csv,text/csv,text/comma-separated-values,application/csv';
         
-        // 讀取檔案內容
-        const content = await FileSystem.readAsStringAsync(asset.uri, {
-          encoding: FileSystem.EncodingType.UTF8,
+        input.onchange = async (event: any) => {
+          const file = event.target.files?.[0];
+          if (!file) return;
+          
+          const reader = new FileReader();
+          reader.onload = async (e) => {
+            const content = e.target?.result as string;
+            
+            // 預覽檔案
+            const preview = await previewCSV(content, 5);
+            
+            const fileInfo: FileInfo = {
+              name: file.name,
+              size: file.size,
+              uri: URL.createObjectURL(file),
+              content,
+              preview,
+            };
+            
+            setFiles(prev => ({
+              ...prev,
+              [fileType]: fileInfo,
+            }));
+          };
+          
+          reader.readAsText(file);
+        };
+        
+        input.click();
+      } else {
+        // 原生平台使用 DocumentPicker
+        const result = await DocumentPicker.getDocumentAsync({
+          type: ['text/csv', 'text/comma-separated-values', 'application/csv'],
+          copyToCacheDirectory: true,
         });
 
-        // 預覽檔案
-        const preview = await previewCSV(content, 5);
+        if (!result.canceled && result.assets[0]) {
+          const asset = result.assets[0];
+          
+          // 讀取檔案內容
+          const content = await FileSystem.readAsStringAsync(asset.uri, {
+            encoding: FileSystem.EncodingType.UTF8,
+          });
 
-        const fileInfo: FileInfo = {
-          name: asset.name,
-          size: asset.size || 0,
-          uri: asset.uri,
-          content,
-          preview,
-        };
+          // 預覽檔案
+          const preview = await previewCSV(content, 5);
 
-        setFiles(prev => ({
-          ...prev,
-          [fileType]: fileInfo,
-        }));
+          const fileInfo: FileInfo = {
+            name: asset.name,
+            size: asset.size || 0,
+            uri: asset.uri,
+            content,
+            preview,
+          };
+
+          setFiles(prev => ({
+            ...prev,
+            [fileType]: fileInfo,
+          }));
+        }
       }
     } catch (error) {
       Alert.alert('錯誤', `無法讀取檔案: ${error.message}`);
