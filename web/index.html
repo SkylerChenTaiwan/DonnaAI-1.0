@@ -10,6 +10,9 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   
+  <!-- 預載字體檔案 -->
+  <link rel="preload" href="/_expo/static/media/Ionicons.6148e7019854f3bde85b633cb88f3c25.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  
   <style>
     /* 防止 FOUC (Flash of Unstyled Content) */
     html, body {
@@ -20,6 +23,13 @@
     }
     #root {
       height: 100%;
+    }
+    
+    /* 預載 Ionicons 字體 */
+    @font-face {
+      font-family: 'Ionicons';
+      src: url('/_expo/static/media/Ionicons.6148e7019854f3bde85b633cb88f3c25.ttf') format('truetype');
+      font-display: swap;
     }
   </style>
 </head>

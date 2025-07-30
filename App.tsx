@@ -15,6 +15,7 @@ import { errorLogger } from '@/services/error/ErrorLogger';
 import { environmentManager } from '@/config/environment';
 import { initializeMonitoring } from '@/services/firebase/monitoring';
 import { NetworkStatusBar } from '@/components/NetworkStatusBar';
+import { loadFonts, preloadWebFonts } from '@/utils/fontLoader';
 
 
 // 開發模式下載入除錯工具
@@ -78,8 +79,14 @@ export default function App() {
     // 初始化應用程式
     const initializeApp = async () => {
       try {
+        // 預載 Web 字體（在其他初始化之前）
+        preloadWebFonts();
+        
         // 驗證環境配置
         environmentManager.getConfig();
+        
+        // 載入字體
+        await loadFonts();
         
         // 初始化監控服務（Crashlytics 和 Performance）
         await initializeMonitoring();
