@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { Picker } from '@react-native-picker/picker';
 import { TableColumn } from '@/types/table';
 import { FilterCondition } from '@/components/common/FilterBadge';
@@ -92,7 +92,7 @@ export const FilterForm: React.FC<FilterFormProps> = ({
       <View style={styles.header}>
         <Text style={styles.headerText}>篩選條件</Text>
         <TouchableOpacity onPress={onRemove} style={styles.removeButton}>
-          <Ionicons name="trash-outline" size={20} color="#A94438" />
+          <Icon name="trash-outline" size={20} color="#A94438" />
         </TouchableOpacity>
       </View>
 

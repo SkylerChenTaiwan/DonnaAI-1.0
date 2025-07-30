@@ -13,7 +13,7 @@ import {
   TouchableWithoutFeedback,
   Animated,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button } from '@/components/common/Button';
 import type { AudioPurpose } from '@/components/input/AudioInput';
@@ -127,10 +127,10 @@ export const RecordPurposeSelector: React.FC<RecordPurposeSelectorProps> = ({
                 activeOpacity={0.7}
               >
                 <View style={styles.purposeIcon}>
-                  <Ionicons name={purpose.icon} size={24} color="#1A1A1A" />
+                  <Icon name={purpose.icon} size={24} color="#1A1A1A" />
                 </View>
                 <Text style={styles.purposeTitle}>{purpose.title}</Text>
-                <Ionicons name="chevron-forward" size={20} color="#C7C7CC" />
+                <Icon name="chevron-forward" size={20} color="#C7C7CC" />
               </TouchableOpacity>
             ))}
           </View>

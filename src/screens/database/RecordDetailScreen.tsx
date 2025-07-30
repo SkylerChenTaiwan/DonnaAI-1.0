@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -56,7 +56,7 @@ export const RecordDetailScreen: React.FC = () => {
       {/* 自定義標題列 */}
       <View style={styles.header}>
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-          <Ionicons name="chevron-back" size={24} color="#1A1A1A" />
+          <Icon name="chevron-back" size={24} color="#1A1A1A" />
         </TouchableOpacity>
         <Text style={styles.headerTitle} numberOfLines={1}>
           {record.type === 'meeting' ? '會議紀錄' : '通話紀錄'}
@@ -65,7 +65,7 @@ export const RecordDetailScreen: React.FC = () => {
           style={styles.editButton}
           onPress={() => navigation.navigate('EditRecord', { recordId })}
         >
-          <Ionicons name="create-outline" size={24} color="#1A1A1A" />
+          <Icon name="create-outline" size={24} color="#1A1A1A" />
         </TouchableOpacity>
       </View>
 
@@ -76,7 +76,7 @@ export const RecordDetailScreen: React.FC = () => {
           <View style={styles.infoRow}>
             <Text style={styles.label}>類型</Text>
             <View style={[styles.typeBadge, record.type === 'meeting' && styles.typeMeeting]}>
-              <Ionicons 
+              <Icon 
                 name={record.type === 'meeting' ? 'people' : 'call'} 
                 size={16} 
                 color="#1C1C1E" 
@@ -141,7 +141,7 @@ export const RecordDetailScreen: React.FC = () => {
             <Text style={styles.sectionTitle}>行動項目</Text>
             {record.aiActionItems.map((item, index) => (
               <View key={index} style={styles.nextStepItem}>
-                <Ionicons name="checkmark-circle-outline" size={20} color="#1A1A1A" />
+                <Icon name="checkmark-circle-outline" size={20} color="#1A1A1A" />
                 <Text style={styles.nextStepText}>{item}</Text>
               </View>
             ))}

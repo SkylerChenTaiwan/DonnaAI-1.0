@@ -10,7 +10,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 
 export const AdminDashboard: React.FC = () => {
@@ -102,7 +102,7 @@ export const AdminDashboard: React.FC = () => {
                 activeOpacity={0.7}
               >
                 <View style={[styles.actionIcon, { backgroundColor: `${action.color}15` }]}>
-                  <Ionicons
+                  <Icon
                     name={action.icon}
                     size={24}
                     color={action.color}
@@ -151,7 +151,7 @@ export const AdminDashboard: React.FC = () => {
           <View style={styles.activityCard}>
             <View style={styles.activityItem}>
               <View style={styles.activityIcon}>
-                <Ionicons name="person-add" size={16} color="#34C759" />
+                <Icon name="person-add" size={16} color="#34C759" />
               </View>
               <View style={styles.activityContent}>
                 <Text style={styles.activityTitle}>新使用者註冊</Text>
@@ -161,7 +161,7 @@ export const AdminDashboard: React.FC = () => {
             
             <View style={styles.activityItem}>
               <View style={styles.activityIcon}>
-                <Ionicons name="warning" size={16} color="#FF9500" />
+                <Icon name="warning" size={16} color="#FF9500" />
               </View>
               <View style={styles.activityContent}>
                 <Text style={styles.activityTitle}>AI 配額警告</Text>
@@ -171,7 +171,7 @@ export const AdminDashboard: React.FC = () => {
             
             <View style={styles.activityItem}>
               <View style={styles.activityIcon}>
-                <Ionicons name="checkmark-circle" size={16} color="#1A1A1A" />
+                <Icon name="checkmark-circle" size={16} color="#1A1A1A" />
               </View>
               <View style={styles.activityContent}>
                 <Text style={styles.activityTitle}>系統備份完成</Text>

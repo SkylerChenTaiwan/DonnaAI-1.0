@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { OrgNode, DragDropEvent } from '@/types/organization';
 import { StatusIndicator } from './StatusIndicator';
 import { PermissionBadge } from './PermissionBadge';
@@ -57,7 +57,7 @@ export function OrgNodeComponent({
             onPress={onExpand}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <Ionicons
+            <Icon
               name={node.expanded ? 'chevron-down' : 'chevron-forward'}
               size={16}
               color={DesignSystem.colors.text.secondary}
@@ -84,7 +84,7 @@ export function OrgNodeComponent({
         
         {hasChildren && (
           <View style={styles.stats}>
-            <Ionicons 
+            <Icon 
               name="people" 
               size={12} 
               color={DesignSystem.colors.text.tertiary} 

@@ -13,7 +13,7 @@ import {
   Switch,
   Alert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { Picker } from '@react-native-picker/picker';
 
 interface BatchEditField {
@@ -151,7 +151,7 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
               onPress={showPreview ? handleConfirmSubmit : handleSave}
               activeOpacity={0.7}
             >
-              <Ionicons name="checkmark" size={18} color="#F7F6F3" />
+              <Icon name="checkmark" size={18} color="#F7F6F3" />
               <Text style={styles.saveButtonText}>{showPreview ? '確認' : '儲存'}</Text>
             </TouchableOpacity>
           )}
@@ -161,7 +161,7 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
             activeOpacity={0.7}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <Ionicons name="close" size={24} color="#7A7A7A" />
+            <Icon name="close" size={24} color="#7A7A7A" />
           </TouchableOpacity>
         </View>
       </View>

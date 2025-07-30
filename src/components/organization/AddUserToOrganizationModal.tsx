@@ -13,7 +13,7 @@ import {
   Modal,
   Alert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, setDoc, Timestamp } from 'firebase/firestore';
 import { getFirebaseAuth, getFirebaseDb } from '@/services/firebase/config';
@@ -183,7 +183,7 @@ export const AddUserToOrganizationModal: React.FC<AddUserToOrganizationModalProp
               style={styles.closeButton}
               disabled={isLoading}
             >
-              <Ionicons name="close" size={24} color={DesignSystem.colors.text.primary} />
+              <Icon name="close" size={24} color={DesignSystem.colors.text.primary} />
             </TouchableOpacity>
             <Text style={styles.headerTitle}>新增用戶到 {organization.name}</Text>
           </View>
@@ -264,7 +264,7 @@ export const AddUserToOrganizationModal: React.FC<AddUserToOrganizationModalProp
 
           {/* 提示訊息 */}
           <View style={styles.infoBox}>
-            <Ionicons name="information-circle-outline" size={20} color={DesignSystem.colors.primary} />
+            <Icon name="information-circle-outline" size={20} color={DesignSystem.colors.primary} />
             <Text style={styles.infoText}>
               新用戶將會收到帳號資訊，請確保電子郵件地址正確。管理員角色可以管理組織設定和其他用戶。
             </Text>

@@ -6,6 +6,7 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Button } from '@/components/common/Button';
 import { Layout } from '@/components/common/Layout';
+import { WebModal } from '@/components/web/WebModal';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { TaskForm } from '@/components/forms/TaskForm';
 import { SimplifiedVoiceTaskInput } from '@/components/input/SimplifiedVoiceTaskInput';
@@ -15,7 +16,7 @@ import { createTask } from '@/services/firebase/tasks';
 import { TaskCreateRequest } from '@/types/task';
 import { TaskFormData } from '@/services/validation/form-schemas';
 import { showToast } from '../../utils/toast';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 
 type RouteParams = {
   CreateTaskModal: {
@@ -132,7 +133,8 @@ export const CreateTaskModal: React.FC = () => {
   }, [navigation, handleSavePress, loading, mode]);
 
   return (
-    <Layout style={styles.container}>
+    <WebModal>
+      <Layout style={styles.container}>
       {mode === 'voice' ? (
         <View style={styles.voiceContent}>
           {/* 切換到文字輸入的連結 - 小而不突兀 */}
@@ -142,7 +144,7 @@ export const CreateTaskModal: React.FC = () => {
             activeOpacity={0.7}
           >
             <Text style={styles.linkText}>使用文字輸入</Text>
-            <Ionicons name="arrow-forward" size={16} color="#7A7A7A" />
+            <Icon name="arrow-forward" size={16} color="#7A7A7A" />
           </TouchableOpacity>
           
           {/* 語音輸入介面 */}
@@ -161,9 +163,9 @@ export const CreateTaskModal: React.FC = () => {
             onPress={switchToVoice}
             activeOpacity={0.7}
           >
-            <Ionicons name="mic" size={20} color="#FF6B6B" />
+            <Icon name="mic" size={20} color="#FF6B6B" />
             <Text style={styles.voiceLinkText}>改用語音輸入</Text>
-            <Ionicons name="arrow-forward" size={16} color="#FF6B6B" />
+            <Icon name="arrow-forward" size={16} color="#FF6B6B" />
           </TouchableOpacity>
           
           <TaskForm 
@@ -181,7 +183,8 @@ export const CreateTaskModal: React.FC = () => {
           />
         </ScrollView>
       )}
-    </Layout>
+      </Layout>
+    </WebModal>
   );
 };
 

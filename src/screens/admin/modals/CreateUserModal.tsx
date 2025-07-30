@@ -24,7 +24,7 @@ import { getFirebaseAuth, getFirebaseDb } from '@/services/firebase/config';
 import { useAuthStore } from '@/stores/authStore';
 import { useAdminStore } from '@/stores/adminStore';
 import { showToast } from '@/utils/toast';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 import { User } from '@/types/entities';
 
@@ -173,7 +173,7 @@ export const CreateUserModal: React.FC = () => {
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
-          <Ionicons name="arrow-back" size={24} color={DesignSystem.colors.text.primary} />
+          <Icon name="arrow-back" size={24} color={DesignSystem.colors.text.primary} />
         </TouchableOpacity>
         <Text style={styles.title}>建立新用戶</Text>
         <Button
@@ -280,7 +280,7 @@ export const CreateUserModal: React.FC = () => {
           </View>
 
           <View style={styles.infoBox}>
-            <Ionicons name="information-circle" size={20} color={DesignSystem.colors.info} />
+            <Icon name="information-circle" size={20} color={DesignSystem.colors.info} />
             <Text style={styles.infoText}>
               新用戶將會收到一封包含登入資訊的電子郵件
             </Text>

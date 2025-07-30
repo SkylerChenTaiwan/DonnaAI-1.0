@@ -12,7 +12,7 @@ import {
   Linking,
   Alert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import Constants from 'expo-constants';
 
@@ -161,13 +161,13 @@ export const HelpSupportScreen: React.FC = () => {
               onPress={item.action}
             >
               <View style={styles.helpIconContainer}>
-                <Ionicons name={item.icon} size={24} color="#007AFF" />
+                <Icon name={item.icon} size={24} color="#007AFF" />
               </View>
               <View style={styles.helpContent}>
                 <Text style={styles.helpTitle}>{item.title}</Text>
                 <Text style={styles.helpDescription}>{item.description}</Text>
               </View>
-              <Ionicons name="chevron-forward" size={20} color="#C7C7CC" />
+              <Icon name="chevron-forward" size={20} color="#C7C7CC" />
             </TouchableOpacity>
           ))}
         </View>
@@ -196,7 +196,7 @@ export const HelpSupportScreen: React.FC = () => {
             }}
           >
             <Text style={styles.resourceText}>服務條款</Text>
-            <Ionicons name="open-outline" size={18} color="#007AFF" />
+            <Icon name="open-outline" size={18} color="#007AFF" />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.resourceItem}
@@ -208,7 +208,7 @@ export const HelpSupportScreen: React.FC = () => {
             }}
           >
             <Text style={styles.resourceText}>隱私權政策</Text>
-            <Ionicons name="open-outline" size={18} color="#007AFF" />
+            <Icon name="open-outline" size={18} color="#007AFF" />
           </TouchableOpacity>
         </View>
 

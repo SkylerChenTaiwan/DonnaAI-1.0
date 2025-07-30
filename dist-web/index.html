@@ -1,42 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>DonnaAI</title>
-    
-    <!-- 使用 Ionicons Web Components -->
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    
-    <!-- The `react-native-web` recommended style reset: https://necolas.github.io/react-native-web/docs/setup/#root-element -->
-    <style id="expo-reset">
-      /* These styles make the body full-height */
-      html,
-      body {
-        height: 100%;
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8" />
+  <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>DonnaAI</title>
+  
+  <!-- 防止無限重載的 meta 標籤 -->
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  
+  <!-- 使用 Ionicons Web Components -->
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  
+  <!-- 確保自定義元素被正確註冊 -->
+  <script>
+    // 等待 DOM 載入完成
+    document.addEventListener('DOMContentLoaded', function() {
+      // 確保 ion-icon 元素被正確定義
+      if (!customElements.get('ion-icon')) {
+        // 如果尚未定義，創建一個臨時的自定義元素
+        class IonIconPlaceholder extends HTMLElement {
+          constructor() {
+            super();
+          }
+        }
+        customElements.define('ion-icon', IonIconPlaceholder);
       }
-      /* 修復滾動問題：註解掉 overflow: hidden */
-      /* body {
-        overflow: hidden;
-      } */
-      /* These styles make the root element full-height */
-      #root {
-        display: flex;
-        height: 100%;
-        flex: 1;
-      }
-    </style>
-  </head>
-
-  <body>
-    <!-- Use static rendering with Expo Router to support running without JavaScript. -->
-    <noscript>
-      You need to enable JavaScript to run this app.
-    </noscript>
-    <!-- The root element for your Expo app. -->
-    <div id="root"></div>
-  <script src="/_expo/static/js/web/index-0085e39e08b907397e95b9ee120a63b2.js" defer></script>
+    });
+  </script>
+  
+  <style>
+    /* 防止 FOUC (Flash of Unstyled Content) */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      /* 修復滾動問題：移除 overflow: hidden */
+    }
+    #root {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+</head>
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+  <script src="/_expo/static/js/web/index-36e13cf376569b1d6195533433980a76.js" defer></script>
 </body>
 </html>

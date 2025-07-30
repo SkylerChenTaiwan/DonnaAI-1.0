@@ -10,7 +10,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { useAuthStore } from '@/stores/authStore';
 
@@ -108,7 +108,7 @@ export const SalespersonDashboard: React.FC = () => {
                 activeOpacity={0.7}
               >
                 <View style={[styles.actionIcon, { backgroundColor: `${action.color}15` }]}>
-                  <Ionicons
+                  <Icon
                     name={action.icon}
                     size={24}
                     color={action.color}
@@ -127,7 +127,7 @@ export const SalespersonDashboard: React.FC = () => {
           <View style={styles.activityCard}>
             <View style={styles.activityItem}>
               <View style={styles.activityIcon}>
-                <Ionicons name="calendar" size={16} color="#1A1A1A" />
+                <Icon name="calendar" size={16} color="#1A1A1A" />
               </View>
               <View style={styles.activityContent}>
                 <Text style={styles.activityTitle}>與王先生會議</Text>
@@ -137,7 +137,7 @@ export const SalespersonDashboard: React.FC = () => {
             
             <View style={styles.activityItem}>
               <View style={styles.activityIcon}>
-                <Ionicons name="person-add" size={16} color="#34C759" />
+                <Icon name="person-add" size={16} color="#34C759" />
               </View>
               <View style={styles.activityContent}>
                 <Text style={styles.activityTitle}>新增客戶：李小姐</Text>
@@ -147,7 +147,7 @@ export const SalespersonDashboard: React.FC = () => {
             
             <View style={styles.activityItem}>
               <View style={styles.activityIcon}>
-                <Ionicons name="mic" size={16} color="#FF9500" />
+                <Icon name="mic" size={16} color="#FF9500" />
               </View>
               <View style={styles.activityContent}>
                 <Text style={styles.activityTitle}>AI 轉錄完成</Text>
@@ -162,7 +162,7 @@ export const SalespersonDashboard: React.FC = () => {
           <Text style={styles.sectionTitle}>AI 智能建議</Text>
           <View style={styles.suggestionCard}>
             <View style={styles.suggestionHeader}>
-              <Ionicons name="bulb" size={20} color="#FF9500" />
+              <Icon name="bulb" size={20} color="#FF9500" />
               <Text style={styles.suggestionTitle}>今日建議</Text>
             </View>
             <Text style={styles.suggestionText}>

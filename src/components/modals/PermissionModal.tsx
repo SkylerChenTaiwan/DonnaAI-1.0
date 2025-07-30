@@ -13,7 +13,7 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '../../theme/DesignSystem';
 import { User } from '../../types/user';
 import { updateUserRole, updateUserPermissions } from '../../services/firebase/userService';
@@ -211,7 +211,7 @@ export const PermissionModal: React.FC<PermissionModalProps> = ({
       <View style={styles.checkboxContainer}>
         <View style={[styles.checkbox, isChecked && styles.checkboxChecked]}>
           {isChecked && (
-            <Ionicons name="checkmark" size={16} color={DesignSystem.colors.text.inverse} />
+            <Icon name="checkmark" size={16} color={DesignSystem.colors.text.inverse} />
           )}
         </View>
         <View style={styles.permissionInfo}>
@@ -235,7 +235,7 @@ export const PermissionModal: React.FC<PermissionModalProps> = ({
           <View style={styles.header}>
             <Text style={styles.title}>權限設定</Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Ionicons name="close" size={24} color={DesignSystem.colors.text.primary} />
+              <Icon name="close" size={24} color={DesignSystem.colors.text.primary} />
             </TouchableOpacity>
           </View>
 

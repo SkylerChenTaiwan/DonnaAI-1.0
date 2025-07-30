@@ -11,7 +11,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CustomerDoc } from '@/types/firebase';
@@ -160,7 +160,7 @@ export const RecentCustomersSection: React.FC<RecentCustomersProps> = ({
         <Text style={styles.customerName}>{item.name}</Text>
         {item.lastInteractionDate && (
           <View style={styles.interactionInfo}>
-            <Ionicons 
+            <Icon 
               name={getInteractionIcon(item.lastInteractionType || '')} 
               size={14} 
               color="#6B7280" 
@@ -174,14 +174,14 @@ export const RecentCustomersSection: React.FC<RecentCustomersProps> = ({
         )}
       </View>
 
-      <Ionicons name="chevron-forward" size={20} color="#D1D5DB" />
+      <Icon name="chevron-forward" size={20} color="#D1D5DB" />
     </TouchableOpacity>
   );
 
   // 空狀態
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
-      <Ionicons name="people-outline" size={48} color="#D1D5DB" />
+      <Icon name="people-outline" size={48} color="#D1D5DB" />
       <Text style={styles.emptyTitle}>尚無客戶互動</Text>
       <Text style={styles.emptyDescription}>開始記錄客戶互動以查看最近接觸</Text>
     </View>

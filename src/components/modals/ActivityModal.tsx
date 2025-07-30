@@ -12,7 +12,7 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '../../theme/DesignSystem';
 import { User } from '../../types/user';
 import { format, formatDistanceToNow } from 'date-fns';
@@ -138,7 +138,7 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({
             </Text>
           </View>
           <View style={styles.statusItem}>
-            <Ionicons name="time-outline" size={16} color={DesignSystem.colors.text.secondary} />
+            <Icon name="time-outline" size={16} color={DesignSystem.colors.text.secondary} />
             <Text style={styles.statusLabel}>
               {user.lastActiveAt
                 ? formatDistanceToNow(user.lastActiveAt, { addSuffix: true, locale: zhTW })
@@ -183,14 +183,14 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({
         <ActivityIndicator size="large" color={DesignSystem.colors.primary} />
       ) : activityLogs.length === 0 ? (
         <View style={styles.emptyState}>
-          <Ionicons name="file-tray-outline" size={48} color={DesignSystem.colors.text.tertiary} />
+          <Icon name="file-tray-outline" size={48} color={DesignSystem.colors.text.tertiary} />
           <Text style={styles.emptyText}>暫無活動記錄</Text>
         </View>
       ) : (
         activityLogs.map(log => (
           <View key={log.id} style={styles.logItem}>
             <View style={[styles.logIcon, { backgroundColor: `${getActionColor(log.action)}15` }]}>
-              <Ionicons
+              <Icon
                 name={getActionIcon(log.action)}
                 size={20}
                 color={getActionColor(log.action)}
@@ -224,7 +224,7 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({
           <View style={styles.header}>
             <Text style={styles.title}>活動詳情</Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Ionicons name="close" size={24} color={DesignSystem.colors.text.primary} />
+              <Icon name="close" size={24} color={DesignSystem.colors.text.primary} />
             </TouchableOpacity>
           </View>
 

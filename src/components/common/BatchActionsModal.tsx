@@ -14,7 +14,7 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 
 export interface BatchAction {
   id: string;
@@ -101,7 +101,7 @@ export const BatchActionsModal: React.FC<BatchActionsModalProps> = ({
                       action.type === 'delete' && styles.deleteIconContainer,
                     ]}
                   >
-                    <Ionicons
+                    <Icon
                       name={action.icon}
                       size={24}
                       color={action.type === 'delete' ? '#A94438' : '#1A1A1A'}
@@ -117,7 +117,7 @@ export const BatchActionsModal: React.FC<BatchActionsModalProps> = ({
                       {action.label}
                     </Text>
                   </View>
-                  <Ionicons name="chevron-forward" size={16} color="#BEBEBE" />
+                  <Icon name="chevron-forward" size={16} color="#BEBEBE" />
                 </TouchableOpacity>
               ))}
             </ScrollView>

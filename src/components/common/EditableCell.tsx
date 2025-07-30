@@ -12,7 +12,7 @@ import {
   StyleSheet,
   Alert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 
 export interface EditableCellProps {
   value: any;
@@ -152,14 +152,14 @@ export const EditableCell: React.FC<EditableCellProps> = ({
             onPress={handleSubmitEdit}
             activeOpacity={0.7}
           >
-            <Ionicons name="checkmark" size={18} color="#28A745" />
+            <Icon name="checkmark" size={18} color="#28A745" />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.actionButton}
             onPress={handleCancelEdit}
             activeOpacity={0.7}
           >
-            <Ionicons name="close" size={18} color="#DC3545" />
+            <Icon name="close" size={18} color="#DC3545" />
           </TouchableOpacity>
         </View>
       </View>
@@ -195,7 +195,7 @@ export const EditableCell: React.FC<EditableCellProps> = ({
       </View>
       {error && (
         <View style={styles.errorIndicator}>
-          <Ionicons name="warning" size={12} color="#DC3545" />
+          <Icon name="warning" size={12} color="#DC3545" />
         </View>
       )}
     </TouchableOpacity>

@@ -14,7 +14,7 @@ import {
   Switch,
   Alert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { TableColumn } from '@/types/table';
 
 interface ColumnSettingsModalProps {
@@ -165,7 +165,7 @@ export const ColumnSettingsModal: React.FC<ColumnSettingsModalProps> = ({
               <View key={column.key} style={styles.columnItem}>
                 <View style={styles.columnItemLeft}>
                   {/* TODO: 拖曳手柄 */}
-                  <Ionicons name="reorder-three" size={24} color="#BEBEBE" />
+                  <Icon name="reorder-three" size={24} color="#BEBEBE" />
                   <Text style={styles.columnLabel}>{column.title}</Text>
                 </View>
                 <Switch
@@ -179,7 +179,7 @@ export const ColumnSettingsModal: React.FC<ColumnSettingsModalProps> = ({
 
           {/* 提示文字 */}
           <View style={styles.tipContainer}>
-            <Ionicons name="information-circle" size={20} color="#7A7A7A" />
+            <Icon name="information-circle" size={20} color="#7A7A7A" />
             <Text style={styles.tipText}>
               提示：您可以拖曳欄位來調整顯示順序（開發中）
             </Text>

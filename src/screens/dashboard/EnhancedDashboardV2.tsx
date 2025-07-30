@@ -30,7 +30,7 @@ import { useCustomerStore } from '@/stores/customerStore';
 import { showToast } from '@/utils/toast';
 import { TaskDoc } from '@/types/task';
 import { CustomerDoc } from '@/types/customer';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@/types/navigation';
@@ -244,7 +244,7 @@ export const EnhancedDashboardV2: React.FC = () => {
       case 'empty_tasks':
         return (
           <View style={styles.emptyState}>
-            <Ionicons name="checkmark-done-outline" size={48} color="#D1D5DB" />
+            <Icon name="checkmark-done-outline" size={48} color="#D1D5DB" />
             <Text style={styles.emptyTitle}>沒有待辦任務</Text>
             <Text style={styles.emptyDescription}>所有任務都已完成！</Text>
           </View>
@@ -263,7 +263,7 @@ export const EnhancedDashboardV2: React.FC = () => {
       case 'empty_customers':
         return (
           <View style={styles.emptyState}>
-            <Ionicons name="people-outline" size={48} color="#D1D5DB" />
+            <Icon name="people-outline" size={48} color="#D1D5DB" />
             <Text style={styles.emptyTitle}>還沒有客戶資料</Text>
             <Text style={styles.emptyDescription}>開始新增您的第一個客戶</Text>
           </View>
@@ -309,9 +309,9 @@ export const EnhancedDashboardV2: React.FC = () => {
           activeOpacity={0.7}
         >
           {task.status === 'completed' ? (
-            <Ionicons name="checkmark-square" size={24} color="#10B981" />
+            <Icon name="checkmark-square" size={24} color="#10B981" />
           ) : (
-            <Ionicons name="square-outline" size={24} color="#D1D5DB" />
+            <Icon name="square-outline" size={24} color="#D1D5DB" />
           )}
         </TouchableOpacity>
         <TouchableOpacity 
@@ -360,7 +360,7 @@ export const EnhancedDashboardV2: React.FC = () => {
           <Text style={styles.customerName}>{customer.name}</Text>
           <Text style={styles.customerCompany}>{customer.company}</Text>
         </View>
-        <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
+        <Icon name="chevron-forward" size={20} color="#9CA3AF" />
       </TouchableOpacity>
     );
   };

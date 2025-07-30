@@ -13,7 +13,7 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { updateOrganization } from '@/services/firebase/admin/organizationService';
 import { TOOL_TYPES } from '@/services/firebase/admin/toolUsageService';
 import { Organization } from '@/types/entities';
@@ -225,7 +225,7 @@ export const PermissionsManagementSection: React.FC<PermissionsManagementSection
             style={[styles.tab, activeTab === tab.key && styles.activeTab]}
             onPress={() => setActiveTab(tab.key as any)}
           >
-            <Ionicons
+            <Icon
               name={tab.icon as any}
               size={16}
               color={activeTab === tab.key ? DesignSystem.colors.text.inverse : DesignSystem.colors.text.secondary}
@@ -383,7 +383,7 @@ export const PermissionsManagementSection: React.FC<PermissionsManagementSection
                 })}
                 disabled={!isEditing}
               >
-                <Ionicons name="remove" size={16} color={DesignSystem.colors.text.secondary} />
+                <Icon name="remove" size={16} color={DesignSystem.colors.text.secondary} />
               </TouchableOpacity>
               <Text style={styles.numberValue}>{roleSettings.maxAdmins}</Text>
               <TouchableOpacity
@@ -394,7 +394,7 @@ export const PermissionsManagementSection: React.FC<PermissionsManagementSection
                 })}
                 disabled={!isEditing}
               >
-                <Ionicons name="add" size={16} color={DesignSystem.colors.text.secondary} />
+                <Icon name="add" size={16} color={DesignSystem.colors.text.secondary} />
               </TouchableOpacity>
             </View>
           </View>

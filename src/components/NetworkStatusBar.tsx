@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
 import * as Network from 'expo-network';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 
 export function NetworkStatusBar() {
   const [isOnline, setIsOnline] = useState(true);
@@ -73,7 +73,7 @@ export function NetworkStatusBar() {
       ]}
     >
       <View style={styles.content}>
-        <Ionicons 
+        <Icon 
           name={isOnline ? "wifi" : "wifi-outline"} 
           size={16} 
           color="white" 

@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
   Switch,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { colors } from '../../theme/colors';
 import { DesignSystem } from '../../theme/designSystem';
 
@@ -65,7 +65,7 @@ export default function QuickSaveButton({ onSave }: QuickSaveButtonProps) {
         onPress={handleSavePress}
         activeOpacity={0.8}
       >
-        <Ionicons name="bookmark-outline" size={24} color="white" />
+        <Icon name="bookmark-outline" size={24} color="white" />
         <Text style={styles.floatingButtonText}>保存</Text>
       </TouchableOpacity>
 

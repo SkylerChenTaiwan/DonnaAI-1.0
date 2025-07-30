@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 import { EnhancedUser } from '@/types/personnel';
 
@@ -49,13 +49,13 @@ export function PermissionBadge({ user, compact = false }: PermissionBadgeProps)
   return (
     <View style={styles.container}>
       <View style={[styles.badge, { backgroundColor: config.bgColor }]}>
-        <Ionicons name={config.icon} size={14} color={config.color} />
+        <Icon name={config.icon} size={14} color={config.color} />
         {!compact && <Text style={[styles.label, { color: config.color }]}>{config.label}</Text>}
       </View>
       
       {!compact && dataAccess && (
         <View style={styles.accessBadge}>
-          <Ionicons 
+          <Icon 
             name={dataAccess === 'organization' ? 'globe' : dataAccess === 'team' ? 'git-network' : 'person'} 
             size={12} 
             color={DesignSystem.colors.text.secondary} 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { RetryButton } from './RetryButton';
 
 interface ErrorMessageProps {
@@ -38,7 +38,7 @@ export function ErrorMessage({ error, onRetry, isNetworkError = false, style }: 
   return (
     <View style={[styles.container, style]}>
       <View style={styles.iconContainer}>
-        <Ionicons 
+        <Icon 
           name={isNetworkError ? "wifi-outline" : "alert-circle-outline"} 
           size={48} 
           color="#EF4444" 

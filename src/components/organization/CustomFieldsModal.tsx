@@ -13,7 +13,7 @@ import {
   Modal,
   RefreshControl,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { Organization } from '@/types/entities';  
 import { DesignSystem } from '@/theme/designSystem';
 import { toast } from '@/utils/toast';
@@ -150,18 +150,18 @@ export const CustomFieldsModal: React.FC<CustomFieldsModalProps> = ({
           onPress={() => handleSelectDatabase(database.key)}
         >
           <View style={[styles.databaseIcon, { backgroundColor: database.color + '20' }]}>
-            <Ionicons name={database.icon as any} size={24} color={database.color} />
+            <Icon name={database.icon as any} size={24} color={database.color} />
           </View>
           <View style={styles.databaseContent}>
             <Text style={styles.databaseTitle}>{database.title}</Text>
             <Text style={styles.databaseDesc}>{database.description}</Text>
           </View>
-          <Ionicons name="chevron-forward" size={20} color={DesignSystem.colors.text.secondary} />
+          <Icon name="chevron-forward" size={20} color={DesignSystem.colors.text.secondary} />
         </TouchableOpacity>
       ))}
 
       <View style={styles.infoBox}>
-        <Ionicons name="information-circle-outline" size={20} color={DesignSystem.colors.primary} />
+        <Icon name="information-circle-outline" size={20} color={DesignSystem.colors.primary} />
         <Text style={styles.infoText}>
           自訂欄位允許您為不同類型的資料添加額外的屬性。
           這些欄位可以在匯入資料時使用，也可以在應用程式中顯示和編輯。
@@ -180,14 +180,14 @@ export const CustomFieldsModal: React.FC<CustomFieldsModalProps> = ({
             style={styles.backButton}
             onPress={handleBack}
           >
-            <Ionicons name="chevron-back" size={20} color={DesignSystem.colors.primary} />
+            <Icon name="chevron-back" size={20} color={DesignSystem.colors.primary} />
             <Text style={styles.backButtonText}>返回</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.databaseHeader}>
           <View style={[styles.databaseIcon, { backgroundColor: selectedDb?.color + '20' }]}>
-            <Ionicons name={selectedDb?.icon as any} size={24} color={selectedDb?.color} />
+            <Icon name={selectedDb?.icon as any} size={24} color={selectedDb?.color} />
           </View>
           <View>
             <Text style={styles.databaseHeaderTitle}>{selectedDb?.title}</Text>
@@ -203,7 +203,7 @@ export const CustomFieldsModal: React.FC<CustomFieldsModalProps> = ({
           </View>
         ) : customFields.length === 0 ? (
           <View style={styles.emptyContainer}>
-            <Ionicons name="folder-open-outline" size={48} color={DesignSystem.colors.text.secondary} />
+            <Icon name="folder-open-outline" size={48} color={DesignSystem.colors.text.secondary} />
             <Text style={styles.emptyTitle}>尚未設定自訂欄位</Text>
             <Text style={styles.emptyDesc}>
               此資料庫目前沒有設定任何自訂欄位。
@@ -221,7 +221,7 @@ export const CustomFieldsModal: React.FC<CustomFieldsModalProps> = ({
               <View key={field.id || index} style={styles.fieldCard}>
                 <View style={styles.fieldHeader}>
                   <View style={styles.fieldIconContainer}>
-                    <Ionicons 
+                    <Icon 
                       name={getFieldTypeIcon(field.type) as any} 
                       size={20} 
                       color={DesignSystem.colors.primary} 
@@ -294,7 +294,7 @@ export const CustomFieldsModal: React.FC<CustomFieldsModalProps> = ({
             onPress={handleClose}
             style={styles.closeButton}
           >
-            <Ionicons name="close" size={24} color={DesignSystem.colors.text.primary} />
+            <Icon name="close" size={24} color={DesignSystem.colors.text.primary} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>自訂欄位查看</Text>
         </View>

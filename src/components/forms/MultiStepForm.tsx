@@ -13,7 +13,7 @@ import {
   SafeAreaView,
   Alert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -194,7 +194,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
             ]}
           >
             {index < currentStep ? (
-              <Ionicons name="checkmark" size={16} color="#FFFFFF" />
+              <Icon name="checkmark" size={16} color="#FFFFFF" />
             ) : (
               <Text 
                 style={[
@@ -240,7 +240,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
           style={styles.closeButton}
           onPress={handleCancel}
         >
-          <Ionicons name="close" size={24} color="#7A7A7A" />
+          <Icon name="close" size={24} color="#7A7A7A" />
         </TouchableOpacity>
       </View>
 

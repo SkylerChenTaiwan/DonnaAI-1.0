@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
 import { getUserPermissionContext } from '@/services/firebase/permissions-v2';
@@ -209,9 +209,9 @@ export const TeamMemberSelector: React.FC<TeamMemberSelectorProps> = ({
           >
             <View style={styles.checkbox}>
               {selectedMembers.length === teamMembers.length ? (
-                <Ionicons name="checkbox" size={24} color="#FF6B6B" />
+                <Icon name="checkbox" size={24} color="#FF6B6B" />
               ) : (
-                <Ionicons name="square-outline" size={24} color="#D1D5DB" />
+                <Icon name="square-outline" size={24} color="#D1D5DB" />
               )}
             </View>
             <Text style={styles.selectAllText}>
@@ -239,9 +239,9 @@ export const TeamMemberSelector: React.FC<TeamMemberSelectorProps> = ({
                 >
                   <View style={styles.checkbox}>
                     {isTeamSelected ? (
-                      <Ionicons name="checkbox" size={24} color="#FF6B6B" />
+                      <Icon name="checkbox" size={24} color="#FF6B6B" />
                     ) : (
-                      <Ionicons name="square-outline" size={24} color="#D1D5DB" />
+                      <Icon name="square-outline" size={24} color="#D1D5DB" />
                     )}
                   </View>
                   <View style={styles.teamInfo}>
@@ -268,9 +268,9 @@ export const TeamMemberSelector: React.FC<TeamMemberSelectorProps> = ({
             >
               <View style={styles.checkbox}>
                 {selectedMembers.includes(member.id) ? (
-                  <Ionicons name="checkbox" size={24} color="#FF6B6B" />
+                  <Icon name="checkbox" size={24} color="#FF6B6B" />
                 ) : (
-                  <Ionicons name="square-outline" size={24} color="#D1D5DB" />
+                  <Icon name="square-outline" size={24} color="#D1D5DB" />
                 )}
               </View>
               <View style={styles.memberInfo}>

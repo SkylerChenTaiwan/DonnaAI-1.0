@@ -14,7 +14,7 @@ import {
   Modal,
   TextInput as RNTextInput,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import DocumentPicker from 'expo-document-picker';
 import {
   importUserData,
@@ -290,7 +290,7 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
             style={styles.closeButton}
             onPress={() => setActiveAssistance(null)}
           >
-            <Ionicons name="close" size={24} color={DesignSystem.colors.text.primary} />
+            <Icon name="close" size={24} color={DesignSystem.colors.text.primary} />
           </TouchableOpacity>
         </View>
 
@@ -304,7 +304,7 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
                 style={styles.fileSelectButton}
                 onPress={handleFileSelection}
               >
-                <Ionicons name="cloud-upload-outline" size={48} color={DesignSystem.colors.primary} />
+                <Icon name="cloud-upload-outline" size={48} color={DesignSystem.colors.primary} />
                 <Text style={styles.fileSelectText}>選擇檔案</Text>
               </TouchableOpacity>
             </View>
@@ -318,7 +318,7 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
               {importWizard.fieldMappings.map((mapping, index) => (
                 <View key={index} style={styles.mappingRow}>
                   <Text style={styles.sourceField}>{mapping.sourceField}</Text>
-                  <Ionicons name="arrow-forward" size={16} color={DesignSystem.colors.text.secondary} />
+                  <Icon name="arrow-forward" size={16} color={DesignSystem.colors.text.secondary} />
                   <Text style={styles.targetField}>{mapping.targetField}</Text>
                 </View>
               ))}
@@ -356,7 +356,7 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
             style={styles.closeButton}
             onPress={() => setActiveAssistance(null)}
           >
-            <Ionicons name="close" size={24} color={DesignSystem.colors.text.primary} />
+            <Icon name="close" size={24} color={DesignSystem.colors.text.primary} />
           </TouchableOpacity>
         </View>
 
@@ -377,7 +377,7 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
                   style={styles.removeFieldButton}
                   onPress={() => handleRemoveCustomField(index)}
                 >
-                  <Ionicons name="trash-outline" size={16} color={DesignSystem.colors.error} />
+                  <Icon name="trash-outline" size={16} color={DesignSystem.colors.error} />
                 </TouchableOpacity>
               </View>
             ))}
@@ -386,7 +386,7 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
               style={styles.addFieldButton}
               onPress={handleAddCustomField}
             >
-              <Ionicons name="add" size={16} color={DesignSystem.colors.primary} />
+              <Icon name="add" size={16} color={DesignSystem.colors.primary} />
               <Text style={styles.addFieldText}>新增欄位</Text>
             </TouchableOpacity>
             
@@ -418,7 +418,7 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
             style={styles.closeButton}
             onPress={() => setActiveAssistance(null)}
           >
-            <Ionicons name="close" size={24} color={DesignSystem.colors.text.primary} />
+            <Icon name="close" size={24} color={DesignSystem.colors.text.primary} />
           </TouchableOpacity>
         </View>
 
@@ -447,7 +447,7 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
       {/* 資料匯入區塊 */}
       <View style={styles.assistanceCard}>
         <View style={styles.cardHeader}>
-          <Ionicons name="cloud-upload-outline" size={32} color={DesignSystem.colors.primary} />
+          <Icon name="cloud-upload-outline" size={32} color={DesignSystem.colors.primary} />
           <View style={styles.cardInfo}>
             <Text style={styles.cardTitle}>資料匯入協助</Text>
             <Text style={styles.cardDesc}>協助匯入 CSV/Excel 資料到系統中</Text>
@@ -479,7 +479,7 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
       {/* 自訂欄位區塊 */}
       <View style={styles.assistanceCard}>
         <View style={styles.cardHeader}>
-          <Ionicons name="settings-outline" size={32} color={DesignSystem.colors.primary} />
+          <Icon name="settings-outline" size={32} color={DesignSystem.colors.primary} />
           <View style={styles.cardInfo}>
             <Text style={styles.cardTitle}>自訂欄位設定</Text>
             <Text style={styles.cardDesc}>建立和管理客製化欄位</Text>
@@ -511,7 +511,7 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
       {/* 系統遷移區塊 */}
       <View style={styles.assistanceCard}>
         <View style={styles.cardHeader}>
-          <Ionicons name="sync-outline" size={32} color={DesignSystem.colors.primary} />
+          <Icon name="sync-outline" size={32} color={DesignSystem.colors.primary} />
           <View style={styles.cardInfo}>
             <Text style={styles.cardTitle}>舊系統遷移</Text>
             <Text style={styles.cardDesc}>從其他 CRM 系統遷移資料</Text>
@@ -545,21 +545,21 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
         <Text style={styles.resourcesTitle}>協助資源</Text>
         
         <TouchableOpacity style={styles.resourceItem}>
-          <Ionicons name="document-text-outline" size={20} color={DesignSystem.colors.primary} />
+          <Icon name="document-text-outline" size={20} color={DesignSystem.colors.primary} />
           <Text style={styles.resourceText}>資料匯入格式說明</Text>
-          <Ionicons name="chevron-forward" size={16} color={DesignSystem.colors.text.secondary} />
+          <Icon name="chevron-forward" size={16} color={DesignSystem.colors.text.secondary} />
         </TouchableOpacity>
         
         <TouchableOpacity style={styles.resourceItem}>
-          <Ionicons name="help-circle-outline" size={20} color={DesignSystem.colors.primary} />
+          <Icon name="help-circle-outline" size={20} color={DesignSystem.colors.primary} />
           <Text style={styles.resourceText}>常見問題與解答</Text>
-          <Ionicons name="chevron-forward" size={16} color={DesignSystem.colors.text.secondary} />
+          <Icon name="chevron-forward" size={16} color={DesignSystem.colors.text.secondary} />
         </TouchableOpacity>
         
         <TouchableOpacity style={styles.resourceItem}>
-          <Ionicons name="call-outline" size={20} color={DesignSystem.colors.primary} />
+          <Icon name="call-outline" size={20} color={DesignSystem.colors.primary} />
           <Text style={styles.resourceText}>聯繫技術支援</Text>
-          <Ionicons name="chevron-forward" size={16} color={DesignSystem.colors.text.secondary} />
+          <Icon name="chevron-forward" size={16} color={DesignSystem.colors.text.secondary} />
         </TouchableOpacity>
       </View>
 

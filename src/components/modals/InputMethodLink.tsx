@@ -10,7 +10,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 
 interface InputMethodLinkProps {
   targetLabel: string;
@@ -34,7 +34,7 @@ export const InputMethodLink: React.FC<InputMethodLinkProps> = ({
         <Text style={[styles.linkText, disabled && styles.disabledText]}>
           {targetLabel}
         </Text>
-        <Ionicons 
+        <Icon 
           name="arrow-forward" 
           size={16} 
           color={disabled ? '#C7C7CC' : '#7A7A7A'} 

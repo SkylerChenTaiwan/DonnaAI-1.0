@@ -12,7 +12,7 @@ import {
   Switch,
   ActivityIndicator,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { ExportFormat, getExportSizeEstimate } from '@/utils/tableExport';
 import { TableData, TableColumn } from '@/types/table';
 
@@ -83,7 +83,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
                 onPress={() => setFormat('csv')}
                 activeOpacity={0.7}
               >
-                <Ionicons
+                <Icon
                   name="document-text-outline"
                   size={24}
                   color={format === 'csv' ? '#1A1A1A' : '#999999'}
@@ -109,7 +109,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
                 onPress={() => setFormat('json')}
                 activeOpacity={0.7}
               >
-                <Ionicons
+                <Icon
                   name="code-outline"
                   size={24}
                   color={format === 'json' ? '#1A1A1A' : '#999999'}
@@ -209,7 +209,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
           activeOpacity={0.7}
           disabled={loading}
         >
-          <Ionicons name="download-outline" size={20} color="#F7F6F3" />
+          <Icon name="download-outline" size={20} color="#F7F6F3" />
           <Text style={styles.exportButtonText}>匯出</Text>
         </TouchableOpacity>
       </View>

@@ -24,7 +24,7 @@ import { getFirebaseDb } from '@/services/firebase/config';
 import { useAuthStore } from '@/stores/authStore';
 import { useAdminStore } from '@/stores/adminStore';
 import { showToast } from '@/utils/toast';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 import { User } from '@/types/entities';
 
@@ -148,7 +148,7 @@ export const EditUserModal: React.FC = () => {
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
-          <Ionicons name="arrow-back" size={24} color={DesignSystem.colors.text.primary} />
+          <Icon name="arrow-back" size={24} color={DesignSystem.colors.text.primary} />
         </TouchableOpacity>
         <Text style={styles.title}>編輯用戶</Text>
         <Button
@@ -173,7 +173,7 @@ export const EditUserModal: React.FC = () => {
         >
           {/* 用戶資訊 */}
           <View style={styles.userInfo}>
-            <Ionicons name="person-circle" size={64} color={DesignSystem.colors.text.secondary} />
+            <Icon name="person-circle" size={64} color={DesignSystem.colors.text.secondary} />
             <Text style={styles.userEmail}>{userData.email}</Text>
             <Text style={styles.userId}>ID: {userId}</Text>
           </View>

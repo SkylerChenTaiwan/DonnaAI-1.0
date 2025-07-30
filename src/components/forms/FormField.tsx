@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Platform, Modal, Button } from 'react-native';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 
 export interface FormFieldProps {
   // 支援兩種格式以保持向後相容
@@ -114,7 +114,7 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
               <Text style={[styles.dateText, !value && styles.placeholderText]}>
                 {value ? formatDate(value) : placeholder || '選擇日期'}
               </Text>
-              <Ionicons name="calendar-outline" size={20} color="#7A7A7A" />
+              <Icon name="calendar-outline" size={20} color="#7A7A7A" />
             </TouchableOpacity>
             
             {showDatePicker && Platform.OS === 'android' && (
@@ -172,7 +172,7 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
               <Text style={[styles.selectText, !value && styles.placeholderText]}>
                 {selectedOption?.label || placeholder || '請選擇'}
               </Text>
-              <Ionicons name="chevron-down-outline" size={20} color="#7A7A7A" />
+              <Icon name="chevron-down-outline" size={20} color="#7A7A7A" />
             </TouchableOpacity>
             
             {Platform.OS === 'ios' ? (

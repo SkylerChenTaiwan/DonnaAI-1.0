@@ -13,7 +13,7 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { runCompleteTestSuite, TestSuite, TestResult } from '@/utils/testValidator';
 import { generateCompleteTestDataSet } from '@/utils/testData';
@@ -85,7 +85,7 @@ export const TestScreen: React.FC = () => {
 
   // 渲染測試結果圖示
   const renderResultIcon = (passed: boolean) => (
-    <Ionicons
+    <Icon
       name={passed ? 'checkmark-circle' : 'close-circle'}
       size={20}
       color={passed ? '#28A745' : '#DC3545'}
@@ -113,7 +113,7 @@ export const TestScreen: React.FC = () => {
             <Text style={styles.suiteStatsText}>
               {suite.passedTests}/{suite.totalTests}
             </Text>
-            <Ionicons
+            <Icon
               name={isExpanded ? 'chevron-up' : 'chevron-down'}
               size={16}
               color="#666666"
@@ -212,7 +212,7 @@ export const TestScreen: React.FC = () => {
           {state.isRunning ? (
             <ActivityIndicator size="small" color="#FFFFFF" />
           ) : (
-            <Ionicons name="play" size={20} color="#FFFFFF" />
+            <Icon name="play" size={20} color="#FFFFFF" />
           )}
           <Text style={styles.primaryButtonText}>
             {state.isRunning ? '測試執行中...' : '執行全部測試'}
@@ -224,7 +224,7 @@ export const TestScreen: React.FC = () => {
           onPress={generateTestData}
           activeOpacity={0.7}
         >
-          <Ionicons name="database" size={20} color="#1A1A1A" />
+          <Icon name="database" size={20} color="#1A1A1A" />
           <Text style={styles.secondaryButtonText}>生成測試資料</Text>
         </TouchableOpacity>
       </View>

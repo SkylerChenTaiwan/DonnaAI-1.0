@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ActivityIndicator, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 
 interface RetryButtonProps {
   onRetry: () => void;
@@ -21,7 +21,7 @@ export function RetryButton({ onRetry, loading = false, message = '重試', styl
         {loading ? (
           <ActivityIndicator size="small" color="#FF6B35" style={styles.icon} />
         ) : (
-          <Ionicons name="refresh" size={20} color="#FF6B35" style={styles.icon} />
+          <Icon name="refresh" size={20} color="#FF6B35" style={styles.icon} />
         )}
         <Text style={styles.text}>{loading ? '載入中...' : message}</Text>
       </View>

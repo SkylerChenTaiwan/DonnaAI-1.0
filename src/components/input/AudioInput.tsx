@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   Modal,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 
 import { AudioRecorder } from '@/components/audio/AudioRecorder';
 import { Button } from '@/components/common/Button';
@@ -265,13 +265,13 @@ export const AudioInput: React.FC<AudioInputProps> = ({
             onPress={() => handlePurposeSelect(option.key)}
           >
             <View style={styles.purposeIcon}>
-              <Ionicons name={option.icon} size={24} color="#1A1A1A" />
+              <Icon name={option.icon} size={24} color="#1A1A1A" />
             </View>
             <View style={styles.purposeInfo}>
               <Text style={styles.purposeTitle}>{option.title}</Text>
               <Text style={styles.purposeDescription}>{option.description}</Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#7A7A7A" />
+            <Icon name="chevron-forward" size={20} color="#7A7A7A" />
           </TouchableOpacity>
         ))}
       </View>
@@ -285,7 +285,7 @@ export const AudioInput: React.FC<AudioInputProps> = ({
     return (
       <View style={styles.recordingContainer}>
         <View style={styles.purposeBadge}>
-          <Ionicons name={purposeOption?.icon || 'mic'} size={16} color="#1A1A1A" />
+          <Icon name={purposeOption?.icon || 'mic'} size={16} color="#1A1A1A" />
           <Text style={styles.purposeBadgeText}>{purposeOption?.title}</Text>
         </View>
         
@@ -444,7 +444,7 @@ export const AudioInput: React.FC<AudioInputProps> = ({
       case 'complete':
         return (
           <View style={styles.completeContainer}>
-            <Ionicons name="checkmark-circle" size={64} color="#22c55e" />
+            <Icon name="checkmark-circle" size={64} color="#22c55e" />
             <Text style={styles.completeTitle}>處理完成</Text>
             <Text style={styles.completeDescription}>
               語音已成功轉換為文字並準備使用
@@ -537,7 +537,7 @@ export const AudioInput: React.FC<AudioInputProps> = ({
           style={styles.closeButton}
           onPress={onCancel}
         >
-          <Ionicons name="close" size={24} color="#7A7A7A" />
+          <Icon name="close" size={24} color="#7A7A7A" />
         </TouchableOpacity>
       </View>
 

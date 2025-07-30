@@ -15,7 +15,7 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import DateTimePicker from '@react-native-community/datetimepicker';
 // @ts-ignore - Picker type issues
 import { Picker } from '@react-native-picker/picker';
@@ -146,7 +146,7 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
           <View style={styles.header}>
             <Text style={styles.headerTitle}>指派任務</Text>
             <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
-              <Ionicons name="close" size={24} color="#666666" />
+              <Icon name="close" size={24} color="#666666" />
             </TouchableOpacity>
           </View>
 
@@ -241,7 +241,7 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
                 onPress={() => setShowDatePicker(true)}
                 activeOpacity={0.7}
               >
-                <Ionicons name="calendar-outline" size={20} color="#666666" />
+                <Icon name="calendar-outline" size={20} color="#666666" />
                 <Text style={styles.dateText}>
                   {dueDate ? formatDate(dueDate) : '選擇日期（選填）'}
                 </Text>
@@ -284,7 +284,7 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
                 <ActivityIndicator size="small" color="#FFFFFF" />
               ) : (
                 <>
-                  <Ionicons name="person-add" size={20} color="#FFFFFF" />
+                  <Icon name="person-add" size={20} color="#FFFFFF" />
                   <Text style={styles.submitButtonText}>指派</Text>
                 </>
               )}

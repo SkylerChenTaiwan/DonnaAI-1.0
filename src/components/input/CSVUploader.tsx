@@ -12,9 +12,10 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import * as DocumentPicker from 'expo-document-picker';
+import { Icon } from '@/components/common/Icon';
+import { pickDocument } from '@/utils/web-file-picker';
 import * as FileSystem from 'expo-file-system';
 
 import { Button } from '@/components/common/Button';
@@ -23,6 +24,7 @@ import { parseCSVFile, CSVParseResult, getCSVTemplate, validateFileSize } from '
 import { validateCustomerBatch, ValidationSummary } from '@/services/csv/validator';
 import { importCustomers, ImportResult, ImportOptions } from '@/services/csv/importer';
 import { CustomerFormData } from '@/services/validation/form-schemas';
+import { useAuthStore } from '@/stores/authStore';
 
 export interface CSVUploaderProps {
   onComplete: (customers: CustomerFormData[]) => void;
@@ -51,11 +53,14 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
     estimatedTime?: number;
   }>({ percentage: 0, current: '' });
   const [loading, setLoading] = useState(false);
+  
+  // 從 auth store 獲取使用者資訊
+  const { user } = useAuthStore.getState();
 
   // 選擇檔案
   const handleFileSelect = useCallback(async () => {
     try {
-      const result = await DocumentPicker.getDocumentAsync({
+      const result = await pickDocument({
         type: ['text/csv', 'application/csv', 'text/comma-separated-values'],
         copyToCacheDirectory: true,
         multiple: false,
@@ -91,10 +96,19 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
       setLoading(true);
       setStage('preview');
 
-      // 讀取檔案內容
-      const fileContent = await FileSystem.readAsStringAsync(uri, {
-        encoding: FileSystem.EncodingType.UTF8,
-      });
+      let fileContent: string;
+      
+      // 根據平台不同處理檔案讀取
+      if (Platform.OS === 'web' && uri.startsWith('data:')) {
+        // Web 平台：從 data URL 提取內容
+        const base64Data = uri.split(',')[1];
+        fileContent = atob(base64Data);
+      } else {
+        // Native 平台：使用 FileSystem 讀取
+        fileContent = await FileSystem.readAsStringAsync(uri, {
+          encoding: FileSystem.EncodingType.UTF8,
+        });
+      }
 
       // 解析 CSV
       const result = await parseCSVFile(fileContent, {
@@ -172,9 +186,9 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
         batchSize: 100,
         skipDuplicates: true,
         updateExisting: false,
-        userId,
-        teamId,
-        organizationId,
+        userId: user?.uid || '',
+        teamId: user?.teamId || '',
+        organizationId: user?.organizationId || '',
         onProgress: (progress) => {
           setImportProgress({
             percentage: progress.percentage,
@@ -227,7 +241,7 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
         return (
           <View style={styles.stageContainer}>
             <View style={styles.uploadArea}>
-              <Ionicons name="cloud-upload-outline" size={64} color="#7A7A7A" />
+              <Icon name="cloud-upload-outline" size={64} color="#7A7A7A" />
               <Text style={styles.uploadTitle}>選擇 CSV 檔案</Text>
               <Text style={styles.uploadDescription}>
                 支援的格式：CSV (.csv){'\n'}
@@ -244,7 +258,7 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
                 style={styles.templateLink}
                 onPress={handleDownloadTemplate}
               >
-                <Ionicons name="download-outline" size={20} color="#1A1A1A" />
+                <Icon name="download-outline" size={20} color="#1A1A1A" />
                 <Text style={styles.templateText}>下載範本格式</Text>
               </TouchableOpacity>
             </View>
@@ -310,7 +324,7 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
                 <Text style={styles.sectionTitle}>驗證摘要</Text>
                 {validationSummary.warnings.length > 0 && (
                   <View style={styles.warningBox}>
-                    <Ionicons name="warning-outline" size={20} color="#f59e0b" />
+                    <Icon name="warning-outline" size={20} color="#f59e0b" />
                     <Text style={styles.warningText}>
                       發現 {validationSummary.warnings.length} 個警告
                     </Text>
@@ -318,7 +332,7 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
                 )}
                 {validationSummary.duplicateRecords.length > 0 && (
                   <View style={styles.warningBox}>
-                    <Ionicons name="copy-outline" size={20} color="#f59e0b" />
+                    <Icon name="copy-outline" size={20} color="#f59e0b" />
                     <Text style={styles.warningText}>
                       發現 {validationSummary.duplicateRecords.length} 筆重複資料
                     </Text>
@@ -356,7 +370,7 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
         return (
           <View style={styles.stageContainer}>
             <View style={styles.completeContainer}>
-              <Ionicons name="checkmark-circle" size={64} color="#22c55e" />
+              <Icon name="checkmark-circle" size={64} color="#22c55e" />
               <Text style={styles.completeTitle}>導入完成</Text>
               <Text style={styles.completeDescription}>
                 CSV 檔案已成功處理完畢

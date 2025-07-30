@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
   StyleSheet,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { useQueryStore } from '../../stores/queryStore';
 import { useAuthStore } from '../../stores/authStore';
 
@@ -218,7 +218,7 @@ export default function QueryChat() {
           onPress={handleSend}
           disabled={!query.trim() || isProcessing}
         >
-          <Ionicons
+          <Icon
             name="send"
             size={20}
             color={!query.trim() || isProcessing ? '#CCC' : '#007AFF'}

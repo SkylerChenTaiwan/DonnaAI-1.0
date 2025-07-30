@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { Button } from '@/components/common/Button';
 import { useAuthStore } from '@/stores/authStore';
@@ -89,14 +89,14 @@ export const ProfileScreen: React.FC = () => {
               >
                 <View style={styles.settingLeft}>
                   <View style={styles.settingIcon}>
-                    <Ionicons name={item.icon} size={20} color="#1A1A1A" />
+                    <Icon name={item.icon} size={20} color="#1A1A1A" />
                   </View>
                   <View style={styles.settingContent}>
                     <Text style={styles.settingTitle}>{item.title}</Text>
                     <Text style={styles.settingSubtitle}>{item.subtitle}</Text>
                   </View>
                 </View>
-                <Ionicons name="chevron-forward" size={20} color="#8E8E93" />
+                <Icon name="chevron-forward" size={20} color="#8E8E93" />
               </TouchableOpacity>
             ))}
           </View>

@@ -12,7 +12,7 @@ import {
   Pressable,
   Animated,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 
 interface Action {
   id: string;
@@ -100,13 +100,13 @@ export const ActionModal = ({
               activeOpacity={0.7}
             >
               <View style={styles.actionIconContainer}>
-                <Ionicons name={action.icon} size={24} color="#1A1A1A" />
+                <Icon name={action.icon} size={24} color="#1A1A1A" />
               </View>
               <View style={styles.actionTextContainer}>
                 <Text style={styles.actionTitle}>{action.title}</Text>
                 <Text style={styles.actionSubtitle}>{action.subtitle}</Text>
               </View>
-              <Ionicons name="chevron-forward" size={16} color="#BEBEBE" />
+              <Icon name="chevron-forward" size={16} color="#BEBEBE" />
             </TouchableOpacity>
           ))}
         </Animated.View>

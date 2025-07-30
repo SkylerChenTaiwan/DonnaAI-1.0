@@ -15,7 +15,7 @@ import {
   Alert,
 } from 'react-native';
 import { Layout } from '@/components/common/Layout';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { useNavigation } from '@react-navigation/native';
 import { useAuthStore } from '@/stores/authStore';
 import { useAdminStore } from '@/stores/adminStore';
@@ -124,7 +124,7 @@ export const ToolManagementScreen: React.FC = () => {
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
-            <Ionicons name="arrow-back" size={24} color={DesignSystem.colors.text.primary} />
+            <Icon name="arrow-back" size={24} color={DesignSystem.colors.text.primary} />
           </TouchableOpacity>
           <Text style={styles.title}>工具管理</Text>
         </View>
@@ -137,10 +137,10 @@ export const ToolManagementScreen: React.FC = () => {
               onPress={() => toggleSection('subscription')}
             >
               <View style={styles.sectionTitleContainer}>
-                <Ionicons name="card-outline" size={24} color={DesignSystem.colors.primary} />
+                <Icon name="card-outline" size={24} color={DesignSystem.colors.primary} />
                 <Text style={styles.sectionTitle}>訂閱資訊</Text>
               </View>
-              <Ionicons 
+              <Icon 
                 name={expandedSections.includes('subscription') ? "chevron-up" : "chevron-down"} 
                 size={20} 
                 color={DesignSystem.colors.text.secondary} 
@@ -188,10 +188,10 @@ export const ToolManagementScreen: React.FC = () => {
             onPress={() => toggleSection('tools')}
           >
             <View style={styles.sectionTitleContainer}>
-              <Ionicons name="construct-outline" size={24} color={DesignSystem.colors.primary} />
+              <Icon name="construct-outline" size={24} color={DesignSystem.colors.primary} />
               <Text style={styles.sectionTitle}>可用工具</Text>
             </View>
-            <Ionicons 
+            <Icon 
               name={expandedSections.includes('tools') ? "chevron-up" : "chevron-down"} 
               size={20} 
               color={DesignSystem.colors.text.secondary} 
@@ -245,10 +245,10 @@ export const ToolManagementScreen: React.FC = () => {
               onPress={() => toggleSection('custom')}
             >
               <View style={styles.sectionTitleContainer}>
-                <Ionicons name="settings-outline" size={24} color={DesignSystem.colors.primary} />
+                <Icon name="settings-outline" size={24} color={DesignSystem.colors.primary} />
                 <Text style={styles.sectionTitle}>自訂設定</Text>
               </View>
-              <Ionicons 
+              <Icon 
                 name={expandedSections.includes('custom') ? "chevron-up" : "chevron-down"} 
                 size={20} 
                 color={DesignSystem.colors.text.secondary} 

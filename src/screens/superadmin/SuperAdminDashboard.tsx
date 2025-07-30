@@ -15,7 +15,7 @@ import {
   Alert,
   Platform,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { ResponsiveLayout } from '@/components/common/ResponsiveLayout';
 import { isWebPlatform, isDesktopWeb, isTabletWeb } from '@/utils/web-detector';
@@ -161,7 +161,7 @@ export const SuperAdminDashboard: React.FC = () => {
         {quickStats.map((stat) => (
           <View key={stat.id} style={[styles.statCard, useResponsiveLayout && styles.webStatCard]}>
             <View style={[styles.statIconContainer, { backgroundColor: `${stat.color}15` }]}>
-              <Ionicons name={stat.icon as any} size={24} color={stat.color} />
+              <Icon name={stat.icon as any} size={24} color={stat.color} />
             </View>
             <Text style={styles.statValue}>{stat.value}</Text>
             <Text style={styles.statTitle}>{stat.title}</Text>
@@ -180,7 +180,7 @@ export const SuperAdminDashboard: React.FC = () => {
               style={[styles.actionCard, useResponsiveLayout && styles.webActionCard]}
               onPress={action.action}
             >
-              <Ionicons 
+              <Icon 
                 name={action.icon as any} 
                 size={32} 
                 color={DesignSystem.colors.primary} 

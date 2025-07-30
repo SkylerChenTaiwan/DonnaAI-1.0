@@ -11,7 +11,7 @@ import {
   ViewStyle,
   ActivityIndicator,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 
 type IconName = keyof typeof Ionicons.glyphMap;
@@ -109,7 +109,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
           color={colors.icon} 
         />
       ) : (
-        <Ionicons
+        <Icon
           name={icon}
           size={currentSize.icon}
           color={disabled ? DesignSystem.colors.text.disabled : colors.icon}

@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
@@ -172,7 +172,7 @@ export const AdminDashboard: React.FC = () => {
               activeOpacity={0.7}
             >
               <View style={[styles.iconContainer, { backgroundColor: action.color }]}>
-                <Ionicons
+                <Icon
                   name={action.icon}
                   size={24}
                   color={DesignSystem.colors.text.inverse}
@@ -259,7 +259,7 @@ export const AdminDashboard: React.FC = () => {
           style={styles.settingsButton}
           onPress={() => navigation.navigate('AdminSettings')}
         >
-          <Ionicons name="settings-outline" size={24} color={DesignSystem.colors.text.primary} />
+          <Icon name="settings-outline" size={24} color={DesignSystem.colors.text.primary} />
         </TouchableOpacity>
       </View>
 

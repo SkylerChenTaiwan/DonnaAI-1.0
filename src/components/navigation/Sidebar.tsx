@@ -13,7 +13,7 @@ import {
   Platform,
   Pressable
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { DesignSystem } from '@/theme/designSystem';
@@ -130,7 +130,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
                 ]}
                 onPress={() => navigation.navigate(item.id as any)}
               >
-                <Ionicons 
+                <Icon 
                   name={isActive ? item.activeIcon : item.icon} 
                   size={24} 
                   color={isActive ? DesignSystem.colors.primary : DesignSystem.colors.text.secondary}
@@ -161,7 +161,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
             onPress={handleActionPress}
           >
             {mode === 'manager' ? (
-              <Ionicons name="search" size={20} color={DesignSystem.colors.text.inverse} />
+              <Icon name="search" size={20} color={DesignSystem.colors.text.inverse} />
             ) : (
               <View style={styles.plusIcon}>
                 <View style={styles.plusHorizontal} />
@@ -180,7 +180,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
         {!collapsed && user && (
           <View style={styles.userInfo}>
             <View style={styles.userAvatar}>
-              <Ionicons name="person-circle" size={32} color={DesignSystem.colors.text.tertiary} />
+              <Icon name="person-circle" size={32} color={DesignSystem.colors.text.tertiary} />
             </View>
             <View style={styles.userDetails}>
               <Text style={styles.userName} numberOfLines={1}>
@@ -216,7 +216,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
             }}
             activeOpacity={0.7}
           >
-            <Ionicons name="key-outline" size={16} color={DesignSystem.colors.text.tertiary} />
+            <Icon name="key-outline" size={16} color={DesignSystem.colors.text.tertiary} />
             <Text style={styles.shortcutsText}>快捷鍵說明</Text>
           </TouchableOpacity>
         )}
@@ -227,7 +227,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
             style={styles.collapseButton}
             onPress={onToggle}
           >
-            <Ionicons 
+            <Icon 
               name={collapsed ? 'chevron-forward' : 'chevron-back'} 
               size={20} 
               color={DesignSystem.colors.text.secondary}

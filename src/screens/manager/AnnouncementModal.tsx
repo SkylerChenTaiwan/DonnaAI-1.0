@@ -15,7 +15,7 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { TeamMemberSelector } from '@/components/manager/TeamMemberSelector';
 import { createAnnouncement } from '@/services/firebase/managerActions';
 import { useAuth } from '@/hooks/useAuth';
@@ -138,7 +138,7 @@ export const AnnouncementModal: React.FC<AnnouncementModalProps> = ({
           <View style={styles.header}>
             <Text style={styles.headerTitle}>發佈公告</Text>
             <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
-              <Ionicons name="close" size={24} color={DesignSystem.colors.text.secondary} />
+              <Icon name="close" size={24} color={DesignSystem.colors.text.secondary} />
             </TouchableOpacity>
           </View>
 
@@ -254,7 +254,7 @@ export const AnnouncementModal: React.FC<AnnouncementModalProps> = ({
                 <ActivityIndicator size="small" color={DesignSystem.colors.text.inverse} />
               ) : (
                 <>
-                  <Ionicons name="megaphone" size={20} color="#FFFFFF" />
+                  <Icon name="megaphone" size={20} color="#FFFFFF" />
                   <Text style={styles.submitButtonText}>發佈</Text>
                 </>
               )}

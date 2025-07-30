@@ -10,7 +10,7 @@ import {
   Switch,
   StyleSheet,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { SettingItem as SettingItemType } from '@/types/settings';
 
 interface SettingItemProps extends SettingItemType {
@@ -44,11 +44,11 @@ export const SettingItem = ({
         return (
           <View style={styles.selectContainer}>
             <Text style={styles.selectValue}>{value || '未選擇'}</Text>
-            <Ionicons name="chevron-forward" size={16} color="#BEBEBE" />
+            <Icon name="chevron-forward" size={16} color="#BEBEBE" />
           </View>
         );
       case 'navigation':
-        return <Ionicons name="chevron-forward" size={20} color="#BEBEBE" />;
+        return <Icon name="chevron-forward" size={20} color="#BEBEBE" />;
       case 'action':
         return null;
       default:
@@ -71,7 +71,7 @@ export const SettingItem = ({
       <View style={styles.leftContent}>
         {icon && (
           <View style={styles.iconContainer}>
-            <Ionicons name={icon as any} size={20} color="#1A1A1A" />
+            <Icon name={icon as any} size={20} color="#1A1A1A" />
           </View>
         )}
         <View style={styles.textContainer}>

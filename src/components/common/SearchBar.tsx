@@ -10,7 +10,7 @@ import {
   StyleSheet,
   TextInputProps,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 
 interface SearchBarProps extends Omit<TextInputProps, 'value' | 'onChangeText'> {
   value: string;
@@ -70,7 +70,7 @@ export const SearchBar = ({
 
   return (
     <View style={styles.container}>
-      <Ionicons name="search" size={16} color="#7A7A7A" style={styles.icon} />
+      <Icon name="search" size={16} color="#7A7A7A" style={styles.icon} />
       <TextInput
         style={styles.input}
         value={localValue}
@@ -84,7 +84,7 @@ export const SearchBar = ({
       />
       {localValue.length > 0 && (
         <TouchableOpacity onPress={handleClear} style={styles.clearButton}>
-          <Ionicons name="close-circle" size={18} color="#7A7A7A" />
+          <Icon name="close-circle" size={18} color="#7A7A7A" />
         </TouchableOpacity>
       )}
     </View>

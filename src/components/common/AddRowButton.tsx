@@ -11,7 +11,7 @@ import {
   StyleSheet,
   ViewStyle,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { colors } from '@/theme/colors';
 
 interface AddRowButtonProps {
@@ -53,13 +53,13 @@ export const AddRowButton: React.FC<AddRowButtonProps> = ({
       >
         <View style={styles.buttonContent}>
           {showGuideIcon && alignment === 'left' && (
-            <Ionicons 
+            <Icon 
               name="chevron-forward" 
               size={16} 
               color={disabled ? colors.textTertiary : colors.textSecondary} 
             />
           )}
-          <Ionicons 
+          <Icon 
             name="add" 
             size={20} 
             color={disabled ? colors.textTertiary : colors.textSecondary} 

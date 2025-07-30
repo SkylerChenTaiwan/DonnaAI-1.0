@@ -6,12 +6,13 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Alert, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 
 import { CustomerForm } from '@/components/forms/CustomerForm';
 import { CSVUploader } from '@/components/input/CSVUploader';
 import { InputMethodLink } from '@/components/modals/InputMethodLink';
 import { Layout } from '@/components/common/Layout';
+import { WebModal } from '@/components/web/WebModal';
 import { createCustomer, createMultipleCustomers } from '@/services/firebase/customers';
 import { CustomerFormData } from '@/services/validation/form-schemas';
 import { useAuth } from '@/hooks/useAuth';
@@ -171,41 +172,43 @@ export const CreateCustomerModal: React.FC = () => {
   }, [navigation, handleSavePress, loading, mode]);
 
   return (
-    <Layout style={styles.container}>
+    <WebModal>
+      <Layout style={styles.container}>
 
-      {/* 內容區域 */}
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {mode === 'form' ? (
-          <>
-            {/* 切換到 CSV 的連結 */}
-            <InputMethodLink
-              targetLabel="改用 CSV 批量匯入"
-              onSwitch={switchToCSV}
-            />
-            <CustomerForm
-              ref={formRef}
-              onSubmit={handleSubmit}
-              onCancel={handleCancel}
-              loading={loading}
-              mode="create"
-            />
-          </>
-        ) : (
-          <>
-            {/* 切換到表單的連結 */}
-            <InputMethodLink
-              targetLabel="改用表格填寫"
-              onSwitch={switchToForm}
-            />
-            <CSVUploader
-              onComplete={handleCSVImportComplete}
-              loading={loading}
-              dataType="customer"
-            />
-          </>
-        )}
-      </ScrollView>
-    </Layout>
+        {/* 內容區域 */}
+        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+          {mode === 'form' ? (
+            <>
+              {/* 切換到 CSV 的連結 */}
+              <InputMethodLink
+                targetLabel="改用 CSV 批量匯入"
+                onSwitch={switchToCSV}
+              />
+              <CustomerForm
+                ref={formRef}
+                onSubmit={handleSubmit}
+                onCancel={handleCancel}
+                loading={loading}
+                mode="create"
+              />
+            </>
+          ) : (
+            <>
+              {/* 切換到表單的連結 */}
+              <InputMethodLink
+                targetLabel="改用表格填寫"
+                onSwitch={switchToForm}
+              />
+              <CSVUploader
+                onComplete={handleCSVImportComplete}
+                loading={loading}
+                dataType="customer"
+              />
+            </>
+          )}
+        </ScrollView>
+      </Layout>
+    </WebModal>
   );
 };
 

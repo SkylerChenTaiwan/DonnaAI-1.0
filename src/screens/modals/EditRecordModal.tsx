@@ -13,8 +13,9 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
+import { WebModal } from '@/components/web/WebModal';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useRecordStore } from '@/stores/recordStore';
@@ -87,21 +88,24 @@ export const EditRecordModal: React.FC = () => {
 
   if (isLoading || !record) {
     return (
-      <Layout style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#1A1A1A" />
-          <Text style={styles.loadingText}>載入中...</Text>
-        </View>
-      </Layout>
+      <WebModal>
+        <Layout style={styles.container}>
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#1A1A1A" />
+            <Text style={styles.loadingText}>載入中...</Text>
+          </View>
+        </Layout>
+      </WebModal>
     );
   }
 
   return (
-    <Layout style={styles.container} scrollable={false}>
+    <WebModal>
+      <Layout style={styles.container} scrollable={false}>
       {/* 標題列 */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerButton}>
-          <Ionicons name="close" size={24} color="#1A1A1A" />
+          <Icon name="close" size={24} color="#1A1A1A" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>編輯紀錄</Text>
         <TouchableOpacity 
@@ -205,7 +209,8 @@ export const EditRecordModal: React.FC = () => {
           </View>
         </View>
       </ScrollView>
-    </Layout>
+      </Layout>
+    </WebModal>
   );
 };
 

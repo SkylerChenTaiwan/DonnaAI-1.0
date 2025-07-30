@@ -14,7 +14,7 @@ import {
   Alert,
 } from 'react-native';
 import { Layout } from '@/components/common/Layout';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { useNavigation } from '@react-navigation/native';
 import { showToast } from '@/utils/toast';
 import { DesignSystem } from '@/theme/designSystem';
@@ -190,7 +190,7 @@ export const DataImportScreen: React.FC = () => {
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
-            <Ionicons name="arrow-back" size={24} color={DesignSystem.colors.text.primary} />
+            <Icon name="arrow-back" size={24} color={DesignSystem.colors.text.primary} />
           </TouchableOpacity>
           <Text style={styles.title}>資料匯入</Text>
         </View>
@@ -208,7 +208,7 @@ export const DataImportScreen: React.FC = () => {
                 ]}
                 onPress={() => setSelectedType(type.id as ImportType)}
               >
-                <Ionicons
+                <Icon
                   name={type.icon as any}
                   size={32}
                   color={selectedType === type.id ? DesignSystem.colors.primary : DesignSystem.colors.text.secondary}
@@ -231,7 +231,7 @@ export const DataImportScreen: React.FC = () => {
             style={styles.uploadButton}
             onPress={handleFileSelect}
           >
-            <Ionicons name="cloud-upload-outline" size={48} color={DesignSystem.colors.text.secondary} />
+            <Icon name="cloud-upload-outline" size={48} color={DesignSystem.colors.text.secondary} />
             <Text style={styles.uploadText}>
               {selectedFile ? selectedFile.name : '點擊選擇 CSV 或 Excel 檔案'}
             </Text>
@@ -241,7 +241,7 @@ export const DataImportScreen: React.FC = () => {
             style={styles.templateLink}
             onPress={handleDownloadTemplate}
           >
-            <Ionicons name="download-outline" size={20} color={DesignSystem.colors.primary} />
+            <Icon name="download-outline" size={20} color={DesignSystem.colors.primary} />
             <Text style={styles.templateText}>下載匯入範本</Text>
           </TouchableOpacity>
         </View>
@@ -346,7 +346,7 @@ export const DataImportScreen: React.FC = () => {
             <ActivityIndicator color={DesignSystem.colors.white} />
           ) : (
             <>
-              <Ionicons name="cloud-upload" size={20} color={DesignSystem.colors.white} />
+              <Icon name="cloud-upload" size={20} color={DesignSystem.colors.white} />
               <Text style={styles.importButtonText}>開始匯入</Text>
             </>
           )}

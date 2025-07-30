@@ -13,7 +13,7 @@ import {
   Modal,
   Alert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import DocumentPicker from 'expo-document-picker';
 import { Organization } from '@/types/entities';
 import { DesignSystem } from '@/theme/designSystem';
@@ -186,13 +186,13 @@ export const DataImportAssistModal: React.FC<DataImportAssistModalProps> = ({
                 onPress={() => handleSelectType(option.key)}
               >
                 <View style={[styles.optionIcon, { backgroundColor: option.color + '20' }]}>
-                  <Ionicons name={option.icon as any} size={24} color={option.color} />
+                  <Icon name={option.icon as any} size={24} color={option.color} />
                 </View>
                 <View style={styles.optionContent}>
                   <Text style={styles.optionTitle}>{option.title}</Text>
                   <Text style={styles.optionDesc}>{option.description}</Text>
                 </View>
-                <Ionicons name="chevron-forward" size={20} color={DesignSystem.colors.text.secondary} />
+                <Icon name="chevron-forward" size={20} color={DesignSystem.colors.text.secondary} />
               </TouchableOpacity>
             ))}
           </View>
@@ -207,7 +207,7 @@ export const DataImportAssistModal: React.FC<DataImportAssistModalProps> = ({
             </Text>
 
             <View style={styles.uploadArea}>
-              <Ionicons name="cloud-upload-outline" size={48} color={DesignSystem.colors.primary} />
+              <Icon name="cloud-upload-outline" size={48} color={DesignSystem.colors.primary} />
               <Text style={styles.uploadTitle}>選擇檔案</Text>
               <Text style={styles.uploadDesc}>
                 支援 CSV、Excel 格式
@@ -220,7 +220,7 @@ export const DataImportAssistModal: React.FC<DataImportAssistModalProps> = ({
               />
 
               <TouchableOpacity onPress={showTemplate} style={styles.templateLink}>
-                <Ionicons name="document-text-outline" size={16} color={DesignSystem.colors.primary} />
+                <Icon name="document-text-outline" size={16} color={DesignSystem.colors.primary} />
                 <Text style={styles.templateText}>查看格式範例</Text>
               </TouchableOpacity>
             </View>
@@ -262,7 +262,7 @@ export const DataImportAssistModal: React.FC<DataImportAssistModalProps> = ({
         return (
           <View style={styles.stepContent}>
             <View style={styles.resultContainer}>
-              <Ionicons 
+              <Icon 
                 name={importResult?.success ? "checkmark-circle" : "alert-circle"} 
                 size={48} 
                 color={importResult?.success ? DesignSystem.colors.success : DesignSystem.colors.warning} 
@@ -319,7 +319,7 @@ export const DataImportAssistModal: React.FC<DataImportAssistModalProps> = ({
             style={styles.closeButton}
             disabled={isImporting}
           >
-            <Ionicons name="close" size={24} color={DesignSystem.colors.text.primary} />
+            <Icon name="close" size={24} color={DesignSystem.colors.text.primary} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>資料匯入協助</Text>
         </View>

@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 
 import { RecordFormSchema, RecordFormData } from '@/services/validation/form-schemas';
 import { FormField } from './FormField';
@@ -209,7 +209,7 @@ export const RecordForm: React.FC<RecordFormProps> = ({
           ]}
           onPress={() => setInputMode('text')}
         >
-          <Ionicons 
+          <Icon 
             name="create-outline" 
             size={18} 
             color={inputMode === 'text' ? '#FFFFFF' : '#7A7A7A'} 
@@ -229,7 +229,7 @@ export const RecordForm: React.FC<RecordFormProps> = ({
           ]}
           onPress={() => setInputMode('voice')}
         >
-          <Ionicons 
+          <Icon 
             name="mic-outline" 
             size={18} 
             color={inputMode === 'voice' ? '#FFFFFF' : '#7A7A7A'} 
@@ -259,7 +259,7 @@ export const RecordForm: React.FC<RecordFormProps> = ({
             style={styles.customerSelectorClose}
             onPress={() => setShowCustomerSelector(false)}
           >
-            <Ionicons name="close" size={24} color="#7A7A7A" />
+            <Icon name="close" size={24} color="#7A7A7A" />
           </TouchableOpacity>
         </View>
         
@@ -281,7 +281,7 @@ export const RecordForm: React.FC<RecordFormProps> = ({
                   <Text style={styles.customerCompany}>一般記錄</Text>
                 </View>
                 {!watchedCustomerId && (
-                  <Ionicons name="checkmark" size={20} color="#22c55e" />
+                  <Icon name="checkmark" size={20} color="#22c55e" />
                 )}
               </TouchableOpacity>
               
@@ -297,7 +297,7 @@ export const RecordForm: React.FC<RecordFormProps> = ({
                     <Text style={styles.customerCompany}>{customer.company}</Text>
                   </View>
                   {watchedCustomerId === customer.id && (
-                    <Ionicons name="checkmark" size={20} color="#22c55e" />
+                    <Icon name="checkmark" size={20} color="#22c55e" />
                   )}
                 </TouchableOpacity>
               ))}
@@ -367,12 +367,12 @@ export const RecordForm: React.FC<RecordFormProps> = ({
                       {getSelectedCustomer()?.company}
                     </Text>
                   </View>
-                  <Ionicons name="person" size={20} color="#1A1A1A" />
+                  <Icon name="person" size={20} color="#1A1A1A" />
                 </>
               ) : (
                 <>
                   <Text style={styles.customerPlaceholder}>選擇客戶（可選）</Text>
-                  <Ionicons name="person-outline" size={20} color="#7A7A7A" />
+                  <Icon name="person-outline" size={20} color="#7A7A7A" />
                 </>
               )}
             </View>
@@ -388,7 +388,7 @@ export const RecordForm: React.FC<RecordFormProps> = ({
                 style={styles.voiceInputButton}
                 onPress={() => setShowAudioInput(true)}
               >
-                <Ionicons name="mic" size={16} color="#FFFFFF" />
+                <Icon name="mic" size={16} color="#FFFFFF" />
                 <Text style={styles.voiceInputButtonText}>開始錄音</Text>
               </TouchableOpacity>
             )}

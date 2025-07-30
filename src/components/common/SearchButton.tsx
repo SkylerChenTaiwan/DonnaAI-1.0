@@ -10,7 +10,7 @@ import {
   Platform,
   ViewStyle,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 
 interface SearchButtonProps {
@@ -65,7 +65,7 @@ export const SearchButton: React.FC<SearchButtonProps> = ({
       accessibilityLabel={accessibilityLabel}
       accessibilityRole="button"
     >
-      <Ionicons 
+      <Icon 
         name="search" 
         size={currentSize.iconSize} 
         color={DesignSystem.colors.text.inverse} 

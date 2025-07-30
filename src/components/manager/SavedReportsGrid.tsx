@@ -13,7 +13,7 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
 import { getSavedReports, SavedReport, saveReport } from '@/services/firebase/managerActions';
@@ -184,7 +184,7 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
   if (reports.length === 0 && !initializingDefaults) {
     return (
       <View style={[styles.emptyContainer, fullScreen && styles.fullScreenEmptyContainer]}>
-        <Ionicons name="bar-chart-outline" size={48} color={colors.border} />
+        <Icon name="bar-chart-outline" size={48} color={colors.border} />
         <Text style={styles.emptyText}>還沒有保存的報表</Text>
         <TouchableOpacity
           style={styles.createButton}
@@ -237,7 +237,7 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
                   { backgroundColor: `${chartColor}15` },
                 ]}
               >
-                <Ionicons
+                <Icon
                   name={chartIcon}
                   size={32}
                   color={chartColor}
@@ -261,7 +261,7 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
                 </Text>
                 {report.isPublic && (
                   <View style={styles.publicBadge}>
-                    <Ionicons name="people" size={12} color="#FFFFFF" />
+                    <Icon name="people" size={12} color="#FFFFFF" />
                   </View>
                 )}
               </View>
@@ -291,7 +291,7 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
             onPress={openDialog}
             activeOpacity={0.7}
           >
-            <Ionicons name="add-circle" size={48} color={colors.primary} />
+            <Icon name="add-circle" size={48} color={colors.primary} />
             <Text style={styles.viewMoreText}>創建新報表</Text>
           </TouchableOpacity>
         )}

@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 
 interface StatCardProps {
@@ -80,7 +80,7 @@ export const StatCard: React.FC<StatCardProps> = ({
     <View style={[styles.container, sizeStyles.container]}>
       {icon && (
         <View style={[styles.iconContainer, { backgroundColor: color + '20' }]}>
-          <Ionicons name={icon} size={24} color={color} />
+          <Icon name={icon} size={24} color={color} />
         </View>
       )}
       
@@ -93,7 +93,7 @@ export const StatCard: React.FC<StatCardProps> = ({
       
       {change && (
         <View style={styles.changeContainer}>
-          <Ionicons
+          <Icon
             name={getChangeIcon()}
             size={16}
             color={getChangeColor()}

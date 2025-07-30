@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 
 export type ChartType = 'line' | 'bar' | 'pie' | 'area';
@@ -49,7 +49,7 @@ export const ChartSelector: React.FC<ChartSelectorProps> = ({
           ]}
           onPress={() => onSelectType(option.id)}
         >
-          <Ionicons
+          <Icon
             name={option.icon}
             size={20}
             color={

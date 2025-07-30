@@ -13,7 +13,7 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { ResponsiveLayout } from '@/components/common/ResponsiveLayout';
 import { isWebPlatform, isDesktopWeb, isTabletWeb } from '@/utils/web-detector';
@@ -60,7 +60,7 @@ export const ManagerDashboard: React.FC = () => {
           onPress={() => setShowAnnouncementModal(true)}
           activeOpacity={0.7}
         >
-          <Ionicons name="megaphone-outline" size={24} color={colors.background} />
+          <Icon name="megaphone-outline" size={24} color={colors.background} />
           <Text style={styles.quickActionText}>資訊佈達</Text>
         </TouchableOpacity>
         
@@ -69,7 +69,7 @@ export const ManagerDashboard: React.FC = () => {
           onPress={() => setShowTaskAssignmentModal(true)}
           activeOpacity={0.7}
         >
-          <Ionicons name="person-add-outline" size={24} color={colors.background} />
+          <Icon name="person-add-outline" size={24} color={colors.background} />
           <Text style={styles.quickActionText}>任務指派</Text>
         </TouchableOpacity>
       </View>

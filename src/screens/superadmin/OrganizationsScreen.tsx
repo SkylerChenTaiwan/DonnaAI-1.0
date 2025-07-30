@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { SearchBar } from '@/components/common/SearchBar';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
@@ -156,13 +156,13 @@ export const OrganizationsScreen: React.FC = () => {
 
       <View style={styles.orgDetails}>
         <View style={styles.detailRow}>
-          <Ionicons name="people-outline" size={16} color={DesignSystem.colors.gray[600]} />
+          <Icon name="people-outline" size={16} color={DesignSystem.colors.gray[600]} />
           <Text style={styles.detailText}>
             {item.maxUsers || 0} 用戶
           </Text>
         </View>
         <View style={styles.detailRow}>
-          <Ionicons name="time-outline" size={16} color={DesignSystem.colors.gray[600]} />
+          <Icon name="time-outline" size={16} color={DesignSystem.colors.gray[600]} />
           <Text style={styles.detailText}>
             {item.aiMinutesUsed || 0} / {item.aiMinutesQuota || 0} AI 分鐘
           </Text>
@@ -174,7 +174,7 @@ export const OrganizationsScreen: React.FC = () => {
           style={styles.actionButton}
           onPress={() => handleToggleStatus(item)}
         >
-          <Ionicons
+          <Icon
             name={item.status === 'active' ? 'pause-circle-outline' : 'play-circle-outline'}
             size={20}
             color={DesignSystem.colors.gray[700]}
@@ -184,7 +184,7 @@ export const OrganizationsScreen: React.FC = () => {
           style={styles.actionButton}
           onPress={() => handleOrganizationPress(item)}
         >
-          <Ionicons
+          <Icon
             name="settings-outline"
             size={20}
             color={DesignSystem.colors.gray[700]}
@@ -239,7 +239,7 @@ export const OrganizationsScreen: React.FC = () => {
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Ionicons name="business-outline" size={48} color={DesignSystem.colors.gray[400]} />
+            <Icon name="business-outline" size={48} color={DesignSystem.colors.gray[400]} />
             <Text style={styles.emptyText}>
               {searchQuery ? '沒有符合的組織' : '尚無組織'}
             </Text>

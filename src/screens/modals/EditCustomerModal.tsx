@@ -13,8 +13,9 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
+import { WebModal } from '@/components/web/WebModal';
 import { Button } from '@/components/common/Button';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -110,21 +111,24 @@ export const EditCustomerModal: React.FC = () => {
 
   if (isLoading || !customer) {
     return (
-      <Layout style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#1A1A1A" />
-          <Text style={styles.loadingText}>載入中...</Text>
-        </View>
-      </Layout>
+      <WebModal>
+        <Layout style={styles.container}>
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#1A1A1A" />
+            <Text style={styles.loadingText}>載入中...</Text>
+          </View>
+        </Layout>
+      </WebModal>
     );
   }
 
   return (
-    <Layout style={styles.container} scrollable={false}>
+    <WebModal>
+      <Layout style={styles.container} scrollable={false}>
       {/* 標題列 */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerButton}>
-          <Ionicons name="close" size={24} color="#1A1A1A" />
+          <Icon name="close" size={24} color="#1A1A1A" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>編輯客戶</Text>
         <TouchableOpacity 
@@ -206,7 +210,7 @@ export const EditCustomerModal: React.FC = () => {
                 onSubmitEditing={handleAddTag}
               />
               <TouchableOpacity onPress={handleAddTag} style={styles.addTagButton}>
-                <Ionicons name="add-circle" size={24} color="#1A1A1A" />
+                <Icon name="add-circle" size={24} color="#1A1A1A" />
               </TouchableOpacity>
             </View>
             <View style={styles.tagList}>
@@ -214,7 +218,7 @@ export const EditCustomerModal: React.FC = () => {
                 <View key={index} style={styles.tag}>
                   <Text style={styles.tagText}>{tag}</Text>
                   <TouchableOpacity onPress={() => handleRemoveTag(tag)}>
-                    <Ionicons name="close-circle" size={18} color="#8E8E93" />
+                    <Icon name="close-circle" size={18} color="#8E8E93" />
                   </TouchableOpacity>
                 </View>
               ))}
@@ -237,7 +241,8 @@ export const EditCustomerModal: React.FC = () => {
           </View>
         </View>
       </ScrollView>
-    </Layout>
+      </Layout>
+    </WebModal>
   );
 };
 

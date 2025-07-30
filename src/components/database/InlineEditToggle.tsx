@@ -10,7 +10,7 @@ import {
   StyleSheet,
   Alert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { DataTable } from '@/components/common/DataTable';
 import { EditableDataTable } from '@/components/common/EditableDataTable';
 import { TableProps, TableColumn } from '@/types/table';
@@ -122,7 +122,7 @@ export const InlineEditToggle: React.FC<InlineEditToggleProps> = ({
           onPress={toggleEditMode}
           activeOpacity={0.7}
         >
-          <Ionicons
+          <Icon
             name={isEditMode ? 'create' : 'create-outline'}
             size={20}
             color={isEditMode ? colors.orange : '#1A1A1A'}

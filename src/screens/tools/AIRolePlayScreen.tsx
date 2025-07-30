@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import Layout from '@/components/common/Layout';
 
 /**
@@ -15,7 +15,7 @@ export default function AIRolePlayScreen() {
     >
       <View style={styles.container}>
         <View style={styles.content}>
-          <Ionicons name="construct-outline" size={64} color="#666" />
+          <Icon name="construct-outline" size={64} color="#666" />
           <Text style={styles.title}>功能升級中</Text>
           <Text style={styles.message}>
             AI 業務訓練功能正在進行系統升級，{'\n'}

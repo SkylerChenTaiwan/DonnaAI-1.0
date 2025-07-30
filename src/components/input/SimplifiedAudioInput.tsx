@@ -13,7 +13,7 @@ import {
   Platform,
   Animated,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { Audio } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
@@ -406,7 +406,7 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
               onPress={pauseRecording}
               activeOpacity={0.7}
             >
-              <Ionicons name="pause" size={32} color="#6B7280" />
+              <Icon name="pause" size={32} color="#6B7280" />
             </TouchableOpacity>
           )}
         </View>
@@ -431,7 +431,7 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
             {recordingStatus === 'loading' ? (
               <LoadingSpinner size="large" color="#FFFFFF" />
             ) : (
-              <Ionicons
+              <Icon
                 name={
                   recordingStatus === 'recording' ? 'mic' : 
                   recordingStatus === 'paused' ? 'play' : 
@@ -452,7 +452,7 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
               onPress={stopRecording}
               activeOpacity={0.7}
             >
-              <Ionicons name="stop" size={32} color="#6B7280" />
+              <Icon name="stop" size={32} color="#6B7280" />
             </TouchableOpacity>
           )}
         </View>

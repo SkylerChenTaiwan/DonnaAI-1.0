@@ -14,7 +14,7 @@ import {
   Alert,
 } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { EditableCell } from './EditableCell';
 import { AddRowButton } from './AddRowButton';
 import { SearchBar } from './SearchBar';
@@ -270,7 +270,7 @@ export const EditableDataTable: React.FC<EditableTableProps> = ({
             }
           }}
         >
-          <Ionicons
+          <Icon
             name={
               selectedItems.size === processedData.length && processedData.length > 0
                 ? 'checkbox'
@@ -301,7 +301,7 @@ export const EditableDataTable: React.FC<EditableTableProps> = ({
             {column.title}
           </Text>
           {column.sortable !== false && (
-            <Ionicons
+            <Icon
               name={
                 sortConfig.key === column.key
                   ? sortConfig.direction === 'asc'
@@ -348,7 +348,7 @@ export const EditableDataTable: React.FC<EditableTableProps> = ({
               style={styles.checkboxContainer}
               onPress={() => toggleSelection(item.id)}
             >
-              <Ionicons
+              <Icon
                 name={selectedItems.has(item.id) ? 'checkbox' : 'square-outline'}
                 size={20}
                 color="#1A1A1A"
@@ -492,7 +492,7 @@ export const EditableDataTable: React.FC<EditableTableProps> = ({
                     onPress={onAddRow}
                     activeOpacity={0.7}
                   >
-                    <Ionicons name="add-circle-outline" size={24} color="#FF5C00" />
+                    <Icon name="add-circle-outline" size={24} color="#FF5C00" />
                     <Text style={styles.emptyAddButtonText}>{addButtonText}</Text>
                   </TouchableOpacity>
                 )}

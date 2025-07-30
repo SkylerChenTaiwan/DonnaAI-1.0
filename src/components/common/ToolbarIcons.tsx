@@ -9,7 +9,7 @@ import {
   StyleSheet,
   ViewStyle,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 
 interface ToolbarIconsProps {
   showFilter?: boolean;
@@ -52,7 +52,7 @@ export const ToolbarIcons: React.FC<ToolbarIconsProps> = ({
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           testID="filter-button"
         >
-          <Ionicons name="filter" size={20} color="#6B6B6B" />
+          <Icon name="filter" size={20} color="#6B6B6B" />
         </TouchableOpacity>
       )}
       {showSort && (
@@ -63,7 +63,7 @@ export const ToolbarIcons: React.FC<ToolbarIconsProps> = ({
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           testID="sort-button"
         >
-          <Ionicons name="swap-vertical" size={20} color="#6B6B6B" />
+          <Icon name="swap-vertical" size={20} color="#6B6B6B" />
         </TouchableOpacity>
       )}
       {showMultiSelect && (
@@ -77,7 +77,7 @@ export const ToolbarIcons: React.FC<ToolbarIconsProps> = ({
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           testID="multi-select-button"
         >
-          <Ionicons 
+          <Icon 
             name="checkmark-circle" 
             size={20} 
             color={multiSelectMode ? "#1A1A1A" : "#6B6B6B"} 
@@ -92,7 +92,7 @@ export const ToolbarIcons: React.FC<ToolbarIconsProps> = ({
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           testID="columns-button"
         >
-          <Ionicons name="list" size={20} color="#6B6B6B" />
+          <Icon name="list" size={20} color="#6B6B6B" />
         </TouchableOpacity>
       )}
       {showModeToggle && (
@@ -106,7 +106,7 @@ export const ToolbarIcons: React.FC<ToolbarIconsProps> = ({
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           testID="mode-toggle-button"
         >
-          <Ionicons 
+          <Icon 
             name={currentMode === 'business' ? 'briefcase' : 'people'} 
             size={20} 
             color={currentMode === 'manager' ? "#1A1A1A" : "#6B6B6B"} 

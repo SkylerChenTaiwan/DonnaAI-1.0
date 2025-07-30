@@ -7,7 +7,7 @@ import { TouchableOpacity, Text, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { DesignSystem } from '@/theme/designSystem';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { useAuthStore } from '@/stores/authStore';
 import { AuthNavigator } from './AuthNavigator';
@@ -176,7 +176,7 @@ export const AppNavigator = () => {
                     }}
                     onPress={() => navigation.navigate('CreateOrganizationScreen')}
                   >
-                    <Ionicons name="add" size={20} color={DesignSystem.colors.text.inverse} />
+                    <Icon name="add" size={20} color={DesignSystem.colors.text.inverse} />
                   </TouchableOpacity>
                 ),
               })}

@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 import { EnhancedUser } from '@/types/personnel';
 
@@ -71,7 +71,7 @@ export function StatusIndicator({
       
       {showLastActive && user.lastActiveAt && (
         <View style={styles.lastActiveRow}>
-          <Ionicons 
+          <Icon 
             name="time-outline" 
             size={sizeStyles.iconSize} 
             color={DesignSystem.colors.text.tertiary} 

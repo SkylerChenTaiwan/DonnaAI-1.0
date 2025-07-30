@@ -14,7 +14,7 @@ import {
 import { Layout } from '@/components/common/Layout';
 import { SearchBar } from '@/components/common/SearchBar';
 import { ToolbarIcons } from '@/components/common/ToolbarIcons';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { FilterModal } from '@/components/common/FilterModal';
 import { ColumnSettingsModal } from '@/components/common/ColumnSettingsModal';
 import { FilterBadge, FilterCondition } from '@/components/common/FilterBadge';
@@ -232,7 +232,7 @@ export const PersonnelScreen: React.FC = () => {
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               testID="edit-button"
             >
-              <Ionicons
+              <Icon
                 name={isEditMode ? 'create' : 'create-outline'}
                 size={20}
                 color={isEditMode ? "#1A1A1A" : "#6B6B6B"}

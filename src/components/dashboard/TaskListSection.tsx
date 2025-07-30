@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
   SectionList,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { TaskDoc } from '@/types/task';
@@ -250,7 +250,7 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
           ) : (
             <View style={[styles.checkbox, item.status === 'completed' && styles.checkboxChecked]}>
               {item.status === 'completed' && (
-                <Ionicons name="checkmark" size={16} color="#FFFFFF" />
+                <Icon name="checkmark" size={16} color="#FFFFFF" />
               )}
             </View>
           )}
@@ -295,7 +295,7 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
   // 空狀態
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
-      <Ionicons name="checkmark-done-outline" size={48} color="#D1D5DB" />
+      <Icon name="checkmark-done-outline" size={48} color="#D1D5DB" />
       <Text style={styles.emptyTitle}>沒有待辦任務</Text>
       <Text style={styles.emptyDescription}>所有任務都已完成！</Text>
     </View>

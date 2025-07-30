@@ -11,7 +11,7 @@ import {
   Modal,
   Alert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { ResponsiveLayout, responsiveGrid } from '@/components/common/ResponsiveLayout';
 import { DataTable } from '@/components/common/DataTable';
@@ -784,7 +784,7 @@ export const DatabaseScreen: React.FC = () => {
           style={styles.desktopActionButton}
           onPress={() => setShowFilterModal(true)}
         >
-          <Ionicons name="filter" size={20} color="#6B6B6B" />
+          <Icon name="filter" size={20} color="#6B6B6B" />
           <Text style={styles.desktopActionText}>篩選器</Text>
         </TouchableOpacity>
         
@@ -792,7 +792,7 @@ export const DatabaseScreen: React.FC = () => {
           style={styles.desktopActionButton}
           onPress={() => setShowColumnSettings(true)}
         >
-          <Ionicons name="options" size={20} color="#6B6B6B" />
+          <Icon name="options" size={20} color="#6B6B6B" />
           <Text style={styles.desktopActionText}>欄位設定</Text>
         </TouchableOpacity>
       </View>
@@ -893,7 +893,7 @@ export const DatabaseScreen: React.FC = () => {
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             testID="edit-button"
           >
-            <Ionicons
+            <Icon
               name={isEditMode ? 'create' : 'create-outline'}
               size={20}
               color={isEditMode ? "#FF5C00" : "#6B6B6B"}
@@ -1023,7 +1023,7 @@ export const DatabaseScreen: React.FC = () => {
               onPress={() => setShowBatchEdit(true)}
               activeOpacity={0.7}
             >
-              <Ionicons name="create-outline" size={20} color="#F7F6F3" />
+              <Icon name="create-outline" size={20} color="#F7F6F3" />
               <Text style={styles.batchActionButtonText}>編輯</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -1031,7 +1031,7 @@ export const DatabaseScreen: React.FC = () => {
               onPress={handleBatchDelete}
               activeOpacity={0.7}
             >
-              <Ionicons name="trash-outline" size={20} color="#F7F6F3" />
+              <Icon name="trash-outline" size={20} color="#F7F6F3" />
               <Text style={styles.batchActionButtonText}>刪除</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -1039,7 +1039,7 @@ export const DatabaseScreen: React.FC = () => {
               onPress={() => setShowExportOptions(true)}
               activeOpacity={0.7}
             >
-              <Ionicons name="download-outline" size={20} color="#F7F6F3" />
+              <Icon name="download-outline" size={20} color="#F7F6F3" />
               <Text style={styles.batchActionButtonText}>匯出</Text>
             </TouchableOpacity>
             <TouchableOpacity

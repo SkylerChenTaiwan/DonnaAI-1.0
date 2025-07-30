@@ -12,7 +12,7 @@ import {
   Linking,
 } from 'react-native';
 import { Layout } from '@/components/common/Layout';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 
 export const PrivacyPolicyScreen: React.FC = () => {
   const lastUpdated = '2024年12月1日';
@@ -140,7 +140,7 @@ export const PrivacyPolicyScreen: React.FC = () => {
               style={styles.contactButton}
               onPress={() => openExternalLink('mailto:privacy@donnaai.com')}
             >
-              <Ionicons name="mail-outline" size={20} color="#007AFF" />
+              <Icon name="mail-outline" size={20} color="#007AFF" />
               <Text style={styles.contactText}>privacy@donnaai.com</Text>
             </TouchableOpacity>
           </View>

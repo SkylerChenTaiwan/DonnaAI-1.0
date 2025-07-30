@@ -13,8 +13,9 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
+import { WebModal } from '@/components/web/WebModal';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useAuthStore } from '@/stores/authStore';
@@ -145,12 +146,14 @@ export const EditProfileModal: React.FC = () => {
 
   if (!user) {
     return (
-      <Layout style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={DesignSystem.colors.primary} />
-          <Text style={styles.loadingText}>載入中...</Text>
-        </View>
-      </Layout>
+      <WebModal>
+        <Layout style={styles.container}>
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={DesignSystem.colors.primary} />
+            <Text style={styles.loadingText}>載入中...</Text>
+          </View>
+        </Layout>
+      </WebModal>
     );
   }
 
@@ -174,7 +177,8 @@ export const EditProfileModal: React.FC = () => {
   }, [navigation, isSaving, handleSave]);
 
   return (
-    <Layout style={styles.container} scrollable={false}>
+    <WebModal>
+      <Layout style={styles.container} scrollable={false}>
 
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <View style={styles.form}>
@@ -240,7 +244,7 @@ export const EditProfileModal: React.FC = () => {
 
           {/* 注意事項 */}
           <View style={styles.noticeContainer}>
-            <Ionicons 
+            <Icon 
               name="information-circle-outline" 
               size={20} 
               color={DesignSystem.colors.text.secondary} 
@@ -251,7 +255,8 @@ export const EditProfileModal: React.FC = () => {
           </View>
         </View>
       </ScrollView>
-    </Layout>
+      </Layout>
+    </WebModal>
   );
 };
 

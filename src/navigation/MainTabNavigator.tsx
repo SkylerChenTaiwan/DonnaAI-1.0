@@ -4,7 +4,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { View, StyleSheet } from 'react-native';
 import { useAuthStore } from '@/stores/authStore';
 import { useAnalyticsStore } from '@/stores/analyticsStore';
@@ -81,7 +81,7 @@ export const MainTabNavigator = () => {
                     return (
                       <View style={styles.addButtonContainer} ref={addButtonRef}>
                         <View style={[styles.searchButton]}>
-                          <Ionicons name="search" size={20} color={DesignSystem.colors.text.inverse} />
+                          <Icon name="search" size={20} color={DesignSystem.colors.text.inverse} />
                         </View>
                       </View>
                     );
@@ -111,7 +111,7 @@ export const MainTabNavigator = () => {
                   iconName = 'ellipse-outline';
               }
 
-              return <Ionicons name={iconName} size={size} color={color} />;
+              return <Icon name={iconName} size={size} color={color} />;
             },
             tabBarActiveTintColor: DesignSystem.colors.text.primary,
             tabBarInactiveTintColor: '#999999',

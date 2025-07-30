@@ -13,7 +13,7 @@ import {
   Animated,
   Dimensions,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { Audio } from 'expo-av';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { Button } from '@/components/common/Button';
@@ -289,7 +289,7 @@ export const SimplifiedVoiceTaskInput: React.FC<SimplifiedVoiceTaskInputProps> =
   const renderRecording = () => (
     <Animated.View style={[styles.recordingContainer, { opacity: fadeAnim }]}>
       <View style={styles.topSection}>
-        <Ionicons name="mic" size={48} color="#FF6B6B" />
+        <Icon name="mic" size={48} color="#FF6B6B" />
         <Text style={styles.title}>語音建立任務</Text>
         <Text style={styles.description}>
           說出您的任務內容，AI 將自動識別並建立任務
@@ -316,7 +316,7 @@ export const SimplifiedVoiceTaskInput: React.FC<SimplifiedVoiceTaskInputProps> =
               {recordingStatus === 'recording' ? (
                 <View style={styles.stopSquare} />
               ) : (
-                <Ionicons name="mic" size={60} color="#FFFFFF" />
+                <Icon name="mic" size={60} color="#FFFFFF" />
               )}
             </View>
           </Animated.View>
@@ -384,7 +384,7 @@ export const SimplifiedVoiceTaskInput: React.FC<SimplifiedVoiceTaskInputProps> =
           <View style={styles.taskMetadata}>
             {task.priority && (
               <View style={styles.metaItem}>
-                <Ionicons name="flag" size={16} color="#FF6B6B" />
+                <Icon name="flag" size={16} color="#FF6B6B" />
                 <Text style={styles.metaText}>
                   {task.priority === 'high' ? '高' : task.priority === 'medium' ? '中' : '低'}優先級
                 </Text>
@@ -393,7 +393,7 @@ export const SimplifiedVoiceTaskInput: React.FC<SimplifiedVoiceTaskInputProps> =
             
             {task.dueDate && (
               <View style={styles.metaItem}>
-                <Ionicons name="calendar" size={16} color="#FF6B6B" />
+                <Icon name="calendar" size={16} color="#FF6B6B" />
                 <Text style={styles.metaText}>
                   {new Date(task.dueDate).toLocaleDateString('zh-TW')}
                 </Text>
@@ -422,7 +422,7 @@ export const SimplifiedVoiceTaskInput: React.FC<SimplifiedVoiceTaskInputProps> =
   // 渲染錯誤
   const renderError = () => (
     <View style={styles.errorContainer}>
-      <Ionicons name="alert-circle" size={64} color="#FF6B6B" />
+      <Icon name="alert-circle" size={64} color="#FF6B6B" />
       <Text style={styles.errorTitle}>處理失敗</Text>
       <Text style={styles.errorMessage}>
         {extractionResult?.error || '語音轉任務處理失敗'}

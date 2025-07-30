@@ -12,7 +12,7 @@ import {
   ScrollView,
   StatusBar,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { TableColumn } from '@/types/table';
 import { FilterCondition } from './FilterBadge';
 import { FilterForm } from '../database/FilterFormV2';
@@ -116,7 +116,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
             onPress={handleAddCondition}
             activeOpacity={0.7}
           >
-            <Ionicons name="add-circle-outline" size={24} color="#1A1A1A" />
+            <Icon name="add-circle-outline" size={24} color="#1A1A1A" />
             <Text style={styles.addButtonText}>新增篩選條件</Text>
           </TouchableOpacity>
 

@@ -25,7 +25,7 @@ import { getFirebaseAuth, getFirebaseDb } from '@/services/firebase/config';
 import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
 import { showToast } from '@/utils/toast';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { colors } from '@/theme/colors';
 import { User } from '@/types/entities';
 
@@ -202,13 +202,13 @@ export const AddUserModal: React.FC = () => {
             style={styles.closeButton}
             activeOpacity={0.7}
           >
-            <Ionicons name="close" size={24} color={colors.text} />
+            <Icon name="close" size={24} color={colors.text} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>新增下屬</Text>
         </View>
         
         <View style={styles.noPermissionContainer}>
-          <Ionicons name="lock-closed" size={48} color={colors.textSecondary} />
+          <Icon name="lock-closed" size={48} color={colors.textSecondary} />
           <Text style={styles.noPermissionText}>您沒有權限新增下屬</Text>
           <Text style={styles.noPermissionSubtext}>
             只有團隊主管或組織管理員可以新增團隊成員
@@ -238,7 +238,7 @@ export const AddUserModal: React.FC = () => {
             style={styles.closeButton}
             activeOpacity={0.7}
           >
-            <Ionicons name="close" size={24} color={colors.text} />
+            <Icon name="close" size={24} color={colors.text} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>新增下屬</Text>
         </View>
@@ -310,7 +310,7 @@ export const AddUserModal: React.FC = () => {
           </View>
 
           <View style={styles.infoBox}>
-            <Ionicons name="information-circle" size={20} color={colors.info} />
+            <Icon name="information-circle" size={20} color={colors.info} />
             <Text style={styles.infoText}>
               新使用者將會收到一封包含登入資訊的電子郵件
             </Text>

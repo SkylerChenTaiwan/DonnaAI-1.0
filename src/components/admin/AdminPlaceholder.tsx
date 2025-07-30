@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { DesignSystem } from '@/theme/designSystem';
 
@@ -24,7 +24,7 @@ export const AdminPlaceholder: React.FC<AdminPlaceholderProps> = ({
     <Layout style={styles.container}>
       <View style={styles.content}>
         <View style={styles.iconContainer}>
-          <Ionicons name={icon} size={64} color={DesignSystem.colors.gray[400]} />
+          <Icon name={icon} size={64} color={DesignSystem.colors.gray[400]} />
         </View>
         <Text style={styles.description}>{description}</Text>
         <Text style={styles.subtitle}>此功能正在開發中，敬請期待！</Text>

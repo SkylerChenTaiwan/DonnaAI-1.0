@@ -13,7 +13,7 @@ import {
 import { Layout } from '@/components/common/Layout';
 import { SearchBar } from '@/components/common/SearchBar';
 import { ToolCard } from '@/components/common/ToolCard';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/types/navigation';
@@ -157,7 +157,7 @@ export const ToolsScreen: React.FC = () => {
 
         {filteredTools.length === 0 && (
           <View style={styles.emptyContainer}>
-            <Ionicons name="search-outline" size={48} color="#C7C7CC" />
+            <Icon name="search-outline" size={48} color="#C7C7CC" />
             <Text style={styles.emptyText}>沒有找到相關工具</Text>
           </View>
         )}

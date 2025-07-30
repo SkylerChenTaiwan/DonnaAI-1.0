@@ -10,7 +10,7 @@ import {
   StyleSheet,
   Animated,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 
 interface Tab {
@@ -42,7 +42,7 @@ export function PersonnelTabs({ activeView, onViewChange }: PersonnelTabsProps) 
           onPress={() => onViewChange(tab.id)}
           activeOpacity={0.7}
         >
-          <Ionicons
+          <Icon
             name={tab.icon}
             size={20}
             color={activeView === tab.id ? DesignSystem.colors.text.primary : DesignSystem.colors.text.secondary}

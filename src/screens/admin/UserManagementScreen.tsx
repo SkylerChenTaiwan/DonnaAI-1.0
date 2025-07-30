@@ -20,7 +20,7 @@ import { FilterModal } from '@/components/common/FilterModal';
 import { FilterBadge, FilterCondition } from '@/components/common/FilterBadge';
 import { StatusIndicator } from '@/components/personnel/StatusIndicator';
 import { PermissionBadge } from '@/components/personnel/PermissionBadge';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { useNavigation } from '@react-navigation/native';
 import { useAuthStore } from '@/stores/authStore';
 import { useAdminStore } from '@/stores/adminStore';
@@ -295,14 +295,14 @@ export const UserManagementScreen: React.FC = () => {
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
-            <Ionicons name="arrow-back" size={24} color={DesignSystem.colors.text.primary} />
+            <Icon name="arrow-back" size={24} color={DesignSystem.colors.text.primary} />
           </TouchableOpacity>
           <Text style={styles.title}>用戶管理</Text>
           <TouchableOpacity
             style={styles.addButton}
             onPress={handleAddUser}
           >
-            <Ionicons name="add" size={24} color={DesignSystem.colors.primary} />
+            <Icon name="add" size={24} color={DesignSystem.colors.primary} />
           </TouchableOpacity>
         </View>
         

@@ -15,7 +15,7 @@ import {
   Platform
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { Layout } from '@/components/common/Layout';
@@ -336,7 +336,7 @@ export function LegacyDataImportScreen({ navigation }: any) {
 
           {files[fileType.key] ? (
             <View style={styles.fileInfo}>
-              <Ionicons name="document-text" size={24} color={DesignSystem.colors.primary} />
+              <Icon name="document-text" size={24} color={DesignSystem.colors.primary} />
               <View style={styles.fileDetails}>
                 <Text style={styles.fileName}>{files[fileType.key]!.name}</Text>
                 <Text style={styles.fileSize}>
@@ -351,7 +351,7 @@ export function LegacyDataImportScreen({ navigation }: any) {
               <TouchableOpacity
                 onPress={() => setFiles(prev => ({ ...prev, [fileType.key]: undefined }))}
               >
-                <Ionicons name="close-circle" size={24} color={DesignSystem.colors.status.error} />
+                <Icon name="close-circle" size={24} color={DesignSystem.colors.status.error} />
               </TouchableOpacity>
             </View>
           ) : (
@@ -359,7 +359,7 @@ export function LegacyDataImportScreen({ navigation }: any) {
               style={styles.uploadButton}
               onPress={() => pickFile(fileType.key)}
             >
-              <Ionicons name="cloud-upload-outline" size={24} color={DesignSystem.colors.primary} />
+              <Icon name="cloud-upload-outline" size={24} color={DesignSystem.colors.primary} />
               <Text style={styles.uploadText}>選擇檔案</Text>
             </TouchableOpacity>
           )}
@@ -445,7 +445,7 @@ export function LegacyDataImportScreen({ navigation }: any) {
 
   const renderComplete = () => (
     <View style={styles.stepContent}>
-      <Ionicons 
+      <Icon 
         name={importResult?.success ? "checkmark-circle" : "alert-circle"} 
         size={64} 
         color={importResult?.success ? DesignSystem.colors.status.success : DesignSystem.colors.status.warning} 
@@ -517,7 +517,7 @@ export function LegacyDataImportScreen({ navigation }: any) {
                 styles.stepCircle,
                 index <= activeStep ? styles.stepCircleActive : null,
               ]}>
-                <Ionicons 
+                <Icon 
                   name={step.icon as any} 
                   size={20} 
                   color={index <= activeStep ? '#fff' : DesignSystem.colors.gray} 

@@ -12,7 +12,7 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { 
   getOrganizationBillingSummary,
   upgradeOrganizationPlan,
@@ -155,7 +155,7 @@ export const BillingManagementSection: React.FC<BillingManagementSectionProps> =
               onPress={handleGenerateBilling}
               disabled={isGenerating}
             >
-              <Ionicons name="receipt-outline" size={16} color={DesignSystem.colors.primary} />
+              <Icon name="receipt-outline" size={16} color={DesignSystem.colors.primary} />
               <Text style={styles.generateButtonText}>
                 {isGenerating ? '生成中...' : '生成帳單'}
               </Text>
@@ -215,39 +215,39 @@ export const BillingManagementSection: React.FC<BillingManagementSectionProps> =
         <Text style={styles.featuresTitle}>計費功能</Text>
         
         <TouchableOpacity style={styles.featureItem}>
-          <Ionicons name="calendar-outline" size={20} color={DesignSystem.colors.primary} />
+          <Icon name="calendar-outline" size={20} color={DesignSystem.colors.primary} />
           <View style={styles.featureContent}>
             <Text style={styles.featureName}>計費週期管理</Text>
             <Text style={styles.featureDesc}>切換月付/年付計費方式</Text>
           </View>
-          <Ionicons name="chevron-forward" size={16} color={DesignSystem.colors.text.secondary} />
+          <Icon name="chevron-forward" size={16} color={DesignSystem.colors.text.secondary} />
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.featureItem}>
-          <Ionicons name="gift-outline" size={20} color={DesignSystem.colors.primary} />
+          <Icon name="gift-outline" size={20} color={DesignSystem.colors.primary} />
           <View style={styles.featureContent}>
             <Text style={styles.featureName}>贈送人數管理</Text>
             <Text style={styles.featureDesc}>設定不計費的用戶人數</Text>
           </View>
-          <Ionicons name="chevron-forward" size={16} color={DesignSystem.colors.text.secondary} />
+          <Icon name="chevron-forward" size={16} color={DesignSystem.colors.text.secondary} />
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.featureItem}>
-          <Ionicons name="analytics-outline" size={20} color={DesignSystem.colors.primary} />
+          <Icon name="analytics-outline" size={20} color={DesignSystem.colors.primary} />
           <View style={styles.featureContent}>
             <Text style={styles.featureName}>使用分析報告</Text>
             <Text style={styles.featureDesc}>檢視詳細的使用統計報告</Text>
           </View>
-          <Ionicons name="chevron-forward" size={16} color={DesignSystem.colors.text.secondary} />
+          <Icon name="chevron-forward" size={16} color={DesignSystem.colors.text.secondary} />
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.featureItem}>
-          <Ionicons name="download-outline" size={20} color={DesignSystem.colors.primary} />
+          <Icon name="download-outline" size={20} color={DesignSystem.colors.primary} />
           <View style={styles.featureContent}>
             <Text style={styles.featureName}>匯出計費資料</Text>
             <Text style={styles.featureDesc}>下載計費記錄和發票</Text>
           </View>
-          <Ionicons name="chevron-forward" size={16} color={DesignSystem.colors.text.secondary} />
+          <Icon name="chevron-forward" size={16} color={DesignSystem.colors.text.secondary} />
         </TouchableOpacity>
       </View>
 
@@ -277,7 +277,7 @@ export const BillingManagementSection: React.FC<BillingManagementSectionProps> =
           {billingHistory.length > 5 && (
             <TouchableOpacity style={styles.showMoreButton}>
               <Text style={styles.showMoreText}>查看更多計費記錄</Text>
-              <Ionicons name="chevron-down" size={16} color={DesignSystem.colors.primary} />
+              <Icon name="chevron-down" size={16} color={DesignSystem.colors.primary} />
             </TouchableOpacity>
           )}
         </View>
@@ -298,7 +298,7 @@ export const BillingManagementSection: React.FC<BillingManagementSectionProps> =
         </View>
         
         <View style={styles.pricingNote}>
-          <Ionicons name="information-circle-outline" size={16} color={DesignSystem.colors.primary} />
+          <Icon name="information-circle-outline" size={16} color={DesignSystem.colors.primary} />
           <Text style={styles.pricingNoteText}>
             按實際使用的活躍用戶數計費，可設定贈送人數以減少計費用戶
           </Text>

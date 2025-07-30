@@ -11,7 +11,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { SearchBar } from './SearchBar';
 import { useTableData } from '@/hooks/useTableData';
 import { TableProps, TableData } from '@/types/table';
@@ -69,7 +69,7 @@ export const DataTable = ({
             }
           }}
         >
-          <Ionicons
+          <Icon
             name={
               selectedItems.size === processedData.length && processedData.length > 0
                 ? 'checkbox'
@@ -95,7 +95,7 @@ export const DataTable = ({
         >
           <Text style={styles.headerText}>{column.title}</Text>
           {column.sortable !== false && (
-            <Ionicons
+            <Icon
               name={
                 sortConfig.key === column.key
                   ? sortConfig.direction === 'asc'
@@ -127,7 +127,7 @@ export const DataTable = ({
             activeOpacity={0.7}
           >
             <View style={styles.checkboxContainer}>
-              <Ionicons
+              <Icon
                 name={selectedItems.has(item.id) ? 'checkbox' : 'square-outline'}
                 size={20}
                 color="#1A1A1A"

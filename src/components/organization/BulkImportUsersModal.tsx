@@ -13,7 +13,7 @@ import {
   Modal,
   Alert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import DocumentPicker from 'expo-document-picker';
 import { Organization } from '@/types/entities';
 import { DesignSystem } from '@/theme/designSystem';
@@ -185,7 +185,7 @@ export const BulkImportUsersModal: React.FC<BulkImportUsersModalProps> = ({
         return (
           <View style={styles.stepContent}>
             <View style={styles.uploadArea}>
-              <Ionicons name="cloud-upload-outline" size={48} color={DesignSystem.colors.primary} />
+              <Icon name="cloud-upload-outline" size={48} color={DesignSystem.colors.primary} />
               <Text style={styles.uploadTitle}>選擇 CSV 檔案</Text>
               <Text style={styles.uploadDesc}>
                 上傳包含用戶資料的 CSV 檔案
@@ -196,7 +196,7 @@ export const BulkImportUsersModal: React.FC<BulkImportUsersModalProps> = ({
                 style={styles.uploadButton}
               />
               <TouchableOpacity onPress={downloadTemplate} style={styles.templateLink}>
-                <Ionicons name="download-outline" size={16} color={DesignSystem.colors.primary} />
+                <Icon name="download-outline" size={16} color={DesignSystem.colors.primary} />
                 <Text style={styles.templateText}>查看 CSV 格式說明</Text>
               </TouchableOpacity>
             </View>
@@ -267,7 +267,7 @@ export const BulkImportUsersModal: React.FC<BulkImportUsersModalProps> = ({
         return (
           <View style={styles.stepContent}>
             <View style={styles.resultContainer}>
-              <Ionicons 
+              <Icon 
                 name={importResult?.success ? "checkmark-circle" : "alert-circle"} 
                 size={48} 
                 color={importResult?.success ? DesignSystem.colors.success : DesignSystem.colors.error} 
@@ -325,7 +325,7 @@ export const BulkImportUsersModal: React.FC<BulkImportUsersModalProps> = ({
               style={styles.closeButton}
               disabled={isProcessing}
             >
-              <Ionicons name="close" size={24} color={DesignSystem.colors.text.primary} />
+              <Icon name="close" size={24} color={DesignSystem.colors.text.primary} />
             </TouchableOpacity>
             <Text style={styles.headerTitle}>批量匯入用戶</Text>
           </View>

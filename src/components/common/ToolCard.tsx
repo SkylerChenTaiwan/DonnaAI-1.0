@@ -10,7 +10,7 @@ import {
   StyleSheet,
   Image,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 
 interface ToolCardProps {
   id: string;
@@ -36,7 +36,7 @@ export const ToolCard = ({
       activeOpacity={0.7}
     >
       <View style={[styles.iconContainer, { backgroundColor: `${color}15` }]}>
-        <Ionicons name={icon} size={40} color={color} />
+        <Icon name={icon} size={40} color={color} />
       </View>
       <Text style={styles.title} numberOfLines={1}>
         {title}

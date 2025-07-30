@@ -15,7 +15,7 @@ import {
   Modal,
 } from 'react-native';
 import { Layout } from '@/components/common/Layout';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { useNavigation } from '@react-navigation/native';
 import { useAuthStore } from '@/stores/authStore';
 import { useAdminStore } from '@/stores/adminStore';
@@ -165,14 +165,14 @@ export const UsageReportsScreen: React.FC = () => {
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
-            <Ionicons name="arrow-back" size={24} color={DesignSystem.colors.text.primary} />
+            <Icon name="arrow-back" size={24} color={DesignSystem.colors.text.primary} />
           </TouchableOpacity>
           <Text style={styles.title}>使用報表</Text>
           <TouchableOpacity
             style={styles.exportButton}
             onPress={handleExport}
           >
-            <Ionicons name="download-outline" size={24} color={DesignSystem.colors.primary} />
+            <Icon name="download-outline" size={24} color={DesignSystem.colors.primary} />
           </TouchableOpacity>
         </View>
         
@@ -211,7 +211,7 @@ export const UsageReportsScreen: React.FC = () => {
                 <Text style={styles.statUnit}>{stat.unit}</Text>
               </View>
               <View style={styles.statChangeContainer}>
-                <Ionicons
+                <Icon
                   name={stat.isPositive ? "trending-up" : "trending-down"}
                   size={16}
                   color={stat.isPositive ? DesignSystem.colors.success : DesignSystem.colors.error}
@@ -238,7 +238,7 @@ export const UsageReportsScreen: React.FC = () => {
               ]}
               onPress={() => setSelectedMetric(metric.id as any)}
             >
-              <Ionicons
+              <Icon
                 name={metric.icon as any}
                 size={20}
                 color={selectedMetric === metric.id ? DesignSystem.colors.primary : DesignSystem.colors.text.secondary}
@@ -303,7 +303,7 @@ export const UsageReportsScreen: React.FC = () => {
                 ]}
                 onPress={() => setExportFormat('csv')}
               >
-                <Ionicons 
+                <Icon 
                   name="document-text-outline" 
                   size={24} 
                   color={exportFormat === 'csv' ? DesignSystem.colors.primary : DesignSystem.colors.text.secondary} 
@@ -326,7 +326,7 @@ export const UsageReportsScreen: React.FC = () => {
                 ]}
                 onPress={() => setExportFormat('excel')}
               >
-                <Ionicons 
+                <Icon 
                   name="grid-outline" 
                   size={24} 
                   color={exportFormat === 'excel' ? DesignSystem.colors.primary : DesignSystem.colors.text.secondary} 
@@ -351,7 +351,7 @@ export const UsageReportsScreen: React.FC = () => {
                 onPress={() => showToast('info', 'PDF 匯出即將推出')}
                 disabled
               >
-                <Ionicons 
+                <Icon 
                   name="document-outline" 
                   size={24} 
                   color={DesignSystem.colors.text.disabled} 
@@ -395,7 +395,7 @@ export const UsageReportsScreen: React.FC = () => {
                   <ActivityIndicator color={DesignSystem.colors.white} size="small" />
                 ) : (
                   <>
-                    <Ionicons name="download" size={20} color={DesignSystem.colors.white} />
+                    <Icon name="download" size={20} color={DesignSystem.colors.white} />
                     <Text style={styles.exportButtonText}>匯出</Text>
                   </>
                 )}

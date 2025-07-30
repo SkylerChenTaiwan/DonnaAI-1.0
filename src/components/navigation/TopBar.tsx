@@ -12,7 +12,7 @@ import {
   Platform,
   Image
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { useRoute } from '@react-navigation/native';
 import { DesignSystem } from '@/theme/designSystem';
 import { shadows, webOnly } from '@/styles/web';
@@ -56,7 +56,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             style={styles.menuButton}
             onPress={onMenuPress}
           >
-            <Ionicons 
+            <Icon 
               name="menu" 
               size={24} 
               color={DesignSystem.colors.text.primary}
@@ -88,7 +88,7 @@ export const TopBar: React.FC<TopBarProps> = ({
               {mode === 'manager' ? '主管' : '業務'}
             </Text>
             <View style={styles.userAvatar}>
-              <Ionicons 
+              <Icon 
                 name="person-circle" 
                 size={32} 
                 color={DesignSystem.colors.text.secondary}

@@ -5,6 +5,7 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Layout } from '@/components/common/Layout';
+import { WebModal } from '@/components/web/WebModal';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { RecordForm } from '@/components/forms/RecordForm';
 import { SimplifiedAudioInput } from '@/components/input/SimplifiedAudioInput';
@@ -15,7 +16,7 @@ import { useOrganization } from '@/hooks/useOrganization';
 import { createRecord } from '@/services/firebase/records';
 import { RecordCreateRequest } from '@/types/record';
 import { showToast } from '../../utils/toast';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import type { AudioPurpose } from '@/components/input/AudioInput';
 
 type RouteParams = {
@@ -137,53 +138,55 @@ export const CreateRecordModal: React.FC = () => {
   };
 
   return (
-    <Layout style={styles.container}>
-      {/* 內容區域 */}
-      {mode === 'audio' ? (
-        <View style={styles.audioContent}>
-          {/* 文字輸入連結 - 小而不突兀 */}
-          <TouchableOpacity
-            style={styles.textInputLink}
-            onPress={switchToText}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.linkText}>使用文字輸入</Text>
-            <Ionicons name="arrow-forward" size={16} color="#7A7A7A" />
-          </TouchableOpacity>
-          
-          {/* 簡化的錄音介面 */}
-          <SimplifiedAudioInput
-            onComplete={handleAudioComplete}
-            disabled={loading}
-          />
-        </View>
-      ) : (
-        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-          {/* 切換到語音錄製的連結 */}
-          <InputMethodLink
-            targetLabel="改用語音錄製 →"
-            onSwitch={switchToAudio}
-          />
-          <RecordForm 
-            onSubmit={handleFormSubmit}
-            initialData={customerId ? { customerIds: [customerId] } : undefined}
-            isSubmitting={loading}
-            userId={user?.uid || ''}
-            organizationId={currentOrganization?.id || ''}
-            teamId={currentTeam?.id || ''}
-          />
-        </ScrollView>
-      )}
+    <WebModal>
+      <Layout style={styles.container}>
+        {/* 內容區域 */}
+        {mode === 'audio' ? (
+          <View style={styles.audioContent}>
+            {/* 文字輸入連結 - 小而不突兀 */}
+            <TouchableOpacity
+              style={styles.textInputLink}
+              onPress={switchToText}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.linkText}>使用文字輸入</Text>
+              <Icon name="arrow-forward" size={16} color="#7A7A7A" />
+            </TouchableOpacity>
+            
+            {/* 簡化的錄音介面 */}
+            <SimplifiedAudioInput
+              onComplete={handleAudioComplete}
+              disabled={loading}
+            />
+          </View>
+        ) : (
+          <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+            {/* 切換到語音錄製的連結 */}
+            <InputMethodLink
+              targetLabel="改用語音錄製 →"
+              onSwitch={switchToAudio}
+            />
+            <RecordForm 
+              onSubmit={handleFormSubmit}
+              initialData={customerId ? { customerIds: [customerId] } : undefined}
+              isSubmitting={loading}
+              userId={user?.uid || ''}
+              organizationId={currentOrganization?.id || ''}
+              teamId={currentTeam?.id || ''}
+            />
+          </ScrollView>
+        )}
 
-      {/* 錄音用途選擇器 */}
-      <RecordPurposeSelector
-        visible={showPurposeSelector}
-        onSelect={handlePurposeSelect}
-        onCancel={handlePurposeCancel}
-        audioUri={recordingData?.audioUri || ''}
-        duration={recordingData?.duration || 0}
-      />
-    </Layout>
+        {/* 錄音用途選擇器 */}
+        <RecordPurposeSelector
+          visible={showPurposeSelector}
+          onSelect={handlePurposeSelect}
+          onCancel={handlePurposeCancel}
+          audioUri={recordingData?.audioUri || ''}
+          duration={recordingData?.duration || 0}
+        />
+      </Layout>
+    </WebModal>
   );
 };
 

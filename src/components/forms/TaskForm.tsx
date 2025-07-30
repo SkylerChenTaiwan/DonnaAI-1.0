@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { SimplifiedAudioInput } from '@/components/input/SimplifiedAudioInput';
 
 import { TaskFormSchema, TaskFormData } from '@/services/validation/form-schemas';
@@ -110,7 +110,7 @@ export const TaskForm = forwardRef<any, TaskFormProps>((props, ref) => {
             style={[styles.tabButton, inputMode === 'text' && styles.tabButtonActive]}
             onPress={() => setInputMode('text')}
           >
-            <Ionicons 
+            <Icon 
               name="create-outline" 
               size={20} 
               color={inputMode === 'text' ? '#FFFFFF' : '#7A7A7A'} 
@@ -124,7 +124,7 @@ export const TaskForm = forwardRef<any, TaskFormProps>((props, ref) => {
             style={[styles.tabButton, inputMode === 'voice' && styles.tabButtonActive]}
             onPress={() => setInputMode('voice')}
           >
-            <Ionicons 
+            <Icon 
               name="mic-outline" 
               size={20} 
               color={inputMode === 'voice' ? '#FFFFFF' : '#7A7A7A'} 

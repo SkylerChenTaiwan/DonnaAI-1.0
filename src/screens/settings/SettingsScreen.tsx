@@ -25,7 +25,7 @@ import Constants from 'expo-constants';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@/types/navigation';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -280,7 +280,7 @@ export const SettingsScreen: React.FC = () => {
             style={styles.editButton}
             onPress={() => navigation.navigate('EditProfileModal' as any)}
           >
-            <Ionicons name="pencil" size={20} color="#007AFF" />
+            <Icon name="pencil" size={20} color="#007AFF" />
           </TouchableOpacity>
         </View>
 

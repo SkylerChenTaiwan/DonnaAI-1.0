@@ -8,7 +8,7 @@ import { Layout } from '@/components/common/Layout';
 import { useCustomerStore } from '@/stores/customerStore';
 import { useAuthStore } from '@/stores/authStore';
 import { CustomerDoc } from '@/types/firebase';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 
 export const CustomersScreen: React.FC = () => {
   const { user } = useAuthStore();
@@ -62,13 +62,13 @@ export const CustomersScreen: React.FC = () => {
       <View style={styles.customerInfo}>
         {item.email && (
           <View style={styles.infoItem}>
-            <Ionicons name="mail-outline" size={14} color="#8E8E93" />
+            <Icon name="mail-outline" size={14} color="#8E8E93" />
             <Text style={styles.infoText}>{item.email}</Text>
           </View>
         )}
         {item.phone && (
           <View style={styles.infoItem}>
-            <Ionicons name="call-outline" size={14} color="#8E8E93" />
+            <Icon name="call-outline" size={14} color="#8E8E93" />
             <Text style={styles.infoText}>{item.phone}</Text>
           </View>
         )}
@@ -100,7 +100,7 @@ export const CustomersScreen: React.FC = () => {
     return (
       <Layout>
         <View style={styles.centerContainer}>
-          <Ionicons name="alert-circle-outline" size={48} color="#FF3B30" />
+          <Icon name="alert-circle-outline" size={48} color="#FF3B30" />
           <Text style={styles.errorText}>{error}</Text>
           <TouchableOpacity 
             style={styles.retryButton}
@@ -125,7 +125,7 @@ export const CustomersScreen: React.FC = () => {
         
         {customers.length === 0 ? (
           <View style={styles.emptyContainer}>
-            <Ionicons name="people-outline" size={64} color="#C7C7CC" />
+            <Icon name="people-outline" size={64} color="#C7C7CC" />
             <Text style={styles.emptyText}>尚無客戶資料</Text>
             <Text style={styles.emptySubtext}>點擊右下角的 + 新增客戶</Text>
           </View>

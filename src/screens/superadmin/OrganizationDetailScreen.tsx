@@ -17,7 +17,7 @@ import {
 } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { TextInput } from '@/components/common/TextInput';
 import { Button } from '@/components/common/Button';
@@ -275,7 +275,7 @@ export const OrganizationDetailScreen: React.FC = () => {
               style={styles.editButton}
               onPress={() => setIsEditing(!isEditing)}
             >
-              <Ionicons 
+              <Icon 
                 name={isEditing ? "close" : "create-outline"} 
                 size={20} 
                 color={DesignSystem.colors.primary} 
@@ -434,7 +434,7 @@ export const OrganizationDetailScreen: React.FC = () => {
                   style={styles.addUserButton}
                   onPress={() => setShowAddUserModal(true)}
                 >
-                  <Ionicons name="person-add-outline" size={16} color={DesignSystem.colors.primary} />
+                  <Icon name="person-add-outline" size={16} color={DesignSystem.colors.primary} />
                   <Text style={styles.addUserButtonText}>新增用戶</Text>
                 </TouchableOpacity>
                 
@@ -442,7 +442,7 @@ export const OrganizationDetailScreen: React.FC = () => {
                   style={styles.bulkImportButton}
                   onPress={() => setShowBulkImportModal(true)}
                 >
-                  <Ionicons name="cloud-upload-outline" size={16} color={DesignSystem.colors.success} />
+                  <Icon name="cloud-upload-outline" size={16} color={DesignSystem.colors.success} />
                   <Text style={styles.bulkImportButtonText}>批量匯入</Text>
                 </TouchableOpacity>
               </View>
@@ -538,7 +538,7 @@ export const OrganizationDetailScreen: React.FC = () => {
             <Text style={styles.sectionTitle}>用戶協助</Text>
             
             <View style={styles.assistanceCard}>
-              <Ionicons name="cloud-upload-outline" size={24} color={DesignSystem.colors.primary} />
+              <Icon name="cloud-upload-outline" size={24} color={DesignSystem.colors.primary} />
               <Text style={styles.assistanceTitle}>資料匯入協助</Text>
               <Text style={styles.assistanceDesc}>協助組織匯入 CSV/Excel 資料</Text>
               <TouchableOpacity 
@@ -550,7 +550,7 @@ export const OrganizationDetailScreen: React.FC = () => {
             </View>
             
             <View style={styles.assistanceCard}>
-              <Ionicons name="database-outline" size={24} color={DesignSystem.colors.primary} />
+              <Icon name="database-outline" size={24} color={DesignSystem.colors.primary} />
               <Text style={styles.assistanceTitle}>自訂欄位查看</Text>
               <Text style={styles.assistanceDesc}>查看各資料庫的自訂欄位配置</Text>
               <TouchableOpacity 
@@ -562,7 +562,7 @@ export const OrganizationDetailScreen: React.FC = () => {
             </View>
             
             <View style={styles.assistanceCard}>
-              <Ionicons name="sync-outline" size={24} color={DesignSystem.colors.primary} />
+              <Icon name="sync-outline" size={24} color={DesignSystem.colors.primary} />
               <Text style={styles.assistanceTitle}>舊系統遷移</Text>
               <Text style={styles.assistanceDesc}>從舊系統匯入資料</Text>
               <TouchableOpacity 
@@ -602,7 +602,7 @@ export const OrganizationDetailScreen: React.FC = () => {
               style={styles.dangerButton}
               onPress={handleDeleteOrganization}
             >
-              <Ionicons name="trash-outline" size={20} color={DesignSystem.colors.error} />
+              <Icon name="trash-outline" size={20} color={DesignSystem.colors.error} />
               <Text style={styles.dangerButtonText}>刪除組織</Text>
             </TouchableOpacity>
           </View>

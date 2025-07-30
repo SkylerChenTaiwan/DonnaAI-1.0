@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -99,7 +99,7 @@ export const TaskDetailScreen: React.FC = () => {
       {/* 自定義標題列 */}
       <View style={styles.header}>
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-          <Ionicons name="chevron-back" size={24} color="#1A1A1A" />
+          <Icon name="chevron-back" size={24} color="#1A1A1A" />
         </TouchableOpacity>
         <Text style={styles.headerTitle} numberOfLines={1}>
           任務詳情
@@ -108,7 +108,7 @@ export const TaskDetailScreen: React.FC = () => {
           style={styles.editButton}
           onPress={() => navigation.navigate('EditTask', { taskId })}
         >
-          <Ionicons name="create-outline" size={24} color="#1A1A1A" />
+          <Icon name="create-outline" size={24} color="#1A1A1A" />
         </TouchableOpacity>
       </View>
 
@@ -142,7 +142,7 @@ export const TaskDetailScreen: React.FC = () => {
           <View style={styles.infoRow}>
             <Text style={styles.label}>優先級</Text>
             <View style={styles.priorityContainer}>
-              <Ionicons 
+              <Icon 
                 name={getPriorityIcon(task.priority).name as any}
                 size={20} 
                 color={getPriorityIcon(task.priority).color} 

@@ -20,7 +20,7 @@ import { FormField } from '@/components/forms/FormField';
 import { columnsToFormFields, validateFormData, FormFieldConfig } from '@/utils/formGenerator';
 import { TableColumn } from '@/components/common/DataTable';
 import { showToast } from '@/utils/toast';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { colors } from '@/theme/colors';
 
 type RouteParams = {
@@ -124,7 +124,7 @@ export const AddRecordModal: React.FC = () => {
             style={styles.closeButton}
             activeOpacity={0.7}
           >
-            <Ionicons name="close" size={24} color={colors.text} />
+            <Icon name="close" size={24} color={colors.text} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>新增{getTableTypeName()}</Text>
         </View>

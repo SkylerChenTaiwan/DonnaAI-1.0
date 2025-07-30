@@ -15,7 +15,7 @@ import { OrgChart } from '@/components/personnel/OrgChart';
 import { OrgNode } from '@/types/organization';
 import { TeamMember } from './PersonnelScreen';
 import { DesignSystem } from '@/theme/designSystem';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 
 interface TreeViewProps {
   teamMembers: TeamMember[];
@@ -105,7 +105,7 @@ export function TreeView({
         }
         contentContainerStyle={styles.emptyContainer}
       >
-        <Ionicons name="git-branch-outline" size={64} color={DesignSystem.colors.text.tertiary} />
+        <Icon name="git-branch-outline" size={64} color={DesignSystem.colors.text.tertiary} />
         <Text style={styles.emptyTitle}>沒有組織資料</Text>
         <Text style={styles.emptyText}>
           目前沒有團隊成員資料
@@ -119,21 +119,21 @@ export function TreeView({
       {/* 統計資訊卡片 */}
       <View style={styles.statsContainer}>
         <View style={styles.statCard}>
-          <Ionicons name="business" size={20} color="#007AFF" />
+          <Icon name="business" size={20} color="#007AFF" />
           <Text style={styles.statValue}>
             {filteredMembers.filter(m => m.role === 'admin').length}
           </Text>
           <Text style={styles.statLabel}>管理層</Text>
         </View>
         <View style={styles.statCard}>
-          <Ionicons name="people" size={20} color="#34C759" />
+          <Icon name="people" size={20} color="#34C759" />
           <Text style={styles.statValue}>
             {filteredMembers.filter(m => m.role === 'manager').length}
           </Text>
           <Text style={styles.statLabel}>主管</Text>
         </View>
         <View style={styles.statCard}>
-          <Ionicons name="person" size={20} color="#FF9500" />
+          <Icon name="person" size={20} color="#FF9500" />
           <Text style={styles.statValue}>
             {filteredMembers.filter(m => m.role === 'salesperson').length}
           </Text>

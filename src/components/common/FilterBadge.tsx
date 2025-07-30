@@ -10,7 +10,7 @@ import {
   StyleSheet,
   ScrollView,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 
 const getOperatorLabel = (operator?: string): string => {
   switch (operator) {
@@ -66,7 +66,7 @@ export const FilterBadge: React.FC<FilterBadgeProps> = ({
                 onPress={() => onRemoveFilter(filter.key)}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               >
-                <Ionicons name="close-circle" size={16} color="#7A7A7A" />
+                <Icon name="close-circle" size={16} color="#7A7A7A" />
               </TouchableOpacity>
             </View>
           ))}

@@ -12,7 +12,7 @@ import {
   ScrollView,
   StatusBar,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/common/Icon';
 import { TableColumn } from '@/types/table';
 
 export interface SortConfig {
@@ -128,7 +128,7 @@ export const SortModal: React.FC<SortModalProps> = ({
                     </Text>
                     {isSelected && (
                       <View style={styles.directionIndicator}>
-                        <Ionicons
+                        <Icon
                           name={sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'}
                           size={16}
                           color="#999999"
@@ -140,7 +140,7 @@ export const SortModal: React.FC<SortModalProps> = ({
                     )}
                   </View>
                   {isSelected && (
-                    <Ionicons name="checkmark" size={20} color="#1A1A1A" />
+                    <Icon name="checkmark" size={20} color="#1A1A1A" />
                   )}
                 </TouchableOpacity>
               );
@@ -160,7 +160,7 @@ export const SortModal: React.FC<SortModalProps> = ({
                   onPress={() => setSortDirection('asc')}
                   activeOpacity={0.7}
                 >
-                  <Ionicons 
+                  <Icon 
                     name="arrow-up" 
                     size={20} 
                     color={sortDirection === 'asc' ? '#FFFFFF' : '#1A1A1A'} 
@@ -181,7 +181,7 @@ export const SortModal: React.FC<SortModalProps> = ({
                   onPress={() => setSortDirection('desc')}
                   activeOpacity={0.7}
                 >
-                  <Ionicons 
+                  <Icon 
                     name="arrow-down" 
                     size={20} 
                     color={sortDirection === 'desc' ? '#FFFFFF' : '#1A1A1A'} 
