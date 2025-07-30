@@ -62,7 +62,7 @@
 | 55v  | web-server-port-3002.md | ✅ 已完成 | Web 伺服器 Port 3002 設定 - 固定 port 運行、開發便利性、避免衝突 | 2025-07-30 |
 | 56v  | firebase-hosting-setup.md | ✅ 已完成 | Firebase Hosting 設定與部署 - 雲端託管、自動部署腳本、CDN 加速 | 2025-07-30 |
 | 57   | web-responsive-ui-layout.md | 📋 待執行 | Web 響應式 UI/UX 橫式佈局 - 側邊欄導航、響應式設計、桌面優化 | - |
-| 58   | web-critical-fixes.md | 📋 待執行 | Web 關鍵問題修復 - Modal 導航、Icon 顯示、CSV 上傳功能 | - |
+| 58v  | web-critical-fixes.md | ✅ 已完成 | Web 關鍵問題修復 - Modal 導航、Icon 顯示、CSV 上傳功能 | 2025-07-30 |
 
 ## 命名規則
 
