@@ -60,6 +60,7 @@
 | 53v2 | legacy-data-import-v2.md | ✅ 已完成 | 舊系統資料導入功能 V2 - 新增業務代碼對照表，支援代碼到姓名的智慧轉換 | 2025-07-30 |
 | 54v  | web-platform-implementation.md | ✅ 已完成 | Web 平台實作與相容性解決方案 - Expo Web 支援、功能適配、開發流程、部署策略 | 2025-07-30 |
 | 55v  | web-server-port-3002.md | ✅ 已完成 | Web 伺服器 Port 3002 設定 - 固定 port 運行、開發便利性、避免衝突 | 2025-07-30 |
+| 56v  | firebase-hosting-setup.md | ✅ 已完成 | Firebase Hosting 設定與部署 - 雲端託管、自動部署腳本、CDN 加速 | 2025-07-30 |
 
 ## 命名規則
 
@@ -75,7 +76,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：56**
+**下一個新建的 PRP 應使用編號：57**
 
 ## PRP 類型說明
 
