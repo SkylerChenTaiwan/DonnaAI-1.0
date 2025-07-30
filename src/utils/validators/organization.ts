@@ -19,7 +19,7 @@ export function normalizeOrganization(data: Partial<Organization>): Organization
     id: data.id || '',
     name: data.name || '',
     ownerId: data.ownerId || '',
-    subscriptionPlan: data.subscriptionPlan || 'basic',
+    subscriptionPlan: data.subscriptionPlan || 'trial',
     aiMinutesQuota: data.aiMinutesQuota ?? 1000, // 預設 1000 分鐘
     aiMinutesUsed: data.aiMinutesUsed ?? 0,
     createdAt: data.createdAt || now,

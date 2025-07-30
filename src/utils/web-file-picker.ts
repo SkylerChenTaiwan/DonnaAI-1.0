@@ -107,6 +107,21 @@ export const pickDocument = async (options: FilePickerOptions): Promise<FilePick
   } else {
     // Native 平台使用 expo-document-picker
     const DocumentPicker = await import('expo-document-picker');
-    return DocumentPicker.getDocumentAsync(options);
+    const result = await DocumentPicker.getDocumentAsync(options as any);
+    
+    // 確保返回的結果符合 FilePickerResult 類型
+    if (!result.canceled && result.assets) {
+      return {
+        canceled: false,
+        assets: result.assets.map(asset => ({
+          uri: asset.uri,
+          name: asset.name,
+          size: asset.size || 0,
+          mimeType: asset.mimeType,
+        })),
+      };
+    }
+    
+    return { canceled: true };
   }
 };

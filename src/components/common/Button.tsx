@@ -41,15 +41,15 @@ export const Button = ({
     styles[size],
     disabled && styles.disabled,
     style,
-  ];
+  ].filter(Boolean);
 
   const buttonTextStyle = [
-    styles.text,
+    styles.textBase,
     styles[`${variant}Text` as keyof typeof styles],
     styles[`${size}Text` as keyof typeof styles],
     disabled && styles.disabledText,
     textStyle,
-  ];
+  ].filter(Boolean);
 
   return (
     <TouchableOpacity
@@ -126,9 +126,9 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   
-  // 文字樣式
-  text: {
-    fontWeight: '500', // 從 600 改為 500
+  // 文字基礎樣式
+  textBase: {
+    fontWeight: '500' as const, // 從 600 改為 500
   },
   primaryText: {
     color: DesignSystem.colors.text.inverse,

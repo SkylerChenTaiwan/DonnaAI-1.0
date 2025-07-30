@@ -38,7 +38,9 @@
       "Bash(./node_modules/.bin/vitest:*)",
       "Bash(bash -c \"npx vitest run\")",
       "Bash(bash -c:*)",
-      "Bash(npm uninstall:*)"
+      "Bash(npm uninstall:*)",
+      "Bash(rm:*)",
+      "Bash(npm run type-check:*)"
     ],
     "deny": []
   }

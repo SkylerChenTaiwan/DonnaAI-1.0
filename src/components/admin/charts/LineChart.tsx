@@ -57,7 +57,7 @@ export const LineChart: React.FC<LineChartProps> = ({
               points={points.y} 
               color={color} 
               strokeWidth={strokeWidth}
-              curveType={curve}
+              curve={curve === 'smooth' ? 'natural' : curve}
             />
           )}
         </CartesianChart>

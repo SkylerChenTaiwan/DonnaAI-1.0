@@ -235,8 +235,8 @@ export const ConfirmationInterface = ({
         recordId: recordId,
         teamId: '', // 需要從使用者資訊獲取
         organizationId: '', // 需要從使用者資訊獲取
-        type: 'once',
-        source: 'ai'
+        type: 'unscheduled',
+        source: 'ai_extracted'
       }, 'current-user-id');
     }
   };

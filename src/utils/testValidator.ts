@@ -83,17 +83,18 @@ export const testCSVInputs = async (): Promise<TestSuite> => {
     
     results.push({
       name: 'CSV 解析功能',
-      passed: parseResult.success,
+      passed: parseResult.data.length > 0,
       message: `成功解析 ${parseResult.data.length} 筆客戶資料`,
       details: {
         rowCount: parseResult.data.length,
-        columnCount: parseResult.headers.length,
-        headers: parseResult.headers,
+        validRows: parseResult.validRows,
+        invalidRows: parseResult.invalidRows,
+        totalRows: parseResult.totalRows,
       }
     });
 
     // 測試資料驗證
-    if (parseResult.success) {
+    if (parseResult.data.length > 0) {
       const validationResult = await validateCustomerData(parseResult.data, {
         requireEmail: false,
         requirePhone: false,

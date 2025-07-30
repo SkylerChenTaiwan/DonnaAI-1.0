@@ -14,6 +14,7 @@ export interface ChartDataPoint {
   label?: string;
   category?: string;
   metadata?: any;
+  [key: string]: any; // 添加索引簽名以相容 Victory Native 的要求
 }
 
 /**

@@ -70,7 +70,7 @@ export const ActionPopover = ({
 
   React.useEffect(() => {
     if (visible && fromRef.current) {
-      fromRef.current.measureInWindow((x, y, width, height) => {
+      fromRef.current.measureInWindow((x: number, y: number, width: number, height: number) => {
         const screenHeight = Dimensions.get('window').height;
         // 按鈕位置減去 paddingTop (10px) 得到導航欄實際頂部
         const navBarTop = y - 10; // paddingTop from tabBarStyle

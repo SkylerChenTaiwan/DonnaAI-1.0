@@ -71,6 +71,7 @@ export const AudioRecorder = ({
         NetworkMonitor.removeListener(handleNetworkChange);
       };
     }
+    return undefined;
   }, [enableOfflineSupport, userId]);
 
   // 檢查初始網路狀態
@@ -261,7 +262,9 @@ export const AudioRecorder = ({
         
         // 獲取檔案資訊
         const fileInfo = await FileSystem.getInfoAsync(uri);
-        console.log('錄音檔案大小:', fileInfo.size, 'bytes');
+        if (fileInfo.exists && 'size' in fileInfo) {
+          console.log('錄音檔案大小:', fileInfo.size, 'bytes');
+        }
         
         setRecordingStatus('stopped');
         onRecordingComplete(uri, duration);

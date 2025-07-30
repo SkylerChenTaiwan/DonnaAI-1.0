@@ -13,7 +13,7 @@
       "@assets/*": ["assets/*"]
     },
     "jsx": "react-native",
-    "lib": ["ESNext"],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "module": "ES2022",
     "target": "ESNext",
     "moduleResolution": "bundler",
@@ -40,7 +40,8 @@
     "**/*.ts",
     "**/*.tsx",
     "**/*.js",
-    "**/*.jsx"
+    "**/*.jsx",
+    "src/types/global.d.ts"
   ],
   "exclude": [
     "node_modules",
