@@ -203,23 +203,7 @@ export const OrganizationsScreen: React.FC = () => {
   }
 
   return (
-    <Layout 
-      style={styles.container} 
-      scrollable={false}
-      headerProps={{
-        title: '組織管理',
-        showBackButton: true,
-        onBackPress: () => navigation.goBack(),
-        rightComponent: (
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={() => navigation.navigate('CreateOrganizationScreen')}
-          >
-            <Icon name="add" size={20} color={DesignSystem.colors.text.inverse} />
-          </TouchableOpacity>
-        ),
-      }}
-    >
+    <Layout style={styles.container} scrollable={false}>
       <View style={styles.searchContainer}>
         <SearchBar
           value={searchQuery}

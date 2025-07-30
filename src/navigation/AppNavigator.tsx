@@ -159,7 +159,26 @@ export const AppNavigator = () => {
               name="OrganizationsScreen"
               component={OrganizationsScreen}
               options={({ navigation }) => ({ 
-                headerShown: false
+                headerShown: true,
+                title: '組織管理',
+                headerTintColor: '#1A1A1A',
+                headerBackTitleVisible: false,
+                headerRight: () => (
+                  <TouchableOpacity
+                    style={{
+                      marginRight: 16,
+                      width: 32,
+                      height: 32,
+                      borderRadius: 16,
+                      backgroundColor: DesignSystem.colors.primary,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                    onPress={() => navigation.navigate('CreateOrganizationScreen')}
+                  >
+                    <Icon name="add" size={20} color={DesignSystem.colors.text.inverse} />
+                  </TouchableOpacity>
+                ),
               })}
             />
             <Stack.Screen
