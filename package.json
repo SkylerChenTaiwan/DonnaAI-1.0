@@ -13,6 +13,8 @@
     "web:build": "expo export --platform web --output-dir dist-web",
     "web:preview": "cd dist-web && npx serve -l 3002",
     "web:clean": "rm -rf dist-web",
+    "web:deploy": "npm run web:build && firebase deploy --only hosting",
+    "web:deploy:prod": "firebase use donnaai-production && npm run web:build && firebase deploy --only hosting",
     "test": "vitest",
     "test:coverage": "vitest --coverage",
     "test:jest": "jest",
