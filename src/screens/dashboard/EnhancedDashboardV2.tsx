@@ -13,9 +13,12 @@ import {
   FlatList,
   ActivityIndicator,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import { Layout } from '@/components/common/Layout';
+import { ResponsiveLayout } from '@/components/common/ResponsiveLayout';
 import { ModeToggle } from '@/components/common/ModeToggle';
+import { isWebPlatform, isDesktopWeb, isTabletWeb } from '@/utils/web-detector';
 import { TaskListSection } from '@/components/dashboard/TaskListSection';
 import { RecentCustomersSection } from '@/components/dashboard/RecentCustomersSection';
 import { ManagerDashboard } from './ManagerDashboard';
@@ -363,34 +366,41 @@ export const EnhancedDashboardV2: React.FC = () => {
   };
 
   // 載入狀態檢查
+  const isWeb = isWebPlatform();
+  const isDesktop = isDesktopWeb();
+  const isTablet = isTabletWeb();
+  const useResponsiveLayout = isWeb && (isDesktop || isTablet);
+  
+  const LayoutComponent = useResponsiveLayout ? ResponsiveLayout : Layout;
+  
   if (orgLoading) {
     return (
-      <Layout style={styles.container}>
+      <LayoutComponent style={styles.container}>
         <View style={styles.loadingState}>
           <ActivityIndicator size="large" color="#FF6B6B" />
           <Text style={styles.loadingText}>載入中...</Text>
         </View>
-      </Layout>
+      </LayoutComponent>
     );
   }
 
   if (!authUser) {
     return (
-      <Layout style={styles.container}>
+      <LayoutComponent style={styles.container}>
         <View style={styles.emptyState}>
           <Text style={styles.emptyText}>請先登入</Text>
         </View>
-      </Layout>
+      </LayoutComponent>
     );
   }
 
   if (!currentOrganization || !currentTeam) {
     return (
-      <Layout style={styles.container}>
+      <LayoutComponent style={styles.container}>
         <View style={styles.emptyState}>
           <Text style={styles.emptyText}>請先設定組織資訊</Text>
         </View>
-      </Layout>
+      </LayoutComponent>
     );
   }
 
@@ -400,6 +410,46 @@ export const EnhancedDashboardV2: React.FC = () => {
   }
 
   // 業務模式：顯示原本的內容
+  // Web 桌面/平板版使用響應式佈局
+  if (useResponsiveLayout) {
+    const headerContent = (
+      <View style={[styles.header, styles.webHeader]}>
+        <View style={styles.userInfo}>
+          <Text style={styles.userName}>{user?.name || authUser?.displayName || '使用者'}</Text>
+          <Text style={styles.userEmail}>{user?.email || authUser?.email}</Text>
+        </View>
+        <ModeToggle
+          value={mode}
+          onToggle={toggleMode}
+          label={mode === 'business' ? '業務模式' : '主管模式'}
+        />
+      </View>
+    );
+    
+    return (
+      <ResponsiveLayout 
+        style={styles.container}
+        header={headerContent}
+        scrollable={false}
+        padding={false}
+      >
+        <View style={styles.webContent}>
+          <FlatList
+            data={sections}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => `${item.type}-${index}`}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            contentContainerStyle={[styles.listContent, styles.webListContent]}
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
+      </ResponsiveLayout>
+    );
+  }
+  
+  // 原生平台維持原有佈局
   return (
     <Layout style={styles.container} scrollable={false}>
       <SafeAreaView style={styles.safeArea}>
@@ -585,5 +635,35 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     color: '#6B7280',
+  },
+  // Web 響應式樣式
+  webHeader: {
+    ...Platform.select({
+      web: {
+        paddingHorizontal: 32,
+        paddingVertical: 20,
+      },
+      default: {},
+    }),
+  },
+  webContent: {
+    flex: 1,
+    ...Platform.select({
+      web: {
+        maxWidth: 1200,
+        width: '100%',
+        marginHorizontal: 'auto' as any,
+      },
+      default: {},
+    }),
+  },
+  webListContent: {
+    ...Platform.select({
+      web: {
+        paddingHorizontal: 32,
+        paddingBottom: 40,
+      },
+      default: {},
+    }),
   },
 });

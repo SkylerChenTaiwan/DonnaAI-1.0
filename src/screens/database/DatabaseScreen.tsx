@@ -13,12 +13,15 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Layout } from '@/components/common/Layout';
+import { ResponsiveLayout, responsiveGrid } from '@/components/common/ResponsiveLayout';
 import { DataTable } from '@/components/common/DataTable';
 import { EditableDataTable } from '@/components/common/EditableDataTable';
 import { SearchBar } from '@/components/common/SearchBar';
 import { ToolbarIcons } from '@/components/common/ToolbarIcons';
 import { FilterBadge, FilterCondition } from '@/components/common/FilterBadge';
 import { FilterModal } from '@/components/common/FilterModal';
+import { isDesktopWeb, isTabletWeb } from '@/utils/web-detector';
+import { responsive, webOnly } from '@/styles/web';
 interface SortConfig {
   key: string | null;
   direction: 'asc' | 'desc';
@@ -738,11 +741,74 @@ export const DatabaseScreen: React.FC = () => {
     }
   };
 
+  const isDesktop = isDesktopWeb();
+  
+  // 桌面版側邊欄內容
+  const sidebarContent = isDesktop ? (
+    <View style={styles.desktopSidebar}>
+      {/* Tab 導航 - 垂直排列 */}
+      <View style={styles.desktopTabContainer}>
+        {tabs.map((tab) => (
+          <TouchableOpacity
+            key={tab.id}
+            style={[
+              styles.desktopTab,
+              activeTab === tab.id && styles.activeDesktopTab,
+            ]}
+            onPress={() => {
+              setActiveTab(tab.id);
+              // 切換 Tab 時清除選擇狀態和編輯模式
+              setMultiSelectMode(false);
+              setSelectedItems([]);
+              setShowBatchActions(false);
+              setIsEditMode(false);
+            }}
+            activeOpacity={0.7}
+          >
+            <Text
+              style={[
+                styles.desktopTabText,
+                activeTab === tab.id && styles.activeDesktopTabText,
+              ]}
+              numberOfLines={1}
+            >
+              {tab.title}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      
+      {/* 篩選器和操作按鈕 */}
+      <View style={styles.desktopActions}>
+        <TouchableOpacity
+          style={styles.desktopActionButton}
+          onPress={() => setShowFilterModal(true)}
+        >
+          <Ionicons name="filter" size={20} color="#6B6B6B" />
+          <Text style={styles.desktopActionText}>篩選器</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity
+          style={styles.desktopActionButton}
+          onPress={() => setShowColumnSettings(true)}
+        >
+          <Ionicons name="options" size={20} color="#6B6B6B" />
+          <Text style={styles.desktopActionText}>欄位設定</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  ) : null;
+
   return (
-    <View style={styles.mainContainer}>
-      <Layout style={styles.container} scrollable={false}>
-        <View style={styles.contentWrapper}>
-          {/* Tab 導航 */}
+    <>
+      <ResponsiveLayout
+        sidebar={sidebarContent}
+        scrollable={false}
+        style={styles.container}
+      >
+      <View style={styles.contentWrapper}>
+        {/* Tab 導航 - 行動版保持水平 */}
+        {!isDesktop && (
           <View style={styles.tabContainer}>
             {tabs.map((tab) => (
               <TouchableOpacity
@@ -773,6 +839,7 @@ export const DatabaseScreen: React.FC = () => {
               </TouchableOpacity>
             ))}
           </View>
+        )}
       
       {/* 整合工具列和搜尋欄 */}
       <View style={styles.toolbar}>
@@ -940,9 +1007,9 @@ export const DatabaseScreen: React.FC = () => {
           />
         </Modal>
       )}
-      </Layout>
+      </ResponsiveLayout>
       
-      {/* 批量操作工具列 - 固定在視窗底部 */}
+      {/* 批量操作工列 - 固定在視窗底部 */}
       {multiSelectMode && selectedItems.length > 0 && (
         <View style={styles.batchActionsBar}>
           <View style={styles.batchActionsLeft}>
@@ -1008,7 +1075,7 @@ export const DatabaseScreen: React.FC = () => {
           </View>
         </View>
       )}
-    </View>
+    </>
   );
 };
 
@@ -1201,5 +1268,66 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 12,
     overflow: 'hidden',
+  },
+  
+  // 桌面版樣式
+  desktopSidebar: {
+    flex: 1,
+    paddingVertical: 24,
+    paddingHorizontal: 16,
+  },
+  desktopTabContainer: {
+    gap: 8,
+  },
+  desktopTab: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 8,
+    ...webOnly({
+      transition: 'all 0.2s ease',
+      cursor: 'pointer',
+    }),
+  },
+  activeDesktopTab: {
+    backgroundColor: '#F7F7F7',
+    borderLeftWidth: 3,
+    borderLeftColor: '#FF5C00',
+  },
+  desktopTabText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#7A7A7A',
+  },
+  activeDesktopTabText: {
+    color: '#1A1A1A',
+    fontWeight: '600',
+  },
+  desktopActions: {
+    marginTop: 32,
+    paddingTop: 24,
+    borderTopWidth: 1,
+    borderTopColor: '#E3E1DC',
+    gap: 12,
+  },
+  desktopActionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 6,
+    ...webOnly({
+      transition: 'all 0.2s ease',
+      cursor: 'pointer',
+      ':hover': {
+        backgroundColor: '#F7F7F7',
+      },
+    }),
+  },
+  desktopActionText: {
+    fontSize: 14,
+    color: '#6B6B6B',
   },
 });

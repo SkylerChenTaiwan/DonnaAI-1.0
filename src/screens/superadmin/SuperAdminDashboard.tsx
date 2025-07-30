@@ -13,9 +13,12 @@ import {
   ActivityIndicator,
   RefreshControl,
   Alert,
+  Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Layout } from '@/components/common/Layout';
+import { ResponsiveLayout } from '@/components/common/ResponsiveLayout';
+import { isWebPlatform, isDesktopWeb, isTabletWeb } from '@/utils/web-detector';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@/types/navigation';
@@ -127,120 +130,134 @@ export const SuperAdminDashboard: React.FC = () => {
     }
   ];
 
+  const isWeb = isWebPlatform();
+  const isDesktop = isDesktopWeb();
+  const isTablet = isTabletWeb();
+  const useResponsiveLayout = isWeb && (isDesktop || isTablet);
+  
+  const LayoutComponent = useResponsiveLayout ? ResponsiveLayout : Layout;
+  
   if (isLoading && !refreshing) {
     return (
-      <Layout style={styles.container}>
+      <LayoutComponent style={styles.container}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={DesignSystem.colors.primary} />
           <Text style={styles.loadingText}>載入中...</Text>
         </View>
-      </Layout>
+      </LayoutComponent>
     );
   }
+  
+  const content = (
+    <>
+      {/* 歡迎區塊 */}
+      <View style={styles.welcomeSection}>
+        <Text style={styles.welcomeTitle}>歡迎回來，Super Admin</Text>
+        <Text style={styles.welcomeSubtitle}>今天是 {new Date().toLocaleDateString('zh-TW')}</Text>
+      </View>
+
+      {/* 快速統計 */}
+      <View style={[styles.statsGrid, useResponsiveLayout && styles.webStatsGrid]}>
+        {quickStats.map((stat) => (
+          <View key={stat.id} style={[styles.statCard, useResponsiveLayout && styles.webStatCard]}>
+            <View style={[styles.statIconContainer, { backgroundColor: `${stat.color}15` }]}>
+              <Ionicons name={stat.icon as any} size={24} color={stat.color} />
+            </View>
+            <Text style={styles.statValue}>{stat.value}</Text>
+            <Text style={styles.statTitle}>{stat.title}</Text>
+            <Text style={styles.statSubtitle}>{stat.subtitle}</Text>
+          </View>
+        ))}
+      </View>
+
+      {/* 快速操作 */}
+      <View style={[styles.section, useResponsiveLayout && styles.webSection]}>
+        <Text style={styles.sectionTitle}>快速操作</Text>
+        <View style={[styles.actionsGrid, useResponsiveLayout && styles.webActionsGrid]}>
+          {quickActions.map((action) => (
+            <TouchableOpacity
+              key={action.id}
+              style={[styles.actionCard, useResponsiveLayout && styles.webActionCard]}
+              onPress={action.action}
+            >
+              <Ionicons 
+                name={action.icon as any} 
+                size={32} 
+                color={DesignSystem.colors.primary} 
+              />
+              <Text style={styles.actionTitle}>{action.title}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
+
+      {/* 系統資訊 */}
+      <View style={[styles.section, useResponsiveLayout && styles.webSection]}>
+        <Text style={styles.sectionTitle}>系統狀態</Text>
+        
+        <View style={styles.systemInfoCard}>
+          <View style={styles.systemInfoRow}>
+            <Text style={styles.systemInfoLabel}>當前用戶角色：</Text>
+            <Text style={styles.systemInfoValue}>系統管理員</Text>
+          </View>
+          <View style={styles.systemInfoRow}>
+            <Text style={styles.systemInfoLabel}>登入帳號：</Text>
+            <Text style={styles.systemInfoValue}>{user?.email}</Text>
+          </View>
+          <View style={styles.systemInfoRow}>
+            <Text style={styles.systemInfoLabel}>平台總記錄數：</Text>
+            <Text style={styles.systemInfoValue}>{stats?.totalRecords.toLocaleString() || '0'}</Text>
+          </View>
+          <View style={styles.systemInfoRow}>
+            <Text style={styles.systemInfoLabel}>AI 處理次數：</Text>
+            <Text style={styles.systemInfoValue}>{stats?.totalAIProcessing.toLocaleString() || '0'}</Text>
+          </View>
+        </View>
+      </View>
+
+      {/* 收入排行榜 */}
+      {topOrganizations.length > 0 && (
+        <View style={[styles.section, useResponsiveLayout && styles.webSection]}>
+          <Text style={styles.sectionTitle}>收入排行榜（前10名）</Text>
+          {topOrganizations.map((org, index) => (
+            <TouchableOpacity 
+              key={org.organizationId} 
+              style={styles.orgCard}
+              onPress={() => navigation.navigate('OrganizationDetail', { organizationId: org.organizationId })}
+            >
+              <View style={styles.orgRank}>
+                <Text style={styles.orgRankText}>{index + 1}</Text>
+              </View>
+              <View style={styles.orgInfo}>
+                <Text style={styles.orgName}>{org.organizationName}</Text>
+                <Text style={styles.orgStats}>
+                  {org.activeUsers} 位用戶 • {org.totalRecords} 筆記錄
+                </Text>
+              </View>
+              <Text style={styles.orgRevenue}>
+                NT${org.monthlyBill.toLocaleString('zh-TW')}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
+
+      <View style={styles.footer} />
+    </>
+  );
 
   return (
-    <Layout style={styles.container} scrollable={false}>
+    <LayoutComponent style={styles.container} scrollable={false} padding={false}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
+        contentContainerStyle={useResponsiveLayout && styles.webScrollContent}
       >
-        {/* 歡迎區塊 */}
-        <View style={styles.welcomeSection}>
-          <Text style={styles.welcomeTitle}>歡迎回來，Super Admin</Text>
-          <Text style={styles.welcomeSubtitle}>今天是 {new Date().toLocaleDateString('zh-TW')}</Text>
-        </View>
-
-        {/* 快速統計 */}
-        <View style={styles.statsGrid}>
-          {quickStats.map((stat) => (
-            <View key={stat.id} style={styles.statCard}>
-              <View style={[styles.statIconContainer, { backgroundColor: `${stat.color}15` }]}>
-                <Ionicons name={stat.icon as any} size={24} color={stat.color} />
-              </View>
-              <Text style={styles.statValue}>{stat.value}</Text>
-              <Text style={styles.statTitle}>{stat.title}</Text>
-              <Text style={styles.statSubtitle}>{stat.subtitle}</Text>
-            </View>
-          ))}
-        </View>
-
-        {/* 快速操作 */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>快速操作</Text>
-          <View style={styles.actionsGrid}>
-            {quickActions.map((action) => (
-              <TouchableOpacity
-                key={action.id}
-                style={styles.actionCard}
-                onPress={action.action}
-              >
-                <Ionicons 
-                  name={action.icon as any} 
-                  size={32} 
-                  color={DesignSystem.colors.primary} 
-                />
-                <Text style={styles.actionTitle}>{action.title}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-
-        {/* 系統資訊 */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>系統狀態</Text>
-          
-          <View style={styles.systemInfoCard}>
-            <View style={styles.systemInfoRow}>
-              <Text style={styles.systemInfoLabel}>當前用戶角色：</Text>
-              <Text style={styles.systemInfoValue}>系統管理員</Text>
-            </View>
-            <View style={styles.systemInfoRow}>
-              <Text style={styles.systemInfoLabel}>登入帳號：</Text>
-              <Text style={styles.systemInfoValue}>{user?.email}</Text>
-            </View>
-            <View style={styles.systemInfoRow}>
-              <Text style={styles.systemInfoLabel}>平台總記錄數：</Text>
-              <Text style={styles.systemInfoValue}>{stats?.totalRecords.toLocaleString() || '0'}</Text>
-            </View>
-            <View style={styles.systemInfoRow}>
-              <Text style={styles.systemInfoLabel}>AI 處理次數：</Text>
-              <Text style={styles.systemInfoValue}>{stats?.totalAIProcessing.toLocaleString() || '0'}</Text>
-            </View>
-          </View>
-        </View>
-
-        {/* 收入排行榜 */}
-        {topOrganizations.length > 0 && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>收入排行榜（前10名）</Text>
-            {topOrganizations.map((org, index) => (
-              <TouchableOpacity 
-                key={org.organizationId} 
-                style={styles.orgCard}
-                onPress={() => navigation.navigate('OrganizationDetail', { organizationId: org.organizationId })}
-              >
-                <View style={styles.orgRank}>
-                  <Text style={styles.orgRankText}>{index + 1}</Text>
-                </View>
-                <View style={styles.orgInfo}>
-                  <Text style={styles.orgName}>{org.organizationName}</Text>
-                  <Text style={styles.orgStats}>
-                    {org.activeUsers} 位用戶 • {org.totalRecords} 筆記錄
-                  </Text>
-                </View>
-                <Text style={styles.orgRevenue}>
-                  NT${org.monthlyBill.toLocaleString('zh-TW')}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        )}
-
-        <View style={styles.footer} />
+        {content}
       </ScrollView>
-    </Layout>
+    </LayoutComponent>
   );
 };
 
@@ -438,5 +455,69 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.primary,
     flex: 1,
     textAlign: 'right',
+  },
+  // Web 響應式樣式
+  webScrollContent: {
+    ...Platform.select({
+      web: {
+        maxWidth: 1200,
+        width: '100%',
+        marginHorizontal: 'auto' as any,
+      },
+      default: {},
+    }),
+  },
+  webStatsGrid: {
+    ...Platform.select({
+      web: {
+        display: 'grid' as any,
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: 16,
+        padding: 20,
+      },
+      default: {},
+    }),
+  },
+  webStatCard: {
+    ...Platform.select({
+      web: {
+        width: 'auto',
+        padding: 20,
+        backgroundColor: DesignSystem.colors.background.surface,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: DesignSystem.colors.border.light,
+      },
+      default: {},
+    }),
+  },
+  webSection: {
+    ...Platform.select({
+      web: {
+        padding: 32,
+      },
+      default: {},
+    }),
+  },
+  webActionsGrid: {
+    ...Platform.select({
+      web: {
+        display: 'grid' as any,
+        gridTemplateColumns: 'repeat(5, 1fr)',
+        gap: 16,
+        marginHorizontal: 0,
+      },
+      default: {},
+    }),
+  },
+  webActionCard: {
+    ...Platform.select({
+      web: {
+        width: 'auto',
+        padding: 20,
+        minHeight: 100,
+      },
+      default: {},
+    }),
   },
 });

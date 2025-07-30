@@ -12,7 +12,9 @@ import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { useAuthStore } from '@/stores/authStore';
 import { AuthNavigator } from './AuthNavigator';
 import { MainTabNavigator } from './MainTabNavigator';
+import { WebNavigator } from './WebNavigator';
 import { RootStackParamList } from '@/types/navigation';
+import { isWebPlatform, isDesktopWeb, isTabletWeb } from '@/utils/web-detector';
 import { CreateCustomerModal } from '@/screens/modals/CreateCustomerModal';
 import { CreateRecordModal } from '@/screens/modals/CreateRecordModal';
 import { CreateTaskModal } from '@/screens/modals/CreateTaskModal';
@@ -62,6 +64,9 @@ const Stack = createStackNavigator<RootStackParamList>();
 export const AppNavigator = () => {
   const { isAuthenticated, isLoading, initializeAuth } = useAuthStore();
   const [isInitialized, setIsInitialized] = useState(false);
+  
+  // 根據平台和螢幕大小選擇導航器
+  const shouldUseWebNav = isWebPlatform() && (isDesktopWeb() || isTabletWeb());
 
   useEffect(() => {
     // 初始化認證監聽器
@@ -94,7 +99,7 @@ export const AppNavigator = () => {
           <>
             <Stack.Screen
               name="MainTabs"
-              component={MainTabNavigator}
+              component={shouldUseWebNav ? WebNavigator : MainTabNavigator}
               options={{
                 headerShown: false,
                 animationTypeForReplace: 'push',

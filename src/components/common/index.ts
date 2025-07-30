@@ -2,3 +2,4 @@
 export { RetryButton } from './RetryButton';
 export { ErrorMessage } from './ErrorMessage';
 export { LoadingView } from './LoadingView';
+export { ResponsiveLayout, responsiveGrid } from './ResponsiveLayout';

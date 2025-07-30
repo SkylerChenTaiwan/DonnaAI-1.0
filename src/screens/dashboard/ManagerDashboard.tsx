@@ -11,9 +11,12 @@ import {
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Layout } from '@/components/common/Layout';
+import { ResponsiveLayout } from '@/components/common/ResponsiveLayout';
+import { isWebPlatform, isDesktopWeb, isTabletWeb } from '@/utils/web-detector';
 import { ModeToggle } from '@/components/common/ModeToggle';
 import { useAuthStore } from '@/stores/authStore';
 import { useAuth } from '@/hooks/useAuth';
@@ -28,55 +31,100 @@ export const ManagerDashboard: React.FC = () => {
   const { user, mode, toggleMode } = useAuthStore();
   const [showAnnouncementModal, setShowAnnouncementModal] = useState(false);
   const [showTaskAssignmentModal, setShowTaskAssignmentModal] = useState(false);
+  
+  const isWeb = isWebPlatform();
+  const isDesktop = isDesktopWeb();
+  const isTablet = isTabletWeb();
+  const useResponsiveLayout = isWeb && (isDesktop || isTablet);
+  
+  const headerContent = (
+    <View style={[styles.header, useResponsiveLayout && styles.webHeader]}>
+      <View style={styles.userInfo}>
+        <Text style={styles.userName}>{user?.name || authUser?.displayName || '使用者'}</Text>
+        <Text style={styles.userEmail}>{user?.email || authUser?.email}</Text>
+      </View>
+      <ModeToggle
+        value={mode}
+        onToggle={toggleMode}
+        label={mode === 'business' ? '業務模式' : '主管模式'}
+      />
+    </View>
+  );
+  
+  const mainContent = (
+    <>
+      {/* 快速操作按鈕 - 使用深灰色 */}
+      <View style={styles.quickActions}>
+        <TouchableOpacity 
+          style={[styles.quickActionButton, styles.primaryButton]}
+          onPress={() => setShowAnnouncementModal(true)}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="megaphone-outline" size={24} color={colors.background} />
+          <Text style={styles.quickActionText}>資訊佈達</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity 
+          style={[styles.quickActionButton, styles.primaryButton]}
+          onPress={() => setShowTaskAssignmentModal(true)}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="person-add-outline" size={24} color={colors.background} />
+          <Text style={styles.quickActionText}>任務指派</Text>
+        </TouchableOpacity>
+      </View>
 
+      {/* 主要內容 - 統計報表 */}
+      <View style={styles.mainContent}>
+        <Text style={styles.mainTitle}>數據分析</Text>
+        <Text style={styles.mainSubtitle}>查看團隊績效與業務洞察</Text>
+        
+        {/* 報表網格 - 作為主要內容 */}
+        <View style={styles.reportsContainer}>
+          <SavedReportsGrid fullScreen={true} />
+        </View>
+      </View>
+    </>
+  );
+  
+  // Web 桌面/平板版使用響應式佈局
+  if (useResponsiveLayout) {
+    return (
+      <>
+        <ResponsiveLayout
+          style={styles.container}
+          header={headerContent}
+          padding={false}
+        >
+          <View style={styles.webContent}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              {mainContent}
+            </ScrollView>
+          </View>
+        </ResponsiveLayout>
+        
+        {/* 模態框 */}
+        <AnnouncementModal
+          visible={showAnnouncementModal}
+          onClose={() => setShowAnnouncementModal(false)}
+        />
+        
+        <TaskAssignmentModal
+          visible={showTaskAssignmentModal}
+          onClose={() => setShowTaskAssignmentModal(false)}
+        />
+      </>
+    );
+  }
+
+  // 原生平台維持原有佈局
   return (
     <Layout scrollable={false}>
       <SafeAreaView style={styles.safeArea}>
-        {/* 固定頭部 */}
-        <View style={styles.header}>
-          <View style={styles.userInfo}>
-            <Text style={styles.userName}>{user?.name || authUser?.displayName || '使用者'}</Text>
-            <Text style={styles.userEmail}>{user?.email || authUser?.email}</Text>
-          </View>
-          <ModeToggle
-            value={mode}
-            onToggle={toggleMode}
-            label={mode === 'business' ? '業務模式' : '主管模式'}
-          />
-        </View>
+        {headerContent}
         
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-          {/* 快速操作按鈕 - 使用深灰色 */}
-          <View style={styles.quickActions}>
-            <TouchableOpacity 
-              style={[styles.quickActionButton, styles.primaryButton]}
-              onPress={() => setShowAnnouncementModal(true)}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="megaphone-outline" size={24} color={colors.background} />
-              <Text style={styles.quickActionText}>資訊佈達</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={[styles.quickActionButton, styles.primaryButton]}
-              onPress={() => setShowTaskAssignmentModal(true)}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="person-add-outline" size={24} color={colors.background} />
-              <Text style={styles.quickActionText}>任務指派</Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* 主要內容 - 統計報表 */}
-          <View style={styles.mainContent}>
-            <Text style={styles.mainTitle}>數據分析</Text>
-            <Text style={styles.mainSubtitle}>查看團隊績效與業務洞察</Text>
-            
-            {/* 報表網格 - 作為主要內容 */}
-            <View style={styles.reportsContainer}>
-              <SavedReportsGrid fullScreen={true} />
-            </View>
-          </View>
+          {mainContent}
         </ScrollView>
       </SafeAreaView>
       
@@ -162,5 +210,28 @@ const styles = StyleSheet.create({
   },
   reportsContainer: {
     minHeight: 400,
+  },
+  // Web 響應式樣式
+  webHeader: {
+    ...Platform.select({
+      web: {
+        paddingHorizontal: 32,
+        paddingVertical: 20,
+      },
+      default: {},
+    }),
+  },
+  webContent: {
+    flex: 1,
+    ...Platform.select({
+      web: {
+        maxWidth: 1200,
+        width: '100%',
+        marginHorizontal: 'auto' as any,
+        paddingHorizontal: 32,
+        paddingVertical: 24,
+      },
+      default: {},
+    }),
   },
 });
