@@ -7,19 +7,20 @@ import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import { PermissionModal } from '../PermissionModal';
 import { User } from '../../../types/user';
 import { Alert } from 'react-native';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Mock Firebase services
-jest.mock('../../../services/firebase/userService', () => ({
+vi.mock('../../../services/firebase/userService', () => ({
   updateUserRole: jest.fn(() => Promise.resolve()),
   updateUserPermissions: jest.fn(() => Promise.resolve()),
 }));
 
-jest.mock('../../../services/firebase/permissions-v2', () => ({
-  clearUserPermissionCache: jest.fn(),
+vi.mock('../../../services/firebase/permissions-v2', () => ({
+  clearUserPermissionCache: vi.fn(),
 }));
 
 // Mock Alert
-jest.spyOn(Alert, 'alert');
+vi.spyOn(Alert, 'alert');
 
 describe('PermissionModal', () => {
   const mockUser: User = {
@@ -33,8 +34,8 @@ describe('PermissionModal', () => {
     updatedAt: new Date(),
   };
 
-  const mockOnClose = jest.fn();
-  const mockOnUpdate = jest.fn();
+  const mockOnClose = vi.fn();
+  const mockOnUpdate = vi.fn();
 
   const defaultProps = {
     visible: true,
@@ -44,7 +45,7 @@ describe('PermissionModal', () => {
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('應該正確顯示使用者資訊', () => {

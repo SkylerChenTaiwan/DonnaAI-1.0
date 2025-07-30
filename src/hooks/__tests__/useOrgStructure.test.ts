@@ -6,10 +6,11 @@ import { renderHook, act } from '@testing-library/react';
 import { useOrgStructure } from '../useOrgStructure';
 import { usePersonnelStore } from '../../stores/personnelStore';
 import { useAuth } from '../useAuth';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Mock stores 和 hooks
-jest.mock('../../stores/personnelStore');
-jest.mock('../useAuth');
+vi.mock('../../stores/personnelStore');
+vi.mock('../useAuth');
 
 describe('useOrgStructure', () => {
   const mockOrgStructure = {
@@ -59,7 +60,7 @@ describe('useOrgStructure', () => {
   ];
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     
     (useAuth as jest.Mock).mockReturnValue({
       user: { id: 'current-user', role: 'admin' },
@@ -70,11 +71,11 @@ describe('useOrgStructure', () => {
       users: mockUsers,
       isLoading: false,
       error: null,
-      expandNode: jest.fn(),
-      collapseNode: jest.fn(),
-      updateUserOrganization: jest.fn(),
-      subscribeToUsers: jest.fn(),
-      unsubscribeFromUsers: jest.fn(),
+      expandNode: vi.fn(),
+      collapseNode: vi.fn(),
+      updateUserOrganization: vi.fn(),
+      subscribeToUsers: vi.fn(),
+      unsubscribeFromUsers: vi.fn(),
     });
   });
 
@@ -99,8 +100,8 @@ describe('useOrgStructure', () => {
 
   describe('節點操作', () => {
     it('toggleNode 應該切換節點展開狀態', () => {
-      const mockExpandNode = jest.fn();
-      const mockCollapseNode = jest.fn();
+      const mockExpandNode = vi.fn();
+      const mockCollapseNode = vi.fn();
       
       (usePersonnelStore as unknown as jest.Mock).mockReturnValue({
         ...usePersonnelStore(),
@@ -119,7 +120,7 @@ describe('useOrgStructure', () => {
     });
 
     it('expandAll 應該展開所有節點', () => {
-      const mockExpandNode = jest.fn();
+      const mockExpandNode = vi.fn();
       
       (usePersonnelStore as unknown as jest.Mock).mockReturnValue({
         ...usePersonnelStore(),
@@ -136,7 +137,7 @@ describe('useOrgStructure', () => {
     });
 
     it('collapseAll 應該收合所有節點（除了根節點）', () => {
-      const mockCollapseNode = jest.fn();
+      const mockCollapseNode = vi.fn();
       
       (usePersonnelStore as unknown as jest.Mock).mockReturnValue({
         ...usePersonnelStore(),
@@ -297,7 +298,7 @@ describe('useOrgStructure', () => {
 
   describe('訂閱管理', () => {
     it('應該在組件掛載時訂閱使用者資料', () => {
-      const mockSubscribe = jest.fn();
+      const mockSubscribe = vi.fn();
       
       (usePersonnelStore as unknown as jest.Mock).mockReturnValue({
         ...usePersonnelStore(),
@@ -310,7 +311,7 @@ describe('useOrgStructure', () => {
     });
 
     it('應該在組件卸載時取消訂閱', () => {
-      const mockUnsubscribe = jest.fn();
+      const mockUnsubscribe = vi.fn();
       
       (usePersonnelStore as unknown as jest.Mock).mockReturnValue({
         ...usePersonnelStore(),

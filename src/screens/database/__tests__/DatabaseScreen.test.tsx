@@ -6,16 +6,17 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import { DatabaseScreen } from '../DatabaseScreen';
 import { NavigationContainer } from '@react-navigation/native';
+import { describe, it, expect, vi } from 'vitest';
 
 // Mock 相依套件
-jest.mock('@react-native-async-storage/async-storage', () => ({
+vi.mock('@react-native-async-storage/async-storage', () => ({
   default: {
     getItem: jest.fn(() => Promise.resolve(null)),
     setItem: jest.fn(() => Promise.resolve()),
   },
 }));
 
-jest.mock('expo-file-system', () => ({
+vi.mock('expo-file-system', () => ({
   documentDirectory: '/mock/',
   writeAsStringAsync: jest.fn(() => Promise.resolve()),
   deleteAsync: jest.fn(() => Promise.resolve()),
@@ -24,18 +25,18 @@ jest.mock('expo-file-system', () => ({
   },
 }));
 
-jest.mock('expo-sharing', () => ({
+vi.mock('expo-sharing', () => ({
   isAvailableAsync: jest.fn(() => Promise.resolve(true)),
   shareAsync: jest.fn(() => Promise.resolve()),
 }));
 
-jest.mock('expo-mail-composer', () => ({
+vi.mock('expo-mail-composer', () => ({
   isAvailableAsync: jest.fn(() => Promise.resolve(false)),
   composeAsync: jest.fn(() => Promise.resolve()),
 }));
 
 // Mock stores
-jest.mock('@/stores/authStore', () => ({
+vi.mock('@/stores/authStore', () => ({
   useAuthStore: () => ({
     user: {
       id: 'test-user',
@@ -45,18 +46,18 @@ jest.mock('@/stores/authStore', () => ({
   }),
 }));
 
-jest.mock('@/stores/customerStore', () => ({
+vi.mock('@/stores/customerStore', () => ({
   useCustomerStore: () => ({
     customers: [
       { id: '1', name: '測試客戶 1', company: '公司 A', phone: '0912345678', tags: ['VIP'] },
       { id: '2', name: '測試客戶 2', company: '公司 B', phone: '0987654321', tags: [] },
     ],
     isLoading: false,
-    fetchCustomers: jest.fn(),
+    fetchCustomers: vi.fn(),
   }),
 }));
 
-jest.mock('@/stores/recordStore', () => ({
+vi.mock('@/stores/recordStore', () => ({
   useRecordStore: () => ({
     records: [
       { 
@@ -71,7 +72,7 @@ jest.mock('@/stores/recordStore', () => ({
   }),
 }));
 
-jest.mock('@/stores/taskStore', () => ({
+vi.mock('@/stores/taskStore', () => ({
   useTaskStore: () => ({
     tasks: [
       {

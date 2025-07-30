@@ -26,7 +26,19 @@
       "Bash(do echo \"=== $file ===\")",
       "Bash(done)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(npm run test:*)",
+      "Bash(npm install:*)",
+      "Bash(chmod:*)",
+      "Bash(node:*)",
+      "Bash(npx vitest run:*)",
+      "Bash(echo $npm_lifecycle_script)",
+      "Bash(npx vitest:*)",
+      "Bash(env)",
+      "Bash(./node_modules/.bin/vitest:*)",
+      "Bash(bash -c \"npx vitest run\")",
+      "Bash(bash -c:*)",
+      "Bash(npm uninstall:*)"
     ],
     "deny": []
   }

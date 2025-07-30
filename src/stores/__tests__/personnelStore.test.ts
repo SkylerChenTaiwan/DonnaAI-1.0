@@ -6,25 +6,26 @@ import { act, renderHook } from '@testing-library/react';
 import { usePersonnelStore } from '../personnelStore';
 import { User } from '../../types/user';
 import { doc, updateDoc, getDocs } from 'firebase/firestore';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 // Mock Firebase
-jest.mock('firebase/firestore', () => ({
-  collection: jest.fn(),
-  query: jest.fn(),
-  where: jest.fn(),
-  orderBy: jest.fn(),
-  onSnapshot: jest.fn(),
-  doc: jest.fn(),
+vi.mock('firebase/firestore', () => ({
+  collection: vi.fn(),
+  query: vi.fn(),
+  where: vi.fn(),
+  orderBy: vi.fn(),
+  onSnapshot: vi.fn(),
+  doc: vi.fn(),
   updateDoc: jest.fn(() => Promise.resolve()),
-  getDocs: jest.fn(),
-  Unsubscribe: jest.fn(),
+  getDocs: vi.fn(),
+  Unsubscribe: vi.fn(),
 }));
 
-jest.mock('../../services/firebase', () => ({
+vi.mock('../../services/firebase', () => ({
   db: {},
 }));
 
-jest.mock('../../services/firebase/permissions-v2', () => ({
+vi.mock('../../services/firebase/permissions-v2', () => ({
   getUserPermissionContext: jest.fn(() => Promise.resolve({
     userId: 'test-user',
     role: 'admin',
@@ -33,7 +34,7 @@ jest.mock('../../services/firebase/permissions-v2', () => ({
     managedTeamIds: ['team-1'],
     cachedAt: Date.now(),
   })),
-  clearUserPermissionCache: jest.fn(),
+  clearUserPermissionCache: vi.fn(),
 }));
 
 describe('personnelStore', () => {
@@ -81,7 +82,7 @@ describe('personnelStore', () => {
   ];
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     
     // Mock getDocs 回傳
     (getDocs as jest.Mock).mockResolvedValue({

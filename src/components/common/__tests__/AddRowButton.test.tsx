@@ -5,10 +5,11 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react-native';
 import { StyleSheet } from 'react-native';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { AddRowButton } from '../AddRowButton';
 
 describe('AddRowButton', () => {
-  const mockOnPress = jest.fn();
+  const mockOnPress = vi.fn();
 
   beforeEach(() => {
     mockOnPress.mockClear();
@@ -27,14 +28,14 @@ describe('AddRowButton', () => {
   });
 
   it('應該在 isVisible 為 false 時不渲染', () => {
-    const { container } = render(
+    const { queryByTestId } = render(
       <AddRowButton 
         onPress={mockOnPress} 
         isVisible={false} 
       />
     );
     
-    expect(container.children.length).toBe(0);
+    expect(queryByTestId('add-row-button')).toBeNull();
   });
 
   it('應該在點擊時調用 onPress', () => {

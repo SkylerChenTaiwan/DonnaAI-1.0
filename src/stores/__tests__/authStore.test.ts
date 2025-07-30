@@ -6,35 +6,36 @@ import { renderHook, act } from '@testing-library/react-hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuthStore } from '../authStore';
 import { STORAGE_KEYS } from '@/config/constants';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Mock Firebase
-jest.mock('@/services/firebase/config', () => ({
+vi.mock('@/services/firebase/config', () => ({
   getFirebaseAuth: jest.fn(() => ({
-    signOut: jest.fn().mockResolvedValue(undefined),
+    signOut: vi.fn().mockResolvedValue(undefined),
   })),
-  getFirebaseDb: jest.fn(),
+  getFirebaseDb: vi.fn(),
 }));
 
 // Mock Firebase Auth
-jest.mock('firebase/auth', () => ({
+vi.mock('firebase/auth', () => ({
   onAuthStateChanged: jest.fn((auth, callback) => {
     // 立即呼叫 callback 模擬未登入狀態
     callback(null);
     // 返回取消訂閱函數
-    return jest.fn();
+    return vi.fn();
   }),
 }));
 
 // Mock Firebase Firestore
-jest.mock('firebase/firestore', () => ({
-  doc: jest.fn(),
-  getDoc: jest.fn(),
+vi.mock('firebase/firestore', () => ({
+  doc: vi.fn(),
+  getDoc: vi.fn(),
 }));
 
 describe('authStore mode persistence', () => {
   beforeEach(() => {
     // 清除所有 mock
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     // 清除 AsyncStorage
     AsyncStorage.clear();
     // 重置 store
@@ -149,8 +150,8 @@ describe('authStore mode persistence', () => {
 
   it('處理 AsyncStorage 錯誤時應該使用預設值', async () => {
     // Mock AsyncStorage 錯誤
-    const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
-    AsyncStorage.getItem = jest.fn().mockRejectedValue(new Error('AsyncStorage error'));
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation();
+    AsyncStorage.getItem = vi.fn().mockRejectedValue(new Error('AsyncStorage error'));
     
     const { result } = renderHook(() => useAuthStore());
     
@@ -175,8 +176,8 @@ describe('authStore mode persistence', () => {
 
   it('儲存模式失敗時應該記錄錯誤但不影響切換', async () => {
     // Mock AsyncStorage 儲存錯誤
-    const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
-    AsyncStorage.setItem = jest.fn().mockRejectedValue(new Error('Storage error'));
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation();
+    AsyncStorage.setItem = vi.fn().mockRejectedValue(new Error('Storage error'));
     
     const { result } = renderHook(() => useAuthStore());
     

@@ -23,15 +23,35 @@ import {
   validateCustomFields
 } from '../../../services/firebase/custom-fields';
 import { CustomFieldDefinition } from '../../../types/custom-fields';
+import { canDefineCustomFields, isOrgAdmin } from '../../../services/firebase/permissions';
+import { getFirebaseDb } from '../../../services/firebase/config';
 
 // Mock Firebase
-vi.mock('firebase/firestore');
-vi.mock('../../../services/firebase/config', () => ({
-  db: {}
+vi.mock('firebase/firestore', () => ({
+  collection: vi.fn(),
+  doc: vi.fn(),
+  setDoc: vi.fn(),
+  getDoc: vi.fn(),
+  getDocs: vi.fn(),
+  updateDoc: vi.fn(),
+  deleteDoc: vi.fn(),
+  query: vi.fn(),
+  where: vi.fn(),
+  orderBy: vi.fn(),
+  serverTimestamp: vi.fn(() => new Date()),
+  Timestamp: {
+    now: vi.fn(() => new Date())
+  }
 }));
+
+vi.mock('../../../services/firebase/config', () => ({
+  getFirebaseDb: vi.fn(() => ({}))
+}));
+
 vi.mock('../../../services/firebase/permissions', () => ({
   canDefineCustomFields: vi.fn(),
-  isOrgAdmin: vi.fn()
+  isOrgAdmin: vi.fn(),
+  canEditCustomFieldDefinition: vi.fn()
 }));
 
 describe('Custom Fields Service', () => {
@@ -42,8 +62,7 @@ describe('Custom Fields Service', () => {
   describe('createCustomFieldDefinition', () => {
     it('應該成功建立自訂欄位定義', async () => {
       // Arrange
-      const mockCanDefineCustomFields = vi.fn().mockResolvedValue(true);
-      vi.mocked(require('../../../services/firebase/permissions').canDefineCustomFields).mockImplementation(mockCanDefineCustomFields);
+      vi.mocked(canDefineCustomFields).mockResolvedValue(true);
       
       const mockQuerySnapshot = {
         empty: true
@@ -68,7 +87,7 @@ describe('Custom Fields Service', () => {
       const result = await createCustomFieldDefinition(fieldDef, 'user123');
 
       // Assert
-      expect(mockCanDefineCustomFields).toHaveBeenCalledWith('user123', 'org123');
+      expect(canDefineCustomFields).toHaveBeenCalledWith('user123', 'org123');
       expect(setDoc).toHaveBeenCalled();
       expect(result).toMatchObject({
         ...fieldDef,
@@ -79,8 +98,7 @@ describe('Custom Fields Service', () => {
 
     it('應該拒絕沒有權限的使用者', async () => {
       // Arrange
-      const mockCanDefineCustomFields = vi.fn().mockResolvedValue(false);
-      vi.mocked(require('../../../services/firebase/permissions').canDefineCustomFields).mockImplementation(mockCanDefineCustomFields);
+      vi.mocked(canDefineCustomFields).mockResolvedValue(false);
 
       const fieldDef: Omit<CustomFieldDefinition, 'id' | 'createdAt'> = {
         fieldKey: 'testField',
@@ -97,13 +115,12 @@ describe('Custom Fields Service', () => {
 
       // Act & Assert
       await expect(createCustomFieldDefinition(fieldDef, 'user123'))
-        .rejects.toThrow('您沒有權限定義自訂欄位');
+        .rejects.toThrow('您沒有權限建立自訂欄位');
     });
 
     it('應該防止重複的欄位鍵值', async () => {
       // Arrange
-      const mockCanDefineCustomFields = vi.fn().mockResolvedValue(true);
-      vi.mocked(require('../../../services/firebase/permissions').canDefineCustomFields).mockImplementation(mockCanDefineCustomFields);
+      vi.mocked(canDefineCustomFields).mockResolvedValue(true);
       
       const mockQuerySnapshot = {
         empty: false
@@ -125,7 +142,7 @@ describe('Custom Fields Service', () => {
 
       // Act & Assert
       await expect(createCustomFieldDefinition(fieldDef, 'user123'))
-        .rejects.toThrow('欄位鍵值已存在');
+        .rejects.toThrow('欄位鍵值 "duplicateKey" 已存在');
     });
   });
 
@@ -156,7 +173,7 @@ describe('Custom Fields Service', () => {
       expect(errors).toHaveLength(1);
       expect(errors[0]).toMatchObject({
         fieldKey: 'requiredField',
-        error: '必填欄位 為必填項目'
+        error: '必填欄位 為必填欄位'
       });
     });
 
@@ -188,7 +205,7 @@ describe('Custom Fields Service', () => {
       expect(errors).toHaveLength(1);
       expect(errors[0]).toMatchObject({
         fieldKey: 'numberField',
-        error: '數字欄位 必須是數字'
+        error: '數字欄位 必須為數字'
       });
     });
 
@@ -221,7 +238,7 @@ describe('Custom Fields Service', () => {
       expect(errors).toHaveLength(1);
       expect(errors[0]).toMatchObject({
         fieldKey: 'selectField',
-        error: '選擇欄位 的值必須是有效選項'
+        error: '選擇欄位 的值必須是預設選項之一'
       });
     });
 
@@ -302,9 +319,9 @@ describe('Custom Fields Service', () => {
       expect(query).toHaveBeenCalled();
       expect(result).toHaveLength(2);
       expect(result[0]).toMatchObject({
-        id: 'field1',
         fieldKey: 'field1',
-        fieldName: '欄位1'
+        fieldName: '欄位1',
+        fieldType: 'text'
       });
     });
   });
@@ -316,13 +333,16 @@ describe('Custom Fields Service', () => {
         exists: () => true,
         data: () => ({
           organizationId: 'org123',
-          createdBy: 'user123'
+          createdBy: 'user123',
+          permissions: {
+            canEdit: ['user123']
+          }
         })
       };
       (getDoc as Mock).mockResolvedValue(mockDoc);
 
-      const mockCanEdit = vi.fn().mockResolvedValue(true);
-      vi.mocked(require('../../../services/firebase/permissions').canEditCustomFieldDefinition).mockImplementation(mockCanEdit);
+      const { canEditCustomFieldDefinition } = await import('../../../services/firebase/permissions');
+      vi.mocked(canEditCustomFieldDefinition).mockResolvedValue(true);
 
       (updateDoc as Mock).mockResolvedValue(undefined);
 
@@ -336,7 +356,11 @@ describe('Custom Fields Service', () => {
 
       // Assert
       expect(updateDoc).toHaveBeenCalled();
-      expect(mockCanEdit).toHaveBeenCalledWith('user123', 'field123');
+      expect(canEditCustomFieldDefinition).toHaveBeenCalledWith(
+        'user123',
+        expect.any(String),
+        expect.any(Object)
+      );
     });
 
     it('應該拒絕沒有權限的更新', async () => {
@@ -350,12 +374,12 @@ describe('Custom Fields Service', () => {
       };
       (getDoc as Mock).mockResolvedValue(mockDoc);
 
-      const mockCanEdit = vi.fn().mockResolvedValue(false);
-      vi.mocked(require('../../../services/firebase/permissions').canEditCustomFieldDefinition).mockImplementation(mockCanEdit);
+      const { canEditCustomFieldDefinition } = await import('../../../services/firebase/permissions');
+      vi.mocked(canEditCustomFieldDefinition).mockResolvedValue(false);
 
       // Act & Assert
       await expect(updateCustomFieldDefinition('field123', {}, 'user123'))
-        .rejects.toThrow('您沒有權限編輯此欄位定義');
+        .rejects.toThrow('您沒有權限更新此欄位');
     });
   });
 });

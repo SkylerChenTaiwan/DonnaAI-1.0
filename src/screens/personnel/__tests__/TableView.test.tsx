@@ -6,9 +6,10 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import { TableView } from '../TableView';
 import { TeamMember } from '../PersonnelScreen';
+import { describe, it, expect, vi } from 'vitest';
 
 // Mock DataTable component
-jest.mock('@/components/common/DataTable', () => ({
+vi.mock('@/components/common/DataTable', () => ({
   DataTable: jest.fn(({ data, onRowPress, showCheckboxes }) => (
     <div testID="data-table">
       {data.map((item: any) => (
@@ -22,11 +23,11 @@ jest.mock('@/components/common/DataTable', () => ({
 }));
 
 // Mock 其他組件
-jest.mock('@/components/personnel/StatusIndicator', () => ({
+vi.mock('@/components/personnel/StatusIndicator', () => ({
   StatusIndicator: jest.fn(() => <div testID="status-indicator" />),
 }));
 
-jest.mock('@/components/personnel/PermissionBadge', () => ({
+vi.mock('@/components/personnel/PermissionBadge', () => ({
   PermissionBadge: jest.fn(() => <div testID="permission-badge" />),
 }));
 
@@ -66,7 +67,7 @@ describe('TableView with Toolbar', () => {
     teamMembers: mockTeamMembers,
     searchQuery: '',
     refreshing: false,
-    onRefresh: jest.fn(),
+    onRefresh: vi.fn(),
   };
 
   it('應該顯示工具列而非統計列', () => {
@@ -100,7 +101,7 @@ describe('TableView with Toolbar', () => {
   });
 
   it('多選模式應該正確運作', () => {
-    const onSelectionChange = jest.fn();
+    const onSelectionChange = vi.fn();
     const { getByTestId } = render(
       <TableView
         {...defaultProps}
@@ -147,7 +148,7 @@ describe('TableView with Toolbar', () => {
   });
 
   it('應該處理行點擊事件', () => {
-    const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+    const consoleSpy = vi.spyOn(console, 'log').mockImplementation();
     const { getByTestId } = render(<TableView {...defaultProps} />);
     
     // 模擬點擊行

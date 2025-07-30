@@ -7,6 +7,18 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./src/tests/setup.ts'],
+    include: [
+      'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+      'src/tests/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+      'src/__tests__/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'
+    ],
+    exclude: [
+      'node_modules/',
+      'dist/',
+      'test-app/',
+      'use-cases/',
+      '**/*.d.ts'
+    ],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
@@ -18,7 +30,9 @@ export default defineConfig({
         '**/coverage/**',
         'functions/',
         'PRPs/',
-        'docs/'
+        'docs/',
+        'test-app/',
+        'use-cases/'
       ],
       thresholds: {
         global: {
@@ -32,7 +46,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': '/src'
+      '@': new URL('./src', import.meta.url).pathname
     }
   }
 });

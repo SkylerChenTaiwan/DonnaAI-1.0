@@ -7,33 +7,34 @@ import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import { ActivityModal } from '../ActivityModal';
 import { User } from '../../../types/user';
 import { getDocs } from 'firebase/firestore';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Mock Firebase
-jest.mock('firebase/firestore', () => ({
-  collection: jest.fn(),
-  query: jest.fn(),
-  where: jest.fn(),
-  orderBy: jest.fn(),
-  limit: jest.fn(),
-  getDocs: jest.fn(),
+vi.mock('firebase/firestore', () => ({
+  collection: vi.fn(),
+  query: vi.fn(),
+  where: vi.fn(),
+  orderBy: vi.fn(),
+  limit: vi.fn(),
+  getDocs: vi.fn(),
 }));
 
-jest.mock('../../../services/firebase', () => ({
+vi.mock('../../../services/firebase', () => ({
   db: {},
 }));
 
 // Mock date-fns
-jest.mock('date-fns', () => ({
+vi.mock('date-fns', () => ({
   format: jest.fn((date, format) => '2024/01/01 12:00'),
   formatDistanceToNow: jest.fn(() => '5 分鐘前'),
 }));
 
-jest.mock('date-fns/locale', () => ({
+vi.mock('date-fns/locale', () => ({
   zhTW: {},
 }));
 
 // Mock ActivityChart
-jest.mock('../../personnel/ActivityChart', () => ({
+vi.mock('../../personnel/ActivityChart', () => ({
   ActivityChart: ({ data }: { data: number[] }) => {
     const { View, Text } = require('react-native');
     return (
@@ -67,7 +68,7 @@ describe('ActivityModal', () => {
     },
   };
 
-  const mockOnClose = jest.fn();
+  const mockOnClose = vi.fn();
 
   const defaultProps = {
     visible: true,
@@ -76,7 +77,7 @@ describe('ActivityModal', () => {
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     (getDocs as jest.Mock).mockResolvedValue({
       forEach: jest.fn((callback) => {
         // Mock 活動日誌
@@ -163,7 +164,7 @@ describe('ActivityModal', () => {
 
   it('沒有活動記錄時應該顯示空狀態', async () => {
     (getDocs as jest.Mock).mockResolvedValueOnce({
-      forEach: jest.fn(),
+      forEach: vi.fn(),
     });
     
     const { getByText } = render(<ActivityModal {...defaultProps} />);
@@ -187,7 +188,7 @@ describe('ActivityModal', () => {
   });
 
   it('載入失敗應該處理錯誤', async () => {
-    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation();
     (getDocs as jest.Mock).mockRejectedValueOnce(new Error('載入失敗'));
     
     const { getByText } = render(<ActivityModal {...defaultProps} />);
