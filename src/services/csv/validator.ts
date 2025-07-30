@@ -15,6 +15,7 @@ export interface ValidationSummary {
   totalRecords: number;
   validRecords: number;
   invalidRecords: number;
+  skippedRecords: number; // 跳過的記錄數
   warnings: ValidationWarning[];
   duplicateRecords: DuplicateRecord[];
 }
@@ -39,6 +40,7 @@ export interface CleaningOptions {
   standardizeEmails?: boolean;
   trimWhitespace?: boolean;
   capitalizeNames?: boolean;
+  skipEmptyRequiredFields?: boolean; // 跳過必填欄位為空的記錄
 }
 
 /**
@@ -60,6 +62,7 @@ export function validateCustomerBatch(
   const duplicates: DuplicateRecord[] = [];
   let validRecords = 0;
   let invalidRecords = 0;
+  let skippedRecords = 0;
 
   // 檢查重複資料
   const emailMap = new Map<string, number[]>();
@@ -211,6 +214,7 @@ export function validateCustomerBatch(
     totalRecords: data.length,
     validRecords,
     invalidRecords,
+    skippedRecords,
     warnings,
     duplicateRecords: duplicates,
   };
@@ -398,6 +402,8 @@ export function validateBusinessCodeMapping(
   const duplicates: DuplicateRecord[] = [];
   let validRecords = 0;
   let invalidRecords = 0;
+  let skippedRecords = 0;
+  let skippedRecords = 0;
   
   const codeMap = new Map<string, number[]>();
   const nameMap = new Map<string, number[]>();
@@ -416,31 +422,40 @@ export function validateBusinessCodeMapping(
       }
       
       // 檢查必填欄位
-      if (!record.業務名稱) {
-        warnings.push({
-          row,
-          field: '業務名稱',
-          message: '業務名稱為必填欄位',
-        });
-        isValid = false;
-      }
-      
-      if (!record.顧問代碼) {
-        warnings.push({
-          row,
-          field: '顧問代碼',
-          message: '顧問代碼為必填欄位',
-        });
-        isValid = false;
-      }
-      
-      if (!record.職級) {
-        warnings.push({
-          row,
-          field: '職級',
-          message: '職級為必填欄位',
-        });
-        isValid = false;
+      if (options.skipEmptyRequiredFields) {
+        // 如果啟用跳過空白記錄，檢查所有必填欄位
+        if (!record.業務名稱 || !record.顧問代碼 || !record.職級) {
+          skippedRecords++;
+          return; // 跳過此記錄
+        }
+      } else {
+        // 原本的驗證邏輯
+        if (!record.業務名稱) {
+          warnings.push({
+            row,
+            field: '業務名稱',
+            message: '業務名稱為必填欄位',
+          });
+          isValid = false;
+        }
+        
+        if (!record.顧問代碼) {
+          warnings.push({
+            row,
+            field: '顧問代碼',
+            message: '顧問代碼為必填欄位',
+          });
+          isValid = false;
+        }
+        
+        if (!record.職級) {
+          warnings.push({
+            row,
+            field: '職級',
+            message: '職級為必填欄位',
+          });
+          isValid = false;
+        }
       }
       
       // 檢查代碼格式（應該是數字）
@@ -515,6 +530,7 @@ export function validateBusinessCodeMapping(
     totalRecords: data.length,
     validRecords,
     invalidRecords,
+    skippedRecords,
     warnings,
     duplicateRecords: duplicates,
   };
@@ -531,6 +547,7 @@ export function validateLegacyUser(
   const duplicates: DuplicateRecord[] = [];
   let validRecords = 0;
   let invalidRecords = 0;
+  let skippedRecords = 0;
   
   const emailMap = new Map<string, number[]>();
   const nameMap = new Map<string, number[]>();
@@ -659,6 +676,7 @@ export function validateLegacyUser(
     totalRecords: data.length,
     validRecords,
     invalidRecords,
+    skippedRecords,
     warnings,
     duplicateRecords: duplicates,
   };
@@ -675,6 +693,7 @@ export function validateLegacyCustomer(
   const duplicates: DuplicateRecord[] = [];
   let validRecords = 0;
   let invalidRecords = 0;
+  let skippedRecords = 0;
   
   const emailMap = new Map<string, number[]>();
   const phoneMap = new Map<string, number[]>();
@@ -695,22 +714,31 @@ export function validateLegacyCustomer(
       }
       
       // 檢查必填欄位
-      if (!record.負責業務) {
-        warnings.push({
-          row,
-          field: '負責業務',
-          message: '負責業務為必填欄位',
-        });
-        isValid = false;
-      }
-      
-      if (!record.客戶名稱) {
-        warnings.push({
-          row,
-          field: '客戶名稱',
-          message: '客戶名稱為必填欄位',
-        });
-        isValid = false;
+      if (options.skipEmptyRequiredFields) {
+        // 如果啟用跳過空白記錄，檢查所有必填欄位
+        if (!record.負責業務 || !record.客戶名稱) {
+          skippedRecords++;
+          return; // 跳過此記錄
+        }
+      } else {
+        // 原本的驗證邏輯
+        if (!record.負責業務) {
+          warnings.push({
+            row,
+            field: '負責業務',
+            message: '負責業務為必填欄位',
+          });
+          isValid = false;
+        }
+        
+        if (!record.客戶名稱) {
+          warnings.push({
+            row,
+            field: '客戶名稱',
+            message: '客戶名稱為必填欄位',
+          });
+          isValid = false;
+        }
       }
       
       // 驗證電子郵件
@@ -827,6 +855,7 @@ export function validateLegacyCustomer(
     totalRecords: data.length,
     validRecords,
     invalidRecords,
+    skippedRecords,
     warnings,
     duplicateRecords: duplicates,
   };
@@ -843,6 +872,7 @@ export function validateLegacyRecord(
   const duplicates: DuplicateRecord[] = [];
   let validRecords = 0;
   let invalidRecords = 0;
+  let skippedRecords = 0;
   
   data.forEach((record, index) => {
     const row = index + 1;
@@ -859,49 +889,58 @@ export function validateLegacyRecord(
       }
       
       // 檢查必填欄位
-      if (!record.標題) {
-        warnings.push({
-          row,
-          field: '標題',
-          message: '標題為必填欄位',
-        });
-        isValid = false;
-      }
-      
-      if (!record.訪談結果) {
-        warnings.push({
-          row,
-          field: '訪談結果',
-          message: '訪談結果為必填欄位',
-        });
-        isValid = false;
-      }
-      
-      if (!record.訪談日期) {
-        warnings.push({
-          row,
-          field: '訪談日期',
-          message: '訪談日期為必填欄位',
-        });
-        isValid = false;
-      }
-      
-      if (!record.業務帳號) {
-        warnings.push({
-          row,
-          field: '業務帳號',
-          message: '業務帳號為必填欄位',
-        });
-        isValid = false;
-      }
-      
-      if (!record.客戶名稱) {
-        warnings.push({
-          row,
-          field: '客戶名稱',
-          message: '客戶名稱為必填欄位',
-        });
-        isValid = false;
+      if (options.skipEmptyRequiredFields) {
+        // 如果啟用跳過空白記錄，檢查所有必填欄位
+        if (!record.標題 || !record.訪談結果 || !record.訪談日期 || !record.業務帳號 || !record.客戶名稱) {
+          skippedRecords++;
+          return; // 跳過此記錄
+        }
+      } else {
+        // 原本的驗證邏輯
+        if (!record.標題) {
+          warnings.push({
+            row,
+            field: '標題',
+            message: '標題為必填欄位',
+          });
+          isValid = false;
+        }
+        
+        if (!record.訪談結果) {
+          warnings.push({
+            row,
+            field: '訪談結果',
+            message: '訪談結果為必填欄位',
+          });
+          isValid = false;
+        }
+        
+        if (!record.訪談日期) {
+          warnings.push({
+            row,
+            field: '訪談日期',
+            message: '訪談日期為必填欄位',
+          });
+          isValid = false;
+        }
+        
+        if (!record.業務帳號) {
+          warnings.push({
+            row,
+            field: '業務帳號',
+            message: '業務帳號為必填欄位',
+          });
+          isValid = false;
+        }
+        
+        if (!record.客戶名稱) {
+          warnings.push({
+            row,
+            field: '客戶名稱',
+            message: '客戶名稱為必填欄位',
+          });
+          isValid = false;
+        }
       }
       
       // 驗證日期格式
@@ -942,6 +981,7 @@ export function validateLegacyRecord(
     totalRecords: data.length,
     validRecords,
     invalidRecords,
+    skippedRecords,
     warnings,
     duplicateRecords: duplicates,
   };

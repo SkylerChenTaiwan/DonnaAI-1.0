@@ -144,6 +144,7 @@ export async function loadAndValidateFile(
       standardizePhoneNumbers: true,
       standardizeEmails: true,
       removeEmptyFields: false,
+      skipEmptyRequiredFields: true, // 跳過必填欄位為空的記錄
     };
 
     switch (fileType) {
@@ -171,6 +172,9 @@ export async function loadAndValidateFile(
     const errors: string[] = [];
     if (validationResult.invalidRecords > 0) {
       errors.push(`有 ${validationResult.invalidRecords} 筆無效記錄`);
+    }
+    if (validationResult.skippedRecords > 0) {
+      errors.push(`已跳過 ${validationResult.skippedRecords} 筆空白記錄`);
     }
     validationResult.warnings.forEach(warning => {
       if (!errors.includes(warning.message)) {

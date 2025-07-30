@@ -132,6 +132,23 @@ export const getFirebaseDb = (): Firestore => {
   const firebaseApp = initializeFirebaseApp();
   db = getFirestore(firebaseApp);
   
+  // 在 Web 平台上配置 Firestore 以避免 QUIC 協議問題
+  if (Platform.OS === 'web') {
+    // 強制使用長輪詢而非 WebChannel
+    // 這可以避免 QUIC 協議錯誤
+    const settings = {
+      experimentalForceLongPolling: true,
+      cacheSizeBytes: 50 * 1024 * 1024 // 50 MB
+    };
+    
+    try {
+      // @ts-ignore - 設定可能不在類型定義中
+      db.settings(settings);
+    } catch (error) {
+      console.warn('無法設定 Firestore 設定:', error);
+    }
+  }
+  
   // 連接模擬器（如果需要且尚未連接）
   connectEmulators();
   

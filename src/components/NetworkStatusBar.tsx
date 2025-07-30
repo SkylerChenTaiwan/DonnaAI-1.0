@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
 import * as Network from 'expo-network';
 import { Icon } from '@/components/common/Icon';
+import { getAnimationConfig } from '@/utils/animationConfig';
 
 export function NetworkStatusBar() {
   const [isOnline, setIsOnline] = useState(true);
@@ -22,25 +23,22 @@ export function NetworkStatusBar() {
           
           // 動畫效果
           if (!online) {
-            Animated.timing(slideAnim, {
+            Animated.timing(slideAnim, getAnimationConfig({
               toValue: 0,
               duration: 300,
-              useNativeDriver: true,
-            }).start();
+            })).start();
           } else {
             // 線上時顯示綠色提示 2 秒後隱藏
-            Animated.timing(slideAnim, {
+            Animated.timing(slideAnim, getAnimationConfig({
               toValue: 0,
               duration: 300,
-              useNativeDriver: true,
-            }).start();
+            })).start();
             
             setTimeout(() => {
-              Animated.timing(slideAnim, {
+              Animated.timing(slideAnim, getAnimationConfig({
                 toValue: -50,
                 duration: 300,
-                useNativeDriver: true,
-              }).start(() => setShowBar(false));
+              })).start(() => setShowBar(false));
             }, 2000);
           }
         }
