@@ -22,7 +22,7 @@ import { isDesktopWeb } from '@/utils/web-detector';
 import { useAuthStore } from '@/stores/authStore';
 import { useAnalyticsStore } from '@/stores/analyticsStore';
 import { MainTabParamList, RootStackParamList } from '@/types/navigation';
-import ActionPopover from '@/components/common/ActionPopover';
+import { ActionPopover } from '@/components/common/ActionPopover';
 import { getKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
