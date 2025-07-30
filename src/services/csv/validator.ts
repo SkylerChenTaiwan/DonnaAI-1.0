@@ -4,6 +4,12 @@
  */
 
 import { CustomerFormData } from '@/services/validation/form-schemas';
+import { 
+  BusinessCodeMapping, 
+  LegacyUser, 
+  LegacyCustomer, 
+  LegacyRecord 
+} from '@/types/legacy-import';
 
 export interface ValidationSummary {
   totalRecords: number;
@@ -379,4 +385,586 @@ export function generateCleaningReport(
   }
 
   return report.join('\n');
+}
+
+/**
+ * 驗證業務代碼對照資料
+ */
+export function validateBusinessCodeMapping(
+  data: BusinessCodeMapping[],
+  options: CleaningOptions = {}
+): ValidationSummary {
+  const warnings: ValidationWarning[] = [];
+  const duplicates: DuplicateRecord[] = [];
+  let validRecords = 0;
+  let invalidRecords = 0;
+  
+  const codeMap = new Map<string, number[]>();
+  const nameMap = new Map<string, number[]>();
+  
+  data.forEach((record, index) => {
+    const row = index + 1;
+    let isValid = true;
+    
+    try {
+      // 修剪空白
+      if (options.trimWhitespace) {
+        record.業務名稱 = record.業務名稱?.trim() || '';
+        record.職級 = record.職級?.trim() || '';
+        record.顧問代碼 = record.顧問代碼?.trim() || '';
+        record.主管清單 = record.主管清單?.trim() || '';
+      }
+      
+      // 檢查必填欄位
+      if (!record.業務名稱) {
+        warnings.push({
+          row,
+          field: '業務名稱',
+          message: '業務名稱為必填欄位',
+        });
+        isValid = false;
+      }
+      
+      if (!record.顧問代碼) {
+        warnings.push({
+          row,
+          field: '顧問代碼',
+          message: '顧問代碼為必填欄位',
+        });
+        isValid = false;
+      }
+      
+      if (!record.職級) {
+        warnings.push({
+          row,
+          field: '職級',
+          message: '職級為必填欄位',
+        });
+        isValid = false;
+      }
+      
+      // 檢查代碼格式（應該是數字）
+      if (record.顧問代碼 && !/^\d+$/.test(record.顧問代碼)) {
+        warnings.push({
+          row,
+          field: '顧問代碼',
+          message: '顧問代碼應該是數字',
+          suggestion: '請檢查是否包含非數字字符',
+        });
+      }
+      
+      // 檢查重複
+      if (record.顧問代碼) {
+        if (!codeMap.has(record.顧問代碼)) {
+          codeMap.set(record.顧問代碼, []);
+        }
+        codeMap.get(record.顧問代碼)!.push(row);
+      }
+      
+      if (record.業務名稱) {
+        if (!nameMap.has(record.業務名稱)) {
+          nameMap.set(record.業務名稱, []);
+        }
+        nameMap.get(record.業務名稱)!.push(row);
+      }
+      
+      if (isValid) {
+        validRecords++;
+      } else {
+        invalidRecords++;
+      }
+    } catch (error) {
+      warnings.push({
+        row,
+        field: 'general',
+        message: `資料處理失敗: ${error instanceof Error ? error.message : '未知錯誤'}`,
+      });
+      invalidRecords++;
+    }
+  });
+  
+  // 檢查重複代碼
+  codeMap.forEach((rows, code) => {
+    if (rows.length > 1) {
+      rows.forEach(row => {
+        duplicates.push({
+          row,
+          duplicateRows: rows.filter(r => r !== row),
+          field: '顧問代碼',
+          value: code,
+        });
+      });
+    }
+  });
+  
+  // 檢查重複姓名
+  nameMap.forEach((rows, name) => {
+    if (rows.length > 1) {
+      rows.forEach(row => {
+        duplicates.push({
+          row,
+          duplicateRows: rows.filter(r => r !== row),
+          field: '業務名稱',
+          value: name,
+        });
+      });
+    }
+  });
+  
+  return {
+    totalRecords: data.length,
+    validRecords,
+    invalidRecords,
+    warnings,
+    duplicateRecords: duplicates,
+  };
+}
+
+/**
+ * 驗證業務人員資料
+ */
+export function validateLegacyUser(
+  data: LegacyUser[],
+  options: CleaningOptions = {}
+): ValidationSummary {
+  const warnings: ValidationWarning[] = [];
+  const duplicates: DuplicateRecord[] = [];
+  let validRecords = 0;
+  let invalidRecords = 0;
+  
+  const emailMap = new Map<string, number[]>();
+  const nameMap = new Map<string, number[]>();
+  
+  data.forEach((record, index) => {
+    const row = index + 1;
+    let isValid = true;
+    
+    try {
+      // 修剪空白
+      if (options.trimWhitespace) {
+        record.業務帳號 = record.業務帳號?.trim() || '';
+        record.公司Gmail帳號 = record.公司Gmail帳號?.trim() || '';
+        record.你的層級 = record.你的層級?.trim() || '';
+        record.Phone = record.Phone?.trim() || '';
+      }
+      
+      // 檢查必填欄位
+      if (!record.業務帳號) {
+        warnings.push({
+          row,
+          field: '業務帳號',
+          message: '業務帳號為必填欄位',
+        });
+        isValid = false;
+      }
+      
+      if (!record.你的層級) {
+        warnings.push({
+          row,
+          field: '你的層級',
+          message: '層級為必填欄位',
+        });
+        isValid = false;
+      }
+      
+      // 驗證電子郵件
+      if (record.公司Gmail帳號 && !isValidEmail(record.公司Gmail帳號)) {
+        warnings.push({
+          row,
+          field: '公司Gmail帳號',
+          message: '電子郵件格式不正確',
+          suggestion: '請檢查電子郵件格式',
+        });
+      }
+      
+      // 驗證電話
+      if (record.Phone && !isValidPhoneNumber(record.Phone)) {
+        warnings.push({
+          row,
+          field: 'Phone',
+          message: '電話號碼格式可能不正確',
+          suggestion: '建議使用格式：0912-345-678',
+        });
+      }
+      
+      // 驗證層級格式
+      if (record.你的層級 && !/^L\d+$/.test(record.你的層級)) {
+        warnings.push({
+          row,
+          field: '你的層級',
+          message: '層級格式不正確',
+          suggestion: '層級應該是 L0, L1, L2 等格式',
+        });
+      }
+      
+      // 檢查重複
+      if (record.公司Gmail帳號) {
+        const emailKey = record.公司Gmail帳號.toLowerCase();
+        if (!emailMap.has(emailKey)) {
+          emailMap.set(emailKey, []);
+        }
+        emailMap.get(emailKey)!.push(row);
+      }
+      
+      if (record.業務帳號) {
+        if (!nameMap.has(record.業務帳號)) {
+          nameMap.set(record.業務帳號, []);
+        }
+        nameMap.get(record.業務帳號)!.push(row);
+      }
+      
+      if (isValid) {
+        validRecords++;
+      } else {
+        invalidRecords++;
+      }
+    } catch (error) {
+      warnings.push({
+        row,
+        field: 'general',
+        message: `資料處理失敗: ${error instanceof Error ? error.message : '未知錯誤'}`,
+      });
+      invalidRecords++;
+    }
+  });
+  
+  // 檢查重複
+  emailMap.forEach((rows, email) => {
+    if (rows.length > 1) {
+      rows.forEach(row => {
+        duplicates.push({
+          row,
+          duplicateRows: rows.filter(r => r !== row),
+          field: '公司Gmail帳號',
+          value: email,
+        });
+      });
+    }
+  });
+  
+  nameMap.forEach((rows, name) => {
+    if (rows.length > 1) {
+      rows.forEach(row => {
+        duplicates.push({
+          row,
+          duplicateRows: rows.filter(r => r !== row),
+          field: '業務帳號',
+          value: name,
+        });
+      });
+    }
+  });
+  
+  return {
+    totalRecords: data.length,
+    validRecords,
+    invalidRecords,
+    warnings,
+    duplicateRecords: duplicates,
+  };
+}
+
+/**
+ * 驗證舊系統客戶資料
+ */
+export function validateLegacyCustomer(
+  data: LegacyCustomer[],
+  options: CleaningOptions = {}
+): ValidationSummary {
+  const warnings: ValidationWarning[] = [];
+  const duplicates: DuplicateRecord[] = [];
+  let validRecords = 0;
+  let invalidRecords = 0;
+  
+  const emailMap = new Map<string, number[]>();
+  const phoneMap = new Map<string, number[]>();
+  const nameCompanyMap = new Map<string, number[]>();
+  
+  data.forEach((record, index) => {
+    const row = index + 1;
+    let isValid = true;
+    
+    try {
+      // 修剪空白
+      if (options.trimWhitespace) {
+        Object.keys(record).forEach(key => {
+          if (typeof record[key] === 'string') {
+            record[key] = record[key].trim();
+          }
+        });
+      }
+      
+      // 檢查必填欄位
+      if (!record.負責業務) {
+        warnings.push({
+          row,
+          field: '負責業務',
+          message: '負責業務為必填欄位',
+        });
+        isValid = false;
+      }
+      
+      if (!record.客戶名稱) {
+        warnings.push({
+          row,
+          field: '客戶名稱',
+          message: '客戶名稱為必填欄位',
+        });
+        isValid = false;
+      }
+      
+      // 驗證電子郵件
+      if (record.電子郵件地址 && !isValidEmail(record.電子郵件地址)) {
+        warnings.push({
+          row,
+          field: '電子郵件地址',
+          message: '電子郵件格式不正確',
+          suggestion: '請檢查電子郵件格式',
+        });
+      }
+      
+      // 驗證電話
+      if (record.聯絡電話 && !isValidPhoneNumber(record.聯絡電話)) {
+        warnings.push({
+          row,
+          field: '聯絡電話',
+          message: '電話號碼格式可能不正確',
+          suggestion: '建議使用格式：0912-345-678',
+        });
+      }
+      
+      // 標準化電子郵件
+      if (options.standardizeEmails && record.電子郵件地址) {
+        record.電子郵件地址 = record.電子郵件地址.toLowerCase();
+      }
+      
+      // 標準化電話
+      if (options.standardizePhoneNumbers && record.聯絡電話) {
+        record.聯絡電話 = standardizePhoneNumber(record.聯絡電話);
+      }
+      
+      // 檢查重複
+      if (record.電子郵件地址) {
+        const emailKey = record.電子郵件地址.toLowerCase();
+        if (!emailMap.has(emailKey)) {
+          emailMap.set(emailKey, []);
+        }
+        emailMap.get(emailKey)!.push(row);
+      }
+      
+      if (record.聯絡電話) {
+        const phoneKey = normalizePhoneNumber(record.聯絡電話);
+        if (!phoneMap.has(phoneKey)) {
+          phoneMap.set(phoneKey, []);
+        }
+        phoneMap.get(phoneKey)!.push(row);
+      }
+      
+      if (record.客戶名稱 && record.公司名稱) {
+        const key = `${record.客戶名稱.toLowerCase()}_${record.公司名稱.toLowerCase()}`;
+        if (!nameCompanyMap.has(key)) {
+          nameCompanyMap.set(key, []);
+        }
+        nameCompanyMap.get(key)!.push(row);
+      }
+      
+      if (isValid) {
+        validRecords++;
+      } else {
+        invalidRecords++;
+      }
+    } catch (error) {
+      warnings.push({
+        row,
+        field: 'general',
+        message: `資料處理失敗: ${error instanceof Error ? error.message : '未知錯誤'}`,
+      });
+      invalidRecords++;
+    }
+  });
+  
+  // 檢查重複
+  emailMap.forEach((rows, email) => {
+    if (rows.length > 1) {
+      rows.forEach(row => {
+        duplicates.push({
+          row,
+          duplicateRows: rows.filter(r => r !== row),
+          field: '電子郵件地址',
+          value: email,
+        });
+      });
+    }
+  });
+  
+  phoneMap.forEach((rows, phone) => {
+    if (rows.length > 1) {
+      rows.forEach(row => {
+        duplicates.push({
+          row,
+          duplicateRows: rows.filter(r => r !== row),
+          field: '聯絡電話',
+          value: phone,
+        });
+      });
+    }
+  });
+  
+  nameCompanyMap.forEach((rows, nameCompany) => {
+    if (rows.length > 1) {
+      rows.forEach(row => {
+        duplicates.push({
+          row,
+          duplicateRows: rows.filter(r => r !== row),
+          field: '客戶名稱_公司名稱',
+          value: nameCompany.replace('_', ' + '),
+        });
+      });
+    }
+  });
+  
+  return {
+    totalRecords: data.length,
+    validRecords,
+    invalidRecords,
+    warnings,
+    duplicateRecords: duplicates,
+  };
+}
+
+/**
+ * 驗證訪談記錄資料
+ */
+export function validateLegacyRecord(
+  data: LegacyRecord[],
+  options: CleaningOptions = {}
+): ValidationSummary {
+  const warnings: ValidationWarning[] = [];
+  const duplicates: DuplicateRecord[] = [];
+  let validRecords = 0;
+  let invalidRecords = 0;
+  
+  data.forEach((record, index) => {
+    const row = index + 1;
+    let isValid = true;
+    
+    try {
+      // 修剪空白
+      if (options.trimWhitespace) {
+        record.標題 = record.標題?.trim() || '';
+        record.訪談結果 = record.訪談結果?.trim() || '';
+        record.訪談日期 = record.訪談日期?.trim() || '';
+        record.業務帳號 = record.業務帳號?.trim() || '';
+        record.客戶名稱 = record.客戶名稱?.trim() || '';
+      }
+      
+      // 檢查必填欄位
+      if (!record.標題) {
+        warnings.push({
+          row,
+          field: '標題',
+          message: '標題為必填欄位',
+        });
+        isValid = false;
+      }
+      
+      if (!record.訪談結果) {
+        warnings.push({
+          row,
+          field: '訪談結果',
+          message: '訪談結果為必填欄位',
+        });
+        isValid = false;
+      }
+      
+      if (!record.訪談日期) {
+        warnings.push({
+          row,
+          field: '訪談日期',
+          message: '訪談日期為必填欄位',
+        });
+        isValid = false;
+      }
+      
+      if (!record.業務帳號) {
+        warnings.push({
+          row,
+          field: '業務帳號',
+          message: '業務帳號為必填欄位',
+        });
+        isValid = false;
+      }
+      
+      if (!record.客戶名稱) {
+        warnings.push({
+          row,
+          field: '客戶名稱',
+          message: '客戶名稱為必填欄位',
+        });
+        isValid = false;
+      }
+      
+      // 驗證日期格式
+      if (record.訪談日期 && !isValidLegacyDate(record.訪談日期)) {
+        warnings.push({
+          row,
+          field: '訪談日期',
+          message: '訪談日期格式不正確',
+          suggestion: '支援格式：MM/DD/YYYY 或 YYYY年M月D日',
+        });
+      }
+      
+      if (record.下次跟進日期 && !isValidLegacyDate(record.下次跟進日期)) {
+        warnings.push({
+          row,
+          field: '下次跟進日期',
+          message: '下次跟進日期格式不正確',
+          suggestion: '支援格式：MM/DD/YYYY 或 YYYY年M月D日',
+        });
+      }
+      
+      if (isValid) {
+        validRecords++;
+      } else {
+        invalidRecords++;
+      }
+    } catch (error) {
+      warnings.push({
+        row,
+        field: 'general',
+        message: `資料處理失敗: ${error instanceof Error ? error.message : '未知錯誤'}`,
+      });
+      invalidRecords++;
+    }
+  });
+  
+  return {
+    totalRecords: data.length,
+    validRecords,
+    invalidRecords,
+    warnings,
+    duplicateRecords: duplicates,
+  };
+}
+
+/**
+ * 驗證舊系統日期格式
+ */
+function isValidLegacyDate(dateStr: string): boolean {
+  // MM/DD/YYYY 格式
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) {
+    return true;
+  }
+  
+  // YYYY年M月D日 格式
+  if (/^\d{4}年\d{1,2}月\d{1,2}日$/.test(dateStr)) {
+    return true;
+  }
+  
+  // YYYY-MM-DD 格式
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+    return true;
+  }
+  
+  return false;
 }

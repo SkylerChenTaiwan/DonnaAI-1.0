@@ -48,6 +48,7 @@ import { AdminDashboard } from '@/screens/admin/AdminDashboard';
 import { UserManagementScreen } from '@/screens/admin/UserManagementScreen';
 import { ToolManagementScreen } from '@/screens/admin/ToolManagementScreen';
 import { DataImportScreen } from '@/screens/admin/DataImportScreen';
+import { LegacyDataImportScreen } from '@/components/screens/admin/LegacyDataImportScreen';
 import { UsageReportsScreen } from '@/screens/admin/UsageReportsScreen';
 
 // Admin 通用頁面
@@ -245,6 +246,13 @@ export const AppNavigator = () => {
                 title: '資料匯入',
                 headerTintColor: '#1A1A1A',
                 headerBackTitleVisible: false,
+              }}
+            />
+            <Stack.Screen
+              name="LegacyDataImportScreen"
+              component={LegacyDataImportScreen}
+              options={{ 
+                headerShown: false, // 使用自定義 header
               }}
             />
             <Stack.Screen

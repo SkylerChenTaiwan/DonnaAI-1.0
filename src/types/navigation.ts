@@ -48,6 +48,7 @@ export type RootStackParamList = {
   UserManagementScreen: undefined;
   ToolManagementScreen: undefined;
   DataImportScreen: undefined;
+  LegacyDataImportScreen: undefined;
   UsageReportsScreen: undefined;
   
   // Admin 通用頁面

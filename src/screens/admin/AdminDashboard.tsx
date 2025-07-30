@@ -127,6 +127,14 @@ export const AdminDashboard: React.FC = () => {
       permission: 'import_data',
     },
     {
+      id: 'legacy-import',
+      title: '舊系統導入',
+      icon: 'git-pull-request-outline',
+      color: '#FF3B30',
+      route: 'LegacyDataImportScreen',
+      permission: 'import_data',
+    },
+    {
       id: 'reports',
       title: '使用報表',
       icon: 'bar-chart-outline',
