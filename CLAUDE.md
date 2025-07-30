@@ -140,3 +140,54 @@
   - PRPs/README.md 是所有 PRP 的中央狀態追蹤檔案
   - 必須保持此檔案為最新狀態，方便追蹤專案進度
   - 未執行的 PRP 保持原編號：`02-another-feature.md`
+
+### 🤖 Contains Studio Agents 整合
+
+#### Trouble-shooting 工作流程
+當遇到錯誤或測試失敗時，使用以下 agents 組合：
+
+**觸發方式**: `/錯誤` 或自動檢測到錯誤
+**執行流程**:
+1. **test-results-analyzer**: 分析錯誤模式和測試結果
+   - 識別 flaky tests
+   - 產生品質指標報告
+   - 找出測試覆蓋率缺口
+2. **bug-hunter**: 追蹤 bug 來源（需要時）
+   - 使用二分搜尋找出引入 bug 的 commit
+   - 快速定位問題根源
+3. **test-writer-fixer**: 修復測試或程式碼
+   - 區分測試問題和程式碼問題
+   - 保持測試意圖不變
+   - 系統性修復失敗
+4. **code-reviewer**: 審查修復
+   - 確保符合最佳實踐
+   - 防止引入新問題
+5. **workflow-optimizer**: 流程改進
+   - 識別開發瓶頸
+   - 提供自動化建議
+
+#### PRP 管理工作流程
+使用 agents 協作完成 PRP 的規劃、執行和發布：
+
+**觸發方式**: 建立新 PRP 或 `/開發`
+**執行階段**:
+
+**規劃階段** (1-2天):
+- **sprint-prioritizer**: 6天衝刺規劃和優先級排序
+- **spec-writer**: 撰寫詳細技術規格
+- **risk-assessor**: 評估技術和商業風險
+
+**執行階段** (3-4天):
+- **studio-producer**: 協調跨團隊合作
+- **code-shipper**: 管理程式碼分支和合併
+- **dependency-updater**: 處理依賴更新
+
+**發布階段** (1天):
+- **project-shipper**: 執行發布檢查清單
+- **marketing-launcher**: 協調市場推廣（如需要）
+- **support-hero**: 準備客服支援
+
+#### 手動調用特定 Agent
+- `/agent [agent-name]`: 直接調用特定 agent
+- 例如：`/agent bug-hunter` 來追蹤特定 bug 的來源
+- 可用 agents 列表請參考 [contains-studio/agents](https://github.com/contains-studio/agents)
