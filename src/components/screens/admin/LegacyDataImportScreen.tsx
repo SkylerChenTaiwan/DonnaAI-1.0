@@ -20,7 +20,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { Layout } from '@/components/common/Layout';
 import { theme } from '@/theme';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthStore } from '@/stores/authStore';
 import { 
   createImportSession,
   loadAndValidateFile,
@@ -53,7 +53,9 @@ interface ImportState {
 }
 
 export function LegacyDataImportScreen({ navigation }: any) {
-  const { user, organizationId, currentTeamId } = useAuth();
+  const { user } = useAuthStore();
+  const organizationId = user?.organizationId;
+  const currentTeamId = user?.teamIds?.[0]; // 使用第一個團隊作為預設
   const [files, setFiles] = useState<ImportState>({});
   const [isImporting, setIsImporting] = useState(false);
   const [importProgress, setImportProgress] = useState<ImportSessionProgress | null>(null);
@@ -267,7 +269,7 @@ export function LegacyDataImportScreen({ navigation }: any) {
     const newSession = createImportSession(
       organizationId,
       currentTeamId,
-      user.uid
+      user.id
     );
     setSession(newSession);
 
