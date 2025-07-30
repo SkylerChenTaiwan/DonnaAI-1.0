@@ -561,13 +561,16 @@ export const OrganizationDetailScreen: React.FC = () => {
               </TouchableOpacity>
             </View>
             
-            <View style={[styles.assistanceCard, styles.disabledCard]}>
-              <Ionicons name="sync-outline" size={24} color={DesignSystem.colors.text.secondary} />
-              <Text style={[styles.assistanceTitle, styles.disabledTitle]}>舊系統遷移</Text>
-              <Text style={styles.assistanceDesc}>功能開發中，即將推出</Text>
-              <View style={[styles.assistanceButton, styles.disabledButton]}>
-                <Text style={[styles.assistanceButtonText, styles.disabledButtonText]}>開發中</Text>
-              </View>
+            <View style={styles.assistanceCard}>
+              <Ionicons name="sync-outline" size={24} color={DesignSystem.colors.primary} />
+              <Text style={styles.assistanceTitle}>舊系統遷移</Text>
+              <Text style={styles.assistanceDesc}>從舊系統匯入資料</Text>
+              <TouchableOpacity 
+                style={styles.assistanceButton}
+                onPress={() => navigation.navigate('LegacyDataImportScreen' as any)}
+              >
+                <Text style={styles.assistanceButtonText}>開始導入</Text>
+              </TouchableOpacity>
             </View>
           </View>
         )}
