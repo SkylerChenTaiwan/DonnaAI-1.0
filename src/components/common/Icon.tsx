@@ -8,8 +8,11 @@ import React from 'react';
 import { ViewStyle, Platform, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+// Ionicons 的所有可用圖標名稱類型
+type IoniconsGlyphNames = keyof typeof Ionicons.glyphMap;
+
 interface IconProps {
-  name: string;
+  name: IoniconsGlyphNames | string;
   size?: number;
   color?: string;
   style?: ViewStyle;
@@ -175,7 +178,10 @@ export const Icon: React.FC<IconProps> = (props) => {
     return <WebIcon {...props} />;
   }
   
-  return <Ionicons {...props} />;
+  // 確保 name 是字串類型
+  const iconName = typeof props.name === 'string' ? props.name : String(props.name);
+  
+  return <Ionicons {...props} name={iconName as IoniconsGlyphNames} />;
 };
 
 // 匯出類型供外部使用

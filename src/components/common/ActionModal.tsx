@@ -12,6 +12,7 @@ import {
   Pressable,
   Animated,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Icon } from '@/components/common/Icon';
 
 interface Action {

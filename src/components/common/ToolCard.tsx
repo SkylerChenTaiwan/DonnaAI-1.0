@@ -10,6 +10,7 @@ import {
   StyleSheet,
   Image,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Icon } from '@/components/common/Icon';
 
 interface ToolCardProps {

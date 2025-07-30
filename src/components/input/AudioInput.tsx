@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   Modal,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Icon } from '@/components/common/Icon';
 
 import { AudioRecorder } from '@/components/audio/AudioRecorder';

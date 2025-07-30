@@ -13,6 +13,7 @@ import {
   TouchableWithoutFeedback,
   Animated,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Icon } from '@/components/common/Icon';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
