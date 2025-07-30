@@ -10,8 +10,8 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   
-  <!-- 預載字體檔案 -->
-  <link rel="preload" href="/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.6148e7019854f3bde85b633cb88f3c25.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <!-- 使用 CDN 載入 Ionicons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/7.1.2/css/ionicons.min.css">
   
   <style>
     /* 防止 FOUC (Flash of Unstyled Content) */
@@ -19,17 +19,12 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      overflow: hidden;
+      /* 修復滾動問題：移除 overflow: hidden */
     }
     #root {
       height: 100%;
-    }
-    
-    /* 預載 Ionicons 字體 */
-    @font-face {
-      font-family: 'Ionicons';
-      src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.6148e7019854f3bde85b633cb88f3c25.ttf') format('truetype');
-      font-display: swap;
+      display: flex;
+      flex-direction: column;
     }
   </style>
 </head>

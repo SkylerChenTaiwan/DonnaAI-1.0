@@ -12,12 +12,13 @@ export const loadFonts = async () => {
   }
 
   try {
-    await Font.loadAsync({
-      // Ionicons 字體預載
-      Ionicons: require('@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf'),
-    });
+    // 暫時註解掉，使用 CDN 載入
+    // await Font.loadAsync({
+    //   // Ionicons 字體預載
+    //   Ionicons: require('@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf'),
+    // });
     
-    console.log('✅ Fonts loaded successfully');
+    console.log('✅ Using CDN fonts for web');
   } catch (error) {
     console.error('❌ Font loading failed:', error);
   }
@@ -28,27 +29,6 @@ export const preloadWebFonts = () => {
     return;
   }
 
-  // 創建 font-face CSS 規則
-  const style = document.createElement('style');
-  style.textContent = `
-    @font-face {
-      font-family: 'Ionicons';
-      src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.6148e7019854f3bde85b633cb88f3c25.ttf') format('truetype');
-      font-display: swap;
-    }
-  `;
-  
-  document.head.appendChild(style);
-  
-  // 預載字體
-  const link = document.createElement('link');
-  link.rel = 'preload';
-  link.href = '/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.6148e7019854f3bde85b633cb88f3c25.ttf';
-  link.as = 'font';
-  link.type = 'font/ttf';
-  link.crossOrigin = 'anonymous';
-  
-  document.head.appendChild(link);
-  
-  console.log('✅ Web fonts preloaded');
+  // 使用 CDN，不需要手動載入
+  console.log('✅ Using CDN for Ionicons');
 };
