@@ -9,8 +9,6 @@ import '@expo/metro-runtime';
 import React, { useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
-import { useFonts } from 'expo-font';
-import { Ionicons } from '@expo/vector-icons';
 import { AppWithDeveloperMenu } from '@/navigation/AppWithDeveloperMenu';
 import { ErrorBoundary } from '@/services/error/ErrorBoundary';
 import { errorLogger } from '@/services/error/ErrorLogger';
@@ -76,11 +74,6 @@ if (__DEV__) {
 }
 
 export default function App() {
-  // 載入 Ionicons 字體
-  const [fontsLoaded] = useFonts({
-    ...Ionicons.font,
-  });
-
   useEffect(() => {
     // 初始化應用程式
     const initializeApp = async () => {
@@ -91,10 +84,8 @@ export default function App() {
         // 初始化監控服務（Crashlytics 和 Performance）
         await initializeMonitoring();
         
-        // 等待字體載入完成後再隱藏啟動畫面
-        if (fontsLoaded) {
-          await SplashScreen.hideAsync();
-        }
+        // 隱藏啟動畫面
+        await SplashScreen.hideAsync();
         
         if (__DEV__) {
           console.log('🚀 DonnaAI 已啟動 - 環境:', environmentManager.getConfig().name);
@@ -106,15 +97,8 @@ export default function App() {
       }
     };
     
-    if (fontsLoaded) {
-      initializeApp();
-    }
-  }, [fontsLoaded]);
-
-  // 字體尚未載入時不渲染內容
-  if (!fontsLoaded) {
-    return null;
-  }
+    initializeApp();
+  }, []);
 
   return (
     <ErrorBoundary
