@@ -5,31 +5,16 @@
 
 import React, { useState } from 'react';
 import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Typography,
-  Alert,
-  LinearProgress,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
-  Chip,
-  IconButton,
-  Collapse
-} from '@mui/material';
-import {
-  Sync as SyncIcon,
-  CheckCircle as CheckCircleIcon,
-  Error as ErrorIcon,
-  ExpandMore as ExpandMoreIcon,
-  ExpandLess as ExpandLessIcon,
-  PersonAdd as PersonAddIcon,
-  GroupAdd as GroupAddIcon
-} from '@mui/icons-material';
-import { useAuth } from '../../contexts/AuthContext';
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+  Alert as RNAlert,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useAuthStore } from '@/stores/authStore';
 import {
   checkTeamDataConsistency,
   syncOrganizationTeamData,
@@ -38,7 +23,7 @@ import {
 } from '../../utils/team-data-sync';
 
 export const TeamDataSyncTool: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [inconsistencies, setInconsistencies] = useState<Array<{
@@ -145,123 +130,302 @@ export const TeamDataSyncTool: React.FC = () => {
   const getInconsistencyInfo = (type: string) => {
     if (type === 'user_missing_team') {
       return {
-        icon: <PersonAddIcon />,
-        color: 'warning' as const,
+        icon: 'person-add',
+        color: '#ff9800',
         description: '使用者的 teamIds 缺少此團隊'
       };
     } else {
       return {
-        icon: <GroupAddIcon />,
-        color: 'info' as const,
+        icon: 'people',
+        color: '#2196f3',
         description: '團隊的 memberIds 缺少此使用者'
       };
     }
   };
 
   return (
-    <Card>
-      <CardContent>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-          <Typography variant="h6">團隊資料同步工具</Typography>
-          <IconButton
-            size="small"
-            onClick={() => setExpanded(!expanded)}
-          >
-            {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-          </IconButton>
-        </Box>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>團隊資料同步工具</Text>
+        <TouchableOpacity
+          onPress={() => setExpanded(!expanded)}
+          style={styles.expandButton}
+        >
+          <Ionicons
+            name={expanded ? 'chevron-up' : 'chevron-down'}
+            size={24}
+            color="#666"
+          />
+        </TouchableOpacity>
+      </View>
 
-        <Collapse in={expanded}>
-          <Typography variant="body2" color="textSecondary" mb={3}>
+      {expanded && (
+        <View style={styles.content}>
+          <Text style={styles.description}>
             此工具用於檢查和修復使用者團隊資料（User.teamIds 和 Team.memberIds）的不一致問題。
-          </Typography>
+          </Text>
 
           {message && (
-            <Alert severity={message.type} sx={{ mb: 2 }} onClose={() => setMessage(null)}>
-              {message.text}
-            </Alert>
+            <View style={[styles.alert, styles[`alert${message.type}`]]}>
+              <Text style={styles.alertText}>{message.text}</Text>
+              <TouchableOpacity
+                onPress={() => setMessage(null)}
+                style={styles.alertClose}
+              >
+                <Ionicons name="close" size={20} color="#666" />
+              </TouchableOpacity>
+            </View>
           )}
 
-          <Box display="flex" gap={2} mb={3}>
-            <Button
-              variant="outlined"
-              startIcon={<SyncIcon />}
-              onClick={handleCheckConsistency}
+          <View style={styles.buttonRow}>
+            <TouchableOpacity
+              style={[styles.button, styles.outlineButton, (loading || syncing) && styles.buttonDisabled]}
+              onPress={handleCheckConsistency}
               disabled={loading || syncing}
             >
-              檢查一致性
-            </Button>
+              <Ionicons name="sync" size={20} color="#1976d2" style={{ marginRight: 8 }} />
+              <Text style={styles.outlineButtonText}>檢查一致性</Text>
+            </TouchableOpacity>
             
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<SyncIcon />}
-              onClick={handleFullSync}
+            <TouchableOpacity
+              style={[styles.button, styles.primaryButton, (syncing || loading || inconsistencies.length === 0) && styles.buttonDisabled]}
+              onPress={handleFullSync}
               disabled={syncing || loading || inconsistencies.length === 0}
             >
-              執行完整同步
-            </Button>
-          </Box>
+              <Ionicons name="sync" size={20} color="white" style={{ marginRight: 8 }} />
+              <Text style={styles.primaryButtonText}>執行完整同步</Text>
+            </TouchableOpacity>
+          </View>
 
-          {(loading || syncing) && <LinearProgress sx={{ mb: 2 }} />}
+          {(loading || syncing) && (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color="#1976d2" />
+            </View>
+          )}
 
           {inconsistencies.length > 0 && (
             <>
-              <Divider sx={{ my: 2 }} />
-              <Typography variant="subtitle2" gutterBottom>
-                發現的不一致項目：
-              </Typography>
+              <View style={styles.divider} />
+              <Text style={styles.subtitle}>發現的不一致項目：</Text>
               
-              <List>
+              <ScrollView style={styles.list}>
                 {inconsistencies.map((item, index) => {
                   const info = getInconsistencyInfo(item.type);
                   return (
-                    <ListItem
-                      key={index}
-                      secondaryAction={
-                        <Button
-                          size="small"
-                          startIcon={<SyncIcon />}
-                          onClick={() => handleSyncItem(item)}
-                          disabled={syncing}
-                        >
-                          同步
-                        </Button>
-                      }
-                    >
-                      <ListItemText
-                        primary={
-                          <Box display="flex" alignItems="center" gap={1}>
-                            <Chip
-                              size="small"
-                              icon={info.icon}
-                              label={item.type}
-                              color={info.color}
-                            />
-                            <Typography variant="body2">
-                              {item.userName || item.userId} - {item.teamName || item.teamId}
-                            </Typography>
-                          </Box>
-                        }
-                        secondary={info.description}
-                      />
-                    </ListItem>
+                    <View key={index} style={styles.listItem}>
+                      <View style={styles.listItemContent}>
+                        <View style={styles.chipContainer}>
+                          <View style={[styles.chip, { backgroundColor: info.color + '20' }]}>
+                            <Ionicons name={info.icon as any} size={16} color={info.color} />
+                            <Text style={[styles.chipText, { color: info.color }]}>
+                              {item.type === 'user_missing_team' ? '使用者缺少團隊' : '團隊缺少使用者'}
+                            </Text>
+                          </View>
+                        </View>
+                        <Text style={styles.itemText}>
+                          {item.userName || item.userId} - {item.teamName || item.teamId}
+                        </Text>
+                        <Text style={styles.itemDescription}>{info.description}</Text>
+                      </View>
+                      <TouchableOpacity
+                        style={[styles.syncButton, syncing && styles.buttonDisabled]}
+                        onPress={() => handleSyncItem(item)}
+                        disabled={syncing}
+                      >
+                        <Ionicons name="sync" size={16} color="#1976d2" style={{ marginRight: 4 }} />
+                        <Text style={styles.syncButtonText}>同步</Text>
+                      </TouchableOpacity>
+                    </View>
                   );
                 })}
-              </List>
+              </ScrollView>
             </>
           )}
 
           {inconsistencies.length === 0 && !loading && (
-            <Box textAlign="center" py={3}>
-              <CheckCircleIcon color="success" sx={{ fontSize: 48, mb: 1 }} />
-              <Typography variant="body2" color="textSecondary">
+            <View style={styles.successContainer}>
+              <Ionicons name="checkmark-circle" size={48} color="#4caf50" />
+              <Text style={styles.successText}>
                 資料檢查完成，所有團隊成員資料都是一致的！
-              </Typography>
-            </Box>
+              </Text>
+            </View>
           )}
-        </Collapse>
-      </CardContent>
-    </Card>
+        </View>
+      )}
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white',
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    margin: 16,
+    padding: 16,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#333',
+  },
+  expandButton: {
+    padding: 4,
+  },
+  content: {
+    flex: 1,
+  },
+  description: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 16,
+    lineHeight: 20,
+  },
+  alert: {
+    padding: 12,
+    borderRadius: 4,
+    marginBottom: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  alertsuccess: {
+    backgroundColor: '#e8f5e9',
+  },
+  alerterror: {
+    backgroundColor: '#ffebee',
+  },
+  alertinfo: {
+    backgroundColor: '#e3f2fd',
+  },
+  alertText: {
+    flex: 1,
+    fontSize: 14,
+    color: '#333',
+  },
+  alertClose: {
+    padding: 4,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 16,
+  },
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 4,
+    flex: 1,
+  },
+  outlineButton: {
+    borderWidth: 1,
+    borderColor: '#1976d2',
+    backgroundColor: 'transparent',
+  },
+  primaryButton: {
+    backgroundColor: '#1976d2',
+  },
+  buttonDisabled: {
+    opacity: 0.5,
+  },
+  outlineButtonText: {
+    color: '#1976d2',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  primaryButtonText: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  loadingContainer: {
+    paddingVertical: 20,
+    alignItems: 'center',
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#e0e0e0',
+    marginVertical: 16,
+  },
+  subtitle: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#333',
+    marginBottom: 12,
+  },
+  list: {
+    maxHeight: 300,
+  },
+  listItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+  },
+  listItemContent: {
+    flex: 1,
+  },
+  chipContainer: {
+    flexDirection: 'row',
+    marginBottom: 8,
+  },
+  chip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 16,
+    gap: 4,
+  },
+  chipText: {
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  itemText: {
+    fontSize: 14,
+    color: '#333',
+    marginBottom: 4,
+  },
+  itemDescription: {
+    fontSize: 12,
+    color: '#666',
+  },
+  syncButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#1976d2',
+  },
+  syncButtonText: {
+    fontSize: 12,
+    color: '#1976d2',
+  },
+  successContainer: {
+    alignItems: 'center',
+    paddingVertical: 32,
+  },
+  successText: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 12,
+    textAlign: 'center',
+  },
+});

@@ -4,7 +4,8 @@
  */
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, Text, StyleSheet, ScrollView, PanGestureHandler, GestureHandlerRootView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { PanGestureHandler, GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Audio } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
 import { Button } from '@/components/common/Button';
