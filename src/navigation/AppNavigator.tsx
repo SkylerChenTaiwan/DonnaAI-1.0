@@ -3,7 +3,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, Text, ActivityIndicator } from 'react-native';
+import { TouchableOpacity, Text, ActivityIndicator, View, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { DesignSystem } from '@/theme/designSystem';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -93,6 +93,11 @@ export const AppNavigator = () => {
       screenOptions={{
           headerShown: false,
           animationTypeForReplace: isAuthenticated ? 'push' : 'pop',
+          headerBackImage: () => (
+            <View style={{ paddingLeft: Platform.OS === 'web' ? 10 : 0 }}>
+              <Icon name="chevron-back" size={24} color="#1A1A1A" />
+            </View>
+          ),
         }}
       >
         {isAuthenticated ? (
