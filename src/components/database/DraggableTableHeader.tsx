@@ -88,16 +88,14 @@ const WebDraggableHeader: React.FC<DraggableTableHeaderProps> = ({
 
   return (
     <View style={styles.tableHeader}>
-      {/* 多選模式的核取方塊欄 */}
-      {multiSelectMode && (
-        <View style={styles.checkboxColumn}>
-          <TouchableOpacity style={styles.headerCheckbox}>
-            <View style={styles.checkbox}>
-              <Icon name="checkmark" size={14} color="#fff" />
-            </View>
-          </TouchableOpacity>
-        </View>
-      )}
+      {/* 核取方塊欄 - 始終顯示 */}
+      <View style={styles.checkboxColumn}>
+        <TouchableOpacity style={styles.headerCheckbox}>
+          <View style={styles.checkbox}>
+            {/* TODO: 處理全選狀態 */}
+          </View>
+        </TouchableOpacity>
+      </View>
       
       {/* 可拖動的欄位標題 */}
       {columnOrder.map((originalIndex, currentIndex) => {
@@ -125,7 +123,6 @@ const WebDraggableHeader: React.FC<DraggableTableHeaderProps> = ({
             <TouchableOpacity
               style={[
                 styles.headerCell,
-                currentIndex === 0 && !multiSelectMode && styles.firstHeaderCell,
               ]}
               onPress={() => column.sortable && onSort && onSort(column.key)}
               disabled={!column.sortable || !onSort}
@@ -176,16 +173,14 @@ const NativeDraggableHeader: React.FC<DraggableTableHeaderProps> = ({
 }) => {
   return (
     <View style={styles.tableHeader}>
-      {/* 多選模式的核取方塊欄 */}
-      {multiSelectMode && (
-        <View style={styles.checkboxColumn}>
-          <TouchableOpacity style={styles.headerCheckbox}>
-            <View style={styles.checkbox}>
-              <Icon name="checkmark" size={14} color="#fff" />
-            </View>
-          </TouchableOpacity>
-        </View>
-      )}
+      {/* 核取方塊欄 - 始終顯示 */}
+      <View style={styles.checkboxColumn}>
+        <TouchableOpacity style={styles.headerCheckbox}>
+          <View style={styles.checkbox}>
+            {/* TODO: 處理全選狀態 */}
+          </View>
+        </TouchableOpacity>
+      </View>
       
       {/* 欄位標題 */}
       {columns.map((column, index) => (
@@ -193,7 +188,6 @@ const NativeDraggableHeader: React.FC<DraggableTableHeaderProps> = ({
           key={column.key}
           style={[
             styles.headerCell,
-            index === 0 && !multiSelectMode && styles.firstHeaderCell,
             column.width ? { width: column.width } : { flex: 1 }
           ]}
           onPress={() => column.sortable && onSort && onSort(column.key)}
@@ -238,9 +232,9 @@ const styles = StyleSheet.create({
   tableHeader: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#e9e9e7',
+    borderBottomColor: '#E9E9E7',
     backgroundColor: '#ffffff',
-    minHeight: 42,
+    minHeight: 36,
     alignItems: 'center',
   },
   
@@ -287,7 +281,7 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     borderWidth: 1,
-    borderColor: '#e9e9e7',
+    borderColor: '#DDDDDB',
     borderRadius: 3,
     backgroundColor: '#ffffff',
     alignItems: 'center',

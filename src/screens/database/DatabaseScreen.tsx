@@ -431,8 +431,18 @@ export const DatabaseScreen: React.FC = () => {
 
 
   return (
-    <Layout scrollable={false}>
+    <Layout scrollable={false} backgroundColor="#F7F6F4">
       <View style={[styles.container, isDesktop && styles.desktopContainer]}>
+        {/* 頁面標題 */}
+        {isDesktop && (
+          <View style={styles.pageHeader}>
+            <Text style={styles.pageTitle}>新資料庫</Text>
+            <View style={styles.pageActions}>
+              {/* 分享、更多選項等 */}
+            </View>
+          </View>
+        )}
+        
         <View style={styles.contentWrapper}>
           {/* Tab 導航 - 水平顯示（僅行動版） */}
           {!isDesktop && (
@@ -650,13 +660,35 @@ export const DatabaseScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#F7F6F4',
   },
   desktopContainer: {
     // 不需要設定 marginLeft，WebNavigator 會處理佈局
   },
+  pageHeader: {
+    paddingHorizontal: responsive(16, 96),
+    paddingTop: responsive(20, 45),
+    paddingBottom: responsive(12, 12),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  pageTitle: {
+    fontSize: responsive(28, 40),
+    fontWeight: '700',
+    color: '#37352F',
+  },
+  pageActions: {
+    flexDirection: 'row',
+    gap: 12,
+  },
   contentWrapper: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
+    marginHorizontal: responsive(0, 96),
+    marginBottom: responsive(0, 96),
+    borderRadius: responsive(0, 3),
+    overflow: 'hidden',
   },
   toolbarContainer: {
     flexDirection: 'row',
@@ -665,7 +697,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#eeeeec',
+    borderBottomColor: '#E9E9E7',
     gap: 16,
   },
   searchBar: {
@@ -675,6 +707,7 @@ const styles = StyleSheet.create({
   },
   tableContainer: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
   },
   tabContainer: {
     flexDirection: 'row',

@@ -242,34 +242,34 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
     // 否則使用原本的表頭
     return (
       <View style={styles.tableHeader}>
-        {/* 多選模式的核取方塊欄 */}
-        {multiSelectMode && (
-          <View style={styles.checkboxColumn}>
-            <TouchableOpacity
-              style={styles.headerCheckbox}
-              onPress={() => {
+        {/* 核取方塊欄 - 始終顯示 */}
+        <View style={styles.checkboxColumn}>
+          <TouchableOpacity
+            style={styles.headerCheckbox}
+            onPress={() => {
+              if (onSelect) {
                 if (selectedItems.length === data.length && data.length > 0) {
-                  onSelect?.([]);
+                  onSelect([]);
                 } else {
-                  onSelect?.(data.map(item => item.id));
+                  onSelect(data.map(item => item.id));
                 }
-              }}
-            >
-              <View style={[
-                styles.checkbox,
-                selectedItems.length === data.length && data.length > 0 && styles.checkboxChecked,
-                selectedItems.length > 0 && selectedItems.length < data.length && styles.checkboxIndeterminate,
-              ]}>
-                {selectedItems.length === data.length && data.length > 0 && (
-                  <Icon name="checkmark" size={14} color="#fff" />
-                )}
-                {selectedItems.length > 0 && selectedItems.length < data.length && (
-                  <View style={styles.indeterminateLine} />
-                )}
-              </View>
-            </TouchableOpacity>
-          </View>
-        )}
+              }
+            }}
+          >
+            <View style={[
+              styles.checkbox,
+              selectedItems.length === data.length && data.length > 0 && styles.checkboxChecked,
+              selectedItems.length > 0 && selectedItems.length < data.length && styles.checkboxIndeterminate,
+            ]}>
+              {selectedItems.length === data.length && data.length > 0 && (
+                <Icon name="checkmark" size={14} color="#fff" />
+              )}
+              {selectedItems.length > 0 && selectedItems.length < data.length && (
+                <View style={styles.indeterminateLine} />
+              )}
+            </View>
+          </TouchableOpacity>
+        </View>
         
         {/* 欄位標題 */}
         {columns.map((column, index) => (
@@ -277,7 +277,6 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
             key={column.key}
             style={[
               styles.headerCell,
-              index === 0 && !multiSelectMode && styles.firstHeaderCell,
               column.width ? { width: column.width } : { flex: 1 }
             ]}
             onPress={() => column.sortable && onSort && onSort(column.key)}
@@ -348,18 +347,19 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
             isSelected && styles.tableRowSelected,
           ]}
           onPress={() => {
-            if (multiSelectMode) {
-              toggleSelection(item.id);
-            } else if (onRowPress) {
+            if (onRowPress && !multiSelectMode) {
               onRowPress(item);
             }
           }}
           onHoverIn={() => Platform.OS === 'web' && setHoveredRow(item.id)}
           onHoverOut={() => Platform.OS === 'web' && setHoveredRow(null)}
         >
-          {/* 多選核取方塊 */}
-          {multiSelectMode && (
-            <View style={styles.checkboxColumn}>
+          {/* 核取方塊 - 始終顯示 */}
+          <View style={styles.checkboxColumn}>
+            <TouchableOpacity
+              style={styles.rowCheckbox}
+              onPress={() => toggleSelection(item.id)}
+            >
               <View style={[
                 styles.checkbox,
                 isSelected && styles.checkboxChecked,
@@ -368,8 +368,8 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
                   <Icon name="checkmark" size={14} color="#fff" />
                 )}
               </View>
-            </View>
-          )}
+            </TouchableOpacity>
+          </View>
           
           {/* 資料欄位 */}
           {columns.map((column, index) => {
@@ -383,7 +383,6 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
                 key={column.key}
                 style={[
                   styles.tableCell,
-                  index === 0 && !multiSelectMode && styles.firstTableCell,
                   column.width ? { width: column.width } : { flex: 1 },
                   isCellSelected && styles.selectedCell,
                   isCellFocused && styles.focusedCell,
@@ -420,8 +419,10 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
 
     return (
       <View style={styles.tableRow}>
-        {/* 多選模式的空格 */}
-        {multiSelectMode && <View style={styles.checkboxColumn} />}
+        {/* 核取方塊欄 - 保持空白 */}
+        <View style={styles.checkboxColumn}>
+          <View style={[styles.checkbox, styles.checkboxDisabled]} />
+        </View>
         
         {/* 可編輯欄位 */}
         {columns.map((column, index) => (
@@ -429,7 +430,6 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
             key={column.key}
             style={[
               styles.tableCell,
-              index === 0 && !multiSelectMode && styles.firstTableCell,
               column.width ? { width: column.width } : { flex: 1 }
             ]}
           >
@@ -512,17 +512,19 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 3,
+    overflow: 'hidden',
   },
   
   // 表頭樣式
   tableHeader: {
     flexDirection: 'row',
-    borderBottomWidth: 0,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E9E9E7',
     backgroundColor: '#ffffff',
-    minHeight: 32,
+    minHeight: 36,
     alignItems: 'center',
-    paddingVertical: 4,
   },
   
   headerCell: {
@@ -558,11 +560,15 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   
+  rowCheckbox: {
+    padding: 2,
+  },
+  
   checkbox: {
     width: 16,
     height: 16,
     borderWidth: 1,
-    borderColor: '#e9e9e7',
+    borderColor: '#DDDDDB',
     borderRadius: 3,
     backgroundColor: '#ffffff',
     alignItems: 'center',
@@ -577,6 +583,11 @@ const styles = StyleSheet.create({
   checkboxIndeterminate: {
     backgroundColor: '#2383e2',
     borderColor: '#2383e2',
+  },
+  
+  checkboxDisabled: {
+    opacity: 0.5,
+    borderColor: '#E9E9E7',
   },
   
   indeterminateLine: {
@@ -658,7 +669,7 @@ const styles = StyleSheet.create({
   },
   
   tableRowHovered: {
-    backgroundColor: '#f7f6f3',
+    backgroundColor: '#F7F6F3',
   },
   
   tableRowSelected: {
@@ -678,7 +689,8 @@ const styles = StyleSheet.create({
   
   cellText: {
     fontSize: 14,
-    color: '#37352f',
+    color: '#37352F',
+    lineHeight: 20,
   },
   
   // 底部新增按鈕
