@@ -19,9 +19,11 @@ interface ToolbarProps {
   onSort: () => void;
   onViewChange?: () => void;
   onSearch?: () => void;
+  onMultiSelect?: () => void;
   currentView?: 'table' | 'board' | 'calendar' | 'list' | 'gallery';
   hasActiveFilters?: boolean;
   hasActiveSort?: boolean;
+  multiSelectMode?: boolean;
 }
 
 export const DatabaseToolbar: React.FC<ToolbarProps> = ({ 
@@ -29,9 +31,11 @@ export const DatabaseToolbar: React.FC<ToolbarProps> = ({
   onSort, 
   onViewChange,
   onSearch,
+  onMultiSelect,
   currentView = 'table',
   hasActiveFilters = false,
   hasActiveSort = false,
+  multiSelectMode = false,
 }) => {
   // 視圖類型對應的圖標和文字
   const viewConfig = {
@@ -121,6 +125,30 @@ export const DatabaseToolbar: React.FC<ToolbarProps> = ({
           </Text>
         </TouchableOpacity>
 
+        {/* 多選 */}
+        {onMultiSelect && (
+          <TouchableOpacity 
+            style={[
+              styles.toolButton,
+              multiSelectMode && styles.activeToolButton
+            ]} 
+            onPress={onMultiSelect}
+            activeOpacity={0.7}
+          >
+            <Icon 
+              name="checkbox-outline" 
+              size={16} 
+              color={multiSelectMode ? "#FF6B6B" : "#666"} 
+            />
+            <Text style={[
+              styles.toolbarText,
+              multiSelectMode && styles.activeToolbarText
+            ]}>
+              多選
+            </Text>
+          </TouchableOpacity>
+        )}
+
         {/* 更多選項 */}
         <TouchableOpacity 
           style={styles.toolButton}
@@ -138,10 +166,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: responsive({ mobile: 8, tablet: 12, desktop: 16 }),
-    paddingVertical: responsive({ mobile: 6, tablet: 8, desktop: 10 }),
+    paddingHorizontal: 16,
+    paddingVertical: 6,
     backgroundColor: '#fff',
-    minHeight: responsive({ mobile: 40, tablet: 44, desktop: 48 }),
+    minHeight: 36,
     borderBottomWidth: 1,
     borderBottomColor: '#eeeeec',
   },
@@ -152,15 +180,15 @@ const styles = StyleSheet.create({
   toolbarRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: responsive({ mobile: 2, tablet: 4, desktop: 6 }),
+    gap: 4,
   },
   viewButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: responsive({ mobile: 4, tablet: 6, desktop: 8 }),
-    paddingHorizontal: responsive({ mobile: 10, tablet: 12, desktop: 14 }),
-    paddingVertical: responsive({ mobile: 6, tablet: 7, desktop: 8 }),
-    borderRadius: responsive({ mobile: 4, tablet: 5, desktop: 6 }),
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
     backgroundColor: '#f9f8f7',
     ...webOnly({
       cursor: 'pointer',
@@ -173,10 +201,10 @@ const styles = StyleSheet.create({
   toolButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: responsive({ mobile: 4, tablet: 5, desktop: 6 }),
-    paddingHorizontal: responsive({ mobile: 8, tablet: 10, desktop: 12 }),
-    paddingVertical: responsive({ mobile: 5, tablet: 6, desktop: 7 }),
-    borderRadius: responsive({ mobile: 3, tablet: 4, desktop: 5 }),
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
     position: 'relative',
     ...webOnly({
       cursor: 'pointer',
@@ -190,7 +218,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 107, 107, 0.1)',
   },
   toolbarText: {
-    fontSize: responsive({ mobile: 13, tablet: 14, desktop: 15 }),
+    fontSize: 13,
     color: '#666',
     fontWeight: '500',
   },

@@ -16,13 +16,14 @@ import {
 } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { Icon } from '@/components/common/Icon';
+import { EditableCell } from '@/components/common/EditableCell';
 import { TableColumn, TableData } from '@/types/table';
 import { responsive } from '@/styles/web';
 
 interface NotionStyleTableV2Props {
   data: TableData[];
   columns: TableColumn[];
-  onAddRow: () => void;
+  onAddRow: (rowData?: Record<string, any>) => void | Promise<void>;
   onAddColumn?: () => void;
   onRowPress?: (item: TableData) => void;
   multiSelectMode?: boolean;
@@ -36,6 +37,7 @@ interface NotionStyleTableV2Props {
     direction: 'asc' | 'desc';
   };
   onSort?: (key: string) => void;
+  onUpdateCell?: (rowId: string, columnKey: string, value: any) => void | Promise<void>;
 }
 
 export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
@@ -52,9 +54,13 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
   loading = false,
   sortConfig,
   onSort,
+  onUpdateCell,
 }) => {
   const [hoveredRow, setHoveredRow] = useState<string | null>(null);
   const [hoveredAddNew, setHoveredAddNew] = useState(false);
+  const [isAddingRow, setIsAddingRow] = useState(false);
+  const [newRowData, setNewRowData] = useState<Record<string, any>>({});
+  const [editingCell, setEditingCell] = useState<{ rowId: string; columnKey: string } | null>(null);
 
   const toggleSelection = useCallback((itemId: string) => {
     if (!onSelect) return;
@@ -65,6 +71,56 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
     
     onSelect(newSelection);
   }, [selectedItems, onSelect]);
+
+  // 處理內聯新增列
+  const handleInlineAdd = () => {
+    setIsAddingRow(true);
+    // 創建空白行資料結構
+    const emptyRow = columns.reduce((acc, col) => {
+      acc[col.key] = '';
+      return acc;
+    }, {} as Record<string, any>);
+    setNewRowData(emptyRow);
+  };
+
+  // 儲存新列
+  const handleSaveNewRow = async () => {
+    try {
+      await onAddRow(newRowData);
+      setIsAddingRow(false);
+      setNewRowData({});
+    } catch (error) {
+      console.error('Failed to add row:', error);
+    }
+  };
+
+  // 取消新增列
+  const handleCancelNewRow = () => {
+    setIsAddingRow(false);
+    setNewRowData({});
+  };
+
+  // 處理儲存格編輯
+  const handleCellEdit = async (rowId: string, columnKey: string, value: any) => {
+    if (onUpdateCell) {
+      try {
+        await onUpdateCell(rowId, columnKey, value);
+      } catch (error) {
+        console.error('Failed to update cell:', error);
+      }
+    }
+    setEditingCell(null);
+  };
+
+  // 根據欄位類型取得輸入類型
+  const getInputTypeForColumn = (column: TableColumn): 'text' | 'number' | 'email' | 'phone' | 'multiline' => {
+    // 可以根據欄位的 key 或其他屬性來決定輸入類型
+    if (column.key.includes('email')) return 'email';
+    if (column.key.includes('phone')) return 'phone';
+    if (column.key.includes('amount') || column.key.includes('price')) return 'number';
+    if (column.key.includes('note') || column.key.includes('description')) return 'multiline';
+    return 'text';
+  };
 
   // 渲染表頭
   const renderHeader = () => (
@@ -198,35 +254,95 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
           )}
           
           {/* 資料欄位 */}
-          {columns.map((column, index) => (
-            <View
-              key={column.key}
-              style={[
-                styles.tableCell,
-                index === 0 && !multiSelectMode && styles.firstTableCell,
-                column.width ? { width: column.width } : { flex: 1 }
-              ]}
-            >
-              {column.render ? (
-                column.render(item[column.key], item)
-              ) : (
-                <Text style={styles.cellText} numberOfLines={1}>
-                  {item[column.key] || ''}
-                </Text>
-              )}
-            </View>
-          ))}
+          {columns.map((column, index) => {
+            const isEditing = editingCell?.rowId === item.id && editingCell?.columnKey === column.key;
+            
+            return (
+              <View
+                key={column.key}
+                style={[
+                  styles.tableCell,
+                  index === 0 && !multiSelectMode && styles.firstTableCell,
+                  column.width ? { width: column.width } : { flex: 1 }
+                ]}
+              >
+                <EditableCell
+                  value={item[column.key]}
+                  isEditing={isEditing}
+                  onStartEdit={() => setEditingCell({ rowId: item.id, columnKey: column.key })}
+                  onFinishEdit={(value) => handleCellEdit(item.id, column.key, value)}
+                  render={column.render}
+                  item={item}
+                  inputType={getInputTypeForColumn(column)}
+                  disabled={!onUpdateCell || multiSelectMode}
+                />
+              </View>
+            );
+          })}
         </Pressable>
       );
     },
-    [columns, selectedItems, multiSelectMode, hoveredRow, toggleSelection, onRowPress]
+    [columns, selectedItems, multiSelectMode, hoveredRow, toggleSelection, onRowPress, editingCell, handleCellEdit, onUpdateCell, getInputTypeForColumn]
   );
+
+  // 渲染內聯新增列
+  const renderNewRow = () => {
+    if (!isAddingRow) return null;
+
+    return (
+      <View style={[styles.tableRow, styles.newRow]}>
+        {/* 多選模式的空格 */}
+        {multiSelectMode && <View style={styles.checkboxColumn} />}
+        
+        {/* 可編輯欄位 */}
+        {columns.map((column, index) => (
+          <View
+            key={column.key}
+            style={[
+              styles.tableCell,
+              index === 0 && !multiSelectMode && styles.firstTableCell,
+              column.width ? { width: column.width } : { flex: 1 }
+            ]}
+          >
+            <EditableCell
+              value={newRowData[column.key]}
+              isEditing={true}
+              onStartEdit={() => {}}
+              onFinishEdit={(value) => {
+                setNewRowData({ ...newRowData, [column.key]: value });
+              }}
+              inputType={getInputTypeForColumn(column)}
+              placeholder={`輸入${column.title}`}
+            />
+          </View>
+        ))}
+        
+        {/* 操作按鈕 */}
+        <View style={styles.newRowActions}>
+          <TouchableOpacity
+            style={styles.saveButton}
+            onPress={handleSaveNewRow}
+            activeOpacity={0.7}
+          >
+            <Icon name="checkmark" size={20} color="#4CAF50" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.cancelButton}
+            onPress={handleCancelNewRow}
+            activeOpacity={0.7}
+          >
+            <Icon name="close" size={20} color="#DC3545" />
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  };
 
   // 渲染底部新增按鈕
   const renderFooter = () => (
     <TouchableOpacity 
       style={styles.footerAddButton}
-      onPress={onAddRow}
+      onPress={handleInlineAdd}
       activeOpacity={0.7}
     >
       <Icon name="add" size={16} color="#91918e" />
@@ -253,7 +369,12 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             ) : undefined
           }
-          ListFooterComponent={renderFooter()}
+          ListFooterComponent={
+            <>
+              {renderNewRow()}
+              {renderFooter()}
+            </>
+          }
           contentContainerStyle={styles.listContent}
         />
       )}
@@ -450,5 +571,37 @@ const styles = StyleSheet.create({
   footerAddText: {
     fontSize: 14,
     color: '#91918e',
+  },
+  
+  // 新增列樣式
+  newRow: {
+    backgroundColor: '#f7f6f3',
+    borderBottomWidth: 2,
+    borderBottomColor: '#2383e2',
+  },
+  
+  newRowActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 8,
+  },
+  
+  saveButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  
+  cancelButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(220, 53, 69, 0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

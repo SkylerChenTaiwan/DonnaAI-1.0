@@ -2,7 +2,7 @@
  * 資料庫主頁面 - Notion 風格重新設計版本
  */
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import {
   View,
   Text,
@@ -17,8 +17,9 @@ import { Layout } from '@/components/common/Layout';
 import { ResponsiveLayout } from '@/components/common/ResponsiveLayout';
 import { SearchBar } from '@/components/common/SearchBar';
 import { FilterBadge, FilterCondition } from '@/components/common/FilterBadge';
-import { FilterModal } from '@/components/common/FilterModal';
 import { ColumnSettingsModal } from '@/components/common/ColumnSettingsModal';
+import { FilterPopover } from '@/components/database/FilterPopover';
+import { SortPopover } from '@/components/database/SortPopover';
 import { EmptyState } from '@/components/database/EmptyState';
 import { NotionStyleTable } from '@/components/database/NotionStyleTable';
 import { NotionStyleTableDebug } from '@/components/database/NotionStyleTableDebug';
@@ -68,7 +69,8 @@ export const DatabaseScreen: React.FC = () => {
   const [multiSelectMode, setMultiSelectMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilters, setActiveFilters] = useState<FilterCondition[]>([]);
-  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [showFilterPopover, setShowFilterPopover] = useState(false);
+  const [showSortPopover, setShowSortPopover] = useState(false);
   const [currentSort, setCurrentSort] = useState<SortConfig | null>(null);
   const [showBatchEdit, setShowBatchEdit] = useState(false);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
@@ -85,6 +87,10 @@ export const DatabaseScreen: React.FC = () => {
   const { customers, isLoading: customerLoading, fetchCustomers } = useCustomerStore();
   const { records, isLoading: recordLoading, fetchRecords } = useRecordStore();
   const { tasks, isLoading: taskLoading, fetchTasks } = useTaskStore();
+
+  // Refs for popover anchors
+  const filterButtonRef = useRef<any>(null);
+  const sortButtonRef = useRef<any>(null);
 
   // 初始載入資料
   useEffect(() => {
@@ -348,16 +354,9 @@ export const DatabaseScreen: React.FC = () => {
     showToast('success', `成功新增欄位：${column.title}`);
   }, [activeTab]);
 
-  const handleSort = useCallback((key: string) => {
-    setCurrentSort(prev => {
-      if (prev?.key === key) {
-        return {
-          key,
-          direction: prev.direction === 'asc' ? 'desc' : 'asc',
-        };
-      }
-      return { key, direction: 'asc' };
-    });
+  const handleSort = useCallback((sort: SortConfig | null) => {
+    setCurrentSort(sort);
+    setShowSortPopover(false);
   }, []);
 
   // 鍵盤快捷鍵
@@ -368,14 +367,8 @@ export const DatabaseScreen: React.FC = () => {
       const searchInput = document.querySelector('input[placeholder*="搜尋"]') as HTMLInputElement;
       searchInput?.focus();
     },
-    onFilter: () => setShowFilterModal(true),
-    onSort: () => {
-      // 排序第一個可排序的欄位
-      const firstSortableColumn = currentColumns.find(col => col.sortable);
-      if (firstSortableColumn) {
-        handleSort(firstSortableColumn.key);
-      }
-    },
+    onFilter: () => setShowFilterPopover(true),
+    onSort: () => setShowSortPopover(true),
     onMultiSelect: () => setMultiSelectMode(!multiSelectMode),
     onEditMode: () => {
       // 如果有編輯模式，在這裡切換
@@ -418,8 +411,9 @@ export const DatabaseScreen: React.FC = () => {
     <Layout scrollable={false}>
       <View style={[styles.container, isDesktop && styles.desktopContainer]}>
         <View style={styles.contentWrapper}>
-          {/* Tab 導航 - 水平顯示 */}
-          <View style={styles.tabContainer}>
+          {/* Tab 導航 - 水平顯示（僅行動版） */}
+          {!isDesktop && (
+            <View style={styles.tabContainer}>
               {tabs.map((tab) => (
                 <TouchableOpacity
                   key={tab.id}
@@ -453,6 +447,7 @@ export const DatabaseScreen: React.FC = () => {
                 </TouchableOpacity>
               ))}
             </View>
+          )}
           
           {/* 搜尋列 */}
           <View style={styles.searchBarContainer}>
@@ -465,17 +460,16 @@ export const DatabaseScreen: React.FC = () => {
           </View>
           
           {/* Notion 風格工具列 */}
-          <DatabaseToolbar
-            onFilter={() => setShowFilterModal(true)}
-            onSort={() => {
-              const firstSortableColumn = currentColumns.find(col => col.sortable);
-              if (firstSortableColumn) {
-                handleSort(firstSortableColumn.key);
-              }
-            }}
-            hasActiveFilters={activeFilters.length > 0}
-            hasActiveSort={currentSort !== null}
-          />
+          <View ref={filterButtonRef}>
+            <DatabaseToolbar
+              onFilter={() => setShowFilterPopover(true)}
+              onSort={() => setShowSortPopover(true)}
+              onMultiSelect={() => setMultiSelectMode(!multiSelectMode)}
+              multiSelectMode={multiSelectMode}
+              hasActiveFilters={activeFilters.length > 0}
+              hasActiveSort={currentSort !== null}
+            />
+          </View>
           
           {/* 篩選條件顯示 */}
           <FilterBadge
@@ -507,21 +501,47 @@ export const DatabaseScreen: React.FC = () => {
                 refreshing={currentData.loading}
                 onRefresh={handleRefresh}
                 sortConfig={currentSort}
-                onSort={handleSort}
+                onSort={(key) => {
+                  // 處理列標題點擊的排序
+                  const newSort = currentSort?.key === key 
+                    ? { key, direction: currentSort.direction === 'asc' ? 'desc' : 'asc' as const }
+                    : { key, direction: 'asc' as const };
+                  setCurrentSort(newSort);
+                }}
+                onUpdateCell={async (rowId, columnKey, value) => {
+                  // 根據 activeTab 更新對應的資料
+                  showToast('info', '儲存格編輯功能開發中');
+                }}
+                onAddRow={async (rowData) => {
+                  if (rowData) {
+                    // 內聯新增列
+                    handleAddRow();
+                  }
+                }}
               />
             )}
           </View>
         </View>
       </View>
 
-      {/* 篩選器 Modal */}
-      <FilterModal
-        visible={showFilterModal}
-        onClose={() => setShowFilterModal(false)}
+      {/* 篩選器 Popover */}
+      <FilterPopover
+        visible={showFilterPopover}
+        onClose={() => setShowFilterPopover(false)}
+        anchor={filterButtonRef}
         columns={currentColumns}
         filters={activeFilters}
         onApply={setActiveFilters}
-        tabType={activeTab}
+      />
+
+      {/* 排序 Popover */}
+      <SortPopover
+        visible={showSortPopover}
+        onClose={() => setShowSortPopover(false)}
+        anchor={filterButtonRef}
+        columns={currentColumns}
+        currentSort={currentSort}
+        onApply={handleSort}
       />
 
       {/* 欄位設定 Modal */}
