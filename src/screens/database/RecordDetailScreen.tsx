@@ -19,7 +19,7 @@ import { useRecordStore } from '@/stores/recordStore';
 import { useCustomerStore } from '@/stores/customerStore';
 import { RootStackParamList } from '@/types/navigation';
 import { migrateToUnifiedWebLayout } from '@/components/layout/withUnifiedWebLayout';
-import { shouldUseWebLayout } from '@/utils/web-detector-v2';
+import { shouldUseWebLayout } from '@/utils/webDetector';
 
 type RecordDetailRouteProp = RouteProp<RootStackParamList, 'RecordDetail'>;
 type RecordDetailNavigationProp = StackNavigationProp<RootStackParamList, 'RecordDetail'>;
