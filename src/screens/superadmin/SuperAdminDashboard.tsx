@@ -17,7 +17,6 @@ import {
 } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
-import { UnifiedWebLayout } from '@/components/layout/UnifiedWebLayout';
 import { isWebPlatform, isDesktopWeb, isTabletWeb } from '@/utils/web-detector';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -137,23 +136,11 @@ export const SuperAdminDashboard: React.FC = () => {
   const useResponsiveLayout = shouldUseWebLayout;
   
   if (isLoading && !refreshing) {
-    if (shouldUseWebLayout) {
-      return (
-        <UnifiedWebLayout>
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color={DesignSystem.colors.primary} />
-            <Text style={styles.loadingText}>載入中...</Text>
-          </View>
-        </UnifiedWebLayout>
-      );
-    }
     return (
-      <Layout style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={DesignSystem.colors.primary} />
-          <Text style={styles.loadingText}>載入中...</Text>
-        </View>
-      </Layout>
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={DesignSystem.colors.primary} />
+        <Text style={styles.loadingText}>載入中...</Text>
+      </View>
     );
   }
   
@@ -255,33 +242,17 @@ export const SuperAdminDashboard: React.FC = () => {
     </>
   );
 
-  if (shouldUseWebLayout) {
-    return (
-      <UnifiedWebLayout scrollable={false} maxWidth={1600}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-          }
-          contentContainerStyle={styles.webScrollContent}
-        >
-          {content}
-        </ScrollView>
-      </UnifiedWebLayout>
-    );
-  }
-  
   return (
-    <Layout style={styles.container} scrollable={false} padding={false}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }
-      >
-        {content}
-      </ScrollView>
-    </Layout>
+    <ScrollView
+      style={styles.container}
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+      }
+      contentContainerStyle={shouldUseWebLayout ? styles.webScrollContent : undefined}
+    >
+      {content}
+    </ScrollView>
   );
 };
 
