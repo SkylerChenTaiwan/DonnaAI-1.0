@@ -41,6 +41,15 @@ config.transformer.assetPlugins = [
 // 簡化配置以確保正常啟動
 // 快取配置暫時移除，避免配置問題
 
+// Web 平台特殊配置 - 避免壓縮器初始化問題
+if (process.env.EXPO_PUBLIC_ENV === 'production' || process.env.NODE_ENV === 'production') {
+  config.transformer.minifierConfig = {
+    ...config.transformer.minifierConfig,
+    keep_fnames: true, // 保留函數名稱
+    mangle: false, // 不要混淆變數名稱
+  };
+}
+
 // 除錯用：列出所有支援的資源副檔名
 // 註解掉以避免 Web 版無限重載
 // console.log('Metro Config - Asset Extensions:', config.resolver.assetExts);
