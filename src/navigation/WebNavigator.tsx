@@ -87,6 +87,7 @@ export const WebNavigator = () => {
       {/* 側邊欄 */}
       {showSidebar && (
         <View style={[
+          styles.sidebarContainer,
           isMobile && styles.mobileSidebar,
           isMobile && !sidebarCollapsed && styles.mobileSidebarVisible
         ]}>
@@ -143,6 +144,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: DesignSystem.colors.background.primary,
     position: 'relative' as any,
+    height: '100vh',
+  },
+  sidebarContainer: {
+    height: '100%',
   },
   mainContent: {
     flex: 1,

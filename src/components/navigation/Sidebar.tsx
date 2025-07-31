@@ -243,50 +243,53 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
           )}
         </View>
         
-        {/* 使用者資訊（底部） */}
-        {!collapsed && user && (
-          <View style={styles.userInfo}>
-            <View style={styles.userAvatar}>
-              <Icon name="person-circle" size={32} color={DesignSystem.colors.text.tertiary} />
+        {/* 底部區域容器 */}
+        <View style={styles.bottomSection}>
+          {/* 使用者資訊 */}
+          {!collapsed && user && (
+            <View style={styles.userInfo}>
+              <View style={styles.userAvatar}>
+                <Icon name="person-circle" size={32} color={DesignSystem.colors.text.tertiary} />
+              </View>
+              <View style={styles.userDetails}>
+                <Text style={styles.userName} numberOfLines={1}>
+                  {user.displayName || user.email}
+                </Text>
+                <Text style={styles.userRole} numberOfLines={1}>
+                  {mode === 'manager' ? '主管模式' : '業務模式'}
+                </Text>
+              </View>
             </View>
-            <View style={styles.userDetails}>
-              <Text style={styles.userName} numberOfLines={1}>
-                {user.displayName || user.email}
-              </Text>
-              <Text style={styles.userRole} numberOfLines={1}>
-                {mode === 'manager' ? '主管模式' : '業務模式'}
-              </Text>
-            </View>
-          </View>
-        )}
-        
-        {/* 鍵盤快捷鍵提示（桌面版） */}
-        {!collapsed && isDesktopWeb() && (
-          <TouchableOpacity 
-            style={styles.shortcutsHint}
-            onPress={() => {
-              const shortcuts = getKeyboardShortcuts();
-              const helpText = shortcuts
-                .map(s => {
-                  const keys = [];
-                  if (s.ctrl) keys.push('Ctrl');
-                  if (s.alt) keys.push('Alt');
-                  if (s.shift) keys.push('Shift');
-                  keys.push(s.key === 'Escape' ? 'Esc' : s.key.toUpperCase());
-                  return `${keys.join('+')} - ${s.description}`;
-                })
-                .join('\n');
-              
-              if (typeof window !== 'undefined') {
-                alert(`鍵盤快捷鍵：\n\n${helpText}`);
-              }
-            }}
-            activeOpacity={0.7}
-          >
-            <Icon name="key-outline" size={16} color={DesignSystem.colors.text.tertiary} />
-            <Text style={styles.shortcutsText}>快捷鍵說明</Text>
-          </TouchableOpacity>
-        )}
+          )}
+          
+          {/* 鍵盤快捷鍵提示（桌面版） */}
+          {!collapsed && isDesktopWeb() && (
+            <TouchableOpacity 
+              style={styles.shortcutsHint}
+              onPress={() => {
+                const shortcuts = getKeyboardShortcuts();
+                const helpText = shortcuts
+                  .map(s => {
+                    const keys = [];
+                    if (s.ctrl) keys.push('Ctrl');
+                    if (s.alt) keys.push('Alt');
+                    if (s.shift) keys.push('Shift');
+                    keys.push(s.key === 'Escape' ? 'Esc' : s.key.toUpperCase());
+                    return `${keys.join('+')} - ${s.description}`;
+                  })
+                  .join('\n');
+                
+                if (typeof window !== 'undefined') {
+                  alert(`鍵盤快捷鍵：\n\n${helpText}`);
+                }
+              }}
+              activeOpacity={0.7}
+            >
+              <Icon name="key-outline" size={16} color={DesignSystem.colors.text.tertiary} />
+              <Text style={styles.shortcutsText}>快捷鍵說明</Text>
+            </TouchableOpacity>
+          )}
+        </View>
         
         {/* 收合按鈕（桌面和平板都顯示） */}
         {onToggle && (
@@ -321,11 +324,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
 const styles = StyleSheet.create({
   sidebar: {
     width: 220,
+    height: '100%',
     backgroundColor: '#ffffff',
     borderRightWidth: 1,
     borderRightColor: '#e9e9e7',
     paddingVertical: 24,
     flexDirection: 'column',
+    flex: 1,
   },
   sidebarCollapsed: {
     width: 80,
@@ -525,5 +530,9 @@ const styles = StyleSheet.create({
   subMenuLabel: {
     fontSize: 13,
     color: '#91918e',
+  },
+  bottomSection: {
+    marginTop: 'auto',
+    paddingTop: 16,
   },
 });
