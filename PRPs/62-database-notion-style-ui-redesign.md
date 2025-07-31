@@ -283,52 +283,147 @@ const AddColumnDialog: React.FC<AddColumnDialogProps> = ({
 };
 ```
 
-### 5. 樣式定義
+### 5. 骨架屏載入狀態（參考 Notion）
 ```typescript
+// 骨架屏組件
+const SkeletonLoader: React.FC = () => {
+  const fadeInDelays = [0, 1000, 2000, 3000, 4000]; // 漸進式顯示
+  
+  return (
+    <View style={styles.skeletonContainer}>
+      {/* 表格標題骨架 */}
+      <View style={styles.skeletonHeader}>
+        {[1, 2, 3, 4].map((_, index) => (
+          <View 
+            key={index} 
+            style={[styles.skeletonCell, styles.shimmer]}
+          />
+        ))}
+      </View>
+      
+      {/* 表格行骨架 */}
+      {[1, 2, 3, 4, 5].map((_, rowIndex) => (
+        <Animated.View 
+          key={rowIndex}
+          style={[
+            styles.skeletonRow,
+            {
+              opacity: fadeInAnimation(fadeInDelays[rowIndex])
+            }
+          ]}
+        >
+          {[1, 2, 3, 4].map((_, colIndex) => (
+            <View 
+              key={colIndex}
+              style={[styles.skeletonCell, styles.shimmer]}
+            />
+          ))}
+        </Animated.View>
+      ))}
+    </View>
+  );
+};
+
+// Shimmer 動畫效果
+const ShimmerEffect: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const animatedValue = useRef(new Animated.Value(0)).current;
+  
+  useEffect(() => {
+    Animated.loop(
+      Animated.timing(animatedValue, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      })
+    ).start();
+  }, []);
+  
+  const translateX = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-200, 200],
+  });
+  
+  return (
+    <View style={styles.shimmerContainer}>
+      {children}
+      <Animated.View
+        style={[
+          styles.shimmerGradient,
+          { transform: [{ translateX }] }
+        ]}
+      />
+    </View>
+  );
+};
+```
+
+### 6. 樣式定義（基於 Notion 設計系統）
+```typescript
+// 顏色系統
+const colors = {
+  light: {
+    background: '#fff',
+    sidebar: '#f9f8f7',
+    border: '#eeeeec',
+    shimmer: 'rgba(227,226,224,0.5)',
+    text: '#37352f',
+    textSecondary: '#787774',
+    hover: 'rgba(55, 53, 47, 0.08)',
+    selected: 'rgba(35, 131, 226, 0.14)',
+  },
+  dark: {
+    background: '#191919',
+    sidebar: '#202020',
+    border: '#2a2a2a',
+    shimmer: '#2f2f2f',
+    text: '#ffffffcf',
+    textSecondary: '#ffffff71',
+    hover: 'rgba(255, 255, 255, 0.055)',
+    selected: 'rgba(35, 131, 226, 0.3)',
+  }
+};
+
 const styles = StyleSheet.create({
   // 表格容器
   tableContainer: {
     flex: 1,
-    backgroundColor: '#fff',
-    borderRadius: 8,
+    backgroundColor: colors.light.background,
+    borderRadius: 0, // Notion 使用直角設計
     overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
   },
 
-  // 表格標題
+  // 表格標題（參考 Notion）
   tableHeader: {
     flexDirection: 'row',
-    backgroundColor: '#f8f9fa',
+    backgroundColor: colors.light.background,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-    minHeight: 42,
+    borderBottomColor: colors.light.border,
+    minHeight: 36, // Notion 的標題高度
+    paddingHorizontal: 8,
   },
 
   headerCell: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRightWidth: 1,
-    borderRightColor: '#e0e0e0',
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    minHeight: 36,
   },
 
-  // 新增按鈕
+  // 新增按鈕（Notion 風格）
   addFirstRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 40,
-    backgroundColor: '#fafafa',
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    minHeight: 36,
   },
 
   addFirstRowText: {
-    marginLeft: 8,
-    fontSize: 16,
-    color: '#FF6B6B',
-    fontWeight: '500',
+    marginLeft: 4,
+    fontSize: 14,
+    color: colors.light.textSecondary,
   },
 
   // 工具列
@@ -336,20 +431,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    backgroundColor: colors.light.background,
+    minHeight: 32,
   },
 
   toolButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 4,
-    marginLeft: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 3,
+    marginLeft: 4,
   },
 
   // 空白狀態
@@ -366,33 +460,139 @@ const styles = StyleSheet.create({
   },
 
   emptyTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: colors.light.text,
     marginBottom: 8,
   },
 
   emptyDescription: {
     fontSize: 14,
-    color: '#666',
+    color: colors.light.textSecondary,
     textAlign: 'center',
     marginBottom: 24,
     paddingHorizontal: 40,
+    lineHeight: 20,
   },
 
   emptyButton: {
     backgroundColor: '#FF6B6B',
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 6,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 3,
   },
 
   emptyButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '500',
   },
+
+  // 骨架屏樣式
+  skeletonContainer: {
+    flex: 1,
+    backgroundColor: colors.light.background,
+  },
+
+  skeletonHeader: {
+    flexDirection: 'row',
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.light.border,
+  },
+
+  skeletonRow: {
+    flexDirection: 'row',
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.light.border,
+  },
+
+  skeletonCell: {
+    flex: 1,
+    height: 10,
+    backgroundColor: colors.light.shimmer,
+    borderRadius: 10,
+    marginHorizontal: 8,
+  },
+
+  shimmer: {
+    overflow: 'hidden',
+  },
+
+  shimmerGradient: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'transparent',
+    // React Native 使用 LinearGradient 組件實現漸變
+  },
+
+  // 懸停效果（Web 平台）
+  ...(Platform.OS === 'web' && {
+    'tableRow:hover': {
+      backgroundColor: colors.light.hover,
+    },
+    'toolButton:hover': {
+      backgroundColor: colors.light.hover,
+    },
+  }),
 });
+```
+
+### 7. 互動細節優化
+
+```typescript
+// 行懸停效果
+const TableRow: React.FC<RowProps> = ({ data, columns, onPress }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  
+  return (
+    <Pressable
+      style={({ pressed }) => [
+        styles.tableRow,
+        pressed && styles.tableRowPressed,
+        isHovered && Platform.OS === 'web' && styles.tableRowHovered,
+      ]}
+      onPress={onPress}
+      onHoverIn={() => setIsHovered(true)}
+      onHoverOut={() => setIsHovered(false)}
+    >
+      {columns.map((column) => (
+        <View key={column.id} style={styles.tableCell}>
+          <Text style={styles.cellText}>{data[column.id]}</Text>
+        </View>
+      ))}
+    </Pressable>
+  );
+};
+
+// 快捷鍵支援
+const useKeyboardShortcuts = () => {
+  useEffect(() => {
+    if (Platform.OS !== 'web') return;
+    
+    const handleKeyPress = (e: KeyboardEvent) => {
+      // Cmd/Ctrl + N: 新增行
+      if ((e.metaKey || e.ctrlKey) && e.key === 'n') {
+        e.preventDefault();
+        handleAddRow();
+      }
+      // Cmd/Ctrl + K: 快速搜尋
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        openQuickSearch();
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, []);
+};
 ```
 
 ## 實施步驟
@@ -458,5 +658,34 @@ const styles = StyleSheet.create({
 3. **風險**：效能問題
    - **緩解**：實作虛擬滾動和懶加載
 
+## 技術實作要點（基於 Notion 原始碼分析）
+
+### 載入優化
+1. **骨架屏設計**
+   - 使用 shimmer 動畫效果提升載入體驗
+   - 漸進式顯示內容（fadeIn 動畫延遲）
+   - 預設顯示表格結構
+
+2. **顏色系統**
+   - 完整的亮色/暗色主題支援
+   - 使用 Notion 的精確顏色值
+   - 統一的 hover 和 selected 狀態
+
+3. **效能考量**
+   - 虛擬滾動處理大量資料
+   - 懶加載欄位配置
+   - 優化重新渲染邏輯
+
+### 平台差異處理
+1. **Web 平台特性**
+   - 滑鼠懸停效果
+   - 快捷鍵支援
+   - 可調整欄寬
+
+2. **移動平台適配**
+   - 觸控優化
+   - 手勢操作
+   - 響應式佈局
+
 ## 總結
-通過借鑒 Notion 的優秀設計理念，結合 DonnaAI 的業務特性，打造一個既美觀又實用的資料庫管理介面，顯著提升使用者的工作效率和滿意度。
+通過深入分析 Notion 的設計系統和實作細節，結合 DonnaAI 的業務特性，打造一個既美觀又實用的資料庫管理介面。這個設計不僅提升視覺體驗，更重要的是改善使用者的工作效率和滿意度。
