@@ -54,7 +54,8 @@ interface Tab {
   count?: number;
 }
 
-const styles = StyleSheet.create({
+// 將 styles 移到組件內部以避免初始化問題
+const createStyles = () => StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: '#F5F5F5',
@@ -320,6 +321,9 @@ const getTaskStatusText = (status: string) => {
 };
 
 export const DatabaseScreen: React.FC = () => {
+  // 在組件內部創建 styles 以確保正確的初始化順序
+  const styles = React.useMemo(() => createStyles(), []);
+  
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [activeTab, setActiveTab] = useState<TabType>('customers');
   const [multiSelectMode, setMultiSelectMode] = useState(false);
