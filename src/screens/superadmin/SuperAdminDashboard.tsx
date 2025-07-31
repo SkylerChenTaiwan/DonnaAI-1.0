@@ -134,6 +134,7 @@ export const SuperAdminDashboard: React.FC = () => {
   const isDesktop = isDesktopWeb();
   const isTablet = isTabletWeb();
   const shouldUseWebLayout = isWeb && (isDesktop || isTablet);
+  const useResponsiveLayout = shouldUseWebLayout;
   
   if (isLoading && !refreshing) {
     if (shouldUseWebLayout) {
