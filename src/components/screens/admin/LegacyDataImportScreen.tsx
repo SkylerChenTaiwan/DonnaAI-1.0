@@ -19,7 +19,7 @@ import { Icon } from '@/components/common/Icon';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { Layout } from '@/components/common/Layout';
-import { UnifiedWebLayout } from '@/components/layout/UnifiedWebLayout';
+import { migrateToUnifiedWebLayout } from '@/components/layout/withUnifiedWebLayout';
 import { responsiveGrid } from '@/components/common/ResponsiveLayout';
 import { isDesktopWeb, isTabletWeb } from '@/utils/web-detector';
 import { DesignSystem } from '@/theme/designSystem';
@@ -582,73 +582,54 @@ export function LegacyDataImportScreen({ navigation }: any) {
   );
 
   // 使用響應式佈局
-  const layoutContent = (
+  const content = (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        {/* 步驟指示器 */}
-        <View style={styles.stepIndicator}>
-          {steps.map((step, index) => (
-            <View key={index} style={styles.stepItem}>
-              <View style={[
-                styles.stepCircle,
-                index <= activeStep ? styles.stepCircleActive : null,
-              ]}>
-                <Icon 
-                  name={step.icon as any} 
-                  size={20} 
-                  color={index <= activeStep ? '#fff' : DesignSystem.colors.gray} 
-                />
-              </View>
-              <Text style={[
-                styles.stepLabel,
-                index <= activeStep ? styles.stepLabelActive : null,
-              ]}>
-                {step.title}
-              </Text>
-              {index < steps.length - 1 && (
-                <View style={[
-                  styles.stepLine,
-                  index < activeStep ? styles.stepLineActive : null,
-                ]} />
-              )}
+      {/* 步驟指示器 */}
+      <View style={styles.stepIndicator}>
+        {steps.map((step, index) => (
+          <View key={index} style={styles.stepItem}>
+            <View style={[
+              styles.stepCircle,
+              index <= activeStep ? styles.stepCircleActive : null,
+            ]}>
+              <Icon 
+                name={step.icon as any} 
+                size={20} 
+                color={index <= activeStep ? '#fff' : DesignSystem.colors.gray} 
+              />
             </View>
-          ))}
-        </View>
+            <Text style={[
+              styles.stepLabel,
+              index <= activeStep ? styles.stepLabelActive : null,
+            ]}>
+              {step.title}
+            </Text>
+            {index < steps.length - 1 && (
+              <View style={[
+                styles.stepLine,
+                index < activeStep ? styles.stepLineActive : null,
+              ]} />
+            )}
+          </View>
+        ))}
+      </View>
 
-        {/* 步驟內容 */}
-        {renderStep()}
-      </ScrollView>
+      {/* 步驟內容 */}
+      {renderStep()}
+    </ScrollView>
   );
 
-  // Web 平台使用 UnifiedWebLayout
-  if (Platform.OS === 'web' && (isDesktop || (isTablet && isLandscape))) {
-    return (
-      <UnifiedWebLayout scrollable={false} maxWidth={1400}>
-        <View style={styles.webHeader}>
-          <TouchableOpacity 
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Icon name="arrow-back" size={24} color={DesignSystem.colors.text.primary} />
-          </TouchableOpacity>
-          <Text style={styles.webTitle}>舊系統資料導入</Text>
-        </View>
-        {layoutContent}
-      </UnifiedWebLayout>
-    );
-  }
-
-  // 行動版使用原有 Layout
-  return (
-    <Layout
-      headerProps={{
+  return migrateToUnifiedWebLayout(content, {
+    maxWidth: 1400,
+    scrollable: false,
+    layoutProps: {
+      headerProps: {
         title: '舊系統資料導入',
         showBack: true,
         onBack: () => navigation.goBack(),
-      }}
-    >
-      {layoutContent}
-    </Layout>
-  );
+      }
+    }
+  });
 }
 
 const styles = StyleSheet.create({
@@ -895,23 +876,5 @@ const styles = StyleSheet.create({
   },
   completeActions: {
     width: '100%',
-  },
-  // Web 專用樣式
-  webHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 24,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
-  backButton: {
-    padding: 8,
-    marginRight: 16,
-  },
-  webTitle: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: DesignSystem.colors.text.primary,
   },
 });

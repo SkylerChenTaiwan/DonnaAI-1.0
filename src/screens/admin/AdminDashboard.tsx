@@ -18,6 +18,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
+import { migrateToUnifiedWebLayout } from '@/components/layout/withUnifiedWebLayout';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useAuthStore } from '@/stores/authStore';
@@ -249,21 +250,8 @@ export const AdminDashboard: React.FC = () => {
     );
   }
 
-  return (
-    <Layout style={styles.container}>
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.title}>管理中心</Text>
-          <Text style={styles.subtitle}>{orgDetails?.name}</Text>
-        </View>
-        <TouchableOpacity
-          style={styles.settingsButton}
-          onPress={() => navigation.navigate('AdminSettings')}
-        >
-          <Icon name="settings-outline" size={24} color={DesignSystem.colors.text.primary} />
-        </TouchableOpacity>
-      </View>
-
+  const content = (
+    <View style={styles.container}>
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         refreshControl={
@@ -277,32 +265,33 @@ export const AdminDashboard: React.FC = () => {
         {renderQuickActions()}
         {renderTodayActivity()}
       </ScrollView>
-    </Layout>
+    </View>
   );
+  
+  return migrateToUnifiedWebLayout(content, {
+    maxWidth: 1400,
+    scrollable: false,
+    layoutProps: {
+      headerProps: {
+        title: '管理中心',
+        subtitle: orgDetails?.name,
+        rightComponent: (
+          <TouchableOpacity
+            style={styles.settingsButton}
+            onPress={() => navigation.navigate('AdminSettings')}
+          >
+            <Icon name="settings-outline" size={24} color={DesignSystem.colors.text.primary} />
+          </TouchableOpacity>
+        )
+      }
+    }
+  });
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: DesignSystem.colors.background.primary,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: DesignSystem.spacing.lg,
-    backgroundColor: DesignSystem.colors.background.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
-  title: {
-    ...DesignSystem.typography.h1,
-    color: DesignSystem.colors.text.primary,
-  },
-  subtitle: {
-    ...DesignSystem.typography.body,
-    color: DesignSystem.colors.text.secondary,
-    marginTop: DesignSystem.spacing.xs,
   },
   settingsButton: {
     padding: DesignSystem.spacing.sm,

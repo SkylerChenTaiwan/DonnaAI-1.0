@@ -18,6 +18,7 @@ import {
   getWebScreenInfo 
 } from '@/utils/web-detector';
 import { webStyles, responsive, mediaQuery } from '@/styles/web';
+import { RESPONSIVE_PADDING } from '@/theme/responsive';
 import { DesignSystem } from '@/theme/designSystem';
 
 interface ResponsiveLayoutProps {

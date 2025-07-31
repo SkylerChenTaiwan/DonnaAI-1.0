@@ -13,6 +13,7 @@ import {
   Alert,
 } from 'react-native';
 import { Layout } from '@/components/common/Layout';
+import { migrateToUnifiedWebLayout } from '@/components/layout/withUnifiedWebLayout';
 import { SearchBar } from '@/components/common/SearchBar';
 import { ToolbarIcons } from '@/components/common/ToolbarIcons';
 import { DataTable } from '@/components/common/DataTable';
@@ -286,25 +287,8 @@ export const UserManagementScreen: React.FC = () => {
     );
   }
   
-  return (
-    <Layout>
-      <View style={styles.container}>
-        {/* 頁面標題 */}
-        <View style={styles.header}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Icon name="arrow-back" size={24} color={DesignSystem.colors.text.primary} />
-          </TouchableOpacity>
-          <Text style={styles.title}>用戶管理</Text>
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={handleAddUser}
-          >
-            <Icon name="add" size={24} color={DesignSystem.colors.primary} />
-          </TouchableOpacity>
-        </View>
+  const content = (
+    <View style={styles.container}>
         
         {/* 工具列 */}
         <View style={styles.toolbar}>
@@ -407,7 +391,29 @@ export const UserManagementScreen: React.FC = () => {
             </View>
           </View>
         )}
-      </View>
+    </View>
+  );
+  
+  return (
+    <>
+      {migrateToUnifiedWebLayout(content, { 
+        maxWidth: 1400,
+        scrollable: false,
+        layoutProps: {
+          headerProps: {
+            title: '用戶管理',
+            showBack: true,
+            rightComponent: (
+              <TouchableOpacity
+                style={styles.addButton}
+                onPress={handleAddUser}
+              >
+                <Icon name="add" size={24} color={DesignSystem.colors.primary} />
+              </TouchableOpacity>
+            )
+          }
+        }
+      })}
       
       {/* 篩選 Modal */}
       <FilterModal
@@ -424,7 +430,7 @@ export const UserManagementScreen: React.FC = () => {
         ]}
         tabType="users"
       />
-    </Layout>
+    </>
   );
 };
 
@@ -442,22 +448,6 @@ const styles = StyleSheet.create({
     marginTop: 12,
     fontSize: 16,
     color: DesignSystem.colors.text.secondary,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: DesignSystem.spacing.lg,
-    backgroundColor: DesignSystem.colors.background.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
-  backButton: {
-    marginRight: DesignSystem.spacing.md,
-  },
-  title: {
-    ...DesignSystem.typography.h1,
-    color: DesignSystem.colors.text.primary,
-    flex: 1,
   },
   addButton: {
     padding: 8,

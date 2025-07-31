@@ -5,25 +5,17 @@
 
 import { StyleSheet, Platform } from 'react-native';
 import { getWebScreenInfo, isDesktopWeb, isTabletWeb, isMobileWeb } from '@/utils/web-detector';
+import { UNIFIED_BREAKPOINTS, getBreakpoint, Breakpoint } from '@/theme/responsive';
 
-// 響應式斷點
-export const breakpoints = {
-  mobile: 480,
-  tablet: 768,
-  desktop: 1024,
-  largeDesktop: 1440,
-};
+// 使用統一的斷點定義
+export const breakpoints = UNIFIED_BREAKPOINTS;
 
 // 獲取當前斷點
-export const getCurrentBreakpoint = (): 'mobile' | 'tablet' | 'desktop' | 'largeDesktop' => {
+export const getCurrentBreakpoint = (): Breakpoint => {
   if (Platform.OS !== 'web') return 'mobile';
   
   const { width } = getWebScreenInfo();
-  
-  if (width < breakpoints.mobile) return 'mobile';
-  if (width < breakpoints.tablet) return 'tablet';
-  if (width < breakpoints.desktop) return 'desktop';
-  return 'largeDesktop';
+  return getBreakpoint(width);
 };
 
 // 響應式樣式助手
@@ -32,6 +24,7 @@ export const responsive = <T extends Record<string, any>>(styles: {
   tablet?: T;
   desktop?: T;
   largeDesktop?: T;
+  wideScreen?: T;
   default: T;
 }): T => {
   if (Platform.OS !== 'web') return styles.default;

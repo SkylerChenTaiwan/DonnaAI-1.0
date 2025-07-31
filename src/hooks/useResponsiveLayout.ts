@@ -5,17 +5,17 @@
 
 import { useWindowDimensions, Platform } from 'react-native';
 import { useState, useEffect } from 'react';
+import { 
+  UNIFIED_BREAKPOINTS, 
+  Breakpoint, 
+  getBreakpoint, 
+  getContentConfig,
+  selectResponsiveStyle,
+  ResponsiveStyle 
+} from '@/theme/responsive';
 
-// 統一的斷點定義（與現有系統保持一致）
-export const BREAKPOINTS = {
-  mobile: 480,
-  tablet: 768,
-  desktop: 1024,
-  largeDesktop: 1440,
-  wideScreen: 1920
-} as const;
-
-export type Breakpoint = 'mobile' | 'tablet' | 'desktop' | 'largeDesktop' | 'wideScreen';
+// 為了向後相容，導出別名
+export const BREAKPOINTS = UNIFIED_BREAKPOINTS;
 
 interface ResponsiveLayout {
   breakpoint: Breakpoint;
@@ -34,35 +34,7 @@ interface ResponsiveLayout {
   contentPadding: number;
 }
 
-/**
- * 根據螢幕寬度獲取當前斷點
- */
-function getBreakpoint(width: number): Breakpoint {
-  if (width >= BREAKPOINTS.wideScreen) return 'wideScreen';
-  if (width >= BREAKPOINTS.largeDesktop) return 'largeDesktop';
-  if (width >= BREAKPOINTS.desktop) return 'desktop';
-  if (width >= BREAKPOINTS.tablet) return 'tablet';
-  return 'mobile';
-}
-
-/**
- * 獲取內容區域的配置
- */
-function getContentConfig(breakpoint: Breakpoint) {
-  switch (breakpoint) {
-    case 'wideScreen':
-      return { maxWidth: 1600, padding: 48 };
-    case 'largeDesktop':
-      return { maxWidth: 1440, padding: 32 };
-    case 'desktop':
-      return { maxWidth: 1200, padding: 24 };
-    case 'tablet':
-      return { maxWidth: 768, padding: 20 };
-    case 'mobile':
-    default:
-      return { maxWidth: 480, padding: 16 };
-  }
-}
+// 函數已經從 theme/responsive.ts 引入
 
 /**
  * 統一的響應式佈局 Hook
@@ -149,25 +121,7 @@ export function useSidebarState() {
 /**
  * 響應式樣式輔助函數
  */
-export function responsive<T>(styles: {
-  mobile?: T;
-  tablet?: T;
-  desktop?: T;
-  largeDesktop?: T;
-  wideScreen?: T;
-}): T | undefined {
+export function responsive<T>(styles: ResponsiveStyle<T>): T | undefined {
   const { breakpoint } = useResponsiveLayout();
-  
-  // 從當前斷點開始向下查找
-  const breakpointOrder: Breakpoint[] = ['wideScreen', 'largeDesktop', 'desktop', 'tablet', 'mobile'];
-  const currentIndex = breakpointOrder.indexOf(breakpoint);
-  
-  for (let i = currentIndex; i < breakpointOrder.length; i++) {
-    const bp = breakpointOrder[i];
-    if (styles[bp]) {
-      return styles[bp];
-    }
-  }
-  
-  return styles.mobile;
+  return selectResponsiveStyle(breakpoint, styles);
 }
