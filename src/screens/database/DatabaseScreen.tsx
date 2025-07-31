@@ -38,8 +38,8 @@ import { useRecordStore } from '@/stores/recordStore';
 import { useTaskStore } from '@/stores/taskStore';
 import { useAuthStore } from '@/stores/authStore';
 import { TableColumn } from '@/types/table';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '@/types/navigation';
 import { createCustomer } from '@/services/firebase/customers';
 import { createRecord } from '@/services/firebase/records';
@@ -61,7 +61,10 @@ interface Tab {
 
 export const DatabaseScreen: React.FC = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const [activeTab, setActiveTab] = useState<TabType>('customers');
+  const route = useRoute<any>();
+  const [activeTab, setActiveTab] = useState<TabType>(
+    route.params?.activeTab || 'customers'
+  );
   const [multiSelectMode, setMultiSelectMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilters, setActiveFilters] = useState<FilterCondition[]>([]);
@@ -92,6 +95,13 @@ export const DatabaseScreen: React.FC = () => {
       fetchTasks(user);
     }
   }, [user, fetchCustomers, fetchRecords, fetchTasks]);
+
+  // 處理路由參數變化
+  useEffect(() => {
+    if (route.params?.activeTab) {
+      setActiveTab(route.params.activeTab);
+    }
+  }, [route.params?.activeTab]);
 
   const tabs = useMemo((): Tab[] => [
     { id: 'customers', title: '客戶', count: customers.length },

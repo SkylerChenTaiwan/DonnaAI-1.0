@@ -193,8 +193,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
                         style={styles.subMenuItem}
                         onPress={() => {
                           // 導航到具體的資料庫分頁
-                          navigation.navigate('Database' as any);
-                          // TODO: 傳遞參數以顯示特定分頁
+                          navigation.navigate('Database' as any, { 
+                            activeTab: subItem.id 
+                          });
                         }}
                       >
                         <Icon 
