@@ -3,7 +3,7 @@
  * 特色：極簡主義、更精緻的空狀態、更細緻的互動
  */
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -20,6 +20,8 @@ import { EditableCell } from '@/components/common/EditableCell';
 import { DraggableTableHeader } from '@/components/database/DraggableTableHeader';
 import { TableColumn, TableData } from '@/types/table';
 import { responsive } from '@/styles/web';
+import { useTableKeyboardShortcuts, copyToClipboard, readFromClipboard } from '@/hooks/useTableKeyboardShortcuts';
+import { showToast } from '@/utils/toast';
 
 interface NotionStyleTableV2Props {
   data: TableData[];
@@ -66,6 +68,10 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
   const [isAddingRow, setIsAddingRow] = useState(false);
   const [newRowData, setNewRowData] = useState<Record<string, any>>({});
   const [editingCell, setEditingCell] = useState<{ rowId: string; columnKey: string } | null>(null);
+  const [selectedCells, setSelectedCells] = useState<Set<string>>(new Set());
+  const [focusedCell, setFocusedCell] = useState<{ rowId: string; columnKey: string } | null>(null);
+  const [copiedData, setCopiedData] = useState<any>(null);
+  const tableRef = useRef<View>(null);
 
   const toggleSelection = useCallback((itemId: string) => {
     if (!onSelect) return;
@@ -76,6 +82,68 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
     
     onSelect(newSelection);
   }, [selectedItems, onSelect]);
+  
+  // 生成儲存格 ID
+  const getCellId = (rowId: string, columnKey: string) => `${rowId}-${columnKey}`;
+  
+  // 處理儲存格點擊
+  const handleCellClick = useCallback((rowId: string, columnKey: string, e: React.MouseEvent) => {
+    const cellId = getCellId(rowId, columnKey);
+    
+    if (e.metaKey || e.ctrlKey) {
+      // 多選
+      const newSelection = new Set(selectedCells);
+      if (newSelection.has(cellId)) {
+        newSelection.delete(cellId);
+      } else {
+        newSelection.add(cellId);
+      }
+      setSelectedCells(newSelection);
+    } else if (e.shiftKey && focusedCell) {
+      // 範圍選擇 - 簡化版本
+      setSelectedCells(new Set([cellId]));
+    } else {
+      // 單選
+      setSelectedCells(new Set([cellId]));
+      setFocusedCell({ rowId, columnKey });
+    }
+  }, [selectedCells, focusedCell]);
+  
+  // 複製選中的儲存格
+  const handleCopy = useCallback(async () => {
+    if (selectedCells.size === 0) return;
+    
+    const cellsData: string[] = [];
+    selectedCells.forEach(cellId => {
+      const [rowId, columnKey] = cellId.split('-');
+      const row = data.find(r => r.id === rowId);
+      if (row) {
+        cellsData.push(String(row[columnKey] || ''));
+      }
+    });
+    
+    if (cellsData.length > 0) {
+      setCopiedData(cellsData);
+      await copyToClipboard(cellsData.join('\t'));
+      showToast('info', '已複製到剪貼簿');
+    }
+  }, [selectedCells, data]);
+  
+  // 貼上到選中的儲存格
+  const handlePaste = useCallback(async () => {
+    const clipboardText = await readFromClipboard();
+    if (!clipboardText || selectedCells.size === 0) return;
+    
+    const values = clipboardText.split('\t');
+    const cellsArray = Array.from(selectedCells);
+    
+    for (let i = 0; i < Math.min(values.length, cellsArray.length); i++) {
+      const [rowId, columnKey] = cellsArray[i].split('-');
+      await onUpdateCell?.(rowId, columnKey, values[i]);
+    }
+    
+    showToast('success', '已貼上資料');
+  }, [selectedCells, onUpdateCell]);
 
   // 處理內聯新增列
   const handleInlineAdd = () => {
@@ -116,6 +184,34 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
     }
     setEditingCell(null);
   };
+  
+  // 使用鍵盤快捷鍵
+  useTableKeyboardShortcuts({
+    onCopy: handleCopy,
+    onPaste: handlePaste,
+    onSelectAll: () => {
+      // 選擇所有儲存格
+      const allCells = new Set<string>();
+      data.forEach(row => {
+        columns.forEach(col => {
+          allCells.add(getCellId(row.id, col.key));
+        });
+      });
+      setSelectedCells(allCells);
+      showToast('info', '已選擇所有儲存格');
+    },
+    onEscape: () => {
+      setSelectedCells(new Set());
+      setEditingCell(null);
+      setIsAddingRow(false);
+    },
+    onEnter: () => {
+      if (focusedCell && !editingCell) {
+        setEditingCell(focusedCell);
+      }
+    },
+    enabled: true,
+  });
 
   // 根據欄位類型取得輸入類型
   const getInputTypeForColumn = (column: TableColumn): 'text' | 'number' | 'email' | 'phone' | 'multiline' => {
@@ -278,33 +374,44 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
           {/* 資料欄位 */}
           {columns.map((column, index) => {
             const isEditing = editingCell?.rowId === item.id && editingCell?.columnKey === column.key;
+            const cellId = getCellId(item.id, column.key);
+            const isCellSelected = selectedCells.has(cellId);
+            const isCellFocused = focusedCell?.rowId === item.id && focusedCell?.columnKey === column.key;
             
             return (
-              <View
+              <Pressable
                 key={column.key}
                 style={[
                   styles.tableCell,
                   index === 0 && !multiSelectMode && styles.firstTableCell,
-                  column.width ? { width: column.width } : { flex: 1 }
+                  column.width ? { width: column.width } : { flex: 1 },
+                  isCellSelected && styles.selectedCell,
+                  isCellFocused && styles.focusedCell,
                 ]}
+                onPress={(e: any) => {
+                  if (!multiSelectMode) {
+                    handleCellClick(item.id, column.key, e);
+                  }
+                }}
               >
                 <EditableCell
                   value={item[column.key]}
                   isEditing={isEditing}
                   onStartEdit={() => setEditingCell({ rowId: item.id, columnKey: column.key })}
                   onFinishEdit={(value) => handleCellEdit(item.id, column.key, value)}
+                  onCancel={() => setEditingCell(null)}
                   render={column.render}
                   item={item}
                   inputType={getInputTypeForColumn(column)}
                   disabled={!onUpdateCell || multiSelectMode}
                 />
-              </View>
+              </Pressable>
             );
           })}
         </Pressable>
       );
     },
-    [columns, selectedItems, multiSelectMode, hoveredRow, toggleSelection, onRowPress, editingCell, handleCellEdit, onUpdateCell, getInputTypeForColumn]
+    [columns, selectedItems, multiSelectMode, hoveredRow, toggleSelection, onRowPress, editingCell, handleCellEdit, onUpdateCell, getInputTypeForColumn, selectedCells, focusedCell, handleCellClick]
   );
 
   // 渲染內聯新增列
@@ -312,7 +419,7 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
     if (!isAddingRow) return null;
 
     return (
-      <View style={[styles.tableRow, styles.newRow]}>
+      <View style={styles.tableRow}>
         {/* 多選模式的空格 */}
         {multiSelectMode && <View style={styles.checkboxColumn} />}
         
@@ -332,30 +439,17 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
               onStartEdit={() => {}}
               onFinishEdit={(value) => {
                 setNewRowData({ ...newRowData, [column.key]: value });
+                // 如果是最後一個欄位，按 Enter 儲存
+                if (index === columns.length - 1 && value) {
+                  handleSaveNewRow();
+                }
               }}
               inputType={getInputTypeForColumn(column)}
-              placeholder={`輸入${column.title}`}
+              placeholder={column.title}
+              autoFocus={index === 0}
             />
           </View>
         ))}
-        
-        {/* 操作按鈕 */}
-        <View style={styles.newRowActions}>
-          <TouchableOpacity
-            style={styles.saveButton}
-            onPress={handleSaveNewRow}
-            activeOpacity={0.7}
-          >
-            <Icon name="checkmark" size={20} color="#4CAF50" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.cancelButton}
-            onPress={handleCancelNewRow}
-            activeOpacity={0.7}
-          >
-            <Icon name="close" size={20} color="#DC3545" />
-          </TouchableOpacity>
-        </View>
       </View>
     );
   };
@@ -598,35 +692,20 @@ const styles = StyleSheet.create({
     color: '#91918e',
   },
   
-  // 新增列樣式
-  newRow: {
-    backgroundColor: '#f7f6f3',
-    borderBottomWidth: 2,
-    borderBottomColor: '#2383e2',
+  // 儲存格選擇樣式
+  selectedCell: {
+    backgroundColor: 'rgba(35, 131, 226, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(35, 131, 226, 0.3)',
   },
   
-  newRowActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    paddingHorizontal: 8,
-  },
-  
-  saveButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: 'rgba(76, 175, 80, 0.1)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  
-  cancelButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: 'rgba(220, 53, 69, 0.1)',
-    alignItems: 'center',
-    justifyContent: 'center',
+  focusedCell: {
+    borderWidth: 2,
+    borderColor: '#2383e2',
+    ...Platform.select({
+      web: {
+        boxShadow: '0 0 0 1px #2383e2',
+      },
+    }),
   },
 });

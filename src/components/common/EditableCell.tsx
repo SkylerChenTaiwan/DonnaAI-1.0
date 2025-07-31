@@ -27,6 +27,9 @@ export interface EditableCellProps {
   placeholder?: string;
   maxLength?: number;
   disabled?: boolean;
+  onCancel?: () => void;
+  onTab?: (shift: boolean) => void;
+  autoFocus?: boolean;
 }
 
 export const EditableCell: React.FC<EditableCellProps> = ({
@@ -42,6 +45,9 @@ export const EditableCell: React.FC<EditableCellProps> = ({
   placeholder = '',
   maxLength,
   disabled = false,
+  onCancel,
+  onTab,
+  autoFocus = false,
 }) => {
   const [editValue, setEditValue] = useState(String(value || ''));
   const inputRef = useRef<TextInput>(null);
@@ -53,6 +59,13 @@ export const EditableCell: React.FC<EditableCellProps> = ({
       setEditValue(String(value || ''));
     }
   }, [isEditing, value]);
+  
+  // 自動聚焦
+  useEffect(() => {
+    if (autoFocus && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [autoFocus]);
 
   // 處理提交編輯
   const handleSubmitEdit = () => {
@@ -81,7 +94,11 @@ export const EditableCell: React.FC<EditableCellProps> = ({
   // 處理取消編輯
   const handleCancelEdit = () => {
     setEditValue(String(value || ''));
-    onFinishEdit(value); // 恢復原值
+    if (onCancel) {
+      onCancel();
+    } else {
+      onFinishEdit(value); // 恢復原值
+    }
   };
 
   // 格式化顯示值
@@ -116,52 +133,48 @@ export const EditableCell: React.FC<EditableCellProps> = ({
         return 'default';
     }
   };
+  
+  // 處理鍵盤事件
+  const handleKeyPress = (e: any) => {
+    if (e.nativeEvent.key === 'Escape') {
+      e.preventDefault();
+      handleCancelEdit();
+    } else if (e.nativeEvent.key === 'Tab') {
+      e.preventDefault();
+      if (onTab) {
+        handleSubmitEdit();
+        onTab(e.shiftKey);
+      }
+    }
+  };
 
   if (isEditing) {
     return (
-      <View style={styles.floatingEditContainer}>
-        {/* 放大的編輯框 */}
-        <View style={styles.expandedEditField}>
-          <TextInput
-            ref={inputRef}
-            style={[
-              styles.floatingInput,
-              inputType === 'multiline' && styles.multilineFloatingInput,
-              error && styles.inputError,
-            ]}
-            value={editValue}
-            onChangeText={setEditValue}
-            onSubmitEditing={handleSubmitEdit}
-            onBlur={handleSubmitEdit}
-            placeholder={placeholder}
-            keyboardType={getKeyboardType()}
-            multiline={inputType === 'multiline'}
-            maxLength={maxLength}
-            selectTextOnFocus
-            returnKeyType="done"
-          />
-          {error && (
-            <Text style={styles.errorText}>{error}</Text>
-          )}
-        </View>
-        
-        {/* 右側漂浮的操作按鈕 */}
-        <View style={styles.floatingActions}>
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={handleSubmitEdit}
-            activeOpacity={0.7}
-          >
-            <Icon name="checkmark" size={18} color="#28A745" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={handleCancelEdit}
-            activeOpacity={0.7}
-          >
-            <Icon name="close" size={18} color="#DC3545" />
-          </TouchableOpacity>
-        </View>
+      <View style={styles.editContainer}>
+        <TextInput
+          ref={inputRef}
+          style={[
+            styles.editInput,
+            inputType === 'multiline' && styles.multilineInput,
+            error && styles.inputError,
+          ]}
+          value={editValue}
+          onChangeText={setEditValue}
+          onSubmitEditing={handleSubmitEdit}
+          onBlur={handleSubmitEdit}
+          onKeyPress={handleKeyPress}
+          placeholder={placeholder}
+          placeholderTextColor="#999"
+          keyboardType={getKeyboardType()}
+          multiline={inputType === 'multiline'}
+          maxLength={maxLength}
+          selectTextOnFocus
+          returnKeyType={inputType === 'multiline' ? 'default' : 'done'}
+          autoFocus={autoFocus}
+        />
+        {error && (
+          <Text style={styles.errorText}>{error}</Text>
+        )}
       </View>
     );
   }
@@ -203,59 +216,27 @@ export const EditableCell: React.FC<EditableCellProps> = ({
 };
 
 const styles = StyleSheet.create({
-  floatingEditContainer: {
-    position: 'absolute',
-    top: -8,
-    left: -8,
-    width: '100%', // 使用固定寬度而非 right: -60
-    zIndex: 1000,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  expandedEditField: {
+  editContainer: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    position: 'relative',
+  },
+  editInput: {
+    fontSize: 14,
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+    minHeight: 32,
+    color: '#37352f',
+    backgroundColor: '#fff',
     borderWidth: 2,
-    borderColor: '#007AFF',
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 4,
+    borderColor: '#2383e2',
+    borderRadius: 3,
   },
-  floatingInput: {
-    fontSize: 16,
-    paddingHorizontal: 12,
-    paddingVertical: 12,
-    minHeight: 44,
-    color: '#1A1A1A',
-  },
-  multilineFloatingInput: {
-    minHeight: 80,
+  multilineInput: {
+    minHeight: 60,
     textAlignVertical: 'top',
   },
   inputError: {
     borderColor: '#DC3545',
-  },
-  floatingActions: {
-    position: 'absolute',
-    right: -50, // 將按鈕定位在編輯框外部
-    flexDirection: 'row',
-    gap: 4,
-  },
-  actionButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    borderRadius: 20,
-    width: 36,
-    height: 36,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 3,
   },
   errorText: {
     fontSize: 12,

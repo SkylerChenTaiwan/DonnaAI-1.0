@@ -95,7 +95,7 @@ export const DatabaseToolbar: React.FC<ToolbarProps> = ({
           <Icon 
             name="filter" 
             size={16} 
-            color={hasActiveFilters ? "#FF6B6B" : "#666"} 
+            color={hasActiveFilters ? "#37352f" : "#666"} 
           />
           <Text style={[
             styles.toolbarText,
@@ -103,9 +103,6 @@ export const DatabaseToolbar: React.FC<ToolbarProps> = ({
           ]}>
             篩選
           </Text>
-          {hasActiveFilters && (
-            <View style={styles.activeDot} />
-          )}
         </TouchableOpacity>
 
         {/* 排序 */}
@@ -121,7 +118,7 @@ export const DatabaseToolbar: React.FC<ToolbarProps> = ({
           <Icon 
             name="swap-vertical" 
             size={16} 
-            color={hasActiveSort ? "#FF6B6B" : "#666"} 
+            color={hasActiveSort ? "#37352f" : "#666"} 
           />
           <Text style={[
             styles.toolbarText,
@@ -144,7 +141,7 @@ export const DatabaseToolbar: React.FC<ToolbarProps> = ({
             <Icon 
               name="checkbox-outline" 
               size={16} 
-              color={multiSelectMode ? "#FF6B6B" : "#666"} 
+              color={multiSelectMode ? "#37352f" : "#666"} 
             />
             <Text style={[
               styles.toolbarText,
@@ -209,7 +206,7 @@ const styles = StyleSheet.create({
     }),
   },
   activeToolButton: {
-    backgroundColor: 'rgba(255, 107, 107, 0.1)',
+    backgroundColor: '#f0f0f0',
   },
   toolbarText: {
     fontSize: 13,
@@ -217,15 +214,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   activeToolbarText: {
-    color: '#FF6B6B',
-  },
-  activeDot: {
-    position: 'absolute',
-    top: responsive({ mobile: 4, tablet: 5, desktop: 6 }),
-    right: responsive({ mobile: 4, tablet: 5, desktop: 6 }),
-    width: responsive({ mobile: 4, tablet: 5, desktop: 6 }),
-    height: responsive({ mobile: 4, tablet: 5, desktop: 6 }),
-    borderRadius: responsive({ mobile: 2, tablet: 2.5, desktop: 3 }),
-    backgroundColor: '#FF6B6B',
+    color: '#37352f',
+    fontWeight: '600',
   },
 });
