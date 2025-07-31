@@ -438,27 +438,8 @@ export const DatabaseScreen: React.FC = () => {
   });
 
   return (
-    <Layout scrollable={false} backgroundColor="#F7F6F4">
+    <Layout scrollable={false}>
       <View style={[styles.container, isDesktop && styles.desktopContainer]}>
-        {/* 偵錯資訊顯示 */}
-        {Platform.OS === 'web' && (
-          <View style={{ padding: 10, backgroundColor: '#fffbeb', borderBottomWidth: 1, borderBottomColor: '#fbbf24' }}>
-            <Text style={{ fontSize: 12, color: '#92400e' }}>
-              偵錯: Platform={Platform.OS}, isDesktop={String(isDesktop)}, 
-              視窗大小={typeof window !== 'undefined' ? `${window.innerWidth}x${window.innerHeight}` : 'N/A'}
-            </Text>
-          </View>
-        )}
-        
-        {/* 頁面標題 */}
-        {isDesktop && (
-          <View style={styles.pageHeader}>
-            <Text style={styles.pageTitle}>新資料庫</Text>
-            <View style={styles.pageActions}>
-              {/* 分享、更多選項等 */}
-            </View>
-          </View>
-        )}
         
         <View style={styles.contentWrapper}>
           {/* Tab 導航 - 水平顯示（僅行動版） */}
@@ -677,35 +658,13 @@ export const DatabaseScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F7F6F4',
+    backgroundColor: '#ffffff',
   },
   desktopContainer: {
     // 不需要設定 marginLeft，WebNavigator 會處理佈局
   },
-  pageHeader: {
-    paddingHorizontal: responsive(16, 96),
-    paddingTop: responsive(20, 45),
-    paddingBottom: responsive(12, 12),
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  pageTitle: {
-    fontSize: responsive(28, 40),
-    fontWeight: '700',
-    color: '#37352F',
-  },
-  pageActions: {
-    flexDirection: 'row',
-    gap: 12,
-  },
   contentWrapper: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-    marginHorizontal: responsive(0, 96),
-    marginBottom: responsive(0, 96),
-    borderRadius: responsive(0, 3),
-    overflow: 'hidden',
   },
   toolbarContainer: {
     flexDirection: 'row',
