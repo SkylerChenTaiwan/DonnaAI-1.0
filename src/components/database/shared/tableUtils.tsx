@@ -27,10 +27,23 @@ export const convertToTanStackColumns = (
         return col.render(value, row.original);
       }
       
+      // 簡單顯示值，可編輯功能由上層組件處理
+      
       // 否則顯示原始值
       return value || '-';
     },
   }));
+};
+
+/**
+ * 根據欄位名稱推斷輸入類型
+ */
+const getInputType = (columnKey: string): 'text' | 'number' | 'email' | 'phone' | 'multiline' => {
+  if (columnKey.includes('email')) return 'email';
+  if (columnKey.includes('phone')) return 'phone';
+  if (columnKey.includes('amount') || columnKey.includes('price') || columnKey.includes('count')) return 'number';
+  if (columnKey.includes('note') || columnKey.includes('description') || columnKey.includes('summary')) return 'multiline';
+  return 'text';
 };
 
 /**

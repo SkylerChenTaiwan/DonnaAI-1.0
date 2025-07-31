@@ -14,6 +14,17 @@ import { generateColumnsByType, convertToTanStackColumns } from '../shared/table
 import { TableColumn } from '@/types/table';
 import { Icon } from '@/components/common/Icon';
 
+/**
+ * 根據欄位名稱推斷輸入類型
+ */
+const getInputType = (columnKey: string): 'text' | 'number' | 'email' | 'phone' | 'multiline' => {
+  if (columnKey.includes('email')) return 'email';
+  if (columnKey.includes('phone')) return 'phone';
+  if (columnKey.includes('amount') || columnKey.includes('price') || columnKey.includes('count')) return 'number';
+  if (columnKey.includes('note') || columnKey.includes('description') || columnKey.includes('summary')) return 'multiline';
+  return 'text';
+};
+
 export const TanStackNotionTable: React.FC<TanStackTableProps> = ({
   data,
   columns: propColumns,
@@ -55,9 +66,43 @@ export const TanStackNotionTable: React.FC<TanStackTableProps> = ({
   });
 
   // 使用傳入的 columns，如果沒有則使用生成的
-  const baseColumns = propColumns && propColumns.length > 0 
-    ? convertToTanStackColumns(propColumns, onUpdateCell)
-    : generatedColumns.filter(col => col.id !== 'select'); // 移除自動生成的選擇列
+  const baseColumns = useMemo(() => {
+    if (propColumns && propColumns.length > 0) {
+      // 轉換傳入的 columns，添加可編輯功能
+      return propColumns.map((col) => ({
+        id: col.key,
+        accessorKey: col.key,
+        header: col.title,
+        size: col.width,
+        enableSorting: col.sortable || false,
+        cell: ({ row, getValue }) => {
+          const value = getValue();
+          
+          // 如果有自訂 render 函數，使用它
+          if (col.render) {
+            return col.render(value, row.original);
+          }
+          
+          // 如果有 onUpdateCell 回調，使用可編輯儲存格
+          if (onUpdateCell) {
+            return (
+              <NotionTableCell
+                value={value}
+                onChange={(newValue) => onUpdateCell(row.original.id, col.key, newValue)}
+                placeholder={`輸入${col.title}`}
+                type={getInputType(col.key)}
+              />
+            );
+          }
+          
+          // 否則顯示原始值
+          return value || '-';
+        },
+      }));
+    }
+    
+    return generatedColumns.filter(col => col.id !== 'select'); // 移除自動生成的選擇列
+  }, [propColumns, generatedColumns, onUpdateCell]);
   
   // 手動添加選擇列（如果需要）
   const columns = useMemo(() => {
@@ -92,7 +137,9 @@ export const TanStackNotionTable: React.FC<TanStackTableProps> = ({
     generatedColumns: generatedColumns.length,
     finalColumns: columns.length,
     dataType,
-    multiSelectMode
+    multiSelectMode,
+    dataLength: data.length,
+    hasData: data.length > 0
   });
 
   // 建立表格實例
