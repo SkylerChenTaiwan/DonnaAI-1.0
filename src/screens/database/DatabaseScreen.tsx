@@ -272,79 +272,86 @@ export const DatabaseScreen: React.FC = () => {
     }
   }, [multiSelectMode, activeTab, navigation]);
 
-  const handleAddRow = useCallback(() => {
-    let columns: TableColumn[] = [];
-    let onSubmit: (data: Record<string, any>) => Promise<void>;
-    
-    switch (activeTab) {
-      case 'customers':
-        columns = currentColumns;
-        onSubmit = async (data) => {
-          try {
-            await createCustomer({
-              ...data,
-              organizationId: user?.organizationId || '',
-              createdBy: user?.uid || '',
-            });
-            await handleRefresh();
-            showToast('success', '成功新增客戶');
-          } catch (error) {
-            console.error('Error creating customer:', error);
-            showToast('error', '新增客戶失敗');
-            throw error;
-          }
-        };
-        break;
-        
-      case 'records':
-        columns = currentColumns;
-        onSubmit = async (data) => {
-          try {
-            await createRecord({
-              ...data,
-              organizationId: user?.organizationId || '',
-              createdBy: user?.uid || '',
-            });
-            await handleRefresh();
-            showToast('success', '成功新增紀錄');
-          } catch (error) {
-            console.error('Error creating record:', error);
-            showToast('error', '新增紀錄失敗');
-            throw error;
-          }
-        };
-        break;
-        
-      case 'tasks':
-        columns = currentColumns;
-        onSubmit = async (data) => {
-          try {
-            await createTask({
-              ...data,
-              type: 'unscheduled',
-              priority: 'medium',
-              organizationId: user?.organizationId || '',
-              teamId: user?.teamId || '',
-              assigneeId: user?.uid || '',
-              source: 'manual',
-            }, user?.uid || '');
-            await handleRefresh();
-            showToast('success', '成功新增任務');
-          } catch (error) {
-            console.error('Error creating task:', error);
-            showToast('error', '新增任務失敗');
-            throw error;
-          }
-        };
-        break;
+  const handleAddRowWithData = useCallback(async (data: Record<string, any>) => {
+    try {
+      switch (activeTab) {
+        case 'customers':
+          await createCustomer({
+            ...data,
+            organizationId: user?.organizationId || '',
+            createdBy: user?.uid || '',
+          });
+          break;
+          
+        case 'records':
+          await createRecord({
+            ...data,
+            organizationId: user?.organizationId || '',
+            createdBy: user?.uid || '',
+          });
+          break;
+          
+        case 'tasks':
+          await createTask({
+            ...data,
+            type: data.type || 'unscheduled',
+            priority: data.priority || 'medium',
+            organizationId: user?.organizationId || '',
+            teamId: user?.teamId || '',
+            assigneeId: data.assigneeId || user?.uid || '',
+            source: 'manual',
+          }, user?.uid || '');
+          break;
+      }
+      
+      await handleRefresh();
+      showToast('success', `成功新增${tabs.find(t => t.id === activeTab)?.title}`);
+    } catch (error) {
+      console.error('Error creating row:', error);
+      showToast('error', '新增失敗');
+      throw error;
     }
-    
-    navigation.navigate('AddRecordModal' as any, {
-      tableType: activeTab,
-      columns,
-      onSubmit,
-    });
-  }, [activeTab, navigation, user, currentColumns, handleRefresh]);
+  }, [activeTab, user, handleRefresh, tabs]);
+
+  const handleAddRow = useCallback(async (rowData?: Record<string, any>) => {
+    if (!rowData) {
+      // 舊模式：導航到 Modal（保留給其他地方使用）
+      let columns: TableColumn[] = [];
+      let onSubmit: (data: Record<string, any>) => Promise<void>;
+      
+      switch (activeTab) {
+        case 'customers':
+          columns = currentColumns;
+          onSubmit = async (data) => {
+            await handleAddRowWithData(data);
+          };
+          break;
+          
+        case 'records':
+          columns = currentColumns;
+          onSubmit = async (data) => {
+            await handleAddRowWithData(data);
+          };
+          break;
+          
+        case 'tasks':
+          columns = currentColumns;
+          onSubmit = async (data) => {
+            await handleAddRowWithData(data);
+          };
+          break;
+      }
+      
+      navigation.navigate('AddRecordModal' as any, {
+        tableType: activeTab,
+        columns,
+        onSubmit,
+      });
+    } else {
+      // 新模式：內聯新增
+      await handleAddRowWithData(rowData);
+    }
+  }, [activeTab, navigation, currentColumns, handleAddRowWithData]);
 
   const handleAddColumn = useCallback((column: ColumnConfig) => {
     setCustomColumns(prev => ({
@@ -519,12 +526,6 @@ export const DatabaseScreen: React.FC = () => {
                 onUpdateCell={async (rowId, columnKey, value) => {
                   // 根據 activeTab 更新對應的資料
                   showToast('info', '儲存格編輯功能開發中');
-                }}
-                onAddRow={async (rowData) => {
-                  if (rowData) {
-                    // 內聯新增列
-                    handleAddRow();
-                  }
                 }}
               />
             )}

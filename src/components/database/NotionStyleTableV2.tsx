@@ -200,7 +200,7 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
           styles.addNewButton,
           hoveredAddNew && styles.addNewButtonHovered
         ]}
-        onPress={onAddRow}
+        onPress={handleInlineAdd}
         activeOpacity={0.8}
         onPressIn={() => setHoveredAddNew(true)}
         onPressOut={() => setHoveredAddNew(false)}
@@ -357,7 +357,10 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
       
       {/* 內容區域 */}
       {data.length === 0 && !loading ? (
-        renderEmptyState()
+        <>
+          {renderEmptyState()}
+          {renderNewRow()}
+        </>
       ) : (
         <FlashList
           data={data}
