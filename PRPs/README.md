@@ -67,6 +67,7 @@
 | 60   | web-responsive-layout-redesign.md | 📋 待執行 | Web 響應式佈局重新設計 - 側邊欄導航、響應式設計、橫式螢幕優化 | - |
 | 61v  | web-responsive-layout-unification.md | ✅ 已完成 | Web 響應式佈局統一 - 修復橫向顯示問題、統一三個佈局系統、側邊欄功能修復 | 2025-07-31 |
 | 62   | database-notion-style-ui-redesign.md | 📋 待執行 | 資料庫頁面 Notion 風格 UI/UX 重新設計 - 空白狀態改進、表格結構顯示、可自訂欄位 | - |
+| 63   | navigation-system-notion-style-redesign.md | 📋 待執行 | 導航系統 Notion 風格重設計 - 側邊欄佈局、可展開導航、統一白色背景 | - |
 
 ## 命名規則
 
@@ -82,7 +83,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：63**
+**下一個新建的 PRP 應使用編號：64**
 
 ## PRP 類型說明
 

@@ -40,6 +40,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
   const { openDialog } = useAnalyticsStore();
   const [showActionModal, setShowActionModal] = useState(false);
   const [actionButtonRef, setActionButtonRef] = useState<View | null>(null);
+  const [databaseExpanded, setDatabaseExpanded] = useState(false);
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   
   // 導航項目配置
   const menuItems = [
@@ -47,25 +49,34 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
       id: 'Home' as keyof MainTabParamList, 
       label: '首頁', 
       icon: 'analytics-outline' as const,
-      activeIcon: 'analytics' as const
+      activeIcon: 'analytics' as const,
+      hasChildren: false
     },
     { 
       id: 'Database' as keyof MainTabParamList, 
       label: '資料庫', 
       icon: 'people-outline' as const,
-      activeIcon: 'people' as const
+      activeIcon: 'people' as const,
+      hasChildren: true,
+      subItems: [
+        { id: 'customers', label: '客戶', icon: 'person' },
+        { id: 'records', label: '紀錄', icon: 'document-text' },
+        { id: 'tasks', label: '任務', icon: 'checkbox' }
+      ]
     },
     { 
       id: 'Tools' as keyof MainTabParamList, 
       label: mode === 'manager' ? '人事' : '小工具', 
       icon: (mode === 'manager' ? 'people-circle-outline' : 'build-outline') as const,
-      activeIcon: (mode === 'manager' ? 'people-circle' : 'build') as const
+      activeIcon: (mode === 'manager' ? 'people-circle' : 'build') as const,
+      hasChildren: false
     },
     { 
       id: 'Settings' as keyof MainTabParamList, 
       label: '設定', 
       icon: 'person-outline' as const,
-      activeIcon: 'person' as const
+      activeIcon: 'person' as const,
+      hasChildren: false
     },
   ];
   
@@ -118,33 +129,87 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
         <View style={styles.menuItems}>
           {menuItems.map(item => {
             const isActive = isActiveRoute(item.id);
+            const isHovered = hoveredItem === item.id;
+            const isExpanded = item.id === 'Database' && databaseExpanded;
             
             return (
-              <Pressable
-                key={item.id}
-                style={({ pressed, hovered }) => [
-                  styles.menuItem,
-                  isActive && styles.menuItemActive,
-                  Platform.OS === 'web' && hovered && styles.menuItemHover,
-                  pressed && styles.menuItemPressed,
-                  collapsed && styles.menuItemCollapsed,
-                ]}
-                onPress={() => navigation.navigate(item.id as any)}
-              >
-                <Icon 
-                  name={isActive ? item.activeIcon : item.icon} 
-                  size={24} 
-                  color={isActive ? DesignSystem.colors.primary : DesignSystem.colors.text.secondary}
-                />
-                {!collapsed && (
-                  <Text style={[
-                    styles.menuLabel,
-                    isActive && styles.menuLabelActive
-                  ]}>
-                    {item.label}
-                  </Text>
+              <View key={item.id}>
+                <Pressable
+                  style={({ pressed, hovered }) => [
+                    styles.menuItem,
+                    isActive && styles.menuItemActive,
+                    Platform.OS === 'web' && hovered && styles.menuItemHover,
+                    pressed && styles.menuItemPressed,
+                    collapsed && styles.menuItemCollapsed,
+                  ]}
+                  onPress={() => {
+                    if (item.hasChildren && item.id === 'Database') {
+                      setDatabaseExpanded(!databaseExpanded);
+                    }
+                    navigation.navigate(item.id as any);
+                  }}
+                  onHoverIn={() => setHoveredItem(item.id)}
+                  onHoverOut={() => setHoveredItem(null)}
+                >
+                  <Icon 
+                    name={isActive ? item.activeIcon : item.icon} 
+                    size={20} 
+                    color={isActive ? '#37352f' : '#787774'}
+                  />
+                  {!collapsed && (
+                    <>
+                      <Text style={[
+                        styles.menuLabel,
+                        isActive && styles.menuLabelActive
+                      ]}>
+                        {item.label}
+                      </Text>
+                      {item.hasChildren && isHovered && (
+                        <TouchableOpacity
+                          style={styles.expandButton}
+                          onPress={(e) => {
+                            e.stopPropagation();
+                            setDatabaseExpanded(!databaseExpanded);
+                          }}
+                          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                        >
+                          <Icon 
+                            name={isExpanded ? 'chevron-down' : 'chevron-forward'} 
+                            size={16} 
+                            color="#91918e" 
+                          />
+                        </TouchableOpacity>
+                      )}
+                    </>
+                  )}
+                </Pressable>
+                
+                {/* 子項目 */}
+                {!collapsed && isExpanded && item.subItems && (
+                  <View style={styles.subMenuContainer}>
+                    {item.subItems.map(subItem => (
+                      <TouchableOpacity
+                        key={subItem.id}
+                        style={styles.subMenuItem}
+                        onPress={() => {
+                          // 導航到具體的資料庫分頁
+                          navigation.navigate('Database' as any);
+                          // TODO: 傳遞參數以顯示特定分頁
+                        }}
+                      >
+                        <Icon 
+                          name={subItem.icon} 
+                          size={16} 
+                          color="#91918e"
+                        />
+                        <Text style={styles.subMenuLabel}>
+                          {subItem.label}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
                 )}
-              </Pressable>
+              </View>
             );
           })}
         </View>
@@ -162,7 +227,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
             onPress={handleActionPress}
           >
             {mode === 'manager' ? (
-              <Icon name="search" size={20} color={DesignSystem.colors.text.inverse} />
+              <Icon name="search" size={16} color={DesignSystem.colors.text.inverse} />
             ) : (
               <View style={styles.plusIcon}>
                 <View style={styles.plusHorizontal} />
@@ -254,13 +319,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
 
 const styles = StyleSheet.create({
   sidebar: {
-    width: 280,
-    backgroundColor: DesignSystem.colors.background.surface,
+    width: 220,
+    height: '100vh',
+    position: 'fixed' as 'fixed',
+    left: 0,
+    top: 0,
+    backgroundColor: '#ffffff',
     borderRightWidth: 1,
-    borderRightColor: DesignSystem.colors.border.light,
+    borderRightColor: '#e9e9e7',
     paddingVertical: 24,
     flexDirection: 'column',
-    ...shadows.small,
+    zIndex: 100,
   },
   sidebarCollapsed: {
     width: 80,
@@ -318,11 +387,11 @@ const styles = StyleSheet.create({
   menuLabel: {
     fontSize: 14,
     fontWeight: '500',
-    color: DesignSystem.colors.text.secondary,
+    color: '#787774',
     flex: 1,
   },
   menuLabelActive: {
-    color: DesignSystem.colors.text.primary,
+    color: '#37352f',
     fontWeight: '600',
   },
   actionButtonContainer: {
@@ -331,13 +400,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   actionButton: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 32,
+    height: 32,
+    borderRadius: 6,
     backgroundColor: DesignSystem.colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
-    ...shadows.medium,
     ...transitions.default,
   },
   actionButtonManager: {
@@ -355,8 +423,8 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.secondary,
   },
   plusIcon: {
-    width: 20,
-    height: 20,
+    width: 16,
+    height: 16,
     position: 'relative',
   },
   plusHorizontal: {
@@ -364,20 +432,20 @@ const styles = StyleSheet.create({
     left: 0,
     top: '50%',
     width: '100%',
-    height: 3,
+    height: 2,
     backgroundColor: '#FFFFFF',
-    borderRadius: 1.5,
-    transform: [{ translateY: -1.5 }],
+    borderRadius: 1,
+    transform: [{ translateY: -1 }],
   },
   plusVertical: {
     position: 'absolute',
     left: '50%',
     top: 0,
-    width: 3,
+    width: 2,
     height: '100%',
     backgroundColor: '#FFFFFF',
-    borderRadius: 1.5,
-    transform: [{ translateX: -1.5 }],
+    borderRadius: 1,
+    transform: [{ translateX: -1 }],
   },
   userInfo: {
     flexDirection: 'row',
@@ -438,5 +506,28 @@ const styles = StyleSheet.create({
   shortcutsText: {
     fontSize: 12,
     color: DesignSystem.colors.text.tertiary,
+  },
+  expandButton: {
+    position: 'absolute',
+    right: 8,
+    padding: 4,
+  },
+  subMenuContainer: {
+    paddingLeft: 32,
+    marginTop: 4,
+  },
+  subMenuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    gap: 8,
+    borderRadius: DesignSystem.borderRadius.sm,
+    marginHorizontal: 8,
+    ...transitions.default,
+  },
+  subMenuLabel: {
+    fontSize: 13,
+    color: '#91918e',
   },
 });

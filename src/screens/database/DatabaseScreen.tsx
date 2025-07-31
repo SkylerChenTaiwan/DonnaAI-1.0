@@ -403,73 +403,13 @@ export const DatabaseScreen: React.FC = () => {
 
   const isDesktop = isDesktopWeb();
 
-  // 桌面版側邊欄內容
-  const renderSidebarContent = () => {
-    if (!isDesktop) return null;
-    return (
-      <View style={styles.desktopSidebar}>
-        {/* Tab 導航 - 垂直排列 */}
-        <View style={styles.desktopTabContainer}>
-          {tabs.map((tab) => (
-            <TouchableOpacity
-              key={tab.id}
-              style={[
-                styles.desktopTab,
-                activeTab === tab.id && styles.activeDesktopTab,
-              ]}
-              onPress={() => {
-                setActiveTab(tab.id);
-                setMultiSelectMode(false);
-                setSelectedItems([]);
-              }}
-              activeOpacity={0.7}
-            >
-              <Text
-                style={[
-                  styles.desktopTabText,
-                  activeTab === tab.id && styles.activeDesktopTabText,
-                ]}
-              >
-                {tab.title}
-              </Text>
-              {tab.count !== undefined && (
-                <Text style={styles.tabCount}>{tab.count}</Text>
-              )}
-            </TouchableOpacity>
-          ))}
-        </View>
-        
-        {/* 快捷鍵提示 */}
-        {Platform.OS === 'web' && (
-          <View style={styles.shortcutsHint}>
-            <Text style={styles.shortcutsTitle}>快捷鍵</Text>
-            {shortcuts.slice(0, 5).map((shortcut, index) => (
-              <View key={index} style={styles.shortcutRow}>
-                <Text style={styles.shortcutKeys}>
-                  {shortcut.keys.join(' + ')}
-                </Text>
-                <Text style={styles.shortcutDesc}>
-                  {shortcut.description}
-                </Text>
-              </View>
-            ))}
-          </View>
-        )}
-      </View>
-    );
-  };
 
   return (
-    <>
-      <ResponsiveLayout
-        sidebar={renderSidebarContent()}
-        scrollable={false}
-        style={styles.container}
-      >
+    <Layout scrollable={false}>
+      <View style={[styles.container, isDesktop && styles.desktopContainer]}>
         <View style={styles.contentWrapper}>
-          {/* Tab 導航 - 行動版保持水平 */}
-          {!isDesktop && (
-            <View style={styles.tabContainer}>
+          {/* Tab 導航 - 水平顯示 */}
+          <View style={styles.tabContainer}>
               {tabs.map((tab) => (
                 <TouchableOpacity
                   key={tab.id}
@@ -503,7 +443,6 @@ export const DatabaseScreen: React.FC = () => {
                 </TouchableOpacity>
               ))}
             </View>
-          )}
           
           {/* 搜尋列 */}
           <View style={styles.searchBarContainer}>
@@ -563,7 +502,8 @@ export const DatabaseScreen: React.FC = () => {
             )}
           </View>
         </View>
-      </ResponsiveLayout>
+      </View>
+    </Layout>
 
       {/* 篩選器 Modal */}
       <FilterModal
@@ -651,7 +591,10 @@ export const DatabaseScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#ffffff',
+  },
+  desktopContainer: {
+    marginLeft: 220, // 配合新的側邊欄寬度
   },
   contentWrapper: {
     flex: 1,
@@ -711,70 +654,6 @@ const styles = StyleSheet.create({
     color: '#FF6B6B',
   },
   
-  // 桌面版樣式
-  desktopSidebar: {
-    flex: 1,
-    paddingVertical: 24,
-    paddingHorizontal: 16,
-    backgroundColor: '#f9f8f7',
-  },
-  desktopTabContainer: {
-    gap: 8,
-  },
-  desktopTab: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 8,
-    ...webOnly({
-      transition: 'all 0.2s ease',
-      cursor: 'pointer',
-    }),
-  },
-  activeDesktopTab: {
-    backgroundColor: '#fff',
-    borderLeftWidth: 3,
-    borderLeftColor: '#FF6B6B',
-  },
-  desktopTabText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#787774',
-  },
-  activeDesktopTabText: {
-    color: '#37352f',
-    fontWeight: '600',
-  },
-  
-  // 快捷鍵提示
-  shortcutsHint: {
-    marginTop: 32,
-    paddingTop: 24,
-    borderTopWidth: 1,
-    borderTopColor: '#eeeeec',
-  },
-  shortcutsTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#37352f',
-    marginBottom: 12,
-  },
-  shortcutRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 6,
-  },
-  shortcutKeys: {
-    fontSize: 12,
-    color: '#787774',
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-  },
-  shortcutDesc: {
-    fontSize: 12,
-    color: '#787774',
-  },
   
   // 批量操作工具列
   batchActionsBar: {

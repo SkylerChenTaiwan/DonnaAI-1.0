@@ -10,9 +10,9 @@ export const DesignSystem = {
     
     // 背景色
     background: {
-      primary: '#F5F5F5',  // 主背景 - 淺灰白色
+      primary: '#FFFFFF',  // 主背景 - 純白
       surface: '#FFFFFF',  // 卡片背景 - 純白
-      elevated: '#FAFAFA', // 提升的背景
+      elevated: '#FFFFFF', // 提升的背景 - 純白
     },
     
     // 按鈕專用色彩系統
