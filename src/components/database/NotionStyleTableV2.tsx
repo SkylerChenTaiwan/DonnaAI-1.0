@@ -17,6 +17,7 @@ import {
 import { FlashList } from '@shopify/flash-list';
 import { Icon } from '@/components/common/Icon';
 import { EditableCell } from '@/components/common/EditableCell';
+import { DraggableTableHeader } from '@/components/database/DraggableTableHeader';
 import { TableColumn, TableData } from '@/types/table';
 import { responsive } from '@/styles/web';
 
@@ -38,6 +39,8 @@ interface NotionStyleTableV2Props {
   };
   onSort?: (key: string) => void;
   onUpdateCell?: (rowId: string, columnKey: string, value: any) => void | Promise<void>;
+  onColumnsReorder?: (columns: TableColumn[]) => void;
+  enableColumnDrag?: boolean;
 }
 
 export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
@@ -55,6 +58,8 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
   sortConfig,
   onSort,
   onUpdateCell,
+  onColumnsReorder,
+  enableColumnDrag = true,
 }) => {
   const [hoveredRow, setHoveredRow] = useState<string | null>(null);
   const [hoveredAddNew, setHoveredAddNew] = useState(false);
@@ -123,74 +128,91 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
   };
 
   // 渲染表頭
-  const renderHeader = () => (
-    <View style={styles.tableHeader}>
-      {/* 多選模式的核取方塊欄 */}
-      {multiSelectMode && (
-        <View style={styles.checkboxColumn}>
+  const renderHeader = () => {
+    // 如果啟用欄位拖動且有 reorder 回調，使用可拖動表頭
+    if (enableColumnDrag && onColumnsReorder) {
+      return (
+        <DraggableTableHeader
+          columns={columns}
+          onColumnsReorder={onColumnsReorder}
+          multiSelectMode={multiSelectMode}
+          onSort={onSort}
+          sortConfig={sortConfig}
+          onAddColumn={onAddColumn}
+        />
+      );
+    }
+    
+    // 否則使用原本的表頭
+    return (
+      <View style={styles.tableHeader}>
+        {/* 多選模式的核取方塊欄 */}
+        {multiSelectMode && (
+          <View style={styles.checkboxColumn}>
+            <TouchableOpacity
+              style={styles.headerCheckbox}
+              onPress={() => {
+                if (selectedItems.length === data.length && data.length > 0) {
+                  onSelect?.([]);
+                } else {
+                  onSelect?.(data.map(item => item.id));
+                }
+              }}
+            >
+              <View style={[
+                styles.checkbox,
+                selectedItems.length === data.length && data.length > 0 && styles.checkboxChecked,
+                selectedItems.length > 0 && selectedItems.length < data.length && styles.checkboxIndeterminate,
+              ]}>
+                {selectedItems.length === data.length && data.length > 0 && (
+                  <Icon name="checkmark" size={14} color="#fff" />
+                )}
+                {selectedItems.length > 0 && selectedItems.length < data.length && (
+                  <View style={styles.indeterminateLine} />
+                )}
+              </View>
+            </TouchableOpacity>
+          </View>
+        )}
+        
+        {/* 欄位標題 */}
+        {columns.map((column, index) => (
           <TouchableOpacity
-            style={styles.headerCheckbox}
-            onPress={() => {
-              if (selectedItems.length === data.length && data.length > 0) {
-                onSelect?.([]);
-              } else {
-                onSelect?.(data.map(item => item.id));
-              }
-            }}
+            key={column.key}
+            style={[
+              styles.headerCell,
+              index === 0 && !multiSelectMode && styles.firstHeaderCell,
+              column.width ? { width: column.width } : { flex: 1 }
+            ]}
+            onPress={() => column.sortable && onSort && onSort(column.key)}
+            disabled={!column.sortable || !onSort}
+            activeOpacity={0.7}
           >
-            <View style={[
-              styles.checkbox,
-              selectedItems.length === data.length && data.length > 0 && styles.checkboxChecked,
-              selectedItems.length > 0 && selectedItems.length < data.length && styles.checkboxIndeterminate,
-            ]}>
-              {selectedItems.length === data.length && data.length > 0 && (
-                <Icon name="checkmark" size={14} color="#fff" />
-              )}
-              {selectedItems.length > 0 && selectedItems.length < data.length && (
-                <View style={styles.indeterminateLine} />
-              )}
-            </View>
+            <Text style={styles.headerText}>{column.title}</Text>
+            {column.sortable && sortConfig && sortConfig.key === column.key && (
+              <Icon
+                name={sortConfig.direction === 'asc' ? 'arrow-up' : 'arrow-down'}
+                size={14}
+                color="#37352f"
+                style={styles.sortIcon}
+              />
+            )}
           </TouchableOpacity>
-        </View>
-      )}
-      
-      {/* 欄位標題 */}
-      {columns.map((column, index) => (
-        <TouchableOpacity
-          key={column.key}
-          style={[
-            styles.headerCell,
-            index === 0 && !multiSelectMode && styles.firstHeaderCell,
-            column.width ? { width: column.width } : { flex: 1 }
-          ]}
-          onPress={() => column.sortable && onSort && onSort(column.key)}
-          disabled={!column.sortable || !onSort}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.headerText}>{column.title}</Text>
-          {column.sortable && sortConfig && sortConfig.key === column.key && (
-            <Icon
-              name={sortConfig.direction === 'asc' ? 'arrow-up' : 'arrow-down'}
-              size={14}
-              color="#37352f"
-              style={styles.sortIcon}
-            />
-          )}
-        </TouchableOpacity>
-      ))}
-      
-      {/* 新增欄位按鈕 */}
-      {onAddColumn && (
-        <TouchableOpacity 
-          style={styles.addColumnButton} 
-          onPress={onAddColumn}
-          activeOpacity={0.7}
-        >
-          <Icon name="add" size={16} color="#37352f" />
-        </TouchableOpacity>
-      )}
-    </View>
-  );
+        ))}
+        
+        {/* 新增欄位按鈕 */}
+        {onAddColumn && (
+          <TouchableOpacity 
+            style={styles.addColumnButton} 
+            onPress={onAddColumn}
+            activeOpacity={0.7}
+          >
+            <Icon name="add" size={16} color="#37352f" />
+          </TouchableOpacity>
+        )}
+      </View>
+    );
+  };
 
   // 渲染空狀態（Notion 2024/2025 風格）
   const renderEmptyState = () => (

@@ -33,6 +33,7 @@ import { useDatabaseKeyboardShortcuts } from '@/hooks/useDatabaseKeyboardShortcu
 import { isDesktopWeb } from '@/utils/web-detector';
 import { responsive, webOnly } from '@/styles/web';
 import { useColumnSettings } from '@/hooks/useColumnSettings';
+import { useColumnOrder } from '@/hooks/useColumnOrder';
 import { exportTableData } from '@/utils/tableExport';
 import { useCustomerStore } from '@/stores/customerStore';
 import { useRecordStore } from '@/stores/recordStore';
@@ -179,12 +180,21 @@ export const DatabaseScreen: React.FC = () => {
     defaultColumnKeys
   );
   
-  // 根據設定過濾顯示的欄位
+  // 使用欄位順序管理
+  const { getOrderedColumns, saveColumnOrder } = useColumnOrder(
+    activeTab,
+    allColumns
+  );
+  
+  // 根據設定過濾並排序顯示的欄位
   const currentColumns = useMemo(() => {
-    return columnSettings 
+    const visibleColumns = columnSettings 
       ? allColumns.filter(col => columnSettings.visibleColumns.includes(col.key))
       : allColumns;
-  }, [allColumns, columnSettings?.visibleColumns]);
+    
+    // 應用使用者自訂的欄位順序
+    return getOrderedColumns(visibleColumns);
+  }, [allColumns, columnSettings?.visibleColumns, getOrderedColumns]);
 
   // 取得當前標籤的資料
   const currentData = useMemo(() => {
@@ -527,6 +537,13 @@ export const DatabaseScreen: React.FC = () => {
                   // 根據 activeTab 更新對應的資料
                   showToast('info', '儲存格編輯功能開發中');
                 }}
+                onColumnsReorder={async (reorderedColumns) => {
+                  // 儲存新的欄位順序
+                  const newOrder = reorderedColumns.map(col => col.key);
+                  await saveColumnOrder(newOrder);
+                  showToast('success', '已儲存欄位順序');
+                }}
+                enableColumnDrag={true}
               />
             )}
           </View>
