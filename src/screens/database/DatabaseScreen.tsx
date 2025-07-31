@@ -124,7 +124,7 @@ export const DatabaseScreen: React.FC = () => {
   // 紀錄表格欄位
   const recordColumns: TableColumn[] = useMemo(() => [
     { key: 'type', title: '類型', sortable: true, filterable: true, render: (value: any) => (
-      <Text style={styles.typeText}>{value === 'meeting' ? '會議' : '通話'}</Text>
+      <Text style={{ fontSize: 14, color: '#1C1C1E' }}>{value === 'meeting' ? '會議' : '通話'}</Text>
     ) },
     { key: 'customerName', title: '客戶', sortable: true, filterable: true },
     { key: 'date', title: '日期', sortable: true, filterable: true },
@@ -136,13 +136,27 @@ export const DatabaseScreen: React.FC = () => {
     { key: 'title', title: '標題', sortable: true, filterable: true },
     { key: 'assignee', title: '負責人', sortable: true, filterable: true },
     { key: 'dueDate', title: '到期日', sortable: true, filterable: true },
-    { key: 'status', title: '狀態', sortable: true, filterable: true, render: (value: any) => (
-      <View style={[styles.statusBadge, getTaskStatusStyle(value)]}>
-        <Text style={styles.statusText}>
-          {getTaskStatusText(value)}
-        </Text>
-      </View>
-    ) },
+    { key: 'status', title: '狀態', sortable: true, filterable: true, render: (value: any) => {
+      const statusStyle = (() => {
+        switch (value) {
+          case 'completed':
+            return { backgroundColor: '#E3F2E6' };
+          case 'in_progress':
+            return { backgroundColor: '#E8F0FF' };
+          case 'cancelled':
+            return { backgroundColor: '#FFE5E5' };
+          default:
+            return { backgroundColor: '#FEF3E2' };
+        }
+      })();
+      return (
+        <View style={[{ borderRadius: 4, paddingHorizontal: 8, paddingVertical: 4 }, statusStyle]}>
+          <Text style={{ fontSize: 12, fontWeight: '500', color: '#1C1C1E' }}>
+            {getTaskStatusText(value)}
+          </Text>
+        </View>
+      );
+    } },
   ], []);
 
   // 取得當前標籤的資料（使用 useMemo 優化）
@@ -1320,16 +1334,4 @@ const styles = StyleSheet.create({
   },
 });
 
-// 輔助函數 - 移到 styles 定義之後
-const getTaskStatusStyle = (status: string) => {
-  switch (status) {
-    case 'completed':
-      return styles.statusCompleted;
-    case 'in_progress':
-      return styles.statusInProgress;
-    case 'cancelled':
-      return styles.statusCancelled;
-    default:
-      return styles.statusTodo;
-  }
-};
+// 輔助函數 - 已移除，改用內聯樣式以避免初始化錯誤
