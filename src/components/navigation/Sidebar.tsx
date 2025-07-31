@@ -321,16 +321,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
 const styles = StyleSheet.create({
   sidebar: {
     width: 220,
-    height: '100vh',
-    position: 'fixed' as 'fixed',
-    left: 0,
-    top: 0,
     backgroundColor: '#ffffff',
     borderRightWidth: 1,
     borderRightColor: '#e9e9e7',
     paddingVertical: 24,
     flexDirection: 'column',
-    zIndex: 100,
   },
   sidebarCollapsed: {
     width: 80,

@@ -603,7 +603,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   desktopContainer: {
-    marginLeft: 220, // 配合新的側邊欄寬度
+    // 不需要設定 marginLeft，WebNavigator 會處理佈局
   },
   contentWrapper: {
     flex: 1,
