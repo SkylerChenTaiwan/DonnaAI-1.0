@@ -459,16 +459,20 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
   };
 
   // 渲染底部新增按鈕
-  const renderFooter = () => (
-    <TouchableOpacity 
-      style={styles.footerAddButton}
-      onPress={handleInlineAdd}
-      activeOpacity={0.7}
-    >
-      <Icon name="add" size={16} color="#91918e" />
-      <Text style={styles.footerAddText}>新增</Text>
-    </TouchableOpacity>
-  );
+  const renderFooter = () => {
+    if (isAddingRow) return null; // 正在新增時不顯示按鈕
+    
+    return (
+      <TouchableOpacity 
+        style={styles.footerAddButton}
+        onPress={handleInlineAdd}
+        activeOpacity={0.7}
+      >
+        <Icon name="add" size={16} color="#91918e" />
+        <Text style={styles.footerAddText}>新頁面</Text>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -514,11 +518,11 @@ const styles = StyleSheet.create({
   // 表頭樣式
   tableHeader: {
     flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e9e9e7',
+    borderBottomWidth: 0,
     backgroundColor: '#ffffff',
-    minHeight: 42,
+    minHeight: 32,
     alignItems: 'center',
+    paddingVertical: 4,
   },
   
   headerCell: {
@@ -640,11 +644,11 @@ const styles = StyleSheet.create({
   
   tableRow: {
     flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e9e9e7',
-    minHeight: 44,
+    borderBottomWidth: 0,
+    minHeight: 36,
     alignItems: 'center',
     backgroundColor: '#ffffff',
+    paddingVertical: 2,
     ...Platform.select({
       web: {
         cursor: 'pointer',
@@ -663,8 +667,9 @@ const styles = StyleSheet.create({
   
   tableCell: {
     paddingHorizontal: 8,
-    paddingVertical: 8,
+    paddingVertical: 4,
     justifyContent: 'center',
+    minHeight: 32,
   },
   
   firstTableCell: {
