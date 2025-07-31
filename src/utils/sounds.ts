@@ -7,6 +7,7 @@
  */
 
 import { Audio } from 'expo-av';
+import { Platform } from 'react-native';
 
 export type SoundType = 'success' | 'error' | 'notification';
 
@@ -37,6 +38,14 @@ class SoundManager {
    */
   async initialize(): Promise<void> {
     if (this.initialized) return;
+
+    // 在 Web 平台上暫時停用音效以避免載入空檔案
+    if (Platform.OS === 'web') {
+      console.log('Web 平台暫時停用音效功能');
+      this.initialized = true;
+      this.enabled = false;
+      return;
+    }
 
     try {
       // 設定音訊模式

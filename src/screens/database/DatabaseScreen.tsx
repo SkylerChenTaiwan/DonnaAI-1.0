@@ -79,6 +79,19 @@ const getTaskStatusText = (status: string) => {
   }
 };
 
+// Render 函數 - 移到組件外部以避免壓縮問題
+const renderRecordType = (value: any) => (
+  <Text style={styles.typeText}>{value === 'meeting' ? '會議' : '通話'}</Text>
+);
+
+const renderTaskStatus = (value: any) => (
+  <View style={[styles.statusBadge, getTaskStatusStyle(value)]}>
+    <Text style={styles.statusText}>
+      {getTaskStatusText(value)}
+    </Text>
+  </View>
+);
+
 export const DatabaseScreen: React.FC = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [activeTab, setActiveTab] = useState<TabType>('customers');
@@ -136,9 +149,7 @@ export const DatabaseScreen: React.FC = () => {
 
   // 紀錄表格欄位
   const recordColumns: TableColumn[] = useMemo(() => [
-    { key: 'type', title: '類型', sortable: true, filterable: true, render: (value) => (
-      <Text style={styles.typeText}>{value === 'meeting' ? '會議' : '通話'}</Text>
-    )},
+    { key: 'type', title: '類型', sortable: true, filterable: true, render: renderRecordType },
     { key: 'customerName', title: '客戶', sortable: true, filterable: true },
     { key: 'date', title: '日期', sortable: true, filterable: true },
     { key: 'summary', title: '摘要', sortable: true, filterable: true },
@@ -149,13 +160,7 @@ export const DatabaseScreen: React.FC = () => {
     { key: 'title', title: '標題', sortable: true, filterable: true },
     { key: 'assignee', title: '負責人', sortable: true, filterable: true },
     { key: 'dueDate', title: '到期日', sortable: true, filterable: true },
-    { key: 'status', title: '狀態', sortable: true, filterable: true, render: (value) => (
-      <View style={[styles.statusBadge, getTaskStatusStyle(value)]}>
-        <Text style={styles.statusText}>
-          {getTaskStatusText(value)}
-        </Text>
-      </View>
-    )},
+    { key: 'status', title: '狀態', sortable: true, filterable: true, render: renderTaskStatus },
   ], []);
 
   // 取得當前標籤的資料（使用 useMemo 優化）
