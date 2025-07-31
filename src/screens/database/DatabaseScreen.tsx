@@ -438,6 +438,23 @@ export const DatabaseScreen: React.FC = () => {
     windowSize: typeof window !== 'undefined' ? `${window.innerWidth}x${window.innerHeight}` : 'N/A'
   });
 
+  // 調試 Platform.select() 的選擇結果
+  const webComponent = TanStackNotionTable;
+  const defaultComponent = NotionStyleTableV2;
+  const selectedComponent = Platform.select({
+    web: webComponent,
+    default: defaultComponent,
+  });
+  
+  console.log('🔍 Platform.select() 調試:', {
+    'Platform.OS': Platform.OS,
+    'webComponent': webComponent.name,
+    'defaultComponent': defaultComponent.name,
+    'selectedComponent': selectedComponent?.name,
+    'TanStackNotionTable 可用': !!TanStackNotionTable,
+    'NotionStyleTableV2 可用': !!NotionStyleTableV2
+  });
+
   return (
     <Layout scrollable={false}>
       <View style={[styles.container, isDesktop && styles.desktopContainer]}>
@@ -524,9 +541,12 @@ export const DatabaseScreen: React.FC = () => {
               />
             ) : (() => {
               // 平台特定的表格元件選擇
-              const TableComponent = Platform.select({
-                web: TanStackNotionTable,
-                default: NotionStyleTableV2,
+              const TableComponent = selectedComponent;
+              
+              console.log('🔍 即將渲染的表格組件:', {
+                componentName: TableComponent?.name,
+                isWeb: Platform.OS === 'web',
+                dataLength: currentData.data.length
               });
 
               return (

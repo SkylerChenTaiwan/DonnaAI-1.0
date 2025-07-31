@@ -10,7 +10,7 @@ import { useNotionTable } from './hooks/useNotionTable';
 import { useNotionColumns } from './hooks/useNotionColumns';
 import { NotionTableCell } from './NotionTableCell';
 import { NotionCheckbox } from './NotionCheckbox';
-import { generateColumnsByType } from '../shared/tableUtils';
+import { generateColumnsByType, convertToTanStackColumns } from '../shared/tableUtils';
 import { TableColumn } from '@/types/table';
 import { Icon } from '@/components/common/Icon';
 
@@ -46,12 +46,53 @@ export const TanStackNotionTable: React.FC<TanStackTableProps> = ({
     return 'customers';
   }, [data]);
 
-  // 生成欄位定義
-  const columns = useNotionColumns({
+  // 生成欄位定義 - 使用傳入的 columns 參數
+  const generatedColumns = useNotionColumns({
     onUpdateCell,
     onColumnsReorder,
     activeTab: dataType,
     includeSelectColumn: multiSelectMode,
+  });
+
+  // 使用傳入的 columns，如果沒有則使用生成的
+  const baseColumns = propColumns && propColumns.length > 0 
+    ? convertToTanStackColumns(propColumns, onUpdateCell)
+    : generatedColumns.filter(col => col.id !== 'select'); // 移除自動生成的選擇列
+  
+  // 手動添加選擇列（如果需要）
+  const columns = useMemo(() => {
+    const result = [...baseColumns];
+    
+    if (multiSelectMode) {
+      result.unshift({
+        id: 'select',
+        header: ({ table }) => (
+          <NotionCheckbox
+            checked={table.getIsAllRowsSelected()}
+            indeterminate={table.getIsSomeRowsSelected()}
+            onChange={(checked) => table.toggleAllRowsSelected(checked)}
+          />
+        ),
+        cell: ({ row }) => (
+          <NotionCheckbox
+            checked={row.getIsSelected()}
+            onChange={(checked) => row.toggleSelected(checked)}
+          />
+        ),
+        size: 40,
+        enableSorting: false,
+      });
+    }
+    
+    return result;
+  }, [baseColumns, multiSelectMode]);
+  
+  console.log('🔍 TanStackNotionTable columns 調試:', {
+    propColumns: propColumns?.length || 0,
+    generatedColumns: generatedColumns.length,
+    finalColumns: columns.length,
+    dataType,
+    multiSelectMode
   });
 
   // 建立表格實例
