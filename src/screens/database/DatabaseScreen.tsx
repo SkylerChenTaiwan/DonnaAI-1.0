@@ -503,7 +503,6 @@ export const DatabaseScreen: React.FC = () => {
           </View>
         </View>
       </View>
-    </Layout>
 
       {/* 篩選器 Modal */}
       <FilterModal
@@ -584,7 +583,7 @@ export const DatabaseScreen: React.FC = () => {
           </View>
         </View>
       )}
-    </>
+    </Layout>
   );
 };
 
