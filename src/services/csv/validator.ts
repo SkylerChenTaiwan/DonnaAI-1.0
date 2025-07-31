@@ -403,7 +403,6 @@ export function validateBusinessCodeMapping(
   let validRecords = 0;
   let invalidRecords = 0;
   let skippedRecords = 0;
-  let skippedRecords = 0;
   
   const codeMap = new Map<string, number[]>();
   const nameMap = new Map<string, number[]>();
