@@ -54,6 +54,259 @@ interface Tab {
   count?: number;
 }
 
+const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: '#F5F5F5',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#F5F5F5',
+  },
+  contentWrapper: {
+    flex: 1,
+  },
+  tableContainer: {
+    flex: 1,
+  },
+  toolbar: {
+    flexDirection: 'row',
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E3E1DC',
+    alignItems: 'center',
+    gap: 12,
+  },
+  searchContainer: {
+    flex: 1,
+    minWidth: 200,
+  },
+  searchBar: {
+    width: '100%',
+  },
+  toolbarButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  iconButton: {
+    padding: 8,
+    borderRadius: 6,
+  },
+  iconButtonActive: {
+    backgroundColor: '#FFF5E6', // 橘色背景，與多選模式保持一致
+    borderColor: '#FFE4B5',
+    borderWidth: 1,
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#FFFFFF',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E3E1DC',
+  },
+  tab: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    gap: 8,
+  },
+  activeTab: {
+    borderBottomWidth: 2,
+    borderBottomColor: '#1A1A1A',
+  },
+  tabText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#7A7A7A',
+  },
+  activeTabText: {
+    color: '#1A1A1A',
+    fontWeight: '700',
+  },
+  statusBadge: {
+    backgroundColor: '#E3E1DC',
+    borderRadius: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    alignSelf: 'flex-start',
+  },
+  statusActive: {
+    backgroundColor: '#E3F2E6',
+  },
+  statusCompleted: {
+    backgroundColor: '#E3F2E6',
+  },
+  statusTodo: {
+    backgroundColor: '#FEF3E2',
+  },
+  statusInProgress: {
+    backgroundColor: '#E8F0FF',
+  },
+  statusCancelled: {
+    backgroundColor: '#FFE5E5',
+  },
+  statusText: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#1A1A1A',
+  },
+  typeText: {
+    fontSize: 14,
+    color: '#1A1A1A',
+  },
+  // 批量操作工具列樣式
+  batchActionsBar: {
+    position: 'absolute',
+    bottom: 90,
+    left: 0,
+    right: 0,
+    backgroundColor: '#1A1A1A',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  batchActionsLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  batchActionsText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#F7F6F3',
+  },
+  batchActionsRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  batchActionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    gap: 6,
+  },
+  batchActionButtonText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#F7F6F3',
+  },
+  cancelButton: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+  },
+  cancelButtonText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#F7F6F3',
+  },
+  // 批量編輯容器樣式
+  batchEditContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 1000,
+  },
+  batchEditOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  batchEditContent: {
+    position: 'absolute',
+    top: 60,
+    left: 20,
+    right: 20,
+    bottom: 20,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    elevation: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    overflow: 'hidden',
+  },
+  
+  // 桌面版樣式
+  desktopSidebar: {
+    flex: 1,
+    paddingVertical: 24,
+    paddingHorizontal: 16,
+  },
+  desktopTabContainer: {
+    gap: 8,
+  },
+  desktopTab: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 8,
+    ...webOnly({
+      transition: 'all 0.2s ease',
+      cursor: 'pointer',
+    }),
+  },
+  activeDesktopTab: {
+    backgroundColor: '#F7F7F7',
+    borderLeftWidth: 3,
+    borderLeftColor: '#FF5C00',
+  },
+  desktopTabText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#7A7A7A',
+  },
+  activeDesktopTabText: {
+    color: '#1A1A1A',
+    fontWeight: '600',
+  },
+  desktopActions: {
+    marginTop: 32,
+    paddingTop: 24,
+    borderTopWidth: 1,
+    borderTopColor: '#E3E1DC',
+    gap: 12,
+  },
+  desktopActionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 6,
+    ...webOnly({
+      transition: 'all 0.2s ease',
+      cursor: 'pointer',
+      ':hover': {
+        backgroundColor: '#F7F7F7',
+      },
+    }),
+  },
+  desktopActionText: {
+    fontSize: 14,
+    color: '#6B6B6B',
+  },
+});
+
 // 輔助函數 - 不依賴 styles 的版本
 const getTaskStatusText = (status: string) => {
   switch (status) {
@@ -745,8 +998,8 @@ export const DatabaseScreen: React.FC = () => {
 
   const isDesktop = isDesktopWeb();
   
-  // 桌面版側邊欄內容
-  const sidebarContent = isDesktop ? (
+  // 桌面版側邊欄內容 - 使用 useMemo 以延遲計算
+  const sidebarContent = useMemo(() => isDesktop ? (
     <View style={styles.desktopSidebar}>
       {/* Tab 導航 - 垂直排列 */}
       <View style={styles.desktopTabContainer}>
@@ -799,7 +1052,7 @@ export const DatabaseScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
     </View>
-  ) : null;
+  ) : null, [isDesktop, tabs, activeTab]);
 
   return (
     <>
@@ -1081,257 +1334,3 @@ export const DatabaseScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    backgroundColor: '#F5F5F5',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#F5F5F5',
-  },
-  contentWrapper: {
-    flex: 1,
-  },
-  tableContainer: {
-    flex: 1,
-  },
-  toolbar: {
-    flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
-    alignItems: 'center',
-    gap: 12,
-  },
-  searchContainer: {
-    flex: 1,
-    minWidth: 200,
-  },
-  searchBar: {
-    width: '100%',
-  },
-  toolbarButtons: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  iconButton: {
-    padding: 8,
-    borderRadius: 6,
-  },
-  iconButtonActive: {
-    backgroundColor: '#FFF5E6', // 橘色背景，與多選模式保持一致
-    borderColor: '#FFE4B5',
-    borderWidth: 1,
-  },
-  tabContainer: {
-    flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
-  },
-  tab: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    gap: 8,
-  },
-  activeTab: {
-    borderBottomWidth: 2,
-    borderBottomColor: '#1A1A1A',
-  },
-  tabText: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#7A7A7A',
-  },
-  activeTabText: {
-    color: '#1A1A1A',
-    fontWeight: '700',
-  },
-  statusBadge: {
-    backgroundColor: '#E3E1DC',
-    borderRadius: 4,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    alignSelf: 'flex-start',
-  },
-  statusActive: {
-    backgroundColor: '#E3F2E6',
-  },
-  statusCompleted: {
-    backgroundColor: '#E3F2E6',
-  },
-  statusTodo: {
-    backgroundColor: '#FEF3E2',
-  },
-  statusInProgress: {
-    backgroundColor: '#E8F0FF',
-  },
-  statusCancelled: {
-    backgroundColor: '#FFE5E5',
-  },
-  statusText: {
-    fontSize: 12,
-    fontWeight: '500',
-    color: '#1A1A1A',
-  },
-  typeText: {
-    fontSize: 14,
-    color: '#1A1A1A',
-  },
-  // 批量操作工具列樣式
-  batchActionsBar: {
-    position: 'absolute',
-    bottom: 90,
-    left: 0,
-    right: 0,
-    backgroundColor: '#1A1A1A',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    elevation: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  batchActionsLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  batchActionsText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#F7F6F3',
-  },
-  batchActionsRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  batchActionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-    gap: 6,
-  },
-  batchActionButtonText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#F7F6F3',
-  },
-  cancelButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-  },
-  cancelButtonText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#F7F6F3',
-  },
-  // 批量編輯容器樣式
-  batchEditContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: 1000,
-  },
-  batchEditOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  batchEditContent: {
-    position: 'absolute',
-    top: 60,
-    left: 20,
-    right: 20,
-    bottom: 20,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    elevation: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
-    overflow: 'hidden',
-  },
-  
-  // 桌面版樣式
-  desktopSidebar: {
-    flex: 1,
-    paddingVertical: 24,
-    paddingHorizontal: 16,
-  },
-  desktopTabContainer: {
-    gap: 8,
-  },
-  desktopTab: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 8,
-    ...webOnly({
-      transition: 'all 0.2s ease',
-      cursor: 'pointer',
-    }),
-  },
-  activeDesktopTab: {
-    backgroundColor: '#F7F7F7',
-    borderLeftWidth: 3,
-    borderLeftColor: '#FF5C00',
-  },
-  desktopTabText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#7A7A7A',
-  },
-  activeDesktopTabText: {
-    color: '#1A1A1A',
-    fontWeight: '600',
-  },
-  desktopActions: {
-    marginTop: 32,
-    paddingTop: 24,
-    borderTopWidth: 1,
-    borderTopColor: '#E3E1DC',
-    gap: 12,
-  },
-  desktopActionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 6,
-    ...webOnly({
-      transition: 'all 0.2s ease',
-      cursor: 'pointer',
-      ':hover': {
-        backgroundColor: '#F7F7F7',
-      },
-    }),
-  },
-  desktopActionText: {
-    fontSize: 14,
-    color: '#6B6B6B',
-  },
-});
-
-// 輔助函數 - 已移除，改用內聯樣式以避免初始化錯誤
