@@ -19,6 +19,8 @@ import { Icon } from '@/components/common/Icon';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { Layout } from '@/components/common/Layout';
+import { ResponsiveLayout, responsiveGrid } from '@/components/common/ResponsiveLayout';
+import { useResponsiveLayout } from '@/hooks/useResponsiveLayout';
 import { DesignSystem } from '@/theme/designSystem';
 import { useAuthStore } from '@/stores/authStore';
 import { 
@@ -62,6 +64,7 @@ export function LegacyDataImportScreen({ navigation }: any) {
   const [importResult, setImportResult] = useState<ImportSessionResult | null>(null);
   const [session, setSession] = useState<LegacyImportSession | null>(null);
   const [activeStep, setActiveStep] = useState(0);
+  const { isDesktop, isTablet, isLandscape } = useResponsiveLayout();
 
   // 初始化 session
   useEffect(() => {
@@ -389,11 +392,15 @@ export function LegacyDataImportScreen({ navigation }: any) {
     }
   };
 
-  const renderFileUpload = () => (
-    <View style={styles.stepContent}>
-      <Text style={styles.stepTitle}>請上傳舊系統匯出的 CSV 檔案</Text>
-      
-      {fileTypes.map((fileType) => (
+  const renderFileUpload = () => {
+    const useGrid = isDesktop || (isTablet && isLandscape);
+    
+    return (
+      <View style={styles.stepContent}>
+        <Text style={styles.stepTitle}>請上傳舊系統匯出的 CSV 檔案</Text>
+        
+        <View style={[useGrid && responsiveGrid.twoColumn]}>
+          {fileTypes.map((fileType) => (
         <View key={fileType.key} style={styles.fileSection}>
           <View style={styles.fileSectionHeader}>
             <Text style={styles.fileLabel}>
@@ -441,9 +448,10 @@ export function LegacyDataImportScreen({ navigation }: any) {
             </View>
           )}
         </View>
-      ))}
+          ))}
+        </View>
 
-      <TouchableOpacity
+        <TouchableOpacity
         style={[
           styles.actionButton,
           !files.codeMapping || !files.users ? styles.disabledButton : null,
@@ -452,9 +460,10 @@ export function LegacyDataImportScreen({ navigation }: any) {
         disabled={!files.codeMapping || !files.users}
       >
         <Text style={styles.actionButtonText}>開始驗證</Text>
-      </TouchableOpacity>
-    </View>
-  );
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   const renderValidation = () => (
     <View style={styles.stepContent}>
@@ -569,15 +578,9 @@ export function LegacyDataImportScreen({ navigation }: any) {
     </View>
   );
 
-  return (
-    <Layout
-      headerProps={{
-        title: '舊系統資料導入',
-        showBack: true,
-        onBack: () => navigation.goBack(),
-      }}
-    >
-      <ScrollView style={styles.container}>
+  // 使用響應式佈局
+  const layoutContent = (
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         {/* 步驟指示器 */}
         <View style={styles.stepIndicator}>
           {steps.map((step, index) => (
@@ -611,6 +614,40 @@ export function LegacyDataImportScreen({ navigation }: any) {
         {/* 步驟內容 */}
         {renderStep()}
       </ScrollView>
+  );
+
+  // Web 平台使用 ResponsiveLayout
+  if (Platform.OS === 'web' && (isDesktop || (isTablet && isLandscape))) {
+    return (
+      <ResponsiveLayout
+        scrollable={false}
+        maxWidth={1400}
+        padding={true}
+      >
+        <View style={styles.webHeader}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Icon name="arrow-back" size={24} color={DesignSystem.colors.text.primary} />
+          </TouchableOpacity>
+          <Text style={styles.webTitle}>舊系統資料導入</Text>
+        </View>
+        {layoutContent}
+      </ResponsiveLayout>
+    );
+  }
+
+  // 行動版使用原有 Layout
+  return (
+    <Layout
+      headerProps={{
+        title: '舊系統資料導入',
+        showBack: true,
+        onBack: () => navigation.goBack(),
+      }}
+    >
+      {layoutContent}
     </Layout>
   );
 }
@@ -859,5 +896,23 @@ const styles = StyleSheet.create({
   },
   completeActions: {
     width: '100%',
+  },
+  // Web 專用樣式
+  webHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 24,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: DesignSystem.colors.border.light,
+  },
+  backButton: {
+    padding: 8,
+    marginRight: 16,
+  },
+  webTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: DesignSystem.colors.text.primary,
   },
 });
