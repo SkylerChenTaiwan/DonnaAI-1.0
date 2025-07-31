@@ -222,10 +222,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
           </TouchableOpacity>
         )}
         
-        {/* 收合按鈕（僅平板顯示） */}
+        {/* 收合按鈕（桌面和平板都顯示） */}
         {onToggle && (
           <TouchableOpacity 
-            style={styles.collapseButton}
+            style={[
+              styles.collapseButton,
+              collapsed && styles.collapseButtonCollapsed
+            ]}
             onPress={onToggle}
           >
             <Icon 
@@ -415,6 +418,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     ...shadows.small,
+  },
+  collapseButtonCollapsed: {
+    // 側邊欄收合時，按鈕位置需要調整
+    right: -12,
   },
   shortcutsHint: {
     flexDirection: 'row',

@@ -49,18 +49,19 @@ export const WebNavigator = () => {
       const { width } = getWebScreenInfo();
       setWindowWidth(width);
       
-      // 平板模式下預設收合側邊欄
-      if (width >= UNIFIED_BREAKPOINTS.tablet && width < UNIFIED_BREAKPOINTS.desktop) {
-        setSidebarCollapsed(true);
-      } else if (width >= UNIFIED_BREAKPOINTS.desktop) {
-        setSidebarCollapsed(false);
+      // 初次載入時的預設狀態
+      if (!windowWidth) {
+        // 平板和手機模式下預設收合側邊欄
+        if (width < UNIFIED_BREAKPOINTS.desktop) {
+          setSidebarCollapsed(true);
+        }
       }
     };
     
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [windowWidth]);
   
   // 添加調試日誌
   const handleSidebarToggle = () => {
@@ -68,8 +69,8 @@ export const WebNavigator = () => {
     setSidebarCollapsed(!sidebarCollapsed);
   };
   
-  // 在手機模式下，側邊欄應該是可切換的
-  const showSidebar = isDesktop || ((isTablet || isMobile) && !sidebarCollapsed);
+  // 側邊欄顯示邏輯：桌面模式始終顯示（但可收合），平板和手機模式根據狀態顯示
+  const showSidebar = true; // 始終渲染側邊欄組件，通過 collapsed 控制收合
   const showTopBar = isTablet || isMobile;
   
   return (
@@ -90,7 +91,7 @@ export const WebNavigator = () => {
           isMobile && !sidebarCollapsed && styles.mobileSidebarVisible
         ]}>
           <Sidebar 
-            collapsed={isTablet && sidebarCollapsed}
+            collapsed={sidebarCollapsed}  // 所有模式都使用統一的收合狀態
             onToggle={handleSidebarToggle}
           />
         </View>
