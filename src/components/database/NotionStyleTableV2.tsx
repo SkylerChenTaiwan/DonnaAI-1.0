@@ -439,11 +439,15 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
               onStartEdit={() => {}}
               onFinishEdit={(value) => {
                 setNewRowData({ ...newRowData, [column.key]: value });
-                // 如果是最後一個欄位，按 Enter 儲存
-                if (index === columns.length - 1 && value) {
+              }}
+              onTab={(shiftKey) => {
+                // Tab 鍵導航到下一個欄位
+                if (!shiftKey && index === columns.length - 1) {
+                  // 最後一個欄位，儲存並結束
                   handleSaveNewRow();
                 }
               }}
+              onCancel={handleCancelNewRow}
               inputType={getInputTypeForColumn(column)}
               placeholder={column.title}
               autoFocus={index === 0}

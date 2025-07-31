@@ -223,13 +223,13 @@ const styles = StyleSheet.create({
   editInput: {
     fontSize: 14,
     paddingHorizontal: 8,
-    paddingVertical: 8,
+    paddingVertical: 6,
     minHeight: 32,
     color: '#37352f',
-    backgroundColor: '#fff',
-    borderWidth: 2,
-    borderColor: '#2383e2',
-    borderRadius: 3,
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    borderRadius: 0,
+    outline: 'none',
   },
   multilineInput: {
     minHeight: 60,
