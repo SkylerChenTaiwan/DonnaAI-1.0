@@ -21,6 +21,7 @@ import { FilterModal } from '@/components/common/FilterModal';
 import { ColumnSettingsModal } from '@/components/common/ColumnSettingsModal';
 import { EmptyState } from '@/components/database/EmptyState';
 import { NotionStyleTable } from '@/components/database/NotionStyleTable';
+import { NotionStyleTableDebug } from '@/components/database/NotionStyleTableDebug';
 import { DatabaseToolbar } from '@/components/database/DatabaseToolbar';
 import { AddColumnDialog, ColumnType, ColumnConfig } from '@/components/database/AddColumnDialog';
 import { SkeletonLoader } from '@/components/database/SkeletonLoader';
@@ -543,25 +544,13 @@ export const DatabaseScreen: React.FC = () => {
                 columns={currentColumns.length}
                 showHeader={true}
               />
-            ) : currentData.data.length === 0 && !multiSelectMode ? (
-              <EmptyState 
-                type={activeTab} 
-                onAdd={handleAddRow} 
-              />
             ) : (
-              <NotionStyleTable
+              <NotionStyleTableDebug
                 data={currentData.data}
                 columns={currentColumns}
                 onAddRow={handleAddRow}
                 onAddColumn={() => setShowAddColumnDialog(true)}
                 onRowPress={handleRowPress}
-                multiSelectMode={multiSelectMode}
-                selectedItems={selectedItems}
-                onSelect={setSelectedItems}
-                refreshing={currentData.loading}
-                onRefresh={handleRefresh}
-                sortConfig={currentSort}
-                onSort={handleSort}
               />
             )}
           </View>
