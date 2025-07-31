@@ -998,8 +998,10 @@ export const DatabaseScreen: React.FC = () => {
 
   const isDesktop = isDesktopWeb();
   
-  // 桌面版側邊欄內容 - 使用 useMemo 以延遲計算
-  const sidebarContent = useMemo(() => isDesktop ? (
+  // 桌面版側邊欄內容 - 改為函數以避免初始化問題
+  const renderSidebarContent = () => {
+    if (!isDesktop) return null;
+    return (
     <View style={styles.desktopSidebar}>
       {/* Tab 導航 - 垂直排列 */}
       <View style={styles.desktopTabContainer}>
@@ -1052,12 +1054,13 @@ export const DatabaseScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
     </View>
-  ) : null, [isDesktop, tabs, activeTab]);
+    );
+  };
 
   return (
     <>
       <ResponsiveLayout
-        sidebar={sidebarContent}
+        sidebar={renderSidebarContent()}
         scrollable={false}
         style={styles.container}
       >
