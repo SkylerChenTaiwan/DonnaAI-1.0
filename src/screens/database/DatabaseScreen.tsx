@@ -429,10 +429,27 @@ export const DatabaseScreen: React.FC = () => {
 
   const isDesktop = isDesktopWeb();
 
+  // 偵錯資訊：檢查平台偵測
+  console.log('🔍 DatabaseScreen 平台偵測:', {
+    Platform: Platform.OS,
+    isDesktop,
+    userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'N/A',
+    windowSize: typeof window !== 'undefined' ? `${window.innerWidth}x${window.innerHeight}` : 'N/A'
+  });
 
   return (
     <Layout scrollable={false} backgroundColor="#F7F6F4">
       <View style={[styles.container, isDesktop && styles.desktopContainer]}>
+        {/* 偵錯資訊顯示 */}
+        {Platform.OS === 'web' && (
+          <View style={{ padding: 10, backgroundColor: '#fffbeb', borderBottomWidth: 1, borderBottomColor: '#fbbf24' }}>
+            <Text style={{ fontSize: 12, color: '#92400e' }}>
+              偵錯: Platform={Platform.OS}, isDesktop={String(isDesktop)}, 
+              視窗大小={typeof window !== 'undefined' ? `${window.innerWidth}x${window.innerHeight}` : 'N/A'}
+            </Text>
+          </View>
+        )}
+        
         {/* 頁面標題 */}
         {isDesktop && (
           <View style={styles.pageHeader}>
