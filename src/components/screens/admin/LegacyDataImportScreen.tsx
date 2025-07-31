@@ -19,8 +19,9 @@ import { Icon } from '@/components/common/Icon';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { Layout } from '@/components/common/Layout';
-import { ResponsiveLayout, responsiveGrid } from '@/components/common/ResponsiveLayout';
-import { useResponsiveLayout } from '@/hooks/useResponsiveLayout';
+import { UnifiedWebLayout } from '@/components/layout/UnifiedWebLayout';
+import { responsiveGrid } from '@/components/common/ResponsiveLayout';
+import { isDesktopWeb, isTabletWeb } from '@/utils/web-detector';
 import { DesignSystem } from '@/theme/designSystem';
 import { useAuthStore } from '@/stores/authStore';
 import { 
@@ -64,7 +65,9 @@ export function LegacyDataImportScreen({ navigation }: any) {
   const [importResult, setImportResult] = useState<ImportSessionResult | null>(null);
   const [session, setSession] = useState<LegacyImportSession | null>(null);
   const [activeStep, setActiveStep] = useState(0);
-  const { isDesktop, isTablet, isLandscape } = useResponsiveLayout();
+  const isDesktop = isDesktopWeb();
+  const isTablet = isTabletWeb();
+  const isLandscape = true; // 簡化判斷
 
   // 初始化 session
   useEffect(() => {
@@ -616,14 +619,10 @@ export function LegacyDataImportScreen({ navigation }: any) {
       </ScrollView>
   );
 
-  // Web 平台使用 ResponsiveLayout
+  // Web 平台使用 UnifiedWebLayout
   if (Platform.OS === 'web' && (isDesktop || (isTablet && isLandscape))) {
     return (
-      <ResponsiveLayout
-        scrollable={false}
-        maxWidth={1400}
-        padding={true}
-      >
+      <UnifiedWebLayout scrollable={false} maxWidth={1400}>
         <View style={styles.webHeader}>
           <TouchableOpacity 
             style={styles.backButton}
@@ -634,7 +633,7 @@ export function LegacyDataImportScreen({ navigation }: any) {
           <Text style={styles.webTitle}>舊系統資料導入</Text>
         </View>
         {layoutContent}
-      </ResponsiveLayout>
+      </UnifiedWebLayout>
     );
   }
 

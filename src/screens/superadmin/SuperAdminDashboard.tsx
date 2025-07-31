@@ -17,7 +17,7 @@ import {
 } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
-import { ResponsiveLayout } from '@/components/common/ResponsiveLayout';
+import { UnifiedWebLayout } from '@/components/layout/UnifiedWebLayout';
 import { isWebPlatform, isDesktopWeb, isTabletWeb } from '@/utils/web-detector';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -133,18 +133,26 @@ export const SuperAdminDashboard: React.FC = () => {
   const isWeb = isWebPlatform();
   const isDesktop = isDesktopWeb();
   const isTablet = isTabletWeb();
-  const useResponsiveLayout = isWeb && (isDesktop || isTablet);
-  
-  const LayoutComponent = useResponsiveLayout ? ResponsiveLayout : Layout;
+  const shouldUseWebLayout = isWeb && (isDesktop || isTablet);
   
   if (isLoading && !refreshing) {
+    if (shouldUseWebLayout) {
+      return (
+        <UnifiedWebLayout>
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={DesignSystem.colors.primary} />
+            <Text style={styles.loadingText}>載入中...</Text>
+          </View>
+        </UnifiedWebLayout>
+      );
+    }
     return (
-      <LayoutComponent style={styles.container}>
+      <Layout style={styles.container}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={DesignSystem.colors.primary} />
           <Text style={styles.loadingText}>載入中...</Text>
         </View>
-      </LayoutComponent>
+      </Layout>
     );
   }
   
@@ -157,7 +165,7 @@ export const SuperAdminDashboard: React.FC = () => {
       </View>
 
       {/* 快速統計 */}
-      <View style={[styles.statsGrid, useResponsiveLayout && styles.webStatsGrid]}>
+      <View style={[styles.statsGrid, shouldUseWebLayout && styles.webStatsGrid]}>
         {quickStats.map((stat) => (
           <View key={stat.id} style={[styles.statCard, useResponsiveLayout && styles.webStatCard]}>
             <View style={[styles.statIconContainer, { backgroundColor: `${stat.color}15` }]}>
@@ -246,18 +254,33 @@ export const SuperAdminDashboard: React.FC = () => {
     </>
   );
 
+  if (shouldUseWebLayout) {
+    return (
+      <UnifiedWebLayout scrollable={false} maxWidth={1600}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
+          contentContainerStyle={styles.webScrollContent}
+        >
+          {content}
+        </ScrollView>
+      </UnifiedWebLayout>
+    );
+  }
+  
   return (
-    <LayoutComponent style={styles.container} scrollable={false} padding={false}>
+    <Layout style={styles.container} scrollable={false} padding={false}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
-        contentContainerStyle={useResponsiveLayout && styles.webScrollContent}
       >
         {content}
       </ScrollView>
-    </LayoutComponent>
+    </Layout>
   );
 };
 
