@@ -20,7 +20,7 @@ import { useRecordStore } from '@/stores/recordStore';
 import { useTaskStore } from '@/stores/taskStore';
 import { RootStackParamList } from '@/types/navigation';
 import { migrateToUnifiedWebLayout } from '@/components/layout/withUnifiedWebLayout';
-import { shouldUseWebLayout } from '@/utils/webDetector';
+import { shouldUseWebLayout } from '@/utils/web-detector';
 
 type CustomerDetailRouteProp = RouteProp<RootStackParamList, 'CustomerDetail'>;
 type CustomerDetailNavigationProp = StackNavigationProp<RootStackParamList, 'CustomerDetail'>;

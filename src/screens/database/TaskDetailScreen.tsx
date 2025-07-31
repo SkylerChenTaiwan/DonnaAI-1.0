@@ -21,7 +21,7 @@ import { RootStackParamList } from '@/types/navigation';
 import { showToast } from '@/utils/toast';
 import { useAuth } from '@/hooks/useAuth';
 import { migrateToUnifiedWebLayout } from '@/components/layout/withUnifiedWebLayout';
-import { shouldUseWebLayout } from '@/utils/webDetector';
+import { shouldUseWebLayout } from '@/utils/web-detector';
 
 type TaskDetailRouteProp = RouteProp<RootStackParamList, 'TaskDetail'>;
 type TaskDetailNavigationProp = StackNavigationProp<RootStackParamList, 'TaskDetail'>;
