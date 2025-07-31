@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Platform } from 'react-native';
+import { View, StyleSheet, ScrollView, Platform, TouchableOpacity } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { isWebPlatform, getWebScreenInfo } from '@/utils/web-detector';
@@ -68,17 +68,32 @@ export const WebNavigator = () => {
     setSidebarCollapsed(!sidebarCollapsed);
   };
   
-  const showSidebar = isDesktop || (isTablet && !sidebarCollapsed);
+  // 在手機模式下，側邊欄應該是可切換的
+  const showSidebar = isDesktop || ((isTablet || isMobile) && !sidebarCollapsed);
   const showTopBar = isTablet || isMobile;
   
   return (
     <View style={styles.container}>
+      {/* 側邊欄遮罩層（手機模式） */}
+      {isMobile && !sidebarCollapsed && (
+        <TouchableOpacity 
+          style={styles.overlay}
+          activeOpacity={1}
+          onPress={handleSidebarToggle}
+        />
+      )}
+      
       {/* 側邊欄 */}
       {showSidebar && (
-        <Sidebar 
-          collapsed={isTablet && sidebarCollapsed}
-          onToggle={handleSidebarToggle}
-        />
+        <View style={[
+          isMobile && styles.mobileSidebar,
+          isMobile && !sidebarCollapsed && styles.mobileSidebarVisible
+        ]}>
+          <Sidebar 
+            collapsed={isTablet && sidebarCollapsed}
+            onToggle={handleSidebarToggle}
+          />
+        </View>
       )}
       
       {/* 主內容區 */}
@@ -87,7 +102,7 @@ export const WebNavigator = () => {
         {showTopBar && (
           <TopBar 
             onMenuPress={handleSidebarToggle}
-            showMenu={isTablet}
+            showMenu={true}  // 平板和手機都需要菜單按鈕
           />
         )}
         
@@ -126,10 +141,33 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     backgroundColor: DesignSystem.colors.background.primary,
+    position: 'relative' as any,
   },
   mainContent: {
     flex: 1,
     flexDirection: 'column',
     minWidth: 0, // 防止內容溢出
+  },
+  overlay: {
+    position: 'absolute' as any,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    zIndex: 998,
+  },
+  mobileSidebar: {
+    position: 'absolute' as any,
+    top: 0,
+    left: -280, // 預設隱藏在左側
+    bottom: 0,
+    width: 280,
+    zIndex: 999,
+    backgroundColor: DesignSystem.colors.background.surface,
+    transition: 'transform 0.3s ease-in-out',
+  },
+  mobileSidebarVisible: {
+    transform: [{ translateX: 280 }],
   },
 });

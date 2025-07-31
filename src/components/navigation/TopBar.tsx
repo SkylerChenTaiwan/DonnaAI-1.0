@@ -42,7 +42,7 @@ export const TopBar: React.FC<TopBarProps> = ({
       case 'Settings':
         return '設定';
       default:
-        return 'DonnaAI';
+        return '';  // 不顯示預設標題，避免重複
     }
   };
   
@@ -76,9 +76,13 @@ export const TopBar: React.FC<TopBarProps> = ({
       </View>
       
       {/* 中間區域 - 頁面標題 */}
-      <View style={styles.centerSection}>
-        <Text style={styles.pageTitle}>{getTitle()}</Text>
-      </View>
+      {getTitle() ? (
+        <View style={styles.centerSection}>
+          <Text style={styles.pageTitle}>{getTitle()}</Text>
+        </View>
+      ) : (
+        <View style={styles.centerSection} />
+      )}
       
       {/* 右側區域 - 使用者資訊 */}
       <View style={styles.rightSection}>
