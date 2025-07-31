@@ -132,7 +132,7 @@ class ErrorLogger {
   private async getDeviceInfo(): Promise<DeviceInfo> {
     return {
       platform: Platform.OS as 'ios' | 'android' | 'web',
-      version: Platform.Version.toString(),
+      version: Platform.Version ? Platform.Version.toString() : 'unknown',
       model: Device.modelName || undefined,
       isDevice: Device.isDevice ?? false
     };

@@ -95,8 +95,8 @@ export const DatabaseScreen: React.FC = () => {
   
   const { user } = useAuthStore();
   const { customers, isLoading: customerLoading, fetchCustomers } = useCustomerStore();
-  const { records, isLoading: recordLoading } = useRecordStore();
-  const { tasks, isLoading: taskLoading } = useTaskStore();
+  const { records, isLoading: recordLoading, fetchRecords } = useRecordStore();
+  const { tasks, isLoading: taskLoading, fetchTasks } = useTaskStore();
 
   // 初始載入資料
   useEffect(() => {
@@ -104,10 +104,10 @@ export const DatabaseScreen: React.FC = () => {
       console.log('📊 DatabaseScreen - 載入資料, 使用者:', user.email);
       fetchCustomers(user); // 傳遞完整的 user 物件
       // 載入其他資料 - 傳遞完整的 user 物件
-      useRecordStore.getState().fetchRecords(user);
-      useTaskStore.getState().fetchTasks(user);
+      fetchRecords(user);
+      fetchTasks(user);
     }
-  }, [user, fetchCustomers]);
+  }, [user, fetchCustomers, fetchRecords, fetchTasks]);
 
   // 調試：監控重新渲染
   console.log('🔄 DatabaseScreen render:', {
