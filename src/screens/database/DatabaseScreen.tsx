@@ -22,10 +22,6 @@ import { FilterBadge, FilterCondition } from '@/components/common/FilterBadge';
 import { FilterModal } from '@/components/common/FilterModal';
 import { isDesktopWeb, isTabletWeb } from '@/utils/web-detector';
 import { responsive, webOnly } from '@/styles/web';
-interface SortConfig {
-  key: string | null;
-  direction: 'asc' | 'desc';
-}
 import { BatchEditForm } from '@/components/database/BatchEditForm';
 import { ColumnSettingsModal } from '@/components/common/ColumnSettingsModal';
 import { useColumnSettings } from '@/hooks/useColumnSettings';
@@ -44,6 +40,11 @@ import { createCustomer } from '@/services/firebase/customers';
 import { createRecord } from '@/services/firebase/records';
 import { createTask } from '@/services/firebase/tasks';
 import { showToast } from '@/utils/toast';
+
+interface SortConfig {
+  key: string | null;
+  direction: 'asc' | 'desc';
+}
 
 type TabType = 'customers' | 'records' | 'tasks';
 

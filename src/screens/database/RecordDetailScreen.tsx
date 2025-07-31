@@ -18,6 +18,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useRecordStore } from '@/stores/recordStore';
 import { useCustomerStore } from '@/stores/customerStore';
 import { RootStackParamList } from '@/types/navigation';
+import { migrateToUnifiedWebLayout } from '@/components/layout/withUnifiedWebLayout';
+import { shouldUseWebLayout } from '@/utils/web-detector-v2';
 
 type RecordDetailRouteProp = RouteProp<RootStackParamList, 'RecordDetail'>;
 type RecordDetailNavigationProp = StackNavigationProp<RootStackParamList, 'RecordDetail'>;
@@ -51,7 +53,7 @@ export const RecordDetailScreen: React.FC = () => {
     );
   }
 
-  return (
+  const content = (
     <Layout style={styles.container} scrollable={false}>
       {/* 自定義標題列 */}
       <View style={styles.header}>
@@ -173,6 +175,16 @@ export const RecordDetailScreen: React.FC = () => {
       </ScrollView>
     </Layout>
   );
+
+  // 根據平台決定是否使用 Web 佈局
+  if (shouldUseWebLayout()) {
+    return migrateToUnifiedWebLayout(content, {
+      maxWidth: 960,
+      scrollable: false
+    });
+  }
+
+  return content;
 };
 
 const styles = StyleSheet.create({

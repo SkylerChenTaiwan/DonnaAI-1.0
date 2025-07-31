@@ -20,6 +20,8 @@ import { useCustomerStore } from '@/stores/customerStore';
 import { RootStackParamList } from '@/types/navigation';
 import { showToast } from '@/utils/toast';
 import { useAuth } from '@/hooks/useAuth';
+import { migrateToUnifiedWebLayout } from '@/components/layout/withUnifiedWebLayout';
+import { shouldUseWebLayout } from '@/utils/web-detector-v2';
 
 type TaskDetailRouteProp = RouteProp<RootStackParamList, 'TaskDetail'>;
 type TaskDetailNavigationProp = StackNavigationProp<RootStackParamList, 'TaskDetail'>;
@@ -94,7 +96,7 @@ export const TaskDetailScreen: React.FC = () => {
     }
   };
 
-  return (
+  const content = (
     <Layout style={styles.container} scrollable={false}>
       {/* 自定義標題列 */}
       <View style={styles.header}>
@@ -205,6 +207,16 @@ export const TaskDetailScreen: React.FC = () => {
       </ScrollView>
     </Layout>
   );
+
+  // 根據平台決定是否使用 Web 佈局
+  if (shouldUseWebLayout()) {
+    return migrateToUnifiedWebLayout(content, {
+      maxWidth: 960,
+      scrollable: false
+    });
+  }
+
+  return content;
 };
 
 const styles = StyleSheet.create({
