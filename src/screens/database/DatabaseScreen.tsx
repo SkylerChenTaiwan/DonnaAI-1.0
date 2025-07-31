@@ -491,6 +491,23 @@ export const DatabaseScreen: React.FC = () => {
       : allColumns;
   }, [allColumns, columnSettings?.visibleColumns]);
 
+  // 統一的重新載入方法 - 移到 handleAddRow 之前定義
+  const handleRefresh = useCallback(async () => {
+    if (!user) return;
+    
+    switch (activeTab) {
+      case 'customers':
+        await fetchCustomers(user);
+        break;
+      case 'records':
+        await fetchRecords(user);
+        break;
+      case 'tasks':
+        await fetchTasks(user);
+        break;
+    }
+  }, [user, activeTab, fetchCustomers, fetchRecords, fetchTasks]);
+
   const handleRowPress = useCallback((item: any) => {
     // 只在非多選模式下導航到詳細頁面
     if (!multiSelectMode) {
@@ -963,22 +980,6 @@ export const DatabaseScreen: React.FC = () => {
     }
   };
 
-  // 統一的重新載入方法
-  const handleRefresh = async () => {
-    if (!user) return;
-    
-    switch (activeTab) {
-      case 'customers':
-        await fetchCustomers(user);
-        break;
-      case 'records':
-        await useRecordStore.getState().fetchRecords(user);
-        break;
-      case 'tasks':
-        await useTaskStore.getState().fetchTasks(user);
-        break;
-    }
-  };
 
   // 檢查編輯權限
   const checkEditPermission = (item: any) => {
