@@ -24,6 +24,7 @@ import { EmptyState } from '@/components/database/EmptyState';
 import { NotionStyleTable } from '@/components/database/NotionStyleTable';
 import { NotionStyleTableDebug } from '@/components/database/NotionStyleTableDebug';
 import { NotionStyleTableV2 } from '@/components/database/NotionStyleTableV2';
+import { TanStackNotionTable } from '@/components/database/web';
 import { DatabaseToolbar } from '@/components/database/DatabaseToolbar';
 import { AddColumnDialog, ColumnType, ColumnConfig } from '@/components/database/AddColumnDialog';
 import { SkeletonLoader } from '@/components/database/SkeletonLoader';
@@ -521,39 +522,47 @@ export const DatabaseScreen: React.FC = () => {
                 columns={currentColumns.length}
                 showHeader={true}
               />
-            ) : (
-              <NotionStyleTableV2
-                data={currentData.data}
-                columns={currentColumns}
-                onAddRow={handleAddRow}
-                onAddColumn={() => setShowAddColumnDialog(true)}
-                onRowPress={handleRowPress}
-                multiSelectMode={multiSelectMode}
-                selectedItems={selectedItems}
-                onSelect={setSelectedItems}
-                refreshing={currentData.loading}
-                onRefresh={handleRefresh}
-                sortConfig={currentSort}
-                onSort={(key) => {
-                  // 處理列標題點擊的排序
-                  const newSort = currentSort?.key === key 
-                    ? { key, direction: currentSort.direction === 'asc' ? 'desc' : 'asc' as const }
-                    : { key, direction: 'asc' as const };
-                  setCurrentSort(newSort);
-                }}
-                onUpdateCell={async (rowId, columnKey, value) => {
-                  // 根據 activeTab 更新對應的資料
-                  showToast('info', '儲存格編輯功能開發中');
-                }}
-                onColumnsReorder={async (reorderedColumns) => {
-                  // 儲存新的欄位順序
-                  const newOrder = reorderedColumns.map(col => col.key);
-                  await saveColumnOrder(newOrder);
-                  showToast('success', '已儲存欄位順序');
-                }}
-                enableColumnDrag={true}
-              />
-            )}
+            ) : (() => {
+              // 平台特定的表格元件選擇
+              const TableComponent = Platform.select({
+                web: TanStackNotionTable,
+                default: NotionStyleTableV2,
+              });
+
+              return (
+                <TableComponent
+                  data={currentData.data}
+                  columns={currentColumns}
+                  onAddRow={handleAddRow}
+                  onAddColumn={() => setShowAddColumnDialog(true)}
+                  onRowPress={handleRowPress}
+                  multiSelectMode={multiSelectMode}
+                  selectedItems={selectedItems}
+                  onSelect={setSelectedItems}
+                  refreshing={currentData.loading}
+                  onRefresh={handleRefresh}
+                  sortConfig={currentSort}
+                  onSort={(key) => {
+                    // 處理列標題點擊的排序
+                    const newSort = currentSort?.key === key 
+                      ? { key, direction: currentSort.direction === 'asc' ? 'desc' : 'asc' as const }
+                      : { key, direction: 'asc' as const };
+                    setCurrentSort(newSort);
+                  }}
+                  onUpdateCell={async (rowId, columnKey, value) => {
+                    // 根據 activeTab 更新對應的資料
+                    showToast('info', '儲存格編輯功能開發中');
+                  }}
+                  onColumnsReorder={async (reorderedColumns) => {
+                    // 儲存新的欄位順序
+                    const newOrder = reorderedColumns.map(col => col.key);
+                    await saveColumnOrder(newOrder);
+                    showToast('success', '已儲存欄位順序');
+                  }}
+                  enableColumnDrag={true}
+                />
+              );
+            })()}
           </View>
         </View>
       </View>

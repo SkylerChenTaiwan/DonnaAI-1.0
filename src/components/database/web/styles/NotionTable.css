@@ -1,0 +1,428 @@
+/**
+ * Notion 風格資料庫表格樣式
+ * 專為 TanStack Table 設計的 CSS 樣式
+ */
+
+/* 表格容器 */
+.notion-table-container {
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* 表格本體 */
+.notion-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: #ffffff;
+}
+
+/* 表頭樣式 */
+.notion-table-header {
+  background-color: #f7f6f3;
+  border-bottom: 1px solid #e9e9e7;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.notion-table-header-row {
+  display: table-row;
+}
+
+.notion-table-header-cell {
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: #37352f;
+  border-right: 1px solid #e9e9e7;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  min-width: 120px;
+  vertical-align: middle;
+}
+
+.notion-table-header-cell:hover {
+  background-color: #eeeeec;
+}
+
+.notion-table-header-cell:last-child {
+  border-right: none;
+}
+
+/* 排序圖示 */
+.notion-table-sort-icon {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 4px;
+  opacity: 0.5;
+  transition: opacity 0.15s ease;
+}
+
+.notion-table-header-cell:hover .notion-table-sort-icon {
+  opacity: 1;
+}
+
+.notion-table-sort-icon.active {
+  opacity: 1;
+}
+
+/* 調整欄位寬度的拖拉手柄 */
+.notion-table-resize-handle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  cursor: col-resize;
+  user-select: none;
+  touch-action: none;
+}
+
+.notion-table-resize-handle:hover {
+  background-color: #0f7b0f;
+}
+
+/* 表格內容 */
+.notion-table-body {
+  background-color: #ffffff;
+}
+
+.notion-table-row {
+  display: table-row;
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+}
+
+.notion-table-row:hover {
+  background-color: #f7f6f3;
+}
+
+.notion-table-row.selected {
+  background-color: #e8f4f8;
+}
+
+.notion-table-cell {
+  padding: 6px 12px;
+  border-bottom: 1px solid #f1f1ef;
+  border-right: 1px solid #f1f1ef;
+  font-size: 14px;
+  color: #37352f;
+  line-height: 20px;
+  min-height: 32px;
+  vertical-align: middle;
+  min-width: 120px;
+}
+
+.notion-table-cell:last-child {
+  border-right: none;
+}
+
+.notion-table-row:last-child .notion-table-cell {
+  border-bottom: none;
+}
+
+/* 空儲存格樣式 */
+.notion-table-cell-empty {
+  color: #9b9b9b;
+  font-style: italic;
+}
+
+/* 可編輯儲存格樣式 */
+.notion-table-cell-editable {
+  position: relative;
+  cursor: text;
+}
+
+.notion-table-cell-editable:hover {
+  background-color: rgba(15, 123, 15, 0.05);
+  border-radius: 3px;
+}
+
+.notion-table-cell-editable.editing {
+  background-color: white;
+  border: 2px solid #0f7b0f;
+  border-radius: 3px;
+  box-shadow: 0 0 0 2px rgba(15, 123, 15, 0.1);
+}
+
+/* 輸入框樣式 */
+.notion-table-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: inherit;
+  color: inherit;
+  font-family: inherit;
+  padding: 0;
+  margin: 0;
+  line-height: inherit;
+}
+
+.notion-table-input::placeholder {
+  color: #9b9b9b;
+  font-style: italic;
+}
+
+/* 多行文字輸入 */
+.notion-table-textarea {
+  min-height: 60px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+/* 核取方塊列樣式 */
+.notion-table-checkbox-cell {
+  width: 40px;
+  min-width: 40px;
+  text-align: center;
+  padding: 6px 8px;
+}
+
+.notion-table-checkbox {
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid #d3d3d3;
+  border-radius: 3px;
+  background-color: white;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.notion-table-checkbox:hover {
+  border-color: #0f7b0f;
+}
+
+.notion-table-checkbox.checked {
+  background-color: #0f7b0f;
+  border-color: #0f7b0f;
+}
+
+.notion-table-checkbox.indeterminate {
+  background-color: #0f7b0f;
+  border-color: #0f7b0f;
+}
+
+.notion-table-checkbox.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 新增行樣式 */
+.notion-table-add-row {
+  display: table-row;
+  background-color: #fafafa;
+}
+
+.notion-table-add-row-button {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  color: #666;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
+}
+
+.notion-table-add-row-button:hover {
+  opacity: 1;
+  background-color: #f1f1ef;
+}
+
+.notion-table-add-row-icon {
+  margin-right: 6px;
+}
+
+/* 新增行編輯模式 */
+.notion-table-add-row-editing {
+  background-color: #fafafa;
+}
+
+.notion-table-add-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+}
+
+.notion-table-add-row-confirm {
+  background-color: #0f7b0f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notion-table-add-row-cancel {
+  background-color: #f1f1ef;
+  color: #666;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 狀態標籤樣式 */
+.notion-status-tag {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #37352f;
+}
+
+.notion-status-tag.completed {
+  background-color: #e3f2e6;
+}
+
+.notion-status-tag.in-progress {
+  background-color: #e8f0ff;
+}
+
+.notion-status-tag.todo {
+  background-color: #fef3e2;
+}
+
+.notion-status-tag.cancelled {
+  background-color: #ffe5e5;
+}
+
+/* 標籤樣式 */
+.notion-tag {
+  display: inline-block;
+  padding: 2px 6px;
+  margin: 1px 2px;
+  background-color: #f1f1ef;
+  border-radius: 3px;
+  font-size: 12px;
+  color: #37352f;
+}
+
+/* 載入狀態 */
+.notion-table-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: #666;
+}
+
+/* 空狀態 */
+.notion-table-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 40px;
+  text-align: center;
+}
+
+.notion-table-empty-icon {
+  opacity: 0.3;
+  margin-bottom: 16px;
+}
+
+.notion-table-empty-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #37352f;
+  margin-bottom: 8px;
+}
+
+.notion-table-empty-subtitle {
+  font-size: 16px;
+  color: #787774;
+  margin-bottom: 24px;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .notion-table-header-cell,
+  .notion-table-cell {
+    min-width: 100px;
+    padding: 6px 8px;
+    font-size: 13px;
+  }
+  
+  .notion-table-checkbox-cell {
+    width: 32px;
+    min-width: 32px;
+    padding: 6px 4px;
+  }
+  
+  .notion-table-checkbox {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* 滾動條樣式 */
+.notion-table-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.notion-table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.notion-table-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.notion-table-container::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* 動畫效果 */
+@keyframes notion-table-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.notion-table-row {
+  animation: notion-table-fade-in 0.2s ease;
+}
+
+/* 選取範圍樣式 */
+.notion-table-selection-area {
+  position: absolute;
+  background-color: rgba(15, 123, 15, 0.1);
+  border: 1px solid #0f7b0f;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* 拖放樣式 */
+.notion-table-dragging {
+  opacity: 0.5;
+}
+
+.notion-table-drop-zone {
+  background-color: rgba(15, 123, 15, 0.1);
+  border-left: 2px solid #0f7b0f;
+}

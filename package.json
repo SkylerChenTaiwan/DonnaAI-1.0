@@ -30,6 +30,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.27.6",
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
     "@expo/config-plugins": "~10.1.1",
     "@expo/metro-runtime": "~5.0.4",
     "@expo/vector-icons": "^14.1.0",
@@ -47,6 +49,7 @@
     "@sentry/react-native": "~6.14.0",
     "@shopify/flash-list": "1.7.6",
     "@shopify/react-native-skia": "^2.1.1",
+    "@tanstack/react-table": "^8.21.3",
     "@types/papaparse": "^5.3.16",
     "eslint-config-expo": "~9.2.0",
     "expo": "~53.0.0",

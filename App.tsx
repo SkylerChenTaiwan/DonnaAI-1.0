@@ -6,6 +6,9 @@
 // 導入 Metro runtime 以支援 Web 版的 HMR
 import '@expo/metro-runtime';
 
+// 導入 Web 平台專用樣式
+import './src/components/database/web/styles/NotionTable.css';
+
 import React, { useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
