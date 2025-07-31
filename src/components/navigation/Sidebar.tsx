@@ -46,26 +46,26 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
     { 
       id: 'Home' as keyof MainTabParamList, 
       label: '首頁', 
-      icon: 'analytics-outline' as keyof typeof Ionicons.glyphMap,
-      activeIcon: 'analytics' as keyof typeof Ionicons.glyphMap
+      icon: 'analytics-outline' as const,
+      activeIcon: 'analytics' as const
     },
     { 
       id: 'Database' as keyof MainTabParamList, 
       label: '資料庫', 
-      icon: 'people-outline' as keyof typeof Ionicons.glyphMap,
-      activeIcon: 'people' as keyof typeof Ionicons.glyphMap
+      icon: 'people-outline' as const,
+      activeIcon: 'people' as const
     },
     { 
       id: 'Tools' as keyof MainTabParamList, 
       label: mode === 'manager' ? '人事' : '小工具', 
-      icon: mode === 'manager' ? 'people-circle-outline' : 'build-outline' as keyof typeof Ionicons.glyphMap,
-      activeIcon: mode === 'manager' ? 'people-circle' : 'build' as keyof typeof Ionicons.glyphMap
+      icon: (mode === 'manager' ? 'people-circle-outline' : 'build-outline') as const,
+      activeIcon: (mode === 'manager' ? 'people-circle' : 'build') as const
     },
     { 
       id: 'Settings' as keyof MainTabParamList, 
       label: '設定', 
-      icon: 'person-outline' as keyof typeof Ionicons.glyphMap,
-      activeIcon: 'person' as keyof typeof Ionicons.glyphMap
+      icon: 'person-outline' as const,
+      activeIcon: 'person' as const
     },
   ];
   

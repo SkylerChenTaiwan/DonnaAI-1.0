@@ -7,11 +7,12 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Platform } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { isDesktopWeb, isTabletWeb, isMobileWeb } from '@/utils/web-detector';
+import { isWebPlatform, getWebScreenInfo } from '@/utils/web-detector';
 import { webStyles, responsive } from '@/styles/web';
 import { DesignSystem } from '@/theme/designSystem';
 import { useAuthStore } from '@/stores/authStore';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { UNIFIED_BREAKPOINTS } from '@/theme/responsive';
 
 // Import screens
 import { HomeScreen } from '@/screens/home/HomeScreen';
@@ -29,20 +30,29 @@ const Stack = createStackNavigator<MainTabParamList>();
 
 export const WebNavigator = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(0);
   const { mode } = useAuthStore();
   
   // 啟用鍵盤快捷鍵（桌面版）
   useKeyboardShortcuts();
   
+  // 根據視窗大小判斷設備類型
+  const isDesktop = windowWidth >= UNIFIED_BREAKPOINTS.desktop;
+  const isTablet = windowWidth >= UNIFIED_BREAKPOINTS.tablet && windowWidth < UNIFIED_BREAKPOINTS.desktop;
+  const isMobile = windowWidth < UNIFIED_BREAKPOINTS.tablet;
+  
   // 自動調整側邊欄狀態
   useEffect(() => {
-    if (Platform.OS !== 'web') return;
+    if (!isWebPlatform()) return;
     
     const handleResize = () => {
+      const { width } = getWebScreenInfo();
+      setWindowWidth(width);
+      
       // 平板模式下預設收合側邊欄
-      if (isTabletWeb() && !isDesktopWeb()) {
+      if (width >= UNIFIED_BREAKPOINTS.tablet && width < UNIFIED_BREAKPOINTS.desktop) {
         setSidebarCollapsed(true);
-      } else if (isDesktopWeb()) {
+      } else if (width >= UNIFIED_BREAKPOINTS.desktop) {
         setSidebarCollapsed(false);
       }
     };
@@ -52,16 +62,22 @@ export const WebNavigator = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
   
-  const showSidebar = isDesktopWeb() || (isTabletWeb() && !sidebarCollapsed);
-  const showTopBar = isTabletWeb() || isMobileWeb();
+  // 添加調試日誌
+  const handleSidebarToggle = () => {
+    console.log('[WebNavigator] Toggle sidebar:', !sidebarCollapsed);
+    setSidebarCollapsed(!sidebarCollapsed);
+  };
+  
+  const showSidebar = isDesktop || (isTablet && !sidebarCollapsed);
+  const showTopBar = isTablet || isMobile;
   
   return (
     <View style={styles.container}>
       {/* 側邊欄 */}
       {showSidebar && (
         <Sidebar 
-          collapsed={isTabletWeb() && sidebarCollapsed}
-          onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+          collapsed={isTablet && sidebarCollapsed}
+          onToggle={handleSidebarToggle}
         />
       )}
       
@@ -70,8 +86,8 @@ export const WebNavigator = () => {
         {/* 頂部導航欄（平板和手機） */}
         {showTopBar && (
           <TopBar 
-            onMenuPress={() => setSidebarCollapsed(!sidebarCollapsed)}
-            showMenu={isTabletWeb()}
+            onMenuPress={handleSidebarToggle}
+            showMenu={isTablet}
           />
         )}
         

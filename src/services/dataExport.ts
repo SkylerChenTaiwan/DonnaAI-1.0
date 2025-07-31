@@ -7,7 +7,7 @@ import { exportTableData, ExportFormat } from '@/utils/tableExport';
 import { getCustomersOptimized } from './firebase/customers-v2';
 import { getTasksOptimized } from './firebase/tasks-v2';
 import { getRecordsOptimized } from './firebase/records-v2';
-import { getUserPermissionContext } from './firebase/permissions';
+import { getUserPermissionContext } from './firebase/permissions-v2';
 import { TableColumn, TableData } from '@/types/table';
 import { CustomerDoc } from '@/types/customer';
 import { TaskDoc } from '@/types/task';
