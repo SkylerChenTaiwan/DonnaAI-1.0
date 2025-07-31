@@ -71,6 +71,7 @@
 | 64v  | database-web-inline-editing.md | ✅ 已完成 | 資料庫 Web 內聯編輯改進 - 內聯新增列、Popover 取代 Modal、修復多選排序 | 2025-08-01 |
 | 65v  | database-inline-add-and-column-drag.md | ✅ 已完成 | 資料庫內聯新增與欄位拖動排序 - 修復內聯新增功能、實作 HTML5 欄位拖放 | 2025-08-01 |
 | 66v  | database-inline-editing-improvements.md | ✅ 已完成 | 資料庫內聯編輯體驗改進 - 修復按鈕顏色、簡化新增列、實作鍵盤快捷鍵 | 2025-08-01 |
+| 67v  | database-notion-table-structure.md | ✅ 已完成 | 資料庫頁面 Notion 風格表格結構重建 - 恢復表格結構感、分隔線、核取方塊列 | 2025-08-01 |
 
 ## 命名規則
 
@@ -86,7 +87,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：67**
+**下一個新建的 PRP 應使用編號：68**
 
 ## PRP 類型說明
 
