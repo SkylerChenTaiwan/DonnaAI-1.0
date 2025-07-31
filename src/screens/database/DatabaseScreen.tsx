@@ -88,9 +88,9 @@ export const DatabaseScreen: React.FC = () => {
   const { records, isLoading: recordLoading, fetchRecords } = useRecordStore();
   const { tasks, isLoading: taskLoading, fetchTasks } = useTaskStore();
 
-  // Refs for popover anchors
-  const filterButtonRef = useRef<any>(null);
-  const sortButtonRef = useRef<any>(null);
+  // State for popover anchors
+  const [filterAnchor, setFilterAnchor] = useState<React.RefObject<any> | null>(null);
+  const [sortAnchor, setSortAnchor] = useState<React.RefObject<any> | null>(null);
 
   // 初始載入資料
   useEffect(() => {
@@ -367,8 +367,14 @@ export const DatabaseScreen: React.FC = () => {
       const searchInput = document.querySelector('input[placeholder*="搜尋"]') as HTMLInputElement;
       searchInput?.focus();
     },
-    onFilter: () => setShowFilterPopover(true),
-    onSort: () => setShowSortPopover(true),
+    onFilter: (ref: React.RefObject<any>) => {
+      setFilterAnchor(ref);
+      setShowFilterPopover(true);
+    },
+    onSort: (ref: React.RefObject<any>) => {
+      setSortAnchor(ref);
+      setShowSortPopover(true);
+    },
     onMultiSelect: () => setMultiSelectMode(!multiSelectMode),
     onEditMode: () => {
       // 如果有編輯模式，在這裡切換
@@ -449,21 +455,23 @@ export const DatabaseScreen: React.FC = () => {
             </View>
           )}
           
-          {/* 搜尋列 */}
-          <View style={styles.searchBarContainer}>
+          {/* 工具列與搜尋欄 */}
+          <View style={styles.toolbarContainer}>
             <SearchBar
               value={searchQuery}
               onChangeText={setSearchQuery}
-              placeholder="搜尋資料..."
+              placeholder={`搜尋${tabs.find(t => t.id === activeTab)?.title}...`}
               style={styles.searchBar}
             />
-          </View>
-          
-          {/* Notion 風格工具列 */}
-          <View ref={filterButtonRef}>
             <DatabaseToolbar
-              onFilter={() => setShowFilterPopover(true)}
-              onSort={() => setShowSortPopover(true)}
+              onFilter={(ref) => {
+                setFilterAnchor(ref);
+                setShowFilterPopover(true);
+              }}
+              onSort={(ref) => {
+                setSortAnchor(ref);
+                setShowSortPopover(true);
+              }}
               onMultiSelect={() => setMultiSelectMode(!multiSelectMode)}
               multiSelectMode={multiSelectMode}
               hasActiveFilters={activeFilters.length > 0}
@@ -525,24 +533,28 @@ export const DatabaseScreen: React.FC = () => {
       </View>
 
       {/* 篩選器 Popover */}
-      <FilterPopover
-        visible={showFilterPopover}
-        onClose={() => setShowFilterPopover(false)}
-        anchor={filterButtonRef}
-        columns={currentColumns}
-        filters={activeFilters}
-        onApply={setActiveFilters}
-      />
+      {filterAnchor && (
+        <FilterPopover
+          visible={showFilterPopover}
+          onClose={() => setShowFilterPopover(false)}
+          anchor={filterAnchor}
+          columns={currentColumns}
+          filters={activeFilters}
+          onApply={setActiveFilters}
+        />
+      )}
 
       {/* 排序 Popover */}
-      <SortPopover
-        visible={showSortPopover}
-        onClose={() => setShowSortPopover(false)}
-        anchor={filterButtonRef}
-        columns={currentColumns}
-        currentSort={currentSort}
-        onApply={handleSort}
-      />
+      {sortAnchor && (
+        <SortPopover
+          visible={showSortPopover}
+          onClose={() => setShowSortPopover(false)}
+          anchor={sortAnchor}
+          columns={currentColumns}
+          currentSort={currentSort}
+          onApply={handleSort}
+        />
+      )}
 
       {/* 欄位設定 Modal */}
       <ColumnSettingsModal
@@ -628,14 +640,18 @@ const styles = StyleSheet.create({
   contentWrapper: {
     flex: 1,
   },
-  searchBarContainer: {
+  toolbarContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    paddingHorizontal: responsive({ mobile: 16, tablet: 20, desktop: 24 }),
-    paddingVertical: responsive({ mobile: 12, tablet: 14, desktop: 16 }),
+    paddingHorizontal: 16,
+    paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#eeeeec',
+    gap: 16,
   },
   searchBar: {
+    width: 200,
     backgroundColor: '#f9f8f7',
     borderWidth: 0,
   },

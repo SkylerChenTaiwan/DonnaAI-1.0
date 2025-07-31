@@ -64,9 +64,14 @@ export const Popover: React.FC<PopoverProps> = ({
           }
         }
 
-        // 水平位置調整
+        // 水平位置調整 - 確保不會超出視窗
         if (popX + minWidth > windowDimensions.width - 20) {
           popX = windowDimensions.width - minWidth - 20;
+        }
+        
+        // 確保不會超出左邊界
+        if (popX < 20) {
+          popX = 20;
         }
 
         setPosition({ x: popX, y: popY });
@@ -74,34 +79,13 @@ export const Popover: React.FC<PopoverProps> = ({
       });
     }
 
-    // 動畫
+    // 移除動畫，直接顯示/隱藏
     if (visible) {
-      Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.spring(scaleAnim, {
-          toValue: 1,
-          friction: 8,
-          tension: 40,
-          useNativeDriver: true,
-        }),
-      ]).start();
+      fadeAnim.setValue(1);
+      scaleAnim.setValue(1);
     } else {
-      Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 150,
-          useNativeDriver: true,
-        }),
-        Animated.timing(scaleAnim, {
-          toValue: 0.9,
-          duration: 150,
-          useNativeDriver: true,
-        }),
-      ]).start();
+      fadeAnim.setValue(0);
+      scaleAnim.setValue(0);
     }
   }, [visible, anchor, placement, offset, maxHeight, minWidth]);
 

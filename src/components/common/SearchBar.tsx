@@ -69,7 +69,15 @@ export const SearchBar = ({
   }, [timeoutId]);
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity 
+      style={styles.container}
+      activeOpacity={1}
+      onPress={() => {
+        // 確保整個區域都可以點擊來聚焦輸入框
+        const input = (props as any).inputRef?.current;
+        if (input) input.focus();
+      }}
+    >
       <Icon name="search" size={16} color="#7A7A7A" style={styles.icon} />
       <TextInput
         style={styles.input}
@@ -87,7 +95,7 @@ export const SearchBar = ({
           <Icon name="close-circle" size={18} color="#7A7A7A" />
         </TouchableOpacity>
       )}
-    </View>
+    </TouchableOpacity>
   );
 };
 

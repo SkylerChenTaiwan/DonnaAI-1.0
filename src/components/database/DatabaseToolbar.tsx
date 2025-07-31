@@ -3,7 +3,7 @@
  * 整合搜尋、視圖切換、篩選、排序等功能
  */
 
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   View,
   Text,
@@ -15,8 +15,8 @@ import { Icon } from '@/components/common/Icon';
 import { responsive, webOnly } from '@/styles/web';
 
 interface ToolbarProps {
-  onFilter: () => void;
-  onSort: () => void;
+  onFilter: (ref: React.RefObject<any>) => void;
+  onSort: (ref: React.RefObject<any>) => void;
   onViewChange?: () => void;
   onSearch?: () => void;
   onMultiSelect?: () => void;
@@ -47,6 +47,10 @@ export const DatabaseToolbar: React.FC<ToolbarProps> = ({
   };
 
   const currentViewConfig = viewConfig[currentView];
+  
+  // 建立按鈕的 refs
+  const filterButtonRef = useRef<any>(null);
+  const sortButtonRef = useRef<any>(null);
 
   return (
     <View style={styles.toolbar}>
@@ -80,11 +84,12 @@ export const DatabaseToolbar: React.FC<ToolbarProps> = ({
 
         {/* 篩選 */}
         <TouchableOpacity 
+          ref={filterButtonRef}
           style={[
             styles.toolButton,
             hasActiveFilters && styles.activeToolButton
           ]} 
-          onPress={onFilter}
+          onPress={() => onFilter(filterButtonRef)}
           activeOpacity={0.7}
         >
           <Icon 
@@ -105,11 +110,12 @@ export const DatabaseToolbar: React.FC<ToolbarProps> = ({
 
         {/* 排序 */}
         <TouchableOpacity 
+          ref={sortButtonRef}
           style={[
             styles.toolButton,
             hasActiveSort && styles.activeToolButton
           ]} 
-          onPress={onSort}
+          onPress={() => onSort(sortButtonRef)}
           activeOpacity={0.7}
         >
           <Icon 
@@ -149,13 +155,6 @@ export const DatabaseToolbar: React.FC<ToolbarProps> = ({
           </TouchableOpacity>
         )}
 
-        {/* 更多選項 */}
-        <TouchableOpacity 
-          style={styles.toolButton}
-          activeOpacity={0.7}
-        >
-          <Icon name="ellipsis-horizontal" size={16} color="#666" />
-        </TouchableOpacity>
       </View>
     </View>
   );
@@ -166,12 +165,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 6,
-    backgroundColor: '#fff',
-    minHeight: 36,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eeeeec',
+    flex: 1,
   },
   toolbarLeft: {
     flexDirection: 'row',
