@@ -130,9 +130,7 @@ export const DatabaseScreen: React.FC = () => {
     ],
     records: [
       { key: 'type', title: '類型', sortable: true, filterable: true, type: 'select' as const, 
-        options: ['meeting', 'call'], render: (value: any) => (
-        <Text style={{ fontSize: 14, color: '#37352f' }}>{value === 'meeting' ? '會議' : '通話'}</Text>
-      ) },
+        options: ['meeting', 'call'] },
       { key: 'customerName', title: '客戶', sortable: true, filterable: true, type: 'text' as const },
       { key: 'date', title: '日期', sortable: true, filterable: true, type: 'date' as const },
       { key: 'summary', title: '摘要', sortable: true, filterable: true, type: 'text' as const },

@@ -14,10 +14,12 @@ import {
   Rectangle,
   Item,
   DataEditorRef,
+  CustomCell,
 } from '@glideapps/glide-data-grid';
 import '@glideapps/glide-data-grid/dist/index.css';
 import { TableColumn } from '@/types/table';
 import { Icon } from '@/components/common/Icon';
+import { NotionColors, NotionFonts, NotionSpacing, NotionStyles } from './NotionTheme';
 
 interface GlideNotionTableProps {
   data: any[];
@@ -32,31 +34,31 @@ interface GlideNotionTableProps {
 
 // Notion 風格主題
 const notionTheme: Partial<Theme> = {
-  accentColor: '#0070f3',
-  accentFg: '#ffffff',
-  accentLight: '#e3f1ff',
-  bgCell: '#ffffff',
-  bgCellMedium: '#f7f6f3',
-  bgHeader: '#ffffff',
-  bgHeaderHasFocus: '#f7f6f3',
-  bgHeaderHovered: '#f7f6f3',
-  bgIconHeader: '#f7f6f3',
-  bgSearchResult: '#fff3a3',
-  borderColor: '#e9e9e7',
+  accentColor: NotionColors.blue,
+  accentFg: NotionColors.bgDefault,
+  accentLight: NotionColors.blueLight,
+  bgCell: NotionColors.bgDefault,
+  bgCellMedium: NotionColors.bgGray,
+  bgHeader: NotionColors.bgDefault,
+  bgHeaderHasFocus: NotionColors.bgGray,
+  bgHeaderHovered: NotionColors.bgGray,
+  bgIconHeader: NotionColors.bgDefault,
+  bgSearchResult: NotionColors.yellowBg,
+  borderColor: NotionColors.border,
   cellHorizontalPadding: 8,
   cellVerticalPadding: 5,
-  editorFontSize: '13px',
-  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif',
-  fgIconHeader: '#37352f',
-  headerFontStyle: '600 13px',
+  editorFontSize: NotionFonts.sizeBody,
+  fontFamily: NotionFonts.family,
+  fgIconHeader: NotionColors.default,
+  headerFontStyle: `${NotionFonts.weightMedium} ${NotionFonts.sizeBody}`,
   headerIconSize: 16,
-  lineHeight: 1.5,
-  linkColor: '#0070f3',
-  textDark: '#37352f',
-  textGroupHeader: '#787774',
-  textHeader: '#37352f',
-  textLight: '#b4b4b3',
-  textMedium: '#787774',
+  lineHeight: NotionFonts.lineHeightBody,
+  linkColor: NotionColors.blue,
+  textDark: NotionColors.default,
+  textGroupHeader: NotionColors.gray,
+  textHeader: NotionColors.gray,
+  textLight: NotionColors.lightGray,
+  textMedium: NotionColors.gray,
 };
 
 export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
@@ -87,46 +89,21 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
     };
   });
 
-  // 轉換欄位定義為 Glide Grid 格式，支援調整寬度
+  // 轉換欄位定義為 Glide Grid 格式
   const gridColumns: GridColumn[] = useMemo(() => {
-    const dataColumns = columns.map(col => ({
+    return columns.map(col => ({
       id: col.key,
       title: col.title,
       width: col.width || 180,
-      minWidth: 100,
-      maxWidth: 400,
       icon: undefined,
       hasMenu: false,
-      grow: 0,
+      grow: 1, // 允許欄位伸展
     }));
-
-    // 新增欄位按鈕
-    const addColumnColumn: GridColumn = {
-      id: '__add_column__',
-      title: '',
-      width: 40,
-      icon: 'headerPlus' as any,
-      hasMenu: false,
-      grow: 0,
-    };
-
-    return [...dataColumns, addColumnColumn];
   }, [columns]);
 
   // 取得儲存格資料
   const getCellContent = useCallback((cell: Item): GridCell => {
     const [col, row] = cell;
-
-    // 新增欄位按鈕
-    if (col === columns.length) {
-      return {
-        kind: GridCellKind.Text,
-        data: '',
-        displayData: '',
-        allowOverlay: false,
-      };
-    }
-
     const column = columns[col];
     const rowData = data[row];
     
@@ -170,28 +147,24 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
         };
       
       case 'select':
+        // 將選項值轉換為顯示文字
+        const displayValue = value === 'meeting' ? '會議' : value === 'call' ? '通話' : value;
         return {
-          kind: GridCellKind.Custom,
+          kind: GridCellKind.Text,
+          data: displayValue || '',
+          displayData: displayValue || '',
           allowOverlay: true,
           readonly: !onUpdateCell,
-          data: {
-            kind: 'select-cell',
-            value: value,
-            options: column.options || [],
-          },
         };
       
       case 'tags':
       case 'multiselect':
         return {
-          kind: GridCellKind.Custom,
+          kind: GridCellKind.Text,
+          data: Array.isArray(value) ? value.join(', ') : value || '',
+          displayData: Array.isArray(value) ? value.join(', ') : value || '',
           allowOverlay: true,
           readonly: !onUpdateCell,
-          data: {
-            kind: 'tags-cell',
-            value: Array.isArray(value) ? value : value ? [value] : [],
-            options: column.options || [],
-          },
         };
       
       default:
@@ -208,8 +181,6 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
   // 處理儲存格編輯
   const onCellEdited = useCallback((cell: Item, newValue: EditableGridCell) => {
     const [col, row] = cell;
-    if (col === columns.length) return; // 新增欄位按鈕不可編輯
-
     const column = columns[col];
     const rowData = data[row];
     
@@ -226,9 +197,6 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
       case GridCellKind.Boolean:
         value = newValue.data;
         break;
-      case GridCellKind.Custom:
-        value = newValue.data.value;
-        break;
       default:
         value = newValue.data;
     }
@@ -237,12 +205,13 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
   }, [columns, data, onUpdateCell]);
 
   // 處理列點擊
-  const onItemHovered = useCallback((args: any) => {
-    if (args.kind === 'header' && args.location[0] === columns.length) {
-      // 點擊新增欄位按鈕
-      console.log('Add new column');
+  const onCellClicked = useCallback((cell: Item, event: any) => {
+    const [col, row] = cell;
+    const rowData = data[row];
+    if (rowData && onRowPress && !multiSelectMode) {
+      onRowPress(rowData);
     }
-  }, [columns.length]);
+  }, [data, onRowPress, multiSelectMode]);
 
   // 處理選擇變更
   const onSelectionChanged = useCallback((newSelection: CompactSelection) => {
@@ -268,218 +237,192 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
 
   // 自訂儲存格渲染
   const drawCell = useCallback((args: any) => {
-    const { cell, rect, ctx, theme } = args;
+    const { ctx, cell, rect, theme } = args;
+    const [col, row] = cell;
+    const column = columns[col];
+    const rowData = data[row];
     
-    if (cell.data?.kind === 'select-cell') {
-      // 繪製下拉選單
-      const value = cell.data.value;
-      ctx.fillStyle = theme.bgCellMedium;
-      ctx.fillRect(rect.x + 4, rect.y + 4, rect.width - 8, rect.height - 8);
-      ctx.fillStyle = theme.textDark;
-      ctx.font = theme.baseFontStyle;
+    if (!column || !rowData) return false;
+    
+    // 清除預設背景，確保沒有灰色色塊
+    ctx.fillStyle = NotionColors.bgDefault;
+    ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
+    
+    const value = rowData[column.key] || '';
+    
+    // 根據欄位類型自訂渲染
+    if (column.type === 'select' && value) {
+      // 渲染選擇標籤
+      const text = value === 'meeting' ? '會議' : value === 'call' ? '通話' : value;
+      const bgColor = value === 'meeting' ? NotionColors.blueBg : NotionColors.greenBg;
+      const textColor = value === 'meeting' ? NotionColors.blue : NotionColors.green;
+      
+      const padding = 4;
+      const fontSize = parseInt(NotionFonts.sizeSmall);
+      ctx.font = `${NotionFonts.weightNormal} ${fontSize}px ${NotionFonts.family}`;
+      const metrics = ctx.measureText(text);
+      const tagWidth = metrics.width + padding * 2;
+      const tagHeight = fontSize + padding;
+      
+      const x = rect.x + 8;
+      const y = rect.y + (rect.height - tagHeight) / 2;
+      
+      // 繪製標籤背景
+      ctx.fillStyle = bgColor;
+      ctx.beginPath();
+      ctx.roundRect(x, y, tagWidth, tagHeight, 3);
+      ctx.fill();
+      
+      // 繪製文字
+      ctx.fillStyle = textColor;
       ctx.textAlign = 'left';
       ctx.textBaseline = 'middle';
-      ctx.fillText(value || '選擇...', rect.x + 8, rect.y + rect.height / 2);
-      return true;
-    }
-    
-    if (cell.data?.kind === 'tags-cell') {
-      // 繪製標籤
-      const tags = cell.data.value;
-      ctx.fillStyle = theme.textDark;
-      ctx.font = theme.baseFontStyle;
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'middle';
-      const text = tags.length > 0 ? tags.join(', ') : '新增標籤...';
-      ctx.fillText(text, rect.x + 8, rect.y + rect.height / 2);
+      ctx.fillText(text, x + padding, y + tagHeight / 2);
+      
       return true;
     }
     
     return false;
-  }, []);
-
-  // 自訂標題渲染
-  const drawHeader = useCallback((args: any) => {
-    const { ctx, rect, column, theme } = args;
-    
-    if (column.id === '__add_column__') {
-      // 繪製新增欄位按鈕
-      ctx.fillStyle = theme.textLight;
-      ctx.font = '16px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('+', rect.x + rect.width / 2, rect.y + rect.height / 2);
-      return true;
-    }
-    
-    return false;
-  }, []);
+  }, [columns, data]);
 
   return (
     <div className="glide-notion-table-wrapper">
-      <div className="glide-notion-table-content">
-        <div className="glide-notion-table-container">
-          <DataEditor
-            ref={gridRef}
-            theme={notionTheme}
-            columns={gridColumns}
-            rows={data.length}
-            getCellContent={getCellContent}
-            onCellEdited={onCellEdited}
-            onColumnResize={(column, newSize) => {
-              console.log(`Column ${column.id} resized to ${newSize}`);
-            }}
-            rowMarkers={multiSelectMode ? 'checkbox' : 'number'}
-            rowSelectionMode={multiSelectMode ? 'multi' : 'none'}
-            selection={selection}
-            onSelectionChanged={onSelectionChanged}
-            onItemHovered={onItemHovered}
-            smoothScrollX={true}
-            smoothScrollY={true}
-            rowHeight={36}
-            headerHeight={36}
-            freezeColumns={0}
-            getCellsForSelection={true}
-            drawCell={drawCell}
-            drawHeader={drawHeader}
-            keybindings={{
-              search: true,
-              downFill: true,
-              rightFill: true,
-              clear: true,
-              copy: true,
-              paste: true,
-              selectAll: true,
-              selectRow: true,
-              selectColumn: true,
-            }}
-            onRowAppended={onAddRow ? handleAddRow : undefined}
-            trailingRowOptions={{
-              hint: '新增列...',
-              tint: '#787774',
-              targetColumn: 0,
-            }}
-          />
+      <div className="glide-notion-table-header">
+        <div className="notion-table-title">
+          <Icon name="table" size={20} />
+          <span>表格</span>
         </div>
-        
-        {/* 功能列 - 置右 */}
         <div className="notion-table-actions">
-          <button className="notion-action-button">
-            <Icon name="filter" size={14} />
-            <span>篩選</span>
-          </button>
-          <button className="notion-action-button">
-            <Icon name="sort" size={14} />
-            <span>排序</span>
-          </button>
-          <button className="notion-action-button">
-            <Icon name="search" size={14} />
-            <span>搜尋</span>
-          </button>
-          <div className="notion-action-separator" />
-          <button className="notion-new-button">
-            新增
+          <button className="notion-property-button">
+            <Icon name="add" size={14} />
+            <span>新增屬性</span>
           </button>
         </div>
+      </div>
+      <div className="glide-notion-table-container">
+        <DataEditor
+          ref={gridRef}
+          theme={notionTheme}
+          columns={gridColumns}
+          rows={data.length}
+          getCellContent={getCellContent}
+          onCellEdited={onCellEdited}
+          onCellClicked={onCellClicked}
+          onColumnResize={(column, newSize) => {
+            console.log(`Column ${column.id} resized to ${newSize}`);
+          }}
+          rowMarkers={multiSelectMode ? 'checkbox' : 'none'}
+          rowSelectionMode={multiSelectMode ? 'multi' : 'none'}
+          selection={selection}
+          onSelectionChanged={onSelectionChanged}
+          smoothScrollX={true}
+          smoothScrollY={true}
+          rowHeight={parseInt(NotionSpacing.rowHeight)}
+          headerHeight={parseInt(NotionSpacing.headerHeight)}
+          freezeColumns={0}
+          getCellsForSelection={true}
+          drawCell={drawCell}
+          keybindings={{
+            search: true,
+            downFill: true,
+            rightFill: true,
+            clear: true,
+            copy: true,
+            paste: true,
+            selectAll: true,
+            selectRow: true,
+            selectColumn: true,
+          }}
+          onRowAppended={onAddRow ? handleAddRow : undefined}
+          trailingRowOptions={{
+            hint: '新增列...',
+            tint: NotionColors.lightGray,
+            targetColumn: 0,
+          }}
+        />
       </div>
       
       <style>{`
         .glide-notion-table-wrapper {
           width: 100%;
-          min-height: 100vh;
-          background: white;
-          padding: 60px 96px;
+          background: ${NotionColors.bgDefault};
         }
         
-        .glide-notion-table-content {
-          max-width: 1200px;
-          margin: 0 auto;
-          position: relative;
+        .glide-notion-table-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: ${NotionSpacing.sm} 0;
+          margin-bottom: ${NotionSpacing.xs};
+        }
+        
+        .notion-table-title {
+          display: flex;
+          align-items: center;
+          gap: ${NotionSpacing.sm};
+          color: ${NotionColors.default};
+          font-size: ${NotionFonts.sizeBody};
+          font-weight: ${NotionFonts.weightMedium};
         }
         
         .glide-notion-table-container {
           width: 100%;
-          overflow-x: auto;
-          overflow-y: visible;
-          background: white;
-          margin-top: 24px;
+          background: ${NotionColors.bgDefault};
+          border: 1px solid ${NotionColors.border};
+          border-radius: ${NotionStyles.borderRadius};
+          overflow: hidden;
         }
         
         .notion-table-actions {
-          position: absolute;
-          top: -36px;
-          right: 0;
           display: flex;
           align-items: center;
-          gap: 4px;
         }
         
-        .notion-action-button {
+        .notion-property-button {
           display: inline-flex;
           align-items: center;
-          gap: 4px;
-          padding: 4px 8px;
+          gap: ${NotionSpacing.xs};
+          padding: ${NotionSpacing.xs} ${NotionSpacing.sm};
           border: none;
           background: transparent;
-          color: #787774;
-          font-size: 14px;
-          font-weight: 400;
+          color: ${NotionColors.gray};
+          font-size: ${NotionFonts.sizeSmall};
+          font-weight: ${NotionFonts.weightNormal};
           cursor: pointer;
-          border-radius: 4px;
-          transition: all 0.1s ease;
+          border-radius: ${NotionStyles.borderRadius};
+          transition: ${NotionStyles.transition};
         }
         
-        .notion-action-button:hover {
-          background: #f7f6f3;
-          color: #37352f;
-        }
-        
-        .notion-action-separator {
-          width: 1px;
-          height: 16px;
-          background: #e9e9e7;
-          margin: 0 4px;
-        }
-        
-        .notion-new-button {
-          padding: 4px 12px;
-          border: none;
-          background: #0070f3;
-          color: white;
-          font-size: 14px;
-          font-weight: 500;
-          cursor: pointer;
-          border-radius: 4px;
-          transition: all 0.1s ease;
-        }
-        
-        .notion-new-button:hover {
-          background: #0051cc;
+        .notion-property-button:hover {
+          background: ${NotionColors.bgGray};
+          color: ${NotionColors.default};
         }
         
         /* 覆蓋 Glide Grid 預設樣式 */
         .dvn-underlay {
-          background: white !important;
+          background: ${NotionColors.bgDefault} !important;
         }
         
         .dvn-scroll-inner {
-          background: white !important;
+          background: ${NotionColors.bgDefault} !important;
           min-width: 100%;
         }
         
         .dvn-cell {
-          font-size: 13px !important;
-          border-right: 1px solid #e9e9e7 !important;
-          border-bottom: 1px solid #e9e9e7 !important;
+          font-size: ${NotionFonts.sizeBody} !important;
+          color: ${NotionColors.default} !important;
+          border-right: 1px solid ${NotionColors.border} !important;
+          border-bottom: 1px solid ${NotionColors.border} !important;
+          background: ${NotionColors.bgDefault} !important;
         }
         
         .dvn-header {
-          font-weight: 500 !important;
-          font-size: 13px !important;
-          color: #787774 !important;
-          background: white !important;
-          border-bottom: 1px solid #e9e9e7 !important;
-          border-right: 1px solid #e9e9e7 !important;
+          font-weight: ${NotionFonts.weightMedium} !important;
+          font-size: ${NotionFonts.sizeBody} !important;
+          color: ${NotionColors.gray} !important;
+          background: ${NotionColors.bgDefault} !important;
+          border-bottom: 1px solid ${NotionColors.border} !important;
+          border-right: 1px solid ${NotionColors.border} !important;
         }
         
         /* 移除容器邊框 */
@@ -487,36 +430,70 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
           border: none !important;
         }
         
+        /* 懸停效果 */
+        .dvn-cell-hovered {
+          background: ${NotionColors.bgGray} !important;
+        }
+        
         /* 確保表格有最小寬度 */
         .glide-data-editor {
           min-width: 100%;
         }
         
-        /* 列標記樣式 */
+        /* 移除列標記（Notion 不顯示行號） */
         .dvn-marker {
-          background: #fbfbfa !important;
-          border-right: 1px solid #e9e9e7 !important;
-          color: #b4b4b3 !important;
-          font-size: 12px !important;
+          display: none !important;
+        }
+        
+        /* 調整選擇框樣式 */
+        .dvn-checkbox-marker {
+          background: ${NotionColors.bgDefault} !important;
+          border-right: 1px solid ${NotionColors.border} !important;
+          padding: 0 ${NotionSpacing.sm} !important;
         }
         
         /* 編輯器樣式 */
         .gdg-growing-entry {
-          border: 2px solid #0070f3 !important;
-          border-radius: 4px !important;
-          font-size: 13px !important;
-          padding: 4px 8px !important;
+          border: 2px solid ${NotionColors.blue} !important;
+          border-radius: ${NotionStyles.borderRadius} !important;
+          font-size: ${NotionFonts.sizeBody} !important;
+          padding: ${NotionSpacing.xs} ${NotionSpacing.sm} !important;
+          font-family: ${NotionFonts.family} !important;
         }
         
         /* 選擇框樣式 */
         .dvn-checkbox {
-          accent-color: #0070f3;
+          accent-color: ${NotionColors.blue};
         }
         
         /* 新增列提示樣式 */
         .dvn-trailing-row {
-          color: #b4b4b3 !important;
+          color: ${NotionColors.lightGray} !important;
           font-style: normal !important;
+          background: ${NotionColors.bgDefault} !important;
+        }
+        
+        .dvn-trailing-row:hover {
+          background: ${NotionColors.bgGray} !important;
+        }
+        
+        /* 確保沒有奇怪的背景色塊 */
+        .gdg-cell-background,
+        .gdg-cell-layer,
+        .dvn-cell-layer {
+          display: none !important;
+        }
+        
+        /* 確保資料編輯器佔滿容器 */
+        .dvn-data-editor {
+          width: 100% !important;
+          height: auto !important;
+          min-height: 400px !important;
+        }
+        
+        /* 移除所有奇怪的背景 */
+        .dvn-cell canvas {
+          background: transparent !important;
         }
       `}</style>
     </div>
