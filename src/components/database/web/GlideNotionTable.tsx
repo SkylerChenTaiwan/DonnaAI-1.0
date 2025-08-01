@@ -30,6 +30,8 @@ interface GlideNotionTableProps {
   multiSelectMode?: boolean;
   selectedItems?: string[];
   onSelect?: (selectedIds: string[]) => void;
+  onAddColumn?: () => void;
+  getValidationError?: (rowId: string, columnKey: string) => string | undefined;
 }
 
 // Notion 風格主題
@@ -70,6 +72,8 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
   multiSelectMode = false,
   selectedItems = [],
   onSelect,
+  onAddColumn,
+  getValidationError,
 }) => {
   const gridRef = useRef<DataEditorRef>(null);
   const [selection, setSelection] = useState<CompactSelection>(() => {
@@ -284,22 +288,28 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
       // 使用預設渲染
       drawContent();
     }
-  }, [columns, data]);
+    
+    // 檢查是否有驗證錯誤
+    const validationError = getValidationError?.(rowData.id, column.key);
+    if (validationError) {
+      // 繪製紅色邊框
+      ctx.strokeStyle = NotionColors.red;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(rect.x + 1, rect.y + 1, rect.width - 2, rect.height - 2);
+      
+      // 繪製錯誤圖標
+      ctx.fillStyle = NotionColors.red;
+      ctx.font = `${NotionFonts.weightBold} 12px ${NotionFonts.family}`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const iconX = rect.x + rect.width - 12;
+      const iconY = rect.y + 12;
+      ctx.fillText('!', iconX, iconY);
+    }
+  }, [columns, data, getValidationError]);
 
   return (
     <div className="glide-notion-table-wrapper">
-      <div className="glide-notion-table-header">
-        <div className="notion-table-title">
-          <Icon name="table" size={20} />
-          <span>表格</span>
-        </div>
-        <div className="notion-table-actions">
-          <button className="notion-property-button">
-            <Icon name="add" size={14} />
-            <span>新增屬性</span>
-          </button>
-        </div>
-      </div>
       <div className="glide-notion-table-container">
         <DataEditor
           ref={gridRef}
@@ -349,22 +359,6 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
           background: ${NotionColors.bgDefault};
         }
         
-        .glide-notion-table-header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: ${NotionSpacing.sm} 0;
-          margin-bottom: ${NotionSpacing.xs};
-        }
-        
-        .notion-table-title {
-          display: flex;
-          align-items: center;
-          gap: ${NotionSpacing.sm};
-          color: ${NotionColors.default};
-          font-size: ${NotionFonts.sizeBody};
-          font-weight: ${NotionFonts.weightMedium};
-        }
         
         .glide-notion-table-container {
           width: 100%;
@@ -374,30 +368,6 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
           overflow: hidden;
         }
         
-        .notion-table-actions {
-          display: flex;
-          align-items: center;
-        }
-        
-        .notion-property-button {
-          display: inline-flex;
-          align-items: center;
-          gap: ${NotionSpacing.xs};
-          padding: ${NotionSpacing.xs} ${NotionSpacing.sm};
-          border: none;
-          background: transparent;
-          color: ${NotionColors.gray};
-          font-size: ${NotionFonts.sizeSmall};
-          font-weight: ${NotionFonts.weightNormal};
-          cursor: pointer;
-          border-radius: ${NotionStyles.borderRadius};
-          transition: ${NotionStyles.transition};
-        }
-        
-        .notion-property-button:hover {
-          background: ${NotionColors.bgGray};
-          color: ${NotionColors.default};
-        }
         
         /* 覆蓋 Glide Grid 預設樣式 */
         .dvn-underlay {

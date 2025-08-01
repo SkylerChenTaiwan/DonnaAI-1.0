@@ -38,6 +38,7 @@ import { isDesktopWeb } from '@/utils/web-detector';
 import { responsive, webOnly } from '@/styles/web';
 import { useColumnSettings } from '@/hooks/useColumnSettings';
 import { useColumnOrder } from '@/hooks/useColumnOrder';
+import { usePendingChanges } from '@/hooks/usePendingChanges';
 import { exportTableData } from '@/utils/tableExport';
 import { useCustomerStore } from '@/stores/customerStore';
 import { useRecordStore } from '@/stores/recordStore';
@@ -93,6 +94,19 @@ export const DatabaseScreen: React.FC = () => {
   const { records, isLoading: recordLoading, fetchRecords } = useRecordStore();
   const { tasks, isLoading: taskLoading, fetchTasks } = useTaskStore();
 
+  // Pending changes hook
+  const {
+    pendingChanges,
+    hasUnsavedChanges,
+    updatePendingChange,
+    addDraftRow,
+    getDraftRows,
+    getValidationError,
+    validateAllChanges,
+    clearPendingChanges,
+    removeDraftRow,
+  } = usePendingChanges(activeTab);
+
   // State for popover anchors
   const [filterAnchor, setFilterAnchor] = useState<React.RefObject<any> | null>(null);
   const [sortAnchor, setSortAnchor] = useState<React.RefObject<any> | null>(null);
@@ -119,6 +133,36 @@ export const DatabaseScreen: React.FC = () => {
     { id: 'records', title: '紀錄', count: records?.length },
     { id: 'tasks', title: '任務', count: tasks?.length },
   ], [customers.length, records?.length, tasks?.length]);
+
+  // 處理切換標籤時的未儲存變更
+  const handleTabChange = useCallback((newTab: TabType) => {
+    if (hasUnsavedChanges) {
+      Alert.alert(
+        '未儲存的變更',
+        '您有未儲存的變更，切換標籤將會遺失這些變更。確定要繼續嗎？',
+        [
+          {
+            text: '取消',
+            style: 'cancel',
+          },
+          {
+            text: '捨棄變更',
+            style: 'destructive',
+            onPress: () => {
+              clearPendingChanges();
+              setActiveTab(newTab);
+              setMultiSelectMode(false);
+              setSelectedItems([]);
+            },
+          },
+        ],
+      );
+    } else {
+      setActiveTab(newTab);
+      setMultiSelectMode(false);
+      setSelectedItems([]);
+    }
+  }, [hasUnsavedChanges, clearPendingChanges]);
 
   // 基礎欄位定義（可被自訂欄位擴展）
   const baseColumns = useMemo(() => ({
@@ -202,56 +246,106 @@ export const DatabaseScreen: React.FC = () => {
 
   // 取得當前標籤的資料
   const currentData = useMemo(() => {
+    const draftRows = getDraftRows();
+    
     switch (activeTab) {
       case 'customers':
+        const customerData = customers.map(c => ({
+          id: c.id || '',
+          name: c.name,
+          company: c.company || '-',
+          phone: c.phone || '-',
+          tags: c.tags?.join(', ') || '-',
+          ...customColumns.customers.reduce((acc, col) => ({
+            ...acc,
+            [col.id]: c[col.id] || col.defaultValue || '-'
+          }), {})
+        }));
+        
+        // 加入草稿列
+        const draftCustomerData = draftRows.map(draft => ({
+          id: draft.id,
+          name: draft.data.name || '',
+          company: draft.data.company || '',
+          phone: draft.data.phone || '',
+          tags: draft.data.tags || '',
+          ...customColumns.customers.reduce((acc, col) => ({
+            ...acc,
+            [col.id]: draft.data[col.id] || col.defaultValue || ''
+          }), {}),
+          _isDraft: true
+        }));
+        
         return {
-          data: customers.map(c => ({
-            id: c.id || '',
-            name: c.name,
-            company: c.company || '-',
-            phone: c.phone || '-',
-            tags: c.tags?.join(', ') || '-',
-            ...customColumns.customers.reduce((acc, col) => ({
-              ...acc,
-              [col.id]: c[col.id] || col.defaultValue || '-'
-            }), {})
-          })),
+          data: [...customerData, ...draftCustomerData],
           loading: customerLoading,
         };
       case 'records':
+        const recordData = (records || []).map(r => ({
+          id: r.id || '',
+          type: r.type || '',
+          customerName: r.customerIds?.length > 0 ? '多位客戶' : '-',
+          date: r.createdAt?.seconds ? new Date(r.createdAt.seconds * 1000).toLocaleDateString('zh-TW') : '-',
+          summary: r.aiSummary || '-',
+          ...customColumns.records.reduce((acc, col) => ({
+            ...acc,
+            [col.id]: r[col.id] || col.defaultValue || '-'
+          }), {})
+        }));
+        
+        // 加入草稿列
+        const draftRecordData = draftRows.map(draft => ({
+          id: draft.id,
+          type: draft.data.type || '',
+          customerName: draft.data.customerName || '',
+          date: draft.data.date || '',
+          summary: draft.data.summary || '',
+          ...customColumns.records.reduce((acc, col) => ({
+            ...acc,
+            [col.id]: draft.data[col.id] || col.defaultValue || ''
+          }), {}),
+          _isDraft: true
+        }));
+        
         return {
-          data: (records || []).map(r => ({
-            id: r.id || '',
-            type: r.type || '',
-            customerName: r.customerIds?.length > 0 ? '多位客戶' : '-',
-            date: r.createdAt?.seconds ? new Date(r.createdAt.seconds * 1000).toLocaleDateString('zh-TW') : '-',
-            summary: r.aiSummary || '-',
-            ...customColumns.records.reduce((acc, col) => ({
-              ...acc,
-              [col.id]: r[col.id] || col.defaultValue || '-'
-            }), {})
-          })),
+          data: [...recordData, ...draftRecordData],
           loading: recordLoading,
         };
       case 'tasks':
+        const taskData = (tasks || []).map(t => ({
+          id: t.id || '',
+          title: t.title || '',
+          assignee: t.assigneeId || '-',
+          dueDate: t.dueDate?.seconds ? new Date(t.dueDate.seconds * 1000).toLocaleDateString('zh-TW') : '-',
+          status: t.status || 'todo',
+          ...customColumns.tasks.reduce((acc, col) => ({
+            ...acc,
+            [col.id]: t[col.id] || col.defaultValue || '-'
+          }), {})
+        }));
+        
+        // 加入草稿列
+        const draftTaskData = draftRows.map(draft => ({
+          id: draft.id,
+          title: draft.data.title || '',
+          assignee: draft.data.assignee || '',
+          dueDate: draft.data.dueDate || '',
+          status: draft.data.status || 'todo',
+          ...customColumns.tasks.reduce((acc, col) => ({
+            ...acc,
+            [col.id]: draft.data[col.id] || col.defaultValue || ''
+          }), {}),
+          _isDraft: true
+        }));
+        
         return {
-          data: (tasks || []).map(t => ({
-            id: t.id || '',
-            title: t.title || '',
-            assignee: t.assigneeId || '-',
-            dueDate: t.dueDate?.seconds ? new Date(t.dueDate.seconds * 1000).toLocaleDateString('zh-TW') : '-',
-            status: t.status || 'todo',
-            ...customColumns.tasks.reduce((acc, col) => ({
-              ...acc,
-              [col.id]: t[col.id] || col.defaultValue || '-'
-            }), {})
-          })),
+          data: [...taskData, ...draftTaskData],
           loading: taskLoading,
         };
       default:
         return { data: [], loading: false };
     }
-  }, [activeTab, customers, records, tasks, customerLoading, recordLoading, taskLoading, customColumns]);
+  }, [activeTab, customers, records, tasks, customerLoading, recordLoading, taskLoading, customColumns, getDraftRows]);
 
   // 統一的重新載入方法
   const handleRefresh = useCallback(async () => {
@@ -329,43 +423,35 @@ export const DatabaseScreen: React.FC = () => {
 
   const handleAddRow = useCallback(async (rowData?: Record<string, any>) => {
     if (!rowData) {
-      // 舊模式：導航到 Modal（保留給其他地方使用）
-      let columns: TableColumn[] = [];
-      let onSubmit: (data: Record<string, any>) => Promise<void>;
+      // 新增草稿列（不立即儲存到 Firebase）
+      const draftId = addDraftRow();
+      console.log('新增草稿列:', draftId);
       
-      switch (activeTab) {
-        case 'customers':
-          columns = currentColumns;
-          onSubmit = async (data) => {
-            await handleAddRowWithData(data);
-          };
-          break;
-          
-        case 'records':
-          columns = currentColumns;
-          onSubmit = async (data) => {
-            await handleAddRowWithData(data);
-          };
-          break;
-          
-        case 'tasks':
-          columns = currentColumns;
-          onSubmit = async (data) => {
-            await handleAddRowWithData(data);
-          };
-          break;
-      }
-      
-      navigation.navigate('AddRecordModal' as any, {
-        tableType: activeTab,
-        columns,
-        onSubmit,
-      });
+      // 可以選擇性地滾動到新列或聚焦到第一個欄位
+      // TODO: 實作滾動到新列的邏輯
     } else {
-      // 新模式：內聯新增
-      await handleAddRowWithData(rowData);
+      // 有資料時，檢查是否為草稿列的儲存
+      if (rowData.id && rowData.id.startsWith('draft_')) {
+        // 草稿列要儲存到 Firebase
+        const validation = validateAllChanges();
+        if (!validation) {
+          showToast('error', '請填寫所有必填欄位');
+          return;
+        }
+        
+        // 取得草稿資料
+        const draftRow = pendingChanges.get(rowData.id);
+        if (draftRow) {
+          await handleAddRowWithData(draftRow.data);
+          // 成功後移除草稿
+          removeDraftRow(rowData.id);
+        }
+      } else {
+        // 舊模式：內聯新增（保留向後相容）
+        await handleAddRowWithData(rowData);
+      }
     }
-  }, [activeTab, navigation, currentColumns, handleAddRowWithData]);
+  }, [activeTab, addDraftRow, validateAllChanges, pendingChanges, handleAddRowWithData, removeDraftRow]);
 
   const handleAddColumn = useCallback((column: ColumnConfig) => {
     setCustomColumns(prev => ({
@@ -472,11 +558,7 @@ export const DatabaseScreen: React.FC = () => {
                     styles.tab,
                     activeTab === tab.id && styles.activeTab,
                   ]}
-                  onPress={() => {
-                    setActiveTab(tab.id);
-                    setMultiSelectMode(false);
-                    setSelectedItems([]);
-                  }}
+                  onPress={() => handleTabChange(tab.id)}
                   activeOpacity={0.7}
                 >
                   <Text
@@ -518,6 +600,7 @@ export const DatabaseScreen: React.FC = () => {
                 setShowSortPopover(true);
               }}
               onMultiSelect={() => setMultiSelectMode(!multiSelectMode)}
+              onAddColumn={() => setShowAddColumnDialog(true)}
               multiSelectMode={multiSelectMode}
               hasActiveFilters={activeFilters.length > 0}
               hasActiveSort={currentSort !== null}
@@ -532,6 +615,70 @@ export const DatabaseScreen: React.FC = () => {
             }, [])}
             onClearAll={useCallback(() => setActiveFilters([]), [])}
           />
+
+          {/* 未儲存變更提示 */}
+          {hasUnsavedChanges && (
+            <View style={styles.unsavedChangesBar}>
+              <View style={styles.unsavedChangesContent}>
+                <Icon name="alert-circle" size={16} color="#e03e3e" />
+                <Text style={styles.unsavedChangesText}>
+                  您有未儲存的變更
+                </Text>
+              </View>
+              <View style={styles.unsavedChangesActions}>
+                <TouchableOpacity
+                  style={styles.discardButton}
+                  onPress={() => {
+                    Alert.alert(
+                      '捨棄變更',
+                      '確定要捨棄所有未儲存的變更嗎？',
+                      [
+                        { text: '取消', style: 'cancel' },
+                        {
+                          text: '捨棄',
+                          style: 'destructive',
+                          onPress: clearPendingChanges,
+                        },
+                      ],
+                    );
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <Text style={styles.discardButtonText}>捨棄</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.saveButton}
+                  onPress={async () => {
+                    const isValid = validateAllChanges();
+                    if (!isValid) {
+                      showToast('error', '請填寫所有必填欄位');
+                      return;
+                    }
+                    
+                    // 儲存所有草稿列
+                    const draftRows = getDraftRows();
+                    for (const draft of draftRows) {
+                      try {
+                        await handleAddRowWithData(draft.data);
+                        removeDraftRow(draft.id);
+                      } catch (error) {
+                        console.error('儲存失敗:', error);
+                        showToast('error', '部分資料儲存失敗');
+                        return;
+                      }
+                    }
+                    
+                    clearPendingChanges();
+                    showToast('success', '已儲存所有變更');
+                    await handleRefresh();
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <Text style={styles.saveButtonText}>儲存變更</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
 
           {/* 資料內容區域 */}
           <View style={styles.tableContainer}>
@@ -550,11 +697,22 @@ export const DatabaseScreen: React.FC = () => {
                 multiSelectMode={multiSelectMode}
                 selectedItems={selectedItems}
                 onSelect={setSelectedItems}
+                onAddColumn={() => setShowAddColumnDialog(true)}
+                getValidationError={getValidationError}
                 onUpdateCell={async (rowId, columnKey, value) => {
                   try {
-                    // 根據 activeTab 更新對應的資料
-                    console.log('更新儲存格:', { rowId, columnKey, value, activeTab });
-                    showToast('success', '已更新');
+                    // 檢查是否為草稿列
+                    const isDraft = rowId.startsWith('draft_');
+                    
+                    if (isDraft) {
+                      // 更新 pending changes
+                      updatePendingChange(rowId, columnKey, value);
+                    } else {
+                      // 更新現有資料
+                      console.log('更新儲存格:', { rowId, columnKey, value, activeTab });
+                      // TODO: 實作實際的更新邏輯
+                      updatePendingChange(rowId, columnKey, value);
+                    }
                   } catch (error) {
                     console.error('更新失敗:', error);
                     showToast('error', '更新失敗');
@@ -850,5 +1008,52 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     color: '#F7F6F3',
+  },
+  
+  // 未儲存變更提示列
+  unsavedChangesBar: {
+    backgroundColor: '#FFF4E6',
+    borderBottomWidth: 1,
+    borderBottomColor: '#FFE0B2',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  unsavedChangesContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  unsavedChangesText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#E65100',
+  },
+  unsavedChangesActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  discardButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  discardButtonText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#757575',
+  },
+  saveButton: {
+    backgroundColor: '#FF6B6B',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 6,
+  },
+  saveButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
 });

@@ -20,6 +20,7 @@ interface ToolbarProps {
   onViewChange?: () => void;
   onSearch?: () => void;
   onMultiSelect?: () => void;
+  onAddColumn?: () => void;
   currentView?: 'table' | 'board' | 'calendar' | 'list' | 'gallery';
   hasActiveFilters?: boolean;
   hasActiveSort?: boolean;
@@ -32,6 +33,7 @@ export const DatabaseToolbar: React.FC<ToolbarProps> = ({
   onViewChange,
   onSearch,
   onMultiSelect,
+  onAddColumn,
   currentView = 'table',
   hasActiveFilters = false,
   hasActiveSort = false,
@@ -148,6 +150,24 @@ export const DatabaseToolbar: React.FC<ToolbarProps> = ({
               multiSelectMode && styles.activeToolbarText
             ]}>
               多選
+            </Text>
+          </TouchableOpacity>
+        )}
+
+        {/* 新增屬性 */}
+        {onAddColumn && (
+          <TouchableOpacity 
+            style={styles.toolButton} 
+            onPress={onAddColumn}
+            activeOpacity={0.7}
+          >
+            <Icon 
+              name="add" 
+              size={16} 
+              color="#666" 
+            />
+            <Text style={styles.toolbarText}>
+              新增屬性
             </Text>
           </TouchableOpacity>
         )}
