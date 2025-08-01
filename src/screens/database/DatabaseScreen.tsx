@@ -25,7 +25,7 @@ import { NotionStyleTable } from '@/components/database/NotionStyleTable';
 import { NotionStyleTableDebug } from '@/components/database/NotionStyleTableDebug';
 import { NotionStyleTableV2 } from '@/components/database/NotionStyleTableV2';
 import { TanStackNotionTableV3 } from '@/components/database/web/TanStackNotionTableV3';
-import { GlideNotionTable } from '@/components/database/web/GlideNotionTable';
+import { NotionTable } from '@/components/database/notion';
 import { NotionDatabase } from '@/components/database/web/NotionDatabase';
 import { DatabaseToolbar } from '@/components/database/DatabaseToolbar';
 import { convertToTanStackColumns } from '@/components/database/web/columnHelpers';
@@ -722,21 +722,30 @@ export const DatabaseScreen: React.FC = () => {
                 showHeader={true}
               />
             ) : Platform.OS === 'web' ? (
-              <GlideNotionTable
+              <NotionTable
                 data={[...currentData.data, ...getDraftRows()]} // 合併現有資料和草稿列
-                columns={currentColumns}
-                onAddRow={handleAddRow}
-                onRowPress={handleRowPress}
-                multiSelectMode={multiSelectMode}
-                selectedItems={selectedItems}
-                onSelect={setSelectedItems}
-                onAddColumn={() => setShowAddColumnDialog(true)}
-                getValidationError={getValidationError}
-                onUpdateCell={(rowId, columnKey, value) => {
+                columns={currentColumns.map(col => ({
+                  id: col.key,
+                  key: col.key,
+                  title: col.title,
+                  type: col.type as any,
+                  width: col.width,
+                  editable: col.editable !== false,
+                  options: col.options,
+                }))}
+                onCellUpdate={(rowId, columnKey, value) => {
                   console.log('更新儲存格:', { rowId, columnKey, value, activeTab });
                   // 使用 debounced 更新
                   debouncedUpdate(rowId, columnKey, value);
                 }}
+                onRowClick={handleRowPress}
+                onRowAdd={handleAddRow}
+                onColumnAdd={() => setShowAddColumnDialog(true)}
+                multiSelect={multiSelectMode}
+                selectedRows={selectedItems}
+                onSelectionChange={setSelectedItems}
+                loading={currentData.loading}
+                emptyMessage="沒有資料，點擊新增列開始"
               />
             ) : (
               <NotionStyleTableV2
