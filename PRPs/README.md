@@ -75,6 +75,9 @@
 | 69v  | notion-database-quality-analysis-and-fixes.md | ✅ 已完成 | Notion 資料庫質感分析與修復 - 深入分析設計原理、修復 5 個關鍵功能問題、重建視覺系統 | 2025-08-01 |
 | 70v  | notion-ui-design-system-refinement.md | ✅ 已完成 | Notion UI 設計系統精緻化 - 彈性欄寬設計、精確色彩字體、60px 外層留白、13px 字體系統 | 2025-08-01 |
 | 71v  | database-table-improvements.md | ✅ 已完成 | 資料庫表格改進 - 移除標題、新增列驗證、屬性按鈕位置 | 2025-08-01 |
+| 72v  | web-database-readonly-implementation.md | ✅ 已完成 | Web 資料庫唯讀模式實作 - 移除內聯編輯、只能查看和編輯屬性 | 2025-08-02 |
+| 73   | notion-database-100-percent-replication.md | 🔄 進行中 | 100% 複製 Notion 資料庫功能 - 完整編輯體驗、鍵盤導航、拖放功能 | 2025-08-02 |
+| 74   | notion-database-complete-rewrite.md | 📋 待執行 | 完整重寫 Notion 風格資料庫元件 - 從頭建立、虛擬滾動、狀態機、100% 還原 | - |
 
 ## 命名規則
 
@@ -90,7 +93,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：72**
+**下一個新建的 PRP 應使用編號：75**
 
 ## PRP 類型說明
 
