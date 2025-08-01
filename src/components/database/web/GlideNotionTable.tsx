@@ -467,9 +467,6 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
           background: transparent !important;
         }
       `}</style>
-      
-      {/* Portal 元素供 Glide Data Grid 編輯器使用 */}
-      <div id="portal" />
     </div>
   );
 };
