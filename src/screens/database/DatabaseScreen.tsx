@@ -560,22 +560,8 @@ export const DatabaseScreen: React.FC = () => {
     windowSize: typeof window !== 'undefined' ? `${window.innerWidth}x${window.innerHeight}` : 'N/A'
   });
 
-  // 調試 Platform.select() 的選擇結果
-  const webComponent = TanStackNotionTableV3;
-  const defaultComponent = NotionStyleTableV2;
-  const selectedComponent = Platform.select({
-    web: webComponent,
-    default: defaultComponent,
-  });
-  
-  console.log('🔍 Platform.select() 調試:', {
-    'Platform.OS': Platform.OS,
-    'webComponent': webComponent.name,
-    'defaultComponent': defaultComponent.name,
-    'selectedComponent': selectedComponent?.name,
-    'TanStackNotionTableV3 可用': !!TanStackNotionTableV3,
-    'NotionStyleTableV2 可用': !!NotionStyleTableV2
-  });
+  // 使用新的 NotionTable 元件
+  console.log('🔍 使用新的 NotionTable 元件');
 
   const renderContent = () => (
     <>
@@ -723,7 +709,7 @@ export const DatabaseScreen: React.FC = () => {
               />
             ) : Platform.OS === 'web' ? (
               <NotionTable
-                data={[...currentData.data, ...getDraftRows()]} // 合併現有資料和草稿列
+                data={currentData.data}
                 columns={currentColumns.map(col => ({
                   id: col.key,
                   key: col.key,
