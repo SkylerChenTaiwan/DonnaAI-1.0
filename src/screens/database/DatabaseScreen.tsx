@@ -95,6 +95,16 @@ export const DatabaseScreen: React.FC = () => {
   const { records, isLoading: recordLoading, fetchRecords } = useRecordStore();
   const { tasks, isLoading: taskLoading, fetchTasks } = useTaskStore();
 
+  // 載入資料
+  useEffect(() => {
+    if (user) {
+      console.log('🔄 DatabaseScreen 載入資料，使用者:', user.email);
+      fetchCustomers(user);
+      fetchRecords(user);
+      fetchTasks(user);
+    }
+  }, [user]);
+
   // Pending changes hook
   const {
     pendingChanges,
@@ -248,6 +258,17 @@ export const DatabaseScreen: React.FC = () => {
   // 取得當前標籤的資料
   const currentData = useMemo(() => {
     const draftRows = getDraftRows();
+    
+    console.log('📊 DatabaseScreen 資料狀態:', {
+      activeTab,
+      tasksLength: tasks?.length || 0,
+      customersLength: customers?.length || 0,
+      recordsLength: records?.length || 0,
+      draftRowsLength: draftRows.length,
+      taskLoading,
+      customerLoading,
+      recordLoading,
+    });
     
     switch (activeTab) {
       case 'customers':
