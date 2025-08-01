@@ -3,6 +3,7 @@ import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-tabl
 import { TanStackTableProps } from '../shared/tableTypes';
 import { NotionDatabaseToolbar } from './NotionDatabaseToolbar';
 import { NotionTableCell } from './NotionTableCell';
+import { DebugInfo } from './DebugInfo';
 
 export const TanStackNotionTableV3: React.FC<TanStackTableProps> = ({
   data,
@@ -108,6 +109,7 @@ export const TanStackNotionTableV3: React.FC<TanStackTableProps> = ({
 
   return (
     <div className="notion-database-container">
+      <DebugInfo />
       <NotionDatabaseToolbar
         onAddRow={handleAddRow}
         onViewSettings={handleViewSettings}

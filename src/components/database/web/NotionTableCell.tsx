@@ -28,9 +28,15 @@ export const NotionTableCell: React.FC<NotionTableCellProps> = ({
   }, [value]);
 
   useEffect(() => {
-    if (autoFocus && inputRef.current) {
+    if (autoFocus) {
       setIsEditing(true);
-      inputRef.current.focus();
+      // 使用 setTimeout 確保 DOM 更新後再聚焦
+      setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+          inputRef.current.select(); // 選中所有文字
+        }
+      }, 10);
     }
   }, [autoFocus]);
 
