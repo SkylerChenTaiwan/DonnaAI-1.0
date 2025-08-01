@@ -3,6 +3,10 @@
  */
 
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+// 在開發模式下載入測試工具
+if (__DEV__) {
+  import('@/utils/create-test-task').catch(console.error);
+}
 import {
   View,
   Text,
@@ -97,13 +101,16 @@ export const DatabaseScreen: React.FC = () => {
 
   // 載入資料
   useEffect(() => {
+    console.log('🔄 DatabaseScreen useEffect - user:', user?.email || 'null');
     if (user) {
-      console.log('🔄 DatabaseScreen 載入資料，使用者:', user.email);
+      console.log('📥 開始載入資料...');
       fetchCustomers(user);
       fetchRecords(user);
       fetchTasks(user);
+    } else {
+      console.log('⚠️ 沒有使用者，無法載入資料');
     }
-  }, [user]);
+  }, [user, fetchCustomers, fetchRecords, fetchTasks]);
 
   // Pending changes hook
   const {

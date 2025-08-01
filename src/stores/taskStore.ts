@@ -103,6 +103,11 @@ export const useTaskStore = create<TaskState>()(
       
       // 獲取任務列表（支援向後相容）
       fetchTasks: async (userOrUserId: User | string, filter?: TaskFilter) => {
+        console.log('🔍 taskStore.fetchTasks 被呼叫:', {
+          userOrUserId: typeof userOrUserId === 'string' ? userOrUserId : userOrUserId?.email,
+          filter
+        });
+        
         set({ isLoading: true, error: null });
         
         try {
@@ -129,6 +134,7 @@ export const useTaskStore = create<TaskState>()(
             tasks = await getTasksOptimized(userOrUserId, currentFilter);
           }
           
+          console.log('✅ taskStore.fetchTasks 成功，任務數量:', tasks.length);
           set({ tasks, isLoading: false });
         } catch (error) {
           set({ 
