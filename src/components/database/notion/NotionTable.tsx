@@ -3,6 +3,7 @@
  */
 
 import React, { useCallback, useMemo, useState, useRef, useEffect } from 'react';
+import '../web/styles/NotionTable.css';
 import { View, Text, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 import { NotionTableProps, CellPosition, ColumnConfig } from './types';
 import { VirtualScroller } from './VirtualScroller';
