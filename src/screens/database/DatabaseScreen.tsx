@@ -690,7 +690,7 @@ export const DatabaseScreen: React.FC = () => {
               />
             ) : Platform.OS === 'web' ? (
               <GlideNotionTable
-                data={currentData.data}
+                data={[...currentData.data, ...getDraftRows()]} // 合併現有資料和草稿列
                 columns={currentColumns}
                 onAddRow={handleAddRow}
                 onRowPress={handleRowPress}

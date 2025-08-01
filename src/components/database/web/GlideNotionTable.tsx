@@ -235,7 +235,7 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
   // 處理新增列
   const handleAddRow = useCallback(() => {
     if (onAddRow) {
-      onAddRow({});
+      onAddRow(); // 不傳遞參數，讓 handleAddRow 知道這是新增草稿列
     }
   }, [onAddRow]);
 
