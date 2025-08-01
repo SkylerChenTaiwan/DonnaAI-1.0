@@ -1,0 +1,593 @@
+/**
+ * Notion 資料庫完全重新設計版本 - CSS 樣式
+ * 基於真實 Notion 介面的精確重現
+ */
+
+/* ===== 主容器 ===== */
+.notion-database-container {
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #37352f;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== 工具列樣式 ===== */
+.notion-database-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  border-bottom: 1px solid #e9e9e7;
+  background-color: #ffffff;
+  min-height: 36px;
+  flex-shrink: 0;
+}
+
+.notion-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.notion-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.notion-toolbar-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border: none;
+  background: none;
+  color: #787774;
+  font-size: 14px;
+  font-weight: 400;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.notion-toolbar-button:hover {
+  background-color: #f1f1ef;
+  color: #37352f;
+}
+
+.notion-toolbar-button:active {
+  background-color: #e9e9e7;
+}
+
+.notion-toolbar-button svg {
+  flex-shrink: 0;
+  color: currentColor;
+}
+
+.notion-add-button {
+  background-color: #2383e2;
+  color: #ffffff;
+}
+
+.notion-add-button:hover {
+  background-color: #1a73d1;
+  color: #ffffff;
+}
+
+.notion-toolbar-button.active {
+  background-color: #f1f1ef;
+  color: #37352f;
+}
+
+/* 搜尋輸入框 */
+.notion-search-input {
+  width: 200px;
+  height: 28px;
+  padding: 4px 8px;
+  border: 1px solid #e9e9e7;
+  border-radius: 3px;
+  background-color: #ffffff;
+  font-size: 14px;
+  color: #37352f;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s ease;
+  margin-left: 8px;
+}
+
+.notion-search-input:focus {
+  border-color: #2383e2;
+  box-shadow: 0 0 0 1px rgba(35, 131, 226, 0.3);
+}
+
+.notion-search-input::placeholder {
+  color: #9b9b9b;
+}
+
+/* ===== 表格容器 ===== */
+.notion-database-table-container {
+  flex: 1;
+  overflow: auto;
+  position: relative;
+  background-color: #ffffff;
+}
+
+/* ===== 表格樣式 ===== */
+.notion-database-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  background-color: #ffffff;
+}
+
+/* ===== 表頭樣式 ===== */
+.notion-database-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #f7f6f3;
+}
+
+.notion-header-row {
+  height: 32px;
+}
+
+.notion-header-cell {
+  position: relative;
+  padding: 6px 8px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 500;
+  color: #37352f;
+  background-color: #f7f6f3;
+  border-right: 1px solid #e9e9e7;
+  border-bottom: 1px solid #e9e9e7;
+  cursor: pointer;
+  user-select: none;
+  vertical-align: middle;
+  min-width: 100px;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.notion-header-cell:hover {
+  background-color: #eeeeec;
+}
+
+.notion-header-cell:last-child {
+  border-right: none;
+}
+
+.notion-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 4px;
+}
+
+.notion-column-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.notion-sort-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  color: #9b9b9b;
+  transition: opacity 0.15s ease;
+  flex-shrink: 0;
+}
+
+.notion-sort-icon.active {
+  color: #37352f;
+}
+
+.notion-header-cell:hover .notion-sort-icon {
+  color: #37352f;
+}
+
+/* ===== 表格內容 ===== */
+.notion-database-body {
+  background-color: #ffffff;
+}
+
+.notion-data-row {
+  height: 33px;
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+}
+
+.notion-data-row:hover {
+  background-color: #f7f6f3;
+}
+
+.notion-data-row.selected {
+  background-color: #e8f4f8;
+}
+
+.notion-cell {
+  position: relative;
+  padding: 6px 8px;
+  border-right: 1px solid #f1f1ef;
+  border-bottom: 1px solid #f1f1ef;
+  font-size: 14px;
+  color: #37352f;
+  line-height: 20px;
+  vertical-align: middle;
+  min-width: 100px;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background-color: transparent;
+}
+
+.notion-cell:last-child {
+  border-right: none;
+}
+
+.notion-data-row:last-child .notion-cell {
+  border-bottom: none;
+}
+
+/* ===== 可編輯儲存格樣式 ===== */
+.notion-cell-editable {
+  cursor: text;
+  position: relative;
+}
+
+.notion-cell-editable:hover {
+  background-color: rgba(35, 131, 226, 0.05);
+  border-radius: 3px;
+}
+
+.notion-cell.editing {
+  background-color: #ffffff;
+  border: 1px solid #2383e2;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px rgba(35, 131, 226, 0.3);
+  padding: 5px 7px;
+}
+
+.notion-cell-empty {
+  color: #9b9b9b;
+  font-style: italic;
+}
+
+/* ===== 空狀態樣式 ===== */
+.notion-empty-row {
+  height: 200px;
+}
+
+.notion-empty-cell {
+  padding: 0;
+  border: none;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.notion-empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  gap: 12px;
+}
+
+.notion-empty-icon {
+  opacity: 0.3;
+}
+
+.notion-empty-text {
+  text-align: center;
+}
+
+.notion-empty-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #37352f;
+  margin-bottom: 4px;
+}
+
+.notion-empty-subtitle {
+  font-size: 14px;
+  color: #9b9b9b;
+}
+
+/* ===== 新增行樣式 ===== */
+.notion-add-row {
+  height: 33px;
+}
+
+.notion-add-row-cell {
+  padding: 0;
+  border-right: none;
+  border-bottom: 1px solid #f1f1ef;
+}
+
+.notion-add-row-button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: 33px;
+  padding: 6px 8px;
+  color: #9b9b9b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  gap: 6px;
+}
+
+.notion-add-row-button:hover {
+  background-color: #f7f6f3;
+  color: #37352f;
+}
+
+.notion-add-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* ===== 編輯模式樣式 ===== */
+.notion-editing-row {
+  height: 33px;
+  background-color: #ffffff;
+}
+
+.notion-row-actions {
+  width: 60px;
+  min-width: 60px;
+  padding: 6px 8px;
+  border-right: 1px solid #f1f1ef;
+  border-bottom: 1px solid #f1f1ef;
+  vertical-align: middle;
+}
+
+.notion-row-action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.notion-save-button,
+.notion-cancel-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.notion-save-button {
+  background-color: #0f7b0f;
+  color: #ffffff;
+}
+
+.notion-save-button:hover:not(:disabled) {
+  background-color: #0d6a0d;
+}
+
+.notion-save-button:disabled {
+  background-color: #e9e9e7;
+  color: #9b9b9b;
+  cursor: not-allowed;
+}
+
+.notion-cancel-button {
+  background-color: #f1f1ef;
+  color: #9b9b9b;
+}
+
+.notion-cancel-button:hover {
+  background-color: #e9e9e7;
+  color: #37352f;
+}
+
+.notion-editing-cell {
+  padding: 2px 8px;
+}
+
+.notion-cell-input {
+  width: 100%;
+  height: 28px;
+  padding: 4px 6px;
+  border: 1px solid #e9e9e7;
+  border-radius: 3px;
+  background-color: #ffffff;
+  font-size: 14px;
+  color: #37352f;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.notion-cell-input:focus {
+  border-color: #2383e2;
+  box-shadow: 0 0 0 1px rgba(35, 131, 226, 0.3);
+}
+
+.notion-cell-input::placeholder {
+  color: #9b9b9b;
+}
+
+/* ===== 載入指示器 ===== */
+.notion-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.notion-loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.notion-refresh-indicator {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(55, 53, 47, 0.9);
+  color: #ffffff;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+/* ===== 響應式設計 ===== */
+@media (max-width: 768px) {
+  .notion-database-toolbar {
+    padding: 4px 8px;
+    gap: 2px;
+  }
+  
+  .notion-toolbar-button {
+    padding: 3px 6px;
+    font-size: 13px;
+  }
+  
+  .notion-header-cell,
+  .notion-cell {
+    min-width: 80px;
+    padding: 4px 6px;
+    font-size: 13px;
+  }
+  
+  .notion-data-row,
+  .notion-add-row,
+  .notion-editing-row {
+    height: 30px;
+  }
+  
+  .notion-add-row-button {
+    height: 30px;
+  }
+}
+
+/* ===== 滾動條樣式 ===== */
+.notion-database-table-container::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.notion-database-table-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.notion-database-table-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.notion-database-table-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.notion-database-table-container::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ===== 焦點和選取樣式 ===== */
+.notion-database-container:focus-within {
+  outline: none;
+}
+
+.notion-cell:focus-within {
+  background-color: rgba(35, 131, 226, 0.05);
+  border-radius: 3px;
+}
+
+/* ===== 動畫效果 ===== */
+.notion-data-row {
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== 輔助功能 ===== */
+.notion-toolbar-button:focus,
+.notion-add-row-button:focus,
+.notion-save-button:focus,
+.notion-cancel-button:focus {
+  outline: 2px solid #2383e2;
+  outline-offset: 2px;
+}
+
+.notion-header-cell:focus {
+  outline: 2px solid #2383e2;
+  outline-offset: -2px;
+}
+
+/* ===== 列印樣式 ===== */
+@media print {
+  .notion-database-toolbar {
+    display: none;
+  }
+  
+  .notion-database-table-container {
+    overflow: visible;
+  }
+  
+  .notion-database-table {
+    page-break-inside: auto;
+  }
+  
+  .notion-data-row {
+    page-break-inside: avoid;
+  }
+}
