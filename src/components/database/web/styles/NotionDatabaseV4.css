@@ -1,4 +1,14 @@
 /* === Notion 設計系統 V4 - 精確還原 === */
+
+/* 全域重置 - 確保樣式優先級 */
+body {
+  background-color: #fbfbfa !important;
+}
+
+#root {
+  background-color: transparent !important;
+}
+
 :root {
   /* 基礎色彩系統 */
   --notion-background: #fbfbfa;
@@ -49,21 +59,22 @@
 
 /* === 外層容器與留白 === */
 .notion-database-wrapper {
-  width: 100%;
-  background: var(--notion-background);
-  padding: 20px 60px;
-  min-height: 100vh;
-  overflow-x: auto;
+  width: 100% !important;
+  background: var(--notion-background) !important;
+  padding: 20px 60px !important;
+  min-height: 100vh !important;
+  overflow-x: auto !important;
+  box-sizing: border-box !important;
 }
 
 /* === 資料庫容器 === */
 .notion-database-container {
-  font-family: var(--notion-font-family);
-  font-size: var(--notion-font-size-body);
-  line-height: var(--notion-line-height);
-  color: var(--notion-gray-80);
-  max-width: 100%;
-  margin: 0 auto;
+  font-family: var(--notion-font-family) !important;
+  font-size: var(--notion-font-size-body) !important;
+  line-height: var(--notion-line-height) !important;
+  color: var(--notion-gray-80) !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
 }
 
 /* === 工具列 === */
@@ -147,17 +158,17 @@
 }
 
 .notion-header-cell {
-  padding: var(--notion-spacing-sm) var(--notion-cell-padding-x);
-  height: var(--notion-header-height);
-  font-size: var(--notion-font-size-small);
-  font-weight: 500;
-  color: var(--notion-gray-50);
-  text-align: left;
-  background: var(--notion-surface);
-  white-space: nowrap;
-  position: relative;
-  user-select: none;
-  min-width: 50px;
+  padding: var(--notion-spacing-sm) var(--notion-cell-padding-x) !important;
+  height: var(--notion-header-height) !important;
+  font-size: var(--notion-font-size-small) !important;
+  font-weight: 500 !important;
+  color: var(--notion-gray-50) !important;
+  text-align: left !important;
+  background: var(--notion-surface) !important;
+  white-space: nowrap !important;
+  position: relative !important;
+  user-select: none !important;
+  min-width: 50px !important;
 }
 
 /* 基於資料類型的預設寬度 */
