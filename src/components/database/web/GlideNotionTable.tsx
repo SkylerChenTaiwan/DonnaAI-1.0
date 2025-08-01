@@ -423,13 +423,24 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
           padding: 0 ${NotionSpacing.sm} !important;
         }
         
-        /* 編輯器樣式 */
+        /* 編輯器樣式 - 更簡潔的 Google Sheets 風格 */
         .gdg-growing-entry {
-          border: 2px solid ${NotionColors.blue} !important;
-          border-radius: ${NotionStyles.borderRadius} !important;
+          border: none !important;
+          box-shadow: none !important;
+          outline: 2px solid ${NotionColors.blue} !important;
+          outline-offset: -2px !important;
+          border-radius: 0 !important;
           font-size: ${NotionFonts.sizeBody} !important;
-          padding: ${NotionSpacing.xs} ${NotionSpacing.sm} !important;
+          padding: 2px 4px !important;
           font-family: ${NotionFonts.family} !important;
+          background: ${NotionColors.bgDefault} !important;
+          margin: 0 !important;
+        }
+        
+        /* 移除編輯器容器的額外樣式 */
+        .dvn-scroll-inner .gdg-growing-entry {
+          position: absolute !important;
+          z-index: 1000 !important;
         }
         
         /* 選擇框樣式 */
