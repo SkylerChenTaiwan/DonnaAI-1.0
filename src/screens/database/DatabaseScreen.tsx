@@ -620,7 +620,7 @@ export const DatabaseScreen: React.FC = () => {
           {hasUnsavedChanges && (
             <View style={styles.unsavedChangesBar}>
               <View style={styles.unsavedChangesContent}>
-                <Icon name="alert-circle" size={16} color="#e03e3e" />
+                <Icon name="alert-circle" size={14} color="#e03e3e" />
                 <Text style={styles.unsavedChangesText}>
                   您有未儲存的變更
                 </Text>
@@ -1016,7 +1016,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#FFE0B2',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 6,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -1027,7 +1027,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   unsavedChangesText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '500',
     color: '#E65100',
   },
@@ -1037,22 +1037,22 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   discardButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
   },
   discardButtonText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '500',
     color: '#757575',
   },
   saveButton: {
     backgroundColor: '#FF6B6B',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderRadius: 4,
   },
   saveButtonText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '600',
     color: '#FFFFFF',
   },
