@@ -456,10 +456,9 @@ export const DatabaseScreen: React.FC = () => {
     'NotionStyleTableV2 可用': !!NotionStyleTableV2
   });
 
-  return (
-    <Layout scrollable={false}>
+  const renderContent = () => (
+    <>
       <View style={[styles.container, isDesktop && styles.desktopContainer]}>
-        
         <View style={styles.contentWrapper}>
           {/* Tab 導航 - 水平顯示（僅行動版） */}
           {!isDesktop && (
@@ -612,6 +611,15 @@ export const DatabaseScreen: React.FC = () => {
             )}
           </View>
         </View>
+
+        {/* Desktop Side Panel */}
+        {isDesktop && (
+          <ResponsiveLayout mobileComponent={null}>
+            <View style={styles.sidePanel}>
+              {/* Side panel content */}
+            </View>
+          </ResponsiveLayout>
+        )}
       </View>
 
       {/* 篩選器 Popover */}
@@ -707,6 +715,17 @@ export const DatabaseScreen: React.FC = () => {
           </View>
         </View>
       )}
+    </>
+  );
+
+  // 根據平台渲染
+  if (Platform.OS === 'web') {
+    return renderContent();
+  }
+
+  return (
+    <Layout scrollable={false}>
+      {renderContent()}
     </Layout>
   );
 };
@@ -715,6 +734,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
+    ...Platform.select({
+      web: {
+        backgroundColor: '#fbfbfa', // Notion 背景色
+      },
+    }),
   },
   desktopContainer: {
     // 不需要設定 marginLeft，WebNavigator 會處理佈局
@@ -740,6 +764,12 @@ const styles = StyleSheet.create({
   tableContainer: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+    ...Platform.select({
+      web: {
+        flex: 'unset' as any,
+        height: '100%',
+      },
+    }),
   },
   tabContainer: {
     flexDirection: 'row',
