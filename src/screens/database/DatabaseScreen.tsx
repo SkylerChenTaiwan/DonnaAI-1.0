@@ -736,7 +736,9 @@ export const DatabaseScreen: React.FC = () => {
                 showHeader={true}
               />
             ) : Platform.OS === 'web' ? (
-              <NotionTable
+              <>
+                {console.log('🎨 正在渲染 NotionTable 元件')}
+                <NotionTable
                 data={currentData.data}
                 columns={currentColumns.map(col => ({
                   id: col.key,
@@ -761,6 +763,7 @@ export const DatabaseScreen: React.FC = () => {
                 loading={currentData.loading}
                 emptyMessage="沒有資料，點擊新增列開始"
               />
+              </>
             ) : (
               <NotionStyleTableV2
                 data={currentData.data}

@@ -3,7 +3,7 @@
  */
 
 import React, { useCallback, useMemo, useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 import { NotionTableProps, CellPosition, ColumnConfig } from './types';
 import { VirtualScroller } from './VirtualScroller';
 import { TableHeader } from './TableHeader';
@@ -83,6 +83,52 @@ export const NotionTable: React.FC<NotionTableProps> = ({
   }, [onCellUpdate]);
   
   const { debouncedUpdate } = useDebouncedUpdate(handleCellUpdate, NOTION_DEFAULTS.DEBOUNCE_DELAY);
+  
+  // Helper function to render cell content based on column type
+  const renderCellContent = useCallback((row: any, column: any) => {
+    const value = row[column.key];
+    
+    if (Platform.OS !== 'web') {
+      // React Native fallback
+      return value || '空白';
+    }
+    
+    switch (column.type) {
+      case 'checkbox':
+        return React.createElement('input', {
+          type: 'checkbox',
+          className: 'notion-checkbox',
+          checked: !!value,
+          onChange: (e: any) => handleCellEdit(row.id, column.key, e.target.checked)
+        });
+      case 'select':
+        if (value && column.options) {
+          const option = column.options.find((opt: any) => opt.value === value);
+          if (option) {
+            return React.createElement('span', {
+              className: 'notion-status-tag',
+              style: { 
+                backgroundColor: option.color || '#f1f3f4',
+                color: option.textColor || '#000'
+              }
+            }, option.label || value);
+          }
+        }
+        return React.createElement('span', {
+          className: 'notion-cell-placeholder'
+        }, value || '選擇選項');
+      case 'date':
+        return value 
+          ? new Date(value).toLocaleDateString('zh-TW') 
+          : React.createElement('span', {
+              className: 'notion-cell-placeholder'
+            }, '選擇日期');
+      default:
+        return value || React.createElement('span', {
+          className: 'notion-cell-placeholder'
+        }, '空白');
+    }
+  }, [handleCellEdit]);
   
   // Handle column resize
   const handleColumnResize = useCallback((columnId: string, newWidth: number) => {
@@ -200,6 +246,33 @@ export const NotionTable: React.FC<NotionTableProps> = ({
   
   // Empty state
   if (data.length === 0) {
+    console.log('📋 NotionTable 空狀態渲染');
+    
+    if (Platform.OS === 'web') {
+      return React.createElement('div', 
+        { className: 'notion-database-wrapper' },
+        React.createElement('div', 
+          { className: 'notion-database-container' },
+          React.createElement('div', 
+            { className: 'notion-empty-state' },
+            React.createElement('div', 
+              { className: 'notion-empty-icon' }, 
+              '📋'
+            ),
+            React.createElement('div', 
+              { className: 'notion-empty-title' }, 
+              emptyMessage
+            ),
+            onRowAdd && React.createElement('button', {
+              className: 'notion-button notion-button-primary',
+              onClick: handleAddRow,
+              style: { marginTop: 16 }
+            }, '新增第一筆資料')
+          )
+        )
+      ) as any;
+    }
+    
     return (
       <View style={[tableStyles.container, tableStyles.emptyContainer]}>
         <Icon name="folder-open" size={48} color={NotionColors.text.lightGray} />
@@ -226,6 +299,84 @@ export const NotionTable: React.FC<NotionTableProps> = ({
     );
   }
   
+  // 當有資料時渲染完整的 Notion 風格表格
+  if (Platform.OS === 'web') {
+    return React.createElement('div', 
+      { className: 'notion-database-wrapper' },
+      React.createElement('div', 
+        { className: 'notion-database-container' },
+        React.createElement('div', 
+          { className: 'notion-database-toolbar' },
+          React.createElement('div', 
+            { className: 'notion-toolbar-left' },
+            React.createElement('span', 
+              { className: 'notion-view-info' }, 
+              `${data.length} 筆記錄`
+            )
+          ),
+          React.createElement('div', 
+            { className: 'notion-toolbar-right' },
+            onColumnAdd && React.createElement('button', 
+              { 
+                className: 'notion-button',
+                onClick: onColumnAdd
+              }, 
+              '+ 新增欄位'
+            )
+          )
+        ),
+        React.createElement('table', 
+          { className: 'notion-database-table' },
+          React.createElement('thead', {},
+            React.createElement('tr', 
+              { className: 'notion-header-row' },
+              columnsWithWidths.map((column) => 
+                React.createElement('th', {
+                  key: column.id,
+                  className: 'notion-header-cell',
+                  'data-column': column.key,
+                  style: { width: column.width }
+                }, column.title)
+              )
+            )
+          ),
+          React.createElement('tbody', {},
+            data.map((row, index) => 
+              React.createElement('tr', {
+                key: row.id,
+                className: `notion-data-row ${selectedRowsSet.has(row.id) ? 'selected' : ''}`,
+                onClick: () => onRowClick?.(row)
+              },
+                columnsWithWidths.map((column) => 
+                  React.createElement('td', {
+                    key: column.id,
+                    className: 'notion-cell'
+                  },
+                    React.createElement('div', {
+                      className: 'notion-cell-content'
+                    }, renderCellContent(row, column))
+                  )
+                )
+              )
+            ),
+            onRowAdd && React.createElement('tr', 
+              { className: 'notion-add-row' },
+              React.createElement('td', {
+                colSpan: columnsWithWidths.length,
+                className: 'notion-add-row-cell'
+              },
+                React.createElement('button', {
+                  className: 'notion-add-row-button',
+                  onClick: handleAddRow
+                }, '+ 新增列')
+              )
+            )
+          )
+        )
+      )
+    ) as any;
+  }
+
   return (
     <View style={tableStyles.container}>
       {/* Fixed header */}
