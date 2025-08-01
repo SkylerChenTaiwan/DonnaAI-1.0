@@ -27,6 +27,7 @@ import { NotionStyleTableV2 } from '@/components/database/NotionStyleTableV2';
 import { TanStackNotionTableV3 } from '@/components/database/web/TanStackNotionTableV3';
 import { NotionDatabase } from '@/components/database/web/NotionDatabase';
 import { DatabaseToolbar } from '@/components/database/DatabaseToolbar';
+import { convertToTanStackColumns } from '@/components/database/web/columnHelpers';
 import { AddColumnDialog, ColumnType, ColumnConfig } from '@/components/database/AddColumnDialog';
 import { SkeletonLoader } from '@/components/database/SkeletonLoader';
 import { BatchEditForm } from '@/components/database/BatchEditForm';
@@ -542,7 +543,7 @@ export const DatabaseScreen: React.FC = () => {
             ) : Platform.OS === 'web' ? (
               <TanStackNotionTableV3
                 data={currentData.data}
-                columns={currentColumns}
+                columns={convertToTanStackColumns(currentColumns)}
                 onAddRow={handleAddRow}
                 onRowPress={handleRowPress}
                 multiSelectMode={multiSelectMode}

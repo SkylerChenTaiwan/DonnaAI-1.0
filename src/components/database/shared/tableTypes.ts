@@ -4,6 +4,7 @@
  */
 
 import { TableColumn } from '@/types/table';
+import { ColumnDef } from '@tanstack/react-table';
 
 // TanStack Table 專用型別
 export interface TanStackTableColumn<T = any> {
@@ -20,7 +21,7 @@ export interface TanStackTableColumn<T = any> {
 
 export interface TanStackTableProps<T = any> {
   data: T[];
-  columns: TanStackTableColumn<T>[];
+  columns: ColumnDef<T, any>[];
   onAddRow?: (rowData?: Record<string, any>) => void | Promise<void>;
   onUpdateCell?: (rowId: string, columnKey: string, value: any) => void | Promise<void>;
   onColumnsReorder?: (columns: TanStackTableColumn<T>[]) => void;
