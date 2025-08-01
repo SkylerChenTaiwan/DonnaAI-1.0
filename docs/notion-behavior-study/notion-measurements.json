@@ -1,0 +1,160 @@
+{
+  "colors": {
+    "text": {
+      "default": "#37352F",
+      "gray": "#787774",
+      "lightGray": "#A4A4A2",
+      "brown": "#64473A",
+      "orange": "#D9730D",
+      "yellow": "#DFAB01",
+      "green": "#0F7B6C",
+      "blue": "#0B6E99",
+      "purple": "#6940A5",
+      "pink": "#AD1A72",
+      "red": "#E03E3E"
+    },
+    "background": {
+      "default": "#FFFFFF",
+      "gray": "#F7F6F3",
+      "brown": "#F4EEEE",
+      "orange": "#FBECDD",
+      "yellow": "#FBF3DB",
+      "green": "#EDF3EC",
+      "blue": "#E7F3F8",
+      "purple": "#F6F3F9",
+      "pink": "#FAF1F5",
+      "red": "#FDEBEC"
+    },
+    "interactive": {
+      "hover": "#F7F6F3",
+      "selected": "#E9E9E7",
+      "selectedBorder": "#0A84FF",
+      "focus": "#0A84FF",
+      "disabled": "#E1E1DB"
+    },
+    "ui": {
+      "border": "#E9E9E7",
+      "divider": "#F0F0F0",
+      "shadow": "rgba(15, 15, 15, 0.1)",
+      "scrollbar": "#D3D1CB",
+      "link": "#0B6E99"
+    }
+  },
+  "spacing": {
+    "xs": "4px",
+    "sm": "8px",
+    "md": "12px",
+    "lg": "16px",
+    "xl": "24px",
+    "xxl": "32px",
+    "cell": {
+      "paddingHorizontal": "8px",
+      "paddingVertical": "6px",
+      "minHeight": "32px"
+    },
+    "header": {
+      "height": "36px",
+      "paddingHorizontal": "8px"
+    },
+    "row": {
+      "height": "36px",
+      "gap": "0px"
+    }
+  },
+  "typography": {
+    "fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif",
+    "fontSize": {
+      "xs": "11px",
+      "sm": "12px",
+      "body": "14px",
+      "md": "16px",
+      "lg": "18px",
+      "xl": "20px"
+    },
+    "fontWeight": {
+      "normal": "400",
+      "medium": "500",
+      "semibold": "600",
+      "bold": "700"
+    },
+    "lineHeight": {
+      "tight": "1.2",
+      "body": "1.5",
+      "relaxed": "1.75"
+    }
+  },
+  "animations": {
+    "duration": {
+      "instant": "0ms",
+      "fast": "100ms",
+      "normal": "150ms",
+      "slow": "300ms"
+    },
+    "easing": {
+      "default": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "ease": "ease",
+      "easeIn": "ease-in",
+      "easeOut": "ease-out",
+      "easeInOut": "ease-in-out"
+    },
+    "transitions": {
+      "background": "background-color 150ms ease",
+      "border": "border-color 150ms ease",
+      "opacity": "opacity 150ms ease",
+      "transform": "transform 150ms ease"
+    }
+  },
+  "interactive": {
+    "borderRadius": {
+      "sm": "3px",
+      "md": "4px",
+      "lg": "6px",
+      "full": "9999px"
+    },
+    "focusRing": {
+      "width": "2px",
+      "color": "#0A84FF",
+      "offset": "0px"
+    },
+    "hover": {
+      "opacity": "0.8",
+      "scale": "1.0"
+    }
+  },
+  "table": {
+    "header": {
+      "background": "#FFFFFF",
+      "borderBottom": "1px solid #E9E9E7",
+      "fontWeight": "500",
+      "fontSize": "14px",
+      "color": "#787774",
+      "textTransform": "none"
+    },
+    "cell": {
+      "background": "#FFFFFF",
+      "backgroundHover": "#F7F6F3",
+      "backgroundSelected": "#E7F3F8",
+      "border": "1px solid #E9E9E7",
+      "padding": "6px 8px",
+      "fontSize": "14px",
+      "color": "#37352F"
+    },
+    "row": {
+      "backgroundEven": "#FFFFFF",
+      "backgroundOdd": "#FFFFFF",
+      "backgroundHover": "#F7F6F3",
+      "height": "36px"
+    }
+  },
+  "editor": {
+    "outline": {
+      "width": "2px",
+      "color": "#0A84FF",
+      "style": "solid"
+    },
+    "background": "#FFFFFF",
+    "fontSize": "14px",
+    "padding": "2px 4px",
+    "borderRadius": "0px"
+  }
+}

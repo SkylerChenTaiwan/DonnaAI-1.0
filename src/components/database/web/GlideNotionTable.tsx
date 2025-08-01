@@ -130,15 +130,15 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
           data: Number(value) || 0,
           displayData: String(value),
           allowOverlay: true,
-          readonly: !onUpdateCell,
+          readonly: false,
         };
       
       case 'boolean':
         return {
           kind: GridCellKind.Boolean,
           data: Boolean(value),
-          allowOverlay: false,
-          readonly: !onUpdateCell,
+          allowOverlay: true,
+          readonly: false,
         };
       
       case 'date':
@@ -147,7 +147,7 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
           data: value,
           displayData: value ? new Date(value).toLocaleDateString('zh-TW') : '',
           allowOverlay: true,
-          readonly: !onUpdateCell,
+          readonly: false,
         };
       
       case 'select':
@@ -158,7 +158,7 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
           data: displayValue || '',
           displayData: displayValue || '',
           allowOverlay: true,
-          readonly: !onUpdateCell,
+          readonly: false,
         };
       
       case 'tags':
@@ -168,7 +168,7 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
           data: Array.isArray(value) ? value.join(', ') : value || '',
           displayData: Array.isArray(value) ? value.join(', ') : value || '',
           allowOverlay: true,
-          readonly: !onUpdateCell,
+          readonly: false,
         };
       
       default:
@@ -177,7 +177,7 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
           data: String(value),
           displayData: String(value),
           allowOverlay: true,
-          readonly: !onUpdateCell,
+          readonly: false,
         };
     }
   }, [columns, data, onUpdateCell]);
@@ -203,6 +203,13 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
         break;
       default:
         value = newValue.data;
+    }
+
+    // 處理 select 類型的值轉換
+    if (column.type === 'select') {
+      // 將顯示文字轉換回選項值
+      if (value === '會議') value = 'meeting';
+      else if (value === '通話') value = 'call';
     }
 
     onUpdateCell(rowData.id, column.key, value);

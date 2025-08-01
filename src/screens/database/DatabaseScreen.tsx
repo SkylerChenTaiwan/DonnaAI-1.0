@@ -39,6 +39,7 @@ import { responsive, webOnly } from '@/styles/web';
 import { useColumnSettings } from '@/hooks/useColumnSettings';
 import { useColumnOrder } from '@/hooks/useColumnOrder';
 import { usePendingChanges } from '@/hooks/usePendingChanges';
+import { useDebouncedUpdate } from '@/hooks/useDebouncedUpdate';
 import { exportTableData } from '@/utils/tableExport';
 import { useCustomerStore } from '@/stores/customerStore';
 import { useRecordStore } from '@/stores/recordStore';
@@ -48,9 +49,9 @@ import { TableColumn } from '@/types/table';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '@/types/navigation';
-import { createCustomer } from '@/services/firebase/customers';
-import { createRecord } from '@/services/firebase/records';
-import { createTask } from '@/services/firebase/tasks';
+import { createCustomer, updateCustomer } from '@/services/firebase/customers';
+import { createRecord, updateRecord } from '@/services/firebase/records';
+import { createTask, updateTask } from '@/services/firebase/tasks';
 import { showToast } from '@/utils/toast';
 
 interface SortConfig {
@@ -519,6 +520,38 @@ export const DatabaseScreen: React.FC = () => {
 
   const isDesktop = isDesktopWeb();
 
+  // 建立 debounced 更新函數
+  const handleCellUpdate = useCallback(async (rowId: string, columnKey: string, value: any) => {
+    try {
+      // 檢查是否為草稿列
+      const isDraft = rowId.startsWith('draft_');
+      
+      if (isDraft) {
+        // 更新 pending changes
+        updatePendingChange(rowId, columnKey, value);
+      } else {
+        // 更新現有資料
+        switch (activeTab) {
+          case 'customers':
+            await updateCustomer(rowId, { [columnKey]: value });
+            break;
+          case 'records':
+            await updateRecord(rowId, { [columnKey]: value });
+            break;
+          case 'tasks':
+            await updateTask(rowId, { [columnKey]: value });
+            break;
+        }
+        showToast('success', '已自動儲存');
+      }
+    } catch (error) {
+      console.error('更新失敗:', error);
+      showToast('error', '更新失敗');
+    }
+  }, [activeTab, updatePendingChange]);
+
+  const { debouncedUpdate } = useDebouncedUpdate(handleCellUpdate, 500);
+
   // 偵錯資訊：檢查平台偵測
   console.log('🔍 DatabaseScreen 平台偵測:', {
     Platform: Platform.OS,
@@ -699,24 +732,10 @@ export const DatabaseScreen: React.FC = () => {
                 onSelect={setSelectedItems}
                 onAddColumn={() => setShowAddColumnDialog(true)}
                 getValidationError={getValidationError}
-                onUpdateCell={async (rowId, columnKey, value) => {
-                  try {
-                    // 檢查是否為草稿列
-                    const isDraft = rowId.startsWith('draft_');
-                    
-                    if (isDraft) {
-                      // 更新 pending changes
-                      updatePendingChange(rowId, columnKey, value);
-                    } else {
-                      // 更新現有資料
-                      console.log('更新儲存格:', { rowId, columnKey, value, activeTab });
-                      // TODO: 實作實際的更新邏輯
-                      updatePendingChange(rowId, columnKey, value);
-                    }
-                  } catch (error) {
-                    console.error('更新失敗:', error);
-                    showToast('error', '更新失敗');
-                  }
+                onUpdateCell={(rowId, columnKey, value) => {
+                  console.log('更新儲存格:', { rowId, columnKey, value, activeTab });
+                  // 使用 debounced 更新
+                  debouncedUpdate(rowId, columnKey, value);
                 }}
               />
             ) : (
