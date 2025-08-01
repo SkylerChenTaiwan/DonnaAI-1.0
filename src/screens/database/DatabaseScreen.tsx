@@ -25,6 +25,7 @@ import { NotionStyleTable } from '@/components/database/NotionStyleTable';
 import { NotionStyleTableDebug } from '@/components/database/NotionStyleTableDebug';
 import { NotionStyleTableV2 } from '@/components/database/NotionStyleTableV2';
 import { TanStackNotionTable } from '@/components/database/web';
+import { NotionDatabase } from '@/components/database/web/NotionDatabase';
 import { DatabaseToolbar } from '@/components/database/DatabaseToolbar';
 import { AddColumnDialog, ColumnType, ColumnConfig } from '@/components/database/AddColumnDialog';
 import { SkeletonLoader } from '@/components/database/SkeletonLoader';
@@ -539,50 +540,69 @@ export const DatabaseScreen: React.FC = () => {
                 columns={currentColumns.length}
                 showHeader={true}
               />
-            ) : (() => {
-              // 平台特定的表格元件選擇
-              const TableComponent = selectedComponent;
-              
-              console.log('🔍 即將渲染的表格組件:', {
-                componentName: TableComponent?.name,
-                isWeb: Platform.OS === 'web',
-                dataLength: currentData.data.length
-              });
-
-              return (
-                <TableComponent
-                  data={currentData.data}
-                  columns={currentColumns}
-                  onAddRow={handleAddRow}
-                  onAddColumn={() => setShowAddColumnDialog(true)}
-                  onRowPress={handleRowPress}
-                  multiSelectMode={multiSelectMode}
-                  selectedItems={selectedItems}
-                  onSelect={setSelectedItems}
-                  refreshing={currentData.loading}
-                  onRefresh={handleRefresh}
-                  sortConfig={currentSort}
-                  onSort={(key) => {
-                    // 處理列標題點擊的排序
-                    const newSort = currentSort?.key === key 
-                      ? { key, direction: currentSort.direction === 'asc' ? 'desc' : 'asc' as const }
-                      : { key, direction: 'asc' as const };
-                    setCurrentSort(newSort);
-                  }}
-                  onUpdateCell={async (rowId, columnKey, value) => {
+            ) : Platform.OS === 'web' ? (
+              <NotionDatabase
+                data={currentData.data}
+                columns={currentColumns.map(col => ({
+                  id: col.key,
+                  title: col.title,
+                  type: col.key === 'phone' ? 'phone' : 
+                        col.key === 'email' ? 'email' : 
+                        col.key === 'status' ? 'select' : 'text',
+                  width: col.width,
+                }))}
+                onUpdateCell={async (rowId, columnId, value) => {
+                  try {
                     // 根據 activeTab 更新對應的資料
-                    showToast('info', '儲存格編輯功能開發中');
-                  }}
-                  onColumnsReorder={async (reorderedColumns) => {
-                    // 儲存新的欄位順序
-                    const newOrder = reorderedColumns.map(col => col.key);
-                    await saveColumnOrder(newOrder);
-                    showToast('success', '已儲存欄位順序');
-                  }}
-                  enableColumnDrag={true}
-                />
-              );
-            })()}
+                    console.log('更新儲存格:', { rowId, columnId, value, activeTab });
+                    showToast('success', '已更新');
+                  } catch (error) {
+                    console.error('更新失敗:', error);
+                    showToast('error', '更新失敗');
+                  }
+                }}
+                onAddRow={async (rowData) => {
+                  try {
+                    await handleAddRowWithData(rowData);
+                  } catch (error) {
+                    console.error('新增行失敗:', error);
+                    showToast('error', '新增失敗');
+                  }
+                }}
+              />
+            ) : (
+              <NotionStyleTableV2
+                data={currentData.data}
+                columns={currentColumns}
+                onAddRow={handleAddRow}
+                onAddColumn={() => setShowAddColumnDialog(true)}
+                onRowPress={handleRowPress}
+                multiSelectMode={multiSelectMode}
+                selectedItems={selectedItems}
+                onSelect={setSelectedItems}
+                refreshing={currentData.loading}
+                onRefresh={handleRefresh}
+                sortConfig={currentSort}
+                onSort={(key) => {
+                  // 處理列標題點擊的排序
+                  const newSort = currentSort?.key === key 
+                    ? { key, direction: currentSort.direction === 'asc' ? 'desc' : 'asc' as const }
+                    : { key, direction: 'asc' as const };
+                  setCurrentSort(newSort);
+                }}
+                onUpdateCell={async (rowId, columnKey, value) => {
+                  // 根據 activeTab 更新對應的資料
+                  showToast('info', '儲存格編輯功能開發中');
+                }}
+                onColumnsReorder={async (reorderedColumns) => {
+                  // 儲存新的欄位順序
+                  const newOrder = reorderedColumns.map(col => col.key);
+                  await saveColumnOrder(newOrder);
+                  showToast('success', '已儲存欄位順序');
+                }}
+                enableColumnDrag={true}
+              />
+            )}
           </View>
         </View>
       </View>
