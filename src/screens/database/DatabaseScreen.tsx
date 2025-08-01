@@ -25,6 +25,7 @@ import { NotionStyleTable } from '@/components/database/NotionStyleTable';
 import { NotionStyleTableDebug } from '@/components/database/NotionStyleTableDebug';
 import { NotionStyleTableV2 } from '@/components/database/NotionStyleTableV2';
 import { TanStackNotionTableV3 } from '@/components/database/web/TanStackNotionTableV3';
+import { GlideNotionTable } from '@/components/database/web/GlideNotionTable';
 import { NotionDatabase } from '@/components/database/web/NotionDatabase';
 import { DatabaseToolbar } from '@/components/database/DatabaseToolbar';
 import { convertToTanStackColumns } from '@/components/database/web/columnHelpers';
@@ -122,24 +123,26 @@ export const DatabaseScreen: React.FC = () => {
   // 基礎欄位定義（可被自訂欄位擴展）
   const baseColumns = useMemo(() => ({
     customers: [
-      { key: 'name', title: '姓名', sortable: true, filterable: true },
-      { key: 'company', title: '公司', sortable: true, filterable: true },
-      { key: 'phone', title: '電話', sortable: true, filterable: true },
-      { key: 'tags', title: '標籤', sortable: true, filterable: true },
+      { key: 'name', title: '姓名', sortable: true, filterable: true, type: 'text' as const },
+      { key: 'company', title: '公司', sortable: true, filterable: true, type: 'text' as const },
+      { key: 'phone', title: '電話', sortable: true, filterable: true, type: 'phone' as const },
+      { key: 'tags', title: '標籤', sortable: true, filterable: true, type: 'tags' as const },
     ],
     records: [
-      { key: 'type', title: '類型', sortable: true, filterable: true, render: (value: any) => (
+      { key: 'type', title: '類型', sortable: true, filterable: true, type: 'select' as const, 
+        options: ['meeting', 'call'], render: (value: any) => (
         <Text style={{ fontSize: 14, color: '#37352f' }}>{value === 'meeting' ? '會議' : '通話'}</Text>
       ) },
-      { key: 'customerName', title: '客戶', sortable: true, filterable: true },
-      { key: 'date', title: '日期', sortable: true, filterable: true },
-      { key: 'summary', title: '摘要', sortable: true, filterable: true },
+      { key: 'customerName', title: '客戶', sortable: true, filterable: true, type: 'text' as const },
+      { key: 'date', title: '日期', sortable: true, filterable: true, type: 'date' as const },
+      { key: 'summary', title: '摘要', sortable: true, filterable: true, type: 'text' as const },
     ],
     tasks: [
-      { key: 'title', title: '標題', sortable: true, filterable: true },
-      { key: 'assignee', title: '負責人', sortable: true, filterable: true },
-      { key: 'dueDate', title: '到期日', sortable: true, filterable: true },
-      { key: 'status', title: '狀態', sortable: true, filterable: true, render: (value: any) => {
+      { key: 'title', title: '標題', sortable: true, filterable: true, type: 'text' as const },
+      { key: 'assignee', title: '負責人', sortable: true, filterable: true, type: 'text' as const },
+      { key: 'dueDate', title: '到期日', sortable: true, filterable: true, type: 'date' as const },
+      { key: 'status', title: '狀態', sortable: true, filterable: true, type: 'select' as const,
+        options: ['todo', 'in_progress', 'completed', 'cancelled'], render: (value: any) => {
         const statusStyle = (() => {
           switch (value) {
             case 'completed':
@@ -541,24 +544,14 @@ export const DatabaseScreen: React.FC = () => {
                 showHeader={true}
               />
             ) : Platform.OS === 'web' ? (
-              <TanStackNotionTableV3
+              <GlideNotionTable
                 data={currentData.data}
-                columns={convertToTanStackColumns(currentColumns)}
+                columns={currentColumns}
                 onAddRow={handleAddRow}
                 onRowPress={handleRowPress}
                 multiSelectMode={multiSelectMode}
                 selectedItems={selectedItems}
                 onSelect={setSelectedItems}
-                refreshing={currentData.loading}
-                onRefresh={handleRefresh}
-                sortConfig={currentSort}
-                onSort={(key) => {
-                  // 處理列標題點擊的排序
-                  const newSort = currentSort?.key === key 
-                    ? { key, direction: currentSort.direction === 'asc' ? 'desc' : 'asc' as const }
-                    : { key, direction: 'asc' as const };
-                  setCurrentSort(newSort);
-                }}
                 onUpdateCell={async (rowId, columnKey, value) => {
                   try {
                     // 根據 activeTab 更新對應的資料
@@ -569,13 +562,6 @@ export const DatabaseScreen: React.FC = () => {
                     showToast('error', '更新失敗');
                   }
                 }}
-                onColumnsReorder={async (reorderedColumns) => {
-                  // 儲存新的欄位順序
-                  const newOrder = reorderedColumns.map(col => col.key);
-                  await saveColumnOrder(newOrder);
-                  showToast('success', '已儲存欄位順序');
-                }}
-                enableColumnDrag={true}
               />
             ) : (
               <NotionStyleTableV2

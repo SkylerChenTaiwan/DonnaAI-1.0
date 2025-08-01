@@ -35,6 +35,7 @@
     "@expo/config-plugins": "~10.1.1",
     "@expo/metro-runtime": "~5.0.4",
     "@expo/vector-icons": "^14.1.0",
+    "@glideapps/glide-data-grid": "^6.0.3",
     "@google/genai": "^1.10.0",
     "@hookform/resolvers": "^5.1.1",
     "@react-native-async-storage/async-storage": "2.1.2",

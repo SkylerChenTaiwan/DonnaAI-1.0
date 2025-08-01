@@ -10,7 +10,9 @@ export interface TableColumn {
   sortable?: boolean;
   filterable?: boolean;
   width?: number;
+  type?: 'text' | 'number' | 'boolean' | 'date' | 'select' | 'multiselect' | 'tags' | 'email' | 'phone' | 'url';
   render?: (value: any, item: any) => React.ReactNode;
+  options?: string[]; // 用於 select 和 multiselect 類型
 }
 
 export interface TableData {
