@@ -122,7 +122,17 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
       grow: col.type === 'text' ? 1 : 0,
     }));
 
-    return [actionColumn, ...dataColumns];
+    // 新增欄位按鈕
+    const addColumnColumn: GridColumn = {
+      id: '__add_column__',
+      title: '+',
+      width: 40,
+      icon: undefined,
+      hasMenu: false,
+      grow: 0,
+    };
+
+    return [actionColumn, ...dataColumns, addColumnColumn];
   }, [columns]);
 
   // 取得儲存格資料
@@ -137,6 +147,17 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
         data: {
           kind: 'action-cell',
           row: row,
+        },
+      };
+    }
+
+    // 新增欄位按鈕
+    if (col === gridColumns.length - 1) {
+      return {
+        kind: GridCellKind.Custom,
+        allowOverlay: false,
+        data: {
+          kind: 'add-column-cell',
         },
       };
     }
@@ -290,15 +311,10 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
 
   // 處理新增列
   const handleAddRow = useCallback(() => {
-    setIsAddingRow(true);
-    setTempRowData({});
-    // 滾動到底部
-    setTimeout(() => {
-      gridRef.current?.scrollTo(0, displayData.length, 'vertical', 0, 0, {
-        vAlign: 'end',
-      });
-    }, 100);
-  }, [displayData.length]);
+    if (onAddRow) {
+      onAddRow({});
+    }
+  }, [onAddRow]);
 
   // 儲存新增列
   const handleSaveNewRow = useCallback(async () => {
@@ -354,11 +370,43 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
       return true;
     }
     
+    if (cell.data?.kind === 'add-column-cell') {
+      // 繪製新增欄位按鈕
+      ctx.fillStyle = theme.textLight;
+      ctx.font = '18px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('+', rect.x + rect.width / 2, rect.y + rect.height / 2);
+      return true;
+    }
+    
     return false;
   }, []);
 
   return (
     <div className="glide-notion-table-wrapper">
+      <div className="glide-notion-table-header">
+        <h1 className="notion-table-title">新資料庫</h1>
+        <div className="notion-table-toolbar">
+          <button className="notion-view-button">
+            <Icon name="list" size={14} />
+            <span>表格</span>
+          </button>
+          <button className="notion-toolbar-button">
+            <Icon name="filter" size={14} />
+          </button>
+          <button className="notion-toolbar-button">
+            <Icon name="sort" size={14} />
+          </button>
+          <button className="notion-toolbar-button">
+            <Icon name="search" size={14} />
+          </button>
+          <div className="notion-toolbar-separator" />
+          <button className="notion-new-button">
+            新增
+          </button>
+        </div>
+      </div>
       <div className="glide-notion-table-container">
         <DataEditor
           ref={gridRef}
@@ -383,38 +431,6 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
           freezeColumns={1} // 凍結操作欄
           getCellsForSelection={true}
           drawCell={drawCell}
-          rightElement={
-            <div className="notion-add-row-container">
-              {!isAddingRow ? (
-                <button
-                  className="notion-add-row-button"
-                  onClick={handleAddRow}
-                >
-                  <Icon name="add" size={16} />
-                  <span>新增列</span>
-                </button>
-              ) : (
-                <div className="notion-new-row-actions">
-                  <button
-                    className="notion-button notion-button-primary"
-                    onClick={handleSaveNewRow}
-                  >
-                    儲存
-                  </button>
-                  <button
-                    className="notion-button"
-                    onClick={handleCancelNewRow}
-                  >
-                    取消
-                  </button>
-                </div>
-              )}
-            </div>
-          }
-          rightElementProps={{
-            sticky: true,
-            fill: false,
-          }}
           keybindings={{
             search: true,
             downFill: true,
@@ -426,34 +442,94 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
             selectRow: true,
             selectColumn: true,
           }}
+          onRowAppended={onAddRow ? handleAddRow : undefined}
+          trailingRowOptions={{
+            hint: '新增列...',
+            tint: '#787774',
+            targetColumn: 1, // 跳過操作欄
+          }}
         />
       </div>
       
-      {/* 底部新增欄位按鈕 */}
-      <div className="notion-table-footer">
-        <button className="notion-add-column-button">
-          <Icon name="add" size={14} />
-          <span>新增欄位</span>
-        </button>
-      </div>
       
       <style>{`
         .glide-notion-table-wrapper {
           width: 100%;
-          height: 100%;
+          min-height: 100vh;
           display: flex;
           flex-direction: column;
-          background: #fbfbfa;
-          padding: 60px;
+          background: white;
+          padding: 0 96px;
+        }
+        
+        .glide-notion-table-header {
+          padding: 40px 0 20px;
+        }
+        
+        .notion-table-title {
+          font-size: 40px;
+          font-weight: 700;
+          color: #37352f;
+          margin: 0 0 8px 0;
+          line-height: 1.2;
+        }
+        
+        .notion-table-toolbar {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-top: 12px;
+        }
+        
+        .notion-view-button,
+        .notion-toolbar-button {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 4px 8px;
+          border: none;
+          background: transparent;
+          color: #787774;
+          font-size: 14px;
+          font-weight: 500;
+          cursor: pointer;
+          border-radius: 4px;
+          transition: all 0.1s ease;
+        }
+        
+        .notion-view-button:hover,
+        .notion-toolbar-button:hover {
+          background: #f7f6f3;
+          color: #37352f;
+        }
+        
+        .notion-toolbar-separator {
+          width: 1px;
+          height: 16px;
+          background: #e9e9e7;
+          margin: 0 4px;
+        }
+        
+        .notion-new-button {
+          padding: 4px 12px;
+          border: none;
+          background: #0070f3;
+          color: white;
+          font-size: 14px;
+          font-weight: 500;
+          cursor: pointer;
+          border-radius: 4px;
+          transition: all 0.1s ease;
+        }
+        
+        .notion-new-button:hover {
+          background: #0051cc;
         }
         
         .glide-notion-table-container {
           flex: 1;
           background: white;
-          border: 1px solid #eeeeec;
-          border-radius: 8px;
-          overflow: hidden;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+          margin-bottom: 100px;
         }
         
         .notion-add-row-container {
@@ -555,11 +631,19 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
         
         .dvn-cell {
           font-size: 13px !important;
+          border-right: 1px solid #e9e9e7 !important;
         }
         
         .dvn-header {
           font-weight: 600 !important;
-          background: #f7f6f3 !important;
+          background: white !important;
+          border-bottom: 1px solid #e9e9e7 !important;
+          border-right: 1px solid #e9e9e7 !important;
+        }
+        
+        /* 移除容器邊框 */
+        .dvn-container {
+          border: none !important;
         }
         
         /* 編輯器樣式 */
