@@ -2,7 +2,7 @@
  * Notion 風格資料庫表格主元件
  */
 
-import React, { useCallback, useMemo, useState, useRef } from 'react';
+import React, { useCallback, useMemo, useState, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 import { NotionTableProps, CellPosition, ColumnConfig } from './types';
 import { VirtualScroller } from './VirtualScroller';
@@ -38,22 +38,25 @@ export const NotionTable: React.FC<NotionTableProps> = ({
     columnsLength: columns?.length,
     loading,
     error,
+    platform: Platform.OS,
     data: data?.slice(0, 2), // 顯示前兩筆資料
     columns: columns?.map(c => ({ id: c.id, title: c.title, type: c.type })),
   });
-  // Column management
-  const [columnWidths, setColumnWidths] = useState<Record<string, number>>(() => {
+  
+  // Column management - 使用 useMemo 避免無限重新渲染
+  const [columnWidths, setColumnWidths] = useState<Record<string, number>>({});
+  
+  // Selection management - 初始化為空，避免依賴外部 props
+  const [internalSelectedRows, setInternalSelectedRows] = useState<Set<string>>(new Set());
+  
+  // 初始化欄位寬度，只在 columns 改變時執行
+  useEffect(() => {
     const widths: Record<string, number> = {};
     columns.forEach(col => {
       widths[col.id] = col.width || NOTION_DEFAULTS.DEFAULT_COLUMN_WIDTH;
     });
-    return widths;
-  });
-  
-  // Selection management
-  const [internalSelectedRows, setInternalSelectedRows] = useState<Set<string>>(
-    new Set(selectedRows)
-  );
+    setColumnWidths(widths);
+  }, [columns]);
   
   const selectedRowsSet = useMemo(
     () => new Set(selectedRows.length > 0 ? selectedRows : internalSelectedRows),
@@ -244,67 +247,16 @@ export const NotionTable: React.FC<NotionTableProps> = ({
     );
   }
   
-  // Empty state
-  if (data.length === 0) {
-    console.log('📋 NotionTable 空狀態渲染');
-    
-    if (Platform.OS === 'web') {
-      return React.createElement('div', 
-        { className: 'notion-database-wrapper' },
-        React.createElement('div', 
-          { className: 'notion-database-container' },
-          React.createElement('div', 
-            { className: 'notion-empty-state' },
-            React.createElement('div', 
-              { className: 'notion-empty-icon' }, 
-              '📋'
-            ),
-            React.createElement('div', 
-              { className: 'notion-empty-title' }, 
-              emptyMessage
-            ),
-            onRowAdd && React.createElement('button', {
-              className: 'notion-button notion-button-primary',
-              onClick: handleAddRow,
-              style: { marginTop: 16 }
-            }, '新增第一筆資料')
-          )
-        )
-      ) as any;
-    }
-    
-    return (
-      <View style={[tableStyles.container, tableStyles.emptyContainer]}>
-        <Icon name="folder-open" size={48} color={NotionColors.text.lightGray} />
-        <Text style={[tableStyles.emptyText, { marginTop: 16 }]}>
-          {emptyMessage}
-        </Text>
-        {onRowAdd && (
-          <TouchableOpacity
-            style={{
-              marginTop: 16,
-              paddingHorizontal: 16,
-              paddingVertical: 8,
-              backgroundColor: NotionColors.interactive.hover,
-              borderRadius: 4,
-            }}
-            onPress={handleAddRow}
-          >
-            <Text style={{ color: NotionColors.text.default }}>
-              新增第一筆資料
-            </Text>
-          </TouchableOpacity>
-        )}
-      </View>
-    );
-  }
-  
-  // 當有資料時渲染完整的 Notion 風格表格
+  // Web 平台的完整 Notion 風格界面
   if (Platform.OS === 'web') {
+    console.log('🌐 渲染 Notion 風格 Web 界面，資料數量:', data.length);
+    
     return React.createElement('div', 
       { className: 'notion-database-wrapper' },
       React.createElement('div', 
         { className: 'notion-database-container' },
+        
+        // Toolbar
         React.createElement('div', 
           { className: 'notion-database-toolbar' },
           React.createElement('div', 
@@ -325,6 +277,26 @@ export const NotionTable: React.FC<NotionTableProps> = ({
             )
           )
         ),
+        
+        // 如果沒有資料，顯示空狀態
+        data.length === 0 ? React.createElement('div', 
+          { className: 'notion-empty-state' },
+          React.createElement('div', 
+            { className: 'notion-empty-icon' }, 
+            '📋'
+          ),
+          React.createElement('div', 
+            { className: 'notion-empty-title' }, 
+            emptyMessage
+          ),
+          onRowAdd && React.createElement('button', {
+            className: 'notion-button notion-button-primary',
+            onClick: handleAddRow,
+            style: { marginTop: 16 }
+          }, '新增第一筆資料')
+        ) : 
+        
+        // 如果有資料，顯示表格
         React.createElement('table', 
           { className: 'notion-database-table' },
           React.createElement('thead', {},
@@ -376,6 +348,35 @@ export const NotionTable: React.FC<NotionTableProps> = ({
       )
     ) as any;
   }
+
+  // React Native 空狀態
+  if (data.length === 0) {
+    return (
+      <View style={[tableStyles.container, tableStyles.emptyContainer]}>
+        <Icon name="folder-open" size={48} color={NotionColors.text.lightGray} />
+        <Text style={[tableStyles.emptyText, { marginTop: 16 }]}>
+          {emptyMessage}
+        </Text>
+        {onRowAdd && (
+          <TouchableOpacity
+            style={{
+              marginTop: 16,
+              paddingHorizontal: 16,
+              paddingVertical: 8,
+              backgroundColor: NotionColors.interactive.hover,
+              borderRadius: 4,
+            }}
+            onPress={handleAddRow}
+          >
+            <Text style={{ color: NotionColors.text.default }}>
+              新增第一筆資料
+            </Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    );
+  }
+  
 
   return (
     <View style={tableStyles.container}>
