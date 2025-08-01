@@ -42,14 +42,66 @@ export interface IAudioService {
 // 動態載入音訊服務
 let AudioService: IAudioService;
 
+// 建立一個空的實作作為預設值
+const DummyAudioService: IAudioService = {
+  async setAudioModeAsync(options: any): Promise<void> {
+    console.log('音訊模式設定（模擬）:', options);
+  },
+  Recording: {
+    async createAsync(
+      options: any,
+      onRecordingStatusUpdate?: (status: RecordingStatus) => void,
+      progressUpdateIntervalMillis?: number
+    ): Promise<{ recording: IRecording; status: RecordingStatus }> {
+      console.warn('音訊錄製在此平台上不可用');
+      const dummyRecording: IRecording = {
+        async getStatusAsync() {
+          return {
+            isRecording: false,
+            isDoneRecording: false,
+            canRecord: false,
+            durationMillis: 0,
+          };
+        },
+        async stopAndUnloadAsync() {},
+        async getURI() { return null; },
+        setOnRecordingStatusUpdate() {},
+      };
+      return {
+        recording: dummyRecording,
+        status: {
+          isRecording: false,
+          isDoneRecording: false,
+          canRecord: false,
+          durationMillis: 0,
+        },
+      };
+    },
+  },
+  RecordingOptionsPresets: {
+    HIGH_QUALITY: {},
+    LOW_QUALITY: {},
+  },
+};
+
 if (Platform.OS === 'web') {
   // Web 平台使用 WebAudioRecorder
-  const WebAudio = require('./web/WebAudioRecorder').default;
-  AudioService = WebAudio;
+  try {
+    const WebAudio = require('./web/WebAudioRecorder').default;
+    AudioService = WebAudio;
+  } catch (error) {
+    console.warn('無法載入 Web 音訊服務，使用模擬實作');
+    AudioService = DummyAudioService;
+  }
 } else {
-  // 原生平台使用 expo-av
-  const { Audio } = require('expo-av');
-  AudioService = Audio;
+  // 原生平台動態載入 expo-av
+  try {
+    const { Audio } = require('expo-av');
+    AudioService = Audio;
+  } catch (error) {
+    console.warn('無法載入 expo-av，使用模擬實作');
+    AudioService = DummyAudioService;
+  }
 }
 
 // 匯出統一的音訊服務

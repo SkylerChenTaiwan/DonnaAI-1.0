@@ -6,7 +6,6 @@
  * npm install expo-audio
  */
 
-import { Audio } from 'expo-av';
 import { Platform } from 'react-native';
 
 export type SoundType = 'success' | 'error' | 'notification';
@@ -16,20 +15,20 @@ interface SoundAssets {
 }
 
 class SoundManager {
-  private sounds: Map<SoundType, Audio.Sound> = new Map();
+  private sounds: Map<SoundType, any> = new Map();
   private enabled: boolean = true;
   private volume: number = 0.7;
   private initialized: boolean = false;
 
   /**
    * 音效檔案來源
-   * 注意：需要確保這些檔案存在於 assets/sounds 目錄
+   * 注意：在 Web 平台上暫時停用音效
    */
   private readonly soundAssets: SoundAssets = {
-    // 這些是預設的系統音效，實際使用時需要替換為真實的音效檔案
-    success: require('../assets/sounds/success.mp3'),
-    error: require('../assets/sounds/error.mp3'),
-    notification: require('../assets/sounds/notification.mp3'),
+    // Web 平台暫時不載入音效檔案
+    success: null,
+    error: null,
+    notification: null,
   };
 
   /**
@@ -48,32 +47,43 @@ class SoundManager {
     }
 
     try {
-      // 設定音訊模式
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: false,
-        playsInSilentModeIOS: true,
-        shouldDuckAndroid: true,
-        staysActiveInBackground: false,
-        playThroughEarpieceAndroid: false
-      });
+      // Native 平台才需要真正載入音效
+      if (Platform.OS !== 'web') {
+        // 動態導入 expo-av
+        const { Audio } = await import('expo-av');
+        
+        // 設定音訊模式
+        await Audio.setAudioModeAsync({
+          allowsRecordingIOS: false,
+          playsInSilentModeIOS: true,
+          shouldDuckAndroid: true,
+          staysActiveInBackground: false,
+          playThroughEarpieceAndroid: false
+        });
 
-      // 預載入所有音效
-      const loadPromises = Object.entries(this.soundAssets).map(async ([key, source]) => {
-        try {
-          const { sound } = await Audio.Sound.createAsync(source, {
-            shouldPlay: false,
-            volume: this.volume
-          });
-          this.sounds.set(key as SoundType, sound);
-        } catch (error) {
-          console.error(`載入音效 ${key} 失敗:`, error);
-        }
-      });
+        // 預載入所有音效
+        const loadPromises = Object.entries(this.soundAssets).map(async ([key, source]) => {
+          if (!source) return;
+          
+          try {
+            const { sound } = await Audio.Sound.createAsync(source, {
+              shouldPlay: false,
+              volume: this.volume
+            });
+            this.sounds.set(key as SoundType, sound);
+          } catch (error) {
+            console.error(`載入音效 ${key} 失敗:`, error);
+          }
+        });
 
-      await Promise.all(loadPromises);
+        await Promise.all(loadPromises);
+      }
+      
       this.initialized = true;
     } catch (error) {
       console.error('初始化音效管理器失敗:', error);
+      // 即使失敗也標記為已初始化，避免重複嘗試
+      this.initialized = true;
     }
   }
 
