@@ -236,22 +236,24 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
   }, [onAddRow]);
 
   // 自訂儲存格渲染
-  const drawCell = useCallback((args: any) => {
-    const { ctx, cell, rect, theme } = args;
-    const [col, row] = cell;
+  const drawCell = useCallback((args: any, drawContent: () => void) => {
+    const { ctx, cell, rect, theme, col, row } = args;
     const column = columns[col];
     const rowData = data[row];
     
-    if (!column || !rowData) return false;
-    
-    // 清除預設背景，確保沒有灰色色塊
-    ctx.fillStyle = NotionColors.bgDefault;
-    ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
+    if (!column || !rowData) {
+      drawContent();
+      return;
+    }
     
     const value = rowData[column.key] || '';
     
     // 根據欄位類型自訂渲染
     if (column.type === 'select' && value) {
+      // 清除預設背景
+      ctx.fillStyle = NotionColors.bgDefault;
+      ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
+      
       // 渲染選擇標籤
       const text = value === 'meeting' ? '會議' : value === 'call' ? '通話' : value;
       const bgColor = value === 'meeting' ? NotionColors.blueBg : NotionColors.greenBg;
@@ -278,11 +280,10 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
       ctx.textAlign = 'left';
       ctx.textBaseline = 'middle';
       ctx.fillText(text, x + padding, y + tagHeight / 2);
-      
-      return true;
+    } else {
+      // 使用預設渲染
+      drawContent();
     }
-    
-    return false;
   }, [columns, data]);
 
   return (
