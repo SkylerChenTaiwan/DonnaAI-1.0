@@ -74,7 +74,7 @@
 | 67v  | database-notion-table-structure.md | ✅ 已完成 | 資料庫頁面 Notion 風格表格結構重建 - 恢復表格結構感、分隔線、核取方塊列 | 2025-08-01 |
 | 69v  | notion-database-quality-analysis-and-fixes.md | ✅ 已完成 | Notion 資料庫質感分析與修復 - 深入分析設計原理、修復 5 個關鍵功能問題、重建視覺系統 | 2025-08-01 |
 | 70v  | notion-ui-design-system-refinement.md | ✅ 已完成 | Notion UI 設計系統精緻化 - 彈性欄寬設計、精確色彩字體、60px 外層留白、13px 字體系統 | 2025-08-01 |
-| 71   | database-table-improvements.md | 📋 待執行 | 資料庫表格改進 - 移除標題、新增列驗證、屬性按鈕位置 | - |
+| 71v  | database-table-improvements.md | ✅ 已完成 | 資料庫表格改進 - 移除標題、新增列驗證、屬性按鈕位置 | 2025-08-01 |
 
 ## 命名規則
 
