@@ -235,6 +235,16 @@ export const DeveloperMenu = () => {
       }
     },
     {
+      id: 'notion-table-test',
+      title: 'NotionTable 測試',
+      icon: '🗂️',
+      description: '測試新的 Notion 風格表格',
+      action: () => {
+        setVisible(false);
+        navigation.navigate('NotionTableTest' as any);
+      }
+    },
+    {
       id: 'test-error',
       title: '測試錯誤',
       icon: '💥',

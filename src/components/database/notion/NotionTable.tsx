@@ -32,6 +32,15 @@ export const NotionTable: React.FC<NotionTableProps> = ({
   headerHeight = NOTION_DEFAULTS.HEADER_HEIGHT,
   overscan = NOTION_DEFAULTS.OVERSCAN_COUNT,
 }) => {
+  // 除錯日誌
+  console.log('🎯 NotionTable 渲染:', {
+    dataLength: data?.length,
+    columnsLength: columns?.length,
+    loading,
+    error,
+    data: data?.slice(0, 2), // 顯示前兩筆資料
+    columns: columns?.map(c => ({ id: c.id, title: c.title, type: c.type })),
+  });
   // Column management
   const [columnWidths, setColumnWidths] = useState<Record<string, number>>(() => {
     const widths: Record<string, number> = {};

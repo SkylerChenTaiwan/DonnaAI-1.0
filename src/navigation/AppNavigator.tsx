@@ -33,6 +33,7 @@ import { StateInspector } from '@/components/developer/StateInspector';
 import { ErrorLogsScreen } from '@/screens/developer/ErrorLogsScreen';
 import { PerformanceMonitorScreen } from '@/screens/developer/PerformanceMonitorScreen';
 import { TestScreen } from '@/screens/developer/TestScreen';
+import { NotionTableTest } from '@/screens/test/NotionTableTest';
 import { HelpSupportScreen } from '@/screens/settings/HelpSupportScreen';
 import { PrivacyPolicyScreen } from '@/screens/settings/PrivacyPolicyScreen';
 import { environmentManager } from '@/config/environment';
@@ -390,6 +391,11 @@ export const AppNavigator = () => {
                   name="TestScreen"
                   component={TestScreen}
                   options={{ title: '系統測試' }}
+                />
+                <Stack.Screen
+                  name="NotionTableTest"
+                  component={NotionTableTest}
+                  options={{ title: 'NotionTable 測試' }}
                 />
               </Stack.Group>
             )}
