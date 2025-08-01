@@ -541,34 +541,42 @@ export const DatabaseScreen: React.FC = () => {
                 showHeader={true}
               />
             ) : Platform.OS === 'web' ? (
-              <NotionDatabase
+              <TanStackNotionTable
                 data={currentData.data}
-                columns={currentColumns.map(col => ({
-                  id: col.key,
-                  title: col.title,
-                  type: col.key === 'phone' ? 'phone' : 
-                        col.key === 'email' ? 'email' : 
-                        col.key === 'status' ? 'select' : 'text',
-                  width: col.width,
-                }))}
-                onUpdateCell={async (rowId, columnId, value) => {
+                columns={currentColumns}
+                onAddRow={handleAddRow}
+                onAddColumn={() => setShowAddColumnDialog(true)}
+                onRowPress={handleRowPress}
+                multiSelectMode={multiSelectMode}
+                selectedItems={selectedItems}
+                onSelect={setSelectedItems}
+                refreshing={currentData.loading}
+                onRefresh={handleRefresh}
+                sortConfig={currentSort}
+                onSort={(key) => {
+                  // 處理列標題點擊的排序
+                  const newSort = currentSort?.key === key 
+                    ? { key, direction: currentSort.direction === 'asc' ? 'desc' : 'asc' as const }
+                    : { key, direction: 'asc' as const };
+                  setCurrentSort(newSort);
+                }}
+                onUpdateCell={async (rowId, columnKey, value) => {
                   try {
                     // 根據 activeTab 更新對應的資料
-                    console.log('更新儲存格:', { rowId, columnId, value, activeTab });
+                    console.log('更新儲存格:', { rowId, columnKey, value, activeTab });
                     showToast('success', '已更新');
                   } catch (error) {
                     console.error('更新失敗:', error);
                     showToast('error', '更新失敗');
                   }
                 }}
-                onAddRow={async (rowData) => {
-                  try {
-                    await handleAddRowWithData(rowData);
-                  } catch (error) {
-                    console.error('新增行失敗:', error);
-                    showToast('error', '新增失敗');
-                  }
+                onColumnsReorder={async (reorderedColumns) => {
+                  // 儲存新的欄位順序
+                  const newOrder = reorderedColumns.map(col => col.key);
+                  await saveColumnOrder(newOrder);
+                  showToast('success', '已儲存欄位順序');
                 }}
+                enableColumnDrag={true}
               />
             ) : (
               <NotionStyleTableV2
