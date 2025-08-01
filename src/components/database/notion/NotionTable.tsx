@@ -84,6 +84,48 @@ export const NotionTable: React.FC<NotionTableProps> = ({
   
   const { debouncedUpdate } = useDebouncedUpdate(handleCellUpdate, NOTION_DEFAULTS.DEBOUNCE_DELAY);
   
+  // Handle column resize
+  const handleColumnResize = useCallback((columnId: string, newWidth: number) => {
+    setColumnWidths(prev => ({
+      ...prev,
+      [columnId]: newWidth,
+    }));
+  }, []);
+  
+  // Handle row selection
+  const handleSelectRow = useCallback((rowId: string, selected: boolean) => {
+    const newSelection = new Set(selectedRowsSet);
+    
+    if (selected) {
+      newSelection.add(rowId);
+    } else {
+      newSelection.delete(rowId);
+    }
+    
+    setInternalSelectedRows(newSelection);
+    onSelectionChange?.(Array.from(newSelection));
+  }, [selectedRowsSet, onSelectionChange]);
+  
+  const handleSelectAll = useCallback((selected: boolean) => {
+    if (selected) {
+      const allIds = data.map(row => row.id);
+      setInternalSelectedRows(new Set(allIds));
+      onSelectionChange?.(allIds);
+    } else {
+      setInternalSelectedRows(new Set());
+      onSelectionChange?.([]);
+    }
+  }, [data, onSelectionChange]);
+  
+  // Handle cell edit
+  const handleCellEdit = useCallback((rowId: string, columnKey: string, value: any) => {
+    // Exit edit mode
+    setEditingCell(null);
+    
+    // Trigger debounced update
+    debouncedUpdate(rowId, columnKey, value);
+  }, [debouncedUpdate, setEditingCell]);
+  
   // Helper function to render cell content based on column type
   const renderCellContent = useCallback((row: any, column: any) => {
     const value = row[column.key];
@@ -129,48 +171,6 @@ export const NotionTable: React.FC<NotionTableProps> = ({
         }, '空白');
     }
   }, [handleCellEdit]);
-  
-  // Handle column resize
-  const handleColumnResize = useCallback((columnId: string, newWidth: number) => {
-    setColumnWidths(prev => ({
-      ...prev,
-      [columnId]: newWidth,
-    }));
-  }, []);
-  
-  // Handle row selection
-  const handleSelectRow = useCallback((rowId: string, selected: boolean) => {
-    const newSelection = new Set(selectedRowsSet);
-    
-    if (selected) {
-      newSelection.add(rowId);
-    } else {
-      newSelection.delete(rowId);
-    }
-    
-    setInternalSelectedRows(newSelection);
-    onSelectionChange?.(Array.from(newSelection));
-  }, [selectedRowsSet, onSelectionChange]);
-  
-  const handleSelectAll = useCallback((selected: boolean) => {
-    if (selected) {
-      const allIds = data.map(row => row.id);
-      setInternalSelectedRows(new Set(allIds));
-      onSelectionChange?.(allIds);
-    } else {
-      setInternalSelectedRows(new Set());
-      onSelectionChange?.([]);
-    }
-  }, [data, onSelectionChange]);
-  
-  // Handle cell edit
-  const handleCellEdit = useCallback((rowId: string, columnKey: string, value: any) => {
-    // Exit edit mode
-    setEditingCell(null);
-    
-    // Trigger debounced update
-    debouncedUpdate(rowId, columnKey, value);
-  }, [debouncedUpdate, setEditingCell]);
   
   // Handle add row
   const handleAddRow = useCallback(() => {
