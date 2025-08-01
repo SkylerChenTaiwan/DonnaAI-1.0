@@ -108,29 +108,34 @@ export const TanStackNotionTableV3: React.FC<TanStackTableProps> = ({
   };
 
   return (
-    <div className="notion-database-container">
-      <DebugInfo />
-      <NotionDatabaseToolbar
-        onAddRow={handleAddRow}
-        onViewSettings={handleViewSettings}
-        viewCount={data.length}
-        selectedCount={selectedItems.length}
-      />
-      
-      <table className="notion-database-table">
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id} className="notion-header-row">
-              {headerGroup.headers.map((header) => (
-                <th key={header.id} className="notion-header-cell">
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(header.column.columnDef.header, header.getContext())}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
+    <div className="notion-database-wrapper">
+      <div className="notion-database-container">
+        <DebugInfo />
+        <NotionDatabaseToolbar
+          onAddRow={handleAddRow}
+          onViewSettings={handleViewSettings}
+          viewCount={data.length}
+          selectedCount={selectedItems.length}
+        />
+        
+        <table className="notion-database-table">
+          <thead>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id} className="notion-header-row">
+                {headerGroup.headers.map((header) => (
+                  <th 
+                    key={header.id} 
+                    className="notion-header-cell"
+                    data-column={header.column.id}
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(header.column.columnDef.header, header.getContext())}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
         
         <tbody>
           {/* 新增列放在最前面 */}
@@ -219,19 +224,20 @@ export const TanStackNotionTableV3: React.FC<TanStackTableProps> = ({
         </tbody>
       </table>
       
-      {/* 重新載入指示器 */}
-      {refreshing && (
-        <div style={{ 
-          position: 'absolute', 
-          top: '50%', 
-          left: '50%', 
-          transform: 'translate(-50%, -50%)',
-          color: 'var(--notion-gray-50)',
-          fontSize: 'var(--notion-font-size-body)'
-        }}>
-          正在重新載入...
-        </div>
-      )}
+        {/* 重新載入指示器 */}
+        {refreshing && (
+          <div style={{ 
+            position: 'absolute', 
+            top: '50%', 
+            left: '50%', 
+            transform: 'translate(-50%, -50%)',
+            color: 'var(--notion-gray-50)',
+            fontSize: 'var(--notion-font-size-body)'
+          }}>
+            正在重新載入...
+          </div>
+        )}
+      </div>
     </div>
   );
 };

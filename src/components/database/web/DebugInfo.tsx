@@ -16,7 +16,7 @@ export const DebugInfo: React.FC = () => {
     }}>
       <div>Platform: {Platform.OS}</div>
       <div>Component: TanStackNotionTableV3</div>
-      <div>CSS: NotionDatabaseV3.css loaded</div>
+      <div>CSS: NotionDatabaseV4.css loaded</div>
       <div>Time: {new Date().toLocaleTimeString()}</div>
     </div>
   );
