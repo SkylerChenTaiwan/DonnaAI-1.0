@@ -1,0 +1,409 @@
+/* === 設計令牌 === */
+:root {
+  --notion-white: #ffffff;
+  --notion-gray-05: #f7f6f3;
+  --notion-gray-10: #f1f1ef;
+  --notion-gray-20: #e9e9e7;
+  --notion-gray-40: #c1c0c0;
+  --notion-gray-50: #9b9a97;
+  --notion-gray-70: #64625f;
+  --notion-gray-90: #37352f;
+  --notion-blue: #2383e2;
+  --notion-blue-light: #e8f2ff;
+  
+  --notion-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --notion-font-size-small: 12px;
+  --notion-font-size-body: 14px;
+  --notion-font-size-title: 16px;
+  --notion-line-height: 1.5;
+  
+  --notion-space-xs: 2px;
+  --notion-space-sm: 4px;
+  --notion-space-md: 8px;
+  --notion-space-lg: 12px;
+  --notion-space-xl: 16px;
+  --notion-space-2xl: 24px;
+  --notion-space-3xl: 32px;
+  
+  --notion-border-width: 1px;
+  --notion-border-radius: 3px;
+}
+
+/* === 容器系統 === */
+.notion-database-container {
+  font-family: var(--notion-font-family);
+  font-size: var(--notion-font-size-body);
+  line-height: var(--notion-line-height);
+  color: var(--notion-gray-90);
+  background: var(--notion-white);
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* === 工具列系統 === */
+.notion-database-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--notion-space-lg) var(--notion-space-lg) var(--notion-space-md);
+  border-bottom: var(--notion-border-width) solid var(--notion-gray-20);
+  background: var(--notion-white);
+}
+
+.notion-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: var(--notion-space-md);
+}
+
+.notion-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--notion-space-sm);
+}
+
+.notion-view-info {
+  font-size: var(--notion-font-size-body);
+  color: var(--notion-gray-70);
+  font-weight: 500;
+}
+
+/* === 表格系統 === */
+.notion-database-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--notion-white);
+  border: var(--notion-border-width) solid var(--notion-gray-20);
+  border-radius: var(--notion-border-radius);
+  overflow: hidden;
+}
+
+/* === 表頭系統 === */
+.notion-header-row {
+  background: var(--notion-gray-05);
+}
+
+.notion-header-cell {
+  padding: var(--notion-space-md) var(--notion-space-lg);
+  border-right: var(--notion-border-width) solid var(--notion-gray-20);
+  border-bottom: var(--notion-border-width) solid var(--notion-gray-20);
+  font-weight: 500;
+  font-size: var(--notion-font-size-body);
+  color: var(--notion-gray-70);
+  text-align: left;
+  vertical-align: middle;
+  min-width: 140px;
+  position: relative;
+  user-select: none;
+}
+
+.notion-header-cell:last-child {
+  border-right: none;
+}
+
+.notion-header-cell:hover {
+  background: var(--notion-gray-10);
+}
+
+/* === 資料列系統 === */
+.notion-data-row {
+  background: var(--notion-white);
+  transition: background-color 0.1s ease;
+}
+
+.notion-data-row:hover {
+  background: rgba(247, 246, 243, 0.5);
+}
+
+.notion-data-row:last-child .notion-cell {
+  border-bottom: none;
+}
+
+/* === 單元格系統 === */
+.notion-cell {
+  padding: var(--notion-space-md) var(--notion-space-lg);
+  border-right: var(--notion-border-width) solid var(--notion-gray-10);
+  border-bottom: var(--notion-border-width) solid var(--notion-gray-10);
+  vertical-align: middle;
+  min-height: 36px;
+  font-size: var(--notion-font-size-body);
+  color: var(--notion-gray-90);
+  position: relative;
+}
+
+.notion-cell:last-child {
+  border-right: none;
+}
+
+.notion-cell-content {
+  cursor: text;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  border-radius: 3px;
+  min-height: 24px;
+  padding: 4px 0;
+  transition: background-color 0.1s ease;
+}
+
+.notion-cell-content:hover {
+  background: rgba(55, 53, 47, 0.03);
+}
+
+.notion-cell-placeholder {
+  color: var(--notion-gray-50);
+  font-style: italic;
+}
+
+/* === 新增列系統 === */
+.notion-add-row {
+  background: var(--notion-white);
+}
+
+.notion-add-row-cell {
+  padding: 0;
+  border-right: var(--notion-border-width) solid var(--notion-gray-10);
+  border-bottom: none;
+}
+
+.notion-add-row-cell:last-child {
+  border-right: none;
+}
+
+.notion-add-row-button {
+  width: 100%;
+  padding: var(--notion-space-md) var(--notion-space-lg);
+  background: none;
+  border: none;
+  color: var(--notion-gray-50);
+  font-size: var(--notion-font-size-body);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--notion-space-md);
+  transition: all 0.1s ease;
+}
+
+.notion-add-row-button:hover {
+  color: var(--notion-gray-90);
+  background: rgba(55, 53, 47, 0.03);
+}
+
+/* === 編輯狀態 === */
+.notion-cell-editing {
+  background: var(--notion-white);
+  box-shadow: 0 0 0 2px var(--notion-blue);
+  z-index: 10;
+  position: relative;
+}
+
+.notion-cell-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  padding: 0;
+  margin: 0;
+}
+
+/* === 按鈕系統 === */
+.notion-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--notion-space-sm);
+  padding: var(--notion-space-sm) var(--notion-space-md);
+  border: var(--notion-border-width) solid var(--notion-gray-20);
+  border-radius: var(--notion-border-radius);
+  background: var(--notion-white);
+  color: var(--notion-gray-70);
+  font-size: var(--notion-font-size-body);
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  text-decoration: none;
+}
+
+.notion-button:hover {
+  background: var(--notion-gray-05);
+  border-color: var(--notion-gray-40);
+}
+
+.notion-button-primary {
+  background: var(--notion-blue);
+  border-color: var(--notion-blue);
+  color: var(--notion-white);
+}
+
+.notion-button-primary:hover {
+  background: #1a6bb8;
+  border-color: #1a6bb8;
+}
+
+.notion-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.notion-button:disabled:hover {
+  background: var(--notion-white);
+  border-color: var(--notion-gray-20);
+}
+
+.notion-button-primary:disabled:hover {
+  background: var(--notion-blue);
+  border-color: var(--notion-blue);
+}
+
+/* === 行動按鈕組 === */
+.notion-row-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--notion-space-sm);
+  padding: var(--notion-space-xs) 0;
+}
+
+/* === 響應式設計 === */
+@media (max-width: 768px) {
+  .notion-header-cell,
+  .notion-cell {
+    min-width: 120px;
+    padding: var(--notion-space-sm) var(--notion-space-md);
+  }
+  
+  .notion-database-toolbar {
+    padding: var(--notion-space-md);
+  }
+  
+  .notion-toolbar-right {
+    flex-direction: column;
+    gap: var(--notion-space-xs);
+  }
+}
+
+/* === 狀態標籤 === */
+.notion-status-tag {
+  display: inline-block;
+  padding: var(--notion-space-xs) var(--notion-space-sm);
+  border-radius: var(--notion-border-radius);
+  font-size: var(--notion-font-size-small);
+  font-weight: 500;
+}
+
+.notion-status-tag.completed {
+  color: #448361;
+  background: #e3f2e6;
+}
+
+.notion-status-tag.in-progress {
+  color: #337ea9;
+  background: #e8f0ff;
+}
+
+.notion-status-tag.todo {
+  color: #9f6b53;
+  background: #fef3e2;
+}
+
+.notion-status-tag.cancelled {
+  color: #e03e3e;
+  background: #ffe5e5;
+}
+
+/* === 核取方塊 === */
+.notion-checkbox {
+  cursor: pointer;
+  accent-color: var(--notion-blue);
+  width: 16px;
+  height: 16px;
+  margin: 4px 0;
+}
+
+/* === 空狀態 === */
+.notion-empty-state {
+  text-align: center;
+  color: var(--notion-gray-50);
+  padding: 48px 24px;
+}
+
+.notion-empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--notion-space-md);
+}
+
+.notion-empty-icon {
+  font-size: 48px;
+  opacity: 0.3;
+  margin-bottom: 16px;
+}
+
+.notion-empty-content p {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.notion-empty-content p:first-of-type {
+  color: var(--notion-gray-90);
+  font-size: var(--notion-font-size-title);
+  font-weight: 500;
+}
+
+.notion-empty-content p:last-of-type {
+  color: var(--notion-gray-50);
+  font-size: var(--notion-font-size-body);
+}
+
+/* === 捲軸樣式 === */
+.notion-database-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.notion-database-container::-webkit-scrollbar-track {
+  background: var(--notion-gray-10);
+}
+
+.notion-database-container::-webkit-scrollbar-thumb {
+  background: var(--notion-gray-40);
+  border-radius: 4px;
+}
+
+.notion-database-container::-webkit-scrollbar-thumb:hover {
+  background: var(--notion-gray-50);
+}
+
+/* === 選取狀態 === */
+.notion-data-row.selected {
+  background: rgba(35, 131, 226, 0.08);
+}
+
+/* === 動畫效果 === */
+@keyframes notion-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.notion-data-row {
+  animation: 0.2s notion-fade-in;
+}
+
+/* === Focus 狀態 === */
+.notion-cell:focus-within {
+  z-index: 1;
+  background: var(--notion-white);
+  position: relative;
+  box-shadow: 0 0 0 1px var(--notion-blue);
+}

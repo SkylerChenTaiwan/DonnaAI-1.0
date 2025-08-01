@@ -24,7 +24,7 @@ import { EmptyState } from '@/components/database/EmptyState';
 import { NotionStyleTable } from '@/components/database/NotionStyleTable';
 import { NotionStyleTableDebug } from '@/components/database/NotionStyleTableDebug';
 import { NotionStyleTableV2 } from '@/components/database/NotionStyleTableV2';
-import { TanStackNotionTable } from '@/components/database/web';
+import { TanStackNotionTableV3 } from '@/components/database/web/TanStackNotionTableV3';
 import { NotionDatabase } from '@/components/database/web/NotionDatabase';
 import { DatabaseToolbar } from '@/components/database/DatabaseToolbar';
 import { AddColumnDialog, ColumnType, ColumnConfig } from '@/components/database/AddColumnDialog';
@@ -440,7 +440,7 @@ export const DatabaseScreen: React.FC = () => {
   });
 
   // 調試 Platform.select() 的選擇結果
-  const webComponent = TanStackNotionTable;
+  const webComponent = TanStackNotionTableV3;
   const defaultComponent = NotionStyleTableV2;
   const selectedComponent = Platform.select({
     web: webComponent,
@@ -452,7 +452,7 @@ export const DatabaseScreen: React.FC = () => {
     'webComponent': webComponent.name,
     'defaultComponent': defaultComponent.name,
     'selectedComponent': selectedComponent?.name,
-    'TanStackNotionTable 可用': !!TanStackNotionTable,
+    'TanStackNotionTableV3 可用': !!TanStackNotionTableV3,
     'NotionStyleTableV2 可用': !!NotionStyleTableV2
   });
 
@@ -541,11 +541,10 @@ export const DatabaseScreen: React.FC = () => {
                 showHeader={true}
               />
             ) : Platform.OS === 'web' ? (
-              <TanStackNotionTable
+              <TanStackNotionTableV3
                 data={currentData.data}
                 columns={currentColumns}
                 onAddRow={handleAddRow}
-                onAddColumn={() => setShowAddColumnDialog(true)}
                 onRowPress={handleRowPress}
                 multiSelectMode={multiSelectMode}
                 selectedItems={selectedItems}
