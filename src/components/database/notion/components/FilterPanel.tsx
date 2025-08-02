@@ -124,19 +124,6 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
           handleRemoveGroup,
           0
         )
-      ),
-
-      // 面板底部 - 只有在沒有任何過濾條件時才顯示
-      currentFilters.filters.length === 0 && React.createElement('div', {
-        className: 'notion-filter-panel-footer'
-      },
-        React.createElement('button', {
-          className: 'notion-button',
-          onClick: () => handleAddFilter(currentFilters.id)
-        }, 
-          NotionIcons.plus(),
-          ' 新增過濾條件'
-        )
       )
     )
   );
