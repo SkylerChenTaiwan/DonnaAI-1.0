@@ -357,6 +357,16 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
       React.createElement('div', 
         { className: 'notion-database-container' },
         
+        // 視圖標籤區域
+        React.createElement('div', 
+          { className: 'notion-view-tabs' },
+          React.createElement('div', 
+            { className: 'notion-view-tab active' },
+            React.createElement('span', { className: 'notion-view-icon' }, '⊞'),
+            ' 表格'
+          )
+        ),
+        
         // 顯示表格（不管有沒有資料）
         React.createElement('table', 
           { className: 'notion-database-table' },

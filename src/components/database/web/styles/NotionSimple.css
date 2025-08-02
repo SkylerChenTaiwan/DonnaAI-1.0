@@ -25,6 +25,41 @@ body {
   -webkit-font-smoothing: subpixel-antialiased;
 }
 
+/* 視圖標籤 */
+.notion-view-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 8px 0;
+  margin-bottom: 4px;
+}
+
+.notion-view-tab {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: rgba(227, 226, 224, 0.3);
+  border-radius: 4px;
+  font-size: 14px;
+  color: rgb(55, 53, 47);
+  cursor: pointer;
+  transition: background 100ms;
+}
+
+.notion-view-tab.active {
+  background: rgba(227, 226, 224, 0.5);
+  font-weight: 500;
+}
+
+.notion-view-tab:hover {
+  background: rgba(227, 226, 224, 0.6);
+}
+
+.notion-view-icon {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
 /* 表格 - 無邊框 */
 .notion-database-table {
   width: 100%;

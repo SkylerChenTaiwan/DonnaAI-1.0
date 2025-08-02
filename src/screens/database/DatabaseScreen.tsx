@@ -626,12 +626,42 @@ export const DatabaseScreen: React.FC = () => {
   }
 
   // 根據平台渲染
-  if (Platform.OS === 'web') {
-    return renderContent();
-  }
+  // Web 平台也使用 Layout 以顯示標題和按鈕
+  // if (Platform.OS === 'web') {
+  //   return renderContent();
+  // }
 
-  // 直接返回 NotionTable，不使用 Layout
-  return renderContent();
+  // 使用 Layout 包裹內容
+  return (
+    <Layout 
+      headerProps={{
+        title: getHeaderTitle(activeTab),
+        showBackButton: false,
+        rightComponent: (
+          <View style={{ flexDirection: 'row', gap: 8 }}>
+            {activeTab !== 'templates' && (
+              <TouchableOpacity
+                style={{
+                  backgroundColor: 'rgb(46, 170, 220)',
+                  paddingHorizontal: 12,
+                  paddingVertical: 6,
+                  borderRadius: 6,
+                  height: 30,
+                  justifyContent: 'center',
+                }}
+                onPress={handleAddNew}
+              >
+                <Text style={{ color: 'white', fontSize: 14, fontWeight: '500' }}>新建</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        ),
+      }}
+      scrollable={false}
+    >
+      {renderContent()}
+    </Layout>
+  );
 };
 
 const styles = StyleSheet.create({
