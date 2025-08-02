@@ -5,9 +5,9 @@
 import React from 'react';
 import { TextEditor } from './TextEditor';
 import { NumberEditor } from './NumberEditor';
-// import { DateEditor } from './DateEditor';
+import { DateEditor } from './DateEditor';
 import { SelectEditor } from './SelectEditor';
-// import { MultiSelectEditor } from './MultiSelectEditor';
+import { MultiSelectEditor } from './MultiSelectEditor';
 import { CheckboxEditor } from './CheckboxEditor';
 // import { UrlEditor } from './UrlEditor';
 // import { EmailEditor } from './EmailEditor';
@@ -22,11 +22,11 @@ export const EditorFactory = {
       case 'number':
         return <NumberEditor {...props} />;
       case 'date':
-        return <TextEditor {...props} />; // 暫時使用 TextEditor
+        return <DateEditor {...props} />;
       case 'select':
         return <SelectEditor {...props} />;
       case 'multi_select':
-        return <SelectEditor {...props} />; // 暫時使用 SelectEditor
+        return <MultiSelectEditor {...props} />;
       case 'checkbox':
         return <CheckboxEditor {...props} />;
       case 'url':

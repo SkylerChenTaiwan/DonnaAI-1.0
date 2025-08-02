@@ -16,6 +16,7 @@ import { Icon } from '@/components/common/Icon';
 import { useDebouncedUpdate } from '@/hooks/useDebouncedUpdate';
 import { EditorFactory } from './editors/EditorFactory';
 import { NotionIcons, getPropertyIcon as getNotionPropertyIcon } from './NotionIcons';
+import { useKeyboardNavigation } from './managers/KeyboardNavigationManager';
 
 export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = ({
   data,
@@ -77,6 +78,8 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
     handleBlur,
     setEditingCell,
     editingCell,
+    selectedCell,
+    setSelectedCell,
   } = useCellStateMachine();
   
   // Debounced update for auto-save
@@ -90,6 +93,52 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   }, [onCellUpdate]);
   
   const { debouncedUpdate } = useDebouncedUpdate(handleCellUpdate, NOTION_DEFAULTS.DEBOUNCE_DELAY);
+  
+  // 將 row/col 格式轉換為 rowId/columnKey 格式
+  const convertPositionToCell = useCallback((position: CellPosition | null) => {
+    if (!position || position.row >= data.length || position.col >= columns.length) {
+      return null;
+    }
+    return {
+      rowId: data[position.row].id,
+      columnKey: columns[position.col].key,
+    };
+  }, [data, columns]);
+  
+  // 將 rowId/columnKey 格式轉換為 row/col 格式
+  const convertCellToPosition = useCallback((cell: { rowId: string; columnKey: string } | null) => {
+    if (!cell) return null;
+    const row = data.findIndex(r => r.id === cell.rowId);
+    const col = columns.findIndex(c => c.key === cell.columnKey);
+    if (row === -1 || col === -1) return null;
+    return { row, col };
+  }, [data, columns]);
+  
+  // 設置鍵盤導航
+  const navigationManager = useKeyboardNavigation({
+    currentCell: convertPositionToCell(selectedCell),
+    editingCell: convertPositionToCell(editingCell),
+    rows: data,
+    columns: columns,
+    onCellSelect: (cell) => {
+      const position = convertCellToPosition(cell);
+      if (position) {
+        setSelectedCell(position);
+      }
+    },
+    onCellEdit: (cell) => {
+      const position = convertCellToPosition(cell);
+      if (position) {
+        setEditingCell(position);
+      }
+    },
+    onCellUpdate: (rowId, columnKey, value) => {
+      debouncedUpdate(rowId, columnKey, value);
+    },
+    onEditComplete: () => {
+      setEditingCell(null);
+    },
+  });
   
   // Handle column resize
   const handleColumnResize = useCallback((columnId: string, newWidth: number) => {
