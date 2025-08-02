@@ -5,19 +5,20 @@
 
 /* 根據 Notion 原始碼設定 */
 body {
-  background: #fbfbfa !important;
+  background: #ffffff !important;
 }
 
 body.dark {
   background: #191919 !important;
 }
 
-/* 主容器 - 移除過多的 padding */
+/* 主容器 - 完全無 padding */
 .notion-database-wrapper {
   width: 100%;
   min-height: 100vh;
-  background: transparent;
+  background: #ffffff;
   padding: 0;
+  margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
   color: rgba(55, 53, 47, 0.85);
   -webkit-font-smoothing: antialiased;
@@ -26,7 +27,8 @@ body.dark {
 /* 內容容器 */
 .notion-database-container {
   max-width: 100%;
-  padding: 12px 0;
+  padding: 0;
+  margin: 0;
 }
 
 /* 工具列 - 更簡潔 */
@@ -127,7 +129,7 @@ body.dark {
   content: '';
   position: absolute;
   bottom: 0;
-  left: 8px;
+  left: 0;
   right: 0;
   height: 1px;
   background: rgba(233, 233, 231, 0.25);
@@ -156,7 +158,7 @@ body.dark {
   display: flex;
   align-items: center;
   gap: 2px;
-  padding: 7px 6px;
+  padding: 8px 8px 8px 2px;
   height: 100%;
   position: relative;
   cursor: default;
@@ -266,7 +268,7 @@ body.dark {
   content: '';
   position: absolute;
   bottom: -1px;
-  left: 8px;
+  left: 0;
   right: 0;
   height: 1px;
   background: rgba(233, 233, 231, 0.15);
@@ -295,7 +297,7 @@ body.dark {
 .notion-cell-content {
   display: flex;
   align-items: center;
-  padding: 7px 6px;
+  padding: 8px 8px 8px 2px;
   min-height: 37px;
   font-size: 14px;
   color: rgba(55, 53, 47, 0.9);
@@ -398,7 +400,7 @@ body.dark {
   gap: 4px;
   width: 100%;
   height: 100%;
-  padding: 2px 8px;
+  padding: 8px 8px 8px 2px;
   background: transparent;
   border: none;
   color: rgba(55, 53, 47, 0.25);
@@ -464,6 +466,13 @@ body.dark {
 .notion-header-cell[data-column="title"],
 .notion-cell[data-column="title"] {
   min-width: 200px;
+}
+
+/* 第一個欄位特殊處理 */
+.notion-header-cell:first-child .notion-header-content,
+.notion-cell:first-child .notion-cell-content,
+.notion-add-row-cell:first-child .notion-add-row-button {
+  padding-left: 8px;
 }
 
 .notion-header-cell[data-column="status"],

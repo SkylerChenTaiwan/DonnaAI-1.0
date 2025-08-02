@@ -630,11 +630,8 @@ export const DatabaseScreen: React.FC = () => {
     return renderContent();
   }
 
-  return (
-    <Layout scrollable={false}>
-      {renderContent()}
-    </Layout>
-  );
+  // 直接返回 NotionTable，不使用 Layout
+  return renderContent();
 };
 
 const styles = StyleSheet.create({
