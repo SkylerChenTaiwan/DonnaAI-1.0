@@ -357,6 +357,28 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
       React.createElement('div', 
         { className: 'notion-database-container' },
         
+        // 簡單的標題區域，包含新建按鈕
+        React.createElement('div', 
+          { style: { 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center',
+            marginBottom: '12px',
+            paddingRight: '4px'
+          }},
+          React.createElement('div', {}, ''), // 左側空白
+          onRowAdd && React.createElement('button', 
+            { 
+              className: 'notion-button-primary',
+              onClick: () => {
+                console.log('🔥 新建按鈕被點擊');
+                handleAddRow();
+              },
+              style: { marginLeft: 'auto' }
+            }, 
+            '新建'
+          )
+        ),
         
         // 顯示表格（不管有沒有資料）
         React.createElement('table', 
@@ -430,6 +452,14 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                 )
               )
             ),
+            // 如果沒有資料，顯示一個空行保持表格結構
+            data.length === 0 && React.createElement('tr',
+              { className: 'notion-empty-row' },
+              React.createElement('td', {
+                colSpan: columnsWithWidths.length + 1,
+                style: { height: '100px', border: 'none' }
+              })
+            ),
             // 新增列按鈕
             onRowAdd && React.createElement('tr', 
               { className: 'notion-add-row' },
@@ -445,7 +475,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                   }
                 }, 
                   React.createElement('span', { className: 'notion-add-icon' }, '+'),
-                  '新增'
+                  '新頁面'
                 )
               )
             )
