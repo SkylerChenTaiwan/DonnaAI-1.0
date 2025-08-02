@@ -522,7 +522,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
         // 工具列區域 - 包含視圖標籤和功能按鈕
         React.createElement('div', 
           { className: 'notion-toolbar-container' },
-          // 左側：視圖標籤和功能按鈕
+          // 左側：只有視圖標籤
           React.createElement('div', 
             { className: 'notion-toolbar-left' },
             // 視圖標籤
@@ -530,12 +530,12 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
               { className: 'notion-view-tab active' },
               React.createElement('span', { className: 'notion-view-icon' }, NotionIcons.table()),
               ' 表格'
-            ),
-            // 分隔線
-            React.createElement('div', 
-              { className: 'notion-toolbar-divider' }
-            ),
-            // 功能按鈕
+            )
+          ),
+          // 右側功能按鈕
+          React.createElement('div', 
+            { className: 'notion-toolbar-right' },
+            // 過濾按鈕
             React.createElement('button', 
               { 
                 className: `notion-button ${statsInfo.activeFilters > 0 ? 'notion-button-active' : ''}`,
@@ -548,6 +548,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                 className: 'notion-button-badge'
               }, statsInfo.activeFilters.toString())
             ),
+            // 排序按鈕
             React.createElement('button', 
               { 
                 className: `notion-button ${statsInfo.activeSorts > 0 ? 'notion-button-active' : ''}`,
@@ -560,6 +561,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                 className: 'notion-button-badge'
               }, statsInfo.activeSorts.toString())
             ),
+            // 群組按鈕
             React.createElement('button', 
               { 
                 className: 'notion-button',
@@ -568,11 +570,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
               },
               React.createElement('span', { className: 'notion-button-icon' }, NotionIcons.group()),
               '群組'
-            )
-          ),
-          // 右側功能按鈕
-          React.createElement('div', 
-            { className: 'notion-toolbar-right' },
+            ),
             // 搜尋列或搜尋按鈕
             showSearchBar ? React.createElement(SearchBar, {
               searchConfig,
