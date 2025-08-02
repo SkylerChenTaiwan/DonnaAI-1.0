@@ -5,14 +5,14 @@
 
 /* 根容器背景 */
 body {
-  background-color: #ffffff !important;
+  background-color: #fbfbfa !important;
 }
 
 /* 主容器 - 包含整個資料庫 */
 .notion-database-wrapper {
   width: 100%;
   min-height: 100vh;
-  background-color: #ffffff;
+  background-color: #fbfbfa;
   padding: 96px 96px 30px 96px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 14px;
@@ -67,10 +67,10 @@ body {
   gap: 4px;
   padding: 4px 8px;
   height: 28px;
-  border: 1px solid rgba(55, 53, 47, 0.16);
-  border-radius: 3px;
-  background-color: #ffffff;
-  color: #37352f;
+  border: none;
+  border-radius: 6px;
+  background-color: transparent;
+  color: rgba(55, 53, 47, 0.65);
   font-size: 14px;
   font-weight: 400;
   line-height: 1.2;
@@ -82,6 +82,7 @@ body {
 
 .notion-button:hover {
   background-color: rgba(55, 53, 47, 0.08);
+  color: #37352f;
 }
 
 .notion-button:active {
@@ -90,19 +91,19 @@ body {
 
 /* 主要按鈕（藍色） */
 .notion-button-primary {
-  background-color: #0073E6;
-  border-color: #0073E6;
+  background-color: #2383e2;
+  border: none;
   color: #ffffff;
+  border-radius: 6px;
 }
 
 .notion-button-primary:hover {
   background-color: #0369d9;
-  border-color: #0369d9;
+  color: #ffffff;
 }
 
 .notion-button-primary:active {
   background-color: #0860ca;
-  border-color: #0860ca;
 }
 
 /* 表格本體 */
@@ -111,7 +112,7 @@ body {
   border-collapse: separate;
   border-spacing: 0;
   background-color: #ffffff;
-  border: 1px solid rgba(55, 53, 47, 0.09);
+  border: 1px solid rgba(55, 53, 47, 0.04);
   border-radius: 3px;
   overflow: hidden;
 }
@@ -123,12 +124,12 @@ body {
 
 /* 表頭單元格 */
 .notion-header-cell {
-  height: 35px;
+  height: 32px;
   padding: 0;
   text-align: left;
   vertical-align: middle;
-  border-bottom: 1px solid rgba(55, 53, 47, 0.09);
-  border-right: 1px solid rgba(55, 53, 47, 0.09);
+  border-bottom: 1px solid rgba(55, 53, 47, 0.04);
+  border-right: 1px solid rgba(55, 53, 47, 0.04);
   background-color: #ffffff;
   position: relative;
   min-width: 120px;
@@ -147,8 +148,8 @@ body {
 .notion-header-content {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 8px;
+  gap: 4px;
+  padding: 4px 8px;
   height: 100%;
   position: relative;
 }
@@ -213,7 +214,7 @@ body {
   width: 40px;
   min-width: 40px;
   padding: 0;
-  border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+  border-bottom: 1px solid rgba(55, 53, 47, 0.04);
   border-right: none;
   background-color: #ffffff;
 }
@@ -254,11 +255,11 @@ body {
 
 /* 資料單元格 */
 .notion-cell {
-  height: 35px;
+  height: 32px;
   padding: 0;
   vertical-align: middle;
-  border-bottom: 1px solid rgba(55, 53, 47, 0.09);
-  border-right: 1px solid rgba(55, 53, 47, 0.09);
+  border-bottom: 1px solid rgba(55, 53, 47, 0.04);
+  border-right: 1px solid rgba(55, 53, 47, 0.04);
   position: relative;
   background-color: transparent;
 }
@@ -275,8 +276,8 @@ body {
 .notion-cell-content {
   display: flex;
   align-items: center;
-  padding: 7px 8px;
-  min-height: 35px;
+  padding: 4px 8px;
+  min-height: 32px;
   font-size: 14px;
   color: #37352f;
   line-height: 1.2;
@@ -291,7 +292,7 @@ body {
 /* 編輯中的單元格 */
 .notion-cell-editing .notion-cell-content {
   background-color: #ffffff;
-  box-shadow: 0 0 0 2px #0073E6;
+  box-shadow: 0 0 0 2px #2383e2;
   border-radius: 2px;
   z-index: 10;
 }
@@ -307,7 +308,7 @@ body {
   width: 40px;
   min-width: 40px;
   padding: 0;
-  border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+  border-bottom: 1px solid rgba(55, 53, 47, 0.04);
   border-right: none;
 }
 
@@ -381,7 +382,7 @@ body {
 }
 
 .notion-add-row-cell {
-  height: 35px;
+  height: 32px;
   padding: 0;
   border: none;
 }

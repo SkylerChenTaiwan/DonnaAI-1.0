@@ -62,17 +62,17 @@ export const NotionSpacing = {
   
   cell: {
     paddingHorizontal: 8,
-    paddingVertical: 6,
+    paddingVertical: 4,
     minHeight: 32,
   },
   
   header: {
-    height: 36,
+    height: 32,
     paddingHorizontal: 8,
   },
   
   row: {
-    height: 36,
+    height: 32,
     gap: 0,
   },
 } as const;
@@ -150,19 +150,19 @@ export const NotionInteractive = {
 export const NotionTable = {
   header: {
     background: '#FFFFFF',
-    borderBottom: '1px solid #E9E9E7',
-    fontWeight: '500',
+    borderBottom: '1px solid rgba(227, 226, 224, 0.5)',
+    fontWeight: '400',
     fontSize: 14,
-    color: '#787774',
+    color: 'rgba(55, 53, 47, 0.65)',
     textTransform: 'none' as const,
   },
   
   cell: {
     background: '#FFFFFF',
-    backgroundHover: '#F7F6F3',
-    backgroundSelected: '#E7F3F8',
-    border: '1px solid #E9E9E7',
-    padding: '6px 8px',
+    backgroundHover: 'rgba(55, 53, 47, 0.03)',
+    backgroundSelected: 'rgba(35, 131, 226, 0.12)',
+    border: '1px solid rgba(55, 53, 47, 0.04)',
+    padding: '4px 8px',
     fontSize: 14,
     color: '#37352F',
   },
@@ -170,8 +170,8 @@ export const NotionTable = {
   row: {
     backgroundEven: '#FFFFFF',
     backgroundOdd: '#FFFFFF',
-    backgroundHover: '#F7F6F3',
-    height: 36,
+    backgroundHover: 'rgba(55, 53, 47, 0.03)',
+    height: 32,
   },
 } as const;
 
@@ -189,8 +189,8 @@ export const NotionEditor = {
 
 // Default configuration values
 export const NOTION_DEFAULTS = {
-  ROW_HEIGHT: 36,
-  HEADER_HEIGHT: 36,
+  ROW_HEIGHT: 32,
+  HEADER_HEIGHT: 32,
   OVERSCAN_COUNT: 5,
   DEBOUNCE_DELAY: 500,
   MIN_COLUMN_WIDTH: 50,
