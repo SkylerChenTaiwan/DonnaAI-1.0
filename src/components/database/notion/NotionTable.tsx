@@ -5,7 +5,14 @@
 import React, { useCallback, useMemo, useState, useRef, useEffect } from 'react';
 import '../web/styles/NotionDatabaseV4.css';
 import { View, Text, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
-import { NotionTableProps, CellPosition, ColumnConfig } from './types';
+import { 
+  NotionTableProps, 
+  CellPosition, 
+  ColumnConfig, 
+  FilterGroup, 
+  Sort, 
+  SearchConfig 
+} from './types';
 import { VirtualScroller } from './VirtualScroller';
 import { TableHeader } from './TableHeader';
 import { TableRow } from './TableRow';
@@ -17,6 +24,12 @@ import { useDebouncedUpdate } from '@/hooks/useDebouncedUpdate';
 import { EditorFactory } from './editors/EditorFactory';
 import { NotionIcons, getPropertyIcon as getNotionPropertyIcon } from './NotionIcons';
 import { useKeyboardNavigation } from './managers/KeyboardNavigationManager';
+import { FilterManager, createEmptyFilterGroup, useFilterManager } from './managers/FilterManager';
+import { SortManager, useSortManager } from './managers/SortManager';
+import { SearchManager, useSearch, createDefaultSearchConfig } from './components/SearchBar';
+import { FilterPanel } from './components/FilterPanel';
+import { SortPanel } from './components/SortPanel';
+import { SearchBar } from './components/SearchBar';
 
 export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = ({
   data,
@@ -53,6 +66,22 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   
   // Selection management - 初始化為空，避免依賴外部 props
   const [internalSelectedRows, setInternalSelectedRows] = useState<Set<string>>(new Set());
+
+  // === 新增功能狀態管理 ===
+  
+  // 過濾狀態
+  const [filters, setFilters] = useState<FilterGroup>(() => createEmptyFilterGroup());
+  const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
+  const [filterButtonRef, setFilterButtonRef] = useState<HTMLElement | null>(null);
+
+  // 排序狀態
+  const [sorts, setSorts] = useState<Sort[]>([]);
+  const [isSortPanelOpen, setIsSortPanelOpen] = useState(false);
+  const [sortButtonRef, setSortButtonRef] = useState<HTMLElement | null>(null);
+
+  // 搜尋狀態
+  const [searchConfig, setSearchConfig] = useState<SearchConfig>(() => createDefaultSearchConfig());
+  const [showSearchBar, setShowSearchBar] = useState(false);
   
   // 初始化欄位寬度，只在 columns 改變時執行
   useEffect(() => {
@@ -67,6 +96,20 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
     () => new Set(selectedRows.length > 0 ? selectedRows : internalSelectedRows),
     [selectedRows, internalSelectedRows]
   );
+
+  // === 資料轉換管道 ===
+  
+  // 1. 首先應用過濾
+  const filteredData = useFilterManager(data, filters);
+  
+  // 2. 然後應用搜尋
+  const { filteredData: searchedData, searchResults, searchManager } = useSearch(filteredData, searchConfig);
+  
+  // 3. 最後應用排序
+  const sortedData = useSortManager(searchedData, sorts);
+  
+  // 最終處理的資料
+  const processedData = sortedData;
   
   // Cell state management
   const {
@@ -96,29 +139,29 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   
   // 將 row/col 格式轉換為 rowId/columnKey 格式
   const convertPositionToCell = useCallback((position: CellPosition | null) => {
-    if (!position || position.row >= data.length || position.col >= columns.length) {
+    if (!position || position.row >= processedData.length || position.col >= columns.length) {
       return null;
     }
     return {
-      rowId: data[position.row].id,
+      rowId: processedData[position.row].id,
       columnKey: columns[position.col].key,
     };
-  }, [data, columns]);
+  }, [processedData, columns]);
   
   // 將 rowId/columnKey 格式轉換為 row/col 格式
   const convertCellToPosition = useCallback((cell: { rowId: string; columnKey: string } | null) => {
     if (!cell) return null;
-    const row = data.findIndex(r => r.id === cell.rowId);
+    const row = processedData.findIndex(r => r.id === cell.rowId);
     const col = columns.findIndex(c => c.key === cell.columnKey);
     if (row === -1 || col === -1) return null;
     return { row, col };
-  }, [data, columns]);
+  }, [processedData, columns]);
   
-  // 設置鍵盤導航
+  // 設置鍵盤導航 - 使用處理後的資料
   const navigationManager = useKeyboardNavigation({
     currentCell: convertPositionToCell(selectedCell),
     editingCell: convertPositionToCell(editingCell),
-    rows: data,
+    rows: processedData,
     columns: columns,
     onCellSelect: (cell) => {
       const position = convertCellToPosition(cell);
@@ -139,6 +182,53 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
       setEditingCell(null);
     },
   });
+
+  // === 新功能事件處理器 ===
+
+  // 過濾事件處理器
+  const handleFilterButtonClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+    setFilterButtonRef(event.currentTarget);
+    setIsFilterPanelOpen(true);
+  }, []);
+
+  const handleFilterPanelClose = useCallback(() => {
+    setIsFilterPanelOpen(false);
+    setFilterButtonRef(null);
+  }, []);
+
+  // 排序事件處理器
+  const handleSortButtonClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+    setSortButtonRef(event.currentTarget);
+    setIsSortPanelOpen(true);
+  }, []);
+
+  const handleSortPanelClose = useCallback(() => {
+    setIsSortPanelOpen(false);
+    setSortButtonRef(null);
+  }, []);
+
+  // 搜尋事件處理器
+  const handleSearchButtonClick = useCallback(() => {
+    setShowSearchBar(!showSearchBar);
+  }, [showSearchBar]);
+
+  // 統計資訊
+  const statsInfo = useMemo(() => {
+    const activeFilters = filters.filters.filter(f => 
+      'isActive' in f ? f.isActive : true
+    ).length;
+    const activeSorts = sorts.length;
+    const isSearching = !!searchConfig.query.trim();
+    
+    return {
+      totalRows: data.length,
+      filteredRows: processedData.length,
+      activeFilters,
+      activeSorts,
+      isSearching,
+      hasTransformations: activeFilters > 0 || activeSorts > 0 || isSearching,
+    };
+  }, [filters.filters, sorts.length, searchConfig.query, data.length, processedData.length]);
   
   // Handle column resize
   const handleColumnResize = useCallback((columnId: string, newWidth: number) => {
@@ -164,14 +254,14 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   
   const handleSelectAll = useCallback((selected: boolean) => {
     if (selected) {
-      const allIds = data.map(row => row.id);
+      const allIds = processedData.map(row => row.id);
       setInternalSelectedRows(new Set(allIds));
       onSelectionChange?.(allIds);
     } else {
       setInternalSelectedRows(new Set());
       onSelectionChange?.([]);
     }
-  }, [data, onSelectionChange]);
+  }, [processedData, onSelectionChange]);
   
   // Handle cell edit
   const handleCellEdit = useCallback((rowId: string, columnKey: string, value: any) => {
@@ -413,24 +503,33 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
             // 功能按鈕
             React.createElement('button', 
               { 
-                className: 'notion-button',
-                onClick: () => console.log('過濾')
+                className: `notion-button ${statsInfo.activeFilters > 0 ? 'notion-button-active' : ''}`,
+                onClick: handleFilterButtonClick,
+                title: `過濾 ${statsInfo.activeFilters > 0 ? `(${statsInfo.activeFilters} 個條件)` : ''}`
               },
               React.createElement('span', { className: 'notion-button-icon' }, NotionIcons.filter()),
-              '過濾'
+              '過濾',
+              statsInfo.activeFilters > 0 && React.createElement('span', {
+                className: 'notion-button-badge'
+              }, statsInfo.activeFilters.toString())
             ),
             React.createElement('button', 
               { 
-                className: 'notion-button',
-                onClick: () => console.log('排序')
+                className: `notion-button ${statsInfo.activeSorts > 0 ? 'notion-button-active' : ''}`,
+                onClick: handleSortButtonClick,
+                title: `排序 ${statsInfo.activeSorts > 0 ? `(${statsInfo.activeSorts} 個規則)` : ''}`
               },
               React.createElement('span', { className: 'notion-button-icon' }, NotionIcons.sort()),
-              '排序'
+              '排序',
+              statsInfo.activeSorts > 0 && React.createElement('span', {
+                className: 'notion-button-badge'
+              }, statsInfo.activeSorts.toString())
             ),
             React.createElement('button', 
               { 
                 className: 'notion-button',
-                onClick: () => console.log('群組')
+                onClick: () => console.log('群組（未實作）'),
+                title: '分組功能（待實作）'
               },
               React.createElement('span', { className: 'notion-button-icon' }, NotionIcons.group()),
               '群組'
@@ -439,13 +538,20 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
           // 右側功能按鈕
           React.createElement('div', 
             { className: 'notion-toolbar-right' },
-            React.createElement('button', 
+            // 搜尋列或搜尋按鈕
+            showSearchBar ? React.createElement(SearchBar, {
+              searchConfig,
+              onSearchChange: setSearchConfig,
+              columns,
+              placeholder: '搜尋資料庫...'
+            }) : React.createElement('button', 
               { 
-                className: 'notion-button',
-                onClick: () => console.log('搜尋')
+                className: `notion-button ${statsInfo.isSearching ? 'notion-button-active' : ''}`,
+                onClick: handleSearchButtonClick,
+                title: statsInfo.isSearching ? `搜尋中: "${searchConfig.query}"` : '搜尋'
               },
               React.createElement('span', { className: 'notion-button-icon' }, NotionIcons.search()),
-              '搜尋'
+              statsInfo.isSearching ? '搜尋中' : '搜尋'
             ),
             React.createElement('button', 
               { 
@@ -509,7 +615,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
           ),
           React.createElement('tbody', {},
             // 如果有資料，顯示資料行
-            data.length > 0 && data.map((row, index) => 
+            processedData.length > 0 && processedData.map((row, index) => 
               React.createElement('tr', {
                 key: row.id,
                 className: `notion-data-row ${selectedRowsSet.has(row.id) ? 'selected' : ''}`,
@@ -537,12 +643,26 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
               )
             ),
             // 如果沒有資料，顯示一個空行保持表格結構
-            data.length === 0 && React.createElement('tr',
+            processedData.length === 0 && React.createElement('tr',
               { className: 'notion-empty-row' },
               React.createElement('td', {
                 colSpan: columnsWithWidths.length + 1,
                 style: { height: '100px', border: 'none' }
-              })
+              },
+                // 顯示適當的空狀態訊息
+                React.createElement('div', {
+                  style: { 
+                    textAlign: 'center', 
+                    color: '#9b9a97', 
+                    fontStyle: 'italic',
+                    padding: '20px'
+                  }
+                }, 
+                  statsInfo.hasTransformations && data.length > 0 
+                    ? '沒有符合條件的資料' 
+                    : '沒有資料'
+                )
+              )
             ),
             // 新增列按鈕
             onRowAdd && React.createElement('tr', 
@@ -564,13 +684,50 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
               )
             )
           )
-        )
+        ),
+
+        // === 面板組件 ===
+        
+        // 過濾面板
+        React.createElement(FilterPanel, {
+          isOpen: isFilterPanelOpen,
+          onClose: handleFilterPanelClose,
+          columns,
+          currentFilters: filters,
+          onFiltersChange: setFilters,
+          anchorEl: filterButtonRef
+        }),
+
+        // 排序面板
+        React.createElement(SortPanel, {
+          isOpen: isSortPanelOpen,
+          onClose: handleSortPanelClose,
+          columns,
+          currentSorts: sorts,
+          onSortsChange: setSorts,
+          anchorEl: sortButtonRef
+        }),
+
+        // 統計資訊（開發模式顯示）
+        process.env.NODE_ENV === 'development' && statsInfo.hasTransformations && React.createElement('div', {
+          style: {
+            position: 'fixed',
+            bottom: '20px',
+            right: '20px',
+            background: 'rgba(0,0,0,0.8)',
+            color: 'white',
+            padding: '8px 12px',
+            borderRadius: '4px',
+            fontSize: '12px',
+            zIndex: 1000
+          }
+        }, `顯示 ${statsInfo.filteredRows} / ${statsInfo.totalRows} 筆資料`)
       )
     ) as any;
   }
 
   // React Native 空狀態
-  if (data.length === 0) {
+  if (processedData.length === 0) {
     return (
       <View style={[tableStyles.container, tableStyles.emptyContainer]}>
         <Icon name="folder-open" size={48} color={NotionColors.text.lightGray} />
@@ -617,7 +774,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
       
       {/* Virtual scrolling body */}
       <VirtualScroller
-        items={data}
+        items={processedData}
         rowHeight={rowHeight}
         overscan={overscan}
         renderRow={renderRow}
