@@ -26,15 +26,6 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   // 將所有 Hook 宣告移到條件檢查之前
   const [filterManager] = useState(() => new FilterManager());
   
-  // 條件檢查移到 Hook 宣告之後
-  console.log('🔍 FilterPanel 渲染:', { isOpen, platform: Platform.OS });
-  
-  if (!isOpen || Platform.OS !== 'web') {
-    return null;
-  }
-  
-  console.log('🔍 FilterPanel 將要渲染面板');
-
   // 處理添加新過濾條件
   const handleAddFilter = useCallback((groupId: string, parentGroup?: FilterGroup) => {
     const targetGroup = parentGroup || currentFilters;
@@ -76,6 +67,15 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
     const updatedGroup = updateGroupOperator(currentFilters, groupId, operator);
     onFiltersChange(updatedGroup);
   }, [currentFilters, onFiltersChange]);
+  
+  // 條件檢查移到所有 Hook 宣告之後
+  console.log('🔍 FilterPanel 渲染:', { isOpen, platform: Platform.OS });
+  
+  if (!isOpen || Platform.OS !== 'web') {
+    return null;
+  }
+  
+  console.log('🔍 FilterPanel 將要渲染面板');
 
   return React.createElement('div', {
     className: 'notion-filter-panel-overlay',
