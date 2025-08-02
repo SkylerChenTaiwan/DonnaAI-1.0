@@ -546,6 +546,23 @@ export const DatabaseScreen: React.FC = () => {
     showToast('info', '批量刪除功能尚未實作');
   };
 
+  const handleAddNew = useCallback(() => {
+    handleAddRow();
+  }, [handleAddRow]);
+
+  const getHeaderTitle = (tab: TabType): string => {
+    switch (tab) {
+      case 'customers':
+        return '客戶資料庫';
+      case 'records':
+        return '紀錄資料庫';
+      case 'tasks':
+        return '任務資料庫';
+      default:
+        return '資料庫';
+    }
+  };
+
   const isDesktop = isDesktopWeb();
 
   // 建立 debounced 更新函數
