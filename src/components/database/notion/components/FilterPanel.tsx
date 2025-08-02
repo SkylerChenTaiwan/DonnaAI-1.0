@@ -23,8 +23,10 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   onFiltersChange,
   anchorEl
 }) => {
+  // 將所有 Hook 宣告移到條件檢查之前
   const [filterManager] = useState(() => new FilterManager());
   
+  // 條件檢查移到 Hook 宣告之後
   if (!isOpen || Platform.OS !== 'web') {
     return null;
   }
