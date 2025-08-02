@@ -195,6 +195,14 @@ body {
   border-color: var(--notion-blue-dark);
 }
 
+/* === 按鈕圖標 === */
+.notion-button-icon {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 4px;
+  opacity: 0.8;
+}
+
 /* === 表格樣式 - 彈性欄寬 === */
 .notion-database-table {
   width: auto;

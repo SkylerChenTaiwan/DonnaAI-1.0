@@ -15,6 +15,7 @@ import { NOTION_DEFAULTS, NotionColors } from './constants';
 import { Icon } from '@/components/common/Icon';
 import { useDebouncedUpdate } from '@/hooks/useDebouncedUpdate';
 import { EditorFactory } from './editors/EditorFactory';
+import { NotionIcons, getPropertyIcon as getNotionPropertyIcon } from './NotionIcons';
 
 export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = ({
   data,
@@ -146,29 +147,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
     }
   }, []);
 
-  // Helper function to get property icon based on column type
-  const getPropertyIcon = useCallback((type: string) => {
-    switch (type) {
-      case 'text': return 'Aa';
-      case 'number': return '#';
-      case 'select': return '▾';
-      case 'multi_select': return '▾';
-      case 'date': return '📅';
-      case 'checkbox': return '☐';
-      case 'url': return '⇢';
-      case 'email': return '@';
-      case 'phone': return '☎';
-      case 'file': return '📎';
-      case 'relation': return '→';
-      case 'formula': return 'ƒ';
-      case 'rollup': return '∑';
-      case 'created_time': return '⌚';
-      case 'last_edited_time': return '⌚';
-      case 'created_by': return '👤';
-      case 'last_edited_by': return '👤';
-      default: return 'Aa';
-    }
-  }, []);
+  // 使用從 NotionIcons 導入的 getPropertyIcon 函數
 
   // Helper function to render cell content based on column type
   const renderCellContent = useCallback((row: any, column: any) => {
@@ -375,7 +354,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
             // 視圖標籤
             React.createElement('div', 
               { className: 'notion-view-tab active' },
-              React.createElement('span', { className: 'notion-view-icon' }, '⊞'),
+              React.createElement('span', { className: 'notion-view-icon' }, NotionIcons.table()),
               ' 表格'
             ),
             // 分隔線
@@ -388,7 +367,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                 className: 'notion-button',
                 onClick: () => console.log('過濾')
               },
-              React.createElement('span', { style: { marginRight: '4px' } }, '⫧'),
+              React.createElement('span', { className: 'notion-button-icon' }, NotionIcons.filter()),
               '過濾'
             ),
             React.createElement('button', 
@@ -396,7 +375,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                 className: 'notion-button',
                 onClick: () => console.log('排序')
               },
-              React.createElement('span', { style: { marginRight: '4px' } }, '↕'),
+              React.createElement('span', { className: 'notion-button-icon' }, NotionIcons.sort()),
               '排序'
             ),
             React.createElement('button', 
@@ -404,7 +383,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                 className: 'notion-button',
                 onClick: () => console.log('群組')
               },
-              React.createElement('span', { style: { marginRight: '4px' } }, '⧉'),
+              React.createElement('span', { className: 'notion-button-icon' }, NotionIcons.group()),
               '群組'
             )
           ),
@@ -416,7 +395,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                 className: 'notion-button',
                 onClick: () => console.log('搜尋')
               },
-              React.createElement('span', { style: { marginRight: '4px' } }, '🔍'),
+              React.createElement('span', { className: 'notion-button-icon' }, NotionIcons.search()),
               '搜尋'
             ),
             React.createElement('button', 
@@ -424,7 +403,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                 className: 'notion-button',
                 onClick: () => console.log('更多')
               },
-              '⋯'
+              NotionIcons.more()
             ),
             React.createElement('button', 
               { 
@@ -453,7 +432,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                     { className: 'notion-header-content' },
                     React.createElement('span', 
                       { className: 'notion-property-icon' }, 
-                      getPropertyIcon(column.type)
+                      getNotionPropertyIcon(column.type)
                     ),
                     React.createElement('span', 
                       { className: 'notion-property-name' }, 
