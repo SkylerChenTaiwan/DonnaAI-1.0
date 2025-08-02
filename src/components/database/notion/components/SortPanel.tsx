@@ -17,10 +17,12 @@ export const SortPanel: React.FC<SortPanelProps> = ({
   onSortsChange,
   anchorEl
 }) => {
+  // 將所有 Hook 宣告移到條件檢查之前
   const [sortManager] = useState(() => new SortManager());
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   
+  // 條件檢查移到 Hook 宣告之後
   if (!isOpen || Platform.OS !== 'web') {
     return null;
   }
