@@ -83,6 +83,10 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   const [searchConfig, setSearchConfig] = useState<SearchConfig>(() => createDefaultSearchConfig());
   const [showSearchBar, setShowSearchBar] = useState(false);
   
+  // 設定選單狀態
+  const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
+  const [settingsButtonRef, setSettingsButtonRef] = useState<HTMLElement | null>(null);
+  
   // 初始化欄位寬度，只在 columns 改變時執行
   useEffect(() => {
     const widths: Record<string, number> = {};
@@ -215,6 +219,33 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   const handleSearchButtonClick = useCallback(() => {
     setShowSearchBar(!showSearchBar);
   }, [showSearchBar]);
+
+  // 設定選單事件處理器
+  const handleSettingsButtonClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+    console.log('⚙️ 設定選單按鈕被點擊');
+    setSettingsButtonRef(event.currentTarget);
+    setIsSettingsMenuOpen(true);
+  }, []);
+
+  const handleSettingsMenuClose = useCallback(() => {
+    setIsSettingsMenuOpen(false);
+    setSettingsButtonRef(null);
+  }, []);
+
+  // 從設定選單觸發的事件處理器
+  const handleFilterFromMenu = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+    console.log('🔍 從設定選單觸發過濾');
+    setFilterButtonRef(event.currentTarget);
+    setIsFilterPanelOpen(true);
+    setIsSettingsMenuOpen(false); // 關閉設定選單
+  }, []);
+
+  const handleSortFromMenu = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+    console.log('📊 從設定選單觸發排序');
+    setSortButtonRef(event.currentTarget);
+    setIsSortPanelOpen(true);
+    setIsSettingsMenuOpen(false); // 關閉設定選單
+  }, []);
 
   // 統計資訊
   const statsInfo = useMemo(() => {
@@ -504,39 +535,18 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
             React.createElement('div', 
               { className: 'notion-toolbar-divider' }
             ),
-            // 功能按鈕
-            React.createElement('button', 
-              { 
-                className: `notion-button ${statsInfo.activeFilters > 0 ? 'notion-button-active' : ''}`,
-                onClick: handleFilterButtonClick,
-                title: `過濾 ${statsInfo.activeFilters > 0 ? `(${statsInfo.activeFilters} 個條件)` : ''}`
-              },
-              React.createElement('span', { className: 'notion-button-icon' }, NotionIcons.filter()),
-              '過濾',
-              statsInfo.activeFilters > 0 && React.createElement('span', {
-                className: 'notion-button-badge'
-              }, statsInfo.activeFilters.toString())
+            // 顯示活躍的過濾和排序狀態（僅資訊顯示）
+            statsInfo.activeFilters > 0 && React.createElement('div', {
+              className: 'notion-filter-indicator'
+            }, 
+              React.createElement('span', { className: 'notion-indicator-icon' }, NotionIcons.filter()),
+              `${statsInfo.activeFilters} 個過濾條件`
             ),
-            React.createElement('button', 
-              { 
-                className: `notion-button ${statsInfo.activeSorts > 0 ? 'notion-button-active' : ''}`,
-                onClick: handleSortButtonClick,
-                title: `排序 ${statsInfo.activeSorts > 0 ? `(${statsInfo.activeSorts} 個規則)` : ''}`
-              },
-              React.createElement('span', { className: 'notion-button-icon' }, NotionIcons.sort()),
-              '排序',
-              statsInfo.activeSorts > 0 && React.createElement('span', {
-                className: 'notion-button-badge'
-              }, statsInfo.activeSorts.toString())
-            ),
-            React.createElement('button', 
-              { 
-                className: 'notion-button',
-                onClick: () => console.log('群組（未實作）'),
-                title: '分組功能（待實作）'
-              },
-              React.createElement('span', { className: 'notion-button-icon' }, NotionIcons.group()),
-              '群組'
+            statsInfo.activeSorts > 0 && React.createElement('div', {
+              className: 'notion-sort-indicator'
+            }, 
+              React.createElement('span', { className: 'notion-indicator-icon' }, NotionIcons.sort()),
+              `${statsInfo.activeSorts} 個排序規則`
             )
           ),
           // 右側功能按鈕
@@ -560,7 +570,8 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
             React.createElement('button', 
               { 
                 className: 'notion-button',
-                onClick: () => console.log('更多')
+                onClick: handleSettingsButtonClick,
+                title: '資料庫設定'
               },
               NotionIcons.more()
             ),
@@ -712,6 +723,66 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
           anchorEl: sortButtonRef
         }),
 
+        // 設定選單
+        isSettingsMenuOpen && React.createElement('div', {
+          className: 'notion-settings-menu-overlay',
+          onClick: (e: React.MouseEvent) => {
+            if (e.target === e.currentTarget) {
+              handleSettingsMenuClose();
+            }
+          }
+        },
+          React.createElement('div', {
+            className: 'notion-settings-menu',
+            style: settingsButtonRef ? getSettingsMenuPosition(settingsButtonRef) : undefined
+          },
+            React.createElement('div', {
+              className: 'notion-settings-menu-header'
+            }, '視圖設定'),
+            React.createElement('div', {
+              className: 'notion-settings-menu-content'
+            },
+              React.createElement('button', {
+                className: `notion-settings-menu-item ${statsInfo.activeFilters > 0 ? 'active' : ''}`,
+                onClick: handleFilterFromMenu
+              },
+                React.createElement('span', { className: 'notion-menu-item-icon' }, NotionIcons.filter()),
+                '過濾',
+                statsInfo.activeFilters > 0 && React.createElement('span', {
+                  className: 'notion-menu-item-badge'
+                }, statsInfo.activeFilters.toString())
+              ),
+              React.createElement('button', {
+                className: `notion-settings-menu-item ${statsInfo.activeSorts > 0 ? 'active' : ''}`,
+                onClick: handleSortFromMenu
+              },
+                React.createElement('span', { className: 'notion-menu-item-icon' }, NotionIcons.sort()),
+                '排序',
+                statsInfo.activeSorts > 0 && React.createElement('span', {
+                  className: 'notion-menu-item-badge'
+                }, statsInfo.activeSorts.toString())
+              ),
+              React.createElement('button', {
+                className: 'notion-settings-menu-item',
+                onClick: () => console.log('群組（未實作）')
+              },
+                React.createElement('span', { className: 'notion-menu-item-icon' }, NotionIcons.group()),
+                '群組'
+              ),
+              React.createElement('div', {
+                className: 'notion-settings-menu-divider'
+              }),
+              React.createElement('button', {
+                className: 'notion-settings-menu-item',
+                onClick: () => setShowSearchBar(!showSearchBar)
+              },
+                React.createElement('span', { className: 'notion-menu-item-icon' }, NotionIcons.search()),
+                showSearchBar ? '隱藏搜尋' : '顯示搜尋'
+              )
+            )
+          )
+        ),
+
         // 統計資訊（開發模式顯示）
         process.env.NODE_ENV === 'development' && statsInfo.hasTransformations && React.createElement('div', {
           style: {
@@ -799,3 +870,15 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
     </View>
   );
 };
+
+// === 輔助函數 ===
+
+function getSettingsMenuPosition(anchorEl: HTMLElement): React.CSSProperties {
+  const rect = anchorEl.getBoundingClientRect();
+  return {
+    position: 'absolute',
+    top: rect.bottom + 8,
+    right: `${window.innerWidth - rect.right}px`,
+    zIndex: 1000,
+  };
+}

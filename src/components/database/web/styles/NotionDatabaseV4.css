@@ -1067,6 +1067,118 @@ body {
   color: #eb5757;
 }
 
+/* === 設定選單樣式 === */
+
+.notion-settings-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  z-index: 999;
+}
+
+.notion-settings-menu {
+  background: var(--notion-surface);
+  border-radius: 6px;
+  box-shadow: 
+    0 0 0 1px rgba(15, 15, 15, 0.05),
+    0 3px 6px rgba(15, 15, 15, 0.1),
+    0 9px 24px rgba(15, 15, 15, 0.2);
+  min-width: 200px;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.notion-settings-menu-header {
+  padding: var(--notion-spacing-md) var(--notion-spacing-lg);
+  border-bottom: 1px solid var(--notion-gray-20);
+  font-family: var(--notion-font-family);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--notion-gray-60);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.notion-settings-menu-content {
+  padding: var(--notion-spacing-xs) 0;
+}
+
+.notion-settings-menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--notion-spacing-sm);
+  width: 100%;
+  padding: var(--notion-spacing-sm) var(--notion-spacing-lg);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--notion-font-family);
+  font-size: 14px;
+  color: var(--notion-gray-80);
+  text-align: left;
+  transition: background-color 0.15s ease;
+}
+
+.notion-settings-menu-item:hover {
+  background: var(--notion-gray-10);
+}
+
+.notion-settings-menu-item.active {
+  background: var(--notion-blue-light);
+  color: var(--notion-blue);
+}
+
+.notion-menu-item-icon {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+}
+
+.notion-menu-item-badge {
+  margin-left: auto;
+  background: var(--notion-blue);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 16px;
+  text-align: center;
+}
+
+.notion-settings-menu-divider {
+  height: 1px;
+  background: var(--notion-gray-20);
+  margin: var(--notion-spacing-xs) 0;
+}
+
+/* === 狀態指示器樣式 === */
+
+.notion-filter-indicator,
+.notion-sort-indicator {
+  display: flex;
+  align-items: center;
+  gap: var(--notion-spacing-xs);
+  padding: var(--notion-spacing-xs) var(--notion-spacing-sm);
+  background: var(--notion-blue-light);
+  color: var(--notion-blue);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.notion-indicator-icon {
+  width: 12px;
+  height: 12px;
+  opacity: 0.8;
+}
+
 /* === 搜尋列樣式 === */
 
 .notion-search-bar {
