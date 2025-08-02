@@ -311,10 +311,39 @@ function getColumnTypeLabel(type: string): string {
 
 function getPositionStyle(anchorEl: HTMLElement): React.CSSProperties {
   const rect = anchorEl.getBoundingClientRect();
+  const panelWidth = 400; // 預估面板寬度
+  const panelHeight = 350; // 預估面板高度
+  const padding = 16; // 與視窗邊緣的間距
+  
+  // 計算位置，確保不超出視窗
+  let left = rect.left;
+  let top = rect.bottom + 8;
+  
+  // 檢查右側是否會超出視窗
+  if (left + panelWidth + padding > window.innerWidth) {
+    left = window.innerWidth - panelWidth - padding;
+  }
+  
+  // 檢查左側是否會超出視窗
+  if (left < padding) {
+    left = padding;
+  }
+  
+  // 檢查底部是否會超出視窗
+  if (top + panelHeight + padding > window.innerHeight) {
+    // 改為顯示在按鈕上方
+    top = rect.top - panelHeight - 8;
+    
+    // 如果上方也不夠空間，則限制在視窗內
+    if (top < padding) {
+      top = padding;
+    }
+  }
+  
   return {
-    position: 'absolute',
-    top: rect.bottom + 8,
-    left: rect.left,
+    position: 'fixed',
+    top,
+    left,
     zIndex: 1000,
   };
 }

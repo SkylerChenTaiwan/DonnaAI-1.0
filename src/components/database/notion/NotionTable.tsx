@@ -535,18 +535,39 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
             React.createElement('div', 
               { className: 'notion-toolbar-divider' }
             ),
-            // 顯示活躍的過濾和排序狀態（僅資訊顯示）
-            statsInfo.activeFilters > 0 && React.createElement('div', {
-              className: 'notion-filter-indicator'
-            }, 
-              React.createElement('span', { className: 'notion-indicator-icon' }, NotionIcons.filter()),
-              `${statsInfo.activeFilters} 個過濾條件`
+            // 功能按鈕
+            React.createElement('button', 
+              { 
+                className: `notion-button ${statsInfo.activeFilters > 0 ? 'notion-button-active' : ''}`,
+                onClick: handleFilterButtonClick,
+                title: `過濾 ${statsInfo.activeFilters > 0 ? `(${statsInfo.activeFilters} 個條件)` : ''}`
+              },
+              React.createElement('span', { className: 'notion-button-icon' }, NotionIcons.filter()),
+              '過濾',
+              statsInfo.activeFilters > 0 && React.createElement('span', {
+                className: 'notion-button-badge'
+              }, statsInfo.activeFilters.toString())
             ),
-            statsInfo.activeSorts > 0 && React.createElement('div', {
-              className: 'notion-sort-indicator'
-            }, 
-              React.createElement('span', { className: 'notion-indicator-icon' }, NotionIcons.sort()),
-              `${statsInfo.activeSorts} 個排序規則`
+            React.createElement('button', 
+              { 
+                className: `notion-button ${statsInfo.activeSorts > 0 ? 'notion-button-active' : ''}`,
+                onClick: handleSortButtonClick,
+                title: `排序 ${statsInfo.activeSorts > 0 ? `(${statsInfo.activeSorts} 個規則)` : ''}`
+              },
+              React.createElement('span', { className: 'notion-button-icon' }, NotionIcons.sort()),
+              '排序',
+              statsInfo.activeSorts > 0 && React.createElement('span', {
+                className: 'notion-button-badge'
+              }, statsInfo.activeSorts.toString())
+            ),
+            React.createElement('button', 
+              { 
+                className: 'notion-button',
+                onClick: () => console.log('群組（未實作）'),
+                title: '分組功能（待實作）'
+              },
+              React.createElement('span', { className: 'notion-button-icon' }, NotionIcons.group()),
+              '群組'
             )
           ),
           // 右側功能按鈕

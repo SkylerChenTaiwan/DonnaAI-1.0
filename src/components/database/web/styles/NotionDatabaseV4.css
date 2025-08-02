@@ -599,12 +599,33 @@ body {
   padding: var(--notion-spacing-md);
 }
 
+.notion-filter-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--notion-spacing-sm);
+}
+
 .notion-filter-group-operator {
   display: flex;
   align-items: center;
   gap: var(--notion-spacing-md);
-  margin-bottom: var(--notion-spacing-md);
-  padding: var(--notion-spacing-sm) 0;
+}
+
+.notion-filter-remove-group {
+  background: none;
+  border: none;
+  color: var(--notion-gray-60);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px 8px;
+  border-radius: 3px;
+  transition: all 0.15s ease;
+}
+
+.notion-filter-remove-group:hover {
+  background: rgba(235, 87, 87, 0.1);
+  color: #eb5757;
 }
 
 .notion-filter-group-label {

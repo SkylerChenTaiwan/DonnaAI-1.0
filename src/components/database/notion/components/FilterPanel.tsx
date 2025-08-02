@@ -67,6 +67,12 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
     const updatedGroup = updateGroupOperator(currentFilters, groupId, operator);
     onFiltersChange(updatedGroup);
   }, [currentFilters, onFiltersChange]);
+
+  // 處理移除過濾組
+  const handleRemoveGroup = useCallback((groupId: string) => {
+    const updatedGroup = removeGroupFromGroup(currentFilters, groupId);
+    onFiltersChange(updatedGroup);
+  }, [currentFilters, onFiltersChange]);
   
   // 條件檢查移到所有 Hook 宣告之後
   console.log('🔍 FilterPanel 渲染:', { isOpen, platform: Platform.OS });
@@ -115,12 +121,13 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
           handleUpdateGroupOperator,
           handleAddFilter,
           handleAddGroup,
+          handleRemoveGroup,
           0
         )
       ),
 
-      // 面板底部
-      React.createElement('div', {
+      // 面板底部 - 只有在沒有任何過濾條件時才顯示
+      currentFilters.filters.length === 0 && React.createElement('div', {
         className: 'notion-filter-panel-footer'
       },
         React.createElement('button', {
@@ -129,13 +136,6 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
         }, 
           NotionIcons.plus(),
           ' 新增過濾條件'
-        ),
-        React.createElement('button', {
-          className: 'notion-button',
-          onClick: () => handleAddGroup(currentFilters.id)
-        }, 
-          NotionIcons.group(),
-          ' 新增過濾組'
         )
       )
     )
@@ -153,29 +153,41 @@ function renderFilterGroup(
   onUpdateGroupOperator: (groupId: string, operator: 'and' | 'or') => void,
   onAddFilter: (groupId: string) => void,
   onAddGroup: (groupId: string) => void,
+  onRemoveGroup: (groupId: string) => void,
   nestingLevel: number
 ): React.ReactElement {
   return React.createElement('div', {
     className: `notion-filter-group notion-filter-group-level-${nestingLevel}`,
     key: group.id
   },
-    // 組操作符選擇器
-    group.filters.length > 1 && React.createElement('div', {
-      className: 'notion-filter-group-operator'
+    // 組標題和操作
+    React.createElement('div', {
+      className: 'notion-filter-group-header'
     },
-      React.createElement('span', {
-        className: 'notion-filter-group-label'
-      }, '滿足'),
-      React.createElement('select', {
-        className: 'notion-filter-operator-select',
-        value: group.operator,
-        onChange: (e: React.ChangeEvent<HTMLSelectElement>) => {
-          onUpdateGroupOperator(group.id, e.target.value as 'and' | 'or');
-        }
+      // 組操作符選擇器
+      group.filters.length > 1 && React.createElement('div', {
+        className: 'notion-filter-group-operator'
       },
-        React.createElement('option', { value: 'and' }, '所有條件'),
-        React.createElement('option', { value: 'or' }, '任一條件')
-      )
+        React.createElement('span', {
+          className: 'notion-filter-group-label'
+        }, '滿足'),
+        React.createElement('select', {
+          className: 'notion-filter-operator-select',
+          value: group.operator,
+          onChange: (e: React.ChangeEvent<HTMLSelectElement>) => {
+            onUpdateGroupOperator(group.id, e.target.value as 'and' | 'or');
+          }
+        },
+          React.createElement('option', { value: 'and' }, '所有條件'),
+          React.createElement('option', { value: 'or' }, '任一條件')
+        )
+      ),
+      // 刪除群組按鈕（只有非根群組才顯示）
+      nestingLevel > 0 && React.createElement('button', {
+        className: 'notion-filter-remove-group',
+        onClick: () => onRemoveGroup(group.id),
+        title: '刪除此過濾群組'
+      }, '✕')
     ),
 
     // 渲染過濾條件
@@ -194,6 +206,7 @@ function renderFilterGroup(
             onUpdateGroupOperator,
             onAddFilter,
             onAddGroup,
+            onRemoveGroup,
             nestingLevel + 1
           );
         } else {
@@ -477,6 +490,35 @@ function updateGroupOperator(
   };
 }
 
+function removeGroupFromGroup(
+  parentGroup: FilterGroup, 
+  groupId: string
+): FilterGroup {
+  // 不能刪除根組
+  if (parentGroup.id === groupId) {
+    return parentGroup;
+  }
+
+  return {
+    ...parentGroup,
+    filters: parentGroup.filters
+      .filter(filter => {
+        // 如果是群組且 ID 匹配，則移除
+        if ('filters' in filter && (filter as FilterGroup).id === groupId) {
+          return false;
+        }
+        return true;
+      })
+      .map(filter => {
+        // 遞迴處理子群組
+        if ('filters' in filter) {
+          return removeGroupFromGroup(filter as FilterGroup, groupId);
+        }
+        return filter;
+      })
+  };
+}
+
 function needsValue(operator: FilterOperator): boolean {
   const noValueOperators: FilterOperator[] = [
     'is_empty', 'is_not_empty', 'checkbox_checked', 'checkbox_unchecked'
@@ -513,10 +555,39 @@ function getOperatorLabel(operator: FilterOperator): string {
 
 function getPositionStyle(anchorEl: HTMLElement): React.CSSProperties {
   const rect = anchorEl.getBoundingClientRect();
+  const panelWidth = 480; // 預估面板寬度
+  const panelHeight = 400; // 預估面板高度
+  const padding = 16; // 與視窗邊緣的間距
+  
+  // 計算位置，確保不超出視窗
+  let left = rect.left;
+  let top = rect.bottom + 8;
+  
+  // 檢查右側是否會超出視窗
+  if (left + panelWidth + padding > window.innerWidth) {
+    left = window.innerWidth - panelWidth - padding;
+  }
+  
+  // 檢查左側是否會超出視窗
+  if (left < padding) {
+    left = padding;
+  }
+  
+  // 檢查底部是否會超出視窗
+  if (top + panelHeight + padding > window.innerHeight) {
+    // 改為顯示在按鈕上方
+    top = rect.top - panelHeight - 8;
+    
+    // 如果上方也不夠空間，則限制在視窗內
+    if (top < padding) {
+      top = padding;
+    }
+  }
+  
   return {
-    position: 'absolute',
-    top: rect.bottom + 8,
-    left: rect.left,
+    position: 'fixed',
+    top,
+    left,
     zIndex: 1000,
   };
 }
