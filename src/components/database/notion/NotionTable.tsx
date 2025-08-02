@@ -354,57 +354,32 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
     return React.createElement('div', 
       { className: 'notion-database-wrapper' },
       
-      // Database Header
-      React.createElement('div', 
-        { className: 'notion-database-header' },
-        React.createElement('div', 
-          { className: 'notion-database-title-section' },
-          React.createElement('h1', 
-            { className: 'notion-database-title' },
-            React.createElement('span', { className: 'notion-database-icon' }, dbInfo.icon),
-            dbInfo.title
-          )
-        )
-      ),
-      
       React.createElement('div', 
         { className: 'notion-database-container' },
         
-        // Views and Controls
+        // Toolbar with filters and new button
         React.createElement('div', 
-          { className: 'notion-database-controls' },
+          { className: 'notion-database-toolbar' },
           React.createElement('div', 
-            { className: 'notion-views-section' },
+            { className: 'notion-toolbar-left' },
             React.createElement('div', 
-              { className: 'notion-view-tabs' },
-              React.createElement('button', 
-                { className: 'notion-view-tab active' },
-                React.createElement('span', { className: 'notion-view-icon' }, '☰'),
-                '表格'
-              ),
-              React.createElement('button', 
-                { className: 'notion-view-tab' },
-                React.createElement('span', { className: 'notion-view-icon' }, '▦'),
-                '看板'
-              )
+              { className: 'notion-view-info' },
+              `${data.length} 筆記錄`
             )
           ),
           React.createElement('div', 
-            { className: 'notion-database-actions' },
+            { className: 'notion-toolbar-right' },
             React.createElement('button', 
-              { className: 'notion-action-button' },
-              React.createElement('span', { className: 'notion-action-icon' }, '🔍'),
-              '搜尋'
-            ),
-            React.createElement('button', 
-              { className: 'notion-action-button' },
-              React.createElement('span', { className: 'notion-action-icon' }, '🔽'),
+              { className: 'notion-button' },
               '篩選'
             ),
             React.createElement('button', 
-              { className: 'notion-action-button' },
-              React.createElement('span', { className: 'notion-action-icon' }, '↕️'),
+              { className: 'notion-button' },
               '排序'
+            ),
+            React.createElement('button', 
+              { className: 'notion-button' },
+              '⋯'
             ),
             onRowAdd && React.createElement('button', 
               { 
@@ -414,118 +389,114 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                   handleAddRow();
                 }
               }, 
-              React.createElement('span', { className: 'notion-button-icon' }, '+'),
               '新增'
             )
           )
         ),
         
         // 顯示表格（不管有沒有資料）
-        React.createElement('div', 
-          { className: 'notion-table-wrapper' },
-          React.createElement('table', 
-            { className: 'notion-database-table' },
-            React.createElement('thead', {},
-              React.createElement('tr', 
-                { className: 'notion-header-row' },
-                columnsWithWidths.map((column) => 
-                  React.createElement('th', {
-                    key: column.id,
-                    className: 'notion-header-cell',
-                    'data-column': column.key,
-                    style: { width: column.width }
-                  },
-                    React.createElement('div', 
-                      { className: 'notion-header-content' },
-                      React.createElement('span', 
-                        { className: 'notion-property-icon' }, 
-                        getPropertyIcon(column.type)
-                      ),
-                      React.createElement('span', 
-                        { className: 'notion-property-name' }, 
-                        column.title
-                      ),
-                      React.createElement('span', 
-                        { className: 'notion-header-actions' },
-                        React.createElement('button', 
-                          { className: 'notion-header-action-btn' }, 
-                          '⋯'
-                        )
+        React.createElement('table', 
+          { className: 'notion-database-table' },
+          React.createElement('thead', {},
+            React.createElement('tr', 
+              { className: 'notion-header-row' },
+              columnsWithWidths.map((column) => 
+                React.createElement('th', {
+                  key: column.id,
+                  className: 'notion-header-cell',
+                  'data-column': column.key,
+                  style: { width: column.width }
+                },
+                  React.createElement('div', 
+                    { className: 'notion-header-content' },
+                    React.createElement('span', 
+                      { className: 'notion-property-icon' }, 
+                      getPropertyIcon(column.type)
+                    ),
+                    React.createElement('span', 
+                      { className: 'notion-property-name' }, 
+                      column.title
+                    ),
+                    React.createElement('span', 
+                      { className: 'notion-header-actions' },
+                      React.createElement('button', 
+                        { className: 'notion-header-action-btn' }, 
+                        '⋯'
                       )
                     )
                   )
+                )
+              ),
+              // 新增欄位按鈕
+              React.createElement('th', 
+                { className: 'notion-add-column-cell' },
+                onColumnAdd && React.createElement('button', {
+                  className: 'notion-add-column-btn',
+                  onClick: onColumnAdd
+                }, '+')
+              )
+            )
+          ),
+          React.createElement('tbody', {},
+            // 如果有資料，顯示資料行
+            data.length > 0 && data.map((row, index) => 
+              React.createElement('tr', {
+                key: row.id,
+                className: `notion-data-row ${selectedRowsSet.has(row.id) ? 'selected' : ''}`,
+                onClick: () => onRowClick?.(row)
+              },
+                columnsWithWidths.map((column) => 
+                  React.createElement('td', {
+                    key: column.id,
+                    className: 'notion-cell',
+                    style: { position: 'relative' },
+                    onDoubleClick: () => {
+                      console.log('雙擊儲存格:', { rowId: row.id, columnKey: column.key });
+                      setEditingCell({ rowId: row.id, columnKey: column.key });
+                    }
+                  },
+                    React.createElement('div', {
+                      className: 'notion-cell-content'
+                    }, renderCellContent(row, column))
+                  )
                 ),
-                // 新增欄位按鈕
-                React.createElement('th', 
-                  { className: 'notion-add-column-cell' },
-                  onColumnAdd && React.createElement('button', {
-                    className: 'notion-add-column-btn',
-                    onClick: onColumnAdd
-                  }, '+')
+                // 空的最後一欄（對應新增欄位按鈕）
+                React.createElement('td', 
+                  { className: 'notion-cell-empty-column' }
                 )
               )
             ),
-            React.createElement('tbody', {},
-              // 如果有資料，顯示資料行
-              data.length > 0 && data.map((row, index) => 
-                React.createElement('tr', {
-                  key: row.id,
-                  className: `notion-data-row ${selectedRowsSet.has(row.id) ? 'selected' : ''}`,
-                  onClick: () => onRowClick?.(row)
+            // 如果沒有資料，顯示空狀態行
+            data.length === 0 && React.createElement('tr',
+              { className: 'notion-empty-row' },
+              React.createElement('td', {
+                colSpan: columnsWithWidths.length + 1,
+                className: 'notion-empty-cell'
+              },
+                React.createElement('div', {
+                  className: 'notion-empty-content'
                 },
-                  columnsWithWidths.map((column) => 
-                    React.createElement('td', {
-                      key: column.id,
-                      className: 'notion-cell',
-                      style: { position: 'relative' },
-                      onDoubleClick: () => {
-                        console.log('雙擊儲存格:', { rowId: row.id, columnKey: column.key });
-                        setEditingCell({ rowId: row.id, columnKey: column.key });
-                      }
-                    },
-                      React.createElement('div', {
-                        className: 'notion-cell-content'
-                      }, renderCellContent(row, column))
-                    )
-                  ),
-                  // 空的最後一欄（對應新增欄位按鈕）
-                  React.createElement('td', 
-                    { className: 'notion-cell-empty-column' }
-                  )
+                  React.createElement('div', { className: 'notion-empty-icon' }, '📋'),
+                  React.createElement('div', { className: 'notion-empty-text' }, emptyMessage)
                 )
-              ),
-              // 如果沒有資料，顯示空狀態行
-              data.length === 0 && React.createElement('tr',
-                { className: 'notion-empty-row' },
-                React.createElement('td', {
-                  colSpan: columnsWithWidths.length + 1,
-                  className: 'notion-empty-cell'
-                },
-                  React.createElement('div', {
-                    className: 'notion-empty-content'
-                  },
-                    React.createElement('div', { className: 'notion-empty-icon' }, '📋'),
-                    React.createElement('div', { className: 'notion-empty-text' }, emptyMessage)
-                  )
-                )
-              ),
-              // 新增列按鈕
-              onRowAdd && React.createElement('tr', 
-                { className: 'notion-add-row' },
-                React.createElement('td', {
-                  colSpan: columnsWithWidths.length + 1,
-                  className: 'notion-add-row-cell'
-                },
-                  React.createElement('button', {
-                    className: 'notion-add-row-button',
-                    onClick: () => {
-                      console.log('🔥 底部新增按鈕被點擊');
-                      handleAddRow();
-                    }
-                  }, 
-                    React.createElement('span', { className: 'notion-add-icon' }, '+'),
-                    '新增'
-                  )
+              )
+            ),
+            // 新增列按鈕
+            onRowAdd && React.createElement('tr', 
+              { className: 'notion-add-row' },
+              React.createElement('td', {
+                colSpan: columnsWithWidths.length + 1,
+                className: 'notion-add-row-cell'
+              },
+                React.createElement('button', {
+                  className: 'notion-add-row-button',
+                  onClick: () => {
+                    console.log('🔥 底部新增按鈕被點擊');
+                    handleAddRow();
+                  }
+                }, 
+                  React.createElement('span', { className: 'notion-add-icon' }, '+'),
+                  '新增'
                 )
               )
             )
