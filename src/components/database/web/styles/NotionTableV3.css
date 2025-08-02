@@ -5,7 +5,7 @@
 
 /* 根據 Notion 原始碼設定 */
 body {
-  background: #fff !important;
+  background: #fbfbfa !important;
 }
 
 body.dark {
@@ -26,7 +26,7 @@ body.dark {
 /* 內容容器 */
 .notion-database-container {
   max-width: 100%;
-  padding: 12px 24px;
+  padding: 12px 8px;
 }
 
 /* 工具列 - 更簡潔 */
@@ -34,8 +34,8 @@ body.dark {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
-  padding: 0 2px;
+  margin-bottom: 8px;
+  padding: 0;
 }
 
 .notion-toolbar-left {
@@ -87,34 +87,38 @@ body.dark {
   background: rgba(55, 53, 47, 0.1);
 }
 
-/* 主要按鈕（新建） - 更柔和的藍色 */
+/* 主要按鈕（新建） - 更小更柔和 */
 .notion-button-primary {
-  background: rgb(35, 131, 226);
+  background: rgb(46, 170, 220);
   color: white;
   font-weight: 400;
+  font-size: 14px;
   border-radius: 6px;
-  padding: 4px 12px;
-  box-shadow: rgb(15 15 15 / 10%) 0px 0px 0px 1px inset, rgb(15 15 15 / 10%) 0px 1px 2px;
+  padding: 2px 10px;
+  height: 26px;
+  box-shadow: none;
+  border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .notion-button-primary:hover {
-  background: rgb(28, 117, 208);
+  background: rgb(33, 158, 210);
 }
 
 .notion-button-primary:active {
-  background: rgb(24, 103, 184);
+  background: rgb(20, 145, 200);
 }
 
-/* 表格 - 幾乎無邊框 */
+/* 表格 - 完全無邊框 */
 .notion-database-table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
   background: transparent;
   position: relative;
+  border: none;
 }
 
-/* 表頭行 - 極淡的底部線 */
+/* 表頭行 - 幾乎看不見的底部線 */
 .notion-header-row {
   position: relative;
 }
@@ -126,7 +130,7 @@ body.dark {
   left: 0;
   right: 0;
   height: 1px;
-  background: rgba(233, 233, 231, 0.4);
+  background: rgba(233, 233, 231, 0.25);
   pointer-events: none;
 }
 
@@ -151,8 +155,8 @@ body.dark {
 .notion-header-content {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 7px 8px;
+  gap: 2px;
+  padding: 7px 6px;
   height: 100%;
   position: relative;
   cursor: default;
@@ -160,22 +164,22 @@ body.dark {
 
 /* 屬性圖標 */
 .notion-property-icon {
-  font-size: 14px;
-  color: rgba(55, 53, 47, 0.45);
+  font-size: 12px;
+  color: rgba(55, 53, 47, 0.35);
   flex-shrink: 0;
-  width: 16px;
+  width: 14px;
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 2px;
+  margin-right: 3px;
 }
 
 /* 屬性名稱 */
 .notion-property-name {
   font-size: 14px;
   font-weight: 400;
-  color: rgba(55, 53, 47, 0.65);
+  color: rgba(55, 53, 47, 0.5);
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
@@ -265,12 +269,12 @@ body.dark {
   left: 0;
   right: 0;
   height: 1px;
-  background: rgba(233, 233, 231, 0.3);
+  background: rgba(233, 233, 231, 0.15);
   pointer-events: none;
 }
 
 .notion-data-row:hover {
-  background: rgba(251, 251, 250, 0.5);
+  background: rgba(55, 53, 47, 0.02);
 }
 
 .notion-data-row.selected {
@@ -291,10 +295,10 @@ body.dark {
 .notion-cell-content {
   display: flex;
   align-items: center;
-  padding: 7px 8px;
+  padding: 7px 6px;
   min-height: 37px;
   font-size: 14px;
-  color: #37352f;
+  color: rgba(55, 53, 47, 0.9);
   line-height: 1.2;
   cursor: text;
   position: relative;
@@ -397,24 +401,29 @@ body.dark {
   padding: 0 8px;
   background: transparent;
   border: none;
-  color: rgba(55, 53, 47, 0.35);
+  color: rgba(55, 53, 47, 0.25);
   font-size: 14px;
   font-weight: 400;
   text-align: left;
   cursor: pointer;
   transition: all 20ms ease-in 0s;
   border-radius: 3px;
+  opacity: 0;
+}
+
+.notion-database-table:hover .notion-add-row-button {
+  opacity: 1;
 }
 
 .notion-add-row-button:hover {
   background: rgba(55, 53, 47, 0.03);
-  color: rgba(55, 53, 47, 0.65);
+  color: rgba(55, 53, 47, 0.5);
 }
 
 .notion-add-icon {
   font-size: 14px;
   line-height: 1;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 /* 空狀態 */

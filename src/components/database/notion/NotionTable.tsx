@@ -357,42 +357,6 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
       React.createElement('div', 
         { className: 'notion-database-container' },
         
-        // Toolbar with filters and new button
-        React.createElement('div', 
-          { className: 'notion-database-toolbar' },
-          React.createElement('div', 
-            { className: 'notion-toolbar-left' },
-            React.createElement('div', 
-              { className: 'notion-view-info' },
-              `${data.length} 筆記錄`
-            )
-          ),
-          React.createElement('div', 
-            { className: 'notion-toolbar-right' },
-            React.createElement('button', 
-              { className: 'notion-button' },
-              '篩選'
-            ),
-            React.createElement('button', 
-              { className: 'notion-button' },
-              '排序'
-            ),
-            React.createElement('button', 
-              { className: 'notion-button' },
-              '⋯'
-            ),
-            onRowAdd && React.createElement('button', 
-              { 
-                className: 'notion-button-primary',
-                onClick: () => {
-                  console.log('🔥 新增按鈕被點擊');
-                  handleAddRow();
-                }
-              }, 
-              '新增'
-            )
-          )
-        ),
         
         // 顯示表格（不管有沒有資料）
         React.createElement('table', 
@@ -463,21 +427,6 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                 // 空的最後一欄（對應新增欄位按鈕）
                 React.createElement('td', 
                   { className: 'notion-cell-empty-column' }
-                )
-              )
-            ),
-            // 如果沒有資料，顯示空狀態行
-            data.length === 0 && React.createElement('tr',
-              { className: 'notion-empty-row' },
-              React.createElement('td', {
-                colSpan: columnsWithWidths.length + 1,
-                className: 'notion-empty-cell'
-              },
-                React.createElement('div', {
-                  className: 'notion-empty-content'
-                },
-                  React.createElement('div', { className: 'notion-empty-icon' }, '📋'),
-                  React.createElement('div', { className: 'notion-empty-text' }, emptyMessage)
                 )
               )
             ),
