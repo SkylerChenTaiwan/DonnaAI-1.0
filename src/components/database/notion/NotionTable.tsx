@@ -151,17 +151,17 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
     switch (type) {
       case 'text': return 'Aa';
       case 'number': return '#';
-      case 'select': return '🏷️';
-      case 'multi_select': return '🏷️';
+      case 'select': return '↓';
+      case 'multi_select': return '↓';
       case 'date': return '📅';
-      case 'checkbox': return '☑️';
+      case 'checkbox': return '☐';
       case 'url': return '🔗';
-      case 'email': return '📧';
-      case 'phone': return '📞';
+      case 'email': return '@';
+      case 'phone': return '☎';
       case 'file': return '📎';
-      case 'relation': return '🔗';
+      case 'relation': return '→';
       case 'formula': return 'fx';
-      case 'rollup': return '🔄';
+      case 'rollup': return '∑';
       case 'created_time': return '⏰';
       case 'last_edited_time': return '⏰';
       case 'created_by': return '👤';
