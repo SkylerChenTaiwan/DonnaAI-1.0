@@ -15,7 +15,7 @@ import { NOTION_DEFAULTS, NotionColors } from './constants';
 import { Icon } from '@/components/common/Icon';
 import { useDebouncedUpdate } from '@/hooks/useDebouncedUpdate';
 
-export const NotionTable: React.FC<NotionTableProps> = ({
+export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = ({
   data,
   columns,
   onCellUpdate,
@@ -32,6 +32,7 @@ export const NotionTable: React.FC<NotionTableProps> = ({
   rowHeight = NOTION_DEFAULTS.ROW_HEIGHT,
   headerHeight = NOTION_DEFAULTS.HEADER_HEIGHT,
   overscan = NOTION_DEFAULTS.OVERSCAN_COUNT,
+  activeTab,
 }) => {
   // 除錯日誌
   console.log('🎯 NotionTable 渲染:', {
@@ -130,6 +131,20 @@ export const NotionTable: React.FC<NotionTableProps> = ({
     debouncedUpdate(rowId, columnKey, value);
   }, [debouncedUpdate, setEditingCell]);
   
+  // Helper function to get database title and icon based on active tab
+  const getDatabaseInfo = useCallback((tab?: string) => {
+    switch (tab) {
+      case 'customers':
+        return { title: '客戶資料庫', icon: '👥', description: '管理客戶聯絡資訊、狀態和相關資料' };
+      case 'records':
+        return { title: '記錄資料庫', icon: '📄', description: '管理各種記錄和文件資料' };
+      case 'tasks':
+        return { title: '任務資料庫', icon: '✅', description: '管理任務分配、進度和完成狀態' };
+      default:
+        return { title: '資料庫', icon: '📊', description: '管理和組織您的資料' };
+    }
+  }, []);
+
   // Helper function to get property icon based on column type
   const getPropertyIcon = useCallback((type: string) => {
     switch (type) {
@@ -200,11 +215,26 @@ export const NotionTable: React.FC<NotionTableProps> = ({
     }
   }, [handleCellEdit]);
   
-  // Handle add row
+  // Handle add row - 允許空值，不強制必填
   const handleAddRow = useCallback(() => {
-    const newRow: any = {};
+    const newRow: any = {
+      id: `draft_${Date.now()}`, // 使用臨時 ID
+    };
     columns.forEach(col => {
-      newRow[col.key] = col.type === 'checkbox' ? false : '';
+      // 所有欄位都設為預設值，允許空值
+      switch (col.type) {
+        case 'checkbox':
+          newRow[col.key] = false;
+          break;
+        case 'number':
+          newRow[col.key] = null;
+          break;
+        case 'date':
+          newRow[col.key] = null;
+          break;
+        default:
+          newRow[col.key] = '';
+      }
     });
     onRowAdd?.(newRow);
   }, [columns, onRowAdd]);
@@ -276,6 +306,8 @@ export const NotionTable: React.FC<NotionTableProps> = ({
   if (Platform.OS === 'web') {
     console.log('🌐 渲染 Notion 風格 Web 界面，資料數量:', data.length);
     
+    const dbInfo = getDatabaseInfo(activeTab);
+    
     return React.createElement('div', 
       { className: 'notion-database-wrapper' },
       
@@ -286,12 +318,8 @@ export const NotionTable: React.FC<NotionTableProps> = ({
           { className: 'notion-database-title-section' },
           React.createElement('h1', 
             { className: 'notion-database-title' },
-            React.createElement('span', { className: 'notion-database-icon' }, '👥'),
-            '客戶資料庫'
-          ),
-          React.createElement('p', 
-            { className: 'notion-database-description' },
-            '管理客戶聯絡資訊、狀態和相關資料'
+            React.createElement('span', { className: 'notion-database-icon' }, dbInfo.icon),
+            dbInfo.title
           )
         )
       ),
@@ -338,7 +366,10 @@ export const NotionTable: React.FC<NotionTableProps> = ({
             onRowAdd && React.createElement('button', 
               { 
                 className: 'notion-button-primary',
-                onClick: handleAddRow
+                onClick: () => {
+                  console.log('🔥 新增按鈕被點擊');
+                  handleAddRow();
+                }
               }, 
               React.createElement('span', { className: 'notion-button-icon' }, '+'),
               '新增'
@@ -346,25 +377,7 @@ export const NotionTable: React.FC<NotionTableProps> = ({
           )
         ),
         
-        // 如果沒有資料，顯示空狀態
-        data.length === 0 ? React.createElement('div', 
-          { className: 'notion-empty-state' },
-          React.createElement('div', 
-            { className: 'notion-empty-icon' }, 
-            '📋'
-          ),
-          React.createElement('div', 
-            { className: 'notion-empty-title' }, 
-            emptyMessage
-          ),
-          onRowAdd && React.createElement('button', {
-            className: 'notion-button notion-button-primary',
-            onClick: handleAddRow,
-            style: { marginTop: 16 }
-          }, '新增第一筆資料')
-        ) : 
-        
-        // 如果有資料，顯示表格
+        // 顯示表格（不管有沒有資料）
         React.createElement('div', 
           { className: 'notion-table-wrapper' },
           React.createElement('table', 
@@ -410,7 +423,8 @@ export const NotionTable: React.FC<NotionTableProps> = ({
               )
             ),
             React.createElement('tbody', {},
-              data.map((row, index) => 
+              // 如果有資料，顯示資料行
+              data.length > 0 && data.map((row, index) => 
                 React.createElement('tr', {
                   key: row.id,
                   className: `notion-data-row ${selectedRowsSet.has(row.id) ? 'selected' : ''}`,
@@ -432,6 +446,21 @@ export const NotionTable: React.FC<NotionTableProps> = ({
                   )
                 )
               ),
+              // 如果沒有資料，顯示空狀態行
+              data.length === 0 && React.createElement('tr',
+                { className: 'notion-empty-row' },
+                React.createElement('td', {
+                  colSpan: columnsWithWidths.length + 1,
+                  className: 'notion-empty-cell'
+                },
+                  React.createElement('div', {
+                    className: 'notion-empty-content'
+                  },
+                    React.createElement('div', { className: 'notion-empty-icon' }, '📋'),
+                    React.createElement('div', { className: 'notion-empty-text' }, emptyMessage)
+                  )
+                )
+              ),
               // 新增列按鈕
               onRowAdd && React.createElement('tr', 
                 { className: 'notion-add-row' },
@@ -441,7 +470,10 @@ export const NotionTable: React.FC<NotionTableProps> = ({
                 },
                   React.createElement('button', {
                     className: 'notion-add-row-button',
-                    onClick: handleAddRow
+                    onClick: () => {
+                      console.log('🔥 底部新增按鈕被點擊');
+                      handleAddRow();
+                    }
                   }, 
                     React.createElement('span', { className: 'notion-add-icon' }, '+'),
                     '新增'

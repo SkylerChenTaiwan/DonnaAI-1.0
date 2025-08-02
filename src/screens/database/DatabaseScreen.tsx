@@ -591,320 +591,39 @@ export const DatabaseScreen: React.FC = () => {
   // 使用新的 NotionTable 元件
   console.log('🔍 使用新的 NotionTable 元件');
 
-  const renderContent = () => (
-    <>
-      <View style={[styles.container, isDesktop && styles.desktopContainer]}>
-        <View style={styles.contentWrapper}>
-          {/* Tab 導航 - 水平顯示（僅行動版） */}
-          {!isDesktop && (
-            <View style={styles.tabContainer}>
-              {tabs.map((tab) => (
-                <TouchableOpacity
-                  key={tab.id}
-                  style={[
-                    styles.tab,
-                    activeTab === tab.id && styles.activeTab,
-                  ]}
-                  onPress={() => handleTabChange(tab.id)}
-                  activeOpacity={0.7}
-                >
-                  <Text
-                    style={[
-                      styles.tabText,
-                      activeTab === tab.id && styles.activeTabText,
-                    ]}
-                  >
-                    {tab.title}
-                  </Text>
-                  {tab.count !== undefined && (
-                    <Text style={[
-                      styles.tabCount,
-                      activeTab === tab.id && styles.activeTabCount,
-                    ]}>
-                      {tab.count}
-                    </Text>
-                  )}
-                </TouchableOpacity>
-              ))}
-            </View>
-          )}
-          
-          {/* 工具列與搜尋欄 */}
-          <View style={styles.toolbarContainer}>
-            <SearchBar
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-              placeholder={`搜尋${tabs.find(t => t.id === activeTab)?.title}...`}
-              style={styles.searchBar}
-            />
-            <DatabaseToolbar
-              onFilter={(ref) => {
-                setFilterAnchor(ref);
-                setShowFilterPopover(true);
-              }}
-              onSort={(ref) => {
-                setSortAnchor(ref);
-                setShowSortPopover(true);
-              }}
-              onMultiSelect={() => setMultiSelectMode(!multiSelectMode)}
-              onAddColumn={() => setShowAddColumnDialog(true)}
-              multiSelectMode={multiSelectMode}
-              hasActiveFilters={activeFilters.length > 0}
-              hasActiveSort={currentSort !== null}
-            />
-          </View>
-          
-          {/* 篩選條件顯示 */}
-          <FilterBadge
-            filters={activeFilters}
-            onRemoveFilter={useCallback((key: string) => {
-              setActiveFilters(prev => prev.filter(f => f.key !== key));
-            }, [])}
-            onClearAll={useCallback(() => setActiveFilters([]), [])}
-          />
-
-          {/* 未儲存變更提示 */}
-          {hasUnsavedChanges && (
-            <View style={styles.unsavedChangesBar}>
-              <View style={styles.unsavedChangesContent}>
-                <Icon name="alert-circle" size={14} color="#e03e3e" />
-                <Text style={styles.unsavedChangesText}>
-                  您有未儲存的變更
-                </Text>
-              </View>
-              <View style={styles.unsavedChangesActions}>
-                <TouchableOpacity
-                  style={styles.discardButton}
-                  onPress={() => {
-                    Alert.alert(
-                      '捨棄變更',
-                      '確定要捨棄所有未儲存的變更嗎？',
-                      [
-                        { text: '取消', style: 'cancel' },
-                        {
-                          text: '捨棄',
-                          style: 'destructive',
-                          onPress: clearPendingChanges,
-                        },
-                      ],
-                    );
-                  }}
-                  activeOpacity={0.7}
-                >
-                  <Text style={styles.discardButtonText}>捨棄</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.saveButton}
-                  onPress={async () => {
-                    const isValid = validateAllChanges();
-                    if (!isValid) {
-                      showToast('error', '請填寫所有必填欄位');
-                      return;
-                    }
-                    
-                    // 儲存所有草稿列
-                    const draftRows = getDraftRows();
-                    for (const draft of draftRows) {
-                      try {
-                        await handleAddRowWithData(draft.data);
-                        removeDraftRow(draft.id);
-                      } catch (error) {
-                        console.error('儲存失敗:', error);
-                        showToast('error', '部分資料儲存失敗');
-                        return;
-                      }
-                    }
-                    
-                    clearPendingChanges();
-                    showToast('success', '已儲存所有變更');
-                    await handleRefresh();
-                  }}
-                  activeOpacity={0.7}
-                >
-                  <Text style={styles.saveButtonText}>儲存變更</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
-
-          {/* 資料內容區域 */}
-          <View style={styles.tableContainer}>
-            {currentData.loading ? (
-              <SkeletonLoader 
-                rows={5} 
-                columns={currentColumns.length}
-                showHeader={true}
-              />
-            ) : Platform.OS === 'web' ? (
-              <>
-                {console.log('🎨 正在渲染 NotionTable 元件')}
-                <NotionTable
-                data={currentData.data}
-                columns={currentColumns.map(col => ({
-                  id: col.key,
-                  key: col.key,
-                  title: col.title,
-                  type: col.type as any,
-                  width: col.width,
-                  editable: col.editable !== false,
-                  options: col.options,
-                }))}
-                onCellUpdate={(rowId, columnKey, value) => {
-                  console.log('更新儲存格:', { rowId, columnKey, value, activeTab });
-                  // 使用 debounced 更新
-                  debouncedUpdate(rowId, columnKey, value);
-                }}
-                onRowClick={handleRowPress}
-                onRowAdd={handleAddRow}
-                onColumnAdd={() => setShowAddColumnDialog(true)}
-                multiSelect={multiSelectMode}
-                selectedRows={selectedItems}
-                onSelectionChange={setSelectedItems}
-                loading={currentData.loading}
-                emptyMessage="沒有資料，點擊新增列開始"
-              />
-              </>
-            ) : (
-              <NotionStyleTableV2
-                data={currentData.data}
-                columns={currentColumns}
-                onAddRow={handleAddRow}
-                onAddColumn={() => setShowAddColumnDialog(true)}
-                onRowPress={handleRowPress}
-                multiSelectMode={multiSelectMode}
-                selectedItems={selectedItems}
-                onSelect={setSelectedItems}
-                refreshing={currentData.loading}
-                onRefresh={handleRefresh}
-                sortConfig={currentSort}
-                onSort={(key) => {
-                  // 處理列標題點擊的排序
-                  const newSort = currentSort?.key === key 
-                    ? { key, direction: currentSort.direction === 'asc' ? 'desc' : 'asc' as const }
-                    : { key, direction: 'asc' as const };
-                  setCurrentSort(newSort);
-                }}
-                onUpdateCell={async (rowId, columnKey, value) => {
-                  // 根據 activeTab 更新對應的資料
-                  showToast('info', '儲存格編輯功能開發中');
-                }}
-                onColumnsReorder={async (reorderedColumns) => {
-                  // 儲存新的欄位順序
-                  const newOrder = reorderedColumns.map(col => col.key);
-                  await saveColumnOrder(newOrder);
-                  showToast('success', '已儲存欄位順序');
-                }}
-                enableColumnDrag={true}
-              />
-            )}
-          </View>
-        </View>
-
-        {/* Desktop Side Panel */}
-        {isDesktop && (
-          <ResponsiveLayout mobileComponent={null}>
-            <View style={styles.sidePanel}>
-              {/* Side panel content */}
-            </View>
-          </ResponsiveLayout>
-        )}
+  const renderContent = () => {
+    console.log('🎨 正在渲染 NotionTable 元件');
+    
+    return (
+      <View style={styles.fullScreenContainer}>
+        <NotionTable
+          data={currentData.data}
+          columns={currentColumns.map(col => ({
+            id: col.key,
+            key: col.key,
+            title: col.title,
+            type: col.type as any,
+            width: col.width,
+            editable: col.editable !== false,
+            options: col.options,
+          }))}
+          onCellUpdate={(rowId, columnKey, value) => {
+            console.log('更新儲存格:', { rowId, columnKey, value, activeTab });
+            debouncedUpdate(rowId, columnKey, value);
+          }}
+          onRowClick={handleRowPress}
+          onRowAdd={handleAddRow}
+          onColumnAdd={() => setShowAddColumnDialog(true)}
+          multiSelect={multiSelectMode}
+          selectedRows={selectedItems}
+          onSelectionChange={setSelectedItems}
+          loading={currentData.loading}
+          emptyMessage="沒有資料，點擊新增列開始"
+          activeTab={activeTab}
+        />
       </View>
-
-      {/* 篩選器 Popover */}
-      {filterAnchor && (
-        <FilterPopover
-          visible={showFilterPopover}
-          onClose={() => setShowFilterPopover(false)}
-          anchor={filterAnchor}
-          columns={currentColumns}
-          filters={activeFilters}
-          onApply={setActiveFilters}
-        />
-      )}
-
-      {/* 排序 Popover */}
-      {sortAnchor && (
-        <SortPopover
-          visible={showSortPopover}
-          onClose={() => setShowSortPopover(false)}
-          anchor={sortAnchor}
-          columns={currentColumns}
-          currentSort={currentSort}
-          onApply={handleSort}
-        />
-      )}
-
-      {/* 欄位設定 Modal */}
-      <ColumnSettingsModal
-        visible={showColumnSettings}
-        onClose={() => setShowColumnSettings(false)}
-        columns={allColumns}
-        visibleColumns={columnSettings?.visibleColumns || allColumns.map(col => col.key)}
-        onApply={async (visibleColumns) => {
-          await saveSettings({
-            visibleColumns,
-            columnOrder: visibleColumns,
-          });
-          setShowColumnSettings(false);
-        }}
-      />
-
-      {/* 新增欄位對話框 */}
-      <AddColumnDialog
-        isVisible={showAddColumnDialog}
-        onClose={() => setShowAddColumnDialog(false)}
-        onAdd={handleAddColumn}
-        existingColumns={allColumns.map(col => col.title)}
-      />
-
-      {/* 批量操作工列 */}
-      {multiSelectMode && selectedItems.length > 0 && (
-        <View style={styles.batchActionsBar}>
-          <View style={styles.batchActionsLeft}>
-            <Text style={styles.batchActionsText}>
-              已選擇 {selectedItems.length} 個項目
-            </Text>
-          </View>
-          <View style={styles.batchActionsRight}>
-            <TouchableOpacity
-              style={styles.batchActionButton}
-              onPress={() => setShowBatchEdit(true)}
-              activeOpacity={0.7}
-            >
-              <Icon name="create-outline" size={20} color="#F7F6F3" />
-              <Text style={styles.batchActionButtonText}>編輯</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.batchActionButton}
-              onPress={handleBatchDelete}
-              activeOpacity={0.7}
-            >
-              <Icon name="trash-outline" size={20} color="#F7F6F3" />
-              <Text style={styles.batchActionButtonText}>刪除</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.batchActionButton}
-              onPress={() => setShowExportOptions(true)}
-              activeOpacity={0.7}
-            >
-              <Icon name="download-outline" size={20} color="#F7F6F3" />
-              <Text style={styles.batchActionButtonText}>匯出</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.batchActionButton, styles.cancelButton]}
-              onPress={() => {
-                setSelectedItems([]);
-                setMultiSelectMode(false);
-              }}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.cancelButtonText}>取消</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      )}
-    </>
-  );
+    );
+  }
 
   // 根據平台渲染
   if (Platform.OS === 'web') {
@@ -919,6 +638,16 @@ export const DatabaseScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+  fullScreenContainer: {
+    width: '100%',
+    height: '100vh',
+    backgroundColor: '#ffffff',
+    ...Platform.select({
+      web: {
+        backgroundColor: '#fbfbfa', // Notion 背景色
+      },
+    }),
+  },
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
