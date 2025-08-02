@@ -61,7 +61,7 @@ body {
 .notion-database-wrapper {
   width: 100% !important;
   background: var(--notion-background) !important;
-  padding: 20px 60px !important;
+  padding: 8px 0 !important;
   min-height: 100vh !important;
   overflow-x: auto !important;
   box-sizing: border-box !important;
@@ -75,27 +75,64 @@ body {
   color: var(--notion-gray-80) !important;
   max-width: 100% !important;
   margin: 0 auto !important;
+  padding: 0 !important;
 }
 
-/* === 工具列 === */
-.notion-database-toolbar {
+/* === 工具列容器 === */
+.notion-toolbar-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--notion-spacing-md);
-  padding: var(--notion-spacing-sm) 0;
+  margin-bottom: 4px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(55, 53, 47, 0.09);
 }
 
 .notion-toolbar-left {
   display: flex;
   align-items: center;
-  gap: var(--notion-spacing-md);
+  gap: 8px;
 }
 
 .notion-toolbar-right {
   display: flex;
   align-items: center;
   gap: var(--notion-spacing-sm);
+}
+
+/* === 視圖標籤 === */
+.notion-view-tab {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  color: var(--notion-gray-80);
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background 0.1s;
+}
+
+.notion-view-tab.active {
+  background: rgba(55, 53, 47, 0.08);
+  font-weight: 500;
+}
+
+.notion-view-tab:hover {
+  background: rgba(55, 53, 47, 0.08);
+}
+
+.notion-view-icon {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* === 工具列分隔線 === */
+.notion-toolbar-divider {
+  width: 1px;
+  height: 16px;
+  background: rgba(55, 53, 47, 0.09);
+  margin: 0 4px;
 }
 
 .notion-view-info {
@@ -158,17 +195,44 @@ body {
 }
 
 .notion-header-cell {
-  padding: var(--notion-spacing-sm) var(--notion-cell-padding-x) !important;
+  padding: 0 !important;
   height: var(--notion-header-height) !important;
-  font-size: var(--notion-font-size-small) !important;
-  font-weight: 500 !important;
-  color: var(--notion-gray-50) !important;
   text-align: left !important;
   background: var(--notion-surface) !important;
   white-space: nowrap !important;
   position: relative !important;
   user-select: none !important;
   min-width: 50px !important;
+  vertical-align: middle !important;
+  border: none !important;
+}
+
+/* === 表頭內容容器 === */
+.notion-header-content {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 var(--notion-cell-padding-x);
+  color: rgba(55, 53, 47, 0.5);
+  font-size: 14px;
+  cursor: default;
+}
+
+.notion-property-icon {
+  font-size: 14px;
+  opacity: 0.8;
+  color: rgba(55, 53, 47, 0.45);
+  line-height: 1;
+}
+
+.notion-property-name {
+  color: rgba(55, 53, 47, 0.5);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.notion-header-actions {
+  display: none;
 }
 
 /* 基於資料類型的預設寬度 */
@@ -306,6 +370,38 @@ body {
 .notion-empty-description {
   font-size: var(--notion-font-size-body);
   color: var(--notion-gray-50);
+}
+
+/* === 新增欄位按鈕 === */
+.notion-add-column-cell {
+  width: 32px;
+  min-width: 32px;
+  padding: 0;
+  border: none;
+}
+
+.notion-add-column-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: none;
+  border: none;
+  color: var(--notion-gray-40);
+  font-size: 14px;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.1s ease;
+}
+
+.notion-header-row:hover .notion-add-column-btn {
+  opacity: 1;
+}
+
+.notion-add-column-btn:hover {
+  background: rgba(55, 53, 47, 0.08);
+  color: var(--notion-gray-60);
 }
 
 /* === 狀態標籤 === */

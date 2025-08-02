@@ -357,22 +357,23 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
       React.createElement('div', 
         { className: 'notion-database-container' },
         
-        // 視圖標籤區域
+        // 工具列區域 - 包含視圖標籤和功能按鈕
         React.createElement('div', 
-          { className: 'notion-view-tabs' },
-          React.createElement('div', 
-            { className: 'notion-view-tab active' },
-            React.createElement('span', { className: 'notion-view-icon' }, '⊞'),
-            ' 表格'
-          )
-        ),
-        
-        // 工具列區域
-        React.createElement('div', 
-          { className: 'notion-database-toolbar' },
-          // 左側功能按鈕
+          { className: 'notion-toolbar-container' },
+          // 左側：視圖標籤和功能按鈕
           React.createElement('div', 
             { className: 'notion-toolbar-left' },
+            // 視圖標籤
+            React.createElement('div', 
+              { className: 'notion-view-tab active' },
+              React.createElement('span', { className: 'notion-view-icon' }, '⊞'),
+              ' 表格'
+            ),
+            // 分隔線
+            React.createElement('div', 
+              { className: 'notion-toolbar-divider' }
+            ),
+            // 功能按鈕
             React.createElement('button', 
               { 
                 className: 'notion-button',
