@@ -14,6 +14,7 @@ import { tableStyles } from './styles/tableStyles';
 import { NOTION_DEFAULTS, NotionColors } from './constants';
 import { Icon } from '@/components/common/Icon';
 import { useDebouncedUpdate } from '@/hooks/useDebouncedUpdate';
+import { EditorFactory } from './editors/EditorFactory';
 
 export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = ({
   data,
@@ -172,12 +173,54 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   // Helper function to render cell content based on column type
   const renderCellContent = useCallback((row: any, column: any) => {
     const value = row[column.key];
+    const cellKey = `${row.id}-${column.key}`;
+    const isEditing = editingCell?.rowId === row.id && editingCell?.columnKey === column.key;
     
     if (Platform.OS !== 'web') {
       // React Native fallback
       return value || '空白';
     }
     
+    // 如果正在編輯，顯示編輯器
+    if (isEditing) {
+      return React.createElement('div', {
+        style: { 
+          position: 'absolute',
+          top: -1,
+          left: -1,
+          right: -1,
+          bottom: -1,
+          zIndex: 1000
+        }
+      },
+        EditorFactory.createEditor(column.type, {
+          value,
+          onChange: (newValue: any) => {
+            console.log('編輯器更新值:', { rowId: row.id, columnKey: column.key, newValue });
+            handleCellEdit(row.id, column.key, newValue);
+          },
+          onBlur: () => {
+            console.log('編輯器失去焦點');
+            setEditingCell(null);
+          },
+          onKeyDown: (e: React.KeyboardEvent) => {
+            if (e.key === 'Tab') {
+              e.preventDefault();
+              // 移動到下一個儲存格
+              const currentColIndex = columns.findIndex((c: any) => c.key === column.key);
+              const nextCol = columns[currentColIndex + (e.shiftKey ? -1 : 1)];
+              if (nextCol) {
+                setEditingCell({ rowId: row.id, columnKey: nextCol.key });
+              }
+            }
+          },
+          column,
+          autoFocus: true,
+        })
+      );
+    }
+    
+    // 一般顯示狀態
     switch (column.type) {
       case 'checkbox':
         return React.createElement('input', {
@@ -213,7 +256,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
           className: 'notion-cell-placeholder'
         }, '空白');
     }
-  }, [handleCellEdit]);
+  }, [handleCellEdit, editingCell, setEditingCell, columns]);
   
   // Handle add row - 允許空值，不強制必填
   const handleAddRow = useCallback(() => {
@@ -433,7 +476,12 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                   columnsWithWidths.map((column) => 
                     React.createElement('td', {
                       key: column.id,
-                      className: 'notion-cell'
+                      className: 'notion-cell',
+                      style: { position: 'relative' },
+                      onDoubleClick: () => {
+                        console.log('雙擊儲存格:', { rowId: row.id, columnKey: column.key });
+                        setEditingCell({ rowId: row.id, columnKey: column.key });
+                      }
                     },
                       React.createElement('div', {
                         className: 'notion-cell-content'
