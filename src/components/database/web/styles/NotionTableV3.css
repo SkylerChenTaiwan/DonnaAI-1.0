@@ -19,14 +19,14 @@ body.dark {
   background: transparent;
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
-  color: #37352f;
+  color: rgba(55, 53, 47, 0.85);
   -webkit-font-smoothing: antialiased;
 }
 
 /* 內容容器 */
 .notion-database-container {
   max-width: 100%;
-  padding: 12px 8px;
+  padding: 12px 0;
 }
 
 /* 工具列 - 更簡潔 */
@@ -127,7 +127,7 @@ body.dark {
   content: '';
   position: absolute;
   bottom: 0;
-  left: 0;
+  left: 8px;
   right: 0;
   height: 1px;
   background: rgba(233, 233, 231, 0.25);
@@ -266,7 +266,7 @@ body.dark {
   content: '';
   position: absolute;
   bottom: -1px;
-  left: 0;
+  left: 8px;
   right: 0;
   height: 1px;
   background: rgba(233, 233, 231, 0.15);
@@ -274,7 +274,7 @@ body.dark {
 }
 
 .notion-data-row:hover {
-  background: rgba(55, 53, 47, 0.02);
+  background: rgba(55, 53, 47, 0.016);
 }
 
 .notion-data-row.selected {
@@ -398,7 +398,7 @@ body.dark {
   gap: 4px;
   width: 100%;
   height: 100%;
-  padding: 0 8px;
+  padding: 2px 8px;
   background: transparent;
   border: none;
   color: rgba(55, 53, 47, 0.25);
@@ -408,11 +408,6 @@ body.dark {
   cursor: pointer;
   transition: all 20ms ease-in 0s;
   border-radius: 3px;
-  opacity: 0;
-}
-
-.notion-database-table:hover .notion-add-row-button {
-  opacity: 1;
 }
 
 .notion-add-row-button:hover {
