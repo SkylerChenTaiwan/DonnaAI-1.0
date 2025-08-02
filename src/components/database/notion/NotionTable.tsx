@@ -3,7 +3,7 @@
  */
 
 import React, { useCallback, useMemo, useState, useRef, useEffect } from 'react';
-import '../web/styles/NotionSimple.css';
+import '../web/styles/NotionDatabaseV4.css';
 import { View, Text, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 import { NotionTableProps, CellPosition, ColumnConfig } from './types';
 import { VirtualScroller } from './VirtualScroller';
@@ -364,6 +364,65 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
             { className: 'notion-view-tab active' },
             React.createElement('span', { className: 'notion-view-icon' }, '⊞'),
             ' 表格'
+          )
+        ),
+        
+        // 工具列區域
+        React.createElement('div', 
+          { className: 'notion-database-toolbar' },
+          // 左側功能按鈕
+          React.createElement('div', 
+            { className: 'notion-toolbar-left' },
+            React.createElement('button', 
+              { 
+                className: 'notion-button',
+                onClick: () => console.log('過濾')
+              },
+              React.createElement('span', { style: { marginRight: '4px' } }, '⫧'),
+              '過濾'
+            ),
+            React.createElement('button', 
+              { 
+                className: 'notion-button',
+                onClick: () => console.log('排序')
+              },
+              React.createElement('span', { style: { marginRight: '4px' } }, '↕'),
+              '排序'
+            ),
+            React.createElement('button', 
+              { 
+                className: 'notion-button',
+                onClick: () => console.log('群組')
+              },
+              React.createElement('span', { style: { marginRight: '4px' } }, '⧉'),
+              '群組'
+            )
+          ),
+          // 右側功能按鈕
+          React.createElement('div', 
+            { className: 'notion-toolbar-right' },
+            React.createElement('button', 
+              { 
+                className: 'notion-button',
+                onClick: () => console.log('搜尋')
+              },
+              React.createElement('span', { style: { marginRight: '4px' } }, '🔍'),
+              '搜尋'
+            ),
+            React.createElement('button', 
+              { 
+                className: 'notion-button',
+                onClick: () => console.log('更多')
+              },
+              '⋯'
+            ),
+            React.createElement('button', 
+              { 
+                className: 'notion-button notion-button-primary',
+                onClick: handleAddRow
+              },
+              '新建'
+            )
           )
         ),
         
