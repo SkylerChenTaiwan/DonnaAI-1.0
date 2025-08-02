@@ -27,9 +27,13 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   const [filterManager] = useState(() => new FilterManager());
   
   // 條件檢查移到 Hook 宣告之後
+  console.log('🔍 FilterPanel 渲染:', { isOpen, platform: Platform.OS });
+  
   if (!isOpen || Platform.OS !== 'web') {
     return null;
   }
+  
+  console.log('🔍 FilterPanel 將要渲染面板');
 
   // 處理添加新過濾條件
   const handleAddFilter = useCallback((groupId: string, parentGroup?: FilterGroup) => {

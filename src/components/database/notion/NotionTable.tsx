@@ -187,8 +187,10 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
 
   // 過濾事件處理器
   const handleFilterButtonClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+    console.log('🔍 過濾按鈕被點擊');
     setFilterButtonRef(event.currentTarget);
     setIsFilterPanelOpen(true);
+    console.log('🔍 過濾面板狀態設為 true');
   }, []);
 
   const handleFilterPanelClose = useCallback(() => {
@@ -198,8 +200,10 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
 
   // 排序事件處理器
   const handleSortButtonClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+    console.log('📊 排序按鈕被點擊');
     setSortButtonRef(event.currentTarget);
     setIsSortPanelOpen(true);
+    console.log('📊 排序面板狀態設為 true');
   }, []);
 
   const handleSortPanelClose = useCallback(() => {

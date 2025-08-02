@@ -23,9 +23,13 @@ export const SortPanel: React.FC<SortPanelProps> = ({
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   
   // 條件檢查移到 Hook 宣告之後
+  console.log('📊 SortPanel 渲染:', { isOpen, platform: Platform.OS });
+  
   if (!isOpen || Platform.OS !== 'web') {
     return null;
   }
+  
+  console.log('📊 SortPanel 將要渲染面板');
 
   // 處理添加新排序規則
   const handleAddSort = useCallback(() => {
