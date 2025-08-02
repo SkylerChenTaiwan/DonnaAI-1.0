@@ -75,7 +75,22 @@ body {
   color: var(--notion-gray-80) !important;
   max-width: 100% !important;
   margin: 0 auto !important;
-  padding: 0 !important;
+  padding: 0 96px !important;
+}
+
+/* === 資料庫標題 === */
+.notion-database-header {
+  padding: 40px 0 0 0;
+  margin-bottom: 8px;
+}
+
+.notion-database-title {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: rgb(55, 53, 47);
+  margin: 0;
+  padding: 3px 2px;
 }
 
 /* === 工具列容器 === */
@@ -144,39 +159,39 @@ body {
 .notion-button {
   display: inline-flex;
   align-items: center;
-  gap: var(--notion-spacing-xs);
-  padding: 3px 8px;
-  height: 28px;
-  border: 1px solid var(--notion-gray-30);
-  border-radius: var(--notion-border-radius);
-  background: var(--notion-surface);
-  color: var(--notion-gray-60);
-  font-size: var(--notion-font-size-small);
+  gap: 3px;
+  padding: 0 6px;
+  height: 24px;
+  border: none;
+  border-radius: 3px;
+  background: transparent;
+  color: rgba(55, 53, 47, 0.65);
+  font-size: 14px;
   font-family: inherit;
-  font-weight: 500;
+  font-weight: 400;
   cursor: pointer;
-  transition: all 0.12s ease;
+  transition: background 20ms ease-in 0s;
   white-space: nowrap;
   user-select: none;
 }
 
 .notion-button:hover {
-  background: var(--notion-gray-05);
-  border-color: var(--notion-gray-40);
+  background: rgba(55, 53, 47, 0.08);
+  color: rgba(55, 53, 47, 0.85);
 }
 
 .notion-button:active {
-  background: var(--notion-gray-10);
+  background: rgba(55, 53, 47, 0.16);
 }
 
 .notion-button-primary {
-  background: var(--notion-blue);
-  border-color: var(--notion-blue);
+  background: rgb(35, 131, 226);
   color: white;
+  padding: 0 8px;
 }
 
 .notion-button-primary:hover {
-  background: var(--notion-blue-dark);
+  background: rgb(0, 110, 200);
   border-color: var(--notion-blue-dark);
 }
 

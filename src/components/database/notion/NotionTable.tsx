@@ -357,6 +357,15 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
       React.createElement('div', 
         { className: 'notion-database-container' },
         
+        // 標題區域
+        React.createElement('div', 
+          { className: 'notion-database-header' },
+          React.createElement('h1', 
+            { className: 'notion-database-title' },
+            dbInfo.title
+          )
+        ),
+        
         // 工具列區域 - 包含視圖標籤和功能按鈕
         React.createElement('div', 
           { className: 'notion-toolbar-container' },

@@ -643,10 +643,10 @@ export const DatabaseScreen: React.FC = () => {
   }
 
   // 根據平台渲染
-  // Web 平台也使用 Layout 以顯示標題和按鈕
-  // if (Platform.OS === 'web') {
-  //   return renderContent();
-  // }
+  // Web 平台直接渲染內容，不使用 Layout
+  if (Platform.OS === 'web') {
+    return renderContent();
+  }
 
   // 使用 Layout 包裹內容
   return (
