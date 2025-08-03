@@ -8,6 +8,7 @@ import { Platform } from 'react-native';
 import { GroupPanelProps, ColumnConfig, GroupConfig } from '../types';
 import { GroupManager, createGroupConfig } from '../managers/GroupManager';
 import { NotionIcons } from '../NotionIcons';
+import { calculatePanelPosition, PANEL_DIMENSIONS } from '../utils/panelPosition';
 
 export const GroupPanel: React.FC<GroupPanelProps> = ({
   isOpen,
@@ -59,7 +60,7 @@ export const GroupPanel: React.FC<GroupPanelProps> = ({
   },
     React.createElement('div', {
       className: 'notion-group-panel',
-      style: anchorEl ? getPositionStyle(anchorEl) : undefined
+      style: calculatePanelPosition(anchorEl, PANEL_DIMENSIONS.group)
     },
       // 面板標題
       React.createElement('div', {
@@ -131,62 +132,6 @@ export const GroupPanel: React.FC<GroupPanelProps> = ({
 };
 
 // === 輔助函數 ===
-
-function getPositionStyle(anchorEl: HTMLElement): React.CSSProperties {
-  const rect = anchorEl.getBoundingClientRect();
-  const panelWidth = 280; // 面板寬度
-  const panelHeight = 400; // 預估面板高度
-  const padding = 16; // 與視窗邊緣的間距
-  
-  // 優先顯示在按鈕下方
-  let top = rect.bottom + 8;
-  let left = rect.left;
-  
-  // 檢查是否會超出視窗底部
-  if (top + panelHeight > window.innerHeight - padding) {
-    // 如果下方空間不足，顯示在按鈕上方
-    top = rect.top - panelHeight - 8;
-    
-    // 如果上方也不足，則固定在視窗內
-    if (top < padding) {
-      top = padding;
-    }
-  }
-  
-  // 檢查是否會超出視窗右側
-  if (left + panelWidth > window.innerWidth - padding) {
-    // 優先向左對齊按鈕右側
-    left = rect.right - panelWidth;
-    
-    // 如果還是超出，則固定在視窗內
-    if (left + panelWidth > window.innerWidth - padding) {
-      left = window.innerWidth - panelWidth - padding;
-    }
-  }
-  
-  // 檢查是否會超出視窗左側
-  if (left < padding) {
-    left = padding;
-  }
-  
-  // 檢查底部是否會超出視窗
-  if (top + panelHeight + padding > window.innerHeight) {
-    // 改為顯示在按鈕上方
-    top = rect.top - panelHeight - 8;
-    
-    // 如果上方也不夠空間，則限制在視窗內
-    if (top < padding) {
-      top = padding;
-    }
-  }
-  
-  return {
-    position: 'fixed',
-    top,
-    left,
-    zIndex: 1000,
-  };
-}
 
 function getColumnIcon(type: string): React.ReactElement {
   switch (type) {

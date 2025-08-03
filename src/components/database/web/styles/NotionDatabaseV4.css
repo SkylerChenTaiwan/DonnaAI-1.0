@@ -2053,11 +2053,29 @@ body.resizing-column * {
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .notion-search-panel-input {
   width: 100%;
-  padding-right: 32px;
+  padding: 6px 32px 6px 12px;
+  font-size: 14px;
+  line-height: 20px;
+  color: rgba(55, 53, 47, 0.85);
+  background: white;
+  border: 1px solid rgba(55, 53, 47, 0.16);
+  border-radius: 3px;
+  outline: none;
+  transition: border-color 0.1s ease-in-out;
+}
+
+.notion-search-panel-input:focus {
+  border-color: rgba(35, 131, 226, 0.35);
+  box-shadow: 0 0 0 1px rgba(35, 131, 226, 0.35);
+}
+
+.notion-search-panel-input::placeholder {
+  color: rgba(55, 53, 47, 0.5);
 }
 
 .notion-input-clear {
@@ -2067,14 +2085,84 @@ body.resizing-column * {
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: rgba(55, 53, 47, 0.5);
+  color: rgba(55, 53, 47, 0.45);
   cursor: pointer;
-  padding: 4px;
-  font-size: 14px;
+  padding: 2px;
+  font-size: 16px;
   line-height: 1;
   transition: color 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
 }
 
 .notion-input-clear:hover {
-  color: rgba(55, 53, 47, 0.8);
+  color: rgba(55, 53, 47, 0.65);
+  background: rgba(55, 53, 47, 0.08);
+}
+
+/* === Notion 風格 Checkbox === */
+.notion-checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.notion-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.1s;
+  font-size: 14px;
+  color: rgba(55, 53, 47, 0.85);
+}
+
+.notion-checkbox-item:hover {
+  background: rgba(55, 53, 47, 0.08);
+}
+
+.notion-checkbox {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  cursor: pointer;
+  appearance: none;
+  border: 1px solid rgba(55, 53, 47, 0.35);
+  border-radius: 3px;
+  background: white;
+  transition: all 0.1s;
+  flex-shrink: 0;
+}
+
+.notion-checkbox:checked {
+  background: rgb(35, 131, 226);
+  border-color: rgb(35, 131, 226);
+}
+
+.notion-checkbox:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.notion-property-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  color: rgba(55, 53, 47, 0.65);
+  flex-shrink: 0;
 }
