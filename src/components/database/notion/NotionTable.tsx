@@ -67,7 +67,14 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   });
   
   // Column management - 使用 useMemo 避免無限重新渲染
-  const [columnWidths, setColumnWidths] = useState<Record<string, number>>({});
+  const [columnWidths, setColumnWidths] = useState<Record<string, number>>(() => {
+    // 初始化時就設定欄位寬度
+    const widths: Record<string, number> = {};
+    columns.forEach(col => {
+      widths[col.id] = col.width || NOTION_DEFAULTS.DEFAULT_COLUMN_WIDTH;
+    });
+    return widths;
+  });
   
   // 處理欄位寬度調整
   const handleColumnResize = useCallback((columnId: string, width: number) => {
@@ -121,14 +128,20 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   const [columnManagerButtonRef, setColumnManagerButtonRef] = useState<HTMLElement | null>(null);
   const [visibleColumns, setVisibleColumns] = useState<string[]>(() => columns.map(col => col.id));
   
-  // 初始化欄位寬度，只在 columns 改變時執行
+  // 初始化欄位寬度，只在元件掛載時執行一次
   useEffect(() => {
     const widths: Record<string, number> = {};
     columns.forEach(col => {
-      widths[col.id] = col.width || NOTION_DEFAULTS.DEFAULT_COLUMN_WIDTH;
+      // 如果已經有寬度設定，保留它
+      if (!columnWidths[col.id]) {
+        widths[col.id] = col.width || NOTION_DEFAULTS.DEFAULT_COLUMN_WIDTH;
+      }
     });
-    setColumnWidths(widths);
-  }, [columns]);
+    // 只有在有新的寬度需要設定時才更新
+    if (Object.keys(widths).length > 0) {
+      setColumnWidths(prev => ({ ...prev, ...widths }));
+    }
+  }, []); // 移除 columns 依賴，避免無限重新渲染
   
   const selectedRowsSet = useMemo(
     () => new Set(selectedRows.length > 0 ? selectedRows : internalSelectedRows),
@@ -494,6 +507,15 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
       width: columnWidths[col.id] || col.width || NOTION_DEFAULTS.DEFAULT_COLUMN_WIDTH,
     }));
   }, [columns, columnWidths]);
+  
+  // 防止無限重新渲染的檢查
+  useEffect(() => {
+    const renderCount = useRef(0);
+    renderCount.current += 1;
+    if (renderCount.current > 10) {
+      console.warn('⚠️ NotionTable 可能有無限重新渲染問題');
+    }
+  });
   
   // Render row for virtual scroller
   const renderRow = useCallback((rowData: any, index: number) => {

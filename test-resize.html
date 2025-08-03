@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>測試欄位寬度調整</title>
+    <style>
+        body {
+            margin: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .test-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        
+        .test-table th {
+            position: relative;
+            background: #f7f6f3;
+            border: 1px solid #e0e0e0;
+            padding: 10px;
+            text-align: left;
+            min-width: 100px;
+        }
+        
+        .test-table td {
+            border: 1px solid #e0e0e0;
+            padding: 10px;
+        }
+        
+        .resize-handle {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 10px;
+            cursor: col-resize;
+            background: transparent;
+        }
+        
+        .resize-handle:hover {
+            background: rgba(0, 0, 255, 0.2);
+        }
+        
+        .resize-handle.dragging {
+            background: rgba(0, 0, 255, 0.5);
+        }
+        
+        body.resizing * {
+            cursor: col-resize !important;
+            -webkit-user-select: none !important;
+            user-select: none !important;
+        }
+        
+        #log {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f0f0f0;
+            font-family: monospace;
+            font-size: 12px;
+            height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>測試欄位寬度調整</h1>
+    <table class="test-table">
+        <thead>
+            <tr>
+                <th style="width: 200px">
+                    姓名
+                    <div class="resize-handle" data-column="name"></div>
+                </th>
+                <th style="width: 150px">
+                    狀態
+                    <div class="resize-handle" data-column="status"></div>
+                </th>
+                <th style="width: 180px">
+                    日期
+                    <div class="resize-handle" data-column="date"></div>
+                </th>
+                <th style="width: 250px">
+                    備註
+                    <div class="resize-handle" data-column="notes"></div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>張三</td>
+                <td>進行中</td>
+                <td>2024-01-15</td>
+                <td>這是一個測試備註</td>
+            </tr>
+            <tr>
+                <td>李四</td>
+                <td>已完成</td>
+                <td>2024-01-16</td>
+                <td>另一個測試備註</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div id="log"></div>
+    
+    <script>
+        const log = document.getElementById('log');
+        function addLog(message) {
+            const time = new Date().toLocaleTimeString();
+            log.innerHTML = `${time}: ${message}<br>` + log.innerHTML;
+        }
+        
+        // 處理所有的 resize handles
+        document.querySelectorAll('.resize-handle').forEach(handle => {
+            let isResizing = false;
+            let startX = 0;
+            let startWidth = 0;
+            let currentTh = null;
+            
+            handle.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                currentTh = handle.parentElement;
+                const computedStyle = window.getComputedStyle(currentTh);
+                const width = parseFloat(computedStyle.width);
+                
+                addLog(`開始調整 ${handle.dataset.column}: 初始寬度 ${width}px`);
+                
+                // 設定固定寬度，避免跳動
+                currentTh.style.width = `${width}px`;
+                
+                isResizing = true;
+                startX = e.clientX;
+                startWidth = width;
+                
+                handle.classList.add('dragging');
+                document.body.classList.add('resizing');
+            });
+            
+            document.addEventListener('mousemove', (e) => {
+                if (!isResizing) return;
+                
+                const diff = e.clientX - startX;
+                const newWidth = Math.max(50, Math.min(500, startWidth + diff));
+                
+                currentTh.style.width = `${newWidth}px`;
+                addLog(`調整中 ${handle.dataset.column}: ${newWidth}px (差異: ${diff}px)`);
+            });
+            
+            document.addEventListener('mouseup', () => {
+                if (!isResizing) return;
+                
+                const finalWidth = parseFloat(currentTh.style.width);
+                addLog(`結束調整 ${handle.dataset.column}: 最終寬度 ${finalWidth}px`);
+                
+                isResizing = false;
+                handle.classList.remove('dragging');
+                document.body.classList.remove('resizing');
+                currentTh = null;
+            });
+        });
+        
+        // 初始化時記錄所有欄位寬度
+        document.querySelectorAll('th').forEach((th, index) => {
+            const width = window.getComputedStyle(th).width;
+            addLog(`初始化: 欄位${index + 1} 寬度 ${width}`);
+        });
+    </script>
+</body>
+</html>
