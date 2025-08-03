@@ -32,7 +32,7 @@ import { SearchManager, useSearch, createDefaultSearchConfig } from './component
 import { FilterPanel } from './components/FilterPanel';
 import { SortPanel } from './components/SortPanel';
 import { GroupPanel } from './components/GroupPanel';
-import { SearchBar } from './components/SearchBar';
+import { SearchPanel } from './components/SearchPanel';
 import { ColumnManager } from './components/ColumnManager';
 import { SimpleColumnResize } from './components/SimpleColumnResize';
 
@@ -111,7 +111,8 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
 
   // 搜尋狀態
   const [searchConfig, setSearchConfig] = useState<SearchConfig>(() => createDefaultSearchConfig());
-  const [showSearchBar, setShowSearchBar] = useState(false);
+  const [isSearchPanelOpen, setIsSearchPanelOpen] = useState(false);
+  const [searchButtonRef, setSearchButtonRef] = useState<HTMLElement | null>(null);
   
   // 群組狀態
   const [groupConfig, setGroupConfig] = useState<GroupConfig | null>(null);
@@ -270,9 +271,14 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   }, []);
 
   // 搜尋事件處理器
-  const handleSearchButtonClick = useCallback(() => {
-    setShowSearchBar(!showSearchBar);
-  }, [showSearchBar]);
+  const handleSearchButtonClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+    setSearchButtonRef(event.currentTarget);
+    setIsSearchPanelOpen(true);
+  }, []);
+  
+  const handleSearchPanelClose = useCallback(() => {
+    setIsSearchPanelOpen(false);
+  }, []);
 
   // 群組事件處理器
   const handleGroupButtonClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
@@ -643,20 +649,18 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                 className: 'notion-button-badge'
               }, '1')
             ),
-            // 搜尋列或搜尋按鈕
-            showSearchBar ? React.createElement(SearchBar, {
-              searchConfig,
-              onSearchChange: setSearchConfig,
-              columns,
-              placeholder: '搜尋資料庫...'
-            }) : React.createElement('button', 
+            // 搜尋按鈕
+            React.createElement('button', 
               { 
                 className: `notion-button ${statsInfo.isSearching ? 'notion-button-active' : ''}`,
                 onClick: handleSearchButtonClick,
                 title: statsInfo.isSearching ? `搜尋中: "${searchConfig.query}"` : '搜尋'
               },
               React.createElement('span', { className: 'notion-button-icon' }, NotionIcons.search()),
-              statsInfo.isSearching ? '搜尋中' : '搜尋'
+              '搜尋',
+              statsInfo.isSearching && React.createElement('span', {
+                className: 'notion-button-badge'
+              }, '✓')
             ),
             React.createElement('button', 
               { 
@@ -913,6 +917,16 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
           anchorEl: groupButtonRef
         }),
         
+        // 搜尋面板
+        React.createElement(SearchPanel, {
+          isOpen: isSearchPanelOpen,
+          onClose: handleSearchPanelClose,
+          searchConfig,
+          onSearchChange: setSearchConfig,
+          columns,
+          anchorEl: searchButtonRef
+        }),
+        
         // 欄位管理面板
         React.createElement(ColumnManager, {
           isOpen: isColumnManagerOpen,
@@ -977,13 +991,6 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
               React.createElement('div', {
                 className: 'notion-settings-menu-divider'
               }),
-              React.createElement('button', {
-                className: 'notion-settings-menu-item',
-                onClick: () => setShowSearchBar(!showSearchBar)
-              },
-                React.createElement('span', { className: 'notion-menu-item-icon' }, NotionIcons.search()),
-                showSearchBar ? '隱藏搜尋' : '顯示搜尋'
-              )
             )
           )
         ),

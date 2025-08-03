@@ -2041,3 +2041,40 @@ body.resizing-column * {
   -ms-user-select: none !important;
   user-select: none !important;
 }
+
+/* === 搜尋面板 === */
+.notion-search-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.notion-search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.notion-search-panel-input {
+  width: 100%;
+  padding-right: 32px;
+}
+
+.notion-input-clear {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: rgba(55, 53, 47, 0.5);
+  cursor: pointer;
+  padding: 4px;
+  font-size: 14px;
+  line-height: 1;
+  transition: color 0.1s;
+}
+
+.notion-input-clear:hover {
+  color: rgba(55, 53, 47, 0.8);
+}

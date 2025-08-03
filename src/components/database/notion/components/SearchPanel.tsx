@@ -1,0 +1,217 @@
+/**
+ * Notion 風格搜尋面板
+ * 懸浮式搜尋介面，與過濾、排序面板保持一致
+ */
+
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { Platform } from 'react-native';
+import { PanelContainer } from './PanelContainer';
+import { NotionIcons } from '../NotionIcons';
+import { SearchConfig, TableColumn } from '../types';
+
+interface SearchPanelProps {
+  isOpen: boolean;
+  onClose: () => void;
+  anchorEl: HTMLElement | null;
+  searchConfig: SearchConfig;
+  onSearchChange: (config: SearchConfig) => void;
+  columns: TableColumn[];
+}
+
+export const SearchPanel: React.FC<SearchPanelProps> = ({
+  isOpen,
+  onClose,
+  anchorEl,
+  searchConfig,
+  onSearchChange,
+  columns,
+}) => {
+  const [localQuery, setLocalQuery] = useState(searchConfig.query);
+  const [selectedColumns, setSelectedColumns] = useState<string[]>(searchConfig.columns);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // 自動聚焦輸入框
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+    }
+  }, [isOpen]);
+
+  // 防抖處理查詢變更
+  const handleQueryChange = useCallback((value: string) => {
+    setLocalQuery(value);
+    
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+
+    debounceTimeoutRef.current = setTimeout(() => {
+      onSearchChange({
+        ...searchConfig,
+        query: value,
+      });
+    }, 300);
+  }, [searchConfig, onSearchChange]);
+
+  // 處理欄位選擇
+  const handleColumnToggle = useCallback((columnKey: string) => {
+    const newColumns = selectedColumns.includes(columnKey)
+      ? selectedColumns.filter(key => key !== columnKey)
+      : [...selectedColumns, columnKey];
+    
+    setSelectedColumns(newColumns);
+    onSearchChange({
+      ...searchConfig,
+      columns: newColumns,
+    });
+  }, [selectedColumns, searchConfig, onSearchChange]);
+
+  // 全選/取消全選
+  const handleSelectAll = useCallback(() => {
+    if (selectedColumns.length === 0) {
+      // 已經是全部欄位，不做任何改變
+      return;
+    }
+    setSelectedColumns([]);
+    onSearchChange({
+      ...searchConfig,
+      columns: [],
+    });
+  }, [searchConfig, onSearchChange]);
+
+  // 清除搜尋
+  const handleClear = useCallback(() => {
+    setLocalQuery('');
+    setSelectedColumns([]);
+    onSearchChange({
+      query: '',
+      columns: [],
+      caseSensitive: false,
+      highlightMatches: true,
+    });
+  }, [onSearchChange]);
+
+  // 清理定時器
+  useEffect(() => {
+    return () => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  if (Platform.OS !== 'web') {
+    return null;
+  }
+
+  return React.createElement(PanelContainer, {
+    isOpen,
+    onClose,
+    anchorEl,
+    title: '搜尋',
+    icon: NotionIcons.search(),
+    width: 320
+  },
+    React.createElement('div', { className: 'notion-search-panel' },
+      // 搜尋輸入框
+      React.createElement('div', { className: 'notion-search-input-wrapper' },
+        React.createElement('input', {
+          ref: inputRef,
+          type: 'text',
+          className: 'notion-input notion-search-panel-input',
+          placeholder: '搜尋資料庫...',
+          value: localQuery,
+          onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleQueryChange(e.target.value),
+          onKeyDown: (e: React.KeyboardEvent) => {
+            if (e.key === 'Escape') {
+              onClose();
+            }
+          }
+        }),
+        localQuery && React.createElement('button', {
+          className: 'notion-input-clear',
+          onClick: () => handleQueryChange(''),
+          title: '清除'
+        }, '✕')
+      ),
+
+      // 搜尋選項
+      React.createElement('div', { className: 'notion-panel-section' },
+        React.createElement('div', { className: 'notion-panel-section-header' },
+          React.createElement('span', {}, '搜尋範圍'),
+          React.createElement('button', {
+            className: 'notion-link-button',
+            onClick: handleSelectAll
+          }, selectedColumns.length === 0 ? '取消全選' : '全部欄位')
+        ),
+        
+        // 欄位選擇列表
+        React.createElement('div', { className: 'notion-checkbox-list' },
+          columns.map(column => 
+            React.createElement('label', {
+              key: column.key,
+              className: 'notion-checkbox-item'
+            },
+              React.createElement('input', {
+                type: 'checkbox',
+                className: 'notion-checkbox',
+                checked: selectedColumns.length === 0 || selectedColumns.includes(column.key),
+                onChange: () => handleColumnToggle(column.key)
+              }),
+              React.createElement('span', { className: 'notion-property-icon' },
+                NotionIcons[column.type]?.() || NotionIcons.text()
+              ),
+              React.createElement('span', {}, column.title)
+            )
+          )
+        )
+      ),
+
+      // 搜尋選項
+      React.createElement('div', { className: 'notion-panel-section' },
+        React.createElement('div', { className: 'notion-panel-section-header' },
+          React.createElement('span', {}, '選項')
+        ),
+        React.createElement('label', { className: 'notion-checkbox-item' },
+          React.createElement('input', {
+            type: 'checkbox',
+            className: 'notion-checkbox',
+            checked: searchConfig.caseSensitive,
+            onChange: () => onSearchChange({
+              ...searchConfig,
+              caseSensitive: !searchConfig.caseSensitive
+            })
+          }),
+          React.createElement('span', {}, '區分大小寫')
+        ),
+        React.createElement('label', { className: 'notion-checkbox-item' },
+          React.createElement('input', {
+            type: 'checkbox',
+            className: 'notion-checkbox',
+            checked: searchConfig.highlightMatches,
+            onChange: () => onSearchChange({
+              ...searchConfig,
+              highlightMatches: !searchConfig.highlightMatches
+            })
+          }),
+          React.createElement('span', {}, '高亮顯示結果')
+        )
+      ),
+
+      // 底部按鈕
+      React.createElement('div', { className: 'notion-panel-footer' },
+        React.createElement('button', {
+          className: 'notion-button notion-button-secondary',
+          onClick: handleClear
+        }, '清除搜尋'),
+        React.createElement('button', {
+          className: 'notion-button notion-button-primary',
+          onClick: onClose
+        }, '完成')
+      )
+    )
+  );
+};
