@@ -1897,6 +1897,17 @@ body {
   justify-content: flex-end;
 }
 
+/* === TanStack Table 支援樣式 === */
+
+/* 表格容器樣式 */
+.notion-table-container {
+  width: 100%;
+  overflow-x: auto;
+  background: var(--notion-surface);
+  border: 1px solid var(--notion-gray-20);
+  border-radius: 6px;
+}
+
 /* === 欄位寬度調整器樣式 === */
 
 .notion-column-resizer {

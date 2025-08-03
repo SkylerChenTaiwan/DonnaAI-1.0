@@ -1,17 +1,9 @@
 /**
- * Notion 風格表格元件 V5 - 使用 TanStack Table
- * 徹底解決欄位寬度調整問題
+ * Notion 風格表格元件 V6 - 修復 TanStack Table 顯示問題
  */
 
-import React, { useMemo, useState, useCallback } from 'react';
-import {
-  useReactTable,
-  getCoreRowModel,
-  flexRender,
-  ColumnDef,
-  ColumnResizeMode,
-} from '@tanstack/react-table';
-import { Platform, View, Text, TouchableOpacity } from 'react-native';
+import React, { useState, useMemo } from 'react';
+import { Platform, View, Text } from 'react-native';
 import { NotionIcons } from './NotionIcons';
 import { FilterPanel } from './components/FilterPanel';
 import { SortPanel } from './components/SortPanel';
@@ -20,7 +12,7 @@ import { ColumnManager } from './components/ColumnManager';
 import { SearchBar } from './components/SearchBar';
 import '../web/styles/NotionDatabaseV4.css';
 
-interface NotionTableV5Props {
+interface NotionTableV6Props {
   data: any[];
   columns: any[];
   onCellUpdate?: (rowId: string, columnKey: string, value: any) => void;
@@ -37,7 +29,7 @@ interface NotionTableV5Props {
   activeTab?: string;
 }
 
-export const NotionTableV5: React.FC<NotionTableV5Props> = ({
+export const NotionTableV6: React.FC<NotionTableV6Props> = ({
   data = [],
   columns: inputColumns = [],
   onCellUpdate,
@@ -57,7 +49,6 @@ export const NotionTableV5: React.FC<NotionTableV5Props> = ({
   const [visibleColumns, setVisibleColumns] = useState<string[]>(
     inputColumns.map(col => col.id)
   );
-  const [columnResizeMode] = useState<ColumnResizeMode>('onChange');
   
   // 各種面板狀態
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
@@ -72,56 +63,62 @@ export const NotionTableV5: React.FC<NotionTableV5Props> = ({
   const [groupButtonRef, setGroupButtonRef] = useState<HTMLElement | null>(null);
   const [columnManagerButtonRef, setColumnManagerButtonRef] = useState<HTMLElement | null>(null);
 
-  // 轉換為 TanStack Table 的欄位定義
-  const columns = useMemo<ColumnDef<any>[]>(() => {
-    return inputColumns
-      .filter(col => visibleColumns.includes(col.id))
-      .map(col => ({
-        id: col.id,
-        accessorKey: col.key,
-        header: () => (
-          <div className="notion-header-content">
-            <span className="notion-property-icon">
-              {NotionIcons[col.type]?.() || NotionIcons.text()}
-            </span>
-            <span className="notion-property-title">{col.title}</span>
-          </div>
-        ),
-        cell: ({ getValue }) => {
-          const value = getValue();
-          return value || '空白';
-        },
-        size: col.width || 180,
-        minSize: 50,
-        maxSize: 500,
-        enableResizing: col.resizable !== false,
-      }));
+  // 欄位寬度狀態
+  const [columnSizing, setColumnSizing] = useState<Record<string, number>>(() => {
+    const initial: Record<string, number> = {};
+    inputColumns.forEach(col => {
+      initial[col.id] = col.width || 180;
+    });
+    return initial;
+  });
+
+  // 正在調整的欄位
+  const [resizingColumn, setResizingColumn] = useState<string | null>(null);
+
+  // 過濾可見欄位
+  const visibleColumnsData = useMemo(() => {
+    return inputColumns.filter(col => visibleColumns.includes(col.id));
   }, [inputColumns, visibleColumns]);
 
-  // 建立 table 實例
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    columnResizeMode,
-    onColumnSizingChange: (updater) => {
-      // 當欄位大小改變時
-      if (typeof updater === 'function') {
-        const newSizing = updater(table.getState().columnSizing);
-        
-        // 延遲通知父組件
-        setTimeout(() => {
-          if (onColumnReorder) {
-            const updatedColumns = inputColumns.map(col => ({
-              ...col,
-              width: newSizing[col.id] || col.width || 180,
-            }));
-            onColumnReorder(updatedColumns);
-          }
-        }, 300);
+  // 處理欄位寬度調整
+  const handleColumnResize = (columnId: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const startX = e.clientX;
+    const startWidth = columnSizing[columnId] || 180;
+
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      const deltaX = moveEvent.clientX - startX;
+      const newWidth = Math.max(50, Math.min(500, startWidth + deltaX));
+      
+      setColumnSizing(prev => ({
+        ...prev,
+        [columnId]: newWidth
+      }));
+    };
+
+    const handleMouseUp = () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.body.classList.remove('resizing-column');
+      setResizingColumn(null);
+
+      // 通知父組件寬度變更
+      if (onColumnReorder) {
+        const updatedColumns = inputColumns.map(col => ({
+          ...col,
+          width: columnSizing[col.id] || col.width || 180,
+        }));
+        onColumnReorder(updatedColumns);
       }
-    },
-  });
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+    document.body.classList.add('resizing-column');
+    setResizingColumn(columnId);
+  };
 
   if (Platform.OS !== 'web') {
     return (
@@ -200,95 +197,80 @@ export const NotionTableV5: React.FC<NotionTableV5Props> = ({
         </div>
       </div>
 
-      {/* 表格 */}
+      {/* 表格容器 */}
       <div className="notion-table-container">
         <table className="notion-database-table">
           <thead>
-            {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id} className="notion-header-row">
-                {headerGroup.headers.map(header => (
-                  <th
-                    key={header.id}
-                    className="notion-header-cell"
-                    style={{
-                      width: header.getSize(),
-                      position: 'relative',
-                    }}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                    
-                    {/* 欄位寬度調整器 */}
-                    {header.column.getCanResize() && (
-                      <div
-                        onMouseDown={header.getResizeHandler()}
-                        onTouchStart={header.getResizeHandler()}
-                        className={`notion-column-resizer ${
-                          header.column.getIsResizing() ? 'resizing' : ''
-                        }`}
-                      />
-                    )}
-                  </th>
-                ))}
-                
-                {/* 新增欄位按鈕 */}
-                <th className="notion-add-column-cell">
-                  {onColumnAdd && (
-                    <button
-                      className="notion-add-column-btn"
-                      onClick={onColumnAdd}
-                    >
-                      +
-                    </button>
-                  )}
+            <tr className="notion-header-row">
+              {visibleColumnsData.map(column => (
+                <th
+                  key={column.id}
+                  className="notion-header-cell"
+                  style={{ width: columnSizing[column.id] || column.width || 180 }}
+                >
+                  <div className="notion-header-content">
+                    <span className="notion-property-icon">
+                      {NotionIcons[column.type]?.() || NotionIcons.text()}
+                    </span>
+                    <span className="notion-property-name">{column.title}</span>
+                  </div>
+                  
+                  {/* 欄位寬度調整器 */}
+                  <div
+                    className={`notion-column-resizer ${resizingColumn === column.id ? 'resizing' : ''}`}
+                    onMouseDown={(e) => handleColumnResize(column.id, e)}
+                  />
                 </th>
-              </tr>
-            ))}
+              ))}
+              
+              {/* 新增欄位按鈕 */}
+              <th className="notion-add-column-cell">
+                {onColumnAdd && (
+                  <button
+                    className="notion-add-column-btn"
+                    onClick={onColumnAdd}
+                  >
+                    +
+                  </button>
+                )}
+              </th>
+            </tr>
           </thead>
           
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={columns.length + 1} style={{ textAlign: 'center', padding: 40 }}>
+                <td colSpan={visibleColumnsData.length + 1} style={{ textAlign: 'center', padding: 40 }}>
                   載入中...
                 </td>
               </tr>
             ) : error ? (
               <tr>
-                <td colSpan={columns.length + 1} style={{ textAlign: 'center', padding: 40 }}>
+                <td colSpan={visibleColumnsData.length + 1} style={{ textAlign: 'center', padding: 40 }}>
                   錯誤：{error.message}
                 </td>
               </tr>
-            ) : table.getRowModel().rows.length === 0 ? (
+            ) : data.length === 0 ? (
               <tr>
-                <td colSpan={columns.length + 1} style={{ textAlign: 'center', padding: 40 }}>
+                <td colSpan={visibleColumnsData.length + 1} style={{ textAlign: 'center', padding: 40 }}>
                   {emptyMessage}
                 </td>
               </tr>
             ) : (
-              table.getRowModel().rows.map(row => (
+              data.map((row, rowIndex) => (
                 <tr
-                  key={row.id}
+                  key={row.id || rowIndex}
                   className="notion-data-row"
-                  onClick={() => onRowClick?.(row.original)}
+                  onClick={() => onRowClick?.(row)}
                 >
-                  {row.getVisibleCells().map(cell => (
+                  {visibleColumnsData.map(column => (
                     <td
-                      key={cell.id}
+                      key={column.id}
                       className="notion-cell"
-                      style={{
-                        width: cell.column.getSize(),
-                      }}
+                      style={{ width: columnSizing[column.id] || column.width || 180 }}
                     >
                       <div className="notion-cell-content">
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
+                        {row[column.key] || '空白'}
                       </div>
                     </td>
                   ))}
@@ -299,7 +281,7 @@ export const NotionTableV5: React.FC<NotionTableV5Props> = ({
             
             {/* 新增列按鈕 */}
             <tr className="notion-add-row">
-              <td colSpan={columns.length + 1} className="notion-add-row-cell">
+              <td colSpan={visibleColumnsData.length + 1} className="notion-add-row-cell">
                 <button
                   className="notion-add-row-button"
                   onClick={onRowAdd}
