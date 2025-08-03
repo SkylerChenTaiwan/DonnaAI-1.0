@@ -33,6 +33,8 @@ import { FilterPanel } from './components/FilterPanel';
 import { SortPanel } from './components/SortPanel';
 import { GroupPanel } from './components/GroupPanel';
 import { SearchBar } from './components/SearchBar';
+import { ColumnManager } from './components/ColumnManager';
+import { ColumnResizer } from './components/ColumnResizer';
 
 export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = ({
   data,
@@ -67,6 +69,14 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   // Column management - 使用 useMemo 避免無限重新渲染
   const [columnWidths, setColumnWidths] = useState<Record<string, number>>({});
   
+  // 處理欄位寬度調整
+  const handleColumnResize = useCallback((columnId: string, width: number) => {
+    setColumnWidths(prev => ({
+      ...prev,
+      [columnId]: width
+    }));
+  }, []);
+  
   // Selection management - 初始化為空，避免依賴外部 props
   const [internalSelectedRows, setInternalSelectedRows] = useState<Set<string>>(new Set());
 
@@ -94,6 +104,11 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   // 設定選單狀態
   const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
   const [settingsButtonRef, setSettingsButtonRef] = useState<HTMLElement | null>(null);
+  
+  // 欄位管理狀態
+  const [isColumnManagerOpen, setIsColumnManagerOpen] = useState(false);
+  const [columnManagerButtonRef, setColumnManagerButtonRef] = useState<HTMLElement | null>(null);
+  const [visibleColumns, setVisibleColumns] = useState<string[]>(() => columns.map(col => col.id));
   
   // 初始化欄位寬度，只在 columns 改變時執行
   useEffect(() => {
@@ -288,14 +303,6 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
       hasTransformations: activeFilters > 0 || activeSorts > 0 || isSearching,
     };
   }, [filters.filters, sorts.length, searchConfig.query, data.length, processedData.length]);
-  
-  // Handle column resize
-  const handleColumnResize = useCallback((columnId: string, newWidth: number) => {
-    setColumnWidths(prev => ({
-      ...prev,
-      [columnId]: newWidth,
-    }));
-  }, []);
   
   // Handle row selection
   const handleSelectRow = useCallback((rowId: string, selected: boolean) => {
@@ -625,9 +632,10 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
             ),
             React.createElement('button', 
               { 
+                ref: (el) => setColumnManagerButtonRef(el),
                 className: 'notion-button',
-                onClick: handleSettingsButtonClick,
-                title: '資料庫設定'
+                onClick: () => setIsColumnManagerOpen(!isColumnManagerOpen),
+                title: '自訂屬性'
               },
               NotionIcons.more()
             ),
@@ -647,12 +655,12 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
           React.createElement('thead', {},
             React.createElement('tr', 
               { className: 'notion-header-row' },
-              columnsWithWidths.map((column) => 
+              columnsWithWidths.filter(col => visibleColumns.includes(col.id)).map((column) => 
                 React.createElement('th', {
                   key: column.id,
                   className: 'notion-header-cell',
                   'data-column': column.key,
-                  style: { width: column.width }
+                  style: { width: column.width, position: 'relative' }
                 },
                   React.createElement('div', 
                     { className: 'notion-header-content' },
@@ -671,7 +679,14 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                         '⋯'
                       )
                     )
-                  )
+                  ),
+                  // 新增欄位寬度調整器
+                  column.resizable !== false && React.createElement(ColumnResizer, {
+                    columnId: column.id,
+                    onResize: handleColumnResize,
+                    minWidth: column.minWidth,
+                    maxWidth: column.maxWidth
+                  })
                 )
               ),
               // 新增欄位按鈕
@@ -723,7 +738,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                     className: `notion-data-row ${selectedRowsSet.has(row.id) ? 'selected' : ''}`,
                     onClick: () => onRowClick?.(row)
                   },
-                    columnsWithWidths.map((column) => 
+                    columnsWithWidths.filter(col => visibleColumns.includes(col.id)).map((column) => 
                       React.createElement('td', {
                         key: column.id,
                         className: 'notion-cell',
@@ -761,7 +776,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                   className: `notion-data-row ${selectedRowsSet.has(row.id) ? 'selected' : ''}`,
                   onClick: () => onRowClick?.(row)
                 },
-                  columnsWithWidths.map((column) => 
+                  columnsWithWidths.filter(col => visibleColumns.includes(col.id)).map((column) => 
                     React.createElement('td', {
                       key: column.id,
                       className: 'notion-cell',
@@ -856,6 +871,21 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
           currentGroup: groupConfig,
           onGroupChange: setGroupConfig,
           anchorEl: groupButtonRef
+        }),
+        
+        // 欄位管理面板
+        React.createElement(ColumnManager, {
+          isOpen: isColumnManagerOpen,
+          onClose: () => setIsColumnManagerOpen(false),
+          columns,
+          visibleColumns,
+          onVisibilityChange: setVisibleColumns,
+          onColumnReorder,
+          onColumnUpdate: (columnId, updates) => {
+            // 這裡需要父元件支援欄位更新
+            console.log('更新欄位:', columnId, updates);
+          },
+          anchorEl: columnManagerButtonRef
         }),
 
         // 設定選單

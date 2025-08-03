@@ -29,6 +29,7 @@ export interface ColumnConfig {
   editable?: boolean;
   options?: SelectOption[]; // for select/multiselect types
   format?: string; // for date/number types
+  description?: string; // 欄位說明，供 AI 判讀
 }
 
 export type ColumnType = 
