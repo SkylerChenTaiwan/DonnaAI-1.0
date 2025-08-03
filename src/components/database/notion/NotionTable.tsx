@@ -71,11 +71,22 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   
   // 處理欄位寬度調整
   const handleColumnResize = useCallback((columnId: string, width: number) => {
+    const roundedWidth = Math.round(width);
     setColumnWidths(prev => ({
       ...prev,
-      [columnId]: Math.round(width) // 四捨五入避免小數點
+      [columnId]: roundedWidth
     }));
-  }, []);
+    
+    // 通知父組件更新欄位寬度
+    if (onColumnReorder) {
+      const updatedColumns = columns.map(col => 
+        col.id === columnId 
+          ? { ...col, width: roundedWidth }
+          : col
+      );
+      onColumnReorder(updatedColumns);
+    }
+  }, [columns, onColumnReorder]);
   
   // Selection management - 初始化為空，避免依賴外部 props
   const [internalSelectedRows, setInternalSelectedRows] = useState<Set<string>>(new Set());

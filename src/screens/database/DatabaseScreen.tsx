@@ -634,6 +634,16 @@ export const DatabaseScreen: React.FC = () => {
           onRowClick={handleRowPress}
           onRowAdd={handleAddRow}
           onColumnAdd={() => setShowAddColumnDialog(true)}
+          onColumnReorder={async (updatedColumns) => {
+            console.log('欄位順序或寬度更新:', updatedColumns);
+            // TODO: 保存欄位順序和寬度到資料庫
+            // 暫時只在控制台顯示
+            const columnWidths = updatedColumns.reduce((acc, col) => {
+              acc[col.id] = col.width;
+              return acc;
+            }, {} as Record<string, number>);
+            console.log('儲存欄位寬度:', columnWidths);
+          }}
           multiSelect={multiSelectMode}
           selectedRows={selectedItems}
           onSelectionChange={setSelectedItems}
