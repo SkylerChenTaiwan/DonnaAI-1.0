@@ -134,20 +134,37 @@ export const GroupPanel: React.FC<GroupPanelProps> = ({
 
 function getPositionStyle(anchorEl: HTMLElement): React.CSSProperties {
   const rect = anchorEl.getBoundingClientRect();
-  const panelWidth = 300; // 預估面板寬度
+  const panelWidth = 280; // 面板寬度
   const panelHeight = 400; // 預估面板高度
   const padding = 16; // 與視窗邊緣的間距
   
-  // 計算位置，確保不超出視窗
-  let left = rect.left;
+  // 優先顯示在按鈕下方
   let top = rect.bottom + 8;
+  let left = rect.left;
   
-  // 檢查右側是否會超出視窗
-  if (left + panelWidth + padding > window.innerWidth) {
-    left = window.innerWidth - panelWidth - padding;
+  // 檢查是否會超出視窗底部
+  if (top + panelHeight > window.innerHeight - padding) {
+    // 如果下方空間不足，顯示在按鈕上方
+    top = rect.top - panelHeight - 8;
+    
+    // 如果上方也不足，則固定在視窗內
+    if (top < padding) {
+      top = padding;
+    }
   }
   
-  // 檢查左側是否會超出視窗
+  // 檢查是否會超出視窗右側
+  if (left + panelWidth > window.innerWidth - padding) {
+    // 優先向左對齊按鈕右側
+    left = rect.right - panelWidth;
+    
+    // 如果還是超出，則固定在視窗內
+    if (left + panelWidth > window.innerWidth - padding) {
+      left = window.innerWidth - panelWidth - padding;
+    }
+  }
+  
+  // 檢查是否會超出視窗左側
   if (left < padding) {
     left = padding;
   }

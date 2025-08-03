@@ -5,9 +5,9 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Platform } from 'react-native';
-import { PanelContainer } from './PanelContainer';
 import { NotionIcons } from '../NotionIcons';
 import { SearchConfig, TableColumn } from '../types';
+import { calculatePanelPosition, PANEL_DIMENSIONS } from '../utils/panelPosition';
 
 interface SearchPanelProps {
   isOpen: boolean;
@@ -103,19 +103,39 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({
     };
   }, []);
 
-  if (Platform.OS !== 'web') {
+  if (!isOpen || Platform.OS !== 'web') {
     return null;
   }
 
-  return React.createElement(PanelContainer, {
-    isOpen,
-    onClose,
-    anchorEl,
-    title: '搜尋',
-    icon: NotionIcons.search(),
-    width: 320
+  return React.createElement('div', {
+    className: 'notion-filter-panel-overlay',
+    onClick: (e: React.MouseEvent) => {
+      if (e.target === e.currentTarget) {
+        onClose();
+      }
+    }
   },
-    React.createElement('div', { className: 'notion-search-panel' },
+    React.createElement('div', {
+      className: 'notion-filter-panel',
+      style: calculatePanelPosition(anchorEl, PANEL_DIMENSIONS.search)
+    },
+      // 面板標題
+      React.createElement('div', {
+        className: 'notion-filter-panel-header'
+      },
+        React.createElement('h3', {
+          className: 'notion-filter-panel-title'
+        }, '搜尋'),
+        React.createElement('button', {
+          className: 'notion-filter-panel-close',
+          onClick: onClose
+        }, '✕')
+      ),
+      
+      // 搜尋內容
+      React.createElement('div', {
+        className: 'notion-filter-panel-content'
+      },
       // 搜尋輸入框
       React.createElement('div', { className: 'notion-search-input-wrapper' },
         React.createElement('input', {
@@ -199,18 +219,7 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({
           }),
           React.createElement('span', {}, '高亮顯示結果')
         )
-      ),
-
-      // 底部按鈕
-      React.createElement('div', { className: 'notion-panel-footer' },
-        React.createElement('button', {
-          className: 'notion-button notion-button-secondary',
-          onClick: handleClear
-        }, '清除搜尋'),
-        React.createElement('button', {
-          className: 'notion-button notion-button-primary',
-          onClick: onClose
-        }, '完成')
+        )
       )
     )
   );
