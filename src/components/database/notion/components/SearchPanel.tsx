@@ -159,7 +159,10 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({
       ),
 
       // 搜尋選項
-      React.createElement('div', { className: 'notion-filter-option-group' },
+      React.createElement('div', { 
+        className: 'notion-filter-option-group',
+        style: { marginTop: '16px' }
+      },
         React.createElement('div', { className: 'notion-filter-option-header' },
           React.createElement('span', { className: 'notion-filter-option-title' }, '搜尋範圍'),
           React.createElement('button', {
