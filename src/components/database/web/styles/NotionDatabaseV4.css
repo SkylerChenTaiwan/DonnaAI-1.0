@@ -95,26 +95,28 @@ body {
   padding: 3px 2px;
 }
 
-/* === Notion 風格視圖列 === */
-.notion-view-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(55, 53, 47, 0.09);
-  margin-bottom: 8px;
-}
-
-.notion-view-tabs {
-  display: flex;
-  align-items: center;
-  gap: 0;
-}
-
-.notion-view-actions {
+/* === 工具列容器 === */
+.notion-toolbar-container {
   display: flex;
   align-items: center;
   gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+  margin-bottom: 0;
+}
+
+.notion-toolbar-left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 8px;
+}
+
+.notion-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
 }
 
 /* === 視圖標籤 === */
