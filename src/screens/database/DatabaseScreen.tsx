@@ -611,6 +611,40 @@ export const DatabaseScreen: React.FC = () => {
   // 使用新的 NotionTable 元件
   console.log('🔍 使用新的 NotionTable 元件');
 
+  // 記憶化 NotionTable 的 columns，避免每次都創建新陣列導致重新渲染
+  const notionColumns = useMemo(() => {
+    return currentColumns.map(col => ({
+      id: col.key,
+      key: col.key,
+      title: col.title,
+      type: col.type as any,
+      width: col.width,
+      editable: col.editable !== false,
+      options: col.options,
+    }));
+  }, [currentColumns]);
+
+  // 記憶化回調函數
+  const handleColumnReorder = useCallback(async (updatedColumns) => {
+    console.log('欄位順序或寬度更新:', updatedColumns);
+    // TODO: 保存欄位順序和寬度到資料庫
+    // 暫時只在控制台顯示
+    const columnWidths = updatedColumns.reduce((acc, col) => {
+      acc[col.id] = col.width;
+      return acc;
+    }, {} as Record<string, number>);
+    console.log('儲存欄位寬度:', columnWidths);
+  }, []);
+
+  const handleCellUpdateCallback = useCallback((rowId, columnKey, value) => {
+    console.log('更新儲存格:', { rowId, columnKey, value, activeTab });
+    debouncedUpdate(rowId, columnKey, value);
+  }, [activeTab, debouncedUpdate]);
+
+  const handleColumnAdd = useCallback(() => {
+    setShowAddColumnDialog(true);
+  }, []);
+
   const renderContent = () => {
     console.log('🎨 正在渲染 NotionTable 元件');
     
@@ -618,32 +652,12 @@ export const DatabaseScreen: React.FC = () => {
       <View style={styles.fullScreenContainer}>
         <NotionTable
           data={currentData.data}
-          columns={currentColumns.map(col => ({
-            id: col.key,
-            key: col.key,
-            title: col.title,
-            type: col.type as any,
-            width: col.width,
-            editable: col.editable !== false,
-            options: col.options,
-          }))}
-          onCellUpdate={(rowId, columnKey, value) => {
-            console.log('更新儲存格:', { rowId, columnKey, value, activeTab });
-            debouncedUpdate(rowId, columnKey, value);
-          }}
+          columns={notionColumns}
+          onCellUpdate={handleCellUpdateCallback}
           onRowClick={handleRowPress}
           onRowAdd={handleAddRow}
-          onColumnAdd={() => setShowAddColumnDialog(true)}
-          onColumnReorder={async (updatedColumns) => {
-            console.log('欄位順序或寬度更新:', updatedColumns);
-            // TODO: 保存欄位順序和寬度到資料庫
-            // 暫時只在控制台顯示
-            const columnWidths = updatedColumns.reduce((acc, col) => {
-              acc[col.id] = col.width;
-              return acc;
-            }, {} as Record<string, number>);
-            console.log('儲存欄位寬度:', columnWidths);
-          }}
+          onColumnAdd={handleColumnAdd}
+          onColumnReorder={handleColumnReorder}
           multiSelect={multiSelectMode}
           selectedRows={selectedItems}
           onSelectionChange={setSelectedItems}

@@ -509,11 +509,15 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   }, [columns, columnWidths]);
   
   // 防止無限重新渲染的檢查
+  const renderCountRef = useRef(0);
   useEffect(() => {
-    const renderCount = useRef(0);
-    renderCount.current += 1;
-    if (renderCount.current > 10) {
-      console.warn('⚠️ NotionTable 可能有無限重新渲染問題');
+    renderCountRef.current += 1;
+    if (renderCountRef.current > 10) {
+      console.warn('⚠️ NotionTable 可能有無限重新渲染問題', {
+        renderCount: renderCountRef.current,
+        dataLength: data?.length,
+        columnsLength: columns?.length
+      });
     }
   });
   

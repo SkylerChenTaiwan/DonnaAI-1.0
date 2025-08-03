@@ -90,7 +90,7 @@ export const ColumnResizer: React.FC<ColumnResizerProps> = ({
     
     // 直接設定 th 的寬度以獲得即時視覺反饋
     thRef.current.style.width = `${newWidth}px`;
-  }, [isResizing, startX, startWidth, columnId, onResize, minWidth, maxWidth]);
+  }, [isResizing, startX, startWidth, minWidth, maxWidth]);
   
   // 處理結束拖拽
   const handleMouseUp = useCallback(() => {
