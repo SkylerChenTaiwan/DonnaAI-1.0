@@ -228,6 +228,12 @@ body {
   min-width: 50px !important;
   vertical-align: middle !important;
   border: none !important;
+  border-right: 1px solid var(--notion-gray-15) !important;
+}
+
+/* 最後一個欄位不需要右邊框 */
+.notion-header-cell:last-child {
+  border-right: none !important;
 }
 
 /* === 表頭內容容器 === */
@@ -289,6 +295,12 @@ body {
   height: var(--notion-cell-height);
   vertical-align: middle;
   position: relative;
+  border-right: 1px solid var(--notion-gray-10);
+}
+
+/* 最後一個單元格不需要右邊框 */
+.notion-cell:last-child {
+  border-right: none;
 }
 
 .notion-cell-content {
@@ -401,6 +413,12 @@ body {
   min-width: 32px;
   padding: 0;
   border: none;
+  border-right: none !important;
+}
+
+/* 空的欄位單元格（用於對齊） */
+.notion-cell-empty-column {
+  border-right: none !important;
 }
 
 .notion-add-column-btn {
@@ -1881,25 +1899,41 @@ body {
 
 .notion-column-resizer {
   position: absolute;
-  right: -3px;
+  right: -2px;
   top: 0;
   bottom: 0;
-  width: 6px;
+  width: 4px;
   cursor: col-resize;
   z-index: 10;
   background-color: transparent;
-  transition: background-color 0.15s ease;
+  transition: all 0.15s ease;
 }
 
-.notion-column-resizer:hover {
-  background-color: rgba(35, 131, 226, 0.3);
+/* 在調整器位置顯示藍色線 */
+.notion-column-resizer::before {
+  content: '';
+  position: absolute;
+  right: 1px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: transparent;
+  transition: all 0.15s ease;
 }
 
-.notion-column-resizer.resizing {
-  background-color: rgba(35, 131, 226, 0.5);
+.notion-column-resizer:hover::before {
+  width: 2px;
+  right: 1px;
+  background-color: var(--notion-blue);
 }
 
-/* 調整表頭單元格以支援調整器 */
-.notion-header-cell {
-  position: relative !important;
+.notion-column-resizer.resizing::before {
+  width: 2px;
+  background-color: var(--notion-blue);
+  opacity: 1;
+}
+
+/* 表頭懸停時顯示調整器 */
+.notion-header-cell:hover .notion-column-resizer::before {
+  background-color: rgba(55, 53, 47, 0.16);
 }

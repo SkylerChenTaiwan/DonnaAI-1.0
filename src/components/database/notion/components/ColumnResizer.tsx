@@ -82,17 +82,6 @@ export const ColumnResizer: React.FC<ColumnResizerProps> = ({
   return React.createElement('div', {
     ref: resizerRef,
     className: `notion-column-resizer ${isResizing ? 'resizing' : ''}`,
-    onMouseDown: handleMouseDown,
-    style: {
-      position: 'absolute',
-      right: -3,
-      top: 0,
-      bottom: 0,
-      width: 6,
-      cursor: 'col-resize',
-      zIndex: 10,
-      backgroundColor: isResizing ? 'rgba(35, 131, 226, 0.5)' : 'transparent',
-      transition: 'background-color 0.15s ease'
-    }
+    onMouseDown: handleMouseDown
   });
 };
