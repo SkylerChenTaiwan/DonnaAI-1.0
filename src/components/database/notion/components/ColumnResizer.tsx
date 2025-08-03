@@ -31,9 +31,13 @@ export const ColumnResizer: React.FC<ColumnResizerProps> = ({
     const th = (e.target as HTMLElement).parentElement;
     if (!th) return;
     
+    // 獲取實際計算的寬度，而不是 CSS 設定的寬度
+    const computedStyle = window.getComputedStyle(th);
+    const actualWidth = parseFloat(computedStyle.width);
+    
     setIsResizing(true);
     setStartX(e.clientX);
-    setStartWidth(th.offsetWidth);
+    setStartWidth(actualWidth);
     
     // 添加全局樣式以防止文字選擇
     document.body.style.cursor = 'col-resize';

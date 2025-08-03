@@ -73,7 +73,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   const handleColumnResize = useCallback((columnId: string, width: number) => {
     setColumnWidths(prev => ({
       ...prev,
-      [columnId]: width
+      [columnId]: Math.round(width) // 四捨五入避免小數點
     }));
   }, []);
   
