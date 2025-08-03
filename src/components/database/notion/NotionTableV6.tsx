@@ -131,72 +131,51 @@ export const NotionTableV6: React.FC<NotionTableV6Props> = ({
   return (
     <div className="notion-database-container">
       <div className="notion-database-wrapper">
-        {/* 工具列 */}
-        <div className="notion-toolbar-container">
-        <div className="notion-toolbar-left">
-          <button
-            ref={(el) => setFilterButtonRef(el)}
-            className="notion-button"
-            onClick={() => setIsFilterPanelOpen(true)}
-          >
-            <span className="notion-button-icon">{NotionIcons.filter()}</span>
-            過濾
-          </button>
+        {/* 工具列 - Notion 風格 */}
+        <div className="notion-view-bar">
+          <div className="notion-view-tabs">
+            <div className="notion-view-tab active">
+              <span className="notion-view-icon">⊞</span>
+              <span>表格</span>
+            </div>
+          </div>
           
-          <button
-            ref={(el) => setSortButtonRef(el)}
-            className="notion-button"
-            onClick={() => setIsSortPanelOpen(true)}
-          >
-            <span className="notion-button-icon">{NotionIcons.sort()}</span>
-            排序
-          </button>
-          
-          <button
-            ref={(el) => setGroupButtonRef(el)}
-            className="notion-button"
-            onClick={() => setIsGroupPanelOpen(true)}
-          >
-            <span className="notion-button-icon">{NotionIcons.group()}</span>
-            群組
-          </button>
-        </div>
-        
-        <div className="notion-toolbar-right">
-          {showSearchBar ? (
-            <SearchBar
-              value=""
-              onChange={() => {}}
-              onClose={() => setShowSearchBar(false)}
-              placeholder="搜尋資料庫..."
-            />
-          ) : (
+          <div className="notion-view-actions">
             <button
-              className="notion-button"
-              onClick={() => setShowSearchBar(true)}
+              ref={(el) => setSortButtonRef(el)}
+              className="notion-icon-button"
+              onClick={() => setIsSortPanelOpen(true)}
+              title="排序"
             >
-              <span className="notion-button-icon">{NotionIcons.search()}</span>
-              搜尋
+              ↕
             </button>
-          )}
-          
-          <button
-            ref={(el) => setColumnManagerButtonRef(el)}
-            className="notion-button"
-            onClick={() => setIsColumnManagerOpen(true)}
-            title="自訂屬性"
-          >
-            {NotionIcons.more()}
-          </button>
-          
-          <button
-            className="notion-button notion-button-primary"
-            onClick={onRowAdd}
-          >
-            新建
-          </button>
+            
+            <button
+              ref={(el) => setFilterButtonRef(el)}
+              className="notion-icon-button"
+              onClick={() => setIsFilterPanelOpen(true)}
+              title="過濾"
+            >
+              ⊕
+            </button>
+            
+            <button
+              className="notion-text-button notion-button-primary"
+              onClick={onRowAdd}
+            >
+              新建
+            </button>
+            
+            <button
+              ref={(el) => setColumnManagerButtonRef(el)}
+              className="notion-icon-button"
+              onClick={() => setIsColumnManagerOpen(true)}
+              title="更多選項"
+            >
+              ⋯
+            </button>
+          </div>
         </div>
-      </div>
 
       {/* 表格容器 */}
       <div className="notion-table-container">
