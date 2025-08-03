@@ -29,7 +29,7 @@ import { NotionStyleTable } from '@/components/database/NotionStyleTable';
 import { NotionStyleTableDebug } from '@/components/database/NotionStyleTableDebug';
 import { NotionStyleTableV2 } from '@/components/database/NotionStyleTableV2';
 import { TanStackNotionTableV3 } from '@/components/database/web/TanStackNotionTableV3';
-import { NotionTable } from '@/components/database/notion';
+import { NotionTableV5 as NotionTable } from '@/components/database/notion/NotionTableV5';
 import { NotionDatabase } from '@/components/database/web/NotionDatabase';
 import { DatabaseToolbar } from '@/components/database/DatabaseToolbar';
 import { convertToTanStackColumns } from '@/components/database/web/columnHelpers';
