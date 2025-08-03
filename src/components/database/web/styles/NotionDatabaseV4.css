@@ -1970,6 +1970,13 @@ body {
   margin-top: 8px;
 }
 
+/* === 簡單表格容器 === */
+.notion-simple-table-container {
+  width: 100%;
+  overflow: auto;
+  background: var(--notion-surface);
+}
+
 /* === 欄位寬度調整器樣式 === */
 
 .notion-column-resizer {

@@ -29,7 +29,7 @@ import { NotionStyleTable } from '@/components/database/NotionStyleTable';
 import { NotionStyleTableDebug } from '@/components/database/NotionStyleTableDebug';
 import { NotionStyleTableV2 } from '@/components/database/NotionStyleTableV2';
 import { TanStackNotionTableV3 } from '@/components/database/web/TanStackNotionTableV3';
-import { NotionTableV6 as NotionTable } from '@/components/database/notion/NotionTableV6';
+import { NotionTableSimple as NotionTable } from '@/components/database/notion/NotionTableSimple';
 import { NotionDatabase } from '@/components/database/web/NotionDatabase';
 import { DatabaseToolbar } from '@/components/database/DatabaseToolbar';
 import { convertToTanStackColumns } from '@/components/database/web/columnHelpers';
@@ -650,21 +650,62 @@ export const DatabaseScreen: React.FC = () => {
     
     return (
       <View style={styles.fullScreenContainer}>
-        <NotionTable
-          data={currentData.data}
-          columns={notionColumns}
-          onCellUpdate={handleCellUpdateCallback}
-          onRowClick={handleRowPress}
-          onRowAdd={handleAddRow}
-          onColumnAdd={handleColumnAdd}
-          onColumnReorder={handleColumnReorder}
-          multiSelect={multiSelectMode}
-          selectedRows={selectedItems}
-          onSelectionChange={setSelectedItems}
-          loading={currentData.loading}
-          emptyMessage="沒有資料，點擊新增列開始"
-          activeTab={activeTab}
-        />
+        <View style={styles.databaseContainer}>
+          {/* 頁面標題 */}
+          <View style={styles.pageHeader}>
+            <Text style={styles.pageTitle}>{getHeaderTitle(activeTab)}</Text>
+          </View>
+          
+          {/* 分頁標籤 */}
+          <View style={styles.tabContainer}>
+            {tabs.map(tab => (
+              <TouchableOpacity
+                key={tab.id}
+                style={[styles.tab, activeTab === tab.id && styles.activeTab]}
+                onPress={() => setActiveTab(tab.id)}
+              >
+                <Icon name="table" size={14} color={activeTab === tab.id ? '#2383e2' : '#787774'} />
+                <Text style={[styles.tabText, activeTab === tab.id && styles.activeTabText]}>
+                  {tab.title}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          
+          {/* 工具列 */}
+          <View style={styles.toolbar}>
+            <View style={styles.toolbarLeft}>
+              <TouchableOpacity style={styles.toolButton} onPress={() => setShowFilterPopover(true)}>
+                <Icon name="filter" size={14} color="#787774" />
+                <Text style={styles.toolButtonText}>過濾</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity style={styles.toolButton} onPress={() => setShowSortPopover(true)}>
+                <Icon name="sort" size={14} color="#787774" />
+                <Text style={styles.toolButtonText}>排序</Text>
+              </TouchableOpacity>
+            </View>
+            
+            <View style={styles.toolbarRight}>
+              <TouchableOpacity style={[styles.toolButton, styles.primaryButton]} onPress={handleAddRow}>
+                <Text style={styles.primaryButtonText}>新建</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          
+          {/* 表格 */}
+          <NotionTable
+            data={currentData.data}
+            columns={notionColumns}
+            onCellUpdate={handleCellUpdateCallback}
+            onRowClick={handleRowPress}
+            onRowAdd={handleAddRow}
+            onColumnAdd={handleColumnAdd}
+            onColumnReorder={handleColumnReorder}
+            loading={currentData.loading}
+            emptyMessage="沒有資料，點擊新增列開始"
+          />
+        </View>
       </View>
     );
   }
@@ -718,6 +759,78 @@ const styles = StyleSheet.create({
         backgroundColor: '#fbfbfa', // Notion 背景色
       },
     }),
+  },
+  databaseContainer: {
+    flex: 1,
+    padding: '0 96px',
+  },
+  pageHeader: {
+    paddingTop: 40,
+    paddingBottom: 16,
+  },
+  pageTitle: {
+    fontSize: 40,
+    fontWeight: '700',
+    color: '#37352f',
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    borderBottom: '1px solid rgba(55, 53, 47, 0.09)',
+    marginBottom: 8,
+  },
+  tab: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    padding: '8px 12px',
+    cursor: 'pointer',
+  },
+  activeTab: {
+    borderBottom: '2px solid #2383e2',
+  },
+  tabText: {
+    fontSize: 14,
+    color: '#787774',
+  },
+  activeTabText: {
+    color: '#37352f',
+    fontWeight: '500',
+  },
+  toolbar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 8,
+    marginBottom: 8,
+  },
+  toolbarLeft: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  toolbarRight: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  toolButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 3,
+    cursor: 'pointer',
+  },
+  toolButtonText: {
+    fontSize: 14,
+    color: '#787774',
+  },
+  primaryButton: {
+    backgroundColor: '#2383e2',
+  },
+  primaryButtonText: {
+    fontSize: 14,
+    color: '#ffffff',
+    fontWeight: '500',
   },
   container: {
     flex: 1,
