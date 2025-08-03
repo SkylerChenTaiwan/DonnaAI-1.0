@@ -129,9 +129,10 @@ export const NotionTableV6: React.FC<NotionTableV6Props> = ({
   }
 
   return (
-    <div className="notion-database-wrapper">
-      {/* 工具列 */}
-      <div className="notion-toolbar-container">
+    <div className="notion-database-container">
+      <div className="notion-database-wrapper">
+        {/* 工具列 */}
+        <div className="notion-toolbar-container">
         <div className="notion-toolbar-left">
           <button
             ref={(el) => setFilterButtonRef(el)}
@@ -341,6 +342,7 @@ export const NotionTableV6: React.FC<NotionTableV6Props> = ({
         />
       )}
 
+      </div>
     </div>
   );
 };
