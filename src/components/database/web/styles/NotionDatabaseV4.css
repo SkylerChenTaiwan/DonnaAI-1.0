@@ -2184,3 +2184,32 @@ body.resizing-column * {
 .notion-text-link:hover {
   opacity: 0.65;
 }
+
+/* === Notion 小按鈕樣式 === */
+.notion-small-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  padding: 0 8px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1;
+  color: rgba(55, 53, 47, 0.65);
+  background: transparent;
+  border: 1px solid rgba(55, 53, 47, 0.16);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.notion-small-button:hover {
+  background: rgba(55, 53, 47, 0.08);
+  border-color: rgba(55, 53, 47, 0.25);
+}
+
+.notion-small-button:active {
+  background: rgba(55, 53, 47, 0.12);
+}

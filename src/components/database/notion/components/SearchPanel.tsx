@@ -163,7 +163,7 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({
         React.createElement('div', { className: 'notion-filter-option-header' },
           React.createElement('span', { className: 'notion-filter-option-title' }, '搜尋範圍'),
           React.createElement('button', {
-            className: 'notion-text-link',
+            className: 'notion-small-button',
             onClick: handleSelectAll
           }, selectedColumns.length === 0 ? '取消全選' : '全部欄位')
         ),
