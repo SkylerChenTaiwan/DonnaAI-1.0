@@ -34,7 +34,8 @@ import { SortPanel } from './components/SortPanel';
 import { GroupPanel } from './components/GroupPanel';
 import { SearchBar } from './components/SearchBar';
 import { ColumnManager } from './components/ColumnManager';
-import { ColumnResizer } from './components/ColumnResizer';
+import { ColumnResizerSimple } from './components/ColumnResizerSimple';
+import { TableResizeManager } from './components/TableResizeManager';
 
 export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = ({
   data,
@@ -66,6 +67,9 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
     columns: columns?.map(c => ({ id: c.id, title: c.title, type: c.type })),
   });
   
+  // 表格引用
+  const tableRef = useRef<HTMLTableElement>(null);
+  
   // Column management - 使用 useMemo 避免無限重新渲染
   const [columnWidths, setColumnWidths] = useState<Record<string, number>>(() => {
     // 初始化時就設定欄位寬度
@@ -76,21 +80,17 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
     return widths;
   });
   
-  // 處理欄位寬度調整
-  const handleColumnResize = useCallback((columnId: string, width: number) => {
-    const roundedWidth = Math.round(width);
-    setColumnWidths(prev => ({
-      ...prev,
-      [columnId]: roundedWidth
-    }));
+  // 處理欄位寬度調整完成
+  const handleResizeComplete = useCallback((newWidths: Record<string, number>) => {
+    // 更新本地狀態
+    setColumnWidths(newWidths);
     
-    // 通知父組件更新欄位寬度
+    // 通知父組件
     if (onColumnReorder) {
-      const updatedColumns = columns.map(col => 
-        col.id === columnId 
-          ? { ...col, width: roundedWidth }
-          : col
-      );
+      const updatedColumns = columns.map(col => ({
+        ...col,
+        width: newWidths[col.id] || col.width || NOTION_DEFAULTS.DEFAULT_COLUMN_WIDTH
+      }));
       onColumnReorder(updatedColumns);
     }
   }, [columns, onColumnReorder]);
@@ -128,20 +128,24 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   const [columnManagerButtonRef, setColumnManagerButtonRef] = useState<HTMLElement | null>(null);
   const [visibleColumns, setVisibleColumns] = useState<string[]>(() => columns.map(col => col.id));
   
-  // 初始化欄位寬度，只在元件掛載時執行一次
+  // 同步欄位寬度變更（只在欄位結構改變時）
+  const prevColumnsRef = useRef(columns);
   useEffect(() => {
-    const widths: Record<string, number> = {};
-    columns.forEach(col => {
-      // 如果已經有寬度設定，保留它
-      if (!columnWidths[col.id]) {
+    // 檢查是否有新增的欄位
+    const newColumns = columns.filter(col => 
+      !prevColumnsRef.current.find(prev => prev.id === col.id)
+    );
+    
+    if (newColumns.length > 0) {
+      const widths: Record<string, number> = {};
+      newColumns.forEach(col => {
         widths[col.id] = col.width || NOTION_DEFAULTS.DEFAULT_COLUMN_WIDTH;
-      }
-    });
-    // 只有在有新的寬度需要設定時才更新
-    if (Object.keys(widths).length > 0) {
+      });
       setColumnWidths(prev => ({ ...prev, ...widths }));
     }
-  }, []); // 移除 columns 依賴，避免無限重新渲染
+    
+    prevColumnsRef.current = columns;
+  }, [columns.length]); // 只依賴長度，不依賴整個陣列
   
   const selectedRowsSet = useMemo(
     () => new Set(selectedRows.length > 0 ? selectedRows : internalSelectedRows),
@@ -508,18 +512,6 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
     }));
   }, [columns, columnWidths]);
   
-  // 防止無限重新渲染的檢查
-  const renderCountRef = useRef(0);
-  useEffect(() => {
-    renderCountRef.current += 1;
-    if (renderCountRef.current > 10) {
-      console.warn('⚠️ NotionTable 可能有無限重新渲染問題', {
-        renderCount: renderCountRef.current,
-        dataLength: data?.length,
-        columnsLength: columns?.length
-      });
-    }
-  });
   
   // Render row for virtual scroller
   const renderRow = useCallback((rowData: any, index: number) => {
@@ -687,8 +679,18 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
         ),
         
         // 顯示表格（不管有沒有資料）
+        // 表格寬度調整管理器
+        React.createElement(TableResizeManager, {
+          tableRef,
+          onResizeComplete: handleResizeComplete
+        }),
+        
+        // 顯示表格
         React.createElement('table', 
-          { className: 'notion-database-table' },
+          { 
+            ref: tableRef,
+            className: 'notion-database-table' 
+          },
           React.createElement('thead', {},
             React.createElement('tr', 
               { className: 'notion-header-row' },
@@ -697,6 +699,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                   key: column.id,
                   className: 'notion-header-cell',
                   'data-column': column.key,
+                  'data-column-id': column.id,
                   style: { width: column.width, position: 'relative' }
                 },
                   React.createElement('div', 
@@ -718,11 +721,8 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                     )
                   ),
                   // 新增欄位寬度調整器
-                  column.resizable !== false && React.createElement(ColumnResizer, {
-                    columnId: column.id,
-                    onResize: handleColumnResize,
-                    minWidth: column.minWidth,
-                    maxWidth: column.maxWidth
+                  column.resizable !== false && React.createElement(ColumnResizerSimple, {
+                    columnId: column.id
                   })
                 )
               ),
