@@ -205,11 +205,19 @@ body {
 
 /* === 表格樣式 - 固定欄寬 === */
 .notion-database-table {
-  width: auto;
-  min-width: 100%;
+  width: 100%;
   border-collapse: collapse;
   background: var(--notion-surface);
   table-layout: fixed; /* 關鍵：固定欄寬，避免調整時其他欄位跟著動 */
+}
+
+/* 使用 CSS 變數控制欄位寬度 */
+.notion-database-table th[data-column-id] {
+  width: var(--col-width);
+}
+
+.notion-database-table td[data-column-id] {
+  width: var(--col-width);
 }
 
 /* === 表頭 === */

@@ -34,8 +34,7 @@ import { SortPanel } from './components/SortPanel';
 import { GroupPanel } from './components/GroupPanel';
 import { SearchBar } from './components/SearchBar';
 import { ColumnManager } from './components/ColumnManager';
-import { ColumnResizerSimple } from './components/ColumnResizerSimple';
-import { TableResizeManager } from './components/TableResizeManager';
+import { SimpleColumnResize } from './components/SimpleColumnResize';
 
 export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = ({
   data,
@@ -67,8 +66,8 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
     columns: columns?.map(c => ({ id: c.id, title: c.title, type: c.type })),
   });
   
-  // 表格引用
-  const tableRef = useRef<HTMLTableElement>(null);
+  // 表格 ID
+  const tableId = useMemo(() => `notion-table-${Math.random().toString(36).substr(2, 9)}`, []);
   
   // Column management - 使用 useMemo 避免無限重新渲染
   const [columnWidths, setColumnWidths] = useState<Record<string, number>>(() => {
@@ -680,15 +679,15 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
         
         // 顯示表格（不管有沒有資料）
         // 表格寬度調整管理器
-        React.createElement(TableResizeManager, {
-          tableRef,
-          onResizeComplete: handleResizeComplete
+        React.createElement(SimpleColumnResize, {
+          tableId,
+          onWidthsChange: handleResizeComplete
         }),
         
         // 顯示表格
         React.createElement('table', 
           { 
-            ref: tableRef,
+            id: tableId,
             className: 'notion-database-table' 
           },
           React.createElement('thead', {},
@@ -700,7 +699,10 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                   className: 'notion-header-cell',
                   'data-column': column.key,
                   'data-column-id': column.id,
-                  style: { width: column.width, position: 'relative' }
+                  style: { 
+                    '--col-width': `var(--col-${column.id}-width, ${column.width}px)`,
+                    position: 'relative' 
+                  } as React.CSSProperties
                 },
                   React.createElement('div', 
                     { className: 'notion-header-content' },
@@ -721,8 +723,9 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                     )
                   ),
                   // 新增欄位寬度調整器
-                  column.resizable !== false && React.createElement(ColumnResizerSimple, {
-                    columnId: column.id
+                  column.resizable !== false && React.createElement('div', {
+                    className: 'notion-column-resizer',
+                    'data-column-id': column.id
                   })
                 )
               ),
