@@ -2166,3 +2166,21 @@ body.resizing-column * {
   color: rgba(55, 53, 47, 0.65);
   flex-shrink: 0;
 }
+
+/* === Notion 風格文字連結 === */
+.notion-text-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: rgba(55, 53, 47, 0.65);
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.1s;
+  font-family: inherit;
+}
+
+.notion-text-link:hover {
+  opacity: 0.65;
+}

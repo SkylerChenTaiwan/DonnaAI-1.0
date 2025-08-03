@@ -159,11 +159,11 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({
       ),
 
       // 搜尋選項
-      React.createElement('div', { className: 'notion-panel-section' },
-        React.createElement('div', { className: 'notion-panel-section-header' },
-          React.createElement('span', {}, '搜尋範圍'),
+      React.createElement('div', { className: 'notion-filter-option-group' },
+        React.createElement('div', { className: 'notion-filter-option-header' },
+          React.createElement('span', { className: 'notion-filter-option-title' }, '搜尋範圍'),
           React.createElement('button', {
-            className: 'notion-link-button',
+            className: 'notion-text-link',
             onClick: handleSelectAll
           }, selectedColumns.length === 0 ? '取消全選' : '全部欄位')
         ),
@@ -191,9 +191,9 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({
       ),
 
       // 搜尋選項
-      React.createElement('div', { className: 'notion-panel-section' },
-        React.createElement('div', { className: 'notion-panel-section-header' },
-          React.createElement('span', {}, '選項')
+      React.createElement('div', { className: 'notion-filter-option-group' },
+        React.createElement('div', { className: 'notion-filter-option-header' },
+          React.createElement('span', { className: 'notion-filter-option-title' }, '選項')
         ),
         React.createElement('label', { className: 'notion-checkbox-item' },
           React.createElement('input', {
