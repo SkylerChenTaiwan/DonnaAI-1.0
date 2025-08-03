@@ -451,10 +451,13 @@ export const DatabaseScreen: React.FC = () => {
   }, [activeTab, user, handleRefresh, tabs]);
 
   const handleAddRow = useCallback(async (rowData?: Record<string, any>) => {
+    console.log('🎯 DatabaseScreen handleAddRow 被調用', { rowData, activeTab });
+    
     if (!rowData) {
       // 新增草稿列（不立即儲存到 Firebase）
+      console.log('🎯 準備調用 addDraftRow');
       const draftId = addDraftRow();
-      console.log('新增草稿列:', draftId);
+      console.log('🎯 新增草稿列完成:', draftId);
       
       // 可以選擇性地滾動到新列或聚焦到第一個欄位
       // TODO: 實作滾動到新列的邏輯

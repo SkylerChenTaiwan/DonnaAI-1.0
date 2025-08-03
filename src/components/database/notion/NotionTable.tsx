@@ -413,6 +413,14 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   
   // Handle add row - 允許空值，不強制必填
   const handleAddRow = useCallback(() => {
+    console.log('🎯 NotionTable handleAddRow 被調用');
+    console.log('🎯 onRowAdd 是否存在:', !!onRowAdd);
+    
+    if (!onRowAdd) {
+      console.error('❌ onRowAdd 函數未定義');
+      return;
+    }
+
     const newRow: any = {
       id: `draft_${Date.now()}`, // 使用臨時 ID
     };
@@ -432,7 +440,9 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
           newRow[col.key] = '';
       }
     });
-    onRowAdd?.(newRow);
+    
+    console.log('🎯 調用 onRowAdd（不傳遞資料，讓 DatabaseScreen 創建草稿行）');
+    onRowAdd();
   }, [columns, onRowAdd]);
   
   // Prepare columns with updated widths
