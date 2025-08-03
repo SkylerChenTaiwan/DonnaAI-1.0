@@ -26,9 +26,12 @@ import { NotionIcons, getPropertyIcon as getNotionPropertyIcon } from './NotionI
 import { useKeyboardNavigation } from './managers/KeyboardNavigationManager';
 import { FilterManager, createEmptyFilterGroup, useFilterManager } from './managers/FilterManager';
 import { SortManager, useSortManager } from './managers/SortManager';
+import { GroupManager, useGroupManager, createGroupConfig } from './managers/GroupManager';
+import type { GroupConfig } from './types';
 import { SearchManager, useSearch, createDefaultSearchConfig } from './components/SearchBar';
 import { FilterPanel } from './components/FilterPanel';
 import { SortPanel } from './components/SortPanel';
+import { GroupPanel } from './components/GroupPanel';
 import { SearchBar } from './components/SearchBar';
 
 export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = ({
@@ -83,6 +86,11 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   const [searchConfig, setSearchConfig] = useState<SearchConfig>(() => createDefaultSearchConfig());
   const [showSearchBar, setShowSearchBar] = useState(false);
   
+  // 群組狀態
+  const [groupConfig, setGroupConfig] = useState<GroupConfig | null>(null);
+  const [isGroupPanelOpen, setIsGroupPanelOpen] = useState(false);
+  const [groupButtonRef, setGroupButtonRef] = useState<HTMLElement | null>(null);
+  
   // 設定選單狀態
   const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
   const [settingsButtonRef, setSettingsButtonRef] = useState<HTMLElement | null>(null);
@@ -109,10 +117,14 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   // 2. 然後應用搜尋
   const { filteredData: searchedData, searchResults, searchManager } = useSearch(filteredData, searchConfig);
   
-  // 3. 最後應用排序
+  // 3. 然後應用排序
   const sortedData = useSortManager(searchedData, sorts);
   
-  // 最終處理的資料
+  // 4. 最後應用群組
+  const groupManager = useMemo(() => new GroupManager(), []);
+  const groupedData = useGroupManager(sortedData, groupConfig, columns);
+  
+  // 最終處理的資料 - 如果沒有群組，使用排序後的資料
   const processedData = sortedData;
   
   // Cell state management
@@ -219,6 +231,18 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   const handleSearchButtonClick = useCallback(() => {
     setShowSearchBar(!showSearchBar);
   }, [showSearchBar]);
+
+  // 群組事件處理器
+  const handleGroupButtonClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+    console.log('👥 群組按鈕被點擊');
+    setGroupButtonRef(event.currentTarget);
+    setIsGroupPanelOpen(true);
+  }, []);
+
+  const handleGroupPanelClose = useCallback(() => {
+    setIsGroupPanelOpen(false);
+    setGroupButtonRef(null);
+  }, []);
 
   // 設定選單事件處理器
   const handleSettingsButtonClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
@@ -574,12 +598,15 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
             // 群組按鈕
             React.createElement('button', 
               { 
-                className: 'notion-button',
-                onClick: () => console.log('群組（未實作）'),
-                title: '分組功能（待實作）'
+                className: `notion-button ${groupConfig ? 'notion-button-active' : ''}`,
+                onClick: handleGroupButtonClick,
+                title: `群組 ${groupConfig ? `(按 ${columns.find(c => c.key === groupConfig.columnKey)?.title})` : ''}`
               },
               React.createElement('span', { className: 'notion-button-icon' }, NotionIcons.group()),
-              '群組'
+              '群組',
+              groupConfig && React.createElement('span', {
+                className: 'notion-button-badge'
+              }, '1')
             ),
             // 搜尋列或搜尋按鈕
             showSearchBar ? React.createElement(SearchBar, {
@@ -658,36 +685,105 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
             )
           ),
           React.createElement('tbody', {},
-            // 如果有資料，顯示資料行
-            processedData.length > 0 && processedData.map((row, index) => 
-              React.createElement('tr', {
-                key: row.id,
-                className: `notion-data-row ${selectedRowsSet.has(row.id) ? 'selected' : ''}`,
-                onClick: () => onRowClick?.(row)
-              },
-                columnsWithWidths.map((column) => 
+            // 如果有群組，渲染群組結構
+            groupConfig && groupedData.length > 0 ? 
+              groupedData.map((group, groupIndex) => [
+                // 群組標題行
+                React.createElement('tr', {
+                  key: `group-${group.groupKey}`,
+                  className: `notion-group-header ${group.collapsed ? 'collapsed' : ''}`,
+                  onClick: () => {
+                    const newConfig = groupManager.toggleGroupCollapse(groupConfig, group.groupKey);
+                    setGroupConfig(newConfig);
+                  }
+                },
                   React.createElement('td', {
-                    key: column.id,
-                    className: 'notion-cell',
-                    style: { position: 'relative' },
-                    onDoubleClick: () => {
-                      console.log('雙擊儲存格:', { rowId: row.id, columnKey: column.key });
-                      setEditingCell({ rowId: row.id, columnKey: column.key });
-                    }
+                    colSpan: columnsWithWidths.length + 1,
+                    style: { padding: 0 }
                   },
                     React.createElement('div', {
-                      className: 'notion-cell-content'
-                    }, renderCellContent(row, column))
+                      style: { display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px' }
+                    },
+                      React.createElement('span', {
+                        className: 'notion-group-collapse-icon'
+                      }, '▼'),
+                      React.createElement('span', {
+                        className: 'notion-group-title'
+                      }, group.label),
+                      React.createElement('span', {
+                        className: 'notion-group-count'
+                      }, `(${group.count})`)
+                    )
                   )
                 ),
-                // 空的最後一欄（對應新增欄位按鈕）
-                React.createElement('td', 
-                  { className: 'notion-cell-empty-column' }
+                // 群組內的資料行（如果未折疊）
+                !group.collapsed && group.items.map((row: any, index: number) => 
+                  React.createElement('tr', {
+                    key: row.id,
+                    className: `notion-data-row ${selectedRowsSet.has(row.id) ? 'selected' : ''}`,
+                    onClick: () => onRowClick?.(row)
+                  },
+                    columnsWithWidths.map((column) => 
+                      React.createElement('td', {
+                        key: column.id,
+                        className: 'notion-cell',
+                        style: { position: 'relative' },
+                        onDoubleClick: () => {
+                          console.log('雙擊儲存格:', { rowId: row.id, columnKey: column.key });
+                          setEditingCell({ rowId: row.id, columnKey: column.key });
+                        }
+                      },
+                        React.createElement('div', {
+                          className: 'notion-cell-content'
+                        }, renderCellContent(row, column))
+                      )
+                    ),
+                    // 空的最後一欄（對應新增欄位按鈕）
+                    React.createElement('td', 
+                      { className: 'notion-cell-empty-column' }
+                    )
+                  )
+                ),
+                // 如果群組是空的且未折疊，顯示空訊息
+                !group.collapsed && group.items.length === 0 && React.createElement('tr', {
+                  key: `empty-${group.groupKey}`
+                },
+                  React.createElement('td', {
+                    colSpan: columnsWithWidths.length + 1,
+                    className: 'notion-group-empty-message'
+                  }, '此群組沒有資料')
                 )
-              )
-            ),
+              ]).flat() :
+              // 沒有群組時，直接渲染資料
+              processedData.length > 0 && processedData.map((row, index) => 
+                React.createElement('tr', {
+                  key: row.id,
+                  className: `notion-data-row ${selectedRowsSet.has(row.id) ? 'selected' : ''}`,
+                  onClick: () => onRowClick?.(row)
+                },
+                  columnsWithWidths.map((column) => 
+                    React.createElement('td', {
+                      key: column.id,
+                      className: 'notion-cell',
+                      style: { position: 'relative' },
+                      onDoubleClick: () => {
+                        console.log('雙擊儲存格:', { rowId: row.id, columnKey: column.key });
+                        setEditingCell({ rowId: row.id, columnKey: column.key });
+                      }
+                    },
+                      React.createElement('div', {
+                        className: 'notion-cell-content'
+                      }, renderCellContent(row, column))
+                    )
+                  ),
+                  // 空的最後一欄（對應新增欄位按鈕）
+                  React.createElement('td', 
+                    { className: 'notion-cell-empty-column' }
+                  )
+                )
+              ),
             // 如果沒有資料，顯示一個空行保持表格結構
-            processedData.length === 0 && React.createElement('tr',
+            (groupConfig ? groupedData.length === 0 : processedData.length === 0) && React.createElement('tr',
               { className: 'notion-empty-row' },
               React.createElement('td', {
                 colSpan: columnsWithWidths.length + 1,
@@ -750,6 +846,16 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
           currentSorts: sorts,
           onSortsChange: setSorts,
           anchorEl: sortButtonRef
+        }),
+
+        // 群組面板
+        React.createElement(GroupPanel, {
+          isOpen: isGroupPanelOpen,
+          onClose: handleGroupPanelClose,
+          columns,
+          currentGroup: groupConfig,
+          onGroupChange: setGroupConfig,
+          anchorEl: groupButtonRef
         }),
 
         // 設定選單

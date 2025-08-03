@@ -220,8 +220,8 @@ export interface GroupPanelProps {
   isOpen: boolean;
   onClose: () => void;
   columns: ColumnConfig[];
-  currentGroup: Group | null;
-  onGroupChange: (group: Group | null) => void;
+  currentGroup: GroupConfig | null;
+  onGroupChange: (group: GroupConfig | null) => void;
   anchorEl?: HTMLElement | null;
 }
 
@@ -247,9 +247,17 @@ export interface SortManagerOptions {
 }
 
 export interface GroupManagerOptions {
+  showEmptyGroups?: boolean;
+  sortGroups?: boolean;
   enableAggregations?: boolean;
   defaultCollapsed?: boolean;
   aggregationTypes?: ('count' | 'sum' | 'avg' | 'min' | 'max')[];
+}
+
+export interface GroupConfig {
+  columnKey: string;
+  collapsedGroups?: string[];
+  groupOrder?: string[];
 }
 
 // === 資料轉換相關類型定義 ===
