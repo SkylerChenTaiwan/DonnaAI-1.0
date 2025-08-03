@@ -25,12 +25,10 @@ import { ColumnSettingsModal } from '@/components/common/ColumnSettingsModal';
 import { FilterPopover } from '@/components/database/FilterPopover';
 import { SortPopover } from '@/components/database/SortPopover';
 import { EmptyState } from '@/components/database/EmptyState';
-import { NotionStyleTable } from '@/components/database/NotionStyleTable';
+import { NotionTable } from '@/components/database/notion/NotionTable';
 import { NotionStyleTableDebug } from '@/components/database/NotionStyleTableDebug';
 import { NotionStyleTableV2 } from '@/components/database/NotionStyleTableV2';
 import { TanStackNotionTableV3 } from '@/components/database/web/TanStackNotionTableV3';
-import { NotionTableSimple as NotionTable } from '@/components/database/notion/NotionTableSimple';
-import { NotionDatabase } from '@/components/database/web/NotionDatabase';
 import { DatabaseToolbar } from '@/components/database/DatabaseToolbar';
 import { convertToTanStackColumns } from '@/components/database/web/columnHelpers';
 import { AddColumnDialog, ColumnType, ColumnConfig } from '@/components/database/AddColumnDialog';
@@ -646,66 +644,24 @@ export const DatabaseScreen: React.FC = () => {
   }, []);
 
   const renderContent = () => {
-    console.log('🎨 正在渲染 NotionTable 元件');
-    
+    // 使用有完整功能的 NotionTable
     return (
       <View style={styles.fullScreenContainer}>
-        <View style={styles.databaseContainer}>
-          {/* 頁面標題 */}
-          <View style={styles.pageHeader}>
-            <Text style={styles.pageTitle}>{getHeaderTitle(activeTab)}</Text>
-          </View>
-          
-          {/* 分頁標籤 */}
-          <View style={styles.tabContainer}>
-            {tabs.map(tab => (
-              <TouchableOpacity
-                key={tab.id}
-                style={[styles.tab, activeTab === tab.id && styles.activeTab]}
-                onPress={() => setActiveTab(tab.id)}
-              >
-                <Icon name="table" size={14} color={activeTab === tab.id ? '#2383e2' : '#787774'} />
-                <Text style={[styles.tabText, activeTab === tab.id && styles.activeTabText]}>
-                  {tab.title}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-          
-          {/* 工具列 */}
-          <View style={styles.toolbar}>
-            <View style={styles.toolbarLeft}>
-              <TouchableOpacity style={styles.toolButton} onPress={() => setShowFilterPopover(true)}>
-                <Icon name="filter" size={14} color="#787774" />
-                <Text style={styles.toolButtonText}>過濾</Text>
-              </TouchableOpacity>
-              
-              <TouchableOpacity style={styles.toolButton} onPress={() => setShowSortPopover(true)}>
-                <Icon name="sort" size={14} color="#787774" />
-                <Text style={styles.toolButtonText}>排序</Text>
-              </TouchableOpacity>
-            </View>
-            
-            <View style={styles.toolbarRight}>
-              <TouchableOpacity style={[styles.toolButton, styles.primaryButton]} onPress={handleAddRow}>
-                <Text style={styles.primaryButtonText}>新建</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          
-          {/* 表格 */}
-          <NotionTable
-            data={currentData.data}
-            columns={notionColumns}
-            onCellUpdate={handleCellUpdateCallback}
-            onRowClick={handleRowPress}
-            onRowAdd={handleAddRow}
-            onColumnAdd={handleColumnAdd}
-            onColumnReorder={handleColumnReorder}
-            loading={currentData.loading}
-            emptyMessage="沒有資料，點擊新增列開始"
-          />
-        </View>
+        <NotionTable
+          data={currentData.data}
+          columns={notionColumns}
+          onCellUpdate={handleCellUpdateCallback}
+          onRowClick={handleRowPress}
+          onRowAdd={handleAddRow}
+          onColumnAdd={handleColumnAdd}
+          onColumnReorder={handleColumnReorder}
+          multiSelect={multiSelectMode}
+          selectedRows={selectedItems}
+          onSelectionChange={setSelectedItems}
+          loading={currentData.loading}
+          emptyMessage="沒有資料，點擊新增列開始"
+          activeTab={activeTab}
+        />
       </View>
     );
   }
