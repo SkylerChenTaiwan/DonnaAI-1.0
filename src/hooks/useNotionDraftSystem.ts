@@ -147,10 +147,15 @@ export function useNotionDraftSystem({
     // 使用較長的延遲以確保狀態更新完成
     const timer = setTimeout(() => {
       console.log('⏰ 計時器觸發，準備同步:', id);
-      // 再次使用 setTimeout 確保狀態已經更新
-      setTimeout(() => {
-        syncItem(id);
-      }, 0);
+      // 檢查計時器是否還在 map 中（可能已被清理）
+      if (syncTimers.current.has(id)) {
+        // 再次使用 setTimeout 確保狀態已經更新
+        setTimeout(() => {
+          syncItem(id);
+        }, 0);
+      } else {
+        console.log('⏰ 計時器已被清理，跳過同步:', id);
+      }
     }, syncDelay);
     
     syncTimers.current.set(id, timer);
@@ -174,31 +179,10 @@ export function useNotionDraftSystem({
     syncingItems.current.add(id);
     
     try {
-      // 先檢查所有項目的狀態（調試用）
-      await new Promise<void>((resolve) => {
-        setDraftState(prev => {
-          console.log('📊 當前所有草稿狀態:', 
-            Array.from(prev.items.entries()).map(([key, item]) => ({
-              id: key,
-              isDirty: item.isDirty,
-              isNew: item.isNew,
-              syncStatus: item.syncStatus
-            }))
-          );
-          resolve();
-          return prev;
-        });
-      });
-      
       // 獲取當前項目狀態
       const currentState = await new Promise<DraftItem | null>((resolve) => {
         setDraftState(prev => {
           const item = prev.items.get(id);
-          console.log('🔍 獲取項目狀態:', {
-            id,
-            found: !!item,
-            item: item ? { ...item } : null
-          });
           resolve(item ? { ...item } : null);
           return prev;
         });
@@ -209,21 +193,19 @@ export function useNotionDraftSystem({
         return;
       }
       
-      console.log('📋 檢查項目狀態:', {
-        id,
-        isDirty: currentState.isDirty,
-        isNew: currentState.isNew,
-        data: currentState.data
-      });
-      
       if (currentState.isDirty !== true) {
         console.log('⚠️ 項目不需要同步:', { 
           id, 
-          isDirty: currentState.isDirty,
-          fullItem: currentState
+          isDirty: currentState.isDirty
         });
         return;
       }
+      
+      console.log('📋 開始同步項目:', {
+        id,
+        isDirty: currentState.isDirty,
+        isNew: currentState.isNew
+      });
     
     // 更新同步狀態為 syncing
     setDraftState(prev => {
