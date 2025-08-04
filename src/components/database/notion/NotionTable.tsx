@@ -391,7 +391,9 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   const renderCellContent = useCallback((row: any, column: any) => {
     const value = row[column.key];
     const cellKey = `${row.id}-${column.key}`;
-    const isEditing = editingCell?.rowId === row.id && editingCell?.columnKey === column.key;
+    // 將 editingCell 的 CellPosition 格式轉換為 rowId/columnKey 來比較
+    const editingCellConverted = editingCell ? convertPositionToCell(editingCell) : null;
+    const isEditing = editingCellConverted?.rowId === row.id && editingCellConverted?.columnKey === column.key;
     
     if (Platform.OS !== 'web') {
       // React Native fallback
@@ -476,7 +478,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
           className: 'notion-cell-placeholder'
         }, '空白');
     }
-  }, [handleCellEdit, editingCell, setEditingCell, columns, convertCellToPosition]);
+  }, [handleCellEdit, editingCell, setEditingCell, columns, convertCellToPosition, convertPositionToCell]);
   
   // Handle add row - 允許空值，不強制必填
   const handleAddRow = useCallback(() => {
@@ -785,11 +787,23 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                     className: `notion-data-row ${selectedRowsSet.has(row.id) ? 'selected' : ''}`,
                     onClick: () => onRowClick?.(row)
                   },
-                    columnsWithWidths.filter(col => visibleColumns.includes(col.id)).map((column) => 
-                      React.createElement('td', {
+                    columnsWithWidths.filter(col => visibleColumns.includes(col.id)).map((column) => {
+                      // 檢查是否為草稿列的必填欄位
+                      const isDraft = row.id && row.id.startsWith('draft_');
+                      const isRequired = column.required;
+                      const isEmpty = !row[column.key] || row[column.key] === '';
+                      const needsRequiredWarning = isDraft && isRequired && isEmpty;
+                      
+                      return React.createElement('td', {
                         key: column.id,
-                        className: 'notion-cell',
-                        style: { position: 'relative' },
+                        className: `notion-cell ${needsRequiredWarning ? 'notion-cell-required' : ''}`,
+                        style: { 
+                          position: 'relative',
+                          ...(needsRequiredWarning && {
+                            border: '2px solid #ff4757',
+                            borderRadius: '3px'
+                          })
+                        },
                         onDoubleClick: () => {
                           console.log('雙擊儲存格:', { rowId: row.id, columnKey: column.key });
                           const position = convertCellToPosition({ rowId: row.id, columnKey: column.key });
@@ -801,8 +815,8 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                         React.createElement('div', {
                           className: 'notion-cell-content'
                         }, renderCellContent(row, column))
-                      )
-                    ),
+                      );
+                    }),
                     // 空的最後一欄（對應新增欄位按鈕）
                     React.createElement('td', 
                       { className: 'notion-cell-empty-column' }
@@ -826,11 +840,23 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                   className: `notion-data-row ${selectedRowsSet.has(row.id) ? 'selected' : ''}`,
                   onClick: () => onRowClick?.(row)
                 },
-                  columnsWithWidths.filter(col => visibleColumns.includes(col.id)).map((column) => 
-                    React.createElement('td', {
+                  columnsWithWidths.filter(col => visibleColumns.includes(col.id)).map((column) => {
+                    // 檢查是否為草稿列的必填欄位
+                    const isDraft = row.id && row.id.startsWith('draft_');
+                    const isRequired = column.required;
+                    const isEmpty = !row[column.key] || row[column.key] === '';
+                    const needsRequiredWarning = isDraft && isRequired && isEmpty;
+                    
+                    return React.createElement('td', {
                       key: column.id,
-                      className: 'notion-cell',
-                      style: { position: 'relative' },
+                      className: `notion-cell ${needsRequiredWarning ? 'notion-cell-required' : ''}`,
+                      style: { 
+                        position: 'relative',
+                        ...(needsRequiredWarning && {
+                          border: '2px solid #ff4757',
+                          borderRadius: '3px'
+                        })
+                      },
                       onDoubleClick: () => {
                         console.log('雙擊儲存格:', { rowId: row.id, columnKey: column.key });
                         const position = convertCellToPosition({ rowId: row.id, columnKey: column.key });
@@ -842,8 +868,8 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                       React.createElement('div', {
                         className: 'notion-cell-content'
                       }, renderCellContent(row, column))
-                    )
-                  ),
+                    );
+                  }),
                   // 空的最後一欄（對應新增欄位按鈕）
                   React.createElement('td', 
                     { className: 'notion-cell-empty-column' }

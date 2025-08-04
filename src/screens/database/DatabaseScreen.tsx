@@ -262,8 +262,8 @@ export const DatabaseScreen: React.FC = () => {
   // 基礎欄位定義（可被自訂欄位擴展）
   const baseColumns = useMemo(() => ({
     customers: [
-      { key: 'name', title: '姓名', sortable: true, filterable: true, type: 'text' as const },
-      { key: 'company', title: '公司', sortable: true, filterable: true, type: 'text' as const },
+      { key: 'name', title: '姓名', sortable: true, filterable: true, type: 'text' as const, required: true },
+      { key: 'company', title: '公司', sortable: true, filterable: true, type: 'text' as const, required: true },
       { key: 'phone', title: '電話', sortable: true, filterable: true, type: 'phone' as const },
       { key: 'tags', title: '標籤', sortable: true, filterable: true, type: 'tags' as const },
     ],
@@ -272,10 +272,10 @@ export const DatabaseScreen: React.FC = () => {
         options: ['meeting', 'call'] },
       { key: 'customerName', title: '客戶', sortable: true, filterable: true, type: 'text' as const },
       { key: 'date', title: '日期', sortable: true, filterable: true, type: 'date' as const },
-      { key: 'summary', title: '摘要', sortable: true, filterable: true, type: 'text' as const },
+      { key: 'summary', title: '摘要', sortable: true, filterable: true, type: 'text' as const, required: true },
     ],
     tasks: [
-      { key: 'title', title: '標題', sortable: true, filterable: true, type: 'text' as const },
+      { key: 'title', title: '標題', sortable: true, filterable: true, type: 'text' as const, required: true },
       { key: 'assignee', title: '負責人', sortable: true, filterable: true, type: 'text' as const },
       { key: 'dueDate', title: '到期日', sortable: true, filterable: true, type: 'date' as const },
       { key: 'status', title: '狀態', sortable: true, filterable: true, type: 'select' as const,
@@ -507,8 +507,8 @@ export const DatabaseScreen: React.FC = () => {
     switch (activeTab) {
       case 'customers':
         customerDraftSystem.addNewDraft({
-          name: '新客戶',
-          company: '未設定',
+          name: '',
+          company: '',
           email: '',
           phone: '',
           tags: [],
@@ -518,22 +518,22 @@ export const DatabaseScreen: React.FC = () => {
         
       case 'records':
         recordDraftSystem.addNewDraft({
-          title: '新紀錄',
+          title: '',
           type: 'general',
           content: '',
           customerIds: [],
-          date: new Date().toLocaleDateString('zh-TW'),
+          date: '',
         });
         showToast('info', '已新增草稿列，開始編輯後將自動儲存');
         break;
         
       case 'tasks':
         taskDraftSystem.addNewDraft({
-          title: '新任務',
+          title: '',
           type: 'unscheduled',
           status: 'todo',
           priority: 'medium',
-          assignee: user?.displayName || user?.email || '未指派',
+          assignee: '',
         });
         showToast('info', '已新增草稿列，開始編輯後將自動儲存');
         break;
@@ -664,6 +664,7 @@ export const DatabaseScreen: React.FC = () => {
       width: col.width,
       editable: col.editable !== false,
       options: col.options,
+      required: col.required || false,
     }));
   }, [currentColumns]);
 
