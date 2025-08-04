@@ -63,6 +63,8 @@ export function clearUserPermissionCache(userId?: string) {
 export function buildQueryConstraints(context: UserPermissionContext, dataType: 'customers' | 'records' | 'tasks') {
   const constraints = [];
   
+  console.log('🔧 建立查詢條件:', { role: context.role, dataType, userId: context.userId });
+  
   switch (context.role) {
     case 'system-admin':
       // 系統管理員：不應該看到任何業務資料，返回一個永遠不匹配的條件
@@ -76,16 +78,17 @@ export function buildQueryConstraints(context: UserPermissionContext, dataType: 
       
     case 'manager':
       // 主管：看管理團隊的資料
-      if (context.managedTeamIds.length > 0) {
+      if (dataType === 'customers') {
+        // 對於客戶，使用 createdBy 作為主要查詢條件
+        constraints.push(['createdBy', '==', context.userId]);
+      } else if (context.managedTeamIds.length > 0) {
         constraints.push(['teamId', 'in', context.managedTeamIds]);
       } else if (context.teamIds.length > 0) {
         // 沒有管理團隊，只看自己團隊
         constraints.push(['teamId', 'in', context.teamIds]);
       } else {
         // 如果沒有任何團隊，根據資料類型決定
-        if (dataType === 'customers') {
-          constraints.push(['assignedTo', '==', context.userId]);
-        } else if (dataType === 'records') {
+        if (dataType === 'records') {
           constraints.push(['createdBy', '==', context.userId]);
         } else if (dataType === 'tasks') {
           constraints.push(['assigneeId', '==', context.userId]);
@@ -96,21 +99,11 @@ export function buildQueryConstraints(context: UserPermissionContext, dataType: 
     case 'salesperson':
       // 業務員：根據資料類型有不同權限
       if (dataType === 'customers') {
-        // 客戶：看自己團隊或自己負責的
-        if (context.teamIds.length > 0) {
-          constraints.push(['teamId', 'in', context.teamIds]);
-        } else {
-          // 如果沒有團隊，只看自己負責的客戶
-          constraints.push(['assignedTo', '==', context.userId]);
-        }
+        // 客戶：優先看自己建立的（因為大部分客戶沒有 teamId 或 assignedTo）
+        constraints.push(['createdBy', '==', context.userId]);
       } else if (dataType === 'records') {
-        // 紀錄：看自己參與的或團隊的
-        if (context.teamIds.length > 0) {
-          constraints.push(['teamId', 'in', context.teamIds]);
-        } else {
-          // 如果沒有團隊，只看自己建立的紀錄
-          constraints.push(['createdBy', '==', context.userId]);
-        }
+        // 紀錄：看自己建立的
+        constraints.push(['createdBy', '==', context.userId]);
       } else if (dataType === 'tasks') {
         // 任務：看自己負責的
         constraints.push(['assigneeId', '==', context.userId]);
