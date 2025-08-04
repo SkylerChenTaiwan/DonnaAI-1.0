@@ -182,22 +182,34 @@ export function useNotionDraftSystem({
     
     try {
       // 執行同步
-      await onSync(id, itemToSync.data, itemToSync.isNew);
+      const result = await onSync(id, itemToSync.data, itemToSync.isNew);
+      
+      // 檢查是否返回了新 ID（新建項目的情況）
+      const newId = result?.newId;
       
       // 同步成功
-      console.log('✅ 同步成功，清除 isDirty 標記:', id);
+      console.log('✅ 同步成功，清除 isDirty 標記:', id, newId ? `新 ID: ${newId}` : '');
+      
       setDraftState(prev => {
         const newItems = new Map(prev.items);
-        const item = newItems.get(id);
-        if (item) {
-          newItems.set(id, {
-            ...item,
-            isDirty: false,
-            isNew: false,
-            syncStatus: 'idle',
-            lastSyncTime: Date.now(),
-            error: undefined
-          });
+        
+        if (newId && newId !== id) {
+          // 如果有新 ID，移除舊的草稿項目
+          newItems.delete(id);
+          console.log('🔄 移除草稿項目:', id);
+        } else {
+          // 更新現有項目
+          const item = newItems.get(id);
+          if (item) {
+            newItems.set(id, {
+              ...item,
+              isDirty: false,
+              isNew: false,
+              syncStatus: 'idle',
+              lastSyncTime: Date.now(),
+              error: undefined
+            });
+          }
         }
         
         // 檢查是否還有其他項目在同步

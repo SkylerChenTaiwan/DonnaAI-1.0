@@ -123,13 +123,17 @@ export const DatabaseScreen: React.FC = () => {
       }
       
       // 新建客戶 - 移除草稿 ID
-      const { id: _, ...customerData } = data;
-      await createCustomer({
+      const { id: draftId, ...customerData } = data;
+      const newCustomer = await createCustomer({
         ...customerData,
         organizationId: user?.organizationId || '',
         createdBy: user?.uid || '',
       }, user?.uid || '');
-      console.log('✅ 客戶創建成功');
+      
+      console.log('✅ 客戶創建成功，新 ID:', newCustomer.id);
+      
+      // 返回新的 ID，讓草稿系統可以更新
+      return { newId: newCustomer.id };
     } else {
       // 更新現有客戶
       await updateCustomer(id, data);
@@ -147,13 +151,14 @@ export const DatabaseScreen: React.FC = () => {
         throw new Error('缺少必填欄位：摘要為必填');
       }
       
-      const { id: _, ...recordData } = data;
-      await createRecord({
+      const { id: draftId, ...recordData } = data;
+      const newRecord = await createRecord({
         ...recordData,
         organizationId: user?.organizationId || '',
         createdBy: user?.uid || '',
       }, user?.uid || '');
-      console.log('✅ 記錄創建成功');
+      console.log('✅ 記錄創建成功，新 ID:', newRecord.id);
+      return { newId: newRecord.id };
     } else {
       await updateRecord(id, data);
       console.log('✅ 記錄更新成功');
@@ -170,13 +175,14 @@ export const DatabaseScreen: React.FC = () => {
         throw new Error('缺少必填欄位：標題為必填');
       }
       
-      const { id: _, ...taskData } = data;
-      await createTask({
+      const { id: draftId, ...taskData } = data;
+      const newTask = await createTask({
         ...taskData,
         organizationId: user?.organizationId || '',
         createdBy: user?.uid || '',
       }, user?.uid || '');
-      console.log('✅ 任務創建成功');
+      console.log('✅ 任務創建成功，新 ID:', newTask.id);
+      return { newId: newTask.id };
     } else {
       await updateTask(id, data);
       console.log('✅ 任務更新成功');
