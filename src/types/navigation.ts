@@ -78,6 +78,7 @@ export type MainTabParamList = {
   AddAction: undefined; // 僅用於觸發modal，不實際導航
   Tools: undefined;
   Settings: undefined;
+  FirebaseTest: undefined;
 };
 
 export type AuthStackParamList = {

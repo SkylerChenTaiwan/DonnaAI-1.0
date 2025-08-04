@@ -16,6 +16,7 @@ import { DatabaseScreen } from '@/screens/database/DatabaseScreen';
 import { ToolsScreen } from '@/screens/tools/ToolsScreen';
 import { PersonnelScreen } from '@/screens/personnel/PersonnelScreen';
 import { SettingsScreen } from '@/screens/settings/SettingsScreen';
+import { FirebaseTestScreen } from '@/screens/test/FirebaseTestScreen';
 import { ActionPopover } from '@/components/common/ActionPopover';
 import AnalyticsDialog from '@/components/analytics/AnalyticsDialog';
 import { MainTabParamList, RootStackParamList } from '@/types/navigation';
@@ -198,6 +199,17 @@ export const MainTabNavigator = () => {
               headerTitle: '設定',
             }}
           />
+
+          {__DEV__ && (
+            <Tab.Screen
+              name="FirebaseTest"
+              component={FirebaseTestScreen}
+              options={{
+                title: '測試',
+                headerTitle: 'Firebase 測試',
+              }}
+            />
+          )}
         </Tab.Navigator>
       </View>
 
