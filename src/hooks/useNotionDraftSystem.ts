@@ -60,6 +60,8 @@ export function useNotionDraftSystem({
   const syncTimers = useRef<Map<string, NodeJS.Timeout>>(new Map());
   // 重試次數記錄
   const retryCount = useRef<Map<string, number>>(new Map());
+  // 正在同步的項目
+  const syncingItems = useRef<Set<string>>(new Set());
   
   // 初始化：將 Firebase 資料載入到草稿層
   useEffect(() => {
@@ -142,8 +144,13 @@ export function useNotionDraftSystem({
     }
     
     // 設定新的同步計時器
+    // 使用較長的延遲以確保狀態更新完成
     const timer = setTimeout(() => {
-      syncItem(id);
+      console.log('⏰ 計時器觸發，準備同步:', id);
+      // 再次使用 setTimeout 確保狀態已經更新
+      setTimeout(() => {
+        syncItem(id);
+      }, 0);
     }, syncDelay);
     
     syncTimers.current.set(id, timer);
@@ -157,34 +164,66 @@ export function useNotionDraftSystem({
   const syncItem = useCallback(async (id: string) => {
     console.log('🔄 開始同步項目:', id);
     
-    // 獲取當前項目狀態
-    const currentState = await new Promise<DraftItem | null>((resolve) => {
-      setDraftState(prev => {
-        const item = prev.items.get(id);
-        resolve(item ? { ...item } : null);
-        return prev;
-      });
-    });
-    
-    if (!currentState) {
-      console.log('⚠️ 找不到項目:', id);
+    // 檢查是否已經在同步中
+    if (syncingItems.current.has(id)) {
+      console.log('⚠️ 項目已經在同步中，跳過:', id);
       return;
     }
     
-    console.log('📋 檢查項目狀態:', {
-      id,
-      isDirty: currentState.isDirty,
-      isNew: currentState.isNew,
-      data: currentState.data
-    });
+    // 標記為正在同步
+    syncingItems.current.add(id);
     
-    if (currentState.isDirty !== true) {
-      console.log('⚠️ 項目不需要同步:', { 
-        id, 
-        isDirty: currentState.isDirty
+    try {
+      // 先檢查所有項目的狀態（調試用）
+      await new Promise<void>((resolve) => {
+        setDraftState(prev => {
+          console.log('📊 當前所有草稿狀態:', 
+            Array.from(prev.items.entries()).map(([key, item]) => ({
+              id: key,
+              isDirty: item.isDirty,
+              isNew: item.isNew,
+              syncStatus: item.syncStatus
+            }))
+          );
+          resolve();
+          return prev;
+        });
       });
-      return;
-    }
+      
+      // 獲取當前項目狀態
+      const currentState = await new Promise<DraftItem | null>((resolve) => {
+        setDraftState(prev => {
+          const item = prev.items.get(id);
+          console.log('🔍 獲取項目狀態:', {
+            id,
+            found: !!item,
+            item: item ? { ...item } : null
+          });
+          resolve(item ? { ...item } : null);
+          return prev;
+        });
+      });
+      
+      if (!currentState) {
+        console.log('⚠️ 找不到項目:', id);
+        return;
+      }
+      
+      console.log('📋 檢查項目狀態:', {
+        id,
+        isDirty: currentState.isDirty,
+        isNew: currentState.isNew,
+        data: currentState.data
+      });
+      
+      if (currentState.isDirty !== true) {
+        console.log('⚠️ 項目不需要同步:', { 
+          id, 
+          isDirty: currentState.isDirty,
+          fullItem: currentState
+        });
+        return;
+      }
     
     // 更新同步狀態為 syncing
     setDraftState(prev => {
@@ -223,6 +262,14 @@ export function useNotionDraftSystem({
           // 如果有新 ID，移除舊的草稿項目
           newItems.delete(id);
           console.log('🔄 移除草稿項目:', id);
+          
+          // 清理相關的計時器
+          const timer = syncTimers.current.get(id);
+          if (timer) {
+            clearTimeout(timer);
+            syncTimers.current.delete(id);
+            console.log('🧹 清理同步計時器:', id);
+          }
         } else {
           // 更新現有項目
           const item = newItems.get(id);
@@ -287,6 +334,11 @@ export function useNotionDraftSystem({
         // 權限錯誤不重試
         showToast('error', '同步失敗：' + (error instanceof Error ? error.message : '未知錯誤'));
       }
+    }
+    } finally {
+      // 清除同步標記
+      syncingItems.current.delete(id);
+      console.log('🔓 清除同步標記:', id);
     }
   }, []);
   
