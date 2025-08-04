@@ -113,7 +113,15 @@ export const DatabaseScreen: React.FC = () => {
 
   // 為每個標籤頁準備同步函數
   const handleSyncCustomer = useCallback(async (id: string, data: any, isNew: boolean) => {
+    console.log('🔄 同步客戶:', { id, data, isNew });
+    
     if (isNew) {
+      // 檢查必填欄位
+      if (!data.name || !data.company) {
+        console.log('⚠️ 缺少必填欄位，暫不同步');
+        return; // 不同步到 Firebase
+      }
+      
       // 新建客戶 - 移除草稿 ID
       const { id: _, ...customerData } = data;
       await createCustomer({
@@ -182,6 +190,67 @@ export const DatabaseScreen: React.FC = () => {
       fetchTasks(user);
     }
   }, [user, fetchCustomers, fetchRecords, fetchTasks]);
+  
+  // 處理離開頁面前的提醒
+  useEffect(() => {
+    // 只在 Web 平台執行
+    if (Platform.OS !== 'web') return;
+    
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      // 檢查各個標籤的未同步草稿
+      const customerUnsyncedDrafts = customerDraftSystem.getUnsyncedDrafts();
+      const recordUnsyncedDrafts = recordDraftSystem.getUnsyncedDrafts();
+      const taskUnsyncedDrafts = taskDraftSystem.getUnsyncedDrafts();
+      
+      const totalUnsyncedCount = 
+        customerUnsyncedDrafts.length + 
+        recordUnsyncedDrafts.length + 
+        taskUnsyncedDrafts.length;
+      
+      if (totalUnsyncedCount > 0) {
+        // 嘗試自動同步可以同步的項目
+        const autoSyncDrafts = async () => {
+          // 處理客戶草稿
+          for (const draft of customerUnsyncedDrafts) {
+            if (!customerDraftSystem.hasRequiredFieldsEmpty(draft, ['name', 'company'])) {
+              await customerDraftSystem.syncItem(draft.id);
+            } else {
+              console.log('⚠️ 客戶草稿缺少必填欄位，無法自動同步:', draft.id);
+            }
+          }
+          
+          // 處理記錄草稿
+          for (const draft of recordUnsyncedDrafts) {
+            if (!recordDraftSystem.hasRequiredFieldsEmpty(draft, ['summary'])) {
+              await recordDraftSystem.syncItem(draft.id);
+            }
+          }
+          
+          // 處理任務草稿
+          for (const draft of taskUnsyncedDrafts) {
+            if (!taskDraftSystem.hasRequiredFieldsEmpty(draft, ['title'])) {
+              await taskDraftSystem.syncItem(draft.id);
+            }
+          }
+        };
+        
+        // 立即嘗試同步
+        autoSyncDrafts();
+        
+        // 設定瀏覽器提示
+        const message = '您有未儲存的變更。確定要離開嗎？';
+        e.preventDefault();
+        e.returnValue = message;
+        return message;
+      }
+    };
+    
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [customerDraftSystem, recordDraftSystem, taskDraftSystem]);
 
   // 處理路由參數變化
   useEffect(() => {

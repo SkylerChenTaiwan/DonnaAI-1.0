@@ -293,6 +293,17 @@ export function useNotionDraftSystem({
     return item?.syncStatus || 'idle';
   }, [draftState.items]);
   
+  // 獲取所有未同步的草稿
+  const getUnsyncedDrafts = useCallback(() => {
+    return Array.from(draftState.items.values())
+      .filter(item => item.isDirty);
+  }, [draftState.items]);
+  
+  // 檢查是否有必填欄位未填
+  const hasRequiredFieldsEmpty = useCallback((item: DraftItem, requiredFields: string[]) => {
+    return requiredFields.some(field => !item.data[field] || item.data[field] === '');
+  }, []);
+  
   // 計算衍生狀態
   const draftData = Array.from(draftState.items.values())
     .map(item => ({
@@ -322,8 +333,11 @@ export function useNotionDraftSystem({
     deleteDraft,
     syncStatus: draftState.globalSyncStatus,
     syncAll,
+    syncItem,
     getSyncStatus,
     hasUnsavedChanges,
-    getUnsavedCount
+    getUnsavedCount,
+    getUnsyncedDrafts,
+    hasRequiredFieldsEmpty
   };
 }
