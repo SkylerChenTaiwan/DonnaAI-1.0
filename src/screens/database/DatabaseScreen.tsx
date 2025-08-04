@@ -119,7 +119,7 @@ export const DatabaseScreen: React.FC = () => {
       // 檢查必填欄位
       if (!data.name || !data.company) {
         console.log('⚠️ 缺少必填欄位，暫不同步');
-        return; // 不同步到 Firebase
+        throw new Error('缺少必填欄位：姓名和公司為必填'); // 拋出錯誤讓草稿系統知道同步失敗
       }
       
       // 新建客戶 - 移除草稿 ID
@@ -129,35 +129,57 @@ export const DatabaseScreen: React.FC = () => {
         organizationId: user?.organizationId || '',
         createdBy: user?.uid || '',
       }, user?.uid || '');
+      console.log('✅ 客戶創建成功');
     } else {
       // 更新現有客戶
       await updateCustomer(id, data);
+      console.log('✅ 客戶更新成功');
     }
   }, [user]);
 
   const handleSyncRecord = useCallback(async (id: string, data: any, isNew: boolean) => {
+    console.log('🔄 同步記錄:', { id, data, isNew });
+    
     if (isNew) {
+      // 檢查必填欄位
+      if (!data.summary) {
+        console.log('⚠️ 缺少必填欄位，暫不同步');
+        throw new Error('缺少必填欄位：摘要為必填');
+      }
+      
       const { id: _, ...recordData } = data;
       await createRecord({
         ...recordData,
         organizationId: user?.organizationId || '',
         createdBy: user?.uid || '',
       }, user?.uid || '');
+      console.log('✅ 記錄創建成功');
     } else {
       await updateRecord(id, data);
+      console.log('✅ 記錄更新成功');
     }
   }, [user]);
 
   const handleSyncTask = useCallback(async (id: string, data: any, isNew: boolean) => {
+    console.log('🔄 同步任務:', { id, data, isNew });
+    
     if (isNew) {
+      // 檢查必填欄位
+      if (!data.title) {
+        console.log('⚠️ 缺少必填欄位，暫不同步');
+        throw new Error('缺少必填欄位：標題為必填');
+      }
+      
       const { id: _, ...taskData } = data;
       await createTask({
         ...taskData,
         organizationId: user?.organizationId || '',
         createdBy: user?.uid || '',
       }, user?.uid || '');
+      console.log('✅ 任務創建成功');
     } else {
       await updateTask(id, data);
+      console.log('✅ 任務更新成功');
     }
   }, [user]);
 
