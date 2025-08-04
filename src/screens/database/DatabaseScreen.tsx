@@ -93,22 +93,36 @@ export const DatabaseScreen: React.FC = () => {
   });
   
   const { user } = useAuthStore();
-  const { customers, isLoading: customerLoading, fetchCustomers } = useCustomerStore();
+  const { customers, isLoading: customerLoading, fetchCustomers, subscribeToCustomers } = useCustomerStore();
   const { records, isLoading: recordLoading, fetchRecords } = useRecordStore();
   const { tasks, isLoading: taskLoading, fetchTasks } = useTaskStore();
 
-  // 載入資料
+  // 載入資料和訂閱即時更新
   useEffect(() => {
     console.log('🔄 DatabaseScreen useEffect - user:', user?.email || 'null');
     if (user) {
       console.log('📥 開始載入資料...');
+      
+      // 初始載入
       fetchCustomers(user);
       fetchRecords(user);
       fetchTasks(user);
+      
+      // 訂閱客戶資料即時更新
+      console.log('📡 訂閱客戶資料即時更新');
+      const unsubscribe = subscribeToCustomers(user);
+      
+      // 清理訂閱
+      return () => {
+        console.log('🔌 取消訂閱客戶資料');
+        if (typeof unsubscribe === 'function') {
+          unsubscribe();
+        }
+      };
     } else {
       console.log('⚠️ 沒有使用者，無法載入資料');
     }
-  }, [user, fetchCustomers, fetchRecords, fetchTasks]);
+  }, [user, fetchCustomers, fetchRecords, fetchTasks, subscribeToCustomers]);
 
 
   // 為每個標籤頁準備同步函數

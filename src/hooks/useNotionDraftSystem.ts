@@ -161,13 +161,17 @@ export function useNotionDraftSystem({
     // 設定新的全頁同步計時器
     pageSyncTimer.current = setTimeout(() => {
       console.log('⏰ 全頁同步計時器觸發');
-      syncAllDirtyItems();
+      // 延後執行以確保函數已定義
+      requestAnimationFrame(() => {
+        syncAllDirtyItemsRef.current();
+      });
     }, syncDelay);
   }, [syncDelay]);
   
-  // 使用 ref 來存儲 onSync 函數，避免閉包問題
+  // 使用 ref 來存儲函數，避免閉包問題
   const onSyncRef = useRef(onSync);
   onSyncRef.current = onSync;
+  const syncAllDirtyItemsRef = useRef<() => Promise<void>>(() => Promise.resolve());
   
   // 同步單個項目 - 重新實作以解決閉包問題
   const syncItem = useCallback(async (id: string) => {
@@ -370,6 +374,9 @@ export function useNotionDraftSystem({
     // 重置標記
     hasPendingChanges.current = false;
   }, [syncItem]);
+  
+  // 更新 ref
+  syncAllDirtyItemsRef.current = syncAllDirtyItems;
   
   // 新增草稿
   const addNewDraft = useCallback((defaultData: Record<string, any> = {}) => {
