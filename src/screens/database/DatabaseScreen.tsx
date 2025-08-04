@@ -262,14 +262,11 @@ export const DatabaseScreen: React.FC = () => {
 
   // 取得當前標籤的資料
   const currentData = useMemo(() => {
-    const draftRows = getDraftRows();
-    
     console.log('📊 DatabaseScreen 資料狀態:', {
       activeTab,
       tasksLength: tasks?.length || 0,
       customersLength: customers?.length || 0,
       recordsLength: records?.length || 0,
-      draftRowsLength: draftRows.length,
       taskLoading,
       customerLoading,
       recordLoading,
@@ -289,22 +286,8 @@ export const DatabaseScreen: React.FC = () => {
           }), {})
         }));
         
-        // 加入草稿列
-        const draftCustomerData = draftRows.map(draft => ({
-          id: draft.id,
-          name: draft.data.name || '',
-          company: draft.data.company || '',
-          phone: draft.data.phone || '',
-          tags: draft.data.tags || '',
-          ...customColumns.customers.reduce((acc, col) => ({
-            ...acc,
-            [col.id]: draft.data[col.id] || col.defaultValue || ''
-          }), {}),
-          _isDraft: true
-        }));
-        
         return {
-          data: [...customerData, ...draftCustomerData],
+          data: customerData,
           loading: customerLoading,
         };
       case 'records':
@@ -320,22 +303,8 @@ export const DatabaseScreen: React.FC = () => {
           }), {})
         }));
         
-        // 加入草稿列
-        const draftRecordData = draftRows.map(draft => ({
-          id: draft.id,
-          type: draft.data.type || '',
-          customerName: draft.data.customerName || '',
-          date: draft.data.date || '',
-          summary: draft.data.summary || '',
-          ...customColumns.records.reduce((acc, col) => ({
-            ...acc,
-            [col.id]: draft.data[col.id] || col.defaultValue || ''
-          }), {}),
-          _isDraft: true
-        }));
-        
         return {
-          data: [...recordData, ...draftRecordData],
+          data: recordData,
           loading: recordLoading,
         };
       case 'tasks':
@@ -351,28 +320,14 @@ export const DatabaseScreen: React.FC = () => {
           }), {})
         }));
         
-        // 加入草稿列
-        const draftTaskData = draftRows.map(draft => ({
-          id: draft.id,
-          title: draft.data.title || '',
-          assignee: draft.data.assignee || '',
-          dueDate: draft.data.dueDate || '',
-          status: draft.data.status || 'todo',
-          ...customColumns.tasks.reduce((acc, col) => ({
-            ...acc,
-            [col.id]: draft.data[col.id] || col.defaultValue || ''
-          }), {}),
-          _isDraft: true
-        }));
-        
         return {
-          data: [...taskData, ...draftTaskData],
+          data: taskData,
           loading: taskLoading,
         };
       default:
         return { data: [], loading: false };
     }
-  }, [activeTab, customers, records, tasks, customerLoading, recordLoading, taskLoading, customColumns, getDraftRows]);
+  }, [activeTab, customers, records, tasks, customerLoading, recordLoading, taskLoading, customColumns]);
 
   // 統一的重新載入方法
   const handleRefresh = useCallback(async () => {
@@ -457,37 +412,57 @@ export const DatabaseScreen: React.FC = () => {
   const handleAddRow = useCallback(async (rowData?: Record<string, any>) => {
     console.log('🎯 DatabaseScreen handleAddRow 被調用', { rowData, activeTab });
     
-    if (!rowData) {
-      // 新增草稿列（不立即儲存到 Firebase）
-      console.log('🎯 準備調用 addDraftRow');
-      const draftId = addDraftRow();
-      console.log('🎯 新增草稿列完成:', draftId);
+    try {
+      // 直接創建新資料到 Firebase，使用預設值
+      const baseData = {
+        organizationId: user?.organizationId || '',
+        createdBy: user?.uid || '',
+      };
       
-      // 可以選擇性地滾動到新列或聚焦到第一個欄位
-      // TODO: 實作滾動到新列的邏輯
-    } else {
-      // 有資料時，檢查是否為草稿列的儲存
-      if (rowData.id && rowData.id.startsWith('draft_')) {
-        // 草稿列要儲存到 Firebase
-        const validation = validateAllChanges();
-        if (!validation) {
-          showToast('error', '請填寫所有必填欄位');
-          return;
-        }
-        
-        // 取得草稿資料
-        const draftRow = pendingChanges.get(rowData.id);
-        if (draftRow) {
-          await handleAddRowWithData(draftRow.data);
-          // 成功後移除草稿
-          removeDraftRow(rowData.id);
-        }
-      } else {
-        // 舊模式：內聯新增（保留向後相容）
-        await handleAddRowWithData(rowData);
+      switch (activeTab) {
+        case 'customers':
+          await createCustomer({
+            ...baseData,
+            name: '新客戶',
+            company: '未設定',
+            email: '',
+            phone: '',
+            tags: [],
+          }, user?.uid || '');
+          break;
+          
+        case 'records':
+          await createRecord({
+            ...baseData,
+            title: '新紀錄',
+            type: 'general',
+            content: '',
+            customerIds: [],
+          }, user?.uid || '');
+          break;
+          
+        case 'tasks':
+          await createTask({
+            ...baseData,
+            title: '新任務',
+            type: 'unscheduled',
+            status: 'todo',
+            priority: 'medium',
+            source: 'manual',
+            teamId: user?.teamId || '',
+            assigneeId: user?.uid || '',
+          }, user?.uid || '');
+          break;
       }
+      
+      await handleRefresh();
+      showToast('success', '已新增列，點擊儲存格進行編輯');
+      
+    } catch (error) {
+      console.error('新增列失敗:', error);
+      showToast('error', '新增失敗');
     }
-  }, [activeTab, addDraftRow, validateAllChanges, pendingChanges, handleAddRowWithData, removeDraftRow]);
+  }, [activeTab, user, handleRefresh]);
 
   const handleAddColumn = useCallback((column: ColumnConfig) => {
     setCustomColumns(prev => ({
@@ -575,32 +550,24 @@ export const DatabaseScreen: React.FC = () => {
   // 建立 debounced 更新函數
   const handleCellUpdate = useCallback(async (rowId: string, columnKey: string, value: any) => {
     try {
-      // 檢查是否為草稿列
-      const isDraft = rowId.startsWith('draft_');
-      
-      if (isDraft) {
-        // 更新 pending changes
-        updatePendingChange(rowId, columnKey, value);
-      } else {
-        // 更新現有資料
-        switch (activeTab) {
-          case 'customers':
-            await updateCustomer(rowId, { [columnKey]: value });
-            break;
-          case 'records':
-            await updateRecord(rowId, { [columnKey]: value });
-            break;
-          case 'tasks':
-            await updateTask(rowId, { [columnKey]: value });
-            break;
-        }
-        showToast('success', '已自動儲存');
+      // 直接更新現有資料
+      switch (activeTab) {
+        case 'customers':
+          await updateCustomer(rowId, { [columnKey]: value });
+          break;
+        case 'records':
+          await updateRecord(rowId, { [columnKey]: value });
+          break;
+        case 'tasks':
+          await updateTask(rowId, { [columnKey]: value });
+          break;
       }
+      showToast('success', '已自動儲存');
     } catch (error) {
       console.error('更新失敗:', error);
       showToast('error', '更新失敗');
     }
-  }, [activeTab, updatePendingChange]);
+  }, [activeTab]);
 
   const { debouncedUpdate } = useDebouncedUpdate(handleCellUpdate, 500);
 
