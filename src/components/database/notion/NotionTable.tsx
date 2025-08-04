@@ -802,8 +802,9 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                         style: { 
                           position: 'relative'
                         },
-                        onDoubleClick: () => {
-                          console.log('雙擊儲存格:', { rowId: row.id, columnKey: column.key });
+                        onClick: (e) => {
+                          e.stopPropagation(); // 防止觸發行點擊事件
+                          console.log('點擊儲存格:', { rowId: row.id, columnKey: column.key });
                           const position = convertCellToPosition({ rowId: row.id, columnKey: column.key });
                           if (position) {
                             setEditingCell(position);
@@ -851,8 +852,9 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                       style: { 
                         position: 'relative'
                       },
-                      onDoubleClick: () => {
-                        console.log('雙擊儲存格:', { rowId: row.id, columnKey: column.key });
+                      onClick: (e) => {
+                        e.stopPropagation(); // 防止觸發行點擊事件
+                        console.log('點擊儲存格:', { rowId: row.id, columnKey: column.key });
                         const position = convertCellToPosition({ rowId: row.id, columnKey: column.key });
                         if (position) {
                           setEditingCell(position);
