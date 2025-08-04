@@ -392,6 +392,12 @@ export const DatabaseScreen: React.FC = () => {
   }, [user, activeTab, fetchCustomers, fetchRecords, fetchTasks]);
 
   const handleRowPress = useCallback((item: any) => {
+    // 如果是草稿列，不導航到詳細頁面
+    if (item.id && item.id.startsWith('draft_')) {
+      console.log('👆 點擊了草稿列，不導航');
+      return;
+    }
+    
     if (!multiSelectMode) {
       switch (activeTab) {
         case 'customers':
