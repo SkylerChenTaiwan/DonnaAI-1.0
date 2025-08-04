@@ -199,6 +199,8 @@ export const DatabaseScreen: React.FC = () => {
     // 只在 Web 平台執行
     if (Platform.OS !== 'web') return;
     
+    console.log('🎯 註冊 beforeunload 事件監聽器');
+    
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       console.log('🚨 beforeunload 事件觸發！');
       
@@ -751,6 +753,7 @@ export const DatabaseScreen: React.FC = () => {
         setTimeout(() => {
           const unsyncedDrafts = customerDraftSystem.getUnsyncedDrafts();
           console.log('📋 客戶更新後的未同步草稿數:', unsyncedDrafts.length, unsyncedDrafts);
+          console.log('📋 hasUnsavedChanges:', customerDraftSystem.hasUnsavedChanges);
         }, 100);
         break;
       case 'records':
@@ -818,10 +821,47 @@ export const DatabaseScreen: React.FC = () => {
     setShowAddColumnDialog(true);
   }, []);
 
+  // 測試函數 - 手動檢查未同步草稿
+  const testUnsyncedDrafts = () => {
+    console.log('🧪 測試未同步草稿狀態');
+    const customerUnsyncedDrafts = customerDraftSystem.getUnsyncedDrafts();
+    const recordUnsyncedDrafts = recordDraftSystem.getUnsyncedDrafts();
+    const taskUnsyncedDrafts = taskDraftSystem.getUnsyncedDrafts();
+    
+    console.log('📊 測試結果:', {
+      客戶未同步: customerUnsyncedDrafts.length,
+      記錄未同步: recordUnsyncedDrafts.length,
+      任務未同步: taskUnsyncedDrafts.length,
+      客戶詳細: customerUnsyncedDrafts,
+      記錄詳細: recordUnsyncedDrafts,
+      任務詳細: taskUnsyncedDrafts
+    });
+  };
+
   const renderContent = () => {
     // 使用有完整功能的 NotionTable
     return (
       <View style={styles.fullScreenContainer}>
+        {/* 測試按鈕 - 只在開發環境顯示 */}
+        {Platform.OS === 'web' && (
+          <button 
+            onClick={testUnsyncedDrafts}
+            style={{
+              position: 'fixed',
+              bottom: 20,
+              right: 20,
+              padding: '10px 20px',
+              backgroundColor: '#007bff',
+              color: 'white',
+              border: 'none',
+              borderRadius: 5,
+              cursor: 'pointer',
+              zIndex: 1000
+            }}
+          >
+            測試未同步草稿
+          </button>
+        )}
         <NotionTable
           data={currentData.data}
           columns={notionColumns}
