@@ -16,6 +16,8 @@ export const TextEditor: React.FC<EditorProps> = ({
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [tempValue, setTempValue] = useState(value || '');
+  
+  console.log('TextEditor 渲染:', { value, tempValue, column });
 
   useEffect(() => {
     if (autoFocus && inputRef.current) {

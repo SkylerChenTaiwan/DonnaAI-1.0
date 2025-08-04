@@ -2228,3 +2228,42 @@ body.resizing-column * {
   color: rgba(55, 53, 47, 0.85);
   font-weight: 500;
 }
+
+/* === 必填欄位提醒樣式 === */
+.notion-cell-required {
+  position: relative;
+}
+
+.notion-cell-required::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(239, 68, 68, 0.1) 0%,
+    rgba(239, 68, 68, 0.05) 50%,
+    transparent 100%
+  );
+  border-top: 2px solid rgba(239, 68, 68, 0.3);
+  z-index: 1;
+}
+
+.notion-cell-required::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(239, 68, 68, 0.2) 0%,
+    transparent 100%
+  );
+  z-index: 2;
+}

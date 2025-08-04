@@ -402,14 +402,16 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
     
     // 如果正在編輯，顯示編輯器
     if (isEditing) {
+      console.log('編輯器容器渲染，column:', column);
       return React.createElement('div', {
         style: { 
           position: 'absolute',
-          top: -1,
-          left: -1,
-          right: -1,
-          bottom: -1,
-          zIndex: 1000
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 10000,
+          background: 'white'
         }
       },
         EditorFactory.createEditor(column.type, {
@@ -798,11 +800,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                         key: column.id,
                         className: `notion-cell ${needsRequiredWarning ? 'notion-cell-required' : ''}`,
                         style: { 
-                          position: 'relative',
-                          ...(needsRequiredWarning && {
-                            border: '2px solid #ff4757',
-                            borderRadius: '3px'
-                          })
+                          position: 'relative'
                         },
                         onDoubleClick: () => {
                           console.log('雙擊儲存格:', { rowId: row.id, columnKey: column.key });
@@ -851,11 +849,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                       key: column.id,
                       className: `notion-cell ${needsRequiredWarning ? 'notion-cell-required' : ''}`,
                       style: { 
-                        position: 'relative',
-                        ...(needsRequiredWarning && {
-                          border: '2px solid #ff4757',
-                          borderRadius: '3px'
-                        })
+                        position: 'relative'
                       },
                       onDoubleClick: () => {
                         console.log('雙擊儲存格:', { rowId: row.id, columnKey: column.key });
