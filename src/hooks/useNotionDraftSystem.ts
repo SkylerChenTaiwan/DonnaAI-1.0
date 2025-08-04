@@ -153,15 +153,33 @@ export function useNotionDraftSystem({
   const syncItem = async (id: string) => {
     console.log('🔄 開始同步項目:', id);
     
-    // 使用 setState 來獲取最新的 state
+    // 使用 setState 來獲取最新的 state，並確保正確獲取到項目
     let itemToSync: DraftItem | undefined;
+    let shouldSync = false;
+    
     setDraftState(prev => {
-      itemToSync = prev.items.get(id);
+      const item = prev.items.get(id);
+      if (item) {
+        itemToSync = { ...item }; // 複製一份，避免引用問題
+        shouldSync = item.isDirty === true;
+      }
+      console.log('📋 檢查項目狀態:', {
+        id,
+        found: !!item,
+        isDirty: item?.isDirty,
+        isNew: item?.isNew,
+        data: item?.data
+      });
       return prev; // 不修改 state
     });
     
-    if (!itemToSync || !itemToSync.isDirty) {
-      console.log('⚠️ 項目不需要同步:', { id, isDirty: itemToSync?.isDirty });
+    if (!itemToSync || !shouldSync) {
+      console.log('⚠️ 項目不需要同步:', { 
+        id, 
+        found: !!itemToSync,
+        isDirty: itemToSync?.isDirty,
+        shouldSync 
+      });
       return;
     }
     
@@ -321,18 +339,29 @@ export function useNotionDraftSystem({
   const syncAll = useCallback(async () => {
     console.log('🔄 同步所有草稿');
     
-    const itemsToSync = Array.from(draftState.items.values())
-      .filter(item => item.isDirty);
+    // 獲取最新的狀態
+    let itemsToSync: DraftItem[] = [];
+    setDraftState(prev => {
+      itemsToSync = Array.from(prev.items.values())
+        .filter(item => item.isDirty);
+      return prev;
+    });
     
     if (itemsToSync.length === 0) {
       showToast('info', '沒有需要同步的變更');
       return;
     }
     
+    console.log('📋 準備同步的項目:', itemsToSync.map(item => ({
+      id: item.id,
+      isDirty: item.isDirty,
+      isNew: item.isNew
+    })));
+    
     for (const item of itemsToSync) {
       await syncItem(item.id);
     }
-  }, [draftState.items]);
+  }, []);
   
   // 取得特定項目的同步狀態
   const getSyncStatus = useCallback((id: string) => {
