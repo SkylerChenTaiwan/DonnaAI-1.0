@@ -161,20 +161,23 @@ export const DatabaseScreen: React.FC = () => {
     }
   }, [user]);
 
-  // 使用草稿系統
+  // 使用草稿系統 - 增加同步延遲時間
   const customerDraftSystem = useNotionDraftSystem({
     sourceData: customers,
     onSync: handleSyncCustomer,
+    syncDelay: 3000  // 延長到 3 秒
   });
 
   const recordDraftSystem = useNotionDraftSystem({
     sourceData: records || [],
     onSync: handleSyncRecord,
+    syncDelay: 3000  // 延長到 3 秒
   });
 
   const taskDraftSystem = useNotionDraftSystem({
     sourceData: tasks || [],
     onSync: handleSyncTask,
+    syncDelay: 3000  // 延長到 3 秒
   });
 
   // State for popover anchors
@@ -197,10 +200,21 @@ export const DatabaseScreen: React.FC = () => {
     if (Platform.OS !== 'web') return;
     
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      console.log('🚨 beforeunload 事件觸發！');
+      
       // 檢查各個標籤的未同步草稿
       const customerUnsyncedDrafts = customerDraftSystem.getUnsyncedDrafts();
       const recordUnsyncedDrafts = recordDraftSystem.getUnsyncedDrafts();
       const taskUnsyncedDrafts = taskDraftSystem.getUnsyncedDrafts();
+      
+      console.log('📋 未同步的草稿數量:', {
+        customers: customerUnsyncedDrafts.length,
+        records: recordUnsyncedDrafts.length,
+        tasks: taskUnsyncedDrafts.length,
+        customerUnsyncedDrafts,
+        recordUnsyncedDrafts,
+        taskUnsyncedDrafts
+      });
       
       const totalUnsyncedCount = 
         customerUnsyncedDrafts.length + 
@@ -234,13 +248,46 @@ export const DatabaseScreen: React.FC = () => {
           }
         };
         
-        // 立即嘗試同步
-        autoSyncDrafts();
+        // 檢查是否有必填欄位未填的草稿
+        let hasInvalidDrafts = false;
+        
+        // 檢查客戶草稿
+        customerUnsyncedDrafts.forEach(draft => {
+          if (customerDraftSystem.hasRequiredFieldsEmpty(draft, ['name', 'company'])) {
+            hasInvalidDrafts = true;
+            console.log('⚠️ 客戶草稿缺少必填欄位:', draft);
+          }
+        });
+        
+        // 檢查記錄草稿
+        recordUnsyncedDrafts.forEach(draft => {
+          if (recordDraftSystem.hasRequiredFieldsEmpty(draft, ['summary'])) {
+            hasInvalidDrafts = true;
+            console.log('⚠️ 記錄草稿缺少必填欄位:', draft);
+          }
+        });
+        
+        // 檢查任務草稿
+        taskUnsyncedDrafts.forEach(draft => {
+          if (taskDraftSystem.hasRequiredFieldsEmpty(draft, ['title'])) {
+            hasInvalidDrafts = true;
+            console.log('⚠️ 任務草稿缺少必填欄位:', draft);
+          }
+        });
         
         // 設定瀏覽器提示
-        const message = '您有未儲存的變更。確定要離開嗎？';
+        const message = hasInvalidDrafts 
+          ? '您有未填寫完整的草稿，離開將會遺失這些資料。確定要離開嗎？'
+          : '您有未儲存的變更。系統將嘗試自動儲存，但建議您稍等片刻再離開。';
+        
         e.preventDefault();
         e.returnValue = message;
+        
+        // 嘗試同步有效的草稿（在背景執行）
+        setTimeout(() => {
+          autoSyncDrafts();
+        }, 0);
+        
         return message;
       }
     };
@@ -700,12 +747,25 @@ export const DatabaseScreen: React.FC = () => {
     switch (activeTab) {
       case 'customers':
         customerDraftSystem.updateDraft(rowId, columnKey, value);
+        // 立即檢查草稿狀態
+        setTimeout(() => {
+          const unsyncedDrafts = customerDraftSystem.getUnsyncedDrafts();
+          console.log('📋 客戶更新後的未同步草稿數:', unsyncedDrafts.length, unsyncedDrafts);
+        }, 100);
         break;
       case 'records':
         recordDraftSystem.updateDraft(rowId, columnKey, value);
+        setTimeout(() => {
+          const unsyncedDrafts = recordDraftSystem.getUnsyncedDrafts();
+          console.log('📋 記錄更新後的未同步草稿數:', unsyncedDrafts.length, unsyncedDrafts);
+        }, 100);
         break;
       case 'tasks':
         taskDraftSystem.updateDraft(rowId, columnKey, value);
+        setTimeout(() => {
+          const unsyncedDrafts = taskDraftSystem.getUnsyncedDrafts();
+          console.log('📋 任務更新後的未同步草稿數:', unsyncedDrafts.length, unsyncedDrafts);
+        }, 100);
         break;
     }
   }, [activeTab, customerDraftSystem, recordDraftSystem, taskDraftSystem]);
