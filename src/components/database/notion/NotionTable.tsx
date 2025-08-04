@@ -427,7 +427,10 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
               const currentColIndex = columns.findIndex((c: any) => c.key === column.key);
               const nextCol = columns[currentColIndex + (e.shiftKey ? -1 : 1)];
               if (nextCol) {
-                setEditingCell({ rowId: row.id, columnKey: nextCol.key });
+                const nextPosition = convertCellToPosition({ rowId: row.id, columnKey: nextCol.key });
+                if (nextPosition) {
+                  setEditingCell(nextPosition);
+                }
               }
             }
           },
@@ -473,7 +476,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
           className: 'notion-cell-placeholder'
         }, '空白');
     }
-  }, [handleCellEdit, editingCell, setEditingCell, columns]);
+  }, [handleCellEdit, editingCell, setEditingCell, columns, convertCellToPosition]);
   
   // Handle add row - 允許空值，不強制必填
   const handleAddRow = useCallback(() => {
@@ -789,7 +792,10 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                         style: { position: 'relative' },
                         onDoubleClick: () => {
                           console.log('雙擊儲存格:', { rowId: row.id, columnKey: column.key });
-                          setEditingCell({ rowId: row.id, columnKey: column.key });
+                          const position = convertCellToPosition({ rowId: row.id, columnKey: column.key });
+                          if (position) {
+                            setEditingCell(position);
+                          }
                         }
                       },
                         React.createElement('div', {
@@ -827,7 +833,10 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                       style: { position: 'relative' },
                       onDoubleClick: () => {
                         console.log('雙擊儲存格:', { rowId: row.id, columnKey: column.key });
-                        setEditingCell({ rowId: row.id, columnKey: column.key });
+                        const position = convertCellToPosition({ rowId: row.id, columnKey: column.key });
+                        if (position) {
+                          setEditingCell(position);
+                        }
                       }
                     },
                       React.createElement('div', {
