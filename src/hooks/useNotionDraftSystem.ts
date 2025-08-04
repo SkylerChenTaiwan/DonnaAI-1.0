@@ -58,6 +58,8 @@ export function useNotionDraftSystem({
   
   // 同步計時器
   const syncTimers = useRef<Map<string, NodeJS.Timeout>>(new Map());
+  // 重試次數記錄
+  const retryCount = useRef<Map<string, number>>(new Map());
   
   // 初始化：將 Firebase 資料載入到草稿層
   useEffect(() => {
@@ -80,7 +82,7 @@ export function useNotionDraftSystem({
             id: item.id,
             data: { ...item },
             isDirty: false,
-            isNew: false,
+            isNew: false,  // Firebase 資料一定不是新的
             syncStatus: 'idle'
           });
         }
@@ -190,6 +192,9 @@ export function useNotionDraftSystem({
       // 同步成功
       console.log('✅ 同步成功，清除 isDirty 標記:', id, newId ? `新 ID: ${newId}` : '');
       
+      // 清除重試計數
+      retryCount.current.delete(id);
+      
       setDraftState(prev => {
         const newItems = new Map(prev.items);
         
@@ -245,10 +250,22 @@ export function useNotionDraftSystem({
         };
       });
       
-      showToast('error', '同步失敗，將在稍後重試');
-      
-      // 5秒後重試
-      setTimeout(() => syncItem(id), 5000);
+      // 只有在非權限錯誤的情況下才重試
+      if (error instanceof Error && !error.message.includes('沒有權限')) {
+        showToast('error', '同步失敗，將在稍後重試');
+        // 5秒後重試，最多重試 3 次
+        const currentRetries = retryCount.current.get(id) || 0;
+        if (currentRetries < 3) {
+          retryCount.current.set(id, currentRetries + 1);
+          setTimeout(() => syncItem(id), 5000);
+        } else {
+          showToast('error', '同步失敗多次，請重新整理頁面');
+          retryCount.current.delete(id);
+        }
+      } else {
+        // 權限錯誤不重試
+        showToast('error', '同步失敗：' + (error instanceof Error ? error.message : '未知錯誤'));
+      }
     }
   };
   

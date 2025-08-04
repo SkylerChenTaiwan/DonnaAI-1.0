@@ -115,7 +115,10 @@ export const DatabaseScreen: React.FC = () => {
   const handleSyncCustomer = useCallback(async (id: string, data: any, isNew: boolean) => {
     console.log('🔄 同步客戶:', { id, data, isNew });
     
-    if (isNew) {
+    // 檢查是否為草稿 ID（即使 isNew 為 false）
+    const isDraftId = id.startsWith('draft_');
+    
+    if (isNew || isDraftId) {
       // 檢查必填欄位
       if (!data.name || !data.company) {
         console.log('⚠️ 缺少必填欄位，暫不同步');
@@ -144,7 +147,10 @@ export const DatabaseScreen: React.FC = () => {
   const handleSyncRecord = useCallback(async (id: string, data: any, isNew: boolean) => {
     console.log('🔄 同步記錄:', { id, data, isNew });
     
-    if (isNew) {
+    // 檢查是否為草稿 ID
+    const isDraftId = id.startsWith('draft_');
+    
+    if (isNew || isDraftId) {
       // 檢查必填欄位
       if (!data.summary) {
         console.log('⚠️ 缺少必填欄位，暫不同步');
@@ -168,7 +174,10 @@ export const DatabaseScreen: React.FC = () => {
   const handleSyncTask = useCallback(async (id: string, data: any, isNew: boolean) => {
     console.log('🔄 同步任務:', { id, data, isNew });
     
-    if (isNew) {
+    // 檢查是否為草稿 ID
+    const isDraftId = id.startsWith('draft_');
+    
+    if (isNew || isDraftId) {
       // 檢查必填欄位
       if (!data.title) {
         console.log('⚠️ 缺少必填欄位，暫不同步');
