@@ -41,7 +41,7 @@ import { responsive, webOnly } from '@/styles/web';
 import { useColumnSettings } from '@/hooks/useColumnSettings';
 import { useColumnOrder } from '@/hooks/useColumnOrder';
 import { useNotionDraftSystem } from '@/hooks/useNotionDraftSystem';
-import { useDebouncedUpdate } from '@/hooks/useDebouncedUpdate';
+// import { useDebouncedUpdate } from '@/hooks/useDebouncedUpdate'; // 移除，直接使用 handleCellUpdate
 import { exportTableData } from '@/utils/tableExport';
 import { useCustomerStore } from '@/stores/customerStore';
 import { useRecordStore } from '@/stores/recordStore';
@@ -810,7 +810,9 @@ export const DatabaseScreen: React.FC = () => {
     }
   }, [activeTab, customerDraftSystem, recordDraftSystem, taskDraftSystem]);
 
-  const { debouncedUpdate } = useDebouncedUpdate(handleCellUpdate, 500);
+  // 移除 debounced update，直接使用 handleCellUpdate
+  // 因為 draft system 內部已經有 debounce 機制
+  // const { debouncedUpdate } = useDebouncedUpdate(handleCellUpdate, 500);
 
   // 偵錯資訊：檢查平台偵測
   console.log('🔍 DatabaseScreen 平台偵測:', {
@@ -851,8 +853,9 @@ export const DatabaseScreen: React.FC = () => {
 
   const handleCellUpdateCallback = useCallback((rowId, columnKey, value) => {
     console.log('更新儲存格:', { rowId, columnKey, value, activeTab });
-    debouncedUpdate(rowId, columnKey, value);
-  }, [activeTab, debouncedUpdate]);
+    // 直接調用 handleCellUpdate，不使用 debouncedUpdate
+    handleCellUpdate(rowId, columnKey, value);
+  }, [activeTab, handleCellUpdate]);
 
   const handleColumnAdd = useCallback(() => {
     setShowAddColumnDialog(true);

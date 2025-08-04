@@ -149,41 +149,44 @@ export function useNotionDraftSystem({
     syncTimers.current.set(id, timer);
   }, [syncDelay]);
   
-  // 同步單個項目 - 移除 useCallback 避免閉包問題
-  const syncItem = async (id: string) => {
+  // 使用 ref 來存儲 onSync 函數，避免閉包問題
+  const onSyncRef = useRef(onSync);
+  onSyncRef.current = onSync;
+  
+  // 同步單個項目 - 重新實作以解決閉包問題
+  const syncItem = useCallback(async (id: string) => {
     console.log('🔄 開始同步項目:', id);
     
-    // 使用 setState 來獲取最新的 state，並確保正確獲取到項目
-    let itemToSync: DraftItem | undefined;
-    let shouldSync = false;
-    
-    setDraftState(prev => {
-      const item = prev.items.get(id);
-      if (item) {
-        itemToSync = { ...item }; // 複製一份，避免引用問題
-        shouldSync = item.isDirty === true;
-      }
-      console.log('📋 檢查項目狀態:', {
-        id,
-        found: !!item,
-        isDirty: item?.isDirty,
-        isNew: item?.isNew,
-        data: item?.data
+    // 獲取當前項目狀態
+    const currentState = await new Promise<DraftItem | null>((resolve) => {
+      setDraftState(prev => {
+        const item = prev.items.get(id);
+        resolve(item ? { ...item } : null);
+        return prev;
       });
-      return prev; // 不修改 state
     });
     
-    if (!itemToSync || !shouldSync) {
+    if (!currentState) {
+      console.log('⚠️ 找不到項目:', id);
+      return;
+    }
+    
+    console.log('📋 檢查項目狀態:', {
+      id,
+      isDirty: currentState.isDirty,
+      isNew: currentState.isNew,
+      data: currentState.data
+    });
+    
+    if (currentState.isDirty !== true) {
       console.log('⚠️ 項目不需要同步:', { 
         id, 
-        found: !!itemToSync,
-        isDirty: itemToSync?.isDirty,
-        shouldSync 
+        isDirty: currentState.isDirty
       });
       return;
     }
     
-    // 更新同步狀態
+    // 更新同步狀態為 syncing
     setDraftState(prev => {
       const newItems = new Map(prev.items);
       const item = newItems.get(id);
@@ -202,13 +205,13 @@ export function useNotionDraftSystem({
     
     try {
       // 執行同步
-      const result = await onSync(id, itemToSync.data, itemToSync.isNew);
+      const result = await onSyncRef.current(id, currentState.data, currentState.isNew);
       
       // 檢查是否返回了新 ID（新建項目的情況）
       const newId = result?.newId;
       
       // 同步成功
-      console.log('✅ 同步成功，清除 isDirty 標記:', id, newId ? `新 ID: ${newId}` : '');
+      console.log('✅ 同步成功:', id, newId ? `新 ID: ${newId}` : '');
       
       // 清除重試計數
       retryCount.current.delete(id);
@@ -285,7 +288,7 @@ export function useNotionDraftSystem({
         showToast('error', '同步失敗：' + (error instanceof Error ? error.message : '未知錯誤'));
       }
     }
-  };
+  }, []);
   
   // 新增草稿
   const addNewDraft = useCallback((defaultData: Record<string, any> = {}) => {
