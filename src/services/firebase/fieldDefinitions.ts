@@ -54,12 +54,15 @@ export function subscribeToFieldDefinitions(
   // 建立快取鍵值
   const cacheKey = `${organizationId}:${collectionName}`;
   
-  // 先檢查快取
-  const cached = fieldDefinitionCache.get(cacheKey);
-  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-    console.log('🎯 使用快取的欄位定義');
-    callback(cached.fields);
-  }
+  // 清除舊快取（暫時停用快取以確保取得最新資料）
+  fieldDefinitionCache.delete(cacheKey);
+  
+  // 先檢查快取（暫時停用）
+  // const cached = fieldDefinitionCache.get(cacheKey);
+  // if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+  //   console.log('🎯 使用快取的欄位定義');
+  //   callback(cached.fields);
+  // }
   
   // 建立查詢
   const q = query(
