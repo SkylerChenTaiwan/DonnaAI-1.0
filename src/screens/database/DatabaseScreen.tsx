@@ -15,6 +15,7 @@ import {
   Modal,
   Alert,
   Platform,
+  ScrollView,
 } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
