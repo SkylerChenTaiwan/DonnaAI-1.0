@@ -718,13 +718,13 @@ export const DatabaseScreen: React.FC = () => {
     // 開啟新增 Modal
     switch (activeTab) {
       case 'customers':
-        navigation.navigate('CreateCustomer');
+        navigation.navigate('CreateCustomerModal', { mode: 'form' });
         break;
       case 'records':
-        navigation.navigate('CreateRecord');
+        navigation.navigate('CreateRecordModal', { mode: 'form' });
         break;
       case 'tasks':
-        navigation.navigate('CreateTask');
+        navigation.navigate('CreateTaskModal', { mode: 'form' });
         break;
     }
   }, [activeTab, navigation]);
