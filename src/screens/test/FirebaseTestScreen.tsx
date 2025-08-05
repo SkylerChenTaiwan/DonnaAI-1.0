@@ -108,6 +108,40 @@ export function FirebaseTestScreen() {
       console.error('直接查詢失敗:', error);
     }
   };
+  
+  // 測試 5: 查詢所有客戶（不加條件）
+  const testQueryAllCustomers = async () => {
+    addTestResult('=== 測試查詢所有客戶（無條件） ===');
+    
+    if (!user) {
+      addTestResult('❌ 需要先登入');
+      return;
+    }
+
+    try {
+      const db = getFirebaseDb();
+      const customersRef = collection(db, 'customers');
+      const snapshot = await getDocs(customersRef);
+      
+      addTestResult(`✅ 查詢成功，找到 ${snapshot.size} 個客戶`);
+      
+      let count = 0;
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        if (count < 5) {  // 只顯示前 5 個
+          addTestResult(`- ${data.name} (${doc.id}) - createdBy: ${data.createdBy}`);
+        }
+        count++;
+      });
+      
+      if (count > 5) {
+        addTestResult(`... 還有 ${count - 5} 個客戶`);
+      }
+    } catch (error) {
+      addTestResult(`❌ 查詢失敗: ${error.message}`);
+      console.error('查詢所有客戶失敗:', error);
+    }
+  };
 
   // 初始化時檢查狀態
   useEffect(() => {
@@ -144,6 +178,10 @@ export function FirebaseTestScreen() {
 
         <TouchableOpacity style={styles.button} onPress={testDirectQuery}>
           <Text style={styles.buttonText}>3. 查詢所有我的客戶</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.button} onPress={testQueryAllCustomers}>
+          <Text style={styles.buttonText}>4. 查詢所有客戶（診斷用）</Text>
         </TouchableOpacity>
 
         <TouchableOpacity 

@@ -38,6 +38,7 @@ import { ExportOptions } from '@/components/database/ExportOptions';
 import { useDatabaseKeyboardShortcuts } from '@/hooks/useDatabaseKeyboardShortcuts';
 import { isDesktopWeb } from '@/utils/web-detector';
 import { responsive, webOnly } from '@/styles/web';
+import { SyncStatusIndicator } from '@/components/database/SyncStatusIndicator';
 import { useColumnSettings } from '@/hooks/useColumnSettings';
 import { useColumnOrder } from '@/hooks/useColumnOrder';
 import { useNotionDraftSystem } from '@/hooks/useNotionDraftSystem';
@@ -893,9 +894,46 @@ export const DatabaseScreen: React.FC = () => {
   };
 
   const renderContent = () => {
+    // 獲取當前標籤的同步狀態
+    const getCurrentSyncStatus = () => {
+      let draftSystem;
+      switch (activeTab) {
+        case 'customers':
+          draftSystem = customerDraftSystem;
+          break;
+        case 'records':
+          draftSystem = recordDraftSystem;
+          break;
+        case 'tasks':
+          draftSystem = taskDraftSystem;
+          break;
+        default:
+          return {
+            isSyncing: false,
+            pendingCount: 0,
+            lastSyncTime: undefined,
+            error: undefined
+          };
+      }
+      
+      return {
+        isSyncing: draftSystem.syncStatus === 'syncing',
+        pendingCount: draftSystem.getUnsavedCount(),
+        lastSyncTime: Date.now(), // TODO: 追蹤實際的最後同步時間
+        error: undefined
+      };
+    };
+
     // 使用有完整功能的 NotionTable
     return (
       <View style={styles.fullScreenContainer}>
+        {/* 同步狀態指示器 - 固定在右上角 */}
+        {Platform.OS === 'web' && (
+          <View style={styles.syncStatusContainer}>
+            <SyncStatusIndicator syncStatus={getCurrentSyncStatus()} />
+          </View>
+        )}
+        
         {/* 測試按鈕 - 只在開發環境顯示 */}
         {Platform.OS === 'web' && (
           <button 
@@ -984,6 +1022,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#fbfbfa', // Notion 背景色
       },
     }),
+  },
+  syncStatusContainer: {
+    position: 'absolute' as 'absolute',
+    top: 10,
+    right: 10,
+    zIndex: 100,
   },
   databaseContainer: {
     flex: 1,
