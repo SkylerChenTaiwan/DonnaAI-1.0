@@ -1,7 +1,7 @@
-# PRP: 資料庫結構編輯器 (Database Schema Editor)
+# PRP: 資料庫欄位編輯功能 (Database Field Editor)
 
 ## 📋 概述
-實作一個讓有權限的用戶能夠修改資料庫結構的功能，包括新增/刪除欄位、修改欄位屬性，以及為欄位加上 AI 備註說明。
+在現有的資料庫頁面中整合欄位編輯功能，採用 Notion 風格的內聯編輯體驗。透過在欄位標題旁加入資訊圖示，讓有權限的用戶能夠直接編輯欄位屬性和加上 AI 備註說明。
 
 ## 🎯 核心需求
 1. **欄位管理**
@@ -50,74 +50,123 @@
 
 ## 📐 實作計劃
 
-### 1. 資料庫結構管理主畫面
-建立 `src/screens/admin/DatabaseSchemaScreen.tsx`
+### 1. 增強 NotionTable 欄位標題
+修改 `src/components/database/notion/NotionTable.tsx`
 
 ```typescript
-interface DatabaseSchemaScreenProps {
-  navigation: NavigationProp<any>;
-}
-
-// 主要功能：
-// - 顯示三個資料庫的當前欄位結構（customers, tasks, records）
-// - 提供進入編輯模式的入口
-// - 顯示版本歷史和最後修改資訊
+// 在欄位標題中加入資訊圖示
+<span className="notion-header-actions">
+  {canEditFields && (
+    <button 
+      className="notion-field-info-btn"
+      onClick={(e) => handleFieldInfo(e, column)}
+      title="欄位資訊與設定"
+    >
+      ℹ️
+    </button>
+  )}
+  <button className="notion-header-action-btn">⋯</button>
+</span>
 ```
 
-### 2. 欄位編輯器元件
-建立 `src/components/database/schema/FieldEditor.tsx`
+### 2. 欄位編輯 Popover 元件
+建立 `src/components/database/notion/FieldEditPopover.tsx`
 
 ```typescript
-interface FieldEditorProps {
-  field: FieldConfig;
-  onChange: (field: FieldConfig) => void;
-  onDelete: () => void;
-  onAIAnnotation: () => void;
+interface FieldEditPopoverProps {
+  visible: boolean;
+  onClose: () => void;
+  anchor: React.RefObject<any>;
+  fieldConfig: FieldConfig;
+  onUpdate: (updates: Partial<FieldConfig>) => Promise<void>;
+  canEdit: boolean;
+  activeTab: 'customers' | 'tasks' | 'records';
 }
 
 // 功能：
-// - 編輯欄位基本屬性
+// - 顯示和編輯欄位名稱
+// - 管理欄位說明（AI 備註）
+// - 設定必填/可見性
 // - 管理驗證規則
 // - 處理選項（select/multiselect）
-// - AI 備註編輯介面
 ```
 
-### 3. AI 欄位備註 Modal
-建立 `src/components/database/schema/AIFieldAnnotationModal.tsx`
+### 3. AI 欄位說明處理
+整合到 FieldEditPopover 中：
 
 ```typescript
-interface AIFieldAnnotationModalProps {
-  visible: boolean;
-  field: FieldConfig;
-  onSave: (annotation: AIFieldInterpretation) => void;
-  onClose: () => void;
-}
+// AI 說明編輯區域
+const [aiDescription, setAiDescription] = useState('');
+const [isProcessingAI, setIsProcessingAI] = useState(false);
 
-// 功能：
-// - 讓用戶輸入欄位說明
-// - 呼叫 AI 服務處理說明
-// - 顯示 AI 生成的結構化說明
-// - 允許編輯提取規則和範例
+const handleAIProcess = async () => {
+  setIsProcessingAI(true);
+  try {
+    const result = await processFieldDescription(
+      aiDescription,
+      fieldConfig.type
+    );
+    // 更新欄位的 AI 備註
+    await onUpdate({
+      aiFieldInterpretation: {
+        userDescription: aiDescription,
+        ...result
+      }
+    });
+  } finally {
+    setIsProcessingAI(false);
+  }
+};
 ```
 
-### 4. 欄位排序拖放功能
-擴展現有的 `NotionTable` 元件支援欄位拖放
+### 4. 整合到 DatabaseScreen
+修改 `src/screens/database/DatabaseScreen.tsx`
 
 ```typescript
-// 使用 react-native-draggable-flatlist
-// 或 react-beautiful-dnd (Web)
+// 加入欄位更新處理
+const handleFieldUpdate = useCallback(async (
+  fieldKey: string,
+  updates: Partial<FieldConfig>
+) => {
+  // 權限檢查
+  if (!await canEditCustomFieldDefinition(user.uid, currentOrganization.id)) {
+    showToast('error', '您沒有權限修改欄位定義');
+    return;
+  }
+  
+  // 更新欄位定義
+  const updatedFields = dynamicFields[activeTab].map(field =>
+    field.key === fieldKey ? { ...field, ...updates } : field
+  );
+  
+  await updateFieldDefinition(
+    `${currentOrganization.id}:${activeTab}`,
+    updatedFields,
+    user.uid,
+    `更新欄位 ${fieldKey}`
+  );
+}, [activeTab, dynamicFields, user, currentOrganization]);
 ```
 
-### 5. 版本控制和預覽
-建立 `src/components/database/schema/SchemaVersionControl.tsx`
+### 5. 權限控制整合
+在 NotionTable 中檢查權限：
 
 ```typescript
-interface SchemaVersionControlProps {
-  currentVersion: FieldDefinition;
-  previousVersions: FieldDefinition[];
-  onRevert: (versionId: string) => void;
-  onCompare: (v1: string, v2: string) => void;
-}
+// 檢查是否可以編輯欄位
+const [canEditFields, setCanEditFields] = useState(false);
+
+useEffect(() => {
+  checkFieldEditPermission();
+}, [user, currentOrganization]);
+
+const checkFieldEditPermission = async () => {
+  if (!user || !currentOrganization) return;
+  const hasPermission = await canDefineCustomFields(
+    user.uid, 
+    currentOrganization.id
+  );
+  setCanEditFields(hasPermission);
+};
 ```
 
 ## 🔄 工作流程
@@ -163,21 +212,21 @@ async function handleFieldUpdate(fieldKey: string, updates: Partial<FieldConfig>
 
 ## 🎨 UI/UX 設計
 
-### 採用 Notion 風格介面
-1. **主介面**
-   - 類似 Notion 的 Database 設定頁面
-   - 左側顯示欄位列表
-   - 右側顯示欄位詳細設定
+### 整合至現有資料庫頁面（Notion 風格）
+1. **欄位標題增強**
+   - 在每個欄位標題旁加入小小的資訊圖示 (ℹ️)
+   - 保持現有的表格結構不變
+   - 權限檢查後才顯示編輯功能
    
-2. **欄位編輯**
-   - Inline 編輯欄位名稱
-   - 下拉選單切換欄位類型
-   - 展開式進階設定區域
+2. **Popover 編輯介面**
+   - 點擊資訊圖示顯示懸浮視窗
+   - 包含欄位名稱、說明、類型等設定
+   - 內聯編輯體驗，無需跳轉頁面
    
-3. **AI 備註**
-   - 獨立的編輯按鈕
-   - Modal 彈窗編輯
-   - 即時預覽 AI 處理結果
+3. **AI 備註整合**
+   - 在 Popover 中直接編輯欄位說明
+   - 即時呼叫 AI 處理並顯示結果
+   - 保存後立即更新到所有使用者
 
 ## 🔒 安全考量
 
@@ -209,36 +258,41 @@ match /field_definitions/{defId} {
 
 ## ✅ 實作任務清單
 
-### Phase 1: 基礎架構 (2天)
-- [ ] 建立 DatabaseSchemaScreen 主畫面
-- [ ] 實作權限檢查和路由保護
-- [ ] 建立基本的欄位列表顯示
-- [ ] 整合現有的 fieldDefinitions 服務
+### Phase 1: NotionTable 整合 (1天)
+- [ ] 在 NotionTable 欄位標題加入資訊圖示
+- [ ] 實作權限檢查邏輯
+- [ ] 加入點擊處理和狀態管理
+- [ ] 調整 CSS 樣式符合 Notion 風格
 
-### Phase 2: 欄位編輯功能 (3天)
-- [ ] 建立 FieldEditor 元件
-- [ ] 實作欄位屬性編輯（名稱、類型、必填等）
-- [ ] 實作驗證規則編輯器
-- [ ] 實作選項管理（select/multiselect）
-- [ ] 整合欄位新增/刪除功能
+### Phase 2: FieldEditPopover 元件 (2天)
+- [ ] 建立 FieldEditPopover 元件
+- [ ] 實作欄位基本資訊編輯（名稱、說明）
+- [ ] 加入必填/可見性切換
+- [ ] 整合到 NotionTable
 
-### Phase 3: AI 備註功能 (2天)
-- [ ] 建立 AIFieldAnnotationModal
-- [ ] 整合 AI 處理服務
-- [ ] 實作備註編輯和預覽
-- [ ] 儲存 AI 處理結果
+### Phase 3: AI 欄位說明功能 (2天)
+- [ ] 在 Popover 中加入 AI 說明編輯區
+- [ ] 整合 processFieldDescription 服務
+- [ ] 實作即時處理和預覽
+- [ ] 顯示 AI 生成的結構化資訊
 
-### Phase 4: 進階功能 (2天)
-- [ ] 實作欄位拖放排序
-- [ ] 建立版本控制介面
-- [ ] 實作版本比較功能
-- [ ] 新增變更預覽功能
+### Phase 4: DatabaseScreen 整合 (1天)
+- [ ] 實作 handleFieldUpdate 功能
+- [ ] 整合權限檢查
+- [ ] 連接 Firebase 更新邏輯
+- [ ] 加入錯誤處理和成功提示
 
-### Phase 5: 測試和優化 (1天)
+### Phase 5: 進階功能 (2天)
+- [ ] 實作驗證規則編輯
+- [ ] 加入選項管理（select/multiselect）
+- [ ] 實作版本記錄顯示
+- [ ] 優化即時同步體驗
+
+### Phase 6: 測試和優化 (1天)
 - [ ] 單元測試
-- [ ] 整合測試
+- [ ] 權限測試
+- [ ] 跨平台測試（Web/Mobile）
 - [ ] 效能優化
-- [ ] 錯誤處理完善
 
 ## 🧪 驗證方法
 
@@ -295,6 +349,6 @@ npm run test:rules
 
 ---
 
-**信心評分**: 9/10
+**信心評分**: 9.5/10
 
-此功能建立在專案現有的強大基礎設施之上，大部分核心功能（動態欄位、AI 處理、權限系統）都已經實作完成。主要工作是建立 UI 介面來整合這些現有功能，風險較低且可預測。
+更新後的設計更加簡潔自然，直接整合到現有的資料庫頁面中，符合 Notion 的設計理念。充分利用現有的 NotionTable 和 Popover 元件，實作工作量更少，用戶體驗更佳。
