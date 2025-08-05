@@ -36,7 +36,11 @@ import { SearchPanel } from './components/SearchPanel';
 import { ColumnManager } from './components/ColumnManager';
 import { SimpleColumnResize } from './components/SimpleColumnResize';
 
-export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = ({
+export const NotionTable: React.FC<NotionTableProps & { 
+  activeTab?: string;
+  onRowEdit?: (rowId: string) => void;
+  onRowDelete?: (rowId: string) => void;
+}> = ({
   data,
   columns,
   onCellUpdate,
@@ -54,6 +58,8 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   headerHeight = NOTION_DEFAULTS.HEADER_HEIGHT,
   overscan = NOTION_DEFAULTS.OVERSCAN_COUNT,
   activeTab,
+  onRowEdit,
+  onRowDelete,
 }) => {
   // 除錯日誌
   console.log('🎯 NotionTable 渲染:', {
@@ -69,11 +75,27 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   // 表格 ID
   const tableId = useMemo(() => `notion-table-${Math.random().toString(36).substr(2, 9)}`, []);
   
+  // 加入操作欄位
+  const columnsWithActions = useMemo(() => {
+    const cols = [...columns];
+    if (onRowEdit || onRowDelete) {
+      cols.push({
+        id: '_actions',
+        key: '_actions',
+        title: '',
+        type: 'custom' as any,
+        width: 80,
+        editable: false,
+      });
+    }
+    return cols;
+  }, [columns, onRowEdit, onRowDelete]);
+
   // Column management - 使用 useMemo 避免無限重新渲染
   const [columnWidths, setColumnWidths] = useState<Record<string, number>>(() => {
     // 初始化時就設定欄位寬度
     const widths: Record<string, number> = {};
-    columns.forEach(col => {
+    columnsWithActions.forEach(col => {
       widths[col.id] = col.width || NOTION_DEFAULTS.DEFAULT_COLUMN_WIDTH;
     });
     return widths;
@@ -86,13 +108,13 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
     
     // 通知父組件
     if (onColumnReorder) {
-      const updatedColumns = columns.map(col => ({
+      const updatedColumns = columnsWithActions.map(col => ({
         ...col,
         width: newWidths[col.id] || col.width || NOTION_DEFAULTS.DEFAULT_COLUMN_WIDTH
       }));
       onColumnReorder(updatedColumns);
     }
-  }, [columns, onColumnReorder]);
+  }, [columnsWithActions, onColumnReorder]);
   
   // Selection management - 初始化為空，避免依賴外部 props
   const [internalSelectedRows, setInternalSelectedRows] = useState<Set<string>>(new Set());
@@ -126,13 +148,13 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   // 欄位管理狀態
   const [isColumnManagerOpen, setIsColumnManagerOpen] = useState(false);
   const [columnManagerButtonRef, setColumnManagerButtonRef] = useState<HTMLElement | null>(null);
-  const [visibleColumns, setVisibleColumns] = useState<string[]>(() => columns.map(col => col.id));
+  const [visibleColumns, setVisibleColumns] = useState<string[]>(() => columnsWithActions.map(col => col.id));
   
   // 同步欄位寬度變更（只在欄位結構改變時）
-  const prevColumnsRef = useRef(columns);
+  const prevColumnsRef = useRef(columnsWithActions);
   useEffect(() => {
     // 檢查是否有新增的欄位
-    const newColumns = columns.filter(col => 
+    const newColumns = columnsWithActions.filter(col => 
       !prevColumnsRef.current.find(prev => prev.id === col.id)
     );
     
@@ -144,8 +166,8 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
       setColumnWidths(prev => ({ ...prev, ...widths }));
     }
     
-    prevColumnsRef.current = columns;
-  }, [columns.length]); // 只依賴長度，不依賴整個陣列
+    prevColumnsRef.current = columnsWithActions;
+  }, [columnsWithActions.length]); // 只依賴長度，不依賴整個陣列
   
   const selectedRowsSet = useMemo(
     () => new Set(selectedRows.length > 0 ? selectedRows : internalSelectedRows),
@@ -198,12 +220,12 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   
   // 將 row/col 格式轉換為 rowId/columnKey 格式
   const convertPositionToCell = useCallback((position: CellPosition | null) => {
-    if (!position || position.row >= processedData.length || position.col >= columns.length) {
+    if (!position || position.row >= processedData.length || position.col >= columnsWithActions.length) {
       return null;
     }
     return {
       rowId: processedData[position.row].id,
-      columnKey: columns[position.col].key,
+      columnKey: columnsWithActions[position.col].key,
     };
   }, [processedData, columns]);
   
@@ -211,7 +233,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
   const convertCellToPosition = useCallback((cell: { rowId: string; columnKey: string } | null) => {
     if (!cell) return null;
     const row = processedData.findIndex(r => r.id === cell.rowId);
-    const col = columns.findIndex(c => c.key === cell.columnKey);
+    const col = columnsWithActions.findIndex(c => c.key === cell.columnKey);
     if (row === -1 || col === -1) return null;
     return { row, col };
   }, [processedData, columns]);
@@ -400,58 +422,45 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
       return value || '空白';
     }
     
-    // 如果正在編輯，顯示編輯器
-    if (isEditing) {
-      console.log('編輯器容器渲染，column:', column);
+    // Read-only mode - no editing
+    // (編輯功能已移除，改為使用表單編輯)
+    
+    // 一般顯示狀態
+    // 特殊處理操作欄位
+    if (column.id === '_actions') {
       return React.createElement('div', {
-        style: { 
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          zIndex: 10000,
-          background: 'white'
-        }
+        className: 'notion-cell-actions',
+        style: { display: 'flex', gap: '4px', justifyContent: 'center' }
       },
-        EditorFactory.createEditor(column.type, {
-          value,
-          onChange: (newValue: any) => {
-            console.log('編輯器更新值:', { rowId: row.id, columnKey: column.key, newValue });
-            handleCellEdit(row.id, column.key, newValue);
+        onRowEdit && React.createElement('button', {
+          className: 'notion-action-button',
+          onClick: (e: React.MouseEvent) => {
+            e.stopPropagation();
+            onRowEdit(row.id);
           },
-          onBlur: () => {
-            console.log('編輯器失去焦點');
-            setEditingCell(null);
-          },
-          onKeyDown: (e: React.KeyboardEvent) => {
-            if (e.key === 'Tab') {
-              e.preventDefault();
-              // 移動到下一個儲存格
-              const currentColIndex = columns.findIndex((c: any) => c.key === column.key);
-              const nextCol = columns[currentColIndex + (e.shiftKey ? -1 : 1)];
-              if (nextCol) {
-                const nextPosition = convertCellToPosition({ rowId: row.id, columnKey: nextCol.key });
-                if (nextPosition) {
-                  setEditingCell(nextPosition);
-                }
-              }
+          title: '編輯'
+        }, '✏️'),
+        onRowDelete && React.createElement('button', {
+          className: 'notion-action-button notion-action-button-danger',
+          onClick: (e: React.MouseEvent) => {
+            e.stopPropagation();
+            if (window.confirm('確定要刪除這筆資料嗎？')) {
+              onRowDelete(row.id);
             }
           },
-          column,
-          autoFocus: true,
-        })
+          title: '刪除'
+        }, '🗑️')
       );
     }
     
-    // 一般顯示狀態
     switch (column.type) {
       case 'checkbox':
         return React.createElement('input', {
           type: 'checkbox',
           className: 'notion-checkbox',
           checked: !!value,
-          onChange: (e: any) => handleCellEdit(row.id, column.key, e.target.checked)
+          disabled: true,
+          style: { cursor: 'default' }
         });
       case 'select':
         if (value && column.options) {
@@ -480,7 +489,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
           className: 'notion-cell-placeholder'
         }, '空白');
     }
-  }, [handleCellEdit, editingCell, setEditingCell, columns, convertCellToPosition, convertPositionToCell]);
+  }, [handleCellEdit, editingCell, setEditingCell, columnsWithActions, convertCellToPosition, convertPositionToCell, onRowEdit, onRowDelete]);
   
   // Handle add row - 允許空值，不強制必填
   const handleAddRow = useCallback(() => {
@@ -536,7 +545,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
         isSelected={selectedRowsSet.has(rowData.id)}
         onRowClick={onRowClick}
         onCellClick={handleClick}
-        onCellDoubleClick={(position) => setEditingCell(position)}
+        onCellDoubleClick={(position) => {/* Read-only mode - no editing */}}
         onCellMouseEnter={handleMouseEnter}
         onCellMouseLeave={handleMouseLeave}
         onCellEdit={handleCellEdit}
@@ -648,7 +657,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
               { 
                 className: `notion-button ${groupConfig ? 'notion-button-active' : ''}`,
                 onClick: handleGroupButtonClick,
-                title: `群組 ${groupConfig ? `(按 ${columns.find(c => c.key === groupConfig.columnKey)?.title})` : ''}`
+                title: `群組 ${groupConfig ? `(按 ${columnsWithActions.find(c => c.key === groupConfig.columnKey)?.title})` : ''}`
               },
               React.createElement('span', { className: 'notion-button-icon' }, NotionIcons.group()),
               '群組',
@@ -804,11 +813,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                         },
                         onClick: (e) => {
                           e.stopPropagation(); // 防止觸發行點擊事件
-                          console.log('點擊儲存格:', { rowId: row.id, columnKey: column.key });
-                          const position = convertCellToPosition({ rowId: row.id, columnKey: column.key });
-                          if (position) {
-                            setEditingCell(position);
-                          }
+                          // Read-only mode - no cell editing
                         }
                       },
                         React.createElement('div', {
@@ -854,11 +859,7 @@ export const NotionTable: React.FC<NotionTableProps & { activeTab?: string }> = 
                       },
                       onClick: (e) => {
                         e.stopPropagation(); // 防止觸發行點擊事件
-                        console.log('點擊儲存格:', { rowId: row.id, columnKey: column.key });
-                        const position = convertCellToPosition({ rowId: row.id, columnKey: column.key });
-                        if (position) {
-                          setEditingCell(position);
-                        }
+                        // Read-only mode - no cell editing
                       }
                     },
                       React.createElement('div', {

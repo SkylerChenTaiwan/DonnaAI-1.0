@@ -35,6 +35,7 @@ import { AddColumnDialog, ColumnType, ColumnConfig } from '@/components/database
 import { SkeletonLoader } from '@/components/database/SkeletonLoader';
 import { BatchEditForm } from '@/components/database/BatchEditForm';
 import { ExportOptions } from '@/components/database/ExportOptions';
+import { CSVUploader } from '@/components/input/CSVUploader';
 import { useDatabaseKeyboardShortcuts } from '@/hooks/useDatabaseKeyboardShortcuts';
 import { isDesktopWeb } from '@/utils/web-detector';
 import { responsive, webOnly } from '@/styles/web';
@@ -87,6 +88,7 @@ export const DatabaseScreen: React.FC = () => {
   const [showColumnSettings, setShowColumnSettings] = useState(false);
   const [showExportOptions, setShowExportOptions] = useState(false);
   const [showAddColumnDialog, setShowAddColumnDialog] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
   const [customColumns, setCustomColumns] = useState<Record<TabType, ColumnConfig[]>>({
     customers: [],
     records: [],
@@ -629,6 +631,46 @@ export const DatabaseScreen: React.FC = () => {
     }
   }, [multiSelectMode, activeTab, navigation]);
 
+  // 處理列編輯
+  const handleRowEdit = useCallback((rowId: string) => {
+    console.log('📝 編輯列:', rowId);
+    switch (activeTab) {
+      case 'customers':
+        navigation.navigate('EditCustomer', { customerId: rowId });
+        break;
+      case 'records':
+        navigation.navigate('EditRecord', { recordId: rowId });
+        break;
+      case 'tasks':
+        navigation.navigate('EditTask', { taskId: rowId });
+        break;
+    }
+  }, [activeTab, navigation]);
+
+  // 處理列刪除
+  const handleRowDelete = useCallback(async (rowId: string) => {
+    console.log('🗑️ 刪除列:', rowId);
+    try {
+      switch (activeTab) {
+        case 'customers':
+          await useCustomerStore.getState().deleteCustomer(rowId);
+          showToast('success', '客戶已刪除');
+          break;
+        case 'records':
+          await useRecordStore.getState().deleteRecord(rowId);
+          showToast('success', '記錄已刪除');
+          break;
+        case 'tasks':
+          await useTaskStore.getState().deleteTask(rowId);
+          showToast('success', '任務已刪除');
+          break;
+      }
+    } catch (error) {
+      console.error('刪除失敗:', error);
+      showToast('error', '刪除失敗，請稍後再試');
+    }
+  }, [activeTab]);
+
   const handleAddRowWithData = useCallback(async (data: Record<string, any>) => {
     try {
       switch (activeTab) {
@@ -740,6 +782,8 @@ export const DatabaseScreen: React.FC = () => {
       setShowSortPopover(true);
     },
     onMultiSelect: () => setMultiSelectMode(!multiSelectMode),
+    onImport: () => setShowImportModal(true),
+    onExport: () => setShowExportOptions(true),
     onEditMode: () => {
       // 如果有編輯模式，在這裡切換
       showToast('info', '編輯模式尚未實作');
@@ -960,6 +1004,8 @@ export const DatabaseScreen: React.FC = () => {
           onCellUpdate={handleCellUpdateCallback}
           onRowClick={handleRowPress}
           onRowAdd={handleAddRow}
+          onRowEdit={handleRowEdit}
+          onRowDelete={handleRowDelete}
           onColumnAdd={handleColumnAdd}
           onColumnReorder={handleColumnReorder}
           multiSelect={multiSelectMode}
@@ -969,6 +1015,88 @@ export const DatabaseScreen: React.FC = () => {
           emptyMessage="沒有資料，點擊新增列開始"
           activeTab={activeTab}
         />
+        
+        {/* CSV 匯入 Modal */}
+        {showImportModal && (
+          <Modal
+            visible={showImportModal}
+            transparent
+            animationType="fade"
+            onRequestClose={() => setShowImportModal(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContent}>
+                <View style={styles.modalHeader}>
+                  <Text style={styles.modalTitle}>匯入 CSV 檔案</Text>
+                  <TouchableOpacity
+                    onPress={() => setShowImportModal(false)}
+                    style={styles.modalCloseButton}
+                  >
+                    <Icon name="close" size={24} color="#666" />
+                  </TouchableOpacity>
+                </View>
+                <CSVUploader
+                  dataType={activeTab === 'customers' ? 'customer' : activeTab === 'records' ? 'record' : 'task'}
+                  onComplete={(items) => {
+                    console.log('CSV 匯入完成:', items.length, '筆資料');
+                    setShowImportModal(false);
+                    showToast('success', `成功匯入 ${items.length} 筆資料`);
+                    // 重新載入資料
+                    switch (activeTab) {
+                      case 'customers':
+                        fetchCustomers(user!);
+                        break;
+                      case 'records':
+                        fetchRecords(user!);
+                        break;
+                      case 'tasks':
+                        fetchTasks(user!);
+                        break;
+                    }
+                  }}
+                  onError={(error) => {
+                    console.error('CSV 匯入錯誤:', error);
+                    showToast('error', `匯入失敗: ${error.message}`);
+                  }}
+                />
+              </View>
+            </View>
+          </Modal>
+        )}
+        
+        {/* 匯出選項 Modal */}
+        {showExportOptions && (
+          <Modal
+            visible={showExportOptions}
+            transparent
+            animationType="fade"
+            onRequestClose={() => setShowExportOptions(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContent}>
+                <View style={styles.modalHeader}>
+                  <Text style={styles.modalTitle}>匯出資料</Text>
+                  <TouchableOpacity
+                    onPress={() => setShowExportOptions(false)}
+                    style={styles.modalCloseButton}
+                  >
+                    <Icon name="close" size={24} color="#666" />
+                  </TouchableOpacity>
+                </View>
+                <ExportOptions
+                  data={currentData.data}
+                  columns={currentColumns}
+                  fileName={`${activeTab}_export_${new Date().toISOString().split('T')[0]}`}
+                  onExport={(format) => {
+                    console.log('匯出格式:', format);
+                    setShowExportOptions(false);
+                    showToast('success', `資料已匯出為 ${format.toUpperCase()} 格式`);
+                  }}
+                />
+              </View>
+            </View>
+          </Modal>
+        )}
       </View>
     );
   }
@@ -1282,5 +1410,44 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '600',
     color: '#FFFFFF',
+  },
+  
+  // Modal 樣式
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    width: '90%',
+    maxWidth: 600,
+    maxHeight: '80%',
+    ...Platform.select({
+      web: {
+        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+      },
+      default: {
+        elevation: 5,
+      },
+    }),
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#333',
+  },
+  modalCloseButton: {
+    padding: 4,
   },
 });

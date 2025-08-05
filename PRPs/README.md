@@ -78,6 +78,7 @@
 | 72v  | web-database-readonly-implementation.md | ✅ 已完成 | Web 資料庫唯讀模式實作 - 移除內聯編輯、只能查看和編輯屬性 | 2025-08-02 |
 | 73   | notion-database-100-percent-replication.md | 🔄 進行中 | 100% 複製 Notion 資料庫功能 - 完整編輯體驗、鍵盤導航、拖放功能 | 2025-08-02 |
 | 74   | notion-database-complete-rewrite.md | 📋 待執行 | 完整重寫 Notion 風格資料庫元件 - 從頭建立、虛擬滾動、狀態機、100% 還原 | - |
+| 75   | database-mixed-mode.md | 📋 待執行 | 資料庫混合模式實作 - 唯讀表格、表單編輯、CSV 批量操作 | - |
 
 ## 命名規則
 
@@ -93,7 +94,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：75**
+**下一個新建的 PRP 應使用編號：76**
 
 ## PRP 類型說明
 

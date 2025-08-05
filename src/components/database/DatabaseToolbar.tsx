@@ -21,6 +21,8 @@ interface ToolbarProps {
   onSearch?: () => void;
   onMultiSelect?: () => void;
   onAddColumn?: () => void;
+  onImport?: () => void;
+  onExport?: () => void;
   currentView?: 'table' | 'board' | 'calendar' | 'list' | 'gallery';
   hasActiveFilters?: boolean;
   hasActiveSort?: boolean;
@@ -34,6 +36,8 @@ export const DatabaseToolbar: React.FC<ToolbarProps> = ({
   onSearch,
   onMultiSelect,
   onAddColumn,
+  onImport,
+  onExport,
   currentView = 'table',
   hasActiveFilters = false,
   hasActiveSort = false,
@@ -150,6 +154,42 @@ export const DatabaseToolbar: React.FC<ToolbarProps> = ({
               multiSelectMode && styles.activeToolbarText
             ]}>
               多選
+            </Text>
+          </TouchableOpacity>
+        )}
+
+        {/* 匯入 */}
+        {onImport && (
+          <TouchableOpacity 
+            style={styles.toolButton} 
+            onPress={onImport}
+            activeOpacity={0.7}
+          >
+            <Icon 
+              name="cloud-upload-outline" 
+              size={16} 
+              color="#666" 
+            />
+            <Text style={styles.toolbarText}>
+              匯入
+            </Text>
+          </TouchableOpacity>
+        )}
+
+        {/* 匯出 */}
+        {onExport && (
+          <TouchableOpacity 
+            style={styles.toolButton} 
+            onPress={onExport}
+            activeOpacity={0.7}
+          >
+            <Icon 
+              name="cloud-download-outline" 
+              size={16} 
+              color="#666" 
+            />
+            <Text style={styles.toolbarText}>
+              匯出
             </Text>
           </TouchableOpacity>
         )}
