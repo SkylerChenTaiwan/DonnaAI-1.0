@@ -20,7 +20,6 @@ import { useCellStateMachine } from './hooks/useCellStateMachine';
 import { tableStyles } from './styles/tableStyles';
 import { NOTION_DEFAULTS, NotionColors } from './constants';
 import { Icon } from '@/components/common/Icon';
-import { useDebouncedUpdate } from '@/hooks/useDebouncedUpdate';
 import { EditorFactory } from './editors/EditorFactory';
 import { NotionIcons, getPropertyIcon as getNotionPropertyIcon } from './NotionIcons';
 import { useKeyboardNavigation } from './managers/KeyboardNavigationManager';
@@ -36,14 +35,13 @@ import { SearchPanel } from './components/SearchPanel';
 import { ColumnManager } from './components/ColumnManager';
 import { SimpleColumnResize } from './components/SimpleColumnResize';
 
-export const NotionTable: React.FC<NotionTableProps & { 
+export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & { 
   activeTab?: string;
   onRowEdit?: (rowId: string) => void;
   onRowDelete?: (rowId: string) => void;
 }> = ({
   data,
   columns,
-  onCellUpdate,
   onRowClick,
   onRowAdd,
   onColumnAdd,
@@ -206,17 +204,7 @@ export const NotionTable: React.FC<NotionTableProps & {
     setSelectedCell,
   } = useCellStateMachine();
   
-  // Debounced update for auto-save
-  const handleCellUpdate = useCallback(async (rowId: string, columnKey: string, value: any) => {
-    try {
-      await onCellUpdate?.(rowId, columnKey, value);
-    } catch (error) {
-      console.error('Failed to update cell:', error);
-      // Show error toast
-    }
-  }, [onCellUpdate]);
-  
-  const { debouncedUpdate } = useDebouncedUpdate(handleCellUpdate, NOTION_DEFAULTS.DEBOUNCE_DELAY);
+  // Read-only mode - no cell updates
   
   // 將 row/col 格式轉換為 rowId/columnKey 格式
   const convertPositionToCell = useCallback((position: CellPosition | null) => {
@@ -256,9 +244,7 @@ export const NotionTable: React.FC<NotionTableProps & {
         setEditingCell(position);
       }
     },
-    onCellUpdate: (rowId, columnKey, value) => {
-      debouncedUpdate(rowId, columnKey, value);
-    },
+    onCellUpdate: undefined,
     onEditComplete: () => {
       setEditingCell(null);
     },
@@ -384,14 +370,7 @@ export const NotionTable: React.FC<NotionTableProps & {
     }
   }, [processedData, onSelectionChange]);
   
-  // Handle cell edit
-  const handleCellEdit = useCallback((rowId: string, columnKey: string, value: any) => {
-    // Exit edit mode
-    setEditingCell(null);
-    
-    // Trigger debounced update
-    debouncedUpdate(rowId, columnKey, value);
-  }, [debouncedUpdate, setEditingCell]);
+  // Read-only mode - no cell editing
   
   // Helper function to get database title and icon based on active tab
   const getDatabaseInfo = useCallback((tab?: string) => {
@@ -489,7 +468,7 @@ export const NotionTable: React.FC<NotionTableProps & {
           className: 'notion-cell-placeholder'
         }, '空白');
     }
-  }, [handleCellEdit, editingCell, setEditingCell, columnsWithActions, convertCellToPosition, convertPositionToCell, onRowEdit, onRowDelete]);
+  }, [editingCell, setEditingCell, columnsWithActions, convertCellToPosition, convertPositionToCell, onRowEdit, onRowDelete]);
   
   // Handle add row - 允許空值，不強制必填
   const handleAddRow = useCallback(() => {
@@ -548,7 +527,7 @@ export const NotionTable: React.FC<NotionTableProps & {
         onCellDoubleClick={(position) => {/* Read-only mode - no editing */}}
         onCellMouseEnter={handleMouseEnter}
         onCellMouseLeave={handleMouseLeave}
-        onCellEdit={handleCellEdit}
+        onCellEdit={undefined}
         getCellState={getCellState}
         multiSelectMode={multiSelect}
         onSelectRow={handleSelectRow}
@@ -562,7 +541,6 @@ export const NotionTable: React.FC<NotionTableProps & {
     setEditingCell,
     handleMouseEnter,
     handleMouseLeave,
-    handleCellEdit,
     getCellState,
     multiSelect,
     handleSelectRow,

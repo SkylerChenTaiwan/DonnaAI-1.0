@@ -1001,7 +1001,6 @@ export const DatabaseScreen: React.FC = () => {
         <NotionTable
           data={currentData.data}
           columns={notionColumns}
-          onCellUpdate={handleCellUpdateCallback}
           onRowClick={handleRowPress}
           onRowAdd={handleAddRow}
           onRowEdit={handleRowEdit}
