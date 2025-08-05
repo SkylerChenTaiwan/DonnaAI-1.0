@@ -38,47 +38,15 @@ export const TableCell: React.FC<TableCellProps> = memo(({
   const clickTimeoutRef = useRef<NodeJS.Timeout>();
   const lastClickTime = useRef(0);
   
-  // Update editing state when state changes
+  // Read-only mode - never enter editing state
   useEffect(() => {
-    if (state === 'editing' && !isEditing) {
-      setIsEditing(true);
-      setEditValue(formatValueForEdit(value, column.type));
-      // Focus input after state update
-      setTimeout(() => {
-        inputRef.current?.focus();
-        // Select all text on web
-        if (Platform.OS === 'web') {
-          (inputRef.current as any)?.select?.();
-        }
-      }, 0);
-    } else if (state !== 'editing' && isEditing) {
-      setIsEditing(false);
-    }
-  }, [state, isEditing, value, column.type]);
+    setIsEditing(false);
+  }, []);
   
-  // Handle click with double-click detection
+  // Handle click - read-only mode
   const handleClick = useCallback(() => {
-    const now = Date.now();
-    const timeSinceLastClick = now - lastClickTime.current;
-    
-    if (timeSinceLastClick < 300) {
-      // Double click
-      if (clickTimeoutRef.current) {
-        clearTimeout(clickTimeoutRef.current);
-      }
-      onCellDoubleClick?.(position);
-    } else {
-      // Single click
-      if (clickTimeoutRef.current) {
-        clearTimeout(clickTimeoutRef.current);
-      }
-      clickTimeoutRef.current = setTimeout(() => {
-        onCellClick?.(position);
-      }, 300);
-    }
-    
-    lastClickTime.current = now;
-  }, [position, onCellClick, onCellDoubleClick]);
+    onCellClick?.(position);
+  }, [position, onCellClick]);
   
   // Handle edit confirm
   const handleEditConfirm = useCallback(() => {
@@ -118,20 +86,7 @@ export const TableCell: React.FC<TableCellProps> = memo(({
   
   // Render cell content based on type
   const renderCellContent = () => {
-    if (isEditing && column.editable !== false) {
-      return (
-        <TextInput
-          ref={inputRef}
-          value={editValue}
-          onChangeText={setEditValue}
-          onBlur={handleEditConfirm}
-          onKeyPress={handleKeyPress}
-          style={tableStyles.editorInput}
-          autoFocus
-          selectTextOnFocus
-        />
-      );
-    }
+    // Read-only mode - no editing
     
     switch (column.type) {
       case 'checkbox':
@@ -140,6 +95,7 @@ export const TableCell: React.FC<TableCellProps> = memo(({
             style={[
               tableStyles.checkbox,
               value && tableStyles.checkboxChecked,
+              { opacity: 0.6, cursor: 'default' }
             ]}
           >
             {value && (
