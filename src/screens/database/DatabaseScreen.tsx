@@ -1076,7 +1076,7 @@ export const DatabaseScreen: React.FC = () => {
             onRequestClose={() => setShowCreateModal(false)}
           >
             <View style={styles.modalOverlay}>
-              <View style={[styles.modalContent, { maxHeight: '90%' }]}>
+              <View style={[styles.modalContent, { maxHeight: '90%', overflow: 'hidden' }]}>
                 <View style={styles.modalHeader}>
                   <Text style={styles.modalTitle}>
                     {activeTab === 'customers' ? '新增客戶' : 
@@ -1091,29 +1091,35 @@ export const DatabaseScreen: React.FC = () => {
                 </View>
                 
                 {/* 內容區域 */}
-                <ScrollView style={styles.modalContent} showsVerticalScrollIndicator={false}>
+                <ScrollView 
+                  style={[styles.modalScrollContent, { flex: 1 }]} 
+                  contentContainerStyle={{ padding: 20 }}
+                  showsVerticalScrollIndicator={false}
+                >
                   {activeTab === 'customers' && (
-                    <CustomerForm
-                      onSubmit={async (data) => {
-                        try {
-                          await createCustomer({
-                            ...data,
-                            assignedTo: user!.uid,
-                            teamId: currentTeam?.id || '',
-                            organizationId: currentOrganization?.id || '',
-                          }, user!.uid);
-                          showToast('success', '客戶新增成功');
-                          setShowCreateModal(false);
-                          // 重新載入資料
-                          fetchCustomers(user!);
-                        } catch (error) {
-                          console.error('新增客戶失敗:', error);
-                          showToast('error', '新增失敗，請稍後再試');
-                        }
-                      }}
-                      onCancel={() => setShowCreateModal(false)}
-                      mode="create"
-                    />
+                    <View style={{ width: '100%', maxWidth: 400 }}>
+                      <CustomerForm
+                        onSubmit={async (data) => {
+                          try {
+                            await createCustomer({
+                              ...data,
+                              assignedTo: user!.uid,
+                              teamId: currentTeam?.id || '',
+                              organizationId: currentOrganization?.id || '',
+                            }, user!.uid);
+                            showToast('success', '客戶新增成功');
+                            setShowCreateModal(false);
+                            // 重新載入資料
+                            fetchCustomers(user!);
+                          } catch (error) {
+                            console.error('新增客戶失敗:', error);
+                            showToast('error', '新增失敗，請稍後再試');
+                          }
+                        }}
+                        onCancel={() => setShowCreateModal(false)}
+                        mode="create"
+                      />
+                    </View>
                   )}
                   {/* TODO: 加入 RecordForm 和 TaskForm */}
                 </ScrollView>
@@ -1447,14 +1453,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderRadius: 12,
     width: '90%',
-    maxWidth: 600,
-    maxHeight: '80%',
+    maxWidth: 480,
+    maxHeight: '85%',
+    display: 'flex',
+    flexDirection: 'column',
     ...Platform.select({
       web: {
-        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)',
       },
       default: {
-        elevation: 5,
+        elevation: 8,
       },
     }),
   },
@@ -1473,5 +1481,8 @@ const styles = StyleSheet.create({
   },
   modalCloseButton: {
     padding: 4,
+  },
+  modalScrollContent: {
+    flex: 1,
   },
 });
