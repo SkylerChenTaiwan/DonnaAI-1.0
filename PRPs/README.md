@@ -79,6 +79,7 @@
 | 73   | notion-database-100-percent-replication.md | 🔄 進行中 | 100% 複製 Notion 資料庫功能 - 完整編輯體驗、鍵盤導航、拖放功能 | 2025-08-02 |
 | 74   | notion-database-complete-rewrite.md | 📋 待執行 | 完整重寫 Notion 風格資料庫元件 - 從頭建立、虛擬滾動、狀態機、100% 還原 | - |
 | 75v  | database-mixed-mode.md | ✅ 已完成 | 資料庫混合模式實作 - 唯讀表格、表單編輯、CSV 批量操作 | 2025-08-05 |
+| 76   | dynamic-field-definitions.md | 📋 待執行 | 動態欄位定義系統 - Firebase 同步欄位結構、動態表單生成、CSV 範本自動化 | - |
 
 ## 命名規則
 
@@ -94,7 +95,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：76**
+**下一個新建的 PRP 應使用編號：77**
 
 ## PRP 類型說明
 
