@@ -92,6 +92,7 @@ export const DatabaseScreen: React.FC = () => {
   const [showAddColumnDialog, setShowAddColumnDialog] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [createModalMode, setCreateModalMode] = useState<'form' | 'csv'>('form');
   const [customColumns, setCustomColumns] = useState<Record<TabType, ColumnConfig[]>>({
     customers: [],
     records: [],
@@ -1029,10 +1030,48 @@ export const DatabaseScreen: React.FC = () => {
                      activeTab === 'records' ? '新增紀錄' : '新增任務'}
                   </Text>
                   <TouchableOpacity
-                    onPress={() => setShowCreateModal(false)}
+                    onPress={() => {
+                      setShowCreateModal(false);
+                      setCreateModalMode('form'); // 重置為表單模式
+                    }}
                     style={styles.modalCloseButton}
                   >
                     <Icon name="close" size={24} color="#666" />
+                  </TouchableOpacity>
+                </View>
+                
+                {/* 模式切換 */}
+                <View style={styles.modalModeSwitch}>
+                  <TouchableOpacity
+                    style={[
+                      styles.modeSwitchButton,
+                      createModalMode === 'form' && styles.modeSwitchButtonActive
+                    ]}
+                    onPress={() => setCreateModalMode('form')}
+                  >
+                    <Icon name="create-outline" size={20} color={createModalMode === 'form' ? '#2196F3' : '#666'} />
+                    <Text style={[
+                      styles.modeSwitchText,
+                      createModalMode === 'form' && styles.modeSwitchTextActive
+                    ]}>
+                      單筆新增
+                    </Text>
+                  </TouchableOpacity>
+                  
+                  <TouchableOpacity
+                    style={[
+                      styles.modeSwitchButton,
+                      createModalMode === 'csv' && styles.modeSwitchButtonActive
+                    ]}
+                    onPress={() => setCreateModalMode('csv')}
+                  >
+                    <Icon name="cloud-upload-outline" size={20} color={createModalMode === 'csv' ? '#2196F3' : '#666'} />
+                    <Text style={[
+                      styles.modeSwitchText,
+                      createModalMode === 'csv' && styles.modeSwitchTextActive
+                    ]}>
+                      批量匯入
+                    </Text>
                   </TouchableOpacity>
                 </View>
                 
@@ -1042,7 +1081,7 @@ export const DatabaseScreen: React.FC = () => {
                   contentContainerStyle={{ padding: 20 }}
                   showsVerticalScrollIndicator={false}
                 >
-                  {activeTab === 'customers' && (
+                  {activeTab === 'customers' && createModalMode === 'form' && (
                     <View style={{ width: '100%', maxWidth: 400 }}>
                       <CustomerForm
                         onSubmit={async (data) => {
@@ -1055,6 +1094,7 @@ export const DatabaseScreen: React.FC = () => {
                             }, user!.uid);
                             showToast('success', '客戶新增成功');
                             setShowCreateModal(false);
+                            setCreateModalMode('form'); // 重置模式
                             // 重新載入資料
                             fetchCustomers(user!);
                           } catch (error) {
@@ -1062,12 +1102,36 @@ export const DatabaseScreen: React.FC = () => {
                             showToast('error', '新增失敗，請稍後再試');
                           }
                         }}
-                        onCancel={() => setShowCreateModal(false)}
+                        onCancel={() => {
+                          setShowCreateModal(false);
+                          setCreateModalMode('form');
+                        }}
                         mode="create"
                       />
                     </View>
                   )}
-                  {/* TODO: 加入 RecordForm 和 TaskForm */}
+                  
+                  {activeTab === 'customers' && createModalMode === 'csv' && (
+                    <View style={{ width: '100%' }}>
+                      <CSVUploader
+                        dataType="customer"
+                        onComplete={(items) => {
+                          console.log('CSV 匯入完成:', items.length, '筆資料');
+                          setShowCreateModal(false);
+                          setCreateModalMode('form'); // 重置模式
+                          showToast('success', `成功匯入 ${items.length} 筆客戶資料`);
+                          // 重新載入資料
+                          fetchCustomers(user!);
+                        }}
+                        onError={(error) => {
+                          console.error('CSV 匯入錯誤:', error);
+                          showToast('error', `匯入失敗: ${error.message}`);
+                        }}
+                      />
+                    </View>
+                  )}
+                  
+                  {/* TODO: 加入 Records 和 Tasks 的表單/CSV 上傳 */}
                 </ScrollView>
               </View>
             </View>
@@ -1425,5 +1489,36 @@ const styles = StyleSheet.create({
   },
   modalScrollContent: {
     flex: 1,
+  },
+  
+  // 模式切換樣式
+  modalModeSwitch: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+    gap: 15,
+  },
+  modeSwitchButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
+    backgroundColor: '#f5f5f5',
+    gap: 8,
+  },
+  modeSwitchButtonActive: {
+    backgroundColor: '#e3f2fd',
+  },
+  modeSwitchText: {
+    fontSize: 14,
+    color: '#666',
+    fontWeight: '500',
+  },
+  modeSwitchTextActive: {
+    color: '#2196F3',
   },
 });
