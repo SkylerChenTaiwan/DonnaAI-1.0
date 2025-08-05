@@ -134,73 +134,25 @@ export const DEFAULT_CUSTOMER_FIELDS: FieldConfig[] = [
     visible: true
   },
   {
-    key: 'email',
-    label: '電子郵件',
-    type: 'email',
-    required: false,
-    order: 3,
-    placeholder: 'example@company.com',
-    visible: true,
-    validation: [
-      { type: 'pattern', value: '^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$', message: '請輸入有效的電子郵件' }
-    ]
-  },
-  {
     key: 'phone',
     label: '聯絡電話',
     type: 'phone',
     required: false,
+    order: 3,
+    placeholder: '請輸入電話號碼',
+    visible: true
+  },
+  {
+    key: 'email',
+    label: '電子郵件',
+    type: 'email',
+    required: false,
     order: 4,
-    placeholder: '0912-345-678',
-    visible: true
-  },
-  {
-    key: 'industry',
-    label: '所屬產業',
-    type: 'select',
-    required: false,
-    order: 5,
-    placeholder: '選擇產業類別',
+    placeholder: '請輸入電子郵件',
     visible: true,
-    options: [
-      { label: '科技業', value: '科技業' },
-      { label: '製造業', value: '製造業' },
-      { label: '服務業', value: '服務業' },
-      { label: '零售業', value: '零售業' },
-      { label: '金融業', value: '金融業' },
-      { label: '醫療業', value: '醫療業' },
-      { label: '教育業', value: '教育業' },
-      { label: '建築業', value: '建築業' },
-      { label: '運輸業', value: '運輸業' },
-      { label: '其他', value: '其他' }
+    validation: [
+      { type: 'pattern', value: '^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$', message: '請輸入有效的電子郵件' }
     ]
-  },
-  {
-    key: 'address',
-    label: '地址',
-    type: 'textarea',
-    required: false,
-    order: 6,
-    placeholder: '請輸入公司地址',
-    visible: true
-  },
-  {
-    key: 'tags',
-    label: '標籤',
-    type: 'tags',
-    required: false,
-    order: 7,
-    visible: true,
-    defaultValue: []
-  },
-  {
-    key: 'notes',
-    label: '備註',
-    type: 'textarea',
-    required: false,
-    order: 8,
-    placeholder: '請輸入相關備註資訊',
-    visible: true
   }
 ];
 
