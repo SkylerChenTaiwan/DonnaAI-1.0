@@ -41,7 +41,7 @@ import { CustomerForm } from '@/components/forms/CustomerForm';
 import { useDatabaseKeyboardShortcuts } from '@/hooks/useDatabaseKeyboardShortcuts';
 import { isDesktopWeb } from '@/utils/web-detector';
 import { responsive, webOnly } from '@/styles/web';
-import { SyncStatusIndicator } from '@/components/database/SyncStatusIndicator';
+// import { SyncStatusIndicator } from '@/components/database/SyncStatusIndicator'; // 已移除 - 唯讀模式不需要
 import { useColumnSettings } from '@/hooks/useColumnSettings';
 import { useColumnOrder } from '@/hooks/useColumnOrder';
 import { useNotionDraftSystem } from '@/hooks/useNotionDraftSystem';
@@ -908,66 +908,12 @@ export const DatabaseScreen: React.FC = () => {
   };
 
   const renderContent = () => {
-    // 獲取當前標籤的同步狀態
-    const getCurrentSyncStatus = () => {
-      let draftSystem;
-      switch (activeTab) {
-        case 'customers':
-          draftSystem = customerDraftSystem;
-          break;
-        case 'records':
-          draftSystem = recordDraftSystem;
-          break;
-        case 'tasks':
-          draftSystem = taskDraftSystem;
-          break;
-        default:
-          return {
-            isSyncing: false,
-            pendingCount: 0,
-            lastSyncTime: undefined,
-            error: undefined
-          };
-      }
-      
-      return {
-        isSyncing: draftSystem.syncStatus === 'syncing',
-        pendingCount: draftSystem.getUnsavedCount(),
-        lastSyncTime: Date.now(), // TODO: 追蹤實際的最後同步時間
-        error: undefined
-      };
-    };
+    // 已移除 getCurrentSyncStatus - 唯讀模式不需要同步狀態
 
     // 使用有完整功能的 NotionTable
     return (
       <View style={styles.fullScreenContainer}>
-        {/* 同步狀態指示器 - 固定在右上角 */}
-        {Platform.OS === 'web' && (
-          <View style={styles.syncStatusContainer}>
-            <SyncStatusIndicator syncStatus={getCurrentSyncStatus()} />
-          </View>
-        )}
-        
-        {/* 測試按鈕 - 只在開發環境顯示 */}
-        {Platform.OS === 'web' && (
-          <button 
-            onClick={testUnsyncedDrafts}
-            style={{
-              position: 'fixed',
-              bottom: 20,
-              right: 20,
-              padding: '10px 20px',
-              backgroundColor: '#007bff',
-              color: 'white',
-              border: 'none',
-              borderRadius: 5,
-              cursor: 'pointer',
-              zIndex: 1000
-            }}
-          >
-            測試未同步草稿
-          </button>
-        )}
+        {/* 已移除同步狀態指示器和測試按鈕 - 唯讀模式不需要 */}
         <NotionTable
           data={currentData.data}
           columns={notionColumns}
@@ -1181,12 +1127,7 @@ const styles = StyleSheet.create({
       },
     }),
   },
-  syncStatusContainer: {
-    position: 'absolute' as 'absolute',
-    top: 10,
-    right: 10,
-    zIndex: 100,
-  },
+  // syncStatusContainer 已移除 - 唯讀模式不需要
   databaseContainer: {
     flex: 1,
     padding: '0 96px',
