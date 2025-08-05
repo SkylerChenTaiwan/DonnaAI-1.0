@@ -59,6 +59,9 @@ import { createCustomer, updateCustomer } from '@/services/firebase/customers';
 import { createRecord, updateRecord } from '@/services/firebase/records';
 import { createTask, updateTask } from '@/services/firebase/tasks';
 import { showToast } from '@/utils/toast';
+import { subscribeToFieldDefinitions } from '@/services/firebase/fieldDefinitions';
+import { FieldConfig as DynamicFieldConfig } from '@/types/fieldDefinitions';
+import { useOrganization } from '@/hooks/useOrganization';
 
 interface SortConfig {
   key: string | null;
@@ -98,8 +101,14 @@ export const DatabaseScreen: React.FC = () => {
     records: [],
     tasks: [],
   });
+  const [dynamicFields, setDynamicFields] = useState<Record<TabType, DynamicFieldConfig[]>>({
+    customers: [],
+    records: [],
+    tasks: [],
+  });
   
   const { user } = useAuthStore();
+  const { currentOrganization } = useOrganization();
   const { customers, isLoading: customerLoading, fetchCustomers, subscribeToCustomers } = useCustomerStore();
   const { records, isLoading: recordLoading, fetchRecords } = useRecordStore();
   const { tasks, isLoading: taskLoading, fetchTasks } = useTaskStore();
@@ -131,6 +140,30 @@ export const DatabaseScreen: React.FC = () => {
     }
   }, [user, fetchCustomers, fetchRecords, fetchTasks, subscribeToCustomers]);
 
+  // 訂閱動態欄位定義
+  useEffect(() => {
+    if (!currentOrganization) return;
+    
+    console.log('📡 訂閱動態欄位定義');
+    const unsubscribes: (() => void)[] = [];
+    
+    // 訂閱每個集合的欄位定義
+    (['customers', 'records', 'tasks'] as TabType[]).forEach(collectionName => {
+      const unsubscribe = subscribeToFieldDefinitions(
+        collectionName,
+        currentOrganization.id,
+        (fields) => {
+          console.log(`收到 ${collectionName} 欄位定義:`, fields);
+          setDynamicFields(prev => ({ ...prev, [collectionName]: fields }));
+        }
+      );
+      unsubscribes.push(unsubscribe);
+    });
+    
+    return () => {
+      unsubscribes.forEach(unsub => unsub());
+    };
+  }, [currentOrganization]);
 
   // 為每個標籤頁準備同步函數
   const handleSyncCustomer = useCallback(async (id: string, data: any, isNew: boolean) => {
@@ -436,48 +469,84 @@ export const DatabaseScreen: React.FC = () => {
   }, [activeTab, customerDraftSystem, recordDraftSystem, taskDraftSystem]);
 
   // 基礎欄位定義（可被自訂欄位擴展）
-  const baseColumns = useMemo(() => ({
-    customers: [
-      { key: 'name', title: '姓名', sortable: true, filterable: true, type: 'text' as const, required: true },
-      { key: 'company', title: '公司', sortable: true, filterable: true, type: 'text' as const, required: true },
-      { key: 'phone', title: '電話', sortable: true, filterable: true, type: 'phone' as const },
-      { key: 'tags', title: '標籤', sortable: true, filterable: true, type: 'tags' as const },
-    ],
-    records: [
-      { key: 'type', title: '類型', sortable: true, filterable: true, type: 'select' as const, 
-        options: ['meeting', 'call'] },
-      { key: 'customerName', title: '客戶', sortable: true, filterable: true, type: 'text' as const },
-      { key: 'date', title: '日期', sortable: true, filterable: true, type: 'date' as const },
-      { key: 'summary', title: '摘要', sortable: true, filterable: true, type: 'text' as const, required: true },
-    ],
-    tasks: [
-      { key: 'title', title: '標題', sortable: true, filterable: true, type: 'text' as const, required: true },
-      { key: 'assignee', title: '負責人', sortable: true, filterable: true, type: 'text' as const },
-      { key: 'dueDate', title: '到期日', sortable: true, filterable: true, type: 'date' as const },
-      { key: 'status', title: '狀態', sortable: true, filterable: true, type: 'select' as const,
-        options: ['todo', 'in_progress', 'completed', 'cancelled'], render: (value: any) => {
-        const statusStyle = (() => {
-          switch (value) {
-            case 'completed':
-              return { backgroundColor: '#E3F2E6' };
-            case 'in_progress':
-              return { backgroundColor: '#E8F0FF' };
-            case 'cancelled':
-              return { backgroundColor: '#FFE5E5' };
-            default:
-              return { backgroundColor: '#FEF3E2' };
+  // 將動態欄位轉換為表格欄位格式
+  const baseColumns = useMemo(() => {
+    const customerFields = dynamicFields.customers;
+    const recordFields = dynamicFields.records;
+    const taskFields = dynamicFields.tasks;
+    
+    // 如果還沒有載入動態欄位，使用預設欄位
+    return {
+      customers: customerFields.length > 0 ? customerFields.map(field => ({
+        key: field.key,
+        title: field.label,
+        sortable: true,
+        filterable: true,
+        type: field.type as any,
+        required: field.required || false,
+        options: field.options?.map(opt => opt.value),
+      })) : [
+        { key: 'name', title: '客戶姓名', sortable: true, filterable: true, type: 'text' as const, required: true },
+        { key: 'company', title: '公司名稱', sortable: true, filterable: true, type: 'text' as const, required: true },
+        { key: 'email', title: '電子郵件', sortable: true, filterable: true, type: 'email' as const },
+        { key: 'phone', title: '聯絡電話', sortable: true, filterable: true, type: 'phone' as const },
+      ],
+      records: recordFields.length > 0 ? recordFields.map(field => ({
+        key: field.key,
+        title: field.label,
+        sortable: true,
+        filterable: true,
+        type: field.type as any,
+        required: field.required || false,
+        options: field.options?.map(opt => opt.value),
+      })) : [
+        { key: 'type', title: '類型', sortable: true, filterable: true, type: 'select' as const, 
+          options: ['meeting', 'call'] },
+        { key: 'customerName', title: '客戶', sortable: true, filterable: true, type: 'text' as const },
+        { key: 'date', title: '日期', sortable: true, filterable: true, type: 'date' as const },
+        { key: 'summary', title: '摘要', sortable: true, filterable: true, type: 'text' as const, required: true },
+      ],
+      tasks: taskFields.length > 0 ? taskFields.map(field => ({
+        key: field.key,
+        title: field.label,
+        sortable: true,
+        filterable: true,
+        type: field.type as any,
+        required: field.required || false,
+        options: field.options?.map(opt => opt.value),
+        // 特殊處理狀態欄位的渲染
+        ...(field.key === 'status' ? {
+          render: (value: any) => {
+            const statusStyle = (() => {
+              switch (value) {
+                case 'completed':
+                  return { backgroundColor: '#E3F2E6' };
+                case 'in_progress':
+                  return { backgroundColor: '#E8F0FF' };
+                case 'cancelled':
+                  return { backgroundColor: '#FFE5E5' };
+                default:
+                  return { backgroundColor: '#FEF3E2' };
+              }
+            })();
+            return (
+              <View style={[{ borderRadius: 4, paddingHorizontal: 8, paddingVertical: 4 }, statusStyle]}>
+                <Text style={{ fontSize: 12, fontWeight: '500', color: '#37352f' }}>
+                  {value === 'completed' ? '已完成' : value === 'todo' ? '待開始' : value}
+                </Text>
+              </View>
+            );
           }
-        })();
-        return (
-          <View style={[{ borderRadius: 4, paddingHorizontal: 8, paddingVertical: 4 }, statusStyle]}>
-            <Text style={{ fontSize: 12, fontWeight: '500', color: '#37352f' }}>
-              {value === 'completed' ? '已完成' : value === 'todo' ? '待開始' : value}
-            </Text>
-          </View>
-        );
-      } },
-    ],
-  }), []);
+        } : {}),
+      })) : [
+        { key: 'title', title: '任務標題', sortable: true, filterable: true, type: 'text' as const, required: true },
+        { key: 'assignee', title: '負責人', sortable: true, filterable: true, type: 'text' as const },
+        { key: 'dueDate', title: '到期日期', sortable: true, filterable: true, type: 'date' as const },
+        { key: 'status', title: '狀態', sortable: true, filterable: true, type: 'select' as const,
+          options: ['todo', 'in_progress', 'completed', 'cancelled'] },
+      ],
+    };
+  }, [dynamicFields]);
 
   // 合併基礎欄位和自訂欄位
   const allColumns = useMemo(() => {
