@@ -65,6 +65,7 @@ export interface NotionTableProps {
   onRowAdd?: (data: Partial<TableData>) => void | Promise<void>;
   onColumnAdd?: () => void;
   onColumnReorder?: (columns: ColumnConfig[]) => void;
+  onFieldUpdate?: (fieldKey: string, updates: Partial<ColumnConfig>) => Promise<void>;
   multiSelect?: boolean;
   selectedRows?: string[];
   onSelectionChange?: (selectedIds: string[]) => void;
@@ -74,6 +75,9 @@ export interface NotionTableProps {
   rowHeight?: number;
   headerHeight?: number;
   overscan?: number;
+  activeTab?: 'customers' | 'tasks' | 'records';
+  onRowEdit?: (row: TableData) => void;
+  onRowDelete?: (row: TableData) => void;
 }
 
 export interface EditorProps<T = any> {

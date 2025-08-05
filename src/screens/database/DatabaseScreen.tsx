@@ -60,9 +60,10 @@ import { createCustomer, updateCustomer } from '@/services/firebase/customers';
 import { createRecord, updateRecord } from '@/services/firebase/records';
 import { createTask, updateTask } from '@/services/firebase/tasks';
 import { showToast } from '@/utils/toast';
-import { subscribeToFieldDefinitions } from '@/services/firebase/fieldDefinitions';
+import { subscribeToFieldDefinitions, updateFieldDefinitionByOrganization } from '@/services/firebase/fieldDefinitions';
 import { FieldConfig as DynamicFieldConfig } from '@/types/fieldDefinitions';
 import { useOrganization } from '@/hooks/useOrganization';
+import { canEditCustomFieldDefinition } from '@/services/firebase/permissions';
 
 interface SortConfig {
   key: string | null;
@@ -961,6 +962,51 @@ export const DatabaseScreen: React.FC = () => {
     setShowAddColumnDialog(true);
   }, []);
 
+  // 處理欄位更新
+  const handleFieldUpdate = useCallback(async (
+    fieldKey: string,
+    updates: Partial<DynamicFieldConfig>
+  ) => {
+    if (!user || !currentOrganization) {
+      showToast('error', '無法獲取用戶資訊');
+      return;
+    }
+
+    try {
+      // 權限檢查 - 使用簡化的權限檢查
+      const hasPermission = await canEditCustomFieldDefinition(
+        user.uid,
+        user.uid, // 創建者通常是當前用戶
+        undefined // 權限物件
+      );
+      
+      if (!hasPermission) {
+        showToast('error', '您沒有權限修改欄位定義');
+        return;
+      }
+      
+      // 獲取當前欄位定義
+      const currentFields = dynamicFields[activeTab];
+      const updatedFields = currentFields.map(field =>
+        field.key === fieldKey ? { ...field, ...updates } : field
+      );
+      
+      // 更新到 Firebase
+      await updateFieldDefinitionByOrganization(
+        activeTab,
+        currentOrganization.id,
+        updatedFields,
+        user.uid,
+        `更新欄位 ${fieldKey}`
+      );
+      
+      showToast('success', '欄位更新成功');
+    } catch (error) {
+      console.error('欄位更新失敗:', error);
+      showToast('error', '欄位更新失敗，請稍後再試');
+    }
+  }, [activeTab, dynamicFields, user, currentOrganization]);
+
   // 測試函數 - 手動檢查未同步草稿
   const testUnsyncedDrafts = () => {
     console.log('🧪 測試未同步草稿狀態');
@@ -994,6 +1040,7 @@ export const DatabaseScreen: React.FC = () => {
           onRowDelete={handleRowDelete}
           onColumnAdd={handleColumnAdd}
           onColumnReorder={handleColumnReorder}
+          onFieldUpdate={handleFieldUpdate}
           multiSelect={multiSelectMode}
           selectedRows={selectedItems}
           onSelectionChange={setSelectedItems}

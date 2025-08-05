@@ -358,3 +358,71 @@ export function clearFieldDefinitionCache(
   }
   console.log('🧹 欄位定義快取已清除');
 }
+
+/**
+ * 更新欄位定義（透過組織和集合名稱）
+ * @param collectionName 集合名稱
+ * @param organizationId 組織 ID
+ * @param fields 更新後的欄位配置
+ * @param userId 更新者 ID
+ * @param description 說明
+ */
+export async function updateFieldDefinitionByOrganization(
+  collectionName: 'customers' | 'tasks' | 'records',
+  organizationId: string,
+  fields: FieldConfig[],
+  userId: string,
+  description?: string
+): Promise<void> {
+  console.log(`📝 更新欄位定義: ${collectionName} (組織: ${organizationId})`);
+  
+  try {
+    // 查詢當前 active 的欄位定義
+    const q = query(
+      collection(getFirebaseDb(), 'field_definitions'),
+      where('collectionName', '==', collectionName),
+      where('organizationId', '==', organizationId),
+      where('isActive', '==', true),
+      limit(1)
+    );
+    
+    const { getDocs } = await import('firebase/firestore');
+    const snapshot = await getDocs(q);
+    
+    if (snapshot.empty) {
+      // 如果沒有現有定義，建立新的
+      await createFieldDefinition(collectionName, organizationId, fields, userId, description);
+      return;
+    }
+    
+    // 取得當前版本
+    const currentDoc = snapshot.docs[0];
+    const currentData = currentDoc.data() as FieldDefinition;
+    
+    // 停用當前版本
+    await updateDoc(currentDoc.ref, { isActive: false });
+    
+    // 建立新版本
+    const newVersionData: Omit<FieldDefinition, 'id'> = {
+      ...currentData,
+      fields,
+      version: currentData.version + 1,
+      isActive: true,
+      createdAt: currentData.createdAt, // 保留原始建立時間
+      updatedAt: serverTimestamp() as Timestamp,
+      updatedBy: userId,
+      description: description || `版本 ${currentData.version + 1}`
+    };
+    
+    await addDoc(collection(getFirebaseDb(), 'field_definitions'), newVersionData);
+    
+    // 清除快取
+    const cacheKey = `${organizationId}:${collectionName}`;
+    fieldDefinitionCache.delete(cacheKey);
+    
+    console.log('✅ 欄位定義更新成功');
+  } catch (error) {
+    console.error('更新欄位定義失敗:', error);
+    throw error;
+  }
+}

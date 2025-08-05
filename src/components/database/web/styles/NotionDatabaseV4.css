@@ -267,7 +267,56 @@ body {
 }
 
 .notion-header-actions {
-  display: none;
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 4px;
+}
+
+/* 欄位資訊按鈕 */
+.notion-field-info-btn {
+  background: none;
+  border: none;
+  color: rgba(55, 53, 47, 0.45);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+  opacity: 0;
+  line-height: 1;
+}
+
+.notion-header-cell:hover .notion-field-info-btn {
+  opacity: 1;
+}
+
+.notion-field-info-btn:hover {
+  background: rgba(55, 53, 47, 0.08);
+  color: rgba(55, 53, 47, 0.8);
+}
+
+/* 標準動作按鈕 */
+.notion-header-action-btn {
+  background: none;
+  border: none;
+  color: rgba(55, 53, 47, 0.45);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+  opacity: 0;
+  line-height: 1;
+}
+
+.notion-header-cell:hover .notion-header-action-btn {
+  opacity: 1;
+}
+
+.notion-header-action-btn:hover {
+  background: rgba(55, 53, 47, 0.08);
+  color: rgba(55, 53, 47, 0.8);
 }
 
 /* 基於資料類型的預設寬度 */

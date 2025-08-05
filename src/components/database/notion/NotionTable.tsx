@@ -18,10 +18,14 @@ import { TableHeader } from './TableHeader';
 import { TableRow } from './TableRow';
 import { useCellStateMachine } from './hooks/useCellStateMachine';
 import { tableStyles } from './styles/tableStyles';
+import { canDefineCustomFields } from '@/services/firebase/permissions';
+import { useAuth } from '@/hooks/useAuth';
+import { useOrganization } from '@/hooks/useOrganization';
 import { NOTION_DEFAULTS, NotionColors } from './constants';
 import { Icon } from '@/components/common/Icon';
 import { EditorFactory } from './editors/EditorFactory';
 import { NotionIcons, getPropertyIcon as getNotionPropertyIcon } from './NotionIcons';
+import { FieldEditPopover } from './FieldEditPopover';
 import { useKeyboardNavigation } from './managers/KeyboardNavigationManager';
 import { FilterManager, createEmptyFilterGroup, useFilterManager } from './managers/FilterManager';
 import { SortManager, useSortManager } from './managers/SortManager';
@@ -46,6 +50,7 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
   onRowAdd,
   onColumnAdd,
   onColumnReorder,
+  onFieldUpdate,
   multiSelect = false,
   selectedRows = [],
   onSelectionChange,
@@ -148,6 +153,20 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
   const [columnManagerButtonRef, setColumnManagerButtonRef] = useState<HTMLElement | null>(null);
   const [visibleColumns, setVisibleColumns] = useState<string[]>(() => columnsWithActions.map(col => col.id));
   
+  // 欄位編輯權限和 Popover 狀態
+  const { user } = useAuth();
+  const { currentOrganization } = useOrganization();
+  const [canEditFields, setCanEditFields] = useState(false);
+  const [fieldEditPopover, setFieldEditPopover] = useState<{
+    visible: boolean;
+    fieldConfig: ColumnConfig | null;
+    anchorRef: React.RefObject<any> | null;
+  }>({
+    visible: false,
+    fieldConfig: null,
+    anchorRef: null
+  });
+  
   // 同步欄位寬度變更（只在欄位結構改變時）
   const prevColumnsRef = useRef(columnsWithActions);
   useEffect(() => {
@@ -166,6 +185,24 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
     
     prevColumnsRef.current = columnsWithActions;
   }, [columnsWithActions.length]); // 只依賴長度，不依賴整個陣列
+  
+  // 檢查欄位編輯權限
+  useEffect(() => {
+    const checkFieldEditPermission = async () => {
+      if (!user || !currentOrganization) return;
+      try {
+        const hasPermission = await canDefineCustomFields(
+          user.uid, 
+          currentOrganization.id
+        );
+        setCanEditFields(hasPermission);
+      } catch (error) {
+        console.error('檢查欄位編輯權限失敗:', error);
+        setCanEditFields(false);
+      }
+    };
+    checkFieldEditPermission();
+  }, [user, currentOrganization]);
   
   const selectedRowsSet = useMemo(
     () => new Set(selectedRows.length > 0 ? selectedRows : internalSelectedRows),
@@ -252,6 +289,23 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
 
   // === 新功能事件處理器 ===
 
+  // 處理欄位資訊點擊
+  const handleFieldInfo = useCallback((event: React.MouseEvent, column: ColumnConfig) => {
+    event.stopPropagation();
+    const anchorRef = React.createRef<any>();
+    // 將事件目標設定為 anchor
+    Object.defineProperty(anchorRef, 'current', {
+      value: event.currentTarget,
+      writable: true
+    });
+    
+    setFieldEditPopover({
+      visible: true,
+      fieldConfig: column,
+      anchorRef
+    });
+  }, []);
+  
   // 過濾事件處理器
   const handleFilterButtonClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
     console.log('🔍 過濾按鈕被點擊');
@@ -714,6 +768,14 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
                     ),
                     React.createElement('span', 
                       { className: 'notion-header-actions' },
+                      canEditFields && !['_checkbox', '_actions'].includes(column.key) && React.createElement('button', 
+                        { 
+                          className: 'notion-field-info-btn',
+                          onClick: (e) => handleFieldInfo(e, column),
+                          title: '欄位資訊與設定'
+                        }, 
+                        'ℹ️'
+                      ),
                       React.createElement('button', 
                         { className: 'notion-header-action-btn' }, 
                         '⋯'
@@ -1070,6 +1132,19 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
           <Icon name="add" size={16} color={NotionColors.text.gray} />
           <Text style={tableStyles.addRowText}>新增列</Text>
         </TouchableOpacity>
+      )}
+      
+      {/* Field Edit Popover */}
+      {fieldEditPopover.visible && fieldEditPopover.fieldConfig && (
+        <FieldEditPopover
+          visible={fieldEditPopover.visible}
+          onClose={() => setFieldEditPopover({ visible: false, fieldConfig: null, anchorRef: null })}
+          anchor={fieldEditPopover.anchorRef!}
+          fieldConfig={fieldEditPopover.fieldConfig}
+          onUpdate={onFieldUpdate || (async () => {})}
+          canEdit={canEditFields}
+          activeTab={activeTab || 'customers'}
+        />
       )}
     </View>
   );
