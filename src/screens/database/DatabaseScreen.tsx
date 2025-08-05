@@ -37,7 +37,8 @@ import { SkeletonLoader } from '@/components/database/SkeletonLoader';
 import { BatchEditForm } from '@/components/database/BatchEditForm';
 import { ExportOptions } from '@/components/database/ExportOptions';
 import { CSVUploader } from '@/components/input/CSVUploader';
-import { CustomerForm } from '@/components/forms/CustomerForm';
+import { DynamicFormBuilder, DynamicFormBuilderRef } from '@/components/database/forms/DynamicFormBuilder';
+import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { useDatabaseKeyboardShortcuts } from '@/hooks/useDatabaseKeyboardShortcuts';
 import { isDesktopWeb } from '@/utils/web-detector';
 import { responsive, webOnly } from '@/styles/web';
@@ -1152,31 +1153,54 @@ export const DatabaseScreen: React.FC = () => {
                 >
                   {activeTab === 'customers' && createModalMode === 'form' && (
                     <View style={{ width: '100%', maxWidth: 400 }}>
-                      <CustomerForm
-                        onSubmit={async (data) => {
-                          try {
-                            await createCustomer({
-                              ...data,
-                              assignedTo: user!.uid,
-                              teamId: currentTeam?.id || '',
-                              organizationId: currentOrganization?.id || '',
-                            }, user!.uid);
-                            showToast('success', '客戶新增成功');
-                            setShowCreateModal(false);
-                            setCreateModalMode('form'); // 重置模式
-                            // 重新載入資料
-                            fetchCustomers(user!);
-                          } catch (error) {
-                            console.error('新增客戶失敗:', error);
-                            showToast('error', '新增失敗，請稍後再試');
-                          }
-                        }}
-                        onCancel={() => {
-                          setShowCreateModal(false);
-                          setCreateModalMode('form');
-                        }}
-                        mode="create"
-                      />
+                      {dynamicFields.customers.length > 0 ? (
+                        <DynamicFormBuilder
+                          fields={dynamicFields.customers}
+                          onSubmit={async (formData) => {
+                            try {
+                              // 準備客戶數據
+                              const customerData: any = {
+                                // 基本必填欄位
+                                name: formData.name || '',
+                                company: formData.company || '',
+                                // 系統欄位
+                                assignedTo: user!.uid,
+                                teamId: currentTeam?.id || '',
+                                organizationId: currentOrganization?.id || '',
+                              };
+                              
+                              // 處理動態欄位
+                              dynamicFields.customers.forEach(field => {
+                                if (field.key in formData) {
+                                  // 根據欄位類型處理值
+                                  if (field.type === 'tags' || field.type === 'multiselect') {
+                                    customerData[field.key] = formData[field.key] || [];
+                                  } else if (formData[field.key] !== '' && formData[field.key] !== null && formData[field.key] !== undefined) {
+                                    customerData[field.key] = formData[field.key];
+                                  }
+                                }
+                              });
+
+                              await createCustomer(customerData, user!.uid);
+                              showToast('success', '客戶新增成功');
+                              setShowCreateModal(false);
+                              setCreateModalMode('form'); // 重置模式
+                              // 重新載入資料
+                              fetchCustomers(user!);
+                            } catch (error) {
+                              console.error('新增客戶失敗:', error);
+                              showToast('error', '新增失敗，請稍後再試');
+                              throw error; // 讓 DynamicFormBuilder 知道提交失敗
+                            }
+                          }}
+                          mode="create"
+                        />
+                      ) : (
+                        <View style={styles.loadingContainer}>
+                          <LoadingSpinner size="large" />
+                          <Text style={styles.loadingText}>載入欄位定義中...</Text>
+                        </View>
+                      )}
                     </View>
                   )}
                   
@@ -1589,5 +1613,16 @@ const styles = StyleSheet.create({
   },
   modeSwitchTextActive: {
     color: '#2196F3',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 60,
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: '#7A7A7A',
   },
 });

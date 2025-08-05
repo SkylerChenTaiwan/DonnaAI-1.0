@@ -164,6 +164,8 @@ export const DynamicFormBuilder = forwardRef<DynamicFormBuilderRef, DynamicFormB
   disabled = false,
   mode = 'create'
 }, ref) => {
+  console.log('DynamicFormBuilder 收到欄位:', fields.length, '個');
+  console.log('DynamicFormBuilder 欄位詳情:', fields.map(f => ({ key: f.key, label: f.label })));
   // 動態生成驗證 schema
   const validationSchema = React.useMemo(() => generateValidationSchema(fields), [fields]);
   

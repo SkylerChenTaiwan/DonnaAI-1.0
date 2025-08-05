@@ -60,6 +60,8 @@ export const CreateCustomerModal: React.FC = () => {
       currentOrganization.id,
       (fieldConfigs) => {
         console.log('收到欄位定義:', fieldConfigs);
+        console.log('欄位數量:', fieldConfigs.length);
+        console.log('欄位詳情:', fieldConfigs.map(f => ({ key: f.key, label: f.label })));
         setFields(fieldConfigs);
       }
     );
