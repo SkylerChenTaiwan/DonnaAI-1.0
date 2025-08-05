@@ -3,7 +3,7 @@
  * 提供檔案選擇、數據預覽、驗證結果顯示和批量導入功能
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
   View,
   Text,
@@ -25,6 +25,10 @@ import { validateCustomerBatch, ValidationSummary } from '@/services/csv/validat
 import { importCustomers, ImportResult, ImportOptions } from '@/services/csv/importer';
 import { CustomerFormData } from '@/services/validation/form-schemas';
 import { useAuthStore } from '@/stores/authStore';
+import { useOrganization } from '@/hooks/useOrganization';
+import { subscribeToFieldDefinitions } from '@/services/firebase/fieldDefinitions';
+import { generateCSVTemplate, downloadCSVTemplate } from '@/utils/csvTemplateGenerator';
+import { FieldConfig } from '@/types/fieldDefinitions';
 
 export interface CSVUploaderProps {
   onComplete: (customers: CustomerFormData[]) => void;
@@ -53,9 +57,30 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
     estimatedTime?: number;
   }>({ percentage: 0, current: '' });
   const [loading, setLoading] = useState(false);
+  const [fields, setFields] = useState<FieldConfig[] | null>(null);
   
   // 從 auth store 獲取使用者資訊
   const { user } = useAuthStore.getState();
+  const { currentOrganization } = useOrganization();
+
+  // 訂閱欄位定義
+  useEffect(() => {
+    if (!currentOrganization || dataType !== 'customer') return;
+    
+    console.log('CSV 匯入器訂閱欄位定義');
+    const unsubscribe = subscribeToFieldDefinitions(
+      'customers',
+      currentOrganization.id,
+      (fieldConfigs) => {
+        console.log('CSV 匯入器收到欄位定義:', fieldConfigs);
+        setFields(fieldConfigs);
+      }
+    );
+    
+    return () => {
+      unsubscribe();
+    };
+  }, [currentOrganization, dataType]);
 
   // 選擇檔案
   const handleFileSelect = useCallback(async () => {
@@ -213,26 +238,37 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
   // 下載範本檔案
   const handleDownloadTemplate = useCallback(async () => {
     try {
-      const template = getCSVTemplate();
+      if (!fields) {
+        Alert.alert('提示', '正在載入欄位定義，請稍後再試');
+        return;
+      }
+      
       const fileName = `客戶資料範本_${new Date().getTime()}.csv`;
       
-      // 在 Expo 環境中，我們顯示範本內容讓用戶複製
-      Alert.alert(
-        'CSV 範本格式',
-        template,
-        [
-          { text: '關閉' },
-          { text: '複製', onPress: () => {
-            // TODO: 實作複製到剪貼簿的功能
-            Alert.alert('提示', '請手動複製上面的範本內容到 CSV 檔案中');
-          }}
-        ]
-      );
+      // Web 平台可以直接下載
+      if (Platform.OS === 'web') {
+        downloadCSVTemplate(fields, fileName, true);
+        Alert.alert('成功', '範本檔案已下載');
+      } else {
+        // 在 Expo 環境中，我們顯示範本內容讓用戶複製
+        const template = generateCSVTemplate(fields, true);
+        Alert.alert(
+          'CSV 範本格式',
+          template,
+          [
+            { text: '關閉' },
+            { text: '複製', onPress: () => {
+              // TODO: 實作複製到剪貼簿的功能
+              Alert.alert('提示', '請手動複製上面的範本內容到 CSV 檔案中');
+            }}
+          ]
+        );
+      }
     } catch (error) {
       console.error('範本生成失敗:', error);
       Alert.alert('錯誤', '範本生成失敗');
     }
-  }, []);
+  }, [fields]);
 
   // 渲染不同階段的內容
   const renderContent = () => {

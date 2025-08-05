@@ -306,7 +306,10 @@ function checkForDuplicates(
 /**
  * 獲取 CSV 範本格式
  */
+// 保留舊版函數以維持相容性，將在新版本中被取代
 export function getCSVTemplate(): string {
+  console.warn('getCSVTemplate 已過時，請使用 generateCSVTemplate 從 csvTemplateGenerator');
+  
   const headers = [
     'name',
     'company', 

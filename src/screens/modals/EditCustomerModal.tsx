@@ -2,7 +2,7 @@
  * 編輯客戶 Modal
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   View,
   Text,
@@ -21,8 +21,14 @@ import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useCustomerStore } from '@/stores/customerStore';
 import { useAuthStore } from '@/stores/authStore';
+import { useOrganization } from '@/hooks/useOrganization';
 import { RootStackParamList } from '@/types/navigation';
 import { CustomerDoc } from '@/types/customer';
+import { DynamicFormBuilder, DynamicFormBuilderRef } from '@/components/database/forms/DynamicFormBuilder';
+import { subscribeToFieldDefinitions } from '@/services/firebase/fieldDefinitions';
+import { FieldConfig, DynamicFormData } from '@/types/fieldDefinitions';
+import { LoadingSpinner } from '@/components/common/LoadingSpinner';
+import { showToast } from '@/utils/toast';
 
 type EditCustomerRouteProp = RouteProp<RootStackParamList, 'EditCustomer'>;
 type EditCustomerNavigationProp = StackNavigationProp<RootStackParamList, 'EditCustomer'>;
@@ -33,39 +39,38 @@ export const EditCustomerModal: React.FC = () => {
   const { customerId } = route.params;
   
   const { user } = useAuthStore();
+  const { currentOrganization } = useOrganization();
   const { customers, updateCustomer, isLoading } = useCustomerStore();
   const customer = customers.find(c => c.id === customerId);
   
-  const [formData, setFormData] = useState({
-    name: '',
-    company: '',
-    email: '',
-    phone: '',
-    notes: '',
-    tags: [] as string[],
-  });
-  
-  const [tagInput, setTagInput] = useState('');
+  const [fields, setFields] = useState<FieldConfig[] | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const formRef = useRef<DynamicFormBuilderRef>(null);
 
+  // 訂閱欄位定義
   useEffect(() => {
-    if (customer) {
-      setFormData({
-        name: customer.name || '',
-        company: customer.company || '',
-        email: customer.email || '',
-        phone: customer.phone || '',
-        notes: customer.notes || '',
-        tags: customer.tags || [],
-      });
-    }
-  }, [customer]);
-
-  const handleSave = async () => {
-    if (!user || !customer) return;
+    if (!currentOrganization) return;
     
-    if (!formData.name.trim()) {
-      Alert.alert('錯誤', '請輸入客戶姓名');
+    console.log('訂閱客戶欄位定義 (編輯)');
+    const unsubscribe = subscribeToFieldDefinitions(
+      'customers',
+      currentOrganization.id,
+      (fieldConfigs) => {
+        console.log('收到欄位定義:', fieldConfigs);
+        setFields(fieldConfigs);
+      }
+    );
+    
+    return () => {
+      unsubscribe();
+    };
+  }, [currentOrganization]);
+
+  const handleSave = useCallback(async (formData: DynamicFormData) => {
+    if (!user || !customer || !fields) return;
+    
+    if (!formData.name || !String(formData.name).trim()) {
+      showToast('error', '請輸入客戶姓名');
       return;
     }
     
@@ -73,41 +78,39 @@ export const EditCustomerModal: React.FC = () => {
     
     try {
       const updates: Partial<CustomerDoc> = {
-        name: formData.name.trim(),
-        company: formData.company.trim(),
-        email: formData.email.trim(),
-        phone: formData.phone.trim(),
-        notes: formData.notes.trim(),
-        tags: formData.tags,
+        name: String(formData.name).trim(),
+        company: formData.company ? String(formData.company).trim() : '',
       };
       
+      // 處理動態欄位
+      fields.forEach(field => {
+        if (field.key in formData) {
+          // 根據欄位類型處理值
+          if (field.type === 'tags' || field.type === 'multiselect') {
+            updates[field.key] = formData[field.key] || [];
+          } else if (formData[field.key] !== '' && formData[field.key] !== null && formData[field.key] !== undefined) {
+            updates[field.key] = formData[field.key];
+          }
+        }
+      });
+      
       await updateCustomer(customerId, updates, user.id);
+      showToast('success', '客戶更新成功');
       navigation.goBack();
     } catch (error) {
       console.error('更新客戶失敗:', error);
-      Alert.alert('錯誤', '更新客戶失敗，請稍後再試');
+      showToast('error', '更新客戶失敗，請稍後再試');
     } finally {
       setIsSaving(false);
     }
-  };
+  }, [user, customer, fields, customerId, updateCustomer, navigation]);
 
-  const handleAddTag = () => {
-    const tag = tagInput.trim();
-    if (tag && !formData.tags.includes(tag)) {
-      setFormData(prev => ({
-        ...prev,
-        tags: [...prev.tags, tag],
-      }));
-      setTagInput('');
+  // 處理儲存按鈕點擊
+  const handleSavePress = useCallback(() => {
+    if (formRef.current) {
+      formRef.current.submit();
     }
-  };
-
-  const handleRemoveTag = (tag: string) => {
-    setFormData(prev => ({
-      ...prev,
-      tags: prev.tags.filter(t => t !== tag),
-    }));
-  };
+  }, []);
 
   if (isLoading || !customer) {
     return (
@@ -132,7 +135,7 @@ export const EditCustomerModal: React.FC = () => {
         </TouchableOpacity>
         <Text style={styles.headerTitle}>編輯客戶</Text>
         <TouchableOpacity 
-          onPress={handleSave} 
+          onPress={handleSavePress} 
           style={styles.headerButton}
           disabled={isSaving}
         >
@@ -145,101 +148,21 @@ export const EditCustomerModal: React.FC = () => {
       </View>
 
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        <View style={styles.form}>
-          {/* 姓名 */}
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>姓名 *</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.name}
-              onChangeText={(text) => setFormData(prev => ({ ...prev, name: text }))}
-              placeholder="請輸入客戶姓名"
-              placeholderTextColor="#C7C7CC"
-            />
+        {fields ? (
+          <DynamicFormBuilder
+            ref={formRef}
+            fields={fields}
+            data={customer}
+            onSubmit={handleSave}
+            disabled={isSaving}
+            mode="edit"
+          />
+        ) : (
+          <View style={styles.loadingContainer}>
+            <LoadingSpinner size="large" />
+            <Text style={styles.loadingText}>載入欄位定義中...</Text>
           </View>
-
-          {/* 公司 */}
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>公司</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.company}
-              onChangeText={(text) => setFormData(prev => ({ ...prev, company: text }))}
-              placeholder="請輸入公司名稱"
-              placeholderTextColor="#C7C7CC"
-            />
-          </View>
-
-          {/* 電子郵件 */}
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>電子郵件</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.email}
-              onChangeText={(text) => setFormData(prev => ({ ...prev, email: text }))}
-              placeholder="example@email.com"
-              placeholderTextColor="#C7C7CC"
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-          </View>
-
-          {/* 電話 */}
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>電話</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.phone}
-              onChangeText={(text) => setFormData(prev => ({ ...prev, phone: text }))}
-              placeholder="請輸入電話號碼"
-              placeholderTextColor="#C7C7CC"
-              keyboardType="phone-pad"
-            />
-          </View>
-
-          {/* 標籤 */}
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>標籤</Text>
-            <View style={styles.tagInputContainer}>
-              <TextInput
-                style={styles.tagInput}
-                value={tagInput}
-                onChangeText={setTagInput}
-                placeholder="輸入標籤後按新增"
-                placeholderTextColor="#C7C7CC"
-                onSubmitEditing={handleAddTag}
-              />
-              <TouchableOpacity onPress={handleAddTag} style={styles.addTagButton}>
-                <Icon name="add-circle" size={24} color="#1A1A1A" />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.tagList}>
-              {formData.tags.map((tag, index) => (
-                <View key={index} style={styles.tag}>
-                  <Text style={styles.tagText}>{tag}</Text>
-                  <TouchableOpacity onPress={() => handleRemoveTag(tag)}>
-                    <Icon name="close-circle" size={18} color="#8E8E93" />
-                  </TouchableOpacity>
-                </View>
-              ))}
-            </View>
-          </View>
-
-          {/* 備註 */}
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>備註</Text>
-            <TextInput
-              style={[styles.input, styles.textArea]}
-              value={formData.notes}
-              onChangeText={(text) => setFormData(prev => ({ ...prev, notes: text }))}
-              placeholder="請輸入備註內容"
-              placeholderTextColor="#C7C7CC"
-              multiline
-              numberOfLines={4}
-              textAlignVertical="top"
-            />
-          </View>
-        </View>
+        )}
       </ScrollView>
       </Layout>
     </WebModal>

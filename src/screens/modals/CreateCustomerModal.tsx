@@ -8,7 +8,7 @@ import { View, Text, StyleSheet, Alert, ScrollView, TouchableOpacity, Modal, Pla
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { Icon } from '@/components/common/Icon';
 
-import { CustomerForm } from '@/components/forms/CustomerForm';
+import { DynamicFormBuilder, DynamicFormBuilderRef } from '@/components/database/forms/DynamicFormBuilder';
 import { CSVUploader } from '@/components/input/CSVUploader';
 import { InputMethodLink } from '@/components/modals/InputMethodLink';
 import { Layout } from '@/components/common/Layout';
@@ -18,6 +18,9 @@ import { CustomerFormData } from '@/services/validation/form-schemas';
 import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
 import { showToast } from '../../utils/toast';
+import { subscribeToFieldDefinitions } from '@/services/firebase/fieldDefinitions';
+import { FieldConfig, DynamicFormData } from '@/types/fieldDefinitions';
+import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 
 type RouteParams = {
   CreateCustomerModal: {
@@ -34,7 +37,8 @@ export const CreateCustomerModal: React.FC = () => {
   // 從路由參數獲取模式，預設為表單
   const mode = route.params?.mode || 'form';
   const [loading, setLoading] = useState(false);
-  const formRef = useRef<any>(null);
+  const [fields, setFields] = useState<FieldConfig[] | null>(null);
+  const formRef = useRef<DynamicFormBuilderRef>(null);
   
   // 切換到 CSV 模式
   const switchToCSV = useCallback(() => {
@@ -46,7 +50,26 @@ export const CreateCustomerModal: React.FC = () => {
     navigation.setParams({ mode: 'form' });
   }, [navigation]);
 
-  const handleSubmit = useCallback(async (formData: CustomerFormData) => {
+  // 訂閱欄位定義
+  useEffect(() => {
+    if (!currentOrganization) return;
+    
+    console.log('訂閱客戶欄位定義');
+    const unsubscribe = subscribeToFieldDefinitions(
+      'customers',
+      currentOrganization.id,
+      (fieldConfigs) => {
+        console.log('收到欄位定義:', fieldConfigs);
+        setFields(fieldConfigs);
+      }
+    );
+    
+    return () => {
+      unsubscribe();
+    };
+  }, [currentOrganization]);
+
+  const handleSubmit = useCallback(async (formData: DynamicFormData) => {
     if (!user || !currentOrganization || !currentTeam) {
       showToast('error', '請先登入');
       return;
@@ -56,18 +79,29 @@ export const CreateCustomerModal: React.FC = () => {
       setLoading(true);
 
       // 準備客戶數據，添加系統需要的欄位
-      const customerData = {
-        ...formData,
+      const customerData: any = {
+        // 基本必填欄位
+        name: formData.name || '',
+        company: formData.company || '',
+        // 系統欄位
         assignedTo: user.uid, // 指定給當前用戶
         teamId: currentTeam.id, // 當前用戶的團隊
         organizationId: currentOrganization.id, // 當前用戶的組織
-        // 處理可選欄位
-        email: formData.email || undefined,
-        phone: formData.phone || undefined,
-        industry: formData.industry || undefined,
-        address: formData.address || undefined,
-        notes: formData.notes || undefined,
       };
+      
+      // 處理動態欄位
+      if (fields) {
+        fields.forEach(field => {
+          if (field.key in formData) {
+            // 根據欄位類型處理值
+            if (field.type === 'tags' || field.type === 'multiselect') {
+              customerData[field.key] = formData[field.key] || [];
+            } else if (formData[field.key] !== '' && formData[field.key] !== null && formData[field.key] !== undefined) {
+              customerData[field.key] = formData[field.key];
+            }
+          }
+        });
+      }
 
       // 呼叫 Firebase 服務創建客戶
       const newCustomer = await createCustomer(customerData, user.uid);
@@ -94,11 +128,11 @@ export const CreateCustomerModal: React.FC = () => {
       }
       
       showToast('error', errorMessage);
-      throw error; // 讓 CustomerForm 知道提交失敗
+      throw error; // 讓 DynamicFormBuilder 知道提交失敗
     } finally {
       setLoading(false);
     }
-  }, [user, currentOrganization, currentTeam, navigation]);
+  }, [user, currentOrganization, currentTeam, navigation, fields]);
 
   // 處理 CSV 匯入完成
   const handleCSVImportComplete = useCallback(async (customers: CustomerFormData[]) => {
@@ -207,15 +241,20 @@ export const CreateCustomerModal: React.FC = () => {
             {/* 內容區域 */}
             <ScrollView style={styles.modalContent} showsVerticalScrollIndicator={false}>
               {mode === 'form' ? (
-                <>
-                  <CustomerForm
+                fields ? (
+                  <DynamicFormBuilder
                     ref={formRef}
+                    fields={fields}
                     onSubmit={handleSubmit}
-                    onCancel={handleCancel}
-                    loading={loading}
+                    disabled={loading}
                     mode="create"
                   />
-                </>
+                ) : (
+                  <View style={styles.loadingContainer}>
+                    <LoadingSpinner size="large" />
+                    <Text style={styles.loadingText}>載入欄位定義中...</Text>
+                  </View>
+                )
               ) : (
                 <>
                   <CSVUploader
@@ -266,13 +305,20 @@ export const CreateCustomerModal: React.FC = () => {
                 targetLabel="改用 CSV 批量匯入"
                 onSwitch={switchToCSV}
               />
-              <CustomerForm
-                ref={formRef}
-                onSubmit={handleSubmit}
-                onCancel={handleCancel}
-                loading={loading}
-                mode="create"
-              />
+              {fields ? (
+                <DynamicFormBuilder
+                  ref={formRef}
+                  fields={fields}
+                  onSubmit={handleSubmit}
+                  disabled={loading}
+                  mode="create"
+                />
+              ) : (
+                <View style={styles.loadingContainer}>
+                  <LoadingSpinner size="large" />
+                  <Text style={styles.loadingText}>載入欄位定義中...</Text>
+                </View>
+              )}
             </>
           ) : (
             <>
@@ -398,5 +444,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     marginBottom: 8,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 60,
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: '#7A7A7A',
   },
 });
