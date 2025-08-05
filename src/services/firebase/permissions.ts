@@ -88,7 +88,7 @@ export const isOrgAdmin = async (userId: string): Promise<boolean> => {
     }
     
     const user = userDoc.data() as User;
-    return user.role === 'admin';
+    return user.role === 'admin' || user.role === 'super_admin' || user.role === 'system-admin';
   } catch (error) {
     console.error('檢查組織管理員權限時發生錯誤:', error);
     return false;
@@ -280,8 +280,8 @@ export const canDefineCustomFields = async (userId: string, organizationId: stri
       return false;
     }
     
-    // 管理員可以定義自訂欄位
-    if (user.role === 'admin') {
+    // Super Admin 和管理員可以定義自訂欄位
+    if (user.role === 'super_admin' || user.role === 'admin' || user.role === 'system-admin') {
       return true;
     }
     
