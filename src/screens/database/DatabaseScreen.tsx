@@ -36,6 +36,7 @@ import { SkeletonLoader } from '@/components/database/SkeletonLoader';
 import { BatchEditForm } from '@/components/database/BatchEditForm';
 import { ExportOptions } from '@/components/database/ExportOptions';
 import { CSVUploader } from '@/components/input/CSVUploader';
+import { CustomerForm } from '@/components/forms/CustomerForm';
 import { useDatabaseKeyboardShortcuts } from '@/hooks/useDatabaseKeyboardShortcuts';
 import { isDesktopWeb } from '@/utils/web-detector';
 import { responsive, webOnly } from '@/styles/web';
@@ -89,6 +90,7 @@ export const DatabaseScreen: React.FC = () => {
   const [showExportOptions, setShowExportOptions] = useState(false);
   const [showAddColumnDialog, setShowAddColumnDialog] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const [customColumns, setCustomColumns] = useState<Record<TabType, ColumnConfig[]>>({
     customers: [],
     records: [],
@@ -715,19 +717,9 @@ export const DatabaseScreen: React.FC = () => {
   const handleAddRow = useCallback(() => {
     console.log('🎯 DatabaseScreen handleAddRow 被調用', { activeTab });
     
-    // 開啟新增 Modal
-    switch (activeTab) {
-      case 'customers':
-        navigation.navigate('CreateCustomerModal', { mode: 'form' });
-        break;
-      case 'records':
-        navigation.navigate('CreateRecordModal', { mode: 'form' });
-        break;
-      case 'tasks':
-        navigation.navigate('CreateTaskModal', { mode: 'form' });
-        break;
-    }
-  }, [activeTab, navigation]);
+    // 顯示內部的新增 Modal
+    setShowCreateModal(true);
+  }, [activeTab]);
 
   const handleAddColumn = useCallback((column: ColumnConfig) => {
     setCustomColumns(prev => ({
@@ -1069,6 +1061,61 @@ export const DatabaseScreen: React.FC = () => {
                     showToast('success', `資料已匯出為 ${format.toUpperCase()} 格式`);
                   }}
                 />
+              </View>
+            </View>
+          </Modal>
+        )}
+        
+        {/* 新增資料 Modal */}
+        {showCreateModal && Platform.OS === 'web' && (
+          <Modal
+            visible={showCreateModal}
+            transparent
+            animationType="fade"
+            onRequestClose={() => setShowCreateModal(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={[styles.modalContent, { maxHeight: '90%' }]}>
+                <View style={styles.modalHeader}>
+                  <Text style={styles.modalTitle}>
+                    {activeTab === 'customers' ? '新增客戶' : 
+                     activeTab === 'records' ? '新增紀錄' : '新增任務'}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => setShowCreateModal(false)}
+                    style={styles.modalCloseButton}
+                  >
+                    <Icon name="close" size={24} color="#666" />
+                  </TouchableOpacity>
+                </View>
+                
+                {/* 內容區域 */}
+                <ScrollView style={styles.modalContent} showsVerticalScrollIndicator={false}>
+                  {activeTab === 'customers' && (
+                    <CustomerForm
+                      onSubmit={async (data) => {
+                        try {
+                          await createCustomer({
+                            ...data,
+                            assignedTo: user!.uid,
+                            teamId: currentTeam?.id || '',
+                            organizationId: currentOrganization?.id || '',
+                          }, user!.uid);
+                          showToast('success', '客戶新增成功');
+                          setShowCreateModal(false);
+                          // 重新載入資料
+                          fetchCustomers(user!);
+                        } catch (error) {
+                          console.error('新增客戶失敗:', error);
+                          showToast('error', '新增失敗，請稍後再試');
+                        }
+                      }}
+                      onCancel={() => setShowCreateModal(false)}
+                      mode="create"
+                    />
+                  )}
+                  {/* TODO: 加入 RecordForm 和 TaskForm */}
+                </ScrollView>
               </View>
             </View>
           </Modal>
