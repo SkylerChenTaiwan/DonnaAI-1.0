@@ -712,45 +712,22 @@ export const DatabaseScreen: React.FC = () => {
     }
   }, [activeTab, user, handleRefresh, tabs]);
 
-  const handleAddRow = useCallback(async () => {
+  const handleAddRow = useCallback(() => {
     console.log('🎯 DatabaseScreen handleAddRow 被調用', { activeTab });
     
-    // 使用草稿系統新增本地草稿
+    // 開啟新增 Modal
     switch (activeTab) {
       case 'customers':
-        customerDraftSystem.addNewDraft({
-          name: '',
-          company: '',
-          email: '',
-          phone: '',
-          tags: [],
-        });
-        showToast('info', '已新增草稿列，開始編輯後將自動儲存');
+        navigation.navigate('CreateCustomer');
         break;
-        
       case 'records':
-        recordDraftSystem.addNewDraft({
-          title: '',
-          type: 'general',
-          content: '',
-          customerIds: [],
-          date: '',
-        });
-        showToast('info', '已新增草稿列，開始編輯後將自動儲存');
+        navigation.navigate('CreateRecord');
         break;
-        
       case 'tasks':
-        taskDraftSystem.addNewDraft({
-          title: '',
-          type: 'unscheduled',
-          status: 'todo',
-          priority: 'medium',
-          assignee: '',
-        });
-        showToast('info', '已新增草稿列，開始編輯後將自動儲存');
+        navigation.navigate('CreateTask');
         break;
     }
-  }, [activeTab, user, customerDraftSystem, recordDraftSystem, taskDraftSystem]);
+  }, [activeTab, navigation]);
 
   const handleAddColumn = useCallback((column: ColumnConfig) => {
     setCustomColumns(prev => ({

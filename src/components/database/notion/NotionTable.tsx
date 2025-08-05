@@ -872,26 +872,8 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
                     : '沒有資料'
                 )
               )
-            ),
-            // 新增列按鈕
-            onRowAdd && React.createElement('tr', 
-              { className: 'notion-add-row' },
-              React.createElement('td', {
-                colSpan: columnsWithWidths.length + 1,
-                className: 'notion-add-row-cell'
-              },
-                React.createElement('button', {
-                  className: 'notion-add-row-button',
-                  onClick: () => {
-                    console.log('🔥 底部新增按鈕被點擊');
-                    handleAddRow();
-                  }
-                }, 
-                  React.createElement('span', { className: 'notion-add-icon' }, '+'),
-                  '新頁面'
-                )
-              )
             )
+            // 移除新增列按鈕 - 現在通過頂部按鈕新增
           )
         ),
 
