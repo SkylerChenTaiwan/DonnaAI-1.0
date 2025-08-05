@@ -80,7 +80,7 @@
 | 74   | notion-database-complete-rewrite.md | 📋 待執行 | 完整重寫 Notion 風格資料庫元件 - 從頭建立、虛擬滾動、狀態機、100% 還原 | - |
 | 75v  | database-mixed-mode.md | ✅ 已完成 | 資料庫混合模式實作 - 唯讀表格、表單編輯、CSV 批量操作 | 2025-08-05 |
 | 76v  | dynamic-field-definitions.md | ✅ 已完成 | 動態欄位定義系統 - Firebase 同步欄位結構、動態表單生成、CSV 範本自動化 | 2025-08-05 |
-| 77   | database-field-editor.md | 📋 待執行 | 資料庫欄位編輯功能 - 內聯編輯、AI 備註、權限控制、Notion 風格 Popover | - |
+| 77v  | database-field-editor.md | ✅ 已完成 | 資料庫欄位編輯功能 - 內聯編輯、AI 備註、權限控制、Notion 風格 Popover | 2025-08-05 |
 
 ## 命名規則
 
