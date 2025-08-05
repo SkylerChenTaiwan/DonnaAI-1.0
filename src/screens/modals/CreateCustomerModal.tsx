@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Alert, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Alert, ScrollView, TouchableOpacity, Modal, Platform } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { Icon } from '@/components/common/Icon';
 
@@ -171,10 +171,92 @@ export const CreateCustomerModal: React.FC = () => {
     }
   }, [navigation, handleSavePress, loading, mode]);
 
+  // Web 平台使用 Modal 元件包裝
+  if (Platform.OS === 'web') {
+    return (
+      <Modal
+        visible={true}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={handleCancel}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>新增客戶</Text>
+              <TouchableOpacity
+                onPress={handleCancel}
+                style={styles.modalCloseButton}
+              >
+                <Icon name="close" size={24} color="#666" />
+              </TouchableOpacity>
+            </View>
+            
+            {/* 模式切換 */}
+            <View style={styles.modeSwitchContainer}>
+              <Text style={styles.modeLabel}>
+                {mode === 'form' ? '請填寫客戶的基本資訊，標有 * 的欄位為必填項目' : ''}
+              </Text>
+              <InputMethodLink
+                activeMethod={mode}
+                alternativeMethod={mode === 'form' ? 'csv' : 'form'}
+                onSwitch={mode === 'form' ? switchToCSV : switchToForm}
+              />
+            </View>
+
+            {/* 內容區域 */}
+            <ScrollView style={styles.modalContent} showsVerticalScrollIndicator={false}>
+              {mode === 'form' ? (
+                <>
+                  <CustomerForm
+                    ref={formRef}
+                    onSubmit={handleSubmit}
+                    onCancel={handleCancel}
+                    loading={loading}
+                    mode="create"
+                  />
+                </>
+              ) : (
+                <>
+                  <CSVUploader
+                    onComplete={handleCSVImportComplete}
+                    loading={loading}
+                    dataType="customer"
+                  />
+                </>
+              )}
+            </ScrollView>
+            
+            {/* 底部按鈕區域 */}
+            {mode === 'form' && (
+              <View style={styles.modalFooter}>
+                <TouchableOpacity
+                  style={[styles.modalButton, styles.cancelButton]}
+                  onPress={handleCancel}
+                >
+                  <Text style={styles.cancelButtonText}>取消</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.modalButton, styles.saveButton, loading && styles.disabledButton]}
+                  onPress={handleSavePress}
+                  disabled={loading}
+                >
+                  <Text style={styles.saveButtonText}>
+                    {loading ? '儲存中...' : '儲存'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+        </View>
+      </Modal>
+    );
+  }
+
+  // 非 Web 平台維持原有設計
   return (
     <WebModal>
       <Layout style={styles.container}>
-
         {/* 內容區域 */}
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
           {mode === 'form' ? (
@@ -231,5 +313,90 @@ const styles = StyleSheet.create({
   },
   disabledText: {
     color: '#C7C7CC',
+  },
+  
+  // Modal 樣式
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    width: '90%',
+    maxWidth: 600,
+    maxHeight: '80%',
+    ...Platform.select({
+      web: {
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)',
+      },
+      default: {
+        elevation: 8,
+      },
+    }),
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#333',
+  },
+  modalCloseButton: {
+    padding: 4,
+  },
+  modalContent: {
+    flex: 1,
+    padding: 20,
+  },
+  modalFooter: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    padding: 20,
+    borderTopWidth: 1,
+    borderTopColor: '#e0e0e0',
+    gap: 12,
+  },
+  modalButton: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  cancelButton: {
+    backgroundColor: '#f0f0f0',
+  },
+  cancelButtonText: {
+    color: '#666',
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  saveButton: {
+    backgroundColor: 'rgb(46, 170, 220)',
+  },
+  saveButtonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  disabledButton: {
+    opacity: 0.6,
+  },
+  modeSwitchContainer: {
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    paddingBottom: 5,
+  },
+  modeLabel: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 8,
   },
 });
