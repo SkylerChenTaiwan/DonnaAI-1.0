@@ -50,6 +50,8 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
   });
   // 編輯狀態
   const [fieldName, setFieldName] = useState(fieldConfig?.title || '');
+  const [fieldType, setFieldType] = useState(fieldConfig?.type || 'text');
+  const [showTypeDropdown, setShowTypeDropdown] = useState(false);
   const [isRequired, setIsRequired] = useState(false); // ColumnConfig doesn't have required
   const [isVisible, setIsVisible] = useState(true); // ColumnConfig doesn't have visible
   
@@ -66,6 +68,7 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
   useEffect(() => {
     if (fieldConfig) {
       setFieldName(fieldConfig.title || '');
+      setFieldType(fieldConfig.type || 'text');
       // ColumnConfig 沒有 required 和 visible 屬性，使用預設值
       setIsRequired(false);
       setIsVisible(true);
@@ -82,12 +85,13 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
   useEffect(() => {
     const changed = 
       fieldName !== fieldConfig?.title ||
+      fieldType !== fieldConfig?.type ||
       isRequired !== false || // Always compare with default since ColumnConfig doesn't have this
       isVisible !== true || // Always compare with default since ColumnConfig doesn't have this
       aiDescription !== (fieldConfig as any)?.aiFieldInterpretation?.userDescription;
     
     setHasChanges(changed);
-  }, [fieldName, isRequired, isVisible, aiDescription, fieldConfig]);
+  }, [fieldName, fieldType, isRequired, isVisible, aiDescription, fieldConfig]);
 
   // 處理 AI 描述
   const handleAIProcess = async () => {
@@ -126,6 +130,7 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
     try {
       const updates: Partial<FieldConfig> = {
         label: fieldName, // This will be mapped to title in DatabaseScreen
+        type: fieldType as any,
         required: isRequired,
         visible: isVisible,
       };
@@ -184,10 +189,36 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
 
             <View style={styles.field}>
               <Text style={styles.fieldLabel}>欄位類型</Text>
-              <View style={styles.fieldTypeContainer}>
-                <Text style={styles.fieldTypeValue}>{getFieldTypeLabel(fieldConfig.type)}</Text>
-                <Text style={styles.fieldTypeHint}>（目前無法修改）</Text>
-              </View>
+              <TouchableOpacity
+                style={[styles.dropdown, !canEdit && styles.dropdownDisabled]}
+                onPress={() => canEdit && setShowTypeDropdown(!showTypeDropdown)}
+                disabled={!canEdit}
+              >
+                <Text style={styles.dropdownText}>{getFieldTypeLabel(fieldType)}</Text>
+                <Icon name="chevron-down" size={16} color={DesignSystem.colors.text.secondary} />
+              </TouchableOpacity>
+              
+              {showTypeDropdown && canEdit && (
+                <View style={styles.dropdownMenu}>
+                  {getFieldTypes().map((type) => (
+                    <TouchableOpacity
+                      key={type.value}
+                      style={styles.dropdownItem}
+                      onPress={() => {
+                        setFieldType(type.value);
+                        setShowTypeDropdown(false);
+                      }}
+                    >
+                      <Text style={[
+                        styles.dropdownItemText,
+                        fieldType === type.value && styles.dropdownItemSelected
+                      ]}>
+                        {type.label}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
             </View>
 
             <View style={styles.switchField}>
@@ -322,6 +353,24 @@ function getFieldTypeLabel(type: string): string {
     tags: '標籤'
   };
   return typeLabels[type] || type;
+}
+
+// 輔助函數：取得所有欄位類型選項
+function getFieldTypes() {
+  return [
+    { value: 'text', label: '文字' },
+    { value: 'number', label: '數字' },
+    { value: 'email', label: '電子郵件' },
+    { value: 'phone', label: '電話' },
+    { value: 'date', label: '日期' },
+    { value: 'datetime', label: '日期時間' },
+    { value: 'select', label: '單選' },
+    { value: 'multiselect', label: '多選' },
+    { value: 'boolean', label: '是/否' },
+    { value: 'url', label: '網址' },
+    { value: 'textarea', label: '多行文字' },
+    { value: 'tags', label: '標籤' },
+  ];
 }
 
 const styles = StyleSheet.create({
@@ -464,6 +513,56 @@ const styles = StyleSheet.create({
   fieldTypeHint: {
     fontSize: 12,
     color: DesignSystem.colors.text.secondary,
+  },
+  dropdown: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+    borderRadius: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: '#FAFAFA',
+  },
+  dropdownDisabled: {
+    backgroundColor: '#F5F5F5',
+  },
+  dropdownText: {
+    fontSize: 14,
+    color: DesignSystem.colors.text.primary,
+  },
+  dropdownMenu: {
+    position: 'absolute',
+    top: '100%',
+    left: 0,
+    right: 0,
+    marginTop: 4,
+    backgroundColor: '#fff',
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    zIndex: 1000,
+    maxHeight: 200,
+  },
+  dropdownItem: {
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F0F0F0',
+  },
+  dropdownItemText: {
+    fontSize: 14,
+    color: DesignSystem.colors.text.primary,
+  },
+  dropdownItemSelected: {
+    fontWeight: '600',
+    color: DesignSystem.colors.primary,
   },
   footer: {
     flexDirection: 'row',
