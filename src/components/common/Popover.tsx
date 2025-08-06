@@ -46,40 +46,78 @@ export const Popover: React.FC<PopoverProps> = ({
   useEffect(() => {
     console.log('🎯 Popover useEffect:', { visible, hasAnchor: !!anchor?.current });
     if (visible && anchor.current) {
-      // 測量錨點元素的位置
-      console.log('📍 準備測量錨點位置');
-      anchor.current.measureInWindow((x: number, y: number, width: number, height: number) => {
-        console.log('📐 錨點測量結果:', { x, y, width, height });
-        const windowDimensions = Dimensions.get('window');
-        let popX = x;
-        let popY = y + height + offset.y;
-        let finalPlacement = placement;
+      // Web 平台使用 getBoundingClientRect
+      if (Platform.OS === 'web') {
+        const element = anchor.current as HTMLElement;
+        if (element && element.getBoundingClientRect) {
+          const rect = element.getBoundingClientRect();
+          console.log('📐 Web getBoundingClientRect:', rect);
+          const windowDimensions = Dimensions.get('window');
+          let popX = rect.left;
+          let popY = rect.bottom + offset.y;
+          let finalPlacement = placement;
 
-        // 自動調整位置避免超出視窗
-        if (placement === 'auto' || placement === 'bottom') {
-          // 檢查是否有足夠空間在下方顯示
-          if (popY + maxHeight > windowDimensions.height - 20) {
-            // 嘗試顯示在上方
-            popY = y - maxHeight - offset.y;
-            finalPlacement = 'top';
-          } else {
-            finalPlacement = 'bottom';
+          // 自動調整位置避免超出視窗
+          if (placement === 'auto' || placement === 'bottom') {
+            // 檢查是否有足夠空間在下方顯示
+            if (popY + maxHeight > windowDimensions.height - 20) {
+              // 嘗試顯示在上方
+              popY = rect.top - maxHeight - offset.y;
+              finalPlacement = 'top';
+            } else {
+              finalPlacement = 'bottom';
+            }
           }
-        }
 
-        // 水平位置調整 - 確保不會超出視窗
-        if (popX + minWidth > windowDimensions.width - 20) {
-          popX = windowDimensions.width - minWidth - 20;
-        }
-        
-        // 確保不會超出左邊界
-        if (popX < 20) {
-          popX = 20;
-        }
+          // 水平位置調整 - 確保不會超出視窗
+          if (popX + minWidth > windowDimensions.width - 20) {
+            popX = windowDimensions.width - minWidth - 20;
+          }
+          
+          // 確保不會超出左邊界
+          if (popX < 20) {
+            popX = 20;
+          }
 
-        setPosition({ x: popX, y: popY });
-        setActualPlacement(finalPlacement);
-      });
+          setPosition({ x: popX, y: popY });
+          setActualPlacement(finalPlacement);
+        }
+      } else {
+        // Native 平台使用 measureInWindow
+        console.log('📍 準備測量錨點位置');
+        anchor.current.measureInWindow((x: number, y: number, width: number, height: number) => {
+          console.log('📐 錨點測量結果:', { x, y, width, height });
+          const windowDimensions = Dimensions.get('window');
+          let popX = x;
+          let popY = y + height + offset.y;
+          let finalPlacement = placement;
+
+          // 自動調整位置避免超出視窗
+          if (placement === 'auto' || placement === 'bottom') {
+            // 檢查是否有足夠空間在下方顯示
+            if (popY + maxHeight > windowDimensions.height - 20) {
+              // 嘗試顯示在上方
+              popY = y - maxHeight - offset.y;
+              finalPlacement = 'top';
+            } else {
+              finalPlacement = 'bottom';
+            }
+          }
+
+          // 水平位置調整 - 確保不會超出視窗
+          if (popX + minWidth > windowDimensions.width - 20) {
+            popX = windowDimensions.width - minWidth - 20;
+          }
+          
+          // 確保不會超出左邊界
+          if (popX < 20) {
+            popX = 20;
+          }
+
+          setPosition({ x: popX, y: popY });
+          setActualPlacement(finalPlacement);
+        });
+      }
     }
 
     // 移除動畫，直接顯示/隱藏
@@ -91,21 +129,6 @@ export const Popover: React.FC<PopoverProps> = ({
       scaleAnim.setValue(0);
     }
   }, [visible, anchor, placement, offset, maxHeight, minWidth]);
-
-  // Web 環境下獲取錨點元素的位置
-  useEffect(() => {
-    if (Platform.OS === 'web' && visible && anchor.current) {
-      const element = anchor.current as HTMLElement;
-      if (element && element.getBoundingClientRect) {
-        const rect = element.getBoundingClientRect();
-        console.log('📐 Web getBoundingClientRect:', rect);
-        setPosition({ 
-          x: rect.left, 
-          y: rect.bottom + offset.y 
-        });
-      }
-    }
-  }, [visible, anchor, offset]);
 
   if (Platform.OS === 'web') {
     // Web 平台使用絕對定位
