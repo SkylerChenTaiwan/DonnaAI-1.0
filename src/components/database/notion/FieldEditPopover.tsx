@@ -199,7 +199,8 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
               </TouchableOpacity>
               
               {showTypeDropdown && canEdit && (
-                <View style={styles.dropdownMenu}>
+                <View style={[styles.dropdownMenu, Platform.OS === 'web' && { backgroundColor: 'white' }]}>
+                  <ScrollView style={{ maxHeight: 200 }} nestedScrollEnabled={true}>
                   {getFieldTypes().map((type) => (
                     <TouchableOpacity
                       key={type.value}
@@ -217,6 +218,7 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
                       </Text>
                     </TouchableOpacity>
                   ))}
+                  </ScrollView>
                 </View>
               )}
             </View>
@@ -538,23 +540,25 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     marginTop: 4,
-    backgroundColor: '#fff',
+    backgroundColor: Platform.OS === 'web' ? 'white' : '#ffffff',
     borderRadius: 4,
     borderWidth: 1,
     borderColor: '#E5E5E5',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-    zIndex: 1000,
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
+    zIndex: 9999,
     maxHeight: 200,
+    overflow: 'hidden',
   },
   dropdownItem: {
     paddingHorizontal: 12,
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#F0F0F0',
+    backgroundColor: Platform.OS === 'web' ? 'white' : '#ffffff',
   },
   dropdownItemText: {
     fontSize: 14,
