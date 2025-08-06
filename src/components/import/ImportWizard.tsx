@@ -30,6 +30,8 @@ import FileUploadMerger from './stages/FileUploadMerger';
 import FieldMapper from './stages/FieldMapper';
 import { useAuthStore } from '@/stores/authStore';
 import { showSuccessToast, showErrorToast } from '@/utils/toast';
+import { SmartDataImporter } from '@/services/firebase/admin/dataImportService';
+import { getFirebaseDb } from '@/services/firebase/config';
 
 interface ImportWizardProps {
   organizationId: string;
@@ -165,14 +167,59 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
     });
 
     try {
-      // TODO: 實際的匯入邏輯將在後續實作
-      // 這裡先模擬匯入過程
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // 建立智能匯入器
+      const importer = new SmartDataImporter(organizationId);
+      
+      // 準備映射配置
+      const mappingConfig = {
+        fileIndex: 0,
+        fileType: wizardState.targetDatabase as any,
+        mappings: wizardState.fieldMappings.reduce((acc, mapping) => {
+          if (mapping.targetField) {
+            acc[mapping.targetField] = mapping.sourceColumn;
+          }
+          return acc;
+        }, {} as { [key: string]: string }),
+        keyField: wizardState.mergedTable.keyColumn
+      };
+
+      // 準備關聯配置
+      const relationConfigs = wizardState.fieldRelations.map(relation => ({
+        sourceFile: 0,
+        sourceField: relation.sourceField,
+        targetFile: 0, // 在單檔案匯入中，這個值不重要
+        targetField: relation.targetField
+      }));
+
+      // 執行匯入
+      const importResult = await importer.importMultipleFilesWithMapping(
+        [{
+          uri: 'data:text/csv;base64,' + btoa(JSON.stringify(wizardState.mergedTable.data)),
+          name: 'merged_data.csv',
+          type: 'application/json'
+        }],
+        [mappingConfig],
+        relationConfigs,
+        (progress) => {
+          updateWizardState({
+            importProgress: {
+              ...wizardState.importProgress,
+              processedRows: progress.current,
+              totalRows: progress.total,
+              successCount: progress.current // 簡化處理
+            }
+          });
+        }
+      );
 
       const result = {
         targetDatabase: wizardState.targetDatabase,
-        importedCount: wizardState.mergedTable.data.length,
-        errors: []
+        importedCount: importResult.success,
+        errors: importResult.errors.map(e => ({
+          row: e.row,
+          message: e.message,
+          type: 'import' as const
+        }))
       };
 
       updateWizardState({
@@ -181,11 +228,16 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
           isImporting: false,
           processedRows: result.importedCount,
           successCount: result.importedCount,
-          errorCount: 0
+          errorCount: importResult.failed,
+          errors: result.errors
         }
       });
 
-      showSuccessToast(`成功匯入 ${result.importedCount} 筆資料`);
+      if (importResult.failed > 0) {
+        showErrorToast(`匯入完成，但有 ${importResult.failed} 筆失敗`);
+      } else {
+        showSuccessToast(`成功匯入 ${result.importedCount} 筆資料`);
+      }
 
       if (onComplete) {
         onComplete(result);
@@ -206,7 +258,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
       });
       showErrorToast('匯入失敗');
     }
-  }, [wizardState, updateWizardState, onComplete]);
+  }, [wizardState, updateWizardState, onComplete, organizationId]);
 
   // 渲染階段標題
   const renderStageTitle = () => {

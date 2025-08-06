@@ -28,6 +28,7 @@ import { getFieldDefinitions } from '@/services/firebase/fieldDefinitions';
 import { getFieldRelations } from '@/services/firebase/fieldRelations';
 import { getFieldStatistics } from '../utils/fileMerger';
 import { showSuccessToast, showErrorToast } from '@/utils/toast';
+import RelationshipVisualizer from '../RelationshipVisualizer';
 
 interface FieldMapperProps {
   targetDatabase: DatabaseType;
@@ -349,66 +350,94 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
       );
     }
 
+    // 收集來源和目標欄位
+    const sourceFields = [...new Set(relations.map(r => r.sourceField))];
+    const targetFields = [...new Set(relations.map(r => r.targetField))];
+    const databases = {
+      source: relations[0]?.sourceDatabase || targetDatabase,
+      target: relations[0]?.targetDatabase || targetDatabase
+    };
+
     return (
-      <View style={styles.relationsList}>
-        {relations.map((relation, index) => (
-          <View 
-            key={relation.id} 
-            style={[styles.relationItem, { backgroundColor: colors.white }]}
-          >
-            <View style={styles.relationInfo}>
-              <View style={styles.relationPath}>
-                <Text style={[styles.relationDatabase, { color: colors.primary }]}>
-                  {relation.sourceDatabase}
-                </Text>
-                <Text style={[styles.relationField, { color: colors.text }]}>
-                  .{relation.sourceField}
-                </Text>
-              </View>
-              
-              <View style={styles.relationArrow}>
-                {relation.bidirectional ? (
-                  <MaterialIcons name="swap-horiz" size={20} color={colors.gray500} />
-                ) : (
-                  <MaterialIcons name="arrow-forward" size={20} color={colors.gray500} />
-                )}
-              </View>
-              
-              <View style={styles.relationPath}>
-                <Text style={[styles.relationDatabase, { color: colors.primary }]}>
-                  {relation.targetDatabase}
-                </Text>
-                <Text style={[styles.relationField, { color: colors.text }]}>
-                  .{relation.targetField}
-                </Text>
-              </View>
-            </View>
-            
-            <View style={styles.relationMeta}>
-              <View style={[styles.relationTypeBadge, { backgroundColor: colors.gray100 }]}>
-                <Text style={[styles.relationTypeText, { color: colors.gray600 }]}>
-                  {relation.relationType}
-                </Text>
-              </View>
-              
-              {relation.bidirectional && (
-                <View style={[styles.bidirectionalBadge, { backgroundColor: colors.success + '20' }]}>
-                  <MaterialIcons name="sync" size={12} color={colors.success} />
-                  <Text style={[styles.bidirectionalText, { color: colors.success }]}>
-                    雙向
+      <View>
+        {/* 視覺化關聯圖 */}
+        <RelationshipVisualizer
+          relations={relations}
+          databases={databases}
+          sourceFields={sourceFields}
+          targetFields={targetFields}
+          onRelationSelect={(relation) => {
+            // 可以顯示詳細資訊或編輯
+            showSuccessToast(`已選擇關聯: ${relation.sourceField} → ${relation.targetField}`);
+          }}
+          onRelationDelete={removeRelation}
+          height={300}
+        />
+        
+        {/* 關聯列表 */}
+        <View style={styles.relationsList}>
+          <Text style={[styles.relationsListTitle, { color: colors.text }]}>
+            關聯詳情
+          </Text>
+          {relations.map((relation, index) => (
+            <View 
+              key={relation.id} 
+              style={[styles.relationItem, { backgroundColor: colors.white }]}
+            >
+              <View style={styles.relationInfo}>
+                <View style={styles.relationPath}>
+                  <Text style={[styles.relationDatabase, { color: colors.primary }]}>
+                    {relation.sourceDatabase}
+                  </Text>
+                  <Text style={[styles.relationField, { color: colors.text }]}>
+                    .{relation.sourceField}
                   </Text>
                 </View>
-              )}
+                
+                <View style={styles.relationArrow}>
+                  {relation.bidirectional ? (
+                    <MaterialIcons name="swap-horiz" size={20} color={colors.gray500} />
+                  ) : (
+                    <MaterialIcons name="arrow-forward" size={20} color={colors.gray500} />
+                  )}
+                </View>
+                
+                <View style={styles.relationPath}>
+                  <Text style={[styles.relationDatabase, { color: colors.primary }]}>
+                    {relation.targetDatabase}
+                  </Text>
+                  <Text style={[styles.relationField, { color: colors.text }]}>
+                    .{relation.targetField}
+                  </Text>
+                </View>
+              </View>
               
-              <TouchableOpacity
-                onPress={() => removeRelation(relation.id)}
-                style={styles.removeRelationButton}
-              >
-                <MaterialIcons name="close" size={16} color={colors.gray500} />
-              </TouchableOpacity>
+              <View style={styles.relationMeta}>
+                <View style={[styles.relationTypeBadge, { backgroundColor: colors.gray100 }]}>
+                  <Text style={[styles.relationTypeText, { color: colors.gray600 }]}>
+                    {relation.relationType}
+                  </Text>
+                </View>
+                
+                {relation.bidirectional && (
+                  <View style={[styles.bidirectionalBadge, { backgroundColor: colors.success + '20' }]}>
+                    <MaterialIcons name="sync" size={12} color={colors.success} />
+                    <Text style={[styles.bidirectionalText, { color: colors.success }]}>
+                      雙向
+                    </Text>
+                  </View>
+                )}
+                
+                <TouchableOpacity
+                  onPress={() => removeRelation(relation.id)}
+                  style={styles.removeRelationButton}
+                >
+                  <MaterialIcons name="close" size={16} color={colors.gray500} />
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        ))}
+          ))}
+        </View>
       </View>
     );
   };
@@ -695,6 +724,12 @@ const styles = StyleSheet.create({
   },
   relationsList: {
     gap: 8
+  },
+  relationsListTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginTop: 16,
+    marginBottom: 8
   },
   relationItem: {
     padding: 12,
