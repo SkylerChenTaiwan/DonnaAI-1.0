@@ -31,6 +31,7 @@ import {
   SmartDataImporter,
 } from '@/services/firebase/admin/dataImportService';
 import { useAuth } from '@/hooks/useAuth';
+import { FieldMappingModal, FieldMapping, RelationMapping } from '@/components/import/FieldMappingModal';
 
 export const DataImportScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -41,6 +42,9 @@ export const DataImportScreen: React.FC = () => {
   const [importStatus, setImportStatus] = useState<ImportResult | null>(null);
   const [importProgress, setImportProgress] = useState<ImportProgress | null>(null);
   const [previewData, setPreviewData] = useState<any[]>([]);
+  const [showMappingModal, setShowMappingModal] = useState(false);
+  const [fieldMappings, setFieldMappings] = useState<FieldMapping[]>([]);
+  const [relationMappings, setRelationMappings] = useState<RelationMapping[]>([]);
   
   // 匯入類型選項
   const importTypes = [
@@ -111,6 +115,87 @@ export const DataImportScreen: React.FC = () => {
     }
   };
   
+  // 處理欄位映射確認
+  const handleMappingConfirm = async (
+    mappings: FieldMapping[],
+    relations: RelationMapping[]
+  ) => {
+    setShowMappingModal(false);
+    setFieldMappings(mappings);
+    setRelationMappings(relations);
+    
+    if (!userProfile?.organizationId) {
+      showToast('error', '無法取得組織資訊');
+      return;
+    }
+    
+    setImporting(true);
+    setImportProgress({
+      current: 0,
+      total: 0,
+      status: 'parsing',
+      message: '準備匯入資料...',
+    });
+    
+    try {
+      const importer = new SmartDataImporter(userProfile.organizationId);
+      const result = await importer.importMultipleFilesWithMapping(
+        selectedFiles.map(f => ({
+          uri: f.uri,
+          name: f.name,
+          type: f.mimeType
+        })),
+        mappings.map(m => ({
+          fileIndex: m.fileIndex,
+          fileType: m.fileType as ImportType,
+          mappings: m.mappings,
+          keyField: m.keyField
+        })),
+        relations.map(r => ({
+          sourceFile: r.sourceFile,
+          sourceField: r.sourceField,
+          targetFile: r.targetFile,
+          targetField: r.targetField
+        })),
+        (progress) => {
+          setImportProgress(progress);
+        }
+      );
+      
+      setImportStatus(result);
+      
+      // 顯示詳細結果
+      if (result.imported) {
+        const details = [];
+        if (result.imported.users > 0) details.push(`${result.imported.users} 位用戶`);
+        if (result.imported.teams > 0) details.push(`${result.imported.teams} 個團隊`);
+        if (result.imported.customers > 0) details.push(`${result.imported.customers} 位客戶`);
+        if (result.imported.records > 0) details.push(`${result.imported.records} 筆紀錄`);
+        
+        if (details.length > 0) {
+          showToast('success', `成功匯入: ${details.join(', ')}`);
+        }
+      }
+      
+      // 顯示警告
+      if (result.warnings && result.warnings.length > 0) {
+        result.warnings.forEach(warning => {
+          console.log('Import warning:', warning);
+        });
+      }
+    } catch (error) {
+      showToast('error', `匯入失敗: ${error instanceof Error ? error.message : '未知錯誤'}`);
+      setImportProgress({
+        current: 0,
+        total: 0,
+        status: 'error',
+        message: error instanceof Error ? error.message : '匯入失敗',
+      });
+    } finally {
+      setImporting(false);
+    }
+  };
+  
   // 開始匯入
   const handleImport = async () => {
     if (selectedFiles.length === 0) {
@@ -149,18 +234,9 @@ export const DataImportScreen: React.FC = () => {
               let result: ImportResult;
               
               if (selectedType === 'auto' && selectedFiles.length > 1) {
-                // 智慧型多檔案匯入
-                const importer = new SmartDataImporter(userProfile.organizationId);
-                result = await importer.importMultipleFiles(
-                  selectedFiles.map(f => ({
-                    uri: f.uri,
-                    name: f.name,
-                    type: f.mimeType
-                  })),
-                  (progress) => {
-                    setImportProgress(progress);
-                  }
-                );
+                // 顯示欄位映射配置 Modal
+                setShowMappingModal(true);
+                return; // 等待用戶確認映射
               } else {
                 // 單檔案匯入
                 const fullData = await parseImportFile(selectedFiles[0].uri, selectedFiles[0].mimeType || '');
@@ -421,6 +497,23 @@ export const DataImportScreen: React.FC = () => {
           )}
         </TouchableOpacity>
       </ScrollView>
+      
+      {/* 欄位映射配置 Modal */}
+      {showMappingModal && (
+        <FieldMappingModal
+          visible={showMappingModal}
+          files={selectedFiles.map(f => ({
+            uri: f.uri,
+            name: f.name,
+            mimeType: f.mimeType
+          }))}
+          onConfirm={handleMappingConfirm}
+          onCancel={() => {
+            setShowMappingModal(false);
+            setImporting(false);
+          }}
+        />
+      )}
     </Layout>
   );
 };

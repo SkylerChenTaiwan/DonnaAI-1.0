@@ -680,7 +680,183 @@ export class SmartDataImporter {
   }
 
   /**
-   * 智慧型匯入多個檔案
+   * 智慧型匯入多個檔案（使用自訂映射）
+   */
+  async importMultipleFilesWithMapping(
+    files: Array<{ uri: string; name: string; type?: string }>,
+    fieldMappings: Array<{
+      fileIndex: number;
+      fileType: ImportType;
+      mappings: { [systemField: string]: string };
+      keyField?: string;
+    }>,
+    relations: Array<{
+      sourceFile: number;
+      sourceField: string;
+      targetFile: number;
+      targetField: string;
+    }>,
+    onProgress?: ProgressCallback
+  ): Promise<ImportResult> {
+    const result: ImportResult = {
+      total: 0,
+      success: 0,
+      failed: 0,
+      errors: [],
+      imported: { users: 0, teams: 0, customers: 0, records: 0 },
+      warnings: []
+    };
+
+    // 建立關聯映射表
+    this.relationMappings = relations;
+    this.fieldMappingsConfig = fieldMappings;
+
+    // 載入現有資料以建立映射
+    await this.loadExistingMappings();
+
+    // 按依賴順序處理檔案
+    const processOrder = this.determineProcessOrder(fieldMappings);
+
+    for (const fileIndex of processOrder) {
+      const file = files[fileIndex];
+      const mapping = fieldMappings[fileIndex];
+      
+      try {
+        result.warnings?.push(`處理檔案: ${file.name}`);
+        
+        // 解析檔案
+        const data = await parseImportFile(file.uri, file.type || 'text/csv');
+        
+        if (data.length === 0) {
+          result.warnings?.push(`${file.name}: 檔案是空的`);
+          continue;
+        }
+
+        // 使用自訂映射處理
+        const fileResult = await this.processFileWithCustomMapping(
+          mapping.fileType,
+          data,
+          mapping.mappings,
+          mapping.keyField,
+          onProgress
+        );
+        
+        // 合併結果
+        result.total += fileResult.total;
+        result.success += fileResult.success;
+        result.failed += fileResult.failed;
+        result.errors.push(...fileResult.errors);
+        
+        if (result.imported && fileResult.imported) {
+          result.imported.users += fileResult.imported.users;
+          result.imported.teams += fileResult.imported.teams;
+          result.imported.customers += fileResult.imported.customers;
+          result.imported.records += fileResult.imported.records;
+        }
+      } catch (error) {
+        result.warnings?.push(`${file.name}: 處理失敗 - ${error}`);
+      }
+    }
+
+    return result;
+  }
+
+  private relationMappings: Array<{
+    sourceFile: number;
+    sourceField: string;
+    targetFile: number;
+    targetField: string;
+  }> = [];
+
+  private fieldMappingsConfig: Array<{
+    fileIndex: number;
+    fileType: ImportType;
+    mappings: { [systemField: string]: string };
+    keyField?: string;
+  }> = [];
+
+  /**
+   * 決定檔案處理順序（根據依賴關係）
+   */
+  private determineProcessOrder(mappings: Array<{ fileType: ImportType }>): number[] {
+    const order: number[] = [];
+    const typeOrder = ['users', 'hierarchy', 'customers', 'records', 'tasks'];
+    
+    for (const type of typeOrder) {
+      mappings.forEach((m, index) => {
+        if (m.fileType === type && !order.includes(index)) {
+          order.push(index);
+        }
+      });
+    }
+    
+    // 加入未分類的檔案
+    mappings.forEach((_, index) => {
+      if (!order.includes(index)) {
+        order.push(index);
+      }
+    });
+    
+    return order;
+  }
+
+  /**
+   * 使用自訂映射處理檔案
+   */
+  private async processFileWithCustomMapping(
+    type: ImportType,
+    data: any[],
+    mappings: { [systemField: string]: string },
+    keyField: string | undefined,
+    onProgress?: ProgressCallback
+  ): Promise<ImportResult> {
+    switch (type) {
+      case 'users':
+        return this.importUsersWithMapping(data, mappings, keyField, onProgress);
+      case 'customers':
+        return this.importCustomersWithMapping(data, mappings, keyField, onProgress);
+      case 'records':
+        return this.importRecordsWithMapping(data, mappings, keyField, onProgress);
+      case 'hierarchy':
+        return this.importHierarchyWithMapping(data, mappings, keyField, onProgress);
+      default:
+        return this.importCustomersWithMapping(data, mappings, keyField, onProgress);
+    }
+  }
+
+  /**
+   * 透過關聯找出對應的 ID
+   */
+  private resolveRelation(
+    sourceFileIndex: number,
+    sourceValue: string,
+    sourceField: string
+  ): string | undefined {
+    // 找出相關的關聯定義
+    const relation = this.relationMappings.find(r => 
+      r.sourceFile === sourceFileIndex && r.sourceField === sourceField
+    );
+    
+    if (!relation) return undefined;
+    
+    // 從目標檔案的映射中找出對應值
+    const targetMapping = this.fieldMappingsConfig[relation.targetFile];
+    if (!targetMapping || !targetMapping.keyField) return undefined;
+    
+    // 根據目標檔案類型查找
+    if (targetMapping.fileType === 'users') {
+      return this.userIdMap.get(sourceValue);
+    } else if (targetMapping.fileType === 'customers') {
+      return this.customerIdMap.get(sourceValue);
+    } else if (targetMapping.fileType === 'hierarchy') {
+      return this.teamIdMap.get(sourceValue);
+    }
+    
+    return undefined;
+  }
+
+  /**
+   * 智慧型匯入多個檔案（自動映射）
    */
   async importMultipleFiles(
     files: Array<{ uri: string; name: string; type?: string }>,
@@ -775,6 +951,405 @@ export class SmartDataImporter {
       default:
         return this.importCustomers(data, headers, onProgress);
     }
+  }
+
+  /**
+   * 匯入業務員資料（使用自訂映射）
+   */
+  private async importUsersWithMapping(
+    rows: any[],
+    mappings: { [systemField: string]: string },
+    keyField: string | undefined,
+    onProgress?: ProgressCallback
+  ): Promise<ImportResult> {
+    const result: ImportResult = {
+      total: rows.length,
+      success: 0,
+      failed: 0,
+      errors: [],
+      imported: { users: 0, teams: 0, customers: 0, records: 0 }
+    };
+
+    const batch = writeBatch(this.db);
+    let count = 0;
+
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      
+      if (onProgress) {
+        onProgress({
+          current: i + 1,
+          total: rows.length,
+          status: 'importing',
+          message: `匯入用戶 ${i + 1}/${rows.length}`
+        });
+      }
+
+      try {
+        const name = row[mappings.name];
+        if (!name) {
+          result.errors.push({ row: i + 2, message: '缺少姓名' });
+          result.failed++;
+          continue;
+        }
+
+        // 產生或取得 email
+        let email = row[mappings.email];
+        if (!email) {
+          const pinyin = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+          email = `${pinyin}@${this.organizationId}.com`;
+        }
+
+        // 判斷角色
+        const jobTitle = row[mappings.jobTitle] || '';
+        let role: 'admin' | 'manager' | 'salesperson' = 'salesperson';
+        if (jobTitle.includes('總監') || jobTitle.includes('處長')) {
+          role = 'admin';
+        } else if (jobTitle.includes('經理') || jobTitle.includes('主管')) {
+          role = 'manager';
+        }
+
+        // 建立用戶資料
+        const userId = doc(collection(this.db, 'users')).id;
+        const userData = {
+          id: userId,
+          name,
+          email,
+          role,
+          organizationId: this.organizationId,
+          phone: row[mappings.phone] || '',
+          department: row[mappings.department] || '',
+          jobTitle,
+          createdAt: Timestamp.now(),
+          isActive: true
+        };
+
+        batch.set(doc(this.db, 'users', userId), userData);
+        
+        // 儲存映射 - 使用關鍵欄位
+        if (keyField && row[keyField]) {
+          this.userIdMap.set(row[keyField], userId);
+        }
+        this.userIdMap.set(name, userId);
+        this.userIdMap.set(email, userId);
+        
+        count++;
+        result.success++;
+      } catch (error) {
+        result.errors.push({
+          row: i + 2,
+          message: `匯入失敗: ${error}`
+        });
+        result.failed++;
+      }
+    }
+
+    if (count > 0) {
+      await batch.commit();
+      result.imported!.users = count;
+    }
+
+    return result;
+  }
+
+  /**
+   * 匯入客戶資料（使用自訂映射）
+   */
+  private async importCustomersWithMapping(
+    rows: any[],
+    mappings: { [systemField: string]: string },
+    keyField: string | undefined,
+    onProgress?: ProgressCallback
+  ): Promise<ImportResult> {
+    const result: ImportResult = {
+      total: rows.length,
+      success: 0,
+      failed: 0,
+      errors: [],
+      imported: { users: 0, teams: 0, customers: 0, records: 0 }
+    };
+
+    const batch = writeBatch(this.db);
+    let count = 0;
+    const currentFileIndex = this.fieldMappingsConfig.findIndex(m => m.mappings === mappings);
+
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      
+      if (onProgress) {
+        onProgress({
+          current: i + 1,
+          total: rows.length,
+          status: 'importing',
+          message: `匯入客戶 ${i + 1}/${rows.length}`
+        });
+      }
+
+      try {
+        const name = row[mappings.name];
+        if (!name) {
+          result.errors.push({ row: i + 2, message: '缺少客戶姓名' });
+          result.failed++;
+          continue;
+        }
+
+        // 透過關聯找出負責業務員
+        let createdBy: string | undefined;
+        if (mappings.salesperson) {
+          const salespersonValue = row[mappings.salesperson];
+          createdBy = this.resolveRelation(currentFileIndex, salespersonValue, mappings.salesperson);
+        }
+        
+        if (!createdBy) {
+          const auth = getAuth();
+          createdBy = auth.currentUser?.uid || '';
+          if (!createdBy) {
+            result.errors.push({ row: i + 2, message: '找不到負責業務員' });
+            result.failed++;
+            continue;
+          }
+        }
+
+        // 處理標籤
+        const tagsStr = row[mappings.tags] || '';
+        const tags = tagsStr.split(/[;,；，]/).map((t: string) => t.trim()).filter(Boolean);
+
+        // 建立客戶資料
+        const customerId = doc(collection(this.db, 'customers')).id;
+        const customerData = {
+          id: customerId,
+          name,
+          company: row[mappings.company] || '',
+          phone: row[mappings.phone] || '',
+          email: row[mappings.email] || '',
+          jobTitle: row[mappings.jobTitle] || '',
+          createdBy,
+          organizationId: this.organizationId,
+          tags,
+          notes: row[mappings.notes] || '',
+          createdAt: Timestamp.now(),
+          updatedAt: Timestamp.now(),
+          teamMembers: [createdBy]
+        };
+
+        batch.set(doc(this.db, 'customers', customerId), customerData);
+        
+        // 儲存映射 - 使用關鍵欄位
+        if (keyField && row[keyField]) {
+          this.customerIdMap.set(row[keyField], customerId);
+        }
+        const customerKey = `${name}_${row[mappings.company] || ''}`;
+        this.customerIdMap.set(customerKey, customerId);
+        
+        count++;
+        result.success++;
+      } catch (error) {
+        result.errors.push({
+          row: i + 2,
+          message: `匯入失敗: ${error}`
+        });
+        result.failed++;
+      }
+    }
+
+    if (count > 0) {
+      await batch.commit();
+      result.imported!.customers = count;
+    }
+
+    return result;
+  }
+
+  /**
+   * 匯入訪談紀錄（使用自訂映射）
+   */
+  private async importRecordsWithMapping(
+    rows: any[],
+    mappings: { [systemField: string]: string },
+    keyField: string | undefined,
+    onProgress?: ProgressCallback
+  ): Promise<ImportResult> {
+    const result: ImportResult = {
+      total: rows.length,
+      success: 0,
+      failed: 0,
+      errors: [],
+      imported: { users: 0, teams: 0, customers: 0, records: 0 }
+    };
+
+    const batch = writeBatch(this.db);
+    let count = 0;
+    const currentFileIndex = this.fieldMappingsConfig.findIndex(m => m.mappings === mappings);
+
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      
+      if (onProgress) {
+        onProgress({
+          current: i + 1,
+          total: rows.length,
+          status: 'importing',
+          message: `匯入紀錄 ${i + 1}/${rows.length}`
+        });
+      }
+
+      try {
+        // 透過關聯找出客戶
+        let customerId: string | undefined;
+        if (mappings.customer) {
+          const customerValue = row[mappings.customer];
+          customerId = this.resolveRelation(currentFileIndex, customerValue, mappings.customer);
+        }
+
+        if (!customerId) {
+          result.errors.push({ row: i + 2, message: `找不到客戶` });
+          result.failed++;
+          continue;
+        }
+
+        // 透過關聯找出業務員
+        let createdBy: string | undefined;
+        if (mappings.salesperson) {
+          const salespersonValue = row[mappings.salesperson];
+          createdBy = this.resolveRelation(currentFileIndex, salespersonValue, mappings.salesperson);
+        }
+        
+        if (!createdBy) {
+          createdBy = getAuth().currentUser?.uid;
+          if (!createdBy) {
+            result.errors.push({ row: i + 2, message: '找不到業務員' });
+            result.failed++;
+            continue;
+          }
+        }
+
+        // 處理日期
+        const dateStr = row[mappings.date];
+        const date = dateStr ? new Date(dateStr) : new Date();
+
+        // 建立紀錄資料
+        const recordId = doc(collection(this.db, 'records')).id;
+        const recordData = {
+          id: recordId,
+          customerId,
+          createdBy,
+          date: Timestamp.fromDate(date),
+          type: row[mappings.type] || '訪談',
+          content: row[mappings.content] || '',
+          organizationId: this.organizationId,
+          createdAt: Timestamp.now(),
+          teamMembers: [createdBy]
+        };
+
+        if (mappings.followUp && row[mappings.followUp]) {
+          recordData.followUpDate = Timestamp.fromDate(new Date(row[mappings.followUp]));
+        }
+
+        batch.set(doc(this.db, 'records', recordId), recordData);
+        count++;
+        result.success++;
+      } catch (error) {
+        result.errors.push({
+          row: i + 2,
+          message: `匯入失敗: ${error}`
+        });
+        result.failed++;
+      }
+    }
+
+    if (count > 0) {
+      await batch.commit();
+      result.imported!.records = count;
+    }
+
+    return result;
+  }
+
+  /**
+   * 匯入層級結構（使用自訂映射）
+   */
+  private async importHierarchyWithMapping(
+    rows: any[],
+    mappings: { [systemField: string]: string },
+    keyField: string | undefined,
+    onProgress?: ProgressCallback
+  ): Promise<ImportResult> {
+    const result: ImportResult = {
+      total: rows.length,
+      success: 0,
+      failed: 0,
+      errors: [],
+      imported: { users: 0, teams: 0, customers: 0, records: 0 }
+    };
+
+    // 建立團隊
+    const teams = new Map<string, string>();
+    const batch = writeBatch(this.db);
+    
+    // 收集唯一團隊
+    const teamNames = new Set<string>();
+    rows.forEach(row => {
+      const teamName = row[mappings.team];
+      if (teamName) teamNames.add(teamName);
+    });
+
+    // 建立團隊文檔
+    for (const teamName of teamNames) {
+      const teamId = doc(collection(this.db, 'teams')).id;
+      const teamData = {
+        id: teamId,
+        name: teamName,
+        organizationId: this.organizationId,
+        memberIds: [],
+        createdAt: Timestamp.now()
+      };
+      
+      batch.set(doc(this.db, 'teams', teamId), teamData);
+      teams.set(teamName, teamId);
+      this.teamIdMap.set(teamName, teamId);
+    }
+
+    // 更新用戶的團隊和主管關係
+    for (const row of rows) {
+      const name = row[mappings.name];
+      const parentName = row[mappings.parentCode];
+      const teamName = row[mappings.team];
+      
+      if (!name) continue;
+      
+      // 使用關鍵欄位找用戶
+      let userId: string | undefined;
+      if (keyField && row[keyField]) {
+        userId = this.userIdMap.get(row[keyField]);
+      }
+      if (!userId) {
+        userId = this.userIdMap.get(name);
+      }
+      if (!userId) continue;
+
+      const updates: any = {};
+      
+      if (teamName && teams.has(teamName)) {
+        updates.teamIds = [teams.get(teamName)];
+      }
+      
+      if (parentName) {
+        const supervisorId = this.userIdMap.get(parentName);
+        if (supervisorId) {
+          updates.supervisorId = supervisorId;
+        }
+      }
+      
+      if (Object.keys(updates).length > 0) {
+        batch.update(doc(this.db, 'users', userId), updates);
+        result.success++;
+      }
+    }
+
+    await batch.commit();
+    result.imported!.teams = teams.size;
+
+    return result;
   }
 
   /**
