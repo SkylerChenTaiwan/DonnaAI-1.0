@@ -189,12 +189,17 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
   // 檢查欄位編輯權限
   useEffect(() => {
     const checkFieldEditPermission = async () => {
-      if (!user || !currentOrganization) return;
+      if (!user || !currentOrganization) {
+        console.log('🔍 缺少用戶或組織資訊:', { user: !!user, org: !!currentOrganization });
+        return;
+      }
+      console.log('🔍 檢查欄位編輯權限:', { userId: user.uid, orgId: currentOrganization.id });
       try {
         const hasPermission = await canDefineCustomFields(
           user.uid, 
           currentOrganization.id
         );
+        console.log('✅ 欄位編輯權限結果:', hasPermission);
         setCanEditFields(hasPermission);
       } catch (error) {
         console.error('檢查欄位編輯權限失敗:', error);
@@ -768,14 +773,19 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
                     ),
                     React.createElement('span', 
                       { className: 'notion-header-actions' },
-                      canEditFields && !['_checkbox', '_actions'].includes(column.key) && React.createElement('button', 
-                        { 
-                          className: 'notion-field-info-btn',
-                          onClick: (e) => handleFieldInfo(e, column),
-                          title: '欄位資訊與設定'
-                        }, 
-                        'ℹ️'
-                      ),
+                      (() => {
+                        const shouldShow = canEditFields && !['_checkbox', '_actions'].includes(column.key);
+                        console.log(`🔍 欄位 ${column.key} 是否顯示 info 按鈕:`, shouldShow, { canEditFields, columnKey: column.key });
+                        return shouldShow && React.createElement('button', 
+                          { 
+                            className: 'notion-field-info-btn',
+                            onClick: (e) => handleFieldInfo(e, column),
+                            title: '欄位資訊與設定',
+                            style: { display: 'inline-block' } // 確保顯示
+                          }, 
+                          'ℹ️'
+                        );
+                      })(),
                       React.createElement('button', 
                         { className: 'notion-header-action-btn' }, 
                         '⋯'
