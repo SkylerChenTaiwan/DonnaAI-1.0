@@ -50,7 +50,6 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
   });
   // 編輯狀態
   const [fieldName, setFieldName] = useState(fieldConfig?.title || '');
-  const [fieldDescription, setFieldDescription] = useState(fieldConfig?.description || '');
   const [isRequired, setIsRequired] = useState(false); // ColumnConfig doesn't have required
   const [isVisible, setIsVisible] = useState(true); // ColumnConfig doesn't have visible
   
@@ -67,7 +66,6 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
   useEffect(() => {
     if (fieldConfig) {
       setFieldName(fieldConfig.title || '');
-      setFieldDescription(fieldConfig.description || '');
       // ColumnConfig 沒有 required 和 visible 屬性，使用預設值
       setIsRequired(false);
       setIsVisible(true);
@@ -84,13 +82,12 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
   useEffect(() => {
     const changed = 
       fieldName !== fieldConfig?.title ||
-      fieldDescription !== fieldConfig?.description ||
       isRequired !== false || // Always compare with default since ColumnConfig doesn't have this
       isVisible !== true || // Always compare with default since ColumnConfig doesn't have this
       aiDescription !== (fieldConfig as any)?.aiFieldInterpretation?.userDescription;
     
     setHasChanges(changed);
-  }, [fieldName, fieldDescription, isRequired, isVisible, aiDescription, fieldConfig]);
+  }, [fieldName, isRequired, isVisible, aiDescription, fieldConfig]);
 
   // 處理 AI 描述
   const handleAIProcess = async () => {
@@ -129,7 +126,6 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
     try {
       const updates: Partial<FieldConfig> = {
         label: fieldName, // This will be mapped to title in DatabaseScreen
-        description: fieldDescription,
         required: isRequired,
         visible: isVisible,
       };
@@ -171,21 +167,6 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
         </View>
 
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-          {/* 欄位資訊 */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>基本資訊</Text>
-            
-            <View style={styles.field}>
-              <Text style={styles.fieldLabel}>欄位鍵值</Text>
-              <Text style={styles.fieldValue}>{fieldConfig.key}</Text>
-            </View>
-
-            <View style={styles.field}>
-              <Text style={styles.fieldLabel}>欄位類型</Text>
-              <Text style={styles.fieldValue}>{getFieldTypeLabel(fieldConfig.type)}</Text>
-            </View>
-          </View>
-
           {/* 可編輯欄位 */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>編輯設定</Text>
@@ -202,16 +183,11 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
             </View>
 
             <View style={styles.field}>
-              <Text style={styles.fieldLabel}>欄位說明</Text>
-              <TextInput
-                style={[styles.input, styles.textArea, !canEdit && styles.inputDisabled]}
-                value={fieldDescription}
-                onChangeText={setFieldDescription}
-                placeholder="輸入欄位說明（選填）"
-                multiline
-                numberOfLines={3}
-                editable={canEdit}
-              />
+              <Text style={styles.fieldLabel}>欄位類型</Text>
+              <View style={styles.fieldTypeContainer}>
+                <Text style={styles.fieldTypeValue}>{getFieldTypeLabel(fieldConfig.type)}</Text>
+                <Text style={styles.fieldTypeHint}>（目前無法修改）</Text>
+              </View>
             </View>
 
             <View style={styles.switchField}>
@@ -243,9 +219,9 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
 
           {/* AI 欄位備註 */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>AI 欄位理解</Text>
+            <Text style={styles.sectionTitle}>欄位說明</Text>
             <Text style={styles.sectionHint}>
-              描述此欄位的用途，讓 AI 更好地理解如何填寫
+              描述此欄位的用途和規則，讓 AI 更好地理解如何填寫
             </Text>
 
             <View style={styles.field}>
@@ -280,7 +256,7 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
             {/* AI 處理結果 */}
             {aiResult && (
               <View style={styles.aiResult}>
-                <Text style={styles.aiResultLabel}>AI 理解結果</Text>
+                <Text style={styles.aiResultLabel}>AI優化結果</Text>
                 <Text style={styles.aiResultText}>
                   {aiResult.aiProcessedDescription}
                 </Text>
@@ -474,6 +450,20 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: DesignSystem.colors.text.secondary,
     marginTop: 2,
+  },
+  fieldTypeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  fieldTypeValue: {
+    fontSize: 14,
+    color: DesignSystem.colors.text.primary,
+    fontWeight: '500',
+  },
+  fieldTypeHint: {
+    fontSize: 12,
+    color: DesignSystem.colors.text.secondary,
   },
   footer: {
     flexDirection: 'row',
