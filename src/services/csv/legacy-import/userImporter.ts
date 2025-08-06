@@ -23,6 +23,7 @@ import { LegacyUser, ImportError, ImportWarning } from '@/types/legacy-import';
 import { User } from '@/types/entities/user';
 import { mapLegacyUser } from './mapper';
 import { resolveBusinessIdentifier } from './codeMapper';
+import { safeCreateUsers } from './safeUserImporter';
 
 export interface UserImportOptions {
   organizationId: string;
@@ -217,6 +218,9 @@ export async function importLegacyUsers(
       progress.currentUser = '批量建立用戶...';
       onProgress?.(progress);
 
+      console.log('🚀 開始使用 Cloud Function 建立用戶');
+      console.log(`📊 準備建立 ${usersToCreate.length} 個用戶`);
+
       const functions = getFunctions(undefined, 'asia-east1');
       const createUsersForImport = httpsCallable(functions, 'createUsersForImport');
       
@@ -225,7 +229,10 @@ export async function importLegacyUsers(
       for (let i = 0; i < usersToCreate.length; i += batchSize) {
         const batch = usersToCreate.slice(i, Math.min(i + batchSize, usersToCreate.length));
         
+        console.log(`📦 處理第 ${Math.floor(i/batchSize) + 1} 批，共 ${batch.length} 個用戶`);
+        
         try {
+          console.log('🔄 呼叫 Cloud Function...');
           const result = await createUsersForImport({
             users: batch,
             organizationId,
@@ -233,6 +240,7 @@ export async function importLegacyUsers(
             defaultPassword,
           });
 
+          console.log('✅ Cloud Function 回應:', result);
           const response = result.data as any;
           
           if (response.success) {
@@ -267,17 +275,52 @@ export async function importLegacyUsers(
             });
           }
         } catch (error) {
-          // 批量建立失敗
-          batch.forEach(userData => {
-            failureCount++;
-            errors.push({
-              type: 'users',
-              row: userData.row,
-              field: 'general',
-              message: error instanceof Error ? error.message : '未知錯誤',
-              data: userData,
-            });
+          console.error('❌ Cloud Function 呼叫失敗:', error);
+          console.error('錯誤詳情:', {
+            message: error instanceof Error ? error.message : '未知錯誤',
+            batchSize: batch.length,
+            error
           });
+          
+          // 改用安全模式
+          console.warn('⚠️ 切換到安全模式（不建立 Auth 帳號）');
+          
+          try {
+            const safeResult = await safeCreateUsers(
+              batch,
+              organizationId,
+              teamId,
+              (msg) => {
+                progress.currentUser = msg;
+                onProgress?.(progress);
+              }
+            );
+            
+            // 合併結果
+            safeResult.userMappings.forEach((uid, businessId) => {
+              userMappings.set(businessId, uid);
+            });
+            successCount += safeResult.successCount;
+            failureCount += safeResult.failureCount;
+            errors.push(...safeResult.errors);
+            warnings.push(...safeResult.warnings);
+            
+            console.log('✅ 安全模式執行成功');
+          } catch (safeError) {
+            console.error('❌ 安全模式也失敗了:', safeError);
+            
+            // 記錄錯誤
+            batch.forEach(userData => {
+              failureCount++;
+              errors.push({
+                type: 'users',
+                row: userData.row,
+                field: 'general',
+                message: '建立用戶失敗（Cloud Function 和安全模式都失敗）',
+                data: userData,
+              });
+            });
+          }
         }
 
         // 更新進度
