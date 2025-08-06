@@ -187,14 +187,22 @@ export function LegacyDataImportScreen({ navigation }: any) {
         }
       }
     } catch (error) {
-      Alert.alert('錯誤', `無法讀取檔案: ${error.message}`);
+      if (Platform.OS === 'web') {
+        window.alert(`無法讀取檔案: ${error.message}`);
+      } else {
+        Alert.alert('錯誤', `無法讀取檔案: ${error.message}`);
+      }
     }
   };
 
   // 驗證所有檔案
   const validateFiles = async () => {
     if (!session || !organizationId || !currentTeamId || !user) {
-      Alert.alert('錯誤', '缺少必要的組織資訊');
+      if (Platform.OS === 'web') {
+        window.alert('錯誤：缺少必要的組織資訊');
+      } else {
+        Alert.alert('錯誤', '缺少必要的組織資訊');
+      }
       console.error('驗證失敗：缺少必要資訊', {
         session: !!session,
         organizationId: !!organizationId,
@@ -212,7 +220,11 @@ export function LegacyDataImportScreen({ navigation }: any) {
         const file = files[fileType.key];
         
         if (fileType.required && !file) {
-          Alert.alert('錯誤', `請上傳${fileType.label}`);
+          if (Platform.OS === 'web') {
+            window.alert(`錯誤：請上傳${fileType.label}`);
+          } else {
+            Alert.alert('錯誤', `請上傳${fileType.label}`);
+          }
           return false;
         }
 
@@ -254,7 +266,11 @@ export function LegacyDataImportScreen({ navigation }: any) {
       }
     } catch (error) {
       console.error('驗證過程發生錯誤:', error);
-      Alert.alert('錯誤', `驗證過程發生錯誤: ${error.message}`);
+      if (Platform.OS === 'web') {
+        window.alert(`驗證過程發生錯誤: ${error.message}`);
+      } else {
+        Alert.alert('錯誤', `驗證過程發生錯誤: ${error.message}`);
+      }
       return false;
     }
 
@@ -264,7 +280,11 @@ export function LegacyDataImportScreen({ navigation }: any) {
   // 執行導入
   const executeImport = async () => {
     if (!session || !organizationId || !currentTeamId || !user) {
-      Alert.alert('錯誤', '缺少必要的組織資訊');
+      if (Platform.OS === 'web') {
+        window.alert('錯誤：缺少必要的組織資訊');
+      } else {
+        Alert.alert('錯誤', '缺少必要的組織資訊');
+      }
       return;
     }
 
@@ -290,38 +310,52 @@ export function LegacyDataImportScreen({ navigation }: any) {
       setActiveStep(3);
 
       if (result.success) {
-        Alert.alert(
-          '導入成功',
-          `成功導入 ${result.stats.successCount} 筆資料`,
-          [
-            {
-              text: '查看報告',
-              onPress: () => showImportReport(result),
-            },
-            {
-              text: '確定',
-              style: 'default',
-            },
-          ]
-        );
+        if (Platform.OS === 'web') {
+          window.alert(`導入成功！成功導入 ${result.stats.successCount} 筆資料`);
+          showImportReport(result);
+        } else {
+          Alert.alert(
+            '導入成功',
+            `成功導入 ${result.stats.successCount} 筆資料`,
+            [
+              {
+                text: '查看報告',
+                onPress: () => showImportReport(result),
+              },
+              {
+                text: '確定',
+                style: 'default',
+              },
+            ]
+          );
+        }
       } else {
-        Alert.alert(
-          '導入完成但有錯誤',
-          `成功: ${result.stats.successCount} 筆\n失敗: ${result.stats.failureCount} 筆`,
-          [
-            {
-              text: '查看報告',
-              onPress: () => showImportReport(result),
-            },
-            {
-              text: '確定',
-              style: 'default',
-            },
-          ]
-        );
+        if (Platform.OS === 'web') {
+          window.alert(`導入完成但有錯誤\n成功: ${result.stats.successCount} 筆\n失敗: ${result.stats.failureCount} 筆`);
+          showImportReport(result);
+        } else {
+          Alert.alert(
+            '導入完成但有錯誤',
+            `成功: ${result.stats.successCount} 筆\n失敗: ${result.stats.failureCount} 筆`,
+            [
+              {
+                text: '查看報告',
+                onPress: () => showImportReport(result),
+              },
+              {
+                text: '確定',
+                style: 'default',
+              },
+            ]
+          );
+        }
       }
     } catch (error) {
-      Alert.alert('導入失敗', error.message);
+      if (Platform.OS === 'web') {
+        window.alert(`導入失敗: ${error.message}`);
+      } else {
+        Alert.alert('導入失敗', error.message);
+      }
     } finally {
       setIsImporting(false);
     }
@@ -336,7 +370,11 @@ export function LegacyDataImportScreen({ navigation }: any) {
   // 開始導入流程
   const startImport = async () => {
     if (!user || !organizationId || !currentTeamId) {
-      Alert.alert('錯誤', '請先登入並選擇團隊');
+      if (Platform.OS === 'web') {
+        window.alert('錯誤：請先登入並選擇團隊');
+      } else {
+        Alert.alert('錯誤', '請先登入並選擇團隊');
+      }
       return;
     }
 
@@ -357,28 +395,43 @@ export function LegacyDataImportScreen({ navigation }: any) {
     if (isValid) {
       // 驗證成功，恢復到檔案上傳步驟，等待使用者確認
       setActiveStep(0);
-      Alert.alert(
-        '確認導入',
-        '檔案驗證成功，是否開始導入？',
-        [
-          {
-            text: '取消',
-            style: 'cancel',
-            onPress: () => {
-              // 使用者取消，保持在步驟 0
-              setActiveStep(0);
-            }
-          },
-          {
-            text: '開始導入',
-            onPress: executeImport,
-          },
-        ]
-      );
+      
+      if (Platform.OS === 'web') {
+        // Web 平台使用 window.confirm
+        const shouldImport = window.confirm('檔案驗證成功，是否開始導入？');
+        if (shouldImport) {
+          executeImport();
+        }
+      } else {
+        // 原生平台使用 Alert.alert
+        Alert.alert(
+          '確認導入',
+          '檔案驗證成功，是否開始導入？',
+          [
+            {
+              text: '取消',
+              style: 'cancel',
+              onPress: () => {
+                // 使用者取消，保持在步驟 0
+                setActiveStep(0);
+              }
+            },
+            {
+              text: '開始導入',
+              onPress: executeImport,
+            },
+          ]
+        );
+      }
     } else {
       // 驗證失敗，恢復到檔案上傳步驟
       setActiveStep(0);
-      Alert.alert('驗證失敗', '請修正錯誤後重試');
+      
+      if (Platform.OS === 'web') {
+        window.alert('驗證失敗：請修正錯誤後重試');
+      } else {
+        Alert.alert('驗證失敗', '請修正錯誤後重試');
+      }
     }
   };
 
