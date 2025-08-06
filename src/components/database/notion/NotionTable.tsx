@@ -188,12 +188,23 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
   
   // 檢查欄位編輯權限
   useEffect(() => {
+    console.log('🔐 權限檢查 useEffect 執行:', { 
+      hasUser: !!user, 
+      hasOrg: !!currentOrganization,
+      userEmail: user?.email,
+      orgId: currentOrganization?.id 
+    });
+    
     const checkFieldEditPermission = async () => {
       if (!user || !currentOrganization) {
         console.log('🔍 缺少用戶或組織資訊:', { user: !!user, org: !!currentOrganization });
         return;
       }
-      console.log('🔍 檢查欄位編輯權限:', { userId: user.uid, orgId: currentOrganization.id });
+      console.log('🔍 檢查欄位編輯權限:', { 
+        userId: user.uid, 
+        userRole: (user as any).role,
+        orgId: currentOrganization.id 
+      });
       try {
         const hasPermission = await canDefineCustomFields(
           user.uid, 
