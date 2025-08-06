@@ -81,7 +81,8 @@
 | 75v  | database-mixed-mode.md | ✅ 已完成 | 資料庫混合模式實作 - 唯讀表格、表單編輯、CSV 批量操作 | 2025-08-05 |
 | 76v  | dynamic-field-definitions.md | ✅ 已完成 | 動態欄位定義系統 - Firebase 同步欄位結構、動態表單生成、CSV 範本自動化 | 2025-08-05 |
 | 77v  | database-field-editor.md | ✅ 已完成 | 資料庫欄位編輯功能 - 內聯編輯、AI 備註、權限控制、Notion 風格 Popover | 2025-08-05 |
-| 78v  | unified-permission-system.md | ✅ 已完成 | 統一權限系統完整重構 - 中央權限控制、自動修復、用戶建立安全化、完整測試 | 2025-08-06 |
+| 78   | three-stage-data-import.md | 📋 待執行 | 三階段資料匯入系統重構 - 選擇資料庫、多檔案合併、欄位映射與雙向關聯 | - |
+| 79v  | unified-permission-system.md | ✅ 已完成 | 統一權限系統完整重構 - 中央權限控制、自動修復、用戶建立安全化、完整測試 | 2025-08-06 |
 
 ## 命名規則
 
@@ -97,7 +98,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：79**
+**下一個新建的 PRP 應使用編號：80**
 
 ## PRP 類型說明
 
