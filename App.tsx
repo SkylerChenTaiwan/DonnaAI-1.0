@@ -24,6 +24,8 @@ import { NetworkStatusBar } from '@/components/NetworkStatusBar';
 import '@/utils/force-logout';
 // 載入權限修復工具
 import '@/utils/fix-admin-permissions-browser';
+// 載入緊急權限修復工具（統一權限系統）
+import '@/utils/emergency-permission-fix';
 
 // 開發模式下載入除錯工具
 // 暫時停用：這些工具會在頂層執行 Firebase 操作，導致初始化錯誤

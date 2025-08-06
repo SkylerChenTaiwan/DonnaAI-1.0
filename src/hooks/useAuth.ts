@@ -1,6 +1,7 @@
 /**
  * 認證 Hook
  * 提供使用者認證狀態和相關功能
+ * 整合中央權限管理服務
  */
 
 import { useState, useEffect, useCallback } from 'react';
@@ -14,20 +15,24 @@ import {
   updateProfile
 } from 'firebase/auth';
 import { getFirebaseAuth } from '@/services/firebase/config';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { getFirebaseDb } from '@/services/firebase/config';
-import { ensureSuperAdminPermissions } from '@/services/firebase/admin/autoAdminSetup';
+import { permissionService } from '@/services/permissions/PermissionService';
+import { Role, normalizeRole } from '@/constants/permissions';
 
 export interface UserProfile {
   id: string;
   email: string;
   displayName?: string;
   role?: string;
+  normalizedRole?: Role;
   isSuperAdmin?: boolean;
   teamId?: string;
+  teamIds?: string[];
   organizationId?: string;
   permissions?: string[];
   platformPermissions?: string[];
+  lastLoginAt?: Date;
 }
 
 export interface AuthState {
@@ -48,7 +53,7 @@ export function useAuth(): AuthState {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // 獲取用戶詳細資料
+  // 獲取用戶詳細資料（整合權限服務）
   const fetchUserProfile = async (uid: string) => {
     try {
       const db = getFirebaseDb();
@@ -56,16 +61,30 @@ export function useAuth(): AuthState {
       
       if (userDoc.exists()) {
         const data = userDoc.data();
+        
+        // 使用權限服務獲取完整權限列表
+        const permissions = await permissionService.getUserPermissions(uid);
+        const userRole = await permissionService.getUserRole(uid);
+        const isSuperAdmin = await permissionService.isSuperAdmin({ uid, email: data.email });
+        
         setUserProfile({
           id: uid,
           email: data.email,
-          displayName: data.displayName,
+          displayName: data.displayName || data.name,
           role: data.role,
-          isSuperAdmin: data.isSuperAdmin || data.role === 'super_admin',
+          normalizedRole: userRole,
+          isSuperAdmin: isSuperAdmin,
           teamId: data.teamId,
+          teamIds: data.teamIds || [],
           organizationId: data.organizationId,
-          permissions: data.permissions || [],
-          platformPermissions: data.platformPermissions || []
+          permissions: permissions,
+          platformPermissions: data.platformPermissions || permissions,
+          lastLoginAt: data.lastLoginAt?.toDate?.() || new Date()
+        });
+        
+        // 更新最後登入時間
+        await updateDoc(doc(db, 'users', uid), {
+          lastLoginAt: serverTimestamp()
         });
       }
     } catch (error) {
@@ -80,13 +99,15 @@ export function useAuth(): AuthState {
       setUser(user);
       
       if (user) {
-        // 自動確保 Super Admin 權限
-        await ensureSuperAdminPermissions(user);
+        // 使用中央權限服務確保權限正確
+        await permissionService.ensurePermissions(user);
         
-        // 獲取用戶資料
+        // 獲取用戶資料（包含完整權限）
         await fetchUserProfile(user.uid);
       } else {
         setUserProfile(null);
+        // 清除權限快取
+        permissionService.clearCache();
       }
       
       setLoading(false);
@@ -101,10 +122,10 @@ export function useAuth(): AuthState {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     
     if (userCredential.user) {
-      // 自動確保 Super Admin 權限
-      await ensureSuperAdminPermissions(userCredential.user);
+      // 使用中央權限服務確保權限正確
+      await permissionService.ensurePermissions(userCredential.user);
       
-      // 獲取用戶資料
+      // 獲取用戶資料（包含完整權限）
       await fetchUserProfile(userCredential.user.uid);
     }
   }, []);
@@ -119,6 +140,10 @@ export function useAuth(): AuthState {
     }
     
     if (userCredential.user) {
+      // 使用中央權限服務初始化新用戶權限
+      await permissionService.ensurePermissions(userCredential.user);
+      
+      // 獲取用戶資料
       await fetchUserProfile(userCredential.user.uid);
     }
   }, []);
@@ -128,6 +153,8 @@ export function useAuth(): AuthState {
     const auth = getFirebaseAuth();
     await firebaseSignOut(auth);
     setUserProfile(null);
+    // 清除權限快取
+    permissionService.clearCache();
   }, []);
 
   // 重設密碼
@@ -136,14 +163,11 @@ export function useAuth(): AuthState {
     await sendPasswordResetEmail(auth, email);
   }, []);
 
-  // 檢查權限
+  // 檢查權限（使用中央權限服務的快取資料）
   const checkPermission = useCallback((permission: string): boolean => {
     if (!userProfile) return false;
     
-    // 管理員擁有所有權限
-    if (userProfile.role === 'admin') return true;
-    
-    // 檢查特定權限
+    // 使用已載入的權限列表（來自權限服務）
     return userProfile.permissions?.includes(permission) || false;
   }, [userProfile]);
 
