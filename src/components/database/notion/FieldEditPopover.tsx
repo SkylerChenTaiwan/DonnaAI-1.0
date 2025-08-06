@@ -199,12 +199,28 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
               </TouchableOpacity>
               
               {showTypeDropdown && canEdit && (
-                <View style={[styles.dropdownMenu, Platform.OS === 'web' && { backgroundColor: 'white' }]}>
-                  <ScrollView style={{ maxHeight: 200 }} nestedScrollEnabled={true}>
+                <View 
+                  className={Platform.OS === 'web' ? 'field-type-dropdown-menu' : undefined}
+                  style={[
+                    styles.dropdownMenu,
+                    {
+                      backgroundColor: '#FFFFFF',
+                      ...(Platform.OS === 'web' && {
+                        backgroundColor: 'rgb(255, 255, 255)',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                      })
+                    }
+                  ]}
+                >
+                  <ScrollView style={{ maxHeight: 200, backgroundColor: '#FFFFFF' }} nestedScrollEnabled={true}>
                   {getFieldTypes().map((type) => (
                     <TouchableOpacity
                       key={type.value}
-                      style={styles.dropdownItem}
+                      className={Platform.OS === 'web' ? 'field-type-dropdown-item' : undefined}
+                      style={[
+                        styles.dropdownItem,
+                        { backgroundColor: '#FFFFFF' }
+                      ]}
                       onPress={() => {
                         setFieldType(type.value);
                         setShowTypeDropdown(false);
@@ -540,7 +556,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     marginTop: 4,
-    backgroundColor: Platform.OS === 'web' ? 'white' : '#ffffff',
+    backgroundColor: '#FFFFFF',
     borderRadius: 4,
     borderWidth: 1,
     borderColor: '#E5E5E5',
@@ -551,14 +567,14 @@ const styles = StyleSheet.create({
     elevation: 5,
     zIndex: 9999,
     maxHeight: 200,
-    overflow: 'hidden',
+    overflow: Platform.OS === 'web' ? 'visible' : 'hidden',
   },
   dropdownItem: {
     paddingHorizontal: 12,
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#F0F0F0',
-    backgroundColor: Platform.OS === 'web' ? 'white' : '#ffffff',
+    backgroundColor: '#FFFFFF',
   },
   dropdownItemText: {
     fontSize: 14,

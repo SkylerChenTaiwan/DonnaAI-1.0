@@ -2345,3 +2345,20 @@ body.resizing-column * {
 .notion-action-button-danger:hover {
   background: rgba(239, 68, 68, 0.1);
 }
+
+/* 欄位類型下拉選單樣式修復 */
+.field-type-dropdown-menu {
+  background-color: #FFFFFF !important;
+  background: white !important;
+  opacity: 1 !important;
+}
+
+.field-type-dropdown-item {
+  background-color: #FFFFFF !important;
+  background: white !important;
+  opacity: 1 !important;
+}
+
+.field-type-dropdown-item:hover {
+  background-color: #F5F5F5 !important;
+}
