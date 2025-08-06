@@ -315,6 +315,8 @@ async function processBatch(
         userId,
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),
+        createdBy: userId, // 添加 createdBy 欄位
+        teamMembers: [userId], // 添加 teamMembers 欄位以符合 Firestore 規則
         metadata: mappedRecord.metadata,
       };
 

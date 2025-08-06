@@ -331,6 +331,7 @@ async function processBatch(
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),
         createdBy: userId,
+        teamMembers: [userId], // 添加 teamMembers 欄位以符合 Firestore 規則
         customFields: (mappedCustomer as any).customFields || {},
       };
 

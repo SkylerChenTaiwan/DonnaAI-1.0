@@ -118,7 +118,10 @@ export function mapLegacyCustomer(
   if (legacyCustomer.年薪) customFields.annualIncome = legacyCustomer.年薪;
   if (legacyCustomer.職務名稱) customFields.jobTitle = legacyCustomer.職務名稱;
   if (legacyCustomer.性別) customFields.gender = legacyCustomer.性別;
-  if (legacyCustomer.出生年月日) customFields.birthDate = parseLegacyDate(legacyCustomer.出生年月日);
+  if (legacyCustomer.出生年月日) {
+    const birthDate = parseLegacyDate(legacyCustomer.出生年月日);
+    customFields.birthDate = Timestamp.fromDate(birthDate);
+  }
   if (legacyCustomer.婚姻狀況) customFields.maritalStatus = legacyCustomer.婚姻狀況;
   if (legacyCustomer.子女) customFields.children = legacyCustomer.子女;
   if (legacyCustomer.年資) customFields.yearsOfService = legacyCustomer.年資;
@@ -287,12 +290,17 @@ export function parseLegacyDate(dateStr: string | undefined): Date {
     return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
   }
   
-  // YYYY年M月D日 格式
-  if (/^\d{4}年\d{1,2}月\d{1,2}日$/.test(cleaned)) {
-    const match = cleaned.match(/^(\d{4})年(\d{1,2})月(\d{1,2})日$/);
+  // YYYY年M月D日 格式（支援 2-4 位數年份）
+  if (/^\d{2,4}年\d{1,2}月\d{1,2}日$/.test(cleaned)) {
+    const match = cleaned.match(/^(\d{2,4})年(\d{1,2})月(\d{1,2})日$/);
     if (match) {
-      const [_, year, month, day] = match;
-      return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+      const [_, yearStr, month, day] = match;
+      let year = parseInt(yearStr);
+      // 如果是 2 位數年份，假設是 1900-1999 或 2000-2099
+      if (year < 100) {
+        year = year < 50 ? 2000 + year : 1900 + year;
+      }
+      return new Date(year, parseInt(month) - 1, parseInt(day));
     }
   }
   
@@ -308,7 +316,7 @@ export function parseLegacyDate(dateStr: string | undefined): Date {
   }
   
   // 如果都失敗，返回當前日期
-  console.warn(`無法解析日期格式: ${dateStr}`);
+  console.warn(`無法解析日期格式: ${dateStr} → ${cleaned}`);
   return new Date();
 }
 
