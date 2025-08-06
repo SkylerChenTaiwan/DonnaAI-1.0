@@ -16,6 +16,7 @@ import {
 import { getFirebaseAuth } from '@/services/firebase/config';
 import { doc, getDoc } from 'firebase/firestore';
 import { getFirebaseDb } from '@/services/firebase/config';
+import { ensureSuperAdminPermissions } from '@/services/firebase/admin/autoAdminSetup';
 
 export interface UserProfile {
   id: string;
@@ -79,6 +80,10 @@ export function useAuth(): AuthState {
       setUser(user);
       
       if (user) {
+        // 自動確保 Super Admin 權限
+        await ensureSuperAdminPermissions(user);
+        
+        // 獲取用戶資料
         await fetchUserProfile(user.uid);
       } else {
         setUserProfile(null);
@@ -96,6 +101,10 @@ export function useAuth(): AuthState {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     
     if (userCredential.user) {
+      // 自動確保 Super Admin 權限
+      await ensureSuperAdminPermissions(userCredential.user);
+      
+      // 獲取用戶資料
       await fetchUserProfile(userCredential.user.uid);
     }
   }, []);
