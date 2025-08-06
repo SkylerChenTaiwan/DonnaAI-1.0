@@ -67,11 +67,15 @@ service cloud.firestore {
     match /teams/{teamId} {
       // Super Admin 可以讀寫所有團隊
       allow read, write: if isSuperAdmin();
-      // 團隊成員可以讀取
+      // 組織成員可以讀取自己組織的團隊（支援 where 查詢）
       allow read: if request.auth != null && 
+        getUserData().organizationId == resource.data.organizationId;
+      // 團隊成員可以讀取（保留原有邏輯）
+      allow read: if request.auth != null && 
+        resource.data.memberIds != null &&
         request.auth.uid in resource.data.memberIds;
-      // 組織管理員可以管理組織內的團隊
-      allow read, write: if request.auth != null && 
+      // 組織管理員可以寫入組織內的團隊
+      allow write: if request.auth != null && 
         getUserData().role == 'admin' &&
         getUserData().organizationId == resource.data.organizationId;
     }
@@ -128,6 +132,19 @@ service cloud.firestore {
     match /organizations/{orgId}/settings/{settingId} {
       allow read: if isOrgMember(orgId) || isSuperAdmin();
       allow write: if isOrgAdmin(orgId) || isSuperAdmin();
+    }
+    
+    // 組織管理員權限集合
+    match /organizations/{orgId}/admin_permissions/{userId} {
+      // Super Admin 可以讀寫所有權限
+      allow read, write: if isSuperAdmin();
+      // 組織管理員可以讀取權限
+      allow read: if request.auth != null && 
+        (request.auth.uid == userId || isOrgAdmin(orgId));
+      // 組織管理員可以管理權限（但不能修改自己的權限）
+      allow write: if request.auth != null && 
+        isOrgAdmin(orgId) && 
+        userId != request.auth.uid;
     }
     
     // AI 處理相關集合
