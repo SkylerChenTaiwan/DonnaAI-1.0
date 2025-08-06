@@ -355,6 +355,8 @@ export function LegacyDataImportScreen({ navigation }: any) {
     const isValid = await validateFiles();
     
     if (isValid) {
+      // 驗證成功，恢復到檔案上傳步驟，等待使用者確認
+      setActiveStep(0);
       Alert.alert(
         '確認導入',
         '檔案驗證成功，是否開始導入？',
@@ -362,6 +364,10 @@ export function LegacyDataImportScreen({ navigation }: any) {
           {
             text: '取消',
             style: 'cancel',
+            onPress: () => {
+              // 使用者取消，保持在步驟 0
+              setActiveStep(0);
+            }
           },
           {
             text: '開始導入',
@@ -370,6 +376,8 @@ export function LegacyDataImportScreen({ navigation }: any) {
         ]
       );
     } else {
+      // 驗證失敗，恢復到檔案上傳步驟
+      setActiveStep(0);
       Alert.alert('驗證失敗', '請修正錯誤後重試');
     }
   };
