@@ -28,12 +28,15 @@ import {
   parseImportFile,
   importData,
   generateImportTemplate,
+  SmartDataImporter,
 } from '@/services/firebase/admin/dataImportService';
+import { useAuth } from '@/hooks/useAuth';
 
 export const DataImportScreen: React.FC = () => {
   const navigation = useNavigation();
-  const [selectedType, setSelectedType] = useState<ImportType>('customers');
-  const [selectedFile, setSelectedFile] = useState<any>(null);
+  const { userProfile } = useAuth();
+  const [selectedType, setSelectedType] = useState<ImportType>('auto');
+  const [selectedFiles, setSelectedFiles] = useState<any[]>([]);
   const [importing, setImporting] = useState(false);
   const [importStatus, setImportStatus] = useState<ImportResult | null>(null);
   const [importProgress, setImportProgress] = useState<ImportProgress | null>(null);
@@ -41,10 +44,12 @@ export const DataImportScreen: React.FC = () => {
   
   // 匯入類型選項
   const importTypes = [
+    { id: 'auto', label: '智慧識別', icon: 'flash-outline' },
     { id: 'customers', label: '客戶資料', icon: 'people-outline' },
     { id: 'records', label: '會議記錄', icon: 'document-text-outline' },
     { id: 'tasks', label: '任務清單', icon: 'checkbox-outline' },
     { id: 'users', label: '用戶資料', icon: 'person-outline' },
+    { id: 'hierarchy', label: '層級結構', icon: 'git-branch-outline' },
   ];
   
   // 檔案選擇
@@ -53,29 +58,52 @@ export const DataImportScreen: React.FC = () => {
       const result = await DocumentPicker.getDocumentAsync({
         type: ['text/csv', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
         copyToCacheDirectory: true,
+        multiple: true, // 支援多檔案選擇
       });
       
       if (result.type === 'success') {
-        setSelectedFile(result);
+        // 處理多檔案
+        const files = Array.isArray(result.output) ? result.output : [result];
+        setSelectedFiles(files);
         setImportStatus(null);
         setImportProgress(null);
         
-        try {
-          // 解析檔案內容
-          const data = await parseImportFile(result.uri, result.mimeType || '');
-          
-          if (data.length === 0) {
-            showToast('error', '檔案是空的或格式不正確');
+        // 如果是智慧識別模式，預覽第一個檔案
+        if (selectedType === 'auto' && files.length > 0) {
+          try {
+            const firstFile = files[0];
+            const data = await parseImportFile(firstFile.uri, firstFile.mimeType || '');
+            
+            if (data.length === 0) {
+              showToast('error', '檔案是空的或格式不正確');
+              setPreviewData([]);
+              return;
+            }
+            
+            // 設定預覽資料（最多顯示前 5 筆）
+            setPreviewData(data.slice(0, 5));
+            showToast('success', `已選擇 ${files.length} 個檔案，預覽第一個檔案的 ${data.length} 筆資料`);
+          } catch (parseError) {
+            showToast('error', `檔案解析失敗: ${parseError instanceof Error ? parseError.message : '未知錯誤'}`);
             setPreviewData([]);
-            return;
           }
-          
-          // 設定預覽資料（最多顯示前 5 筆）
-          setPreviewData(data.slice(0, 5));
-          showToast('success', `成功讀取 ${data.length} 筆資料`);
-        } catch (parseError) {
-          showToast('error', `檔案解析失敗: ${parseError instanceof Error ? parseError.message : '未知錯誤'}`);
-          setPreviewData([]);
+        } else if (files.length === 1) {
+          // 單檔案模式
+          try {
+            const data = await parseImportFile(files[0].uri, files[0].mimeType || '');
+            
+            if (data.length === 0) {
+              showToast('error', '檔案是空的或格式不正確');
+              setPreviewData([]);
+              return;
+            }
+            
+            setPreviewData(data.slice(0, 5));
+            showToast('success', `成功讀取 ${data.length} 筆資料`);
+          } catch (parseError) {
+            showToast('error', `檔案解析失敗: ${parseError instanceof Error ? parseError.message : '未知錯誤'}`);
+            setPreviewData([]);
+          }
         }
       }
     } catch (error) {
@@ -85,19 +113,25 @@ export const DataImportScreen: React.FC = () => {
   
   // 開始匯入
   const handleImport = async () => {
-    if (!selectedFile) {
+    if (selectedFiles.length === 0) {
       showToast('error', '請先選擇檔案');
       return;
     }
     
-    if (previewData.length === 0) {
-      showToast('error', '沒有可匯入的資料');
+    if (!userProfile?.organizationId) {
+      showToast('error', '無法取得組織資訊');
       return;
     }
     
+    const filesText = selectedFiles.length > 1 
+      ? `${selectedFiles.length} 個檔案` 
+      : '1 個檔案';
+    
     Alert.alert(
       '確認匯入',
-      `確定要匯入${getTypeLabel(selectedType)}嗎？\n\n總共 ${previewData.length} 筆資料`,
+      selectedType === 'auto' 
+        ? `使用智慧識別模式匯入 ${filesText}？\n系統將自動識別檔案類型並建立關聯`
+        : `確定要匯入${getTypeLabel(selectedType)}嗎？\n\n總共 ${filesText}`,
       [
         { text: '取消', style: 'cancel' },
         {
@@ -112,21 +146,52 @@ export const DataImportScreen: React.FC = () => {
             });
             
             try {
-              // 重新解析完整檔案（預覽可能只是部分資料）
-              const fullData = await parseImportFile(selectedFile.uri, selectedFile.mimeType || '');
+              let result: ImportResult;
               
-              // 執行匯入，並追蹤進度
-              const result = await importData(
-                selectedType,
-                fullData,
-                (progress) => {
-                  setImportProgress(progress);
-                }
-              );
+              if (selectedType === 'auto' && selectedFiles.length > 1) {
+                // 智慧型多檔案匯入
+                const importer = new SmartDataImporter(userProfile.organizationId);
+                result = await importer.importMultipleFiles(
+                  selectedFiles.map(f => ({
+                    uri: f.uri,
+                    name: f.name,
+                    type: f.mimeType
+                  })),
+                  (progress) => {
+                    setImportProgress(progress);
+                  }
+                );
+              } else {
+                // 單檔案匯入
+                const fullData = await parseImportFile(selectedFiles[0].uri, selectedFiles[0].mimeType || '');
+                
+                result = await importData(
+                  selectedType === 'auto' ? 'customers' : selectedType,
+                  fullData,
+                  (progress) => {
+                    setImportProgress(progress);
+                  }
+                );
+              }
               
               setImportStatus(result);
               
-              if (result.failed === 0) {
+              // 顯示詳細結果
+              if (result.imported) {
+                const details = [];
+                if (result.imported.users > 0) details.push(`${result.imported.users} 位用戶`);
+                if (result.imported.teams > 0) details.push(`${result.imported.teams} 個團隊`);
+                if (result.imported.customers > 0) details.push(`${result.imported.customers} 位客戶`);
+                if (result.imported.records > 0) details.push(`${result.imported.records} 筆紀錄`);
+                
+                if (details.length > 0) {
+                  showToast('success', `成功匯入: ${details.join(', ')}`);
+                } else if (result.failed === 0) {
+                  showToast('success', `成功匯入所有 ${result.success} 筆資料`);
+                } else {
+                  showToast('warning', `匯入完成：成功 ${result.success} 筆，失敗 ${result.failed} 筆`);
+                }
+              } else if (result.failed === 0) {
                 showToast('success', `成功匯入所有 ${result.success} 筆資料`);
               } else {
                 showToast('warning', `匯入完成：成功 ${result.success} 筆，失敗 ${result.failed} 筆`);
@@ -233,7 +298,11 @@ export const DataImportScreen: React.FC = () => {
           >
             <Icon name="cloud-upload-outline" size={48} color={DesignSystem.colors.text.secondary} />
             <Text style={styles.uploadText}>
-              {selectedFile ? selectedFile.name : '點擊選擇 CSV 或 Excel 檔案'}
+              {selectedFiles.length > 0 
+                ? selectedFiles.length === 1 
+                  ? selectedFiles[0].name 
+                  : `已選擇 ${selectedFiles.length} 個檔案`
+                : '點擊選擇 CSV 或 Excel 檔案（可多選）'}
             </Text>
           </TouchableOpacity>
           
@@ -337,10 +406,10 @@ export const DataImportScreen: React.FC = () => {
         <TouchableOpacity
           style={[
             styles.importButton,
-            (!selectedFile || importing) && styles.importButtonDisabled,
+            (selectedFiles.length === 0 || importing) && styles.importButtonDisabled,
           ]}
           onPress={handleImport}
-          disabled={!selectedFile || importing}
+          disabled={selectedFiles.length === 0 || importing}
         >
           {importing ? (
             <ActivityIndicator color={DesignSystem.colors.white} />

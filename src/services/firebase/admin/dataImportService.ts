@@ -16,12 +16,13 @@ import { getFirebaseDb } from '../config';
 import { getAuth } from 'firebase/auth';
 // import { createUserWithEmailAndPassword } from 'firebase/auth'; // 不應該在這裡使用，改用 Cloud Function
 import { Customer, Record, Task } from '@/types/firebase';
-import { User } from '@/types/entities';
+import { User, CreateUserData } from '@/types/entities';
+import { Team, CreateTeamData } from '@/types/entities/team';
 import { isOrgAdmin } from '../permissions';
 import * as Papa from 'papaparse';
 import * as XLSX from 'xlsx';
 
-export type ImportType = 'customers' | 'records' | 'tasks' | 'users';
+export type ImportType = 'customers' | 'records' | 'tasks' | 'users' | 'hierarchy' | 'auto';
 
 export interface ImportResult {
   total: number;
@@ -31,6 +32,13 @@ export interface ImportResult {
     row: number;
     message: string;
   }>;
+  imported?: {
+    users: number;
+    teams: number;
+    customers: number;
+    records: number;
+  };
+  warnings?: string[];
 }
 
 export interface ImportProgress {
@@ -601,4 +609,602 @@ export function generateImportTemplate(type: ImportType): string {
   });
   
   return csv;
+}
+
+/**
+ * 智慧型資料匯入 - 自動識別檔案類型和欄位映射
+ */
+export class SmartDataImporter {
+  private db = getFirebaseDb();
+  private organizationId: string;
+  private userIdMap = new Map<string, string>(); // 姓名/Email -> Firebase ID
+  private customerIdMap = new Map<string, string>(); // 客戶識別 -> Firebase ID
+  private teamIdMap = new Map<string, string>(); // 團隊名稱 -> Firebase ID
+  
+  constructor(organizationId: string) {
+    this.organizationId = organizationId;
+  }
+
+  /**
+   * 智慧分析 CSV 欄位並判斷檔案類型
+   */
+  private analyzeFileType(headers: string[], rows: any[]): ImportType {
+    const lowerHeaders = headers.map(h => h.toLowerCase());
+    
+    // 判斷檔案類型的關鍵字
+    const patterns = {
+      users: ['業務', '員工', 'salesperson', 'staff', '職稱', '部門'],
+      customers: ['客戶', 'customer', 'client', '公司', 'company'],
+      records: ['訪談', '紀錄', 'record', 'meeting', '會議', '內容'],
+      hierarchy: ['層級', 'level', '上級', 'parent', '主管', 'supervisor'],
+      tasks: ['任務', 'task', '待辦', 'todo', '截止', 'deadline']
+    };
+    
+    // 計算每種類型的匹配分數
+    const scores: Record<string, number> = {};
+    
+    for (const [type, keywords] of Object.entries(patterns)) {
+      scores[type] = 0;
+      for (const keyword of keywords) {
+        if (lowerHeaders.some(h => h.includes(keyword))) {
+          scores[type]++;
+        }
+      }
+    }
+    
+    // 找出最高分的類型
+    let maxScore = 0;
+    let detectedType: ImportType = 'customers'; // 預設
+    
+    for (const [type, score] of Object.entries(scores)) {
+      if (score > maxScore) {
+        maxScore = score;
+        detectedType = type as ImportType;
+      }
+    }
+    
+    return detectedType;
+  }
+
+  /**
+   * 尋找最匹配的欄位名
+   */
+  private findColumn(headers: string[], candidates: string[]): string {
+    for (const candidate of candidates) {
+      const found = headers.find(h => 
+        h.toLowerCase().includes(candidate.toLowerCase())
+      );
+      if (found) return found;
+    }
+    return '';
+  }
+
+  /**
+   * 智慧型匯入多個檔案
+   */
+  async importMultipleFiles(
+    files: Array<{ uri: string; name: string; type?: string }>,
+    onProgress?: ProgressCallback
+  ): Promise<ImportResult> {
+    const result: ImportResult = {
+      total: 0,
+      success: 0,
+      failed: 0,
+      errors: [],
+      imported: { users: 0, teams: 0, customers: 0, records: 0 },
+      warnings: []
+    };
+
+    // 排序檔案（業務員 -> 層級 -> 客戶 -> 紀錄）
+    const sortedFiles = files.sort((a, b) => {
+      const getPriority = (name: string) => {
+        const lower = name.toLowerCase();
+        if (lower.includes('業務') || lower.includes('員工')) return 1;
+        if (lower.includes('層級') || lower.includes('hierarchy')) return 2;
+        if (lower.includes('客戶') || lower.includes('customer')) return 3;
+        if (lower.includes('訪談') || lower.includes('紀錄')) return 4;
+        return 5;
+      };
+      return getPriority(a.name) - getPriority(b.name);
+    });
+
+    // 載入現有資料以建立映射
+    await this.loadExistingMappings();
+
+    // 逐個處理檔案
+    for (const file of sortedFiles) {
+      try {
+        result.warnings?.push(`處理檔案: ${file.name}`);
+        
+        // 解析檔案
+        const data = await parseImportFile(file.uri, file.type || 'text/csv');
+        
+        if (data.length === 0) {
+          result.warnings?.push(`${file.name}: 檔案是空的`);
+          continue;
+        }
+
+        // 自動識別檔案類型
+        const headers = Object.keys(data[0]);
+        const fileType = this.analyzeFileType(headers, data);
+        
+        result.warnings?.push(`${file.name} 識別為: ${fileType}`);
+        
+        // 根據類型處理
+        const fileResult = await this.processFileByType(fileType, data, onProgress);
+        
+        // 合併結果
+        result.total += fileResult.total;
+        result.success += fileResult.success;
+        result.failed += fileResult.failed;
+        result.errors.push(...fileResult.errors);
+        
+        if (result.imported && fileResult.imported) {
+          result.imported.users += fileResult.imported.users;
+          result.imported.teams += fileResult.imported.teams;
+          result.imported.customers += fileResult.imported.customers;
+          result.imported.records += fileResult.imported.records;
+        }
+      } catch (error) {
+        result.warnings?.push(`${file.name}: 處理失敗 - ${error}`);
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * 根據檔案類型處理資料
+   */
+  private async processFileByType(
+    type: ImportType,
+    data: any[],
+    onProgress?: ProgressCallback
+  ): Promise<ImportResult> {
+    const headers = Object.keys(data[0]);
+    
+    switch (type) {
+      case 'users':
+        return this.importUsers(data, headers, onProgress);
+      case 'customers':
+        return this.importCustomers(data, headers, onProgress);
+      case 'records':
+        return this.importRecords(data, headers, onProgress);
+      case 'hierarchy':
+        return this.importHierarchy(data, headers, onProgress);
+      default:
+        return this.importCustomers(data, headers, onProgress);
+    }
+  }
+
+  /**
+   * 匯入業務員資料
+   */
+  private async importUsers(
+    rows: any[],
+    headers: string[],
+    onProgress?: ProgressCallback
+  ): Promise<ImportResult> {
+    const result: ImportResult = {
+      total: rows.length,
+      success: 0,
+      failed: 0,
+      errors: [],
+      imported: { users: 0, teams: 0, customers: 0, records: 0 }
+    };
+
+    // 欄位映射
+    const nameCol = this.findColumn(headers, ['姓名', '業務員', '員工', 'name']);
+    const emailCol = this.findColumn(headers, ['email', '電子郵件', '信箱']);
+    const phoneCol = this.findColumn(headers, ['電話', '手機', 'phone']);
+    const titleCol = this.findColumn(headers, ['職稱', '職位', 'title']);
+    const deptCol = this.findColumn(headers, ['部門', 'department']);
+
+    const batch = writeBatch(this.db);
+    let count = 0;
+
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      
+      if (onProgress) {
+        onProgress({
+          current: i + 1,
+          total: rows.length,
+          status: 'importing',
+          message: `匯入用戶 ${i + 1}/${rows.length}`
+        });
+      }
+
+      try {
+        const name = row[nameCol];
+        if (!name) {
+          result.errors.push({ row: i + 2, message: '缺少姓名' });
+          result.failed++;
+          continue;
+        }
+
+        // 產生或取得 email
+        let email = row[emailCol];
+        if (!email) {
+          // 自動產生 email
+          const pinyin = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+          email = `${pinyin}@${this.organizationId}.com`;
+        }
+
+        // 判斷角色
+        const jobTitle = row[titleCol] || '';
+        let role: 'admin' | 'manager' | 'salesperson' = 'salesperson';
+        if (jobTitle.includes('總監') || jobTitle.includes('處長')) {
+          role = 'admin';
+        } else if (jobTitle.includes('經理') || jobTitle.includes('主管')) {
+          role = 'manager';
+        }
+
+        // 建立用戶資料
+        const userId = doc(collection(this.db, 'users')).id;
+        const userData = {
+          id: userId,
+          name,
+          email,
+          role,
+          organizationId: this.organizationId,
+          phone: row[phoneCol] || '',
+          department: row[deptCol] || '',
+          jobTitle,
+          createdAt: Timestamp.now(),
+          isActive: true
+        };
+
+        batch.set(doc(this.db, 'users', userId), userData);
+        
+        // 儲存映射
+        this.userIdMap.set(name, userId);
+        this.userIdMap.set(email, userId);
+        
+        count++;
+        result.success++;
+      } catch (error) {
+        result.errors.push({
+          row: i + 2,
+          message: `匯入失敗: ${error}`
+        });
+        result.failed++;
+      }
+    }
+
+    if (count > 0) {
+      await batch.commit();
+      result.imported!.users = count;
+    }
+
+    return result;
+  }
+
+  /**
+   * 匯入客戶資料
+   */
+  private async importCustomers(
+    rows: any[],
+    headers: string[],
+    onProgress?: ProgressCallback
+  ): Promise<ImportResult> {
+    const result: ImportResult = {
+      total: rows.length,
+      success: 0,
+      failed: 0,
+      errors: [],
+      imported: { users: 0, teams: 0, customers: 0, records: 0 }
+    };
+
+    // 欄位映射
+    const nameCol = this.findColumn(headers, ['客戶姓名', '姓名', '客戶', 'name']);
+    const companyCol = this.findColumn(headers, ['公司', '客戶公司', 'company']);
+    const phoneCol = this.findColumn(headers, ['電話', '手機', 'phone']);
+    const emailCol = this.findColumn(headers, ['email', '電子郵件']);
+    const salesCol = this.findColumn(headers, ['業務員', '負責人', '業務']);
+    const tagsCol = this.findColumn(headers, ['標籤', '分類', 'tags']);
+    const notesCol = this.findColumn(headers, ['備註', '說明', 'notes']);
+
+    const batch = writeBatch(this.db);
+    let count = 0;
+
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      
+      if (onProgress) {
+        onProgress({
+          current: i + 1,
+          total: rows.length,
+          status: 'importing',
+          message: `匯入客戶 ${i + 1}/${rows.length}`
+        });
+      }
+
+      try {
+        const name = row[nameCol];
+        if (!name) {
+          result.errors.push({ row: i + 2, message: '缺少客戶姓名' });
+          result.failed++;
+          continue;
+        }
+
+        // 找出負責業務員
+        const salespersonName = row[salesCol];
+        let createdBy = this.userIdMap.get(salespersonName);
+        
+        if (!createdBy) {
+          // 使用目前用戶或預設值
+          const auth = getAuth();
+          createdBy = auth.currentUser?.uid || '';
+          if (!createdBy) {
+            result.errors.push({ row: i + 2, message: '找不到負責業務員' });
+            result.failed++;
+            continue;
+          }
+        }
+
+        // 處理標籤
+        const tagsStr = row[tagsCol] || '';
+        const tags = tagsStr.split(/[;,；，]/).map((t: string) => t.trim()).filter(Boolean);
+
+        // 建立客戶資料
+        const customerId = doc(collection(this.db, 'customers')).id;
+        const customerData = {
+          id: customerId,
+          name,
+          company: row[companyCol] || '',
+          phone: row[phoneCol] || '',
+          email: row[emailCol] || '',
+          createdBy,
+          organizationId: this.organizationId,
+          tags,
+          notes: row[notesCol] || '',
+          createdAt: Timestamp.now(),
+          updatedAt: Timestamp.now(),
+          teamMembers: [createdBy]
+        };
+
+        batch.set(doc(this.db, 'customers', customerId), customerData);
+        
+        // 儲存映射
+        const customerKey = `${name}_${row[companyCol] || ''}`;
+        this.customerIdMap.set(customerKey, customerId);
+        
+        count++;
+        result.success++;
+      } catch (error) {
+        result.errors.push({
+          row: i + 2,
+          message: `匯入失敗: ${error}`
+        });
+        result.failed++;
+      }
+    }
+
+    if (count > 0) {
+      await batch.commit();
+      result.imported!.customers = count;
+    }
+
+    return result;
+  }
+
+  /**
+   * 匯入訪談紀錄
+   */
+  private async importRecords(
+    rows: any[],
+    headers: string[],
+    onProgress?: ProgressCallback
+  ): Promise<ImportResult> {
+    const result: ImportResult = {
+      total: rows.length,
+      success: 0,
+      failed: 0,
+      errors: [],
+      imported: { users: 0, teams: 0, customers: 0, records: 0 }
+    };
+
+    // 欄位映射
+    const dateCol = this.findColumn(headers, ['日期', '訪談日期', 'date']);
+    const customerCol = this.findColumn(headers, ['客戶', '客戶姓名', 'customer']);
+    const salesCol = this.findColumn(headers, ['業務員', '業務', 'sales']);
+    const typeCol = this.findColumn(headers, ['類型', '訪談類型', 'type']);
+    const contentCol = this.findColumn(headers, ['內容', '紀錄', 'content']);
+
+    const batch = writeBatch(this.db);
+    let count = 0;
+
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      
+      if (onProgress) {
+        onProgress({
+          current: i + 1,
+          total: rows.length,
+          status: 'importing',
+          message: `匯入紀錄 ${i + 1}/${rows.length}`
+        });
+      }
+
+      try {
+        // 找出客戶
+        const customerName = row[customerCol];
+        let customerId: string | undefined;
+        
+        for (const [key, id] of this.customerIdMap.entries()) {
+          if (key.includes(customerName)) {
+            customerId = id;
+            break;
+          }
+        }
+
+        if (!customerId) {
+          result.errors.push({ row: i + 2, message: `找不到客戶: ${customerName}` });
+          result.failed++;
+          continue;
+        }
+
+        // 找出業務員
+        const salespersonName = row[salesCol];
+        const createdBy = this.userIdMap.get(salespersonName) || getAuth().currentUser?.uid;
+        
+        if (!createdBy) {
+          result.errors.push({ row: i + 2, message: '找不到業務員' });
+          result.failed++;
+          continue;
+        }
+
+        // 處理日期
+        const dateStr = row[dateCol];
+        const date = dateStr ? new Date(dateStr) : new Date();
+
+        // 建立紀錄資料
+        const recordId = doc(collection(this.db, 'records')).id;
+        const recordData = {
+          id: recordId,
+          customerId,
+          createdBy,
+          date: Timestamp.fromDate(date),
+          type: row[typeCol] || '訪談',
+          content: row[contentCol] || '',
+          organizationId: this.organizationId,
+          createdAt: Timestamp.now(),
+          teamMembers: [createdBy]
+        };
+
+        batch.set(doc(this.db, 'records', recordId), recordData);
+        count++;
+        result.success++;
+      } catch (error) {
+        result.errors.push({
+          row: i + 2,
+          message: `匯入失敗: ${error}`
+        });
+        result.failed++;
+      }
+    }
+
+    if (count > 0) {
+      await batch.commit();
+      result.imported!.records = count;
+    }
+
+    return result;
+  }
+
+  /**
+   * 匯入層級結構
+   */
+  private async importHierarchy(
+    rows: any[],
+    headers: string[],
+    onProgress?: ProgressCallback
+  ): Promise<ImportResult> {
+    const result: ImportResult = {
+      total: rows.length,
+      success: 0,
+      failed: 0,
+      errors: [],
+      imported: { users: 0, teams: 0, customers: 0, records: 0 }
+    };
+
+    // 欄位映射
+    const nameCol = this.findColumn(headers, ['姓名', '名稱', 'name']);
+    const teamCol = this.findColumn(headers, ['團隊', '部門', 'team']);
+    const parentCol = this.findColumn(headers, ['上級', '主管', 'parent']);
+
+    // 建立團隊
+    const teams = new Map<string, string>();
+    const batch = writeBatch(this.db);
+    
+    // 收集唯一團隊
+    const teamNames = new Set<string>();
+    rows.forEach(row => {
+      const teamName = row[teamCol];
+      if (teamName) teamNames.add(teamName);
+    });
+
+    // 建立團隊文檔
+    for (const teamName of teamNames) {
+      const teamId = doc(collection(this.db, 'teams')).id;
+      const teamData = {
+        id: teamId,
+        name: teamName,
+        organizationId: this.organizationId,
+        memberIds: [],
+        createdAt: Timestamp.now()
+      };
+      
+      batch.set(doc(this.db, 'teams', teamId), teamData);
+      teams.set(teamName, teamId);
+      this.teamIdMap.set(teamName, teamId);
+    }
+
+    // 更新用戶的團隊和主管關係
+    for (const row of rows) {
+      const name = row[nameCol];
+      const parentName = row[parentCol];
+      const teamName = row[teamCol];
+      
+      if (!name) continue;
+      
+      const userId = this.userIdMap.get(name);
+      if (!userId) continue;
+
+      const updates: any = {};
+      
+      if (teamName && teams.has(teamName)) {
+        updates.teamIds = [teams.get(teamName)];
+      }
+      
+      if (parentName) {
+        const supervisorId = this.userIdMap.get(parentName);
+        if (supervisorId) {
+          updates.supervisorId = supervisorId;
+        }
+      }
+      
+      if (Object.keys(updates).length > 0) {
+        batch.update(doc(this.db, 'users', userId), updates);
+        result.success++;
+      }
+    }
+
+    await batch.commit();
+    result.imported!.teams = teams.size;
+
+    return result;
+  }
+
+  /**
+   * 載入現有資料映射
+   */
+  private async loadExistingMappings(): Promise<void> {
+    // 載入用戶
+    const usersQuery = query(
+      collection(this.db, 'users'),
+      where('organizationId', '==', this.organizationId)
+    );
+    
+    const usersSnapshot = await getDocs(usersQuery);
+    usersSnapshot.forEach(doc => {
+      const user = doc.data();
+      this.userIdMap.set(user.name, user.id);
+      this.userIdMap.set(user.email, user.id);
+    });
+
+    // 載入客戶
+    const customersQuery = query(
+      collection(this.db, 'customers'),
+      where('organizationId', '==', this.organizationId)
+    );
+    
+    const customersSnapshot = await getDocs(customersQuery);
+    customersSnapshot.forEach(doc => {
+      const customer = doc.data();
+      const key = `${customer.name}_${customer.company}`;
+      this.customerIdMap.set(key, customer.id);
+    });
+  }
 }
