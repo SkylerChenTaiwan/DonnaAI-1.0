@@ -199,43 +199,66 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
               </TouchableOpacity>
               
               {showTypeDropdown && canEdit && (
-                <View 
-                  className={Platform.OS === 'web' ? 'field-type-dropdown-menu' : undefined}
-                  style={[
-                    styles.dropdownMenu,
-                    {
+                <>
+                  {/* 不透明的背景層 */}
+                  <View 
+                    style={{
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                      right: 0,
+                      marginTop: 4,
                       backgroundColor: '#FFFFFF',
-                      ...(Platform.OS === 'web' && {
-                        backgroundColor: 'rgb(255, 255, 255)',
-                        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-                      })
-                    }
-                  ]}
-                >
-                  <ScrollView style={{ maxHeight: 200, backgroundColor: '#FFFFFF' }} nestedScrollEnabled={true}>
-                  {getFieldTypes().map((type) => (
-                    <TouchableOpacity
-                      key={type.value}
-                      className={Platform.OS === 'web' ? 'field-type-dropdown-item' : undefined}
-                      style={[
-                        styles.dropdownItem,
-                        { backgroundColor: '#FFFFFF' }
-                      ]}
-                      onPress={() => {
-                        setFieldType(type.value);
-                        setShowTypeDropdown(false);
-                      }}
+                      borderRadius: 4,
+                      borderWidth: 1,
+                      borderColor: '#E5E5E5',
+                      zIndex: 9998,
+                      opacity: 1,
+                    }}
+                  />
+                  {/* 實際的選單內容 */}
+                  <View 
+                    style={[
+                      styles.dropdownMenu,
+                      {
+                        backgroundColor: '#FFFFFF',
+                        opacity: 1,
+                      }
+                    ]}
+                  >
+                    <ScrollView 
+                      style={{ 
+                        maxHeight: 200, 
+                        backgroundColor: '#FFFFFF',
+                      }} 
+                      nestedScrollEnabled={true}
                     >
-                      <Text style={[
-                        styles.dropdownItemText,
-                        fieldType === type.value && styles.dropdownItemSelected
-                      ]}>
-                        {type.label}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                  </ScrollView>
-                </View>
+                      {getFieldTypes().map((type) => (
+                        <TouchableOpacity
+                          key={type.value}
+                          style={[
+                            styles.dropdownItem,
+                            { 
+                              backgroundColor: fieldType === type.value ? '#F5F5F5' : '#FFFFFF',
+                              opacity: 1,
+                            }
+                          ]}
+                          onPress={() => {
+                            setFieldType(type.value);
+                            setShowTypeDropdown(false);
+                          }}
+                        >
+                          <Text style={[
+                            styles.dropdownItemText,
+                            fieldType === type.value && styles.dropdownItemSelected
+                          ]}>
+                            {type.label}
+                          </Text>
+                        </TouchableOpacity>
+                      ))}
+                    </ScrollView>
+                  </View>
+                </>
               )}
             </View>
 
