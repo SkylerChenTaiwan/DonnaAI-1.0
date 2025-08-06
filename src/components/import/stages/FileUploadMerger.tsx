@@ -320,7 +320,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
             </Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <View style={styles.keyFieldOptions}>
-                {candidates.slice(0, 3).map(candidate => (
+                {candidates.map(candidate => (
                   <TouchableOpacity
                     key={candidate.field}
                     style={[

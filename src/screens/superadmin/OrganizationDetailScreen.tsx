@@ -41,6 +41,8 @@ import { AddUserToOrganizationModal } from '@/components/organization/AddUserToO
 import { BulkImportUsersModal } from '@/components/organization/BulkImportUsersModal';
 import { DataImportAssistModal } from '@/components/organization/DataImportAssistModal';
 import { CustomFieldsModal } from '@/components/organization/CustomFieldsModal';
+import ImportWizard from '@/components/import/ImportWizard';
+import { Modal } from 'react-native';
 
 type RouteParams = RouteProp<RootStackParamList, 'OrganizationDetailScreen'>;
 type NavigationProp = StackNavigationProp<RootStackParamList, 'OrganizationDetailScreen'>;
@@ -77,6 +79,7 @@ export const OrganizationDetailScreen: React.FC = () => {
   // 用戶協助 Modal 狀態
   const [showDataImportModal, setShowDataImportModal] = useState(false);
   const [showCustomFieldsModal, setShowCustomFieldsModal] = useState(false);
+  const [showImportWizard, setShowImportWizard] = useState(false);
 
   // 功能開關狀態
   const [features, setFeatures] = useState({
@@ -543,9 +546,9 @@ export const OrganizationDetailScreen: React.FC = () => {
               <Text style={styles.assistanceDesc}>協助組織匯入 CSV/Excel 資料</Text>
               <TouchableOpacity 
                 style={styles.assistanceButton}
-                onPress={() => setShowDataImportModal(true)}
+                onPress={() => setShowImportWizard(true)}
               >
-                <Text style={styles.assistanceButtonText}>開始匯入</Text>
+                <Text style={styles.assistanceButtonText}>開始資料匯入精靈</Text>
               </TouchableOpacity>
             </View>
             
@@ -561,19 +564,6 @@ export const OrganizationDetailScreen: React.FC = () => {
               </TouchableOpacity>
             </View>
             
-            <View style={styles.assistanceCard}>
-              <Icon name="sync-outline" size={24} color={DesignSystem.colors.primary} />
-              <Text style={styles.assistanceTitle}>舊系統遷移</Text>
-              <Text style={styles.assistanceDesc}>從舊系統匯入資料</Text>
-              <TouchableOpacity 
-                style={styles.assistanceButton}
-                onPress={() => navigation.navigate('LegacyDataImportScreen' as any, { 
-                  organizationId: organizationId 
-                })}
-              >
-                <Text style={styles.assistanceButtonText}>開始導入</Text>
-              </TouchableOpacity>
-            </View>
           </View>
         )}
 
@@ -648,6 +638,24 @@ export const OrganizationDetailScreen: React.FC = () => {
         organization={organization}
         onClose={() => setShowCustomFieldsModal(false)}
       />
+      
+      {/* 新的三階段匯入精靈 */}
+      <Modal
+        visible={showImportWizard}
+        animationType="slide"
+        presentationStyle="fullScreen"
+      >
+        <ImportWizard
+          organizationId={organizationId}
+          teamId={organization?.defaultTeamId}
+          onComplete={(result) => {
+            toast.success(`成功匯入 ${result.importedCount} 筆資料到 ${result.targetDatabase}`);
+            setShowImportWizard(false);
+            loadOrganizationData(); // 重新載入組織資料
+          }}
+          onCancel={() => setShowImportWizard(false)}
+        />
+      </Modal>
     </Layout>
   );
 };
