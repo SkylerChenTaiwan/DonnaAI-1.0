@@ -213,6 +213,12 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
         </Text>
         
         {/* 欄位編輯 info 按鈕 */}
+        {console.log('🔍 HeaderCell info 按鈕檢查:', {
+          columnTitle: column.title,
+          columnId: column.id,
+          canEditFields,
+          shouldShow: canEditFields && column.id !== '_checkbox' && column.id !== '_actions'
+        })}
         {canEditFields && column.id !== '_checkbox' && column.id !== '_actions' && (
           <TouchableOpacity
             onPress={(e) => {

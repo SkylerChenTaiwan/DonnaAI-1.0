@@ -64,16 +64,7 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
   onRowEdit,
   onRowDelete,
 }) => {
-  // 除錯日誌
-  console.log('🎯 NotionTable 渲染:', {
-    dataLength: data?.length,
-    columnsLength: columns?.length,
-    loading,
-    error,
-    platform: Platform.OS,
-    data: data?.slice(0, 2), // 顯示前兩筆資料
-    columns: columns?.map(c => ({ id: c.id, title: c.title, type: c.type })),
-  });
+  // 除錯日誌（移到元件內部）
   
   // 表格 ID
   const tableId = useMemo(() => `notion-table-${Math.random().toString(36).substr(2, 9)}`, []);
@@ -186,6 +177,17 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
     prevColumnsRef.current = columnsWithActions;
   }, [columnsWithActions.length]); // 只依賴長度，不依賴整個陣列
   
+  // 在每次渲染時記錄權限狀態
+  console.log('🎯 NotionTable 渲染狀態:', {
+    canEditFields,
+    hasUser: !!user,
+    hasUserProfile: !!userProfile,
+    userRole: userProfile?.role,
+    hasOrg: !!currentOrganization,
+    dataLength: data?.length,
+    columnsLength: columns?.length,
+  });
+
   // 檢查欄位編輯權限
   useEffect(() => {
     console.log('🔐 權限檢查 useEffect 執行:', { 
