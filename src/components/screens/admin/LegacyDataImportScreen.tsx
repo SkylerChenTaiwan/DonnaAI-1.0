@@ -35,6 +35,8 @@ import { LegacyImportSession } from '@/types/legacy-import';
 import { previewCSV } from '@/services/csv/legacy-import/parser';
 import { FieldMappingModal, FieldMapping, RelationMapping } from '@/components/import/FieldMappingModal';
 import { SmartDataImporter } from '@/services/firebase/admin/dataImportService';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { getFirebaseDb } from '@/services/firebase/config';
 
 interface FileInfo {
   name: string;
@@ -57,10 +59,11 @@ interface ImportState {
   records?: FileInfo;
 }
 
-export function LegacyDataImportScreen({ navigation }: any) {
+export function LegacyDataImportScreen({ navigation, route }: any) {
   const { user } = useAuthStore();
-  const organizationId = user?.organizationId;
-  const currentTeamId = user?.teamIds?.[0] || 'default-team'; // 使用第一個團隊或預設值
+  // 優先使用路由參數中的 organizationId，否則使用當前用戶的
+  const organizationId = route?.params?.organizationId || user?.organizationId;
+  const [currentTeamId, setCurrentTeamId] = useState<string>(route?.params?.teamId || user?.teamIds?.[0] || '');
   const [files, setFiles] = useState<ImportState>({});
   const [isImporting, setIsImporting] = useState(false);
   const [importProgress, setImportProgress] = useState<ImportSessionProgress | null>(null);
@@ -74,19 +77,49 @@ export function LegacyDataImportScreen({ navigation }: any) {
   const isTablet = isTabletWeb();
   const isLandscape = true; // 簡化判斷
 
+  // 獲取組織的第一個團隊（如果沒有提供 teamId）
+  useEffect(() => {
+    const fetchFirstTeam = async () => {
+      if (organizationId && !currentTeamId) {
+        try {
+          const db = getFirebaseDb();
+          const teamsQuery = query(
+            collection(db, 'teams'),
+            where('organizationId', '==', organizationId)
+          );
+          const teamsSnapshot = await getDocs(teamsQuery);
+          
+          if (!teamsSnapshot.empty) {
+            const firstTeam = teamsSnapshot.docs[0];
+            setCurrentTeamId(firstTeam.id);
+            console.log('使用組織的第一個團隊:', firstTeam.id, firstTeam.data().name);
+          } else {
+            // 如果組織沒有團隊，使用預設值
+            setCurrentTeamId('default-team');
+            console.log('組織沒有團隊，使用預設團隊');
+          }
+        } catch (error) {
+          console.error('獲取團隊失敗:', error);
+          setCurrentTeamId('default-team');
+        }
+      }
+    };
+    
+    fetchFirstTeam();
+  }, [organizationId, currentTeamId]);
+
   // 初始化 session
   useEffect(() => {
-    if (organizationId && user?.id) {
-      const teamId = user?.teamIds?.[0] || 'default-team';
+    if (organizationId && currentTeamId && user?.id) {
       const newSession = createImportSession(
         organizationId,
-        teamId,
+        currentTeamId,
         user.id
       );
       setSession(newSession);
       console.log('建立新的導入 session:', newSession);
     }
-  }, [organizationId, user?.id, user?.teamIds]);
+  }, [organizationId, currentTeamId, user?.id]);
 
   const steps = [
     { title: '上傳檔案', icon: 'cloud-upload-outline' },
@@ -428,7 +461,7 @@ export function LegacyDataImportScreen({ navigation }: any) {
     // 確保 session 已建立
     if (!session) {
       // 如果沒有 session，建立新的
-      const teamId = user?.teamIds?.[0] || 'default-team';
+      const teamId = currentTeamId || 'default-team';
       const newSession = createImportSession(
         organizationId,
         teamId,

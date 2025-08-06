@@ -567,7 +567,9 @@ export const OrganizationDetailScreen: React.FC = () => {
               <Text style={styles.assistanceDesc}>從舊系統匯入資料</Text>
               <TouchableOpacity 
                 style={styles.assistanceButton}
-                onPress={() => navigation.navigate('LegacyDataImportScreen' as any)}
+                onPress={() => navigation.navigate('LegacyDataImportScreen' as any, { 
+                  organizationId: organizationId 
+                })}
               >
                 <Text style={styles.assistanceButtonText}>開始導入</Text>
               </TouchableOpacity>
