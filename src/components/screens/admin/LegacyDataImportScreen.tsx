@@ -71,16 +71,16 @@ export function LegacyDataImportScreen({ navigation }: any) {
 
   // 初始化 session
   useEffect(() => {
-    if (organizationId && currentTeamId && user?.uid) {
+    if (organizationId && currentTeamId && user?.id) {
       const newSession = createImportSession(
         organizationId,
         currentTeamId,
-        user.uid
+        user.id
       );
       setSession(newSession);
       console.log('建立新的導入 session:', newSession);
     }
-  }, [organizationId, currentTeamId, user?.uid]);
+  }, [organizationId, currentTeamId, user?.id]);
 
   const steps = [
     { title: '上傳檔案', icon: 'cloud-upload-outline' },
@@ -340,13 +340,16 @@ export function LegacyDataImportScreen({ navigation }: any) {
       return;
     }
 
-    // 建立導入會話
-    const newSession = createImportSession(
-      organizationId,
-      currentTeamId,
-      user.id
-    );
-    setSession(newSession);
+    // 確保 session 已建立
+    if (!session) {
+      // 如果沒有 session，建立新的
+      const newSession = createImportSession(
+        organizationId,
+        currentTeamId,
+        user.id
+      );
+      setSession(newSession);
+    }
 
     // 驗證檔案
     const isValid = await validateFiles();
