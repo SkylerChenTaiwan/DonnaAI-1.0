@@ -5,22 +5,34 @@ service cloud.firestore {
     // 輔助函數：檢查是否為 Super Admin
     function isSuperAdmin() {
       return request.auth != null && (
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'system-admin' ||
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin' ||
+        // 先檢查 token 中的資訊（不需要額外讀取）
         request.auth.token.role == 'system-admin' ||
         request.auth.token.role == 'super_admin' ||
-        request.auth.token.email == 'admin@donnaai-app.com'
+        request.auth.token.email == 'admin@donnaai-app.com' ||
+        // 再檢查資料庫（使用 exists 避免權限錯誤）
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'system-admin' ||
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin' ||
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isSuperAdmin == true))
       );
     }
     
-    // 輔助函數：獲取用戶資料
+    // 輔助函數：安全獲取用戶資料
     function getUserData() {
-      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+      return exists(/databases/$(database)/documents/users/$(request.auth.uid)) 
+        ? get(/databases/$(database)/documents/users/$(request.auth.uid)).data
+        : {};
+    }
+    
+    // 輔助函數：檢查用戶文檔是否存在
+    function hasUserDoc() {
+      return exists(/databases/$(database)/documents/users/$(request.auth.uid));
     }
     
     // 輔助函數：檢查是否為組織管理員
     function isOrgAdmin(orgId) {
       return request.auth != null && 
+        hasUserDoc() &&
         getUserData().organizationId == orgId && 
         getUserData().role == 'admin';
     }
@@ -28,6 +40,7 @@ service cloud.firestore {
     // 輔助函數：檢查是否為組織成員
     function isOrgMember(orgId) {
       return request.auth != null && 
+        hasUserDoc() &&
         getUserData().organizationId == orgId;
     }
     
@@ -54,13 +67,19 @@ service cloud.firestore {
       allow read, write: if isSuperAdmin();
       // 組織管理員可以讀取同組織的用戶
       allow read: if request.auth != null && 
+        hasUserDoc() &&
         getUserData().role == 'admin' &&
         getUserData().organizationId == resource.data.organizationId;
       // 組織管理員可以更新同組織的用戶（除了 role）
       allow update: if request.auth != null && 
+        hasUserDoc() &&
         getUserData().role == 'admin' &&
         getUserData().organizationId == resource.data.organizationId &&
         (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']));
+      // 用戶可以更新自己的基本資料（不包括敏感欄位）
+      allow update: if request.auth != null && 
+        request.auth.uid == userId &&
+        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'organizationId', 'isSuperAdmin']));
     }
     
     // 團隊集合
