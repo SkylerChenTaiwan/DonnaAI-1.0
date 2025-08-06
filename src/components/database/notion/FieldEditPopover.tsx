@@ -183,6 +183,7 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
                 value={fieldName}
                 onChangeText={setFieldName}
                 placeholder="輸入欄位名稱"
+                placeholderTextColor="#B0B0B0"
                 editable={canEdit}
               />
             </View>
@@ -248,6 +249,7 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
                 value={aiDescription}
                 onChangeText={setAiDescription}
                 placeholder="例如：記錄客戶最近一次購買的產品名稱和日期"
+                placeholderTextColor="#B0B0B0"
                 multiline
                 numberOfLines={3}
                 editable={canEdit}
