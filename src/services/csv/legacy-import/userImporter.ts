@@ -17,13 +17,12 @@ import {
   getAuth, 
   fetchSignInMethodsForEmail 
 } from 'firebase/auth';
-import { getFunctions, httpsCallable } from 'firebase/functions';
-import { getFirebaseDb } from '@/services/firebase/config';
+import { httpsCallable } from 'firebase/functions';
+import { getFirebaseDb, getFirebaseFunctions } from '@/services/firebase/config';
 import { LegacyUser, ImportError, ImportWarning } from '@/types/legacy-import';
 import { User } from '@/types/entities/user';
 import { mapLegacyUser } from './mapper';
 import { resolveBusinessIdentifier } from './codeMapper';
-import { safeCreateUsers } from './safeUserImporter';
 
 export interface UserImportOptions {
   organizationId: string;
@@ -221,8 +220,10 @@ export async function importLegacyUsers(
       console.log('🚀 開始使用 Cloud Function 建立用戶');
       console.log(`📊 準備建立 ${usersToCreate.length} 個用戶`);
 
-      const functions = getFunctions(undefined, 'asia-east1');
+      const functions = getFirebaseFunctions();
       const createUsersForImport = httpsCallable(functions, 'createUsersForImport');
+      
+      console.log('🔗 Cloud Functions 已連接 (asia-east1)');
       
       // 分批處理，每批 50 個
       const batchSize = 50;
@@ -282,45 +283,56 @@ export async function importLegacyUsers(
             error
           });
           
-          // 改用安全模式
-          console.warn('⚠️ 切換到安全模式（不建立 Auth 帳號）');
+          // 檢查錯誤類型
+          const errorMessage = error instanceof Error ? error.message : '未知錯誤';
           
-          try {
-            const safeResult = await safeCreateUsers(
-              batch,
-              organizationId,
-              teamId,
-              (msg) => {
-                progress.currentUser = msg;
-                onProgress?.(progress);
-              }
-            );
-            
-            // 合併結果
-            safeResult.userMappings.forEach((uid, businessId) => {
-              userMappings.set(businessId, uid);
+          if (errorMessage.includes('CORS') || errorMessage.includes('Failed to fetch')) {
+            console.error('🔥 CORS 錯誤：可能需要檢查 Cloud Functions 的 CORS 設定');
+            warnings.push({
+              type: 'users',
+              row: 0,
+              field: 'cloudFunction',
+              message: 'Cloud Functions CORS 錯誤，請聯繫管理員',
+              suggestion: '可能需要更新 Cloud Functions 的 CORS 設定'
             });
-            successCount += safeResult.successCount;
-            failureCount += safeResult.failureCount;
-            errors.push(...safeResult.errors);
-            warnings.push(...safeResult.warnings);
-            
-            console.log('✅ 安全模式執行成功');
-          } catch (safeError) {
-            console.error('❌ 安全模式也失敗了:', safeError);
-            
-            // 記錄錯誤
-            batch.forEach(userData => {
-              failureCount++;
-              errors.push({
-                type: 'users',
-                row: userData.row,
-                field: 'general',
-                message: '建立用戶失敗（Cloud Function 和安全模式都失敗）',
-                data: userData,
-              });
+          } else if (errorMessage.includes('PERMISSION_DENIED')) {
+            console.error('🔒 權限錯誤：當前用戶沒有權限呼叫 Cloud Function');
+            warnings.push({
+              type: 'users',
+              row: 0,
+              field: 'cloudFunction',
+              message: '權限不足，無法呼叫 Cloud Function',
+              suggestion: '請確認您有管理員權限'
+            });
+          } else if (errorMessage.includes('NOT_FOUND')) {
+            console.error('❓ Cloud Function 不存在或區域設定錯誤');
+            warnings.push({
+              type: 'users',
+              row: 0,
+              field: 'cloudFunction',
+              message: 'Cloud Function 未找到，可能未部署',
+              suggestion: '請聯繫技術人員部署 Cloud Functions'
             });
           }
+          
+          // 記錄失敗但提供詳細資訊
+          batch.forEach(userData => {
+            failureCount++;
+            errors.push({
+              type: 'users',
+              row: userData.row,
+              field: 'general',
+              message: `Cloud Function 錯誤: ${errorMessage}`,
+              data: userData,
+            });
+          });
+          
+          // 提供建議
+          console.warn('💡 建議：');
+          console.warn('1. 檢查網路連線');
+          console.warn('2. 確認 Cloud Functions 已部署到 asia-east1');
+          console.warn('3. 檢查 Firebase 專案設定');
+          console.warn('4. 如果問題持續，請聯繫技術支援');
         }
 
         // 更新進度

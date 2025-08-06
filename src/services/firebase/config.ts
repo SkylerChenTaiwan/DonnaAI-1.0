@@ -160,7 +160,8 @@ export const getFirebaseFunctions = (): Functions => {
   if (functions) return functions;
   
   const firebaseApp = initializeFirebaseApp();
-  functions = getFunctions(firebaseApp);
+  // 重要：指定 asia-east1 區域以匹配 Cloud Functions 部署位置
+  functions = getFunctions(firebaseApp, 'asia-east1');
   
   // 連接模擬器（如果需要且尚未連接）
   connectEmulators();
