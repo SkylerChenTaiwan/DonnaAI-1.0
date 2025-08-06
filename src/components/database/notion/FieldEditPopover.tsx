@@ -41,6 +41,13 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
   canEdit,
   activeTab
 }) => {
+  console.log('🎯 FieldEditPopover 渲染:', {
+    visible,
+    hasAnchor: !!anchor,
+    hasAnchorCurrent: !!anchor?.current,
+    fieldTitle: fieldConfig?.title,
+    canEdit
+  });
   // 編輯狀態
   const [fieldName, setFieldName] = useState(fieldConfig?.title || '');
   const [fieldDescription, setFieldDescription] = useState(fieldConfig?.description || '');

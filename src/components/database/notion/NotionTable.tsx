@@ -311,6 +311,7 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
 
   // 處理欄位資訊點擊
   const handleFieldInfo = useCallback((event: React.MouseEvent, column: ColumnConfig) => {
+    console.log('🔍 handleFieldInfo 被調用:', column.title);
     event.stopPropagation();
     const anchorRef = React.createRef<any>();
     // 將事件目標設定為 anchor
@@ -319,6 +320,11 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
       writable: true
     });
     
+    console.log('📍 設置 fieldEditPopover:', { 
+      column: column.title, 
+      hasAnchor: !!anchorRef.current,
+      anchorElement: event.currentTarget
+    });
     setFieldEditPopover({
       visible: true,
       fieldConfig: column,
@@ -802,9 +808,23 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
                         return shouldShow && React.createElement('button', 
                           { 
                             className: 'notion-field-info-btn',
+                            ref: (el) => {
+                              // 將按鈕元素保存為 ref
+                              if (el) {
+                                (el as any)._column = column;
+                              }
+                            },
                             onClick: (e) => {
                               e.stopPropagation();
-                              handleFieldInfo(e, column);
+                              const target = e.currentTarget;
+                              const anchorRef = { current: target };
+                              const col = (target as any)._column || column;
+                              console.log('🔍 Info 按鈕點擊 (Web):', col.title, { hasTarget: !!target });
+                              setFieldEditPopover({
+                                visible: true,
+                                fieldConfig: col,
+                                anchorRef
+                              });
                             },
                             title: '欄位資訊與設定',
                             style: { 
@@ -1205,10 +1225,20 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
       )}
       
       {/* Field Edit Popover */}
+      {console.log('🎯 FieldEditPopover 狀態:', {
+        visible: fieldEditPopover.visible,
+        hasFieldConfig: !!fieldEditPopover.fieldConfig,
+        hasAnchorRef: !!fieldEditPopover.anchorRef,
+        canEditFields,
+        fieldTitle: fieldEditPopover.fieldConfig?.title
+      })}
       {fieldEditPopover.visible && fieldEditPopover.fieldConfig && (
         <FieldEditPopover
           visible={fieldEditPopover.visible}
-          onClose={() => setFieldEditPopover({ visible: false, fieldConfig: null, anchorRef: null })}
+          onClose={() => {
+            console.log('🔍 關閉 FieldEditPopover');
+            setFieldEditPopover({ visible: false, fieldConfig: null, anchorRef: null });
+          }}
           anchor={fieldEditPopover.anchorRef!}
           fieldConfig={fieldEditPopover.fieldConfig}
           onUpdate={onFieldUpdate || (async () => {})}

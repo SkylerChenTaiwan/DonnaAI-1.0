@@ -44,9 +44,12 @@ export const Popover: React.FC<PopoverProps> = ({
   const scaleAnim = useRef(new Animated.Value(0.9)).current;
 
   useEffect(() => {
+    console.log('🎯 Popover useEffect:', { visible, hasAnchor: !!anchor?.current });
     if (visible && anchor.current) {
       // 測量錨點元素的位置
+      console.log('📍 準備測量錨點位置');
       anchor.current.measureInWindow((x: number, y: number, width: number, height: number) => {
+        console.log('📐 錨點測量結果:', { x, y, width, height });
         const windowDimensions = Dimensions.get('window');
         let popX = x;
         let popY = y + height + offset.y;
@@ -89,9 +92,26 @@ export const Popover: React.FC<PopoverProps> = ({
     }
   }, [visible, anchor, placement, offset, maxHeight, minWidth]);
 
+  // Web 環境下獲取錨點元素的位置
+  useEffect(() => {
+    if (Platform.OS === 'web' && visible && anchor.current) {
+      const element = anchor.current as HTMLElement;
+      if (element && element.getBoundingClientRect) {
+        const rect = element.getBoundingClientRect();
+        console.log('📐 Web getBoundingClientRect:', rect);
+        setPosition({ 
+          x: rect.left, 
+          y: rect.bottom + offset.y 
+        });
+      }
+    }
+  }, [visible, anchor, offset]);
+
   if (Platform.OS === 'web') {
     // Web 平台使用絕對定位
     if (!visible) return null;
+    
+    console.log('🌐 Popover Web 渲染模式', { position });
 
     return (
       <>
