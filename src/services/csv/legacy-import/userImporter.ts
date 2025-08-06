@@ -218,7 +218,7 @@ export async function importLegacyUsers(
       progress.currentUser = '批量建立用戶...';
       onProgress?.(progress);
 
-      const functions = getFunctions();
+      const functions = getFunctions(undefined, 'asia-east1');
       const createUsersForImport = httpsCallable(functions, 'createUsersForImport');
       
       // 分批處理，每批 50 個
