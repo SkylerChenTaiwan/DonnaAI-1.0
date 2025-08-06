@@ -16,14 +16,13 @@ import {
 } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import DocumentPicker from 'expo-document-picker';
+import ImportWizard from '@/components/import/ImportWizard';
 import {
   importUserData,
   setupCustomFields,
-  migrateFromOldCRM,
   getCustomFieldConfig,
   SUPPORTED_FORMATS,
   CustomFieldConfig,
-  LegacyCRMConfig,
 } from '@/services/firebase/admin/userAssistService';
 import { Organization, ImportResult, FieldMapping } from '@/types/entities';
 import { DesignSystem } from '@/theme/designSystem';
@@ -47,17 +46,11 @@ interface CustomFieldWizardState {
   entityType: 'users' | 'customers' | 'tasks';
 }
 
-interface MigrationWizardState {
-  systemType: 'salesforce' | 'hubspot' | 'custom' | 'excel';
-  config: Partial<LegacyCRMConfig>;
-  dataType: 'users' | 'customers' | 'tasks';
-}
-
 export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
   organization,
   onUpdate,
 }) => {
-  const [activeAssistance, setActiveAssistance] = useState<'import' | 'fields' | 'migration' | null>(null);
+  const [activeAssistance, setActiveAssistance] = useState<'import' | 'fields' | null>(null);
   const [importWizard, setImportWizard] = useState<ImportWizardState>({
     step: 'select',
     selectedFile: null,
@@ -68,11 +61,6 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
   const [customFieldWizard, setCustomFieldWizard] = useState<CustomFieldWizardState>({
     fields: [],
     entityType: 'users',
-  });
-  const [migrationWizard, setMigrationWizard] = useState<MigrationWizardState>({
-    systemType: 'excel',
-    config: {},
-    dataType: 'users',
   });
   const [isProcessing, setIsProcessing] = useState(false);
   const [importHistory, setImportHistory] = useState<ImportResult[]>([]);
@@ -87,18 +75,6 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
     setImportHistory([]);
   };
 
-  // === 資料匯入助手 ===
-
-  const handleStartImport = (dataType: 'users' | 'customers' | 'tasks') => {
-    setImportWizard({
-      step: 'select',
-      selectedFile: null,
-      dataType,
-      fieldMappings: [],
-      previewData: [],
-    });
-    setActiveAssistance('import');
-  };
 
   const handleFileSelection = async () => {
     try {
@@ -231,115 +207,24 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
     }
   };
 
-  // === 舊系統遷移助手 ===
-
-  const handleStartMigration = (systemType: LegacyCRMConfig['systemType']) => {
-    setMigrationWizard({
-      systemType,
-      config: { systemType, mappings: [], batchSize: 100 },
-      dataType: 'users',
-    });
-    setActiveAssistance('migration');
-  };
-
-  const handleStartMigrationProcess = async () => {
-    Alert.alert(
-      '開始資料遷移',
-      '確定要開始從舊系統遷移資料嗎？此過程可能需要一些時間。',
-      [
-        { text: '取消', style: 'cancel' },
-        {
-          text: '開始遷移',
-          onPress: async () => {
-            setIsProcessing(true);
-            try {
-              const result = await migrateFromOldCRM(
-                migrationWizard.config as LegacyCRMConfig,
-                migrationWizard.dataType
-              );
-              
-              if (result.success) {
-                toast.success(`成功遷移 ${result.imported} 筆資料`);
-                setActiveAssistance(null);
-                onUpdate?.();
-              } else {
-                toast.error(`遷移失敗，錯誤: ${result.errors.join(', ')}`);
-              }
-            } catch (error) {
-              console.error('資料遷移失敗:', error);
-              toast.error('遷移失敗');
-            } finally {
-              setIsProcessing(false);
-            }
-          },
-        },
-      ]
-    );
-  };
 
   const renderImportWizard = () => (
     <Modal
       visible={activeAssistance === 'import'}
       animationType="slide"
-      presentationStyle="pageSheet"
+      presentationStyle="fullScreen"
     >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalHeader}>
-          <Text style={styles.modalTitle}>資料匯入助手</Text>
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={() => setActiveAssistance(null)}
-          >
-            <Icon name="close" size={24} color={DesignSystem.colors.text.primary} />
-          </TouchableOpacity>
-        </View>
-
-        <ScrollView style={styles.modalContent}>
-          {importWizard.step === 'select' && (
-            <View style={styles.wizardStep}>
-              <Text style={styles.stepTitle}>選擇要匯入的檔案</Text>
-              <Text style={styles.stepDesc}>支援 CSV、Excel 格式檔案</Text>
-              
-              <TouchableOpacity
-                style={styles.fileSelectButton}
-                onPress={handleFileSelection}
-              >
-                <Icon name="cloud-upload-outline" size={48} color={DesignSystem.colors.primary} />
-                <Text style={styles.fileSelectText}>選擇檔案</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-
-          {importWizard.step === 'mapping' && (
-            <View style={styles.wizardStep}>
-              <Text style={styles.stepTitle}>欄位映射</Text>
-              <Text style={styles.stepDesc}>將檔案欄位對應到系統欄位</Text>
-              
-              {importWizard.fieldMappings.map((mapping, index) => (
-                <View key={index} style={styles.mappingRow}>
-                  <Text style={styles.sourceField}>{mapping.sourceField}</Text>
-                  <Icon name="arrow-forward" size={16} color={DesignSystem.colors.text.secondary} />
-                  <Text style={styles.targetField}>{mapping.targetField}</Text>
-                </View>
-              ))}
-              
-              <TouchableOpacity
-                style={styles.primaryButton}
-                onPress={handleImportData}
-              >
-                <Text style={styles.primaryButtonText}>開始匯入</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-
-          {importWizard.step === 'importing' && (
-            <View style={styles.wizardStep}>
-              <Text style={styles.stepTitle}>正在匯入...</Text>
-              <Text style={styles.stepDesc}>請稍候，正在處理您的資料</Text>
-            </View>
-          )}
-        </ScrollView>
-      </View>
+      <ImportWizard
+        organizationId={organization.id}
+        teamId={organization.defaultTeamId}
+        onComplete={(result) => {
+          toast.success(`成功匯入 ${result.importedCount} 筆資料到 ${result.targetDatabase}`);
+          setActiveAssistance(null);
+          onUpdate?.();
+          loadImportHistory();
+        }}
+        onCancel={() => setActiveAssistance(null)}
+      />
     </Modal>
   );
 
@@ -405,42 +290,6 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
     </Modal>
   );
 
-  const renderMigrationWizard = () => (
-    <Modal
-      visible={activeAssistance === 'migration'}
-      animationType="slide"
-      presentationStyle="pageSheet"
-    >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalHeader}>
-          <Text style={styles.modalTitle}>資料遷移助手</Text>
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={() => setActiveAssistance(null)}
-          >
-            <Icon name="close" size={24} color={DesignSystem.colors.text.primary} />
-          </TouchableOpacity>
-        </View>
-
-        <ScrollView style={styles.modalContent}>
-          <View style={styles.wizardStep}>
-            <Text style={styles.stepTitle}>從 {migrationWizard.systemType} 遷移資料</Text>
-            <Text style={styles.stepDesc}>設定連接參數並開始遷移</Text>
-            
-            <TouchableOpacity
-              style={styles.primaryButton}
-              onPress={handleStartMigrationProcess}
-              disabled={isProcessing}
-            >
-              <Text style={styles.primaryButtonText}>
-                {isProcessing ? '遷移中...' : '開始遷移'}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </View>
-    </Modal>
-  );
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -454,26 +303,13 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
           </View>
         </View>
         
-        <View style={styles.actionButtons}>
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={() => handleStartImport('users')}
-          >
-            <Text style={styles.actionButtonText}>匯入用戶</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={() => handleStartImport('customers')}
-          >
-            <Text style={styles.actionButtonText}>匯入客戶</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={() => handleStartImport('tasks')}
-          >
-            <Text style={styles.actionButtonText}>匯入任務</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          style={[styles.primaryButton, { marginTop: 12 }]}
+          onPress={() => setActiveAssistance('import')}
+        >
+          <Icon name="cloud-upload" size={20} color={DesignSystem.colors.background.primary} />
+          <Text style={styles.primaryButtonText}>開始資料匯入精靈</Text>
+        </TouchableOpacity>
       </View>
 
       {/* 自訂欄位區塊 */}
@@ -508,37 +344,6 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
         </View>
       </View>
 
-      {/* 系統遷移區塊 */}
-      <View style={styles.assistanceCard}>
-        <View style={styles.cardHeader}>
-          <Icon name="sync-outline" size={32} color={DesignSystem.colors.primary} />
-          <View style={styles.cardInfo}>
-            <Text style={styles.cardTitle}>舊系統遷移</Text>
-            <Text style={styles.cardDesc}>從其他 CRM 系統遷移資料</Text>
-          </View>
-        </View>
-        
-        <View style={styles.actionButtons}>
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={() => handleStartMigration('salesforce')}
-          >
-            <Text style={styles.actionButtonText}>Salesforce</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={() => handleStartMigration('hubspot')}
-          >
-            <Text style={styles.actionButtonText}>HubSpot</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={() => handleStartMigration('excel')}
-          >
-            <Text style={styles.actionButtonText}>Excel 檔案</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
 
       {/* 協助資源 */}
       <View style={styles.resourcesCard}>
@@ -566,7 +371,6 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
       {/* 渲染模態窗口 */}
       {renderImportWizard()}
       {renderCustomFieldWizard()}
-      {renderMigrationWizard()}
     </ScrollView>
   );
 };
@@ -756,5 +560,20 @@ const styles = StyleSheet.create({
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.primary,
     fontWeight: '500',
+  },
+  primaryButton: {
+    flexDirection: 'row',
+    backgroundColor: DesignSystem.colors.primary,
+    paddingVertical: DesignSystem.spacing.md,
+    paddingHorizontal: DesignSystem.spacing.lg,
+    borderRadius: DesignSystem.borderRadius.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: DesignSystem.spacing.sm,
+  },
+  primaryButtonText: {
+    ...DesignSystem.typography.button,
+    color: DesignSystem.colors.background.primary,
+    fontWeight: '600',
   },
 });
