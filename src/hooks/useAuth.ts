@@ -22,9 +22,11 @@ export interface UserProfile {
   email: string;
   displayName?: string;
   role?: string;
+  isSuperAdmin?: boolean;
   teamId?: string;
   organizationId?: string;
   permissions?: string[];
+  platformPermissions?: string[];
 }
 
 export interface AuthState {
@@ -58,9 +60,11 @@ export function useAuth(): AuthState {
           email: data.email,
           displayName: data.displayName,
           role: data.role,
+          isSuperAdmin: data.isSuperAdmin || data.role === 'super_admin',
           teamId: data.teamId,
           organizationId: data.organizationId,
-          permissions: data.permissions || []
+          permissions: data.permissions || [],
+          platformPermissions: data.platformPermissions || []
         });
       }
     } catch (error) {
@@ -157,6 +161,7 @@ export function useAuth(): AuthState {
     userProfile,
     loading,
     isAuthenticated: !!user,
+    isSuperAdmin: userProfile?.isSuperAdmin || userProfile?.role === 'super_admin',
     signIn,
     signUp,
     signOut,
