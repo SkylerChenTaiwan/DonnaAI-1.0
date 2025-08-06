@@ -387,7 +387,7 @@ async function updateCustomerLastContactDates(
   customerLastContactDates: Map<string, Date>
 ): Promise<void> {
   const db = getFirebaseDb();
-  const batch = writeBatch(db);
+  let batch = writeBatch(db);
   let operationCount = 0;
 
   try {
@@ -403,6 +403,8 @@ async function updateCustomerLastContactDates(
       // 檢查批次限制
       if (operationCount >= 500) {
         await batch.commit();
+        // 重新建立新的批次
+        batch = writeBatch(db);
         operationCount = 0;
       }
     }
@@ -415,6 +417,7 @@ async function updateCustomerLastContactDates(
     console.log(`已更新 ${customerLastContactDates.size} 個客戶的最後聯絡日期`);
   } catch (error) {
     console.error('更新客戶最後聯絡日期失敗:', error);
+    throw error; // 重新拋出錯誤，讓上層處理
   }
 }
 

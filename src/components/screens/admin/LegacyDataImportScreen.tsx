@@ -33,6 +33,8 @@ import {
 } from '@/services/csv/legacy-import/legacyDataImportService';
 import { LegacyImportSession } from '@/types/legacy-import';
 import { previewCSV } from '@/services/csv/legacy-import/parser';
+import { FieldMappingModal, FieldMapping, RelationMapping } from '@/components/import/FieldMappingModal';
+import { SmartDataImporter } from '@/services/firebase/admin/dataImportService';
 
 interface FileInfo {
   name: string;
@@ -65,6 +67,9 @@ export function LegacyDataImportScreen({ navigation }: any) {
   const [importResult, setImportResult] = useState<ImportSessionResult | null>(null);
   const [session, setSession] = useState<LegacyImportSession | null>(null);
   const [activeStep, setActiveStep] = useState(0);
+  const [showMappingModal, setShowMappingModal] = useState(false);
+  const [fieldMappings, setFieldMappings] = useState<FieldMapping[]>([]);
+  const [relationMappings, setRelationMappings] = useState<RelationMapping[]>([]);
   const isDesktop = isDesktopWeb();
   const isTablet = isTabletWeb();
   const isLandscape = true; // 簡化判斷
@@ -277,8 +282,50 @@ export function LegacyDataImportScreen({ navigation }: any) {
     return allValid;
   };
 
-  // 執行導入
+  // 處理欄位映射確認
+  const handleMappingConfirm = async (
+    mappings: FieldMapping[],
+    relations: RelationMapping[]
+  ) => {
+    setShowMappingModal(false);
+    setFieldMappings(mappings);
+    setRelationMappings(relations);
+    
+    // 繼續執行原本的導入流程
+    await executeImportWithMapping();
+  };
+
+  // 執行導入（顯示欄位映射）
   const executeImport = async () => {
+    if (!session || !organizationId || !currentTeamId || !user) {
+      if (Platform.OS === 'web') {
+        window.alert('錯誤：缺少必要的組織資訊');
+      } else {
+        Alert.alert('錯誤', '缺少必要的組織資訊');
+      }
+      return;
+    }
+
+    // 顯示欄位映射 Modal
+    const filesArray = Object.entries(files)
+      .filter(([key, file]) => file && file.uri)
+      .map(([key, file]) => ({
+        uri: file!.uri,
+        name: file!.name,
+        mimeType: 'text/csv'
+      }));
+    
+    if (filesArray.length > 0) {
+      setShowMappingModal(true);
+      return; // 等待用戶確認映射
+    } else {
+      // 沒有檔案時直接執行原流程
+      await executeImportWithMapping();
+    }
+  };
+
+  // 執行導入（使用映射）
+  const executeImportWithMapping = async () => {
     if (!session || !organizationId || !currentTeamId || !user) {
       if (Platform.OS === 'web') {
         window.alert('錯誤：缺少必要的組織資訊');
@@ -680,6 +727,22 @@ export function LegacyDataImportScreen({ navigation }: any) {
 
       {/* 步驟內容 */}
       {renderStep()}
+      
+      {/* 欄位映射 Modal */}
+      {showMappingModal && (
+        <FieldMappingModal
+          visible={showMappingModal}
+          files={Object.entries(files)
+            .filter(([key, file]) => file && file.uri)
+            .map(([key, file]) => ({
+              uri: file!.uri,
+              name: file!.name,
+              mimeType: 'text/csv'
+            }))}
+          onConfirm={handleMappingConfirm}
+          onCancel={() => setShowMappingModal(false)}
+        />
+      )}
     </ScrollView>
   );
 
@@ -942,3 +1005,6 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 });
+
+// 匯出元件
+export default LegacyDataImportScreen;
