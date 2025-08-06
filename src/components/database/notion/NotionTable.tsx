@@ -158,6 +158,16 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
     anchorRef: null
   });
   
+  // 監控 fieldEditPopover 狀態變化
+  useEffect(() => {
+    console.log('📍 fieldEditPopover 狀態變化:', {
+      visible: fieldEditPopover.visible,
+      hasFieldConfig: !!fieldEditPopover.fieldConfig,
+      hasAnchorRef: !!fieldEditPopover.anchorRef,
+      fieldTitle: fieldEditPopover.fieldConfig?.title
+    });
+  }, [fieldEditPopover]);
+  
   // 同步欄位寬度變更（只在欄位結構改變時）
   const prevColumnsRef = useRef(columnsWithActions);
   useEffect(() => {
@@ -1150,7 +1160,30 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
             fontSize: '12px',
             zIndex: 1000
           }
-        }, `顯示 ${statsInfo.filteredRows} / ${statsInfo.totalRows} 筆資料`)
+        }, `顯示 ${statsInfo.filteredRows} / ${statsInfo.totalRows} 筆資料`),
+        
+        // Field Edit Popover
+        (() => {
+          console.log('🎯 FieldEditPopover 狀態 (Web):', {
+            visible: fieldEditPopover.visible,
+            hasFieldConfig: !!fieldEditPopover.fieldConfig,
+            hasAnchorRef: !!fieldEditPopover.anchorRef,
+            canEditFields,
+            fieldTitle: fieldEditPopover.fieldConfig?.title
+          });
+          return fieldEditPopover.visible && fieldEditPopover.fieldConfig && React.createElement(FieldEditPopover as any, {
+            visible: fieldEditPopover.visible,
+            onClose: () => {
+              console.log('🔍 關閉 FieldEditPopover (Web)');
+              setFieldEditPopover({ visible: false, fieldConfig: null, anchorRef: null });
+            },
+            anchor: fieldEditPopover.anchorRef,
+            fieldConfig: fieldEditPopover.fieldConfig,
+            onUpdate: onFieldUpdate || (async () => {}),
+            canEdit: canEditFields,
+            activeTab: activeTab || 'customers'
+          });
+        })()
       )
     ) as any;
   }
