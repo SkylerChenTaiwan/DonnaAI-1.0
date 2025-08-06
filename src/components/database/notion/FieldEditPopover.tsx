@@ -15,6 +15,7 @@ import {
   ActivityIndicator,
   Platform
 } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { Popover } from '@/components/common/Popover';
 import { Icon } from '@/components/common/Icon';
 import { processFieldDescription } from '@/services/api/ai-integration';
@@ -51,7 +52,6 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
   // 編輯狀態
   const [fieldName, setFieldName] = useState(fieldConfig?.title || '');
   const [fieldType, setFieldType] = useState(fieldConfig?.type || 'text');
-  const [showTypeDropdown, setShowTypeDropdown] = useState(false);
   const [isRequired, setIsRequired] = useState(false); // ColumnConfig doesn't have required
   const [isVisible, setIsVisible] = useState(true); // ColumnConfig doesn't have visible
   
@@ -189,77 +189,23 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
 
             <View style={styles.field}>
               <Text style={styles.fieldLabel}>欄位類型</Text>
-              <TouchableOpacity
-                style={[styles.dropdown, !canEdit && styles.dropdownDisabled]}
-                onPress={() => canEdit && setShowTypeDropdown(!showTypeDropdown)}
-                disabled={!canEdit}
-              >
-                <Text style={styles.dropdownText}>{getFieldTypeLabel(fieldType)}</Text>
-                <Icon name="chevron-down" size={16} color={DesignSystem.colors.text.secondary} />
-              </TouchableOpacity>
-              
-              {showTypeDropdown && canEdit && (
-                <>
-                  {/* 不透明的背景層 */}
-                  <View 
-                    style={{
-                      position: 'absolute',
-                      top: '100%',
-                      left: 0,
-                      right: 0,
-                      marginTop: 4,
-                      backgroundColor: '#FFFFFF',
-                      borderRadius: 4,
-                      borderWidth: 1,
-                      borderColor: '#E5E5E5',
-                      zIndex: 9998,
-                      opacity: 1,
-                    }}
-                  />
-                  {/* 實際的選單內容 */}
-                  <View 
-                    style={[
-                      styles.dropdownMenu,
-                      {
-                        backgroundColor: '#FFFFFF',
-                        opacity: 1,
-                      }
-                    ]}
-                  >
-                    <ScrollView 
-                      style={{ 
-                        maxHeight: 200, 
-                        backgroundColor: '#FFFFFF',
-                      }} 
-                      nestedScrollEnabled={true}
-                    >
-                      {getFieldTypes().map((type) => (
-                        <TouchableOpacity
-                          key={type.value}
-                          style={[
-                            styles.dropdownItem,
-                            { 
-                              backgroundColor: fieldType === type.value ? '#F5F5F5' : '#FFFFFF',
-                              opacity: 1,
-                            }
-                          ]}
-                          onPress={() => {
-                            setFieldType(type.value);
-                            setShowTypeDropdown(false);
-                          }}
-                        >
-                          <Text style={[
-                            styles.dropdownItemText,
-                            fieldType === type.value && styles.dropdownItemSelected
-                          ]}>
-                            {type.label}
-                          </Text>
-                        </TouchableOpacity>
-                      ))}
-                    </ScrollView>
-                  </View>
-                </>
-              )}
+              <View style={[styles.pickerContainer, !canEdit && styles.pickerDisabled]}>
+                <Picker
+                  selectedValue={fieldType}
+                  onValueChange={(itemValue) => setFieldType(itemValue)}
+                  enabled={canEdit}
+                  style={styles.picker}
+                  dropdownIconColor={DesignSystem.colors.text.secondary}
+                >
+                  {getFieldTypes().map((type) => (
+                    <Picker.Item 
+                      key={type.value} 
+                      label={type.label} 
+                      value={type.value}
+                    />
+                  ))}
+                </Picker>
+              </View>
             </View>
 
             <View style={styles.switchField}>
@@ -555,57 +501,22 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: DesignSystem.colors.text.secondary,
   },
-  dropdown: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+  pickerContainer: {
     borderWidth: 1,
     borderColor: '#E5E5E5',
     borderRadius: 4,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
     backgroundColor: '#FAFAFA',
+    overflow: 'hidden',
   },
-  dropdownDisabled: {
+  pickerDisabled: {
     backgroundColor: '#F5F5F5',
+    opacity: 0.6,
   },
-  dropdownText: {
+  picker: {
+    height: Platform.OS === 'ios' ? 180 : 44,
+    width: '100%',
     fontSize: 14,
     color: DesignSystem.colors.text.primary,
-  },
-  dropdownMenu: {
-    position: 'absolute',
-    top: '100%',
-    left: 0,
-    right: 0,
-    marginTop: 4,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: '#E5E5E5',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 5,
-    zIndex: 9999,
-    maxHeight: 200,
-    overflow: Platform.OS === 'web' ? 'visible' : 'hidden',
-  },
-  dropdownItem: {
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
-    backgroundColor: '#FFFFFF',
-  },
-  dropdownItemText: {
-    fontSize: 14,
-    color: DesignSystem.colors.text.primary,
-  },
-  dropdownItemSelected: {
-    fontWeight: '600',
-    color: DesignSystem.colors.primary,
   },
   footer: {
     flexDirection: 'row',
