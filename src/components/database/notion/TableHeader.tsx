@@ -195,22 +195,24 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
         },
       ]}
     >
-      <TouchableOpacity
-        onPress={handleClick}
-        style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}
-        activeOpacity={0.7}
-        // Web-specific drag props
-        {...(Platform.OS === 'web' && onReorder ? {
-          draggable: true,
-          onDragStart: handleDragStart,
-          onDragEnd: handleDragEnd,
-          onDragOver: handleDragOver,
-          onDrop: handleDrop,
-        } as any : {})}
-      >
-        <Text style={tableStyles.headerText}>
-          {column.title}
-        </Text>
+      <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+        <TouchableOpacity
+          onPress={handleClick}
+          style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}
+          activeOpacity={0.7}
+          // Web-specific drag props
+          {...(Platform.OS === 'web' && onReorder ? {
+            draggable: true,
+            onDragStart: handleDragStart,
+            onDragEnd: handleDragEnd,
+            onDragOver: handleDragOver,
+            onDrop: handleDrop,
+          } as any : {})}
+        >
+          <Text style={tableStyles.headerText}>
+            {column.title}
+          </Text>
+        </TouchableOpacity>
         
         {/* 欄位編輯 info 按鈕 */}
         {console.log('🔍 HeaderCell info 按鈕檢查:', {
@@ -240,7 +242,7 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
             />
           </TouchableOpacity>
         )}
-      </TouchableOpacity>
+      </View>
       
       {/* Resize handle */}
       {column.resizable !== false && onResize && (

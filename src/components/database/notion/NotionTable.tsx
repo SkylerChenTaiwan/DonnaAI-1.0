@@ -787,22 +787,65 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
                       column.title
                     ),
                     React.createElement('span', 
-                      { className: 'notion-header-actions' },
+                      { 
+                        className: 'notion-header-actions',
+                        style: {
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          marginLeft: 'auto'
+                        }
+                      },
                       (() => {
                         const shouldShow = canEditFields && !['_checkbox', '_actions'].includes(column.key);
                         console.log(`🔍 欄位 ${column.key} 是否顯示 info 按鈕:`, shouldShow, { canEditFields, columnKey: column.key });
                         return shouldShow && React.createElement('button', 
                           { 
                             className: 'notion-field-info-btn',
-                            onClick: (e) => handleFieldInfo(e, column),
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              handleFieldInfo(e, column);
+                            },
                             title: '欄位資訊與設定',
-                            style: { display: 'inline-block' } // 確保顯示
+                            style: { 
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: '24px',
+                              height: '24px',
+                              padding: '4px',
+                              background: 'transparent',
+                              border: 'none',
+                              borderRadius: '3px',
+                              cursor: 'pointer',
+                              fontSize: '14px'
+                            }
                           }, 
                           'ℹ️'
                         );
                       })(),
-                      React.createElement('button', 
-                        { className: 'notion-header-action-btn' }, 
+                      // 欄位選單按鈕（暫時隱藏，避免重疊）
+                      false && React.createElement('button', 
+                        { 
+                          className: 'notion-header-action-btn',
+                          onClick: (e) => {
+                            e.stopPropagation();
+                            console.log('欄位選單按鈕點擊');
+                          },
+                          style: {
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: '24px',
+                            height: '24px',
+                            padding: '4px',
+                            background: 'transparent',
+                            border: 'none',
+                            borderRadius: '3px',
+                            cursor: 'pointer',
+                            fontSize: '14px'
+                          }
+                        }, 
                         '⋯'
                       )
                     )
