@@ -27,3 +27,9 @@ export {
   processRolePlayDialogue,
   getCoachAdvice
 } from "./roleplay";
+
+// Legacy Import Functions
+export {
+  createUsersForImport,
+  linkSupervisorRelationships
+} from "./legacy-import";

@@ -18,6 +18,7 @@ import {
   createUserWithEmailAndPassword,
   fetchSignInMethodsForEmail 
 } from 'firebase/auth';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 import { getFirebaseDb } from '@/services/firebase/config';
 import { LegacyUser, ImportError, ImportWarning } from '@/types/legacy-import';
 import { User } from '@/types/entities/user';
@@ -106,140 +107,217 @@ export async function importLegacyUsers(
 
     // 檢查現有用戶
     const existingUsers = await getExistingUsers(organizationId);
-    const auth = getAuth();
 
-    // 第二階段：導入用戶
+    // 準備要建立的用戶清單
+    const usersToCreate = [];
+    const usersToUpdate = [];
+
+    // 第二階段：準備用戶資料
     progress.phase = 'importing';
     onProgress?.(progress);
 
     for (let i = 0; i < users.length; i++) {
       const user = users[i];
       const row = i + 1;
-      progress.currentUser = user.業務帳號;
       
-      try {
-        // 解析業務身份
-        let businessName = user.業務帳號;
-        let businessCode = '';
-        
-        if (codeToName && nameToCode && codeToLevel) {
-          const identification = resolveBusinessIdentifier(
-            user.業務帳號,
-            codeToName,
-            nameToCode,
-            codeToLevel
-          );
-          
-          businessName = identification.name || user.業務帳號;
-          businessCode = identification.code;
-          
-          if (!identification.found) {
-            warnings.push({
-              type: 'users',
-              row,
-              field: '業務帳號',
-              message: `找不到業務代碼對照: ${user.業務帳號}`,
-              suggestion: '將使用原始輸入作為姓名',
-            });
-          }
-        }
-
-        // 檢查 Email
-        if (!user.公司Gmail帳號) {
-          errors.push({
-            type: 'users',
-            row,
-            field: '公司Gmail帳號',
-            message: '缺少電子郵件地址',
-            data: user,
-          });
-          failureCount++;
-          continue;
-        }
-
-        // 檢查是否已存在
-        const existingUserId = existingUsers.get(user.公司Gmail帳號.toLowerCase());
-        
-        if (existingUserId) {
-          if (skipExisting && !updateExisting) {
-            warnings.push({
-              type: 'users',
-              row,
-              field: '公司Gmail帳號',
-              message: `用戶已存在: ${user.公司Gmail帳號}`,
-              suggestion: '已跳過',
-            });
-            userMappings.set(user.業務帳號, existingUserId);
-            skippedCount++;
-            continue;
-          } else if (updateExisting) {
-            // 更新現有用戶
-            const success = await updateExistingUser(
-              existingUserId,
-              user,
-              organizationId,
-              teamId,
-              businessName,
-              businessCode
-            );
-            
-            if (success) {
-              userMappings.set(user.業務帳號, existingUserId);
-              successCount++;
-            } else {
-              failureCount++;
-              errors.push({
-                type: 'users',
-                row,
-                field: 'general',
-                message: '更新用戶失敗',
-                data: user,
-              });
-            }
-            continue;
-          }
-        }
-
-        // 創建新用戶
-        const userId = await createNewUser(
-          user,
-          organizationId,
-          teamId,
-          defaultPassword,
-          businessName,
-          businessCode
+      // 解析業務身份
+      let businessName = user.業務帳號;
+      let businessCode = '';
+      
+      if (codeToName && nameToCode && codeToLevel) {
+        const identification = resolveBusinessIdentifier(
+          user.業務帳號,
+          codeToName,
+          nameToCode,
+          codeToLevel
         );
         
-        if (userId) {
-          userMappings.set(user.業務帳號, userId);
-          successCount++;
-        } else {
-          failureCount++;
-          errors.push({
+        businessName = identification.name || user.業務帳號;
+        businessCode = identification.code;
+        
+        if (!identification.found) {
+          warnings.push({
             type: 'users',
             row,
-            field: 'general',
-            message: '創建用戶失敗',
-            data: user,
+            field: '業務帳號',
+            message: `找不到業務代碼對照: ${user.業務帳號}`,
+            suggestion: '將使用原始輸入作為姓名',
           });
         }
+      }
 
-      } catch (error) {
-        failureCount++;
+      // 檢查 Email
+      if (!user.公司Gmail帳號) {
         errors.push({
           type: 'users',
           row,
-          field: 'general',
-          message: error instanceof Error ? error.message : '未知錯誤',
+          field: '公司Gmail帳號',
+          message: '缺少電子郵件地址',
           data: user,
         });
+        failureCount++;
+        continue;
       }
 
-      // 更新進度
+      // 檢查是否已存在
+      const existingUserId = existingUsers.get(user.公司Gmail帳號.toLowerCase());
+      
+      if (existingUserId) {
+        if (skipExisting && !updateExisting) {
+          warnings.push({
+            type: 'users',
+            row,
+            field: '公司Gmail帳號',
+            message: `用戶已存在: ${user.公司Gmail帳號}`,
+            suggestion: '已跳過',
+          });
+          userMappings.set(user.業務帳號, existingUserId);
+          skippedCount++;
+          continue;
+        } else if (updateExisting) {
+          // 加入更新清單
+          usersToUpdate.push({
+            userId: existingUserId,
+            user,
+            businessName,
+            businessCode,
+            row,
+          });
+          continue;
+        }
+      }
+
+      // 映射用戶資料
+      const mappedUser = mapLegacyUser(
+        user,
+        organizationId,
+        teamId,
+        businessName,
+        businessCode
+      );
+
+      // 加入建立清單
+      usersToCreate.push({
+        email: user.公司Gmail帳號!,
+        name: mappedUser.name || businessName,
+        businessName: businessName,
+        businessCode: businessCode,
+        role: mappedUser.role || 'salesperson',
+        department: mappedUser.department || null,
+        phone: mappedUser.phone || null,
+        isActive: mappedUser.isActive !== false,
+        supervisorId: null,
+        customFields: (mappedUser as any).customFields || {},
+        originalBusinessId: user.業務帳號,
+        row,
+      });
+    }
+
+    // 批量建立用戶（使用 Cloud Function）
+    if (usersToCreate.length > 0) {
+      progress.currentUser = '批量建立用戶...';
+      onProgress?.(progress);
+
+      const functions = getFunctions();
+      const createUsersForImport = httpsCallable(functions, 'createUsersForImport');
+      
+      // 分批處理，每批 50 個
+      const batchSize = 50;
+      for (let i = 0; i < usersToCreate.length; i += batchSize) {
+        const batch = usersToCreate.slice(i, Math.min(i + batchSize, usersToCreate.length));
+        
+        try {
+          const result = await createUsersForImport({
+            users: batch,
+            organizationId,
+            teamId,
+            defaultPassword,
+          });
+
+          const response = result.data as any;
+          
+          if (response.success) {
+            // 處理成功的用戶
+            response.results?.forEach((userResult: any, index: number) => {
+              const originalData = batch[index];
+              if (userResult.success) {
+                userMappings.set(originalData.originalBusinessId, userResult.uid);
+                successCount++;
+              } else {
+                failureCount++;
+                errors.push({
+                  type: 'users',
+                  row: originalData.row,
+                  field: 'general',
+                  message: userResult.error || '創建用戶失敗',
+                  data: originalData,
+                });
+              }
+            });
+          } else {
+            // 整批失敗
+            batch.forEach(userData => {
+              failureCount++;
+              errors.push({
+                type: 'users',
+                row: userData.row,
+                field: 'general',
+                message: '批量建立失敗',
+                data: userData,
+              });
+            });
+          }
+        } catch (error) {
+          // 批量建立失敗
+          batch.forEach(userData => {
+            failureCount++;
+            errors.push({
+              type: 'users',
+              row: userData.row,
+              field: 'general',
+              message: error instanceof Error ? error.message : '未知錯誤',
+              data: userData,
+            });
+          });
+        }
+
+        // 更新進度
+        progress.processed = Math.min(i + batchSize, usersToCreate.length);
+        progress.succeeded = successCount;
+        progress.failed = failureCount;
+        progress.skipped = skippedCount;
+        onProgress?.(progress);
+      }
+    }
+
+    // 處理更新的用戶
+    for (const updateData of usersToUpdate) {
+      const success = await updateExistingUser(
+        updateData.userId,
+        updateData.user,
+        organizationId,
+        teamId,
+        updateData.businessName,
+        updateData.businessCode
+      );
+      
+      if (success) {
+        userMappings.set(updateData.user.業務帳號, updateData.userId);
+        successCount++;
+      } else {
+        failureCount++;
+        errors.push({
+          type: 'users',
+          row: updateData.row,
+          field: 'general',
+          message: '更新用戶失敗',
+          data: updateData.user,
+        });
+      }
+      
       progress.processed++;
       progress.succeeded = successCount;
       progress.failed = failureCount;
-      progress.skipped = skippedCount;
       onProgress?.(progress);
     }
 
@@ -299,90 +377,6 @@ async function getExistingUsers(organizationId: string): Promise<Map<string, str
   return existingMap;
 }
 
-/**
- * 創建新用戶
- */
-async function createNewUser(
-  legacyUser: LegacyUser,
-  organizationId: string,
-  teamId: string,
-  password: string,
-  businessName: string,
-  businessCode: string
-): Promise<string | null> {
-  const auth = getAuth();
-  const db = getFirebaseDb();
-
-  try {
-    // 檢查 Auth 中是否已存在
-    const signInMethods = await fetchSignInMethodsForEmail(auth, legacyUser.公司Gmail帳號!);
-    
-    let uid: string;
-    
-    if (signInMethods.length > 0) {
-      // Auth 帳戶已存在，但 Firestore 中沒有，可能是之前導入失敗
-      // 獲取現有 Auth 用戶的 UID（需要管理員權限）
-      console.warn(`Auth 帳戶已存在但 Firestore 中沒有: ${legacyUser.公司Gmail帳號}`);
-      return null; // 暫時跳過，需要管理員工具處理
-    } else {
-      // 創建新的 Auth 帳戶
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        legacyUser.公司Gmail帳號!,
-        password
-      );
-      uid = userCredential.user.uid;
-    }
-
-    // 映射用戶資料
-    const mappedUser = mapLegacyUser(
-      legacyUser,
-      organizationId,
-      teamId,
-      businessName,
-      businessCode
-    );
-
-    // 創建 Firestore 文檔
-    const userData: User = {
-      id: uid,
-      uid,
-      email: legacyUser.公司Gmail帳號!,
-      name: mappedUser.name || businessName,
-      role: mappedUser.role || 'salesperson',
-      organizationId,
-      teamIds: [teamId],
-      department: mappedUser.department || null,
-      phone: mappedUser.phone || null,
-      isActive: mappedUser.isActive !== false,
-      createdAt: new Date(),
-      lastLoginAt: null,
-      supervisorId: null,
-      personalGoals: {},
-      ...((mappedUser as any).customFields ? { customFields: (mappedUser as any).customFields } : {}),
-    };
-
-    await setDoc(doc(db, 'users', uid), userData);
-
-    return uid;
-
-  } catch (error) {
-    console.error('創建用戶失敗:', error);
-    
-    // 處理特定錯誤
-    if (error instanceof Error) {
-      if (error.message.includes('auth/email-already-in-use')) {
-        console.warn('Email 已被使用:', legacyUser.公司Gmail帳號);
-      } else if (error.message.includes('auth/invalid-email')) {
-        console.error('無效的 Email 格式:', legacyUser.公司Gmail帳號);
-      } else if (error.message.includes('auth/weak-password')) {
-        console.error('密碼太弱');
-      }
-    }
-    
-    return null;
-  }
-}
 
 /**
  * 更新現有用戶
