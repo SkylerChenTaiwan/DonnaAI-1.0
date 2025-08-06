@@ -60,7 +60,7 @@ interface ImportState {
 export function LegacyDataImportScreen({ navigation }: any) {
   const { user } = useAuthStore();
   const organizationId = user?.organizationId;
-  const currentTeamId = user?.teamIds?.[0]; // 使用第一個團隊作為預設
+  const currentTeamId = user?.teamIds?.[0] || 'default-team'; // 使用第一個團隊或預設值
   const [files, setFiles] = useState<ImportState>({});
   const [isImporting, setIsImporting] = useState(false);
   const [importProgress, setImportProgress] = useState<ImportSessionProgress | null>(null);
@@ -76,16 +76,17 @@ export function LegacyDataImportScreen({ navigation }: any) {
 
   // 初始化 session
   useEffect(() => {
-    if (organizationId && currentTeamId && user?.id) {
+    if (organizationId && user?.id) {
+      const teamId = user?.teamIds?.[0] || 'default-team';
       const newSession = createImportSession(
         organizationId,
-        currentTeamId,
+        teamId,
         user.id
       );
       setSession(newSession);
       console.log('建立新的導入 session:', newSession);
     }
-  }, [organizationId, currentTeamId, user?.id]);
+  }, [organizationId, user?.id, user?.teamIds]);
 
   const steps = [
     { title: '上傳檔案', icon: 'cloud-upload-outline' },
@@ -202,7 +203,7 @@ export function LegacyDataImportScreen({ navigation }: any) {
 
   // 驗證所有檔案
   const validateFiles = async () => {
-    if (!session || !organizationId || !currentTeamId || !user) {
+    if (!session || !organizationId || !user) {
       if (Platform.OS === 'web') {
         window.alert('錯誤：缺少必要的組織資訊');
       } else {
@@ -211,7 +212,6 @@ export function LegacyDataImportScreen({ navigation }: any) {
       console.error('驗證失敗：缺少必要資訊', {
         session: !!session,
         organizationId: !!organizationId,
-        currentTeamId: !!currentTeamId,
         user: !!user
       });
       return false;
@@ -297,7 +297,7 @@ export function LegacyDataImportScreen({ navigation }: any) {
 
   // 執行導入（顯示欄位映射）
   const executeImport = async () => {
-    if (!session || !organizationId || !currentTeamId || !user) {
+    if (!session || !organizationId || !user) {
       if (Platform.OS === 'web') {
         window.alert('錯誤：缺少必要的組織資訊');
       } else {
@@ -326,7 +326,7 @@ export function LegacyDataImportScreen({ navigation }: any) {
 
   // 執行導入（使用映射）
   const executeImportWithMapping = async () => {
-    if (!session || !organizationId || !currentTeamId || !user) {
+    if (!session || !organizationId || !user) {
       if (Platform.OS === 'web') {
         window.alert('錯誤：缺少必要的組織資訊');
       } else {
@@ -416,11 +416,11 @@ export function LegacyDataImportScreen({ navigation }: any) {
 
   // 開始導入流程
   const startImport = async () => {
-    if (!user || !organizationId || !currentTeamId) {
+    if (!user || !organizationId) {
       if (Platform.OS === 'web') {
-        window.alert('錯誤：請先登入並選擇團隊');
+        window.alert('錯誤：請先登入');
       } else {
-        Alert.alert('錯誤', '請先登入並選擇團隊');
+        Alert.alert('錯誤', '請先登入');
       }
       return;
     }
@@ -428,9 +428,10 @@ export function LegacyDataImportScreen({ navigation }: any) {
     // 確保 session 已建立
     if (!session) {
       // 如果沒有 session，建立新的
+      const teamId = user?.teamIds?.[0] || 'default-team';
       const newSession = createImportSession(
         organizationId,
-        currentTeamId,
+        teamId,
         user.id
       );
       setSession(newSession);
