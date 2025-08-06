@@ -12,10 +12,10 @@ import {
   ActivityIndicator
 } from 'react-native';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { useTheme } from '@/hooks/useTheme';
+import { DesignSystem } from '@/theme/designSystem';
 import { DatabaseType } from '@/types/import';
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '@/config/firebase';
+import { getFirebaseDb } from '@/services/firebase/config';
 import { getFieldDefinitions } from '@/services/firebase/fieldDefinitions';
 import { FieldConfig } from '@/types/fieldDefinitions';
 
@@ -44,7 +44,7 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
   onSelect,
   organizationId
 }) => {
-  const { colors } = useTheme();
+  const colors = DesignSystem.colors;
   const [loading, setLoading] = useState(false);
   const [databaseStats, setDatabaseStats] = useState<Record<DatabaseType, any>>({});
   const [fieldCounts, setFieldCounts] = useState<Record<DatabaseType, number>>({});
@@ -93,6 +93,7 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
         const collectionName = option.type;
         
         // 取得記錄數量
+        const db = getFirebaseDb();
         const q = query(
           collection(db, collectionName),
           where('organizationId', '==', organizationId)

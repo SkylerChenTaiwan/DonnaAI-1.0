@@ -15,7 +15,7 @@ import {
   Platform
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useTheme } from '@/hooks/useTheme';
+import { DesignSystem } from '@/theme/designSystem';
 import { 
   ImportWizardState, 
   DatabaseType,
@@ -28,7 +28,7 @@ import {
 import DatabaseSelector from './stages/DatabaseSelector';
 import FileUploadMerger from './stages/FileUploadMerger';
 import FieldMapper from './stages/FieldMapper';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthStore } from '@/stores/authStore';
 import { showSuccessToast, showErrorToast } from '@/utils/toast';
 
 interface ImportWizardProps {
@@ -48,8 +48,8 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
   onComplete,
   onCancel
 }) => {
-  const { colors } = useTheme();
-  const { user } = useAuth();
+  const colors = DesignSystem.colors;
+  const { user } = useAuthStore();
   
   // 初始化精靈狀態
   const [wizardState, setWizardState] = useState<ImportWizardState>({

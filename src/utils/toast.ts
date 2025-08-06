@@ -99,3 +99,7 @@ export const toast = {
   warning: showWarning,
   info: showInfo,
 };
+
+// 為了兼容性，提供別名
+export const showSuccessToast = showSuccess;
+export const showErrorToast = showError;

@@ -17,7 +17,7 @@ import {
 import { MaterialIcons } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
 import Papa from 'papaparse';
-import { useTheme } from '@/hooks/useTheme';
+import { DesignSystem } from '@/theme/designSystem';
 import {
   UploadedFile,
   MergeConfig,
@@ -49,7 +49,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
   onFilesUploaded,
   onMergeConfigured
 }) => {
-  const { colors } = useTheme();
+  const colors = DesignSystem.colors;
   const [loading, setLoading] = useState(false);
   const [selectedFileId, setSelectedFileId] = useState<string | null>(null);
   const [keyFieldCandidates, setKeyFieldCandidates] = useState<Record<string, KeyFieldCandidate[]>>({});

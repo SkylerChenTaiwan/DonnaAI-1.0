@@ -15,7 +15,7 @@ import {
   ActivityIndicator
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useTheme } from '@/hooks/useTheme';
+import { DesignSystem } from '@/theme/designSystem';
 import {
   DatabaseType,
   MergedTable,
@@ -48,7 +48,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
   onRelationsChanged,
   organizationId
 }) => {
-  const { colors } = useTheme();
+  const colors = DesignSystem.colors;
   const [loading, setLoading] = useState(false);
   const [existingFields, setExistingFields] = useState<FieldConfig[]>([]);
   const [existingRelations, setExistingRelations] = useState<FieldRelation[]>([]);

@@ -35,6 +35,7 @@ import { LegacyImportSession } from '@/types/legacy-import';
 import { previewCSV } from '@/services/csv/legacy-import/parser';
 import { FieldMappingModal, FieldMapping, RelationMapping } from '@/components/import/FieldMappingModal';
 import { SmartDataImporter } from '@/services/firebase/admin/dataImportService';
+import ImportWizard from '@/components/import/ImportWizard';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { getFirebaseDb } from '@/services/firebase/config';
 
@@ -73,6 +74,7 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
   const [showMappingModal, setShowMappingModal] = useState(false);
   const [fieldMappings, setFieldMappings] = useState<FieldMapping[]>([]);
   const [relationMappings, setRelationMappings] = useState<RelationMapping[]>([]);
+  const [useNewWizard, setUseNewWizard] = useState(true); // 預設使用新的三階段精靈
   const isDesktop = isDesktopWeb();
   const isTablet = isTabletWeb();
   const isLandscape = true; // 簡化判斷
@@ -726,9 +728,63 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
     </View>
   );
 
-  // 使用響應式佈局
+  // 使用新的三階段精靈
+  if (useNewWizard) {
+    return migrateToUnifiedWebLayout(
+      <View style={styles.wizardContainer}>
+        {/* 切換開關 */}
+        <View style={styles.switchContainer}>
+          <Text style={styles.switchLabel}>使用新版匯入精靈</Text>
+          <TouchableOpacity
+            style={[styles.switchButton, { backgroundColor: DesignSystem.colors.primary }]}
+            onPress={() => setUseNewWizard(false)}
+          >
+            <Text style={styles.switchButtonText}>切換到舊版</Text>
+          </TouchableOpacity>
+        </View>
+        
+        {/* 新的三階段匯入精靈 */}
+        <ImportWizard
+          organizationId={organizationId}
+          teamId={currentTeamId}
+          onComplete={(result) => {
+            Alert.alert(
+              '匯入完成',
+              `成功匯入 ${result.importedCount} 筆資料到 ${result.targetDatabase}`,
+              [{ text: '確定', onPress: () => navigation.goBack() }]
+            );
+          }}
+          onCancel={() => navigation.goBack()}
+        />
+      </View>,
+      {
+        maxWidth: 1400,
+        scrollable: false,
+        layoutProps: {
+          headerProps: {
+            title: '資料匯入精靈',
+            showBack: true,
+            onBack: () => navigation.goBack(),
+          }
+        }
+      }
+    );
+  }
+
+  // 使用響應式佈局（舊版）
   const content = (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      {/* 切換開關 */}
+      <View style={styles.switchContainer}>
+        <Text style={styles.switchLabel}>使用舊版匯入</Text>
+        <TouchableOpacity
+          style={[styles.switchButton, { backgroundColor: DesignSystem.colors.gray[500] }]}
+          onPress={() => setUseNewWizard(true)}
+        >
+          <Text style={styles.switchButtonText}>切換到新版</Text>
+        </TouchableOpacity>
+      </View>
+
       {/* 步驟指示器 */}
       <View style={styles.stepIndicator}>
         {steps.map((step, index) => (
@@ -797,6 +853,33 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: DesignSystem.colors.background.primary,
+  },
+  wizardContainer: {
+    flex: 1,
+    backgroundColor: DesignSystem.colors.background.primary,
+  },
+  switchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 16,
+    backgroundColor: DesignSystem.colors.background.secondary,
+    borderBottomWidth: 1,
+    borderBottomColor: DesignSystem.colors.gray[200],
+  },
+  switchLabel: {
+    fontSize: 14,
+    color: DesignSystem.colors.text.secondary,
+  },
+  switchButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+  },
+  switchButtonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '600',
   },
   stepIndicator: {
     flexDirection: 'row',

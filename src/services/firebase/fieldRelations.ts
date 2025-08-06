@@ -20,7 +20,7 @@ import {
   orderBy,
   limit
 } from 'firebase/firestore';
-import { db } from '@/config/firebase';
+import { getFirebaseDb } from '@/services/firebase/config';
 import { 
   FieldRelation, 
   DatabaseType, 
@@ -43,6 +43,7 @@ const CACHE_TTL = 5 * 60 * 1000; // 5分鐘快取
  * 生成唯一 ID
  */
 function generateId(): string {
+  const db = getFirebaseDb();
   return doc(collection(db, 'field_relations')).id;
 }
 
@@ -53,6 +54,7 @@ function generateId(): string {
 export async function createFieldRelation(
   relation: Omit<FieldRelation, 'id' | 'createdAt' | 'updatedAt'>
 ): Promise<{ forward: string; reverse?: string }> {
+  const db = getFirebaseDb();
   const batch = writeBatch(db);
   const relationIds = { forward: '', reverse: '' };
 
@@ -122,6 +124,7 @@ export async function getFieldRelations(
   organizationId: string,
   database?: DatabaseType
 ): Promise<FieldRelation[]> {
+  const db = getFirebaseDb();
   // 檢查快取
   const cacheKey = `${organizationId}-${database || 'all'}`;
   const cached = relationCache.get(cacheKey);
@@ -202,6 +205,7 @@ export async function getFieldRelationsByField(
   database: DatabaseType,
   field: string
 ): Promise<FieldRelation[]> {
+  const db = getFirebaseDb();
   try {
     const [sourceRelations, targetRelations] = await Promise.all([
       // 作為來源欄位的關聯
@@ -245,6 +249,7 @@ export async function updateFieldRelation(
   relationId: string,
   updates: Partial<FieldRelation>
 ): Promise<void> {
+  const db = getFirebaseDb();
   try {
     const relationRef = doc(db, 'field_relations', relationId);
     
@@ -281,6 +286,7 @@ export async function deleteFieldRelation(
   relationId: string,
   organizationId: string
 ): Promise<void> {
+  const db = getFirebaseDb();
   try {
     const relationRef = doc(db, 'field_relations', relationId);
     const relationDoc = await getDoc(relationRef);
@@ -334,6 +340,7 @@ export async function deleteFieldRelation(
 export async function validateFieldRelation(
   relation: Omit<FieldRelation, 'id' | 'createdAt'>
 ): Promise<RelationValidation> {
+  const db = getFirebaseDb();
   const validation: RelationValidation = {
     relation: { ...relation, id: '', createdAt: Timestamp.now() },
     isValid: true,
@@ -469,6 +476,7 @@ function detectCircularReference(
 export async function createFieldRelationsBatch(
   relations: Array<Omit<FieldRelation, 'id' | 'createdAt'>>
 ): Promise<string[]> {
+  const db = getFirebaseDb();
   const batch = writeBatch(db);
   const relationIds: string[] = [];
 
