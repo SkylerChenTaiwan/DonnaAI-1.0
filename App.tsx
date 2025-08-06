@@ -20,10 +20,14 @@ import { initializeMonitoring } from '@/services/firebase/monitoring';
 import { NetworkStatusBar } from '@/components/NetworkStatusBar';
 
 
+// 載入強制登出工具（用於緊急情況）
+import '@/utils/force-logout';
+
 // 開發模式下載入除錯工具
 // 暫時停用：這些工具會在頂層執行 Firebase 操作，導致初始化錯誤
 if (__DEV__) {
   console.log('🔧 開發工具已停用自動載入，請在登入後手動執行需要的工具');
+  console.log('💡 如需強制登出，請在 Console 執行: forceLogout()');
   /*
   import('@/utils/quick-fix-team-sync').catch(err => 
     console.warn('團隊同步修復工具載入失敗:', err)
