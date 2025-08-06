@@ -15,10 +15,9 @@ import {
 } from 'firebase/firestore';
 import { 
   getAuth, 
-  createUserWithEmailAndPassword,
   fetchSignInMethodsForEmail 
 } from 'firebase/auth';
-import { getFunctions, httpsCallable } from 'firebase/functions';
+// import { getFunctions, httpsCallable } from 'firebase/functions'; // 暫時停用，直到 Cloud Functions 部署
 import { getFirebaseDb } from '@/services/firebase/config';
 import { LegacyUser, ImportError, ImportWarning } from '@/types/legacy-import';
 import { User } from '@/types/entities/user';
@@ -213,81 +212,98 @@ export async function importLegacyUsers(
       });
     }
 
-    // 批量建立用戶（使用 Cloud Function）
+    // 批量建立用戶（暫時只建立 Firestore 文檔，不建立 Auth 帳號）
     if (usersToCreate.length > 0) {
       progress.currentUser = '批量建立用戶...';
       onProgress?.(progress);
 
-      const functions = getFunctions(undefined, 'asia-east1');
-      const createUsersForImport = httpsCallable(functions, 'createUsersForImport');
+      // 暫時不使用 Cloud Functions，直接建立 Firestore 文檔
+      console.warn('⚠️ Cloud Functions 尚未部署，暫時只建立 Firestore 文檔');
+      console.warn('⚠️ 用戶將無法登入，需要後續手動建立 Auth 帳號');
       
-      // 分批處理，每批 50 個
-      const batchSize = 50;
-      for (let i = 0; i < usersToCreate.length; i += batchSize) {
-        const batch = usersToCreate.slice(i, Math.min(i + batchSize, usersToCreate.length));
+      const db = getFirebaseDb();
+      let batch = writeBatch(db);
+      let batchCount = 0;
+      
+      for (let i = 0; i < usersToCreate.length; i++) {
+        const userData = usersToCreate[i];
         
         try {
-          const result = await createUsersForImport({
-            users: batch,
-            organizationId,
-            teamId,
-            defaultPassword,
-          });
-
-          const response = result.data as any;
+          // 生成臨時 UID（不建立 Auth 帳號）
+          const tempUid = `temp_user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
           
-          if (response.success) {
-            // 處理成功的用戶
-            response.results?.forEach((userResult: any, index: number) => {
-              const originalData = batch[index];
-              if (userResult.success) {
-                userMappings.set(originalData.originalBusinessId, userResult.uid);
-                successCount++;
-              } else {
-                failureCount++;
-                errors.push({
-                  type: 'users',
-                  row: originalData.row,
-                  field: 'general',
-                  message: userResult.error || '創建用戶失敗',
-                  data: originalData,
-                });
-              }
-            });
-          } else {
-            // 整批失敗
-            batch.forEach(userData => {
-              failureCount++;
-              errors.push({
-                type: 'users',
-                row: userData.row,
-                field: 'general',
-                message: '批量建立失敗',
-                data: userData,
-              });
-            });
+          // 建立 Firestore 文檔
+          const userRef = doc(db, 'users', tempUid);
+          const userDocData = {
+            id: tempUid,
+            uid: tempUid,
+            email: userData.email,
+            name: userData.name || userData.businessName,
+            role: userData.role || 'salesperson',
+            organizationId: organizationId,
+            teamIds: [teamId],
+            department: userData.department || null,
+            phone: userData.phone || null,
+            isActive: false, // 設為未啟用，因為沒有對應的 Auth 帳號
+            createdAt: Timestamp.now(),
+            lastLoginAt: null,
+            supervisorId: userData.supervisorId || null,
+            personalGoals: {},
+            customFields: userData.customFields || {},
+            // 標記為需要後續建立 Auth 帳號
+            needsAuthAccount: true,
+            importedAt: Timestamp.now(),
+          };
+          
+          batch.set(userRef, userDocData);
+          batchCount++;
+          
+          // 記錄映射
+          userMappings.set(userData.originalBusinessId, tempUid);
+          successCount++;
+          
+          // 每 500 筆提交一次（Firestore 批次限制）
+          if (batchCount >= 500) {
+            await batch.commit();
+            batch = writeBatch(db); // 重新建立新的批次
+            batchCount = 0;
           }
+          
         } catch (error) {
-          // 批量建立失敗
-          batch.forEach(userData => {
-            failureCount++;
-            errors.push({
-              type: 'users',
-              row: userData.row,
-              field: 'general',
-              message: error instanceof Error ? error.message : '未知錯誤',
-              data: userData,
-            });
+          failureCount++;
+          errors.push({
+            type: 'users',
+            row: userData.row,
+            field: 'general',
+            message: error instanceof Error ? error.message : '建立用戶文檔失敗',
+            data: userData,
           });
         }
-
+        
         // 更新進度
-        progress.processed = Math.min(i + batchSize, usersToCreate.length);
-        progress.succeeded = successCount;
-        progress.failed = failureCount;
-        progress.skipped = skippedCount;
-        onProgress?.(progress);
+        if (i % 10 === 0 || i === usersToCreate.length - 1) {
+          progress.processed = i + 1;
+          progress.succeeded = successCount;
+          progress.failed = failureCount;
+          progress.skipped = skippedCount;
+          progress.currentUser = userData.name || userData.email;
+          onProgress?.(progress);
+        }
       }
+      
+      // 提交剩餘的批次
+      if (batchCount > 0) {
+        await batch.commit();
+      }
+      
+      // 添加警告提醒
+      warnings.push({
+        type: 'users',
+        row: 0,
+        field: 'general',
+        message: `已建立 ${successCount} 個用戶文檔，但尚未建立對應的 Auth 帳號。請聯繫管理員完成設置。`,
+        suggestion: '升級到 Blaze 計劃並部署 Cloud Functions 後，可自動建立 Auth 帳號',
+      });
     }
 
     // 處理更新的用戶

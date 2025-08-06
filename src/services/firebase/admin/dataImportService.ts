@@ -13,7 +13,8 @@ import {
   getDocs,
 } from 'firebase/firestore';
 import { getFirebaseDb } from '../config';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
+// import { createUserWithEmailAndPassword } from 'firebase/auth'; // 不應該在這裡使用，改用 Cloud Function
 import { Customer, Record, Task } from '@/types/firebase';
 import { User } from '@/types/entities';
 import { isOrgAdmin } from '../permissions';
@@ -462,14 +463,17 @@ async function importUser(
   const department = data.department || data.部門 || null;
   const phone = data.phone || data.電話 || null;
   
-  // 建立 Auth 帳號（使用預設密碼）
-  const defaultPassword = 'Welcome123!'; // 預設密碼，用戶首次登入需要修改
+  // 不應該在前端建立 Auth 帳號，這會導致自動登入
+  // 應該使用 Cloud Function 或後端服務來建立用戶
+  console.error('⚠️ 警告：dataImportService 不應該直接建立 Auth 帳號');
+  console.error('請使用 legacy-import 服務或 Cloud Function');
   
+  // 暫時只建立 Firestore 文件，不建立 Auth 帳號
   try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, defaultPassword);
-    const uid = userCredential.user.uid;
+    // 生成一個臨時的 UID
+    const uid = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
-    // 建立 Firestore 用戶文件
+    // 建立 Firestore 用戶文件（但沒有對應的 Auth 帳號）
     const userRef = doc(db, 'users', uid);
     const userData: User = {
       id: uid,
@@ -480,7 +484,7 @@ async function importUser(
       organizationId,
       department,
       phone,
-      isActive: true,
+      isActive: false, // 設為未啟用，因為沒有 Auth 帳號
       createdAt: new Date(),
       lastLoginAt: null,
       supervisorId: null,
@@ -488,7 +492,8 @@ async function importUser(
       personalGoals: {},
     };
     
-    await userRef.set(userData);
+    await setDoc(userRef, userData);
+    console.warn(`⚠️ 已建立用戶文件但無 Auth 帳號: ${email}`);
   } catch (error) {
     // 如果是已存在的用戶，只更新資料
     if (error instanceof Error && error.message.includes('already-exists')) {
