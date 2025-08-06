@@ -18,6 +18,8 @@ interface TableHeaderProps {
   multiSelectMode?: boolean;
   allSelected?: boolean;
   onSelectAll?: (selected: boolean) => void;
+  canEditFields?: boolean;
+  onFieldInfo?: (event: React.MouseEvent, column: ColumnConfig) => void;
 }
 
 export const TableHeader: React.FC<TableHeaderProps> = ({
@@ -29,6 +31,8 @@ export const TableHeader: React.FC<TableHeaderProps> = ({
   multiSelectMode,
   allSelected,
   onSelectAll,
+  canEditFields,
+  onFieldInfo,
 }) => {
   const [resizingColumn, setResizingColumn] = useState<string | null>(null);
   const [dragStartX, setDragStartX] = useState(0);
@@ -67,6 +71,8 @@ export const TableHeader: React.FC<TableHeaderProps> = ({
           isResizing={resizingColumn === column.id}
           onResizeStart={() => setResizingColumn(column.id)}
           onResizeEnd={() => setResizingColumn(null)}
+          canEditFields={canEditFields}
+          onFieldInfo={onFieldInfo}
         />
       ))}
       
@@ -92,6 +98,8 @@ interface HeaderCellProps {
   isResizing: boolean;
   onResizeStart: () => void;
   onResizeEnd: () => void;
+  canEditFields?: boolean;
+  onFieldInfo?: (event: React.MouseEvent, column: ColumnConfig) => void;
 }
 
 const HeaderCell: React.FC<HeaderCellProps> = ({
@@ -103,6 +111,8 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
   isResizing,
   onResizeStart,
   onResizeEnd,
+  canEditFields,
+  onFieldInfo,
 }) => {
   const cellRef = useRef<View>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -187,7 +197,7 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
     >
       <TouchableOpacity
         onPress={handleClick}
-        style={{ flex: 1, justifyContent: 'center' }}
+        style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}
         activeOpacity={0.7}
         // Web-specific drag props
         {...(Platform.OS === 'web' && onReorder ? {
@@ -201,6 +211,29 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
         <Text style={tableStyles.headerText}>
           {column.title}
         </Text>
+        
+        {/* 欄位編輯 info 按鈕 */}
+        {canEditFields && column.id !== '_checkbox' && column.id !== '_actions' && (
+          <TouchableOpacity
+            onPress={(e) => {
+              console.log('🔍 欄位 info 按鈕被點擊:', column.title);
+              e.stopPropagation();
+              onFieldInfo?.(e as any, column);
+            }}
+            style={{
+              marginLeft: 6,
+              padding: 4,
+              borderRadius: 4,
+              backgroundColor: 'transparent',
+            }}
+          >
+            <Icon 
+              name="information-circle-outline" 
+              size={16} 
+              color={NotionColors.text.gray}
+            />
+          </TouchableOpacity>
+        )}
       </TouchableOpacity>
       
       {/* Resize handle */}

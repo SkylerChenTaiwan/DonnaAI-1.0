@@ -154,7 +154,7 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
   const [visibleColumns, setVisibleColumns] = useState<string[]>(() => columnsWithActions.map(col => col.id));
   
   // 欄位編輯權限和 Popover 狀態
-  const { user } = useAuth();
+  const { user, userProfile } = useAuth();
   const { currentOrganization } = useOrganization();
   const [canEditFields, setCanEditFields] = useState(false);
   const [fieldEditPopover, setFieldEditPopover] = useState<{
@@ -190,8 +190,10 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
   useEffect(() => {
     console.log('🔐 權限檢查 useEffect 執行:', { 
       hasUser: !!user, 
+      hasUserProfile: !!userProfile,
       hasOrg: !!currentOrganization,
       userEmail: user?.email,
+      userRole: userProfile?.role,
       orgId: currentOrganization?.id 
     });
     
@@ -202,7 +204,7 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
       }
       console.log('🔍 檢查欄位編輯權限:', { 
         userId: user.uid, 
-        userRole: (user as any).role,
+        userRole: userProfile?.role,
         orgId: currentOrganization.id 
       });
       try {
@@ -218,7 +220,7 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
       }
     };
     checkFieldEditPermission();
-  }, [user, currentOrganization]);
+  }, [user, userProfile, currentOrganization]);
   
   const selectedRowsSet = useMemo(
     () => new Set(selectedRows.length > 0 ? selectedRows : internalSelectedRows),
@@ -1131,6 +1133,8 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
         onAddColumn={onColumnAdd}
         multiSelectMode={multiSelect}
         allSelected={selectedRowsSet.size === data.length && data.length > 0}
+        canEditFields={canEditFields}
+        onFieldInfo={handleFieldInfo}
         onSelectAll={handleSelectAll}
       />
       
