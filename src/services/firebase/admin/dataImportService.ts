@@ -12,6 +12,7 @@ import {
   where,
   getDocs,
   setDoc,
+  limit,
 } from 'firebase/firestore';
 import { getFirebaseDb } from '../config';
 import { getAuth } from 'firebase/auth';
@@ -848,6 +849,88 @@ export class SmartDataImporter {
     }
   }
 
+  /**
+   * 從匯入資料更新欄位定義
+   */
+  private async updateFieldDefinitionsFromData(
+    collectionName: 'customers' | 'tasks' | 'records',
+    mappings: { [systemField: string]: string }
+  ): Promise<void> {
+    try {
+      console.log(`🔄 更新 ${collectionName} 欄位定義...`);
+      
+      // 取得當前欄位定義
+      const { getFieldDefinitions, clearFieldDefinitionCache } = await import('../fieldDefinitions');
+      const currentFields = await getFieldDefinitions(collectionName, this.organizationId);
+      
+      // 檢查映射中的新欄位
+      const newFields = [];
+      const existingFieldKeys = new Set(currentFields.map(f => f.key));
+      
+      for (const [systemField, sourceColumn] of Object.entries(mappings)) {
+        // 如果是自訂欄位且不在當前欄位定義中
+        if (systemField.startsWith('customField_') && !existingFieldKeys.has(systemField)) {
+          const label = systemField.replace('customField_', '');
+          newFields.push({
+            key: systemField,
+            label: label,
+            type: 'text' as const,
+            isRequired: false,
+            isSystem: false,
+            visible: true,
+            order: currentFields.length + newFields.length
+          });
+        }
+      }
+      
+      // 如果有新欄位，建立新的欄位定義版本
+      if (newFields.length > 0) {
+        console.log(`📝 發現 ${newFields.length} 個新自訂欄位，更新欄位定義`);
+        
+        const updatedFields = [...currentFields, ...newFields];
+        
+        // 建立新的欄位定義版本
+        const fieldDefinition = {
+          collectionName,
+          organizationId: this.organizationId,
+          fields: updatedFields,
+          version: Date.now(),
+          isActive: true,
+          createdAt: Timestamp.now(),
+          createdBy: getAuth().currentUser?.uid || 'system'
+        };
+        
+        // 先標記舊版本為非活躍狀態
+        const oldQuery = query(
+          collection(this.db, 'field_definitions'),
+          where('collectionName', '==', collectionName),
+          where('organizationId', '==', this.organizationId),
+          where('isActive', '==', true)
+        );
+        
+        const oldSnapshot = await getDocs(oldQuery);
+        const batch = writeBatch(this.db);
+        
+        oldSnapshot.forEach(docSnap => {
+          batch.update(doc(this.db, 'field_definitions', docSnap.id), { isActive: false });
+        });
+        
+        // 新增新版本
+        const newDocRef = doc(collection(this.db, 'field_definitions'));
+        batch.set(newDocRef, fieldDefinition);
+        
+        await batch.commit();
+        
+        // 清除快取
+        clearFieldDefinitionCache();
+        console.log(`✅ 成功更新 ${collectionName} 欄位定義，新增 ${newFields.length} 個欄位`);
+      } else {
+        console.log(`ℹ️ 沒有發現新欄位，欄位定義無需更新`);
+      }
+    } catch (error) {
+      console.error('更新欄位定義時發生錯誤:', error);
+    }
+  }
 
   /**
    * 透過關聯找出對應的 ID
@@ -1098,6 +1181,23 @@ export class SmartDataImporter {
     const currentFileIndex = this.fieldMappingsConfig.findIndex(m => m.mappings === mappings);
     let totalCount = 0;
 
+    // 預先載入現有客戶資料以提高效能
+    console.log('📥 預載入現有客戶資料...');
+    const existingCustomersQuery = query(
+      collection(this.db, 'customers'),
+      where('organizationId', '==', this.organizationId)
+    );
+    const existingSnapshot = await getDocs(existingCustomersQuery);
+    const existingCustomers = new Map<string, any>();
+    
+    existingSnapshot.forEach(doc => {
+      const data = doc.data();
+      const key = `${data.name || ''}_${data.company || ''}`;
+      existingCustomers.set(key, { id: doc.id, ...data });
+    });
+    
+    console.log(`📋 載入了 ${existingCustomers.size} 筆現有客戶資料`);
+
     // 分批處理
     for (let batchStart = 0; batchStart < rows.length; batchStart += BATCH_SIZE) {
       const batch = writeBatch(this.db);
@@ -1145,19 +1245,37 @@ export class SmartDataImporter {
           const tagsStr = row[mappings.tags] || '';
           const tags = tagsStr.split(/[;,；，]/).map((t: string) => t.trim()).filter(Boolean);
 
-          // 使用關鍵欄位檢查重複（比 Firestore 查詢更有效率）
+          // 檢查是否已存在相同客戶（用於更新而非跳過）
           const customerKey = keyField && row[keyField] 
             ? row[keyField] 
             : `${name}_${row[mappings.company] || ''}`;
           
-          if (this.customerIdMap.has(customerKey)) {
-            console.log(`客戶 "${name}" 已存在於本次匯入中，跳過`);
-            continue; // 跳過重複的客戶
+          let customerId: string;
+          let isUpdate = false;
+          let existingData: any = null;
+          
+          // 使用預載入的資料檢查是否已存在
+          const existingCustomer = existingCustomers.get(customerKey);
+          
+          if (existingCustomer) {
+            // 找到現有客戶，準備更新
+            customerId = existingCustomer.id;
+            existingData = existingCustomer;
+            isUpdate = true;
+            console.log(`客戶 "${name}" 已存在，準備更新欄位`);
+          } else if (this.customerIdMap.has(customerKey)) {
+            // 本次匯入中已處理過，使用現有 ID
+            customerId = this.customerIdMap.get(customerKey)!;
+            isUpdate = true;
+            console.log(`客戶 "${name}" 在本次匯入中重複，合併資料`);
+          } else {
+            // 新客戶
+            customerId = doc(collection(this.db, 'customers')).id;
+            console.log(`新增客戶 "${name}"`);
           }
 
-          // 建立客戶資料
-          const customerId = doc(collection(this.db, 'customers')).id;
-          const rawCustomerData = {
+          // 準備客戶資料（新增或更新）
+          let rawCustomerData: any = {
             id: customerId,
             name,
             company: row[mappings.company] || '',
@@ -1168,14 +1286,30 @@ export class SmartDataImporter {
             organizationId: this.organizationId,
             tags,
             notes: row[mappings.notes] || '',
-            createdAt: Timestamp.now(),
-            updatedAt: Timestamp.now(),
             teamMembers: [createdBy],
             assignedTo: createdBy,
             userId: createdBy,
             // 加入所有原始資料
             ...row
           };
+
+          if (isUpdate) {
+            // 更新模式：只更新 updatedAt，保留原 createdAt
+            rawCustomerData.updatedAt = Timestamp.now();
+            // 如果是資料庫中的現有記錄，合併現有資料
+            if (existingData) {
+              rawCustomerData = {
+                ...existingData, // 保留現有資料
+                ...rawCustomerData, // 覆蓋新資料
+                createdAt: existingData.createdAt || Timestamp.now(), // 保留原創建時間
+                updatedAt: Timestamp.now(), // 更新時間戳
+              };
+            }
+          } else {
+            // 新增模式：設定 createdAt
+            rawCustomerData.createdAt = Timestamp.now();
+            rawCustomerData.updatedAt = Timestamp.now();
+          }
 
           // 使用清理工具處理資料
           const cleanedCustomerData = cleanCustomerData(rawCustomerData);
@@ -1250,14 +1384,12 @@ export class SmartDataImporter {
 
     result.imported!.customers = totalCount;
 
-    // 匯入完成後，清除欄位定義快取以反映新的自訂欄位
+    // 匯入完成後，動態檢測並更新欄位定義
     if (totalCount > 0) {
       try {
-        const { clearFieldDefinitionCache } = await import('../fieldDefinitions');
-        clearFieldDefinitionCache();
-        console.log('已清除欄位定義快取，下次查詢將重新載入');
+        await this.updateFieldDefinitionsFromData('customers', mappings);
       } catch (error) {
-        console.warn('清除欄位定義快取失敗:', error);
+        console.warn('更新欄位定義失敗:', error);
       }
     }
 
