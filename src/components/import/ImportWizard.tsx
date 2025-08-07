@@ -32,6 +32,7 @@ import { useAuthStore } from '@/stores/authStore';
 import { showSuccessToast, showErrorToast } from '@/utils/toast';
 import { SmartDataImporter } from '@/services/firebase/admin/dataImportService';
 import { getFirebaseDb } from '@/services/firebase/config';
+import { cleanupDuplicateCustomers } from '@/services/firebase/cleanupService';
 
 interface ImportWizardProps {
   organizationId: string;
@@ -78,6 +79,12 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
       errorCount: 0,
       errors: []
     }
+  });
+
+  // 清理狀態
+  const [cleanupState, setCleanupState] = useState({
+    isCleaningUp: false,
+    progress: { message: '', percent: 0 }
   });
 
   // 狀態更新輔助函數
@@ -293,6 +300,45 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
     }
   }, [wizardState, updateWizardState, onComplete, organizationId]);
 
+  // 清理重複資料
+  const handleCleanupDuplicates = useCallback(async () => {
+    try {
+      setCleanupState({ isCleaningUp: true, progress: { message: '開始清理...', percent: 0 } });
+      
+      const result = await cleanupDuplicateCustomers(
+        organizationId,
+        (progress) => {
+          setCleanupState(prev => ({
+            ...prev,
+            progress
+          }));
+        }
+      );
+      
+      setCleanupState({ isCleaningUp: false, progress: { message: '', percent: 0 } });
+      
+      Alert.alert(
+        '清理完成',
+        `清理結果：\n• 原始記錄: ${result.totalRecords} 筆\n• 發現重複: ${result.duplicatesFound} 筆\n• 已清理: ${result.duplicatesRemoved} 筆\n• 剩餘記錄: ${result.finalRecords} 筆`,
+        [{ text: '確定', style: 'default' }]
+      );
+      
+      showSuccessToast(`清理完成！已移除 ${result.duplicatesRemoved} 筆重複資料`);
+      
+    } catch (error) {
+      console.error('清理失敗:', error);
+      setCleanupState({ isCleaningUp: false, progress: { message: '', percent: 0 } });
+      
+      const errorMessage = error instanceof Error ? error.message : '未知錯誤';
+      Alert.alert(
+        '清理失敗',
+        `清理過程中發生錯誤：${errorMessage}`,
+        [{ text: '確定', style: 'default' }]
+      );
+      showErrorToast(`清理失敗: ${errorMessage}`);
+    }
+  }, [organizationId]);
+
   // 渲染階段標題
   const renderStageTitle = () => {
     const titles = [
@@ -432,6 +478,26 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
             <MaterialIcons name="close" size={24} color={colors.gray600} />
           </TouchableOpacity>
         )}
+        
+        {/* 資料清理按鈕 */}
+        <TouchableOpacity
+          style={[styles.cleanupButton, {
+            backgroundColor: colors.status.warning + '20',
+            borderColor: colors.status.warning,
+            opacity: cleanupState.isCleaningUp ? 0.6 : 1
+          }]}
+          onPress={handleCleanupDuplicates}
+          disabled={cleanupState.isCleaningUp || wizardState.importProgress.isImporting}
+        >
+          <MaterialIcons 
+            name={cleanupState.isCleaningUp ? "hourglass-empty" : "cleaning-services"} 
+            size={16} 
+            color={colors.status.warning} 
+          />
+          <Text style={[styles.cleanupButtonText, { color: colors.status.warning }]}>
+            {cleanupState.isCleaningUp ? '清理中...' : '清理重複資料'}
+          </Text>
+        </TouchableOpacity>
       </View>
 
       {/* 進度指示器 */}
@@ -502,6 +568,33 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
 
       {/* 匯入進度覆蓋層 */}
       {renderImportProgress()}
+      
+      {/* 清理進度覆蓋層 */}
+      {cleanupState.isCleaningUp && (
+        <View style={[styles.progressOverlay, { backgroundColor: colors.background }]}>
+          <View style={styles.progressContent}>
+            <ActivityIndicator size="large" color={colors.status.warning} />
+            <Text style={[styles.progressTitle, { color: colors.text }]}>
+              正在清理重複資料...
+            </Text>
+            <Text style={[styles.progressMessage, { color: colors.gray600 }]}>
+              {cleanupState.progress.message}
+            </Text>
+            <View style={styles.progressBar}>
+              <View style={[
+                styles.progressBarFill,
+                { 
+                  backgroundColor: colors.status.warning,
+                  width: `${cleanupState.progress.percent}%`
+                }
+              ]} />
+            </View>
+            <Text style={[styles.progressText, { color: colors.gray600 }]}>
+              {Math.round(cleanupState.progress.percent)}%
+            </Text>
+          </View>
+        </View>
+      )}
     </View>
   );
 };
@@ -531,6 +624,20 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     padding: 8
+  },
+  cleanupButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 6,
+    borderWidth: 1,
+    gap: 4,
+    marginLeft: 8
+  },
+  cleanupButtonText: {
+    fontSize: 12,
+    fontWeight: '500'
   },
   progressContainer: {
     flexDirection: 'row',
@@ -617,6 +724,11 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginTop: 16,
     marginBottom: 12
+  },
+  progressMessage: {
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: 8
   },
   progressBar: {
     width: 200,
