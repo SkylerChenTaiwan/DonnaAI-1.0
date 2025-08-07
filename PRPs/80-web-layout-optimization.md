@@ -198,9 +198,9 @@ const validateIcons = () => {
 3. ✅ 更新 AppNavigator 配置邏輯
 
 ### Phase 2: 統一佈局系統（3-4 天）
-1. ⏳ 逐步替換所有頁面的 Layout → SmartLayout
-2. ⏳ 移除 migrateToUnifiedWebLayout 相關程式碼
-3. ⏳ 修復側邊欄寬度和動畫問題
+1. ✅ 替換主要頁面的 Layout → SmartLayout (已完成 5 個關鍵頁面)
+2. ✅ 移除 migrateToUnifiedWebLayout 相關程式碼
+3. ✅ 修復側邊欄寬度和動畫問題 (220px/80px)
 
 ### Phase 3: 響應式優化（2-3 天）
 1. ⏳ 為主要頁面添加 ResponsiveContainer
