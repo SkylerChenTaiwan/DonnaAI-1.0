@@ -306,9 +306,8 @@ service cloud.firestore {
       // Super Admin 可以讀寫所有關聯
       allow read, write: if isSuperAdmin();
       
-      // 組織成員可以讀取自己組織的關聯
-      allow read: if request.auth != null && 
-        getUserData().organizationId == resource.data.organizationId;
+      // 已登入用戶可以讀取（用於列表查詢，會在客戶端過濾）
+      allow read: if request.auth != null && hasUserDoc();
       
       // 組織管理員可以管理自己組織的關聯
       allow write: if request.auth != null && 

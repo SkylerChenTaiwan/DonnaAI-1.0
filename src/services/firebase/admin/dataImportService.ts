@@ -827,7 +827,7 @@ export class SmartDataImporter {
   /**
    * 使用自訂映射處理檔案
    */
-  private async processFileWithCustomMapping(
+  async processFileWithCustomMapping(
     type: ImportType,
     data: any[],
     mappings: { [systemField: string]: string },
@@ -1093,101 +1093,123 @@ export class SmartDataImporter {
       imported: { users: 0, teams: 0, customers: 0, records: 0 }
     };
 
-    const batch = writeBatch(this.db);
-    let count = 0;
+    const BATCH_SIZE = 100; // 每批最多處理 100 筆
     const currentFileIndex = this.fieldMappingsConfig.findIndex(m => m.mappings === mappings);
+    let totalCount = 0;
 
-    for (let i = 0; i < rows.length; i++) {
-      const row = rows[i];
-      
-      if (onProgress) {
-        onProgress({
-          current: i + 1,
-          total: rows.length,
-          status: 'importing',
-          message: `匯入客戶 ${i + 1}/${rows.length}`
-        });
-      }
+    // 分批處理
+    for (let batchStart = 0; batchStart < rows.length; batchStart += BATCH_SIZE) {
+      const batch = writeBatch(this.db);
+      const batchEnd = Math.min(batchStart + BATCH_SIZE, rows.length);
+      let batchCount = 0;
 
-      try {
-        const name = row[mappings.name];
-        if (!name) {
-          result.errors.push({ row: i + 2, message: '缺少客戶姓名' });
-          result.failed++;
-          continue;
-        }
-
-        // 透過關聯找出負責業務員
-        let createdBy: string | undefined;
-        if (mappings.salesperson) {
-          const salespersonValue = row[mappings.salesperson];
-          createdBy = this.resolveRelation(currentFileIndex, salespersonValue, mappings.salesperson);
-        }
+      for (let i = batchStart; i < batchEnd; i++) {
+        const row = rows[i];
         
-        if (!createdBy) {
-          const auth = getAuth();
-          createdBy = auth.currentUser?.uid || '';
-          if (!createdBy) {
-            result.errors.push({ row: i + 2, message: '找不到負責業務員' });
+        if (onProgress) {
+          onProgress({
+            current: i + 1,
+            total: rows.length,
+            status: 'importing',
+            message: `匯入客戶 ${i + 1}/${rows.length}`
+          });
+        }
+
+        try {
+          const name = row[mappings.name];
+          if (!name) {
+            result.errors.push({ row: i + 2, message: '缺少客戶姓名' });
             result.failed++;
             continue;
           }
+
+          // 透過關聯找出負責業務員
+          let createdBy: string | undefined;
+          if (mappings.salesperson) {
+            const salespersonValue = row[mappings.salesperson];
+            createdBy = this.resolveRelation(currentFileIndex, salespersonValue, mappings.salesperson);
+          }
+          
+          if (!createdBy) {
+            const auth = getAuth();
+            createdBy = auth.currentUser?.uid || '';
+            if (!createdBy) {
+              result.errors.push({ row: i + 2, message: '找不到負責業務員' });
+              result.failed++;
+              continue;
+            }
+          }
+
+          // 處理標籤
+          const tagsStr = row[mappings.tags] || '';
+          const tags = tagsStr.split(/[;,；，]/).map((t: string) => t.trim()).filter(Boolean);
+
+          // 建立客戶資料
+          const customerId = doc(collection(this.db, 'customers')).id;
+          const rawCustomerData = {
+            id: customerId,
+            name,
+            company: row[mappings.company] || '',
+            phone: row[mappings.phone] || '',
+            email: row[mappings.email] || '',
+            jobTitle: row[mappings.jobTitle] || '',
+            createdBy,
+            organizationId: this.organizationId,
+            tags,
+            notes: row[mappings.notes] || '',
+            createdAt: Timestamp.now(),
+            updatedAt: Timestamp.now(),
+            teamMembers: [createdBy],
+            assignedTo: createdBy,
+            userId: createdBy,
+            // 加入所有原始資料
+            ...row
+          };
+
+          // 使用清理工具處理資料
+          const cleanedCustomerData = cleanCustomerData(rawCustomerData);
+          
+          batch.set(doc(this.db, 'customers', customerId), cleanedCustomerData);
+          
+          // 儲存映射 - 使用關鍵欄位
+          if (keyField && row[keyField]) {
+            this.customerIdMap.set(row[keyField], customerId);
+          }
+          const customerKey = `${name}_${row[mappings.company] || ''}`;
+          this.customerIdMap.set(customerKey, customerId);
+          
+          batchCount++;
+          result.success++;
+        } catch (error) {
+          result.errors.push({
+            row: i + 2,
+            message: `匯入失敗: ${error}`
+          });
+          result.failed++;
         }
+      }
 
-        // 處理標籤
-        const tagsStr = row[mappings.tags] || '';
-        const tags = tagsStr.split(/[;,；，]/).map((t: string) => t.trim()).filter(Boolean);
-
-        // 建立客戶資料
-        const customerId = doc(collection(this.db, 'customers')).id;
-        const rawCustomerData = {
-          id: customerId,
-          name,
-          company: row[mappings.company] || '',
-          phone: row[mappings.phone] || '',
-          email: row[mappings.email] || '',
-          jobTitle: row[mappings.jobTitle] || '',
-          createdBy,
-          organizationId: this.organizationId,
-          tags,
-          notes: row[mappings.notes] || '',
-          createdAt: Timestamp.now(),
-          updatedAt: Timestamp.now(),
-          teamMembers: [createdBy],
-          assignedTo: createdBy,
-          userId: createdBy,
-          // 加入所有原始資料
-          ...row
-        };
-
-        // 使用清理工具處理資料
-        const cleanedCustomerData = cleanCustomerData(rawCustomerData);
-        
-        batch.set(doc(this.db, 'customers', customerId), cleanedCustomerData);
-        
-        // 儲存映射 - 使用關鍵欄位
-        if (keyField && row[keyField]) {
-          this.customerIdMap.set(row[keyField], customerId);
+      // 提交這一批次
+      if (batchCount > 0) {
+        try {
+          await batch.commit();
+          totalCount += batchCount;
+        } catch (error) {
+          console.error(`批次提交失敗: ${error}`);
+          // 如果批次提交失敗，記錄錯誤
+          for (let i = batchStart; i < batchEnd; i++) {
+            result.errors.push({
+              row: i + 2,
+              message: `批次提交失敗: ${error}`
+            });
+            result.failed++;
+          }
+          result.success -= batchCount; // 扣回成功數
         }
-        const customerKey = `${name}_${row[mappings.company] || ''}`;
-        this.customerIdMap.set(customerKey, customerId);
-        
-        count++;
-        result.success++;
-      } catch (error) {
-        result.errors.push({
-          row: i + 2,
-          message: `匯入失敗: ${error}`
-        });
-        result.failed++;
       }
     }
 
-    if (count > 0) {
-      await batch.commit();
-      result.imported!.customers = count;
-    }
-
+    result.imported!.customers = totalCount;
     return result;
   }
 
