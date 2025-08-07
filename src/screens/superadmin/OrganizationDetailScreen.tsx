@@ -268,7 +268,23 @@ export const OrganizationDetailScreen: React.FC = () => {
     <>
       {/* 自定義標題列 */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <TouchableOpacity 
+          onPress={() => {
+            console.log('返回按鈕點擊');
+            console.log('Can go back:', navigation.canGoBack());
+            console.log('Navigation state:', navigation.getState());
+            
+            // 嘗試返回，如果失敗則導航到組織列表
+            if (navigation.canGoBack()) {
+              console.log('執行 goBack()');
+              navigation.goBack();
+            } else {
+              console.log('導航到 OrganizationsScreen');
+              navigation.navigate('OrganizationsScreen' as any);
+            }
+          }} 
+          style={styles.backButton}
+        >
           <Icon name="chevron-back" size={24} color={DesignSystem.colors.text.primary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle} numberOfLines={1}>
