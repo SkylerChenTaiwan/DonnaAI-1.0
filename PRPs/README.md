@@ -85,6 +85,7 @@
 | 79v  | unified-permission-system.md | ✅ 已完成 | 統一權限系統完整重構 - 中央權限控制、自動修復、用戶建立安全化、完整測試 | 2025-08-06 |
 | 80   | web-layout-optimization.md | 🔄 進行中 | Web 佈局架構統一優化 - 側邊欄一致性、響應式設計、Icon 系統完善 | 2025-08-07 |
 | 81v  | web-layout-complete-redesign.md | ✅ 已完成 | Web 版面完整重構與修復 - 修復導航、統一佈局、響應式設計 | 2025-08-07 |
+| 82   | web-navigation-super-admin-fix.md | 📋 待執行 | 修復 Web 導航系統與 Super Admin 頁面架構 - 側邊欄消失、返回導航、UX 改進 | - |
 
 ## 命名規則
 
@@ -100,7 +101,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：82**
+**下一個新建的 PRP 應使用編號：83**
 
 ## PRP 類型說明
 
