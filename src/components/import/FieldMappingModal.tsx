@@ -178,15 +178,27 @@ export const FieldMappingModal: React.FC<Props> = ({
     
     if (!fields) return mapping;
 
+    console.log(`為檔案類型 '${fileType}' 執行自動映射`);
+    console.log('檔案欄位:', headers);
+    console.log('系統欄位:', fields);
+
     // 對每個系統欄位，嘗試找到最匹配的 CSV 欄位
     Object.keys(fields).forEach(systemField => {
       const fieldName = fields[systemField as keyof typeof fields];
       const matchedHeader = findBestMatch(headers, fieldName);
+      console.log(`系統欄位 '${fieldName}' (${systemField}) 匹配到: ${matchedHeader}`);
       if (matchedHeader) {
-        mapping[systemField] = matchedHeader;
+        // 避免重複映射 - 如果 CSV 欄位已經被映射，跳過
+        const alreadyMapped = Object.values(mapping).includes(matchedHeader);
+        if (!alreadyMapped) {
+          mapping[systemField] = matchedHeader;
+        } else {
+          console.log(`CSV 欄位 '${matchedHeader}' 已經被映射，跳過系統欄位 '${fieldName}'`);
+        }
       }
     });
 
+    console.log('最終映射結果:', mapping);
     return mapping;
   };
 
@@ -198,16 +210,43 @@ export const FieldMappingModal: React.FC<Props> = ({
     const exact = headers.find(h => h.toLowerCase() === lowerTarget);
     if (exact) return exact;
     
-    // 包含匹配
-    const contains = headers.find(h => h.toLowerCase().includes(lowerTarget) || lowerTarget.includes(h.toLowerCase()));
-    if (contains) return contains;
+    // 精確包含匹配 - 目標完全包含欄位名稱
+    const targetContains = headers.find(h => 
+      h.toLowerCase().length >= 2 && lowerTarget.includes(h.toLowerCase())
+    );
+    if (targetContains) return targetContains;
     
-    // 部分匹配
-    const partial = headers.find(h => {
+    // 特定關鍵字匹配 - 更精確的匹配規則
+    const keywordMappings: { [key: string]: string[] } = {
+      '客戶姓名': ['客戶', '姓名', 'customer', 'name'],
+      '業務名稱': ['業務', '員工', '人員', 'sales', 'staff'],
+      '電子郵件': ['郵件', 'email', 'mail'],
+      '電話': ['電話', 'phone', 'tel'],
+      '公司': ['公司', 'company', '企業'],
+      '部門': ['部門', 'department', 'dept'],
+      '職稱': ['職稱', '职位', 'title', 'position'],
+    };
+    
+    // 使用特定關鍵字匹配
+    const targetKeywords = keywordMappings[target];
+    if (targetKeywords) {
+      for (const keyword of targetKeywords) {
+        const match = headers.find(h => 
+          h.toLowerCase().includes(keyword.toLowerCase())
+        );
+        if (match) {
+          console.log(`為 '${target}' 找到關鍵字匹配: '${match}' (關鍵字: '${keyword}')`);
+          return match;
+        }
+      }
+    }
+    
+    // 最後才使用一般包含匹配
+    const headerContains = headers.find(h => {
       const lowerH = h.toLowerCase();
-      return target.split('').some(char => lowerH.includes(char.toLowerCase()));
+      return lowerH.includes(lowerTarget) && lowerTarget.length >= 2;
     });
-    if (partial) return partial;
+    if (headerContains) return headerContains;
     
     return null;
   };
@@ -308,9 +347,13 @@ export const FieldMappingModal: React.FC<Props> = ({
 
   // 更新欄位映射
   const updateFieldMapping = (fileIndex: number, systemField: string, csvField: string) => {
+    console.log(`更新欄位映射: 檔案${fileIndex}, 系統欄位「${systemField}」-> CSV欄位「${csvField}」`);
     setFieldMappings(prev => {
       const newMappings = [...prev];
-      newMappings[fileIndex].mappings[systemField] = csvField;
+      if (newMappings[fileIndex]) {
+        newMappings[fileIndex].mappings[systemField] = csvField;
+        console.log('更新後的映射:', newMappings[fileIndex].mappings);
+      }
       return newMappings;
     });
   };
@@ -383,10 +426,15 @@ export const FieldMappingModal: React.FC<Props> = ({
             <View style={styles.pickerContainer}>
               <Picker
                 selectedValue={mapping.mappings[systemField] || ''}
-                onValueChange={(value) => updateFieldMapping(index, systemField, value)}
+                onValueChange={(value) => {
+                  console.log(`Picker 值變更: ${systemField} -> ${value}`);
+                  updateFieldMapping(index, systemField, value);
+                }}
                 style={styles.picker}
+                enabled={true}
+                mode="dropdown"
               >
-                <Picker.Item label="不映射" value="" />
+                <Picker.Item label="選擇欄位" value="" />
                 {headers.map(header => (
                   <Picker.Item key={header} label={header} value={header} />
                 ))}
