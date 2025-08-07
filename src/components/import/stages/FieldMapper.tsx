@@ -81,9 +81,17 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
     try {
       const fields = await getFieldDefinitions(targetDatabase, organizationId);
       setExistingFields(fields);
-    } catch (error) {
-      console.error('載入欄位定義失敗:', error);
-      showErrorToast('載入欄位定義失敗');
+      console.log('✅ 成功載入欄位定義:', fields.length);
+    } catch (error: any) {
+      console.error('❌ 載入欄位定義失敗:', error);
+      
+      // 如果是權限錯誤，使用預設欄位
+      if (error?.message?.includes('permission')) {
+        console.log('⚠️ 權限不足，使用預設欄位定義');
+        setExistingFields(getDefaultFields(targetDatabase));
+      } else {
+        showErrorToast('載入欄位定義失敗');
+      }
     } finally {
       setLoading(false);
     }
@@ -93,38 +101,90 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
     try {
       const relations = await getFieldRelations(organizationId, targetDatabase);
       setExistingRelations(relations);
-    } catch (error) {
-      console.error('載入關聯失敗:', error);
+      console.log('✅ 成功載入欄位關聯:', relations.length);
+    } catch (error: any) {
+      console.error('❌ 取得欄位關聯失敗:', error);
+      
+      // 如果是權限錯誤，不顯示錯誤，直接使用空陣列
+      if (error?.message?.includes('permission')) {
+        console.log('⚠️ 權限不足，無法載入現有關聯');
+        setExistingRelations([]);
+      }
     }
+  };
+
+  // 取得預設欄位定義
+  const getDefaultFields = (database: DatabaseType): FieldConfig[] => {
+    const defaultFields: Record<DatabaseType, FieldConfig[]> = {
+      customers: [
+        { key: 'name', label: '客戶姓名', type: 'text' as FieldType, isRequired: true, isSystem: false },
+        { key: 'phone', label: '電話', type: 'text' as FieldType, isRequired: false, isSystem: false },
+        { key: 'email', label: '電子郵件', type: 'text' as FieldType, isRequired: false, isSystem: false },
+        { key: 'company', label: '公司', type: 'text' as FieldType, isRequired: false, isSystem: false },
+        { key: 'address', label: '地址', type: 'text' as FieldType, isRequired: false, isSystem: false },
+        { key: 'notes', label: '備註', type: 'text' as FieldType, isRequired: false, isSystem: false },
+        { key: 'customField1', label: '自訂欄位1', type: 'text' as FieldType, isRequired: false, isSystem: false },
+        { key: 'customField2', label: '自訂欄位2', type: 'text' as FieldType, isRequired: false, isSystem: false },
+        { key: 'customField3', label: '自訂欄位3', type: 'text' as FieldType, isRequired: false, isSystem: false }
+      ],
+      records: [
+        { key: 'title', label: '標題', type: 'text' as FieldType, isRequired: true, isSystem: false },
+        { key: 'content', label: '內容', type: 'text' as FieldType, isRequired: false, isSystem: false },
+        { key: 'date', label: '日期', type: 'date' as FieldType, isRequired: false, isSystem: false },
+        { key: 'amount', label: '金額', type: 'number' as FieldType, isRequired: false, isSystem: false },
+        { key: 'status', label: '狀態', type: 'text' as FieldType, isRequired: false, isSystem: false }
+      ],
+      tasks: [
+        { key: 'title', label: '任務名稱', type: 'text' as FieldType, isRequired: true, isSystem: false },
+        { key: 'description', label: '描述', type: 'text' as FieldType, isRequired: false, isSystem: false },
+        { key: 'dueDate', label: '到期日', type: 'date' as FieldType, isRequired: false, isSystem: false },
+        { key: 'priority', label: '優先級', type: 'text' as FieldType, isRequired: false, isSystem: false },
+        { key: 'status', label: '狀態', type: 'text' as FieldType, isRequired: false, isSystem: false }
+      ],
+      users: []
+    };
+
+    return defaultFields[database] || [];
   };
 
   // 初始化欄位映射
   const initializeMappings = () => {
     const initialMappings: FieldMapping[] = [];
     
+    console.log('初始化欄位映射，現有欄位數:', existingFields.length);
+    console.log('CSV 欄位:', mergedTable.headers);
+    
     mergedTable.headers.forEach(header => {
       // 嘗試自動匹配現有欄位
       const matchedField = existingFields.find(field => {
         const fieldLabel = field.label.toLowerCase();
+        const fieldKey = field.key.toLowerCase();
         const headerLower = header.toLowerCase();
         
-        // 完全匹配
-        if (fieldLabel === headerLower) return true;
+        // 完全匹配 label 或 key
+        if (fieldLabel === headerLower || fieldKey === headerLower) return true;
         
-        // 常見別名匹配
+        // 常見別名匹配（擴展匹配規則）
         const aliases: Record<string, string[]> = {
-          'name': ['姓名', '客戶姓名', '名稱', 'customer_name'],
-          'phone': ['電話', '手機', '聯絡電話', 'mobile', 'tel'],
-          'email': ['郵件', '電子郵件', 'mail', 'e-mail'],
-          'company': ['公司', '公司名稱', '企業', 'organization'],
-          'address': ['地址', '住址', '聯絡地址'],
-          'title': ['標題', '主題', '任務名稱'],
-          'description': ['描述', '說明', '內容', '備註']
+          'name': ['姓名', '客戶姓名', '名稱', '客戶名稱', 'customer_name', '客戶'],
+          'phone': ['電話', '手機', '聯絡電話', 'mobile', 'tel', '電話號碼', '聯絡方式'],
+          'email': ['郵件', '電子郵件', 'mail', 'e-mail', '郵箱', 'email'],
+          'company': ['公司', '公司名稱', '企業', 'organization', '單位'],
+          'address': ['地址', '住址', '聯絡地址', '地點'],
+          'title': ['標題', '主題', '任務名稱', '名稱'],
+          'description': ['描述', '說明', '內容', '備註', '記錄'],
+          'notes': ['備註', '筆記', '註記', '說明'],
+          'customField1': ['負責業務', '業務', '業務員', '銷售', '銷售員'],
+          'customField2': ['建議方案', '方案', '建議', '推薦'],
+          'customField3': ['客戶等級', '等級', '級別', 'VIP']
         };
         
         for (const [key, values] of Object.entries(aliases)) {
-          if (field.key === key && values.some(v => headerLower.includes(v))) {
-            return true;
+          if (field.key === key) {
+            // 檢查 header 是否包含任何別名
+            if (values.some(v => headerLower.includes(v) || v.includes(headerLower))) {
+              return true;
+            }
           }
         }
         
@@ -133,17 +193,22 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
 
       if (matchedField) {
         // 匹配到現有欄位
+        console.log(`欄位 "${header}" 匹配到 "${matchedField.key}"`);
         initialMappings.push({
           sourceColumn: header,
           targetField: matchedField.key,
-          isNew: false
+          isNew: false,
+          customLabel: matchedField.label
         });
       } else {
-        // 新建欄位
+        // 新建欄位 - 預設啟用所有欄位
         const stats = getFieldStatistics(mergedTable.data, header);
+        const fieldKey = generateFieldKey(header);
+        console.log(`欄位 "${header}" 將建立新欄位 "${fieldKey}"`);
+        
         initialMappings.push({
           sourceColumn: header,
-          targetField: generateFieldKey(header),
+          targetField: fieldKey,
           isNew: true,
           fieldType: stats.type,
           customLabel: header
@@ -151,6 +216,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
       }
     });
 
+    console.log('初始化映射完成:', initialMappings);
     setMappings(initialMappings);
     onMappingsChanged(initialMappings);
   };
