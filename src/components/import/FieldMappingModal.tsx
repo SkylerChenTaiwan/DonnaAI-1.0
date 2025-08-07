@@ -12,6 +12,7 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Icon } from '@/components/common/Icon';
@@ -406,16 +407,42 @@ export const FieldMappingModal: React.FC<Props> = ({
         <View style={styles.mappingRow}>
           <Text style={styles.labelText}>關鍵欄位 (用於關聯):</Text>
           <View style={styles.pickerContainer}>
-            <Picker
-              selectedValue={mapping.keyField}
-              onValueChange={(value) => updateKeyField(index, value)}
-              style={styles.picker}
-            >
-              <Picker.Item label="選擇欄位" value="" />
-              {headers.map(header => (
-                <Picker.Item key={header} label={header} value={header} />
-              ))}
-            </Picker>
+            {Platform.OS === 'web' ? (
+              <select
+                value={mapping.keyField || ''}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  console.log(`Web select 關鍵欄位變更: ${value}`);
+                  updateKeyField(index, value);
+                }}
+                style={{
+                  width: '100%',
+                  height: 44,
+                  backgroundColor: DesignSystem.colors.background.elevated,
+                  border: `1px solid ${DesignSystem.colors.border.light}`,
+                  borderRadius: 8,
+                  padding: '0 12px',
+                  fontSize: 16,
+                  color: DesignSystem.colors.text.primary,
+                }}
+              >
+                <option value="">選擇欄位</option>
+                {headers.map(header => (
+                  <option key={header} value={header}>{header}</option>
+                ))}
+              </select>
+            ) : (
+              <Picker
+                selectedValue={mapping.keyField}
+                onValueChange={(value) => updateKeyField(index, value)}
+                style={styles.picker}
+              >
+                <Picker.Item label="選擇欄位" value="" />
+                {headers.map(header => (
+                  <Picker.Item key={header} label={header} value={header} />
+                ))}
+              </Picker>
+            )}
           </View>
         </View>
         
@@ -424,21 +451,47 @@ export const FieldMappingModal: React.FC<Props> = ({
           <View key={systemField} style={styles.mappingRow}>
             <Text style={styles.labelText}>{fieldLabel}:</Text>
             <View style={styles.pickerContainer}>
-              <Picker
-                selectedValue={mapping.mappings[systemField] || ''}
-                onValueChange={(value) => {
-                  console.log(`Picker 值變更: ${systemField} -> ${value}`);
-                  updateFieldMapping(index, systemField, value);
-                }}
-                style={styles.picker}
-                enabled={true}
-                mode="dropdown"
-              >
-                <Picker.Item label="選擇欄位" value="" />
-                {headers.map(header => (
-                  <Picker.Item key={header} label={header} value={header} />
-                ))}
-              </Picker>
+              {Platform.OS === 'web' ? (
+                <select
+                  value={mapping.mappings[systemField] || ''}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    console.log(`Web select 值變更: ${systemField} -> ${value}`);
+                    updateFieldMapping(index, systemField, value);
+                  }}
+                  style={{
+                    width: '100%',
+                    height: 44,
+                    backgroundColor: DesignSystem.colors.background.elevated,
+                    border: `1px solid ${DesignSystem.colors.border.light}`,
+                    borderRadius: 8,
+                    padding: '0 12px',
+                    fontSize: 16,
+                    color: DesignSystem.colors.text.primary,
+                  }}
+                >
+                  <option value="">選擇欄位</option>
+                  {headers.map(header => (
+                    <option key={header} value={header}>{header}</option>
+                  ))}
+                </select>
+              ) : (
+                <Picker
+                  selectedValue={mapping.mappings[systemField] || ''}
+                  onValueChange={(value) => {
+                    console.log(`Picker 值變更: ${systemField} -> ${value}`);
+                    updateFieldMapping(index, systemField, value);
+                  }}
+                  style={styles.picker}
+                  enabled={true}
+                  mode="dropdown"
+                >
+                  <Picker.Item label="選擇欄位" value="" />
+                  {headers.map(header => (
+                    <Picker.Item key={header} label={header} value={header} />
+                  ))}
+                </Picker>
+              )}
             </View>
           </View>
         ))}
@@ -471,25 +524,70 @@ export const FieldMappingModal: React.FC<Props> = ({
             <View style={styles.relationRow}>
               <Text style={styles.relationLabel}>來源:</Text>
               <View style={styles.relationPickers}>
-                <Picker
-                  selectedValue={relation.sourceFile}
-                  onValueChange={(value) => updateRelation(index, 'sourceFile', value)}
-                  style={[styles.picker, styles.halfPicker]}
-                >
-                  {fieldMappings.map((m, i) => (
-                    <Picker.Item key={i} label={m.fileName} value={i} />
-                  ))}
-                </Picker>
-                <Picker
-                  selectedValue={relation.sourceField}
-                  onValueChange={(value) => updateRelation(index, 'sourceField', value)}
-                  style={[styles.picker, styles.halfPicker]}
-                >
-                  <Picker.Item label="選擇欄位" value="" />
-                  {fileHeaders[relation.sourceFile]?.headers.map(h => (
-                    <Picker.Item key={h} label={h} value={h} />
-                  ))}
-                </Picker>
+                {Platform.OS === 'web' ? (
+                  <>
+                    <select
+                      value={relation.sourceFile}
+                      onChange={(e) => updateRelation(index, 'sourceFile', parseInt(e.target.value))}
+                      style={{
+                        flex: 1,
+                        height: 44,
+                        backgroundColor: DesignSystem.colors.background.elevated,
+                        border: `1px solid ${DesignSystem.colors.border.light}`,
+                        borderRadius: 8,
+                        padding: '0 12px',
+                        fontSize: 16,
+                        color: DesignSystem.colors.text.primary,
+                        marginRight: 8,
+                      }}
+                    >
+                      {fieldMappings.map((m, i) => (
+                        <option key={i} value={i}>{m.fileName}</option>
+                      ))}
+                    </select>
+                    <select
+                      value={relation.sourceField}
+                      onChange={(e) => updateRelation(index, 'sourceField', e.target.value)}
+                      style={{
+                        flex: 1,
+                        height: 44,
+                        backgroundColor: DesignSystem.colors.background.elevated,
+                        border: `1px solid ${DesignSystem.colors.border.light}`,
+                        borderRadius: 8,
+                        padding: '0 12px',
+                        fontSize: 16,
+                        color: DesignSystem.colors.text.primary,
+                      }}
+                    >
+                      <option value="">選擇欄位</option>
+                      {fileHeaders[relation.sourceFile]?.headers.map(h => (
+                        <option key={h} value={h}>{h}</option>
+                      ))}
+                    </select>
+                  </>
+                ) : (
+                  <>
+                    <Picker
+                      selectedValue={relation.sourceFile}
+                      onValueChange={(value) => updateRelation(index, 'sourceFile', value)}
+                      style={[styles.picker, styles.halfPicker]}
+                    >
+                      {fieldMappings.map((m, i) => (
+                        <Picker.Item key={i} label={m.fileName} value={i} />
+                      ))}
+                    </Picker>
+                    <Picker
+                      selectedValue={relation.sourceField}
+                      onValueChange={(value) => updateRelation(index, 'sourceField', value)}
+                      style={[styles.picker, styles.halfPicker]}
+                    >
+                      <Picker.Item label="選擇欄位" value="" />
+                      {fileHeaders[relation.sourceFile]?.headers.map(h => (
+                        <Picker.Item key={h} label={h} value={h} />
+                      ))}
+                    </Picker>
+                  </>
+                )}
               </View>
             </View>
             
@@ -497,25 +595,70 @@ export const FieldMappingModal: React.FC<Props> = ({
             <View style={styles.relationRow}>
               <Text style={styles.relationLabel}>目標:</Text>
               <View style={styles.relationPickers}>
-                <Picker
-                  selectedValue={relation.targetFile}
-                  onValueChange={(value) => updateRelation(index, 'targetFile', value)}
-                  style={[styles.picker, styles.halfPicker]}
-                >
-                  {fieldMappings.map((m, i) => (
-                    <Picker.Item key={i} label={m.fileName} value={i} />
-                  ))}
-                </Picker>
-                <Picker
-                  selectedValue={relation.targetField}
-                  onValueChange={(value) => updateRelation(index, 'targetField', value)}
-                  style={[styles.picker, styles.halfPicker]}
-                >
-                  <Picker.Item label="選擇欄位" value="" />
-                  {fileHeaders[relation.targetFile]?.headers.map(h => (
-                    <Picker.Item key={h} label={h} value={h} />
-                  ))}
-                </Picker>
+                {Platform.OS === 'web' ? (
+                  <>
+                    <select
+                      value={relation.targetFile}
+                      onChange={(e) => updateRelation(index, 'targetFile', parseInt(e.target.value))}
+                      style={{
+                        flex: 1,
+                        height: 44,
+                        backgroundColor: DesignSystem.colors.background.elevated,
+                        border: `1px solid ${DesignSystem.colors.border.light}`,
+                        borderRadius: 8,
+                        padding: '0 12px',
+                        fontSize: 16,
+                        color: DesignSystem.colors.text.primary,
+                        marginRight: 8,
+                      }}
+                    >
+                      {fieldMappings.map((m, i) => (
+                        <option key={i} value={i}>{m.fileName}</option>
+                      ))}
+                    </select>
+                    <select
+                      value={relation.targetField}
+                      onChange={(e) => updateRelation(index, 'targetField', e.target.value)}
+                      style={{
+                        flex: 1,
+                        height: 44,
+                        backgroundColor: DesignSystem.colors.background.elevated,
+                        border: `1px solid ${DesignSystem.colors.border.light}`,
+                        borderRadius: 8,
+                        padding: '0 12px',
+                        fontSize: 16,
+                        color: DesignSystem.colors.text.primary,
+                      }}
+                    >
+                      <option value="">選擇欄位</option>
+                      {fileHeaders[relation.targetFile]?.headers.map(h => (
+                        <option key={h} value={h}>{h}</option>
+                      ))}
+                    </select>
+                  </>
+                ) : (
+                  <>
+                    <Picker
+                      selectedValue={relation.targetFile}
+                      onValueChange={(value) => updateRelation(index, 'targetFile', value)}
+                      style={[styles.picker, styles.halfPicker]}
+                    >
+                      {fieldMappings.map((m, i) => (
+                        <Picker.Item key={i} label={m.fileName} value={i} />
+                      ))}
+                    </Picker>
+                    <Picker
+                      selectedValue={relation.targetField}
+                      onValueChange={(value) => updateRelation(index, 'targetField', value)}
+                      style={[styles.picker, styles.halfPicker]}
+                    >
+                      <Picker.Item label="選擇欄位" value="" />
+                      {fileHeaders[relation.targetField]?.headers.map(h => (
+                        <Picker.Item key={h} label={h} value={h} />
+                      ))}
+                    </Picker>
+                  </>
+                )}
               </View>
             </View>
             
