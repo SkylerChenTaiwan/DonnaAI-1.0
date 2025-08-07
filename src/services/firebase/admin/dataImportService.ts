@@ -11,6 +11,7 @@ import {
   query,
   where,
   getDocs,
+  setDoc,
 } from 'firebase/firestore';
 import { getFirebaseDb } from '../config';
 import { getAuth } from 'firebase/auth';
@@ -21,6 +22,13 @@ import { Team, CreateTeamData } from '@/types/entities/team';
 import { isOrgAdmin } from '../permissions';
 import * as Papa from 'papaparse';
 import * as XLSX from 'xlsx';
+import { 
+  cleanFirestoreData, 
+  cleanCustomerData,
+  cleanRecordData,
+  cleanUserData,
+  parseFlexibleDate 
+} from '@/utils/firebaseDataCleaner';
 
 export type ImportType = 'customers' | 'records' | 'tasks' | 'users' | 'hierarchy' | 'auto';
 
@@ -379,7 +387,8 @@ async function importCustomer(
   const db = getFirebaseDb();
   const customerRef = doc(collection(db, 'customers'));
   
-  const customer: Partial<Customer> = {
+  // 準備原始客戶資料
+  const rawCustomer = {
     name: data.name || data.公司名稱 || data.客戶名稱 || '',
     email: data.email || data.電子郵件 || data.電郵 || null,
     phone: data.phone || data.電話 || data.聯絡電話 || null,
@@ -392,9 +401,16 @@ async function importCustomer(
     assignedTo: userId,
     createdAt: Timestamp.now(),
     updatedAt: Timestamp.now(),
+    notes: data.notes || data.備註 || null,
+    tags: data.tags || [],
+    // 加入其他可能的欄位
+    ...data
   };
   
-  batch.set(customerRef, customer);
+  // 使用清理工具處理資料
+  const cleanedCustomer = cleanCustomerData(rawCustomer);
+  
+  batch.set(customerRef, cleanedCustomer);
 }
 
 /**
@@ -409,20 +425,27 @@ async function importRecord(
   const db = getFirebaseDb();
   const recordRef = doc(collection(db, 'records'));
   
-  const record: Partial<Record> = {
+  // 準備原始記錄資料
+  const rawRecord = {
     title: data.title || data.標題 || data.記錄標題 || '',
     content: data.content || data.內容 || data.記錄內容 || '',
     type: data.type || data.類型 || 'meeting',
     customerId: data.customerId || data.客戶ID || null,
-    date: data.date ? new Date(data.date) : new Date(),
+    date: parseFlexibleDate(data.date || data.日期 || data.訪談日期) || new Date(),
+    nextFollowUpDate: data.nextFollowUpDate ? parseFlexibleDate(data.nextFollowUpDate) : null,
     tags: data.tags ? (typeof data.tags === 'string' ? data.tags.split(',') : data.tags) : [],
     organizationId,
     userId,
     createdAt: Timestamp.now(),
     updatedAt: Timestamp.now(),
+    // 加入其他可能的欄位
+    ...data
   };
   
-  batch.set(recordRef, record);
+  // 使用清理工具處理資料
+  const cleanedRecord = cleanRecordData(rawRecord);
+  
+  batch.set(recordRef, cleanedRecord);
 }
 
 /**
@@ -465,11 +488,21 @@ async function importUser(
   const db = getFirebaseDb();
   const auth = getAuth();
   
-  const email = data.email || data.電子郵件 || data.電郵;
-  const name = data.name || data.姓名 || data.用戶名稱;
-  const role = data.role || data.角色 || data.權限 || 'salesperson';
-  const department = data.department || data.部門 || null;
-  const phone = data.phone || data.電話 || null;
+  // 準備原始用戶資料
+  const rawUser = {
+    email: data.email || data.電子郵件 || data.電郵 || data.公司Gmail帳號,
+    name: data.name || data.姓名 || data.用戶名稱 || data.業務帳號,
+    role: data.role || data.角色 || data.權限 || 'salesperson',
+    department: data.department || data.部門 || null,
+    phone: data.phone || data.電話 || data.Phone || null,
+    organizationId,
+    isActive: data.enabled !== 'false' && data.enabled !== '0',
+    // 加入其他可能的欄位
+    ...data
+  };
+  
+  // 使用清理工具處理資料
+  const cleanedUser = cleanUserData(rawUser);
   
   // 不應該在前端建立 Auth 帳號，這會導致自動登入
   // 應該使用 Cloud Function 或後端服務來建立用戶
@@ -483,16 +516,10 @@ async function importUser(
     
     // 建立 Firestore 用戶文件（但沒有對應的 Auth 帳號）
     const userRef = doc(db, 'users', uid);
-    const userData: User = {
+    const userData = {
+      ...cleanedUser,
       id: uid,
       uid,
-      email,
-      name,
-      role,
-      organizationId,
-      department,
-      phone,
-      isActive: false, // 設為未啟用，因為沒有 Auth 帳號
       createdAt: new Date(),
       lastLoginAt: null,
       supervisorId: null,
@@ -501,14 +528,14 @@ async function importUser(
     };
     
     await setDoc(userRef, userData);
-    console.warn(`⚠️ 已建立用戶文件但無 Auth 帳號: ${email}`);
+    console.warn(`⚠️ 已建立用戶文件但無 Auth 帳號: ${cleanedUser.email}`);
   } catch (error) {
     // 如果是已存在的用戶，只更新資料
     if (error instanceof Error && error.message.includes('already-exists')) {
       // 查找現有用戶
       const usersQuery = query(
         collection(db, 'users'),
-        where('email', '==', email),
+        where('email', '==', cleanedUser.email),
         where('organizationId', '==', organizationId)
       );
       const snapshot = await getDocs(usersQuery);
@@ -516,10 +543,7 @@ async function importUser(
       if (!snapshot.empty) {
         const existingUser = snapshot.docs[0];
         await existingUser.ref.update({
-          name,
-          role,
-          department,
-          phone,
+          ...cleanedUser,
           updatedAt: Timestamp.now(),
         });
       }
@@ -1116,7 +1140,7 @@ export class SmartDataImporter {
 
         // 建立客戶資料
         const customerId = doc(collection(this.db, 'customers')).id;
-        const customerData = {
+        const rawCustomerData = {
           id: customerId,
           name,
           company: row[mappings.company] || '',
@@ -1129,10 +1153,17 @@ export class SmartDataImporter {
           notes: row[mappings.notes] || '',
           createdAt: Timestamp.now(),
           updatedAt: Timestamp.now(),
-          teamMembers: [createdBy]
+          teamMembers: [createdBy],
+          assignedTo: createdBy,
+          userId: createdBy,
+          // 加入所有原始資料
+          ...row
         };
 
-        batch.set(doc(this.db, 'customers', customerId), customerData);
+        // 使用清理工具處理資料
+        const cleanedCustomerData = cleanCustomerData(rawCustomerData);
+        
+        batch.set(doc(this.db, 'customers', customerId), cleanedCustomerData);
         
         // 儲存映射 - 使用關鍵欄位
         if (keyField && row[keyField]) {
@@ -1225,27 +1256,36 @@ export class SmartDataImporter {
 
         // 處理日期
         const dateStr = row[mappings.date];
-        const date = dateStr ? new Date(dateStr) : new Date();
+        const date = parseFlexibleDate(dateStr) || new Date();
 
         // 建立紀錄資料
         const recordId = doc(collection(this.db, 'records')).id;
-        const recordData = {
+        const rawRecordData = {
           id: recordId,
           customerId,
           createdBy,
-          date: Timestamp.fromDate(date),
+          userId: createdBy,
+          date: date,
           type: row[mappings.type] || '訪談',
+          title: row[mappings.title] || row[mappings.content]?.substring(0, 50) || '訪談紀錄',
           content: row[mappings.content] || '',
           organizationId: this.organizationId,
           createdAt: Timestamp.now(),
-          teamMembers: [createdBy]
+          updatedAt: Timestamp.now(),
+          teamMembers: [createdBy],
+          // 加入所有原始資料
+          ...row
         };
 
+        // 處理下次跟進日期
         if (mappings.followUp && row[mappings.followUp]) {
-          recordData.followUpDate = Timestamp.fromDate(new Date(row[mappings.followUp]));
+          rawRecordData.nextFollowUpDate = parseFlexibleDate(row[mappings.followUp]);
         }
 
-        batch.set(doc(this.db, 'records', recordId), recordData);
+        // 使用清理工具處理資料
+        const cleanedRecordData = cleanRecordData(rawRecordData);
+        
+        batch.set(doc(this.db, 'records', recordId), cleanedRecordData);
         count++;
         result.success++;
       } catch (error) {
