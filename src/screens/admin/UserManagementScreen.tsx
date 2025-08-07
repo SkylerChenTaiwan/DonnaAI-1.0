@@ -12,8 +12,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import { Layout } from '@/components/common/Layout';
-import { migrateToUnifiedWebLayout } from '@/components/layout/withUnifiedWebLayout';
+import { SmartLayout } from '@/components/layout/SmartLayout';
 import { SearchBar } from '@/components/common/SearchBar';
 import { ToolbarIcons } from '@/components/common/ToolbarIcons';
 import { DataTable } from '@/components/common/DataTable';
@@ -287,8 +286,8 @@ export const UserManagementScreen: React.FC = () => {
     );
   }
   
-  const content = (
-    <View style={styles.container}>
+  return (
+    <SmartLayout style={styles.container} scrollable={false}>
         
         {/* 工具列 */}
         <View style={styles.toolbar}>
@@ -391,29 +390,6 @@ export const UserManagementScreen: React.FC = () => {
             </View>
           </View>
         )}
-    </View>
-  );
-  
-  return (
-    <>
-      {migrateToUnifiedWebLayout(content, { 
-        maxWidth: 1400,
-        scrollable: false,
-        layoutProps: {
-          headerProps: {
-            title: '用戶管理',
-            showBack: true,
-            rightComponent: (
-              <TouchableOpacity
-                style={styles.addButton}
-                onPress={handleAddUser}
-              >
-                <Icon name="add" size={24} color={DesignSystem.colors.primary} />
-              </TouchableOpacity>
-            )
-          }
-        }
-      })}
       
       {/* 篩選 Modal */}
       <FilterModal
@@ -430,7 +406,7 @@ export const UserManagementScreen: React.FC = () => {
         ]}
         tabType="users"
       />
-    </>
+    </SmartLayout>
   );
 };
 

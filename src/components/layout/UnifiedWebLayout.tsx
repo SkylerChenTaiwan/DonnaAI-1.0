@@ -16,6 +16,12 @@ import { TopBar } from '@/components/navigation/TopBar';
 import { useAuthStore } from '@/stores/authStore';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
+// 側邊欄寬度常數
+const SIDEBAR_WIDTH = {
+  expanded: 220,
+  collapsed: 80,
+};
+
 interface UnifiedWebLayoutProps {
   children: React.ReactNode;
   scrollable?: boolean;
@@ -60,6 +66,10 @@ export const UnifiedWebLayout: React.FC<UnifiedWebLayoutProps> = ({
   const shouldShowSidebar = showSidebar && (isDesktopWeb() || (isTabletWeb() && !sidebarCollapsed));
   const shouldShowTopBar = showSidebar && (isTabletWeb() || isMobileWeb());
   
+  // 計算側邊欄寬度
+  const sidebarWidth = shouldShowSidebar ? 
+    (sidebarCollapsed ? SIDEBAR_WIDTH.collapsed : SIDEBAR_WIDTH.expanded) : 0;
+  
   // 非 Web 平台直接返回子元素
   if (Platform.OS !== 'web') {
     return <>{children}</>;
@@ -98,7 +108,7 @@ export const UnifiedWebLayout: React.FC<UnifiedWebLayoutProps> = ({
       {/* 主內容區 */}
       <View style={[
         styles.mainContent,
-        shouldShowSidebar && styles.mainContentWithSidebar,
+        shouldShowSidebar && { marginLeft: sidebarWidth },
       ]}>
         {/* 頂部導航欄（平板和手機） */}
         {shouldShowTopBar && (
@@ -127,9 +137,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     minWidth: 0, // 防止內容溢出
-  },
-  mainContentWithSidebar: {
-    // 側邊欄展開時的樣式 - 由 Sidebar 組件自行處理寬度
+    transition: 'margin-left 0.3s ease', // 平滑過渡動畫
   },
   pageWrapper: {
     flex: 1,

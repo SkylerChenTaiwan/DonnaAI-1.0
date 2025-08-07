@@ -12,15 +12,13 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { Icon } from '@/components/common/Icon';
-import { Layout } from '@/components/common/Layout';
+import { SmartLayout } from '@/components/layout/SmartLayout';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useCustomerStore } from '@/stores/customerStore';
 import { useRecordStore } from '@/stores/recordStore';
 import { useTaskStore } from '@/stores/taskStore';
 import { RootStackParamList } from '@/types/navigation';
-import { migrateToUnifiedWebLayout } from '@/components/layout/withUnifiedWebLayout';
-import { shouldUseWebLayout } from '@/utils/web-detector';
 
 type CustomerDetailRouteProp = RouteProp<RootStackParamList, 'CustomerDetail'>;
 type CustomerDetailNavigationProp = StackNavigationProp<RootStackParamList, 'CustomerDetail'>;
@@ -70,17 +68,17 @@ export const CustomerDetailScreen: React.FC = () => {
 
   if (customerLoading || !customer) {
     return (
-      <Layout style={styles.container}>
+      <SmartLayout style={styles.container}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#1A1A1A" />
           <Text style={styles.loadingText}>載入中...</Text>
         </View>
-      </Layout>
+      </SmartLayout>
     );
   }
 
-  const content = (
-    <Layout style={styles.container} scrollable={false}>
+  return (
+    <SmartLayout style={styles.container} scrollable={false}>
       {/* 自定義標題列 */}
       <View style={styles.header}>
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
@@ -191,18 +189,8 @@ export const CustomerDetailScreen: React.FC = () => {
           )}
         </View>
       </ScrollView>
-    </Layout>
+    </SmartLayout>
   );
-
-  // 根據平台決定是否使用 Web 佈局
-  if (shouldUseWebLayout()) {
-    return migrateToUnifiedWebLayout(content, {
-      maxWidth: 960,
-      scrollable: false
-    });
-  }
-
-  return content;
 };
 
 const styles = StyleSheet.create({

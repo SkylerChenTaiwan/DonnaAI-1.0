@@ -12,7 +12,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { Icon } from '@/components/common/Icon';
-import { Layout } from '@/components/common/Layout';
+import { SmartLayout } from '@/components/layout/SmartLayout';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useTaskStore } from '@/stores/taskStore';
@@ -20,8 +20,6 @@ import { useCustomerStore } from '@/stores/customerStore';
 import { RootStackParamList } from '@/types/navigation';
 import { showToast } from '@/utils/toast';
 import { useAuth } from '@/hooks/useAuth';
-import { migrateToUnifiedWebLayout } from '@/components/layout/withUnifiedWebLayout';
-import { shouldUseWebLayout } from '@/utils/web-detector';
 
 type TaskDetailRouteProp = RouteProp<RootStackParamList, 'TaskDetail'>;
 type TaskDetailNavigationProp = StackNavigationProp<RootStackParamList, 'TaskDetail'>;
@@ -70,12 +68,12 @@ export const TaskDetailScreen: React.FC = () => {
 
   if (taskLoading || !task) {
     return (
-      <Layout style={styles.container}>
+      <SmartLayout style={styles.container}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#1A1A1A" />
           <Text style={styles.loadingText}>載入中...</Text>
         </View>
-      </Layout>
+      </SmartLayout>
     );
   }
 
@@ -96,8 +94,8 @@ export const TaskDetailScreen: React.FC = () => {
     }
   };
 
-  const content = (
-    <Layout style={styles.container} scrollable={false}>
+  return (
+    <SmartLayout style={styles.container} scrollable={false}>
       {/* 自定義標題列 */}
       <View style={styles.header}>
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
@@ -205,18 +203,8 @@ export const TaskDetailScreen: React.FC = () => {
         )}
 
       </ScrollView>
-    </Layout>
+    </SmartLayout>
   );
-
-  // 根據平台決定是否使用 Web 佈局
-  if (shouldUseWebLayout()) {
-    return migrateToUnifiedWebLayout(content, {
-      maxWidth: 960,
-      scrollable: false
-    });
-  }
-
-  return content;
 };
 
 const styles = StyleSheet.create({

@@ -17,8 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Icon } from '@/components/common/Icon';
-import { Layout } from '@/components/common/Layout';
-import { migrateToUnifiedWebLayout } from '@/components/layout/withUnifiedWebLayout';
+import { SmartLayout } from '@/components/layout/SmartLayout';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useAuthStore } from '@/stores/authStore';
@@ -250,8 +249,8 @@ export const AdminDashboard: React.FC = () => {
     );
   }
 
-  const content = (
-    <View style={styles.container}>
+  return (
+    <SmartLayout style={styles.container} scrollable={false}>
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         refreshControl={
@@ -265,27 +264,8 @@ export const AdminDashboard: React.FC = () => {
         {renderQuickActions()}
         {renderTodayActivity()}
       </ScrollView>
-    </View>
+    </SmartLayout>
   );
-  
-  return migrateToUnifiedWebLayout(content, {
-    maxWidth: 1400,
-    scrollable: false,
-    layoutProps: {
-      headerProps: {
-        title: '管理中心',
-        subtitle: orgDetails?.name,
-        rightComponent: (
-          <TouchableOpacity
-            style={styles.settingsButton}
-            onPress={() => navigation.navigate('AdminSettings')}
-          >
-            <Icon name="settings-outline" size={24} color={DesignSystem.colors.text.primary} />
-          </TouchableOpacity>
-        )
-      }
-    }
-  });
 };
 
 const styles = StyleSheet.create({
