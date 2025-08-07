@@ -21,12 +21,28 @@ import { ToolsScreen } from '@/screens/tools/ToolsScreen';
 import { PersonnelScreen } from '@/screens/personnel/PersonnelScreen';
 import { SettingsScreen } from '@/screens/settings/SettingsScreen';
 
+// Import Super Admin screens
+import { SuperAdminDashboard } from '@/screens/superadmin/SuperAdminDashboard';
+import { OrganizationsScreen } from '@/screens/superadmin/OrganizationsScreen';
+import { OrganizationDetailScreen } from '@/screens/superadmin/OrganizationDetailScreen';
+import { CreateOrganizationScreen } from '@/screens/superadmin/CreateOrganizationScreen';
+import { PlatformDashboard } from '@/screens/superadmin/PlatformDashboard';
+
+// Import Enterprise Admin screens
+import { AdminDashboard } from '@/screens/admin/AdminDashboard';
+import { UserManagementScreen } from '@/screens/admin/UserManagementScreen';
+import { ToolManagementScreen } from '@/screens/admin/ToolManagementScreen';
+import { DataImportScreen } from '@/screens/admin/DataImportScreen';
+import { UsageReportsScreen } from '@/screens/admin/UsageReportsScreen';
+import { AdminSettings } from '@/screens/admin/AdminSettings';
+import { LegacyDataImportScreen } from '@/components/screens/admin/LegacyDataImportScreen';
+
 // Import components
 import { Sidebar } from '@/components/navigation/Sidebar';
 import { TopBar } from '@/components/navigation/TopBar';
-import { MainTabParamList } from '@/types/navigation';
+import { RootStackParamList } from '@/types/navigation';
 
-const Stack = createStackNavigator<MainTabParamList>();
+const Stack = createStackNavigator<RootStackParamList>();
 
 export const WebNavigator = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -115,6 +131,7 @@ export const WebNavigator = () => {
             animationEnabled: Platform.OS === 'web' ? false : true,
           }}
         >
+          {/* 主要頁面 */}
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Database" component={DatabaseScreen} />
           <Stack.Screen 
@@ -122,6 +139,22 @@ export const WebNavigator = () => {
             component={mode === 'manager' ? PersonnelScreen : ToolsScreen} 
           />
           <Stack.Screen name="Settings" component={SettingsScreen} />
+          
+          {/* Super Admin 頁面 */}
+          <Stack.Screen name="SuperAdminDashboard" component={SuperAdminDashboard} />
+          <Stack.Screen name="OrganizationsScreen" component={OrganizationsScreen} />
+          <Stack.Screen name="OrganizationDetailScreen" component={OrganizationDetailScreen} />
+          <Stack.Screen name="CreateOrganizationScreen" component={CreateOrganizationScreen} />
+          <Stack.Screen name="PlatformDashboard" component={PlatformDashboard} />
+          
+          {/* Enterprise Admin 頁面 */}
+          <Stack.Screen name="AdminDashboard" component={AdminDashboard} />
+          <Stack.Screen name="UserManagementScreen" component={UserManagementScreen} />
+          <Stack.Screen name="ToolManagementScreen" component={ToolManagementScreen} />
+          <Stack.Screen name="DataImportScreen" component={DataImportScreen} />
+          <Stack.Screen name="UsageReportsScreen" component={UsageReportsScreen} />
+          <Stack.Screen name="AdminSettings" component={AdminSettings} />
+          <Stack.Screen name="LegacyDataImportScreen" component={LegacyDataImportScreen} />
           
           {/* AddAction 是一個特殊的路由，不需要實際頁面 */}
           <Stack.Screen 

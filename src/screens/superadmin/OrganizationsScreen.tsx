@@ -173,23 +173,19 @@ export const OrganizationsScreen: React.FC = () => {
       <View style={styles.orgActions}>
         <TouchableOpacity
           style={styles.actionButton}
-          onPress={() => handleToggleStatus(item)}
+          onPress={(e) => {
+            e.stopPropagation(); // 防止觸發卡片點擊事件
+            handleToggleStatus(item);
+          }}
         >
           <Icon
             name={item.status === 'active' ? 'pause-circle-outline' : 'play-circle-outline'}
             size={20}
             color={DesignSystem.colors.gray[700]}
           />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.actionButton}
-          onPress={() => handleOrganizationPress(item)}
-        >
-          <Icon
-            name="settings-outline"
-            size={20}
-            color={DesignSystem.colors.gray[700]}
-          />
+          <Text style={styles.actionLabel}>
+            {item.status === 'active' ? '停用' : '啟用'}
+          </Text>
         </TouchableOpacity>
       </View>
     </TouchableOpacity>
@@ -377,6 +373,13 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     padding: DesignSystem.spacing.sm,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: DesignSystem.spacing.xs,
+  },
+  actionLabel: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.gray[700],
   },
   separator: {
     height: DesignSystem.spacing.md,

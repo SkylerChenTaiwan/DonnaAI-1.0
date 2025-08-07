@@ -22,6 +22,7 @@ import { Layout } from '@/components/common/Layout';
 import { TextInput } from '@/components/common/TextInput';
 import { Button } from '@/components/common/Button';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
+import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
 import { 
   getOrganization, 
   updateOrganization,
@@ -264,32 +265,25 @@ export const OrganizationDetailScreen: React.FC = () => {
 
   const content = (
     <>
-      {/* 自定義標題列 */}
-      <View style={styles.header}>
-        <TouchableOpacity 
-          onPress={() => {
-            console.log('返回按鈕點擊');
-            console.log('Can go back:', navigation.canGoBack());
-            console.log('Navigation state:', navigation.getState());
-            
-            // 嘗試返回，如果失敗則導航到組織列表
-            if (navigation.canGoBack()) {
-              console.log('執行 goBack()');
-              navigation.goBack();
-            } else {
-              console.log('導航到 OrganizationsScreen');
-              navigation.navigate('OrganizationsScreen' as any);
-            }
-          }} 
-          style={styles.backButton}
-        >
-          <Icon name="chevron-back" size={24} color={DesignSystem.colors.text.primary} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle} numberOfLines={1}>
-          {organization?.name || '組織詳情'}
-        </Text>
-        <View style={styles.headerSpace} />
-      </View>
+      {/* 麵包屑導航 */}
+      <Breadcrumbs
+        items={[
+          {
+            id: 'home',
+            label: '首頁',
+            onPress: () => navigation.navigate('Home' as any),
+          },
+          {
+            id: 'organizations',
+            label: '組織管理',
+            onPress: () => navigation.navigate('OrganizationsScreen' as any),
+          },
+          {
+            id: 'current',
+            label: organization?.name || '組織詳情',
+          },
+        ]}
+      />
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
@@ -700,30 +694,6 @@ export const OrganizationDetailScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: DesignSystem.spacing.lg,
-    paddingVertical: DesignSystem.spacing.md,
-    backgroundColor: DesignSystem.colors.background.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-    ...DesignSystem.shadows.sm,
-  },
-  backButton: {
-    padding: DesignSystem.spacing.sm,
-    marginRight: DesignSystem.spacing.sm,
-  },
-  headerTitle: {
-    ...DesignSystem.typography.h2,
-    color: DesignSystem.colors.text.primary,
-    flex: 1,
-    textAlign: 'center',
-  },
-  headerSpace: {
-    width: 40, // 平衡返回按鈕的空間
-  },
   scrollContent: {
     padding: DesignSystem.spacing.lg,
   },

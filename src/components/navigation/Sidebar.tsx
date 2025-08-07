@@ -41,19 +41,25 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
   const [showActionModal, setShowActionModal] = useState(false);
   const [actionButtonRef, setActionButtonRef] = useState<View | null>(null);
   const [databaseExpanded, setDatabaseExpanded] = useState(false);
+  const [adminExpanded, setAdminExpanded] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  
+  // 計算用戶權限
+  const isSuperAdmin = user?.isSuperAdmin || user?.role === 'super_admin' || user?.role === 'system-admin';
+  const isEnterpriseAdmin = user?.role === 'admin';
+  const hasAdminAccess = isSuperAdmin || isEnterpriseAdmin;
   
   // 導航項目配置
   const menuItems = [
     { 
-      id: 'Home' as keyof MainTabParamList, 
+      id: 'Home', 
       label: '首頁', 
       icon: 'analytics-outline' as const,
       activeIcon: 'analytics' as const,
       hasChildren: false
     },
     { 
-      id: 'Database' as keyof MainTabParamList, 
+      id: 'Database', 
       label: '資料庫', 
       icon: 'people-outline' as const,
       activeIcon: 'people' as const,
@@ -65,19 +71,37 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
       ]
     },
     { 
-      id: 'Tools' as keyof MainTabParamList, 
+      id: 'Tools', 
       label: mode === 'manager' ? '人事' : '小工具', 
       icon: (mode === 'manager' ? 'people-circle-outline' : 'build-outline') as const,
       activeIcon: (mode === 'manager' ? 'people-circle' : 'build') as const,
       hasChildren: false
     },
     { 
-      id: 'Settings' as keyof MainTabParamList, 
+      id: 'Settings', 
       label: '設定', 
       icon: 'person-outline' as const,
       activeIcon: 'person' as const,
       hasChildren: false
     },
+    // Admin 項目（僅管理員可見）
+    ...(hasAdminAccess ? [{
+      id: 'Admin',
+      label: '管理',
+      icon: 'settings-outline' as const,
+      activeIcon: 'settings' as const,
+      hasChildren: true,
+      subItems: isSuperAdmin ? [
+        { id: 'OrganizationsScreen', label: '組織管理', icon: 'business' },
+        { id: 'SuperAdminDashboard', label: 'Super Admin', icon: 'shield' },
+        { id: 'PlatformDashboard', label: '平台統計', icon: 'stats-chart' },
+      ] : [
+        { id: 'AdminDashboard', label: '管理中心', icon: 'grid' },
+        { id: 'UserManagementScreen', label: '用戶管理', icon: 'people' },
+        { id: 'DataImportScreen', label: '資料匯入', icon: 'cloud-upload' },
+        { id: 'UsageReportsScreen', label: '使用報表', icon: 'bar-chart' },
+      ]
+    }] : []),
   ];
   
   const handleActionPress = () => {
@@ -130,7 +154,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
           {menuItems.map(item => {
             const isActive = isActiveRoute(item.id);
             const isHovered = hoveredItem === item.id;
-            const isExpanded = item.id === 'Database' && databaseExpanded;
+            const isExpanded = (item.id === 'Database' && databaseExpanded) || 
+                              (item.id === 'Admin' && adminExpanded);
             
             return (
               <View key={item.id}>
@@ -143,19 +168,24 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
                     collapsed && styles.menuItemCollapsed,
                   ]}
                   onPress={() => {
-                    if (item.hasChildren && item.id === 'Database') {
-                      setDatabaseExpanded(!databaseExpanded);
-                    }
-                    // 修復導航邏輯 - 確保導航到正確的路由
-                    try {
-                      if (navigation && navigation.navigate) {
-                        navigation.navigate(item.id as never);
-                        console.log(`[Sidebar] Navigating to: ${item.id}`);
-                      } else {
-                        console.error('[Sidebar] Navigation not available');
+                    if (item.hasChildren) {
+                      if (item.id === 'Database') {
+                        setDatabaseExpanded(!databaseExpanded);
+                      } else if (item.id === 'Admin') {
+                        setAdminExpanded(!adminExpanded);
                       }
-                    } catch (error) {
-                      console.error(`[Sidebar] Navigation failed for ${item.id}:`, error);
+                    } else {
+                      // 修復導航邏輯 - 確保導航到正確的路由
+                      try {
+                        if (navigation && navigation.navigate) {
+                          navigation.navigate(item.id as never);
+                          console.log(`[Sidebar] Navigating to: ${item.id}`);
+                        } else {
+                          console.error('[Sidebar] Navigation not available');
+                        }
+                      } catch (error) {
+                        console.error(`[Sidebar] Navigation failed for ${item.id}:`, error);
+                      }
                     }
                   }}
                   onHoverIn={() => setHoveredItem(item.id)}
@@ -179,7 +209,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
                           style={styles.expandButton}
                           onPress={(e) => {
                             e.stopPropagation();
-                            setDatabaseExpanded(!databaseExpanded);
+                            if (item.id === 'Database') {
+                              setDatabaseExpanded(!databaseExpanded);
+                            } else if (item.id === 'Admin') {
+                              setAdminExpanded(!adminExpanded);
+                            }
                           }}
                           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                         >
@@ -202,11 +236,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
                         key={subItem.id}
                         style={styles.subMenuItem}
                         onPress={() => {
-                          // 導航到具體的資料庫分頁
+                          // 導航到具體的分頁
                           try {
-                            navigation.navigate('Database' as never, { 
-                              activeTab: subItem.id 
-                            } as never);
+                            if (item.id === 'Database') {
+                              navigation.navigate('Database' as never, { 
+                                activeTab: subItem.id 
+                              } as never);
+                            } else if (item.id === 'Admin') {
+                              // 直接導航到 Admin 頁面
+                              navigation.navigate(subItem.id as never);
+                            }
                             console.log(`[Sidebar] Navigating to Database tab: ${subItem.id}`);
                           } catch (error) {
                             console.error(`[Sidebar] Database navigation failed:`, error);

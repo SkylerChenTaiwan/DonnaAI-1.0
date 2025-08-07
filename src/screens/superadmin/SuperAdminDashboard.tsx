@@ -17,6 +17,7 @@ import {
 } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
+import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
 import { isWebPlatform, isDesktopWeb, isTabletWeb } from '@/utils/web-detector';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -146,6 +147,21 @@ export const SuperAdminDashboard: React.FC = () => {
   
   const content = (
     <>
+      {/* 麵包屑導航 */}
+      <Breadcrumbs
+        items={[
+          {
+            id: 'home',
+            label: '首頁',
+            onPress: () => navigation.navigate('Home' as any),
+          },
+          {
+            id: 'current',
+            label: 'Super Admin 控制台',
+          },
+        ]}
+      />
+      
       {/* 歡迎區塊 */}
       <View style={styles.welcomeSection}>
         <Text style={styles.welcomeTitle}>歡迎回來，Super Admin</Text>
@@ -242,17 +258,36 @@ export const SuperAdminDashboard: React.FC = () => {
     </>
   );
 
+  // Web 平台直接返回內容（由 WebNavigator 管理佈局）
+  if (Platform.OS === 'web') {
+    return (
+      <ScrollView
+        style={styles.container}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+        contentContainerStyle={shouldUseWebLayout ? styles.webScrollContent : undefined}
+      >
+        {content}
+      </ScrollView>
+    );
+  }
+  
+  // 其他平台使用 Layout
   return (
-    <ScrollView
-      style={styles.container}
-      showsVerticalScrollIndicator={false}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-      }
-      contentContainerStyle={shouldUseWebLayout ? styles.webScrollContent : undefined}
-    >
-      {content}
-    </ScrollView>
+    <Layout scrollable={false}>
+      <ScrollView
+        style={styles.container}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+        contentContainerStyle={shouldUseWebLayout ? styles.webScrollContent : undefined}
+      >
+        {content}
+      </ScrollView>
+    </Layout>
   );
 };
 
