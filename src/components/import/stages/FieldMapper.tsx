@@ -14,7 +14,8 @@ import {
   Switch,
   ActivityIndicator,
   Platform,
-  Modal
+  Modal,
+  Pressable
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { DesignSystem } from '@/theme/designSystem';
@@ -499,43 +500,96 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                   </View>
                 </View>
               ) : (
-                // 現有欄位
-                <TouchableOpacity
-                  style={[styles.existingFieldButton, { borderColor: colors.gray200 }]}
-                  onPress={() => {
-                    console.log('🔍 打開欄位選擇器 for mapping:', index);
-                    console.log('Current mapping:', mapping);
-                    console.log('Setting showFieldSelector to true');
-                    setCurrentMappingIndex(index);
-                    setShowFieldSelector(true);
-                  }}
-                  activeOpacity={0.7}
-                >
-                  <Text style={[styles.existingFieldName, { color: colors.text }]}>
-                    {existingFields.find(f => f.key === mapping.targetField)?.label || mapping.targetField}
-                  </Text>
-                  <MaterialIcons name="arrow-drop-down" size={20} color={colors.gray500} />
-                </TouchableOpacity>
+                // 現有欄位 - 使用 Pressable for better Web compatibility
+                Platform.OS === 'web' ? (
+                  <Pressable
+                    style={({ pressed }) => [
+                      styles.existingFieldButton, 
+                      { 
+                        borderColor: colors.gray200,
+                        backgroundColor: pressed ? colors.gray50 : 'transparent',
+                        opacity: pressed ? 0.8 : 1
+                      }
+                    ]}
+                    onPress={() => {
+                      console.log('🔍 [Pressable] 打開欄位選擇器 for mapping:', index);
+                      console.log('Current mapping:', mapping);
+                      console.log('Setting showFieldSelector to true');
+                      setCurrentMappingIndex(index);
+                      setShowFieldSelector(true);
+                    }}
+                    accessibilityRole="button"
+                  >
+                    <Text style={[styles.existingFieldName, { color: colors.text }]}>
+                      {existingFields.find(f => f.key === mapping.targetField)?.label || mapping.targetField}
+                    </Text>
+                    <MaterialIcons name="arrow-drop-down" size={20} color={colors.gray500} />
+                  </Pressable>
+                ) : (
+                  <TouchableOpacity
+                    style={[styles.existingFieldButton, { borderColor: colors.gray200 }]}
+                    onPress={() => {
+                      console.log('🔍 打開欄位選擇器 for mapping:', index);
+                      console.log('Current mapping:', mapping);
+                      console.log('Setting showFieldSelector to true');
+                      setCurrentMappingIndex(index);
+                      setShowFieldSelector(true);
+                    }}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={[styles.existingFieldName, { color: colors.text }]}>
+                      {existingFields.find(f => f.key === mapping.targetField)?.label || mapping.targetField}
+                    </Text>
+                    <MaterialIcons name="arrow-drop-down" size={20} color={colors.gray500} />
+                  </TouchableOpacity>
+                )
               )}
 
               {/* 關聯設定按鈕 */}
-              <TouchableOpacity
-                style={[styles.relationButton, { borderColor: colors.primary }]}
-                onPress={() => {
-                  console.log('🔗 設定關聯按鈕被點擊');
-                  console.log('Selected mapping:', mapping);
-                  setSelectedMapping(mapping);
-                  setShowRelationEditor(true);
-                  // 暫時顯示提示，因為關聯編輯器尚未實作
-                  showSuccessToast('關聯設定功能開發中');
-                }}
-                activeOpacity={0.7}
-              >
-                <MaterialIcons name="link" size={16} color={colors.primary} />
-                <Text style={[styles.relationButtonText, { color: colors.primary }]}>
-                  設定關聯
-                </Text>
-              </TouchableOpacity>
+              {Platform.OS === 'web' ? (
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.relationButton, 
+                    { 
+                      borderColor: colors.primary,
+                      backgroundColor: pressed ? colors.primary + '10' : 'transparent',
+                      opacity: pressed ? 0.8 : 1
+                    }
+                  ]}
+                  onPress={() => {
+                    console.log('🔗 [Pressable] 設定關聯按鈕被點擊');
+                    console.log('Selected mapping:', mapping);
+                    setSelectedMapping(mapping);
+                    setShowRelationEditor(true);
+                    // 暫時顯示提示，因為關聯編輯器尚未實作
+                    showSuccessToast('關聯設定功能開發中');
+                  }}
+                  accessibilityRole="button"
+                >
+                  <MaterialIcons name="link" size={16} color={colors.primary} />
+                  <Text style={[styles.relationButtonText, { color: colors.primary }]}>
+                    設定關聯
+                  </Text>
+                </Pressable>
+              ) : (
+                <TouchableOpacity
+                  style={[styles.relationButton, { borderColor: colors.primary }]}
+                  onPress={() => {
+                    console.log('🔗 設定關聯按鈕被點擊');
+                    console.log('Selected mapping:', mapping);
+                    setSelectedMapping(mapping);
+                    setShowRelationEditor(true);
+                    // 暫時顯示提示，因為關聯編輯器尚未實作
+                    showSuccessToast('關聯設定功能開發中');
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <MaterialIcons name="link" size={16} color={colors.primary} />
+                  <Text style={[styles.relationButtonText, { color: colors.primary }]}>
+                    設定關聯
+                  </Text>
+                </TouchableOpacity>
+              )}
             </>
           ) : (
             <Text style={[styles.disabledText, { color: colors.gray400 }]}>
@@ -695,6 +749,24 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
   return (
     <>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      {/* 測試按鈕 - 調試用 */}
+      {Platform.OS === 'web' && (
+        <TouchableOpacity 
+          style={{
+            backgroundColor: '#FF6B6B',
+            padding: 12,
+            marginBottom: 16,
+            borderRadius: 8,
+            alignItems: 'center'
+          }}
+          onPress={() => {
+            console.log('🚨 測試按鈕被點擊！');
+            alert('測試按鈕工作正常！');
+          }}
+        >
+          <Text style={{ color: 'white', fontWeight: 'bold' }}>測試按鈕 - 點我測試</Text>
+        </TouchableOpacity>
+      )}
       {/* 欄位映射區塊 */}
       <TouchableOpacity
         style={[styles.sectionHeader, { borderBottomColor: colors.gray200 }]}
@@ -1123,7 +1195,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 6,
     paddingHorizontal: 8,
-    paddingVertical: 6
+    paddingVertical: 6,
+    ...Platform.select({
+      web: {
+        cursor: 'pointer',
+        userSelect: 'none',
+        transition: 'background-color 0.2s'
+      }
+    })
   },
   existingFieldName: {
     fontSize: 14,
@@ -1142,7 +1221,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     marginTop: 8,
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
+    ...Platform.select({
+      web: {
+        cursor: 'pointer',
+        userSelect: 'none',
+        transition: 'background-color 0.2s'
+      }
+    })
   },
   relationButtonText: {
     fontSize: 12,
