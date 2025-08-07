@@ -12,7 +12,9 @@ import {
   TouchableOpacity,
   TextInput,
   Switch,
-  ActivityIndicator
+  ActivityIndicator,
+  Platform,
+  Modal
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { DesignSystem } from '@/theme/designSystem';
@@ -62,6 +64,8 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
     relations: false,
     preview: false
   });
+  const [showFieldSelector, setShowFieldSelector] = useState(false);
+  const [currentMappingIndex, setCurrentMappingIndex] = useState<number>(-1);
 
   // 載入現有欄位定義
   useEffect(() => {
@@ -488,7 +492,9 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                 <TouchableOpacity
                   style={[styles.existingFieldButton, { borderColor: colors.gray200 }]}
                   onPress={() => {
-                    // TODO: 顯示欄位選擇器
+                    console.log('打開欄位選擇器 for mapping:', index);
+                    setCurrentMappingIndex(index);
+                    setShowFieldSelector(true);
                   }}
                 >
                   <Text style={[styles.existingFieldName, { color: colors.text }]}>
@@ -638,8 +644,38 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
     }));
   };
 
+  // 選擇欄位的函數
+  const selectField = (fieldKey: string) => {
+    if (currentMappingIndex >= 0) {
+      console.log(`選擇欄位: ${fieldKey} for mapping ${currentMappingIndex}`);
+      const existingField = existingFields.find(f => f.key === fieldKey);
+      if (existingField) {
+        updateMapping(currentMappingIndex, {
+          targetField: fieldKey,
+          isNew: false,
+          customLabel: existingField.label
+        });
+        showSuccessToast(`已將「${mappings[currentMappingIndex].sourceColumn}」映射到「${existingField.label}」`);
+      } else if (fieldKey === 'new_field') {
+        // 建立新欄位
+        const stats = getFieldStatistics(mergedTable.data, mappings[currentMappingIndex].sourceColumn);
+        const newFieldKey = generateFieldKey(mappings[currentMappingIndex].sourceColumn);
+        updateMapping(currentMappingIndex, {
+          targetField: newFieldKey,
+          isNew: true,
+          fieldType: stats.type,
+          customLabel: mappings[currentMappingIndex].sourceColumn
+        });
+        showSuccessToast(`已建立新欄位「${mappings[currentMappingIndex].sourceColumn}」`);
+      }
+    }
+    setShowFieldSelector(false);
+    setCurrentMappingIndex(-1);
+  };
+
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* 欄位映射區塊 */}
       <TouchableOpacity
         style={[styles.sectionHeader, { borderBottomColor: colors.gray200 }]}
@@ -769,6 +805,89 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
         </View>
       )}
     </ScrollView>
+    
+    {/* 欄位選擇器 Modal */}
+    <Modal
+      visible={showFieldSelector}
+      animationType="slide"
+      transparent={true}
+      onRequestClose={() => setShowFieldSelector(false)}
+    >
+      <View style={styles.modalOverlay}>
+        <View style={[styles.modalContent, { backgroundColor: colors.white }]}>
+          <View style={styles.modalHeader}>
+            <Text style={[styles.modalTitle, { color: colors.text }]}>
+              選擇系統欄位
+            </Text>
+            <TouchableOpacity
+              onPress={() => setShowFieldSelector(false)}
+              style={styles.modalCloseButton}
+            >
+              <MaterialIcons name="close" size={24} color={colors.gray500} />
+            </TouchableOpacity>
+          </View>
+          
+          <ScrollView style={styles.modalBody}>
+            {/* 現有欄位 */}
+            <Text style={[styles.modalSectionTitle, { color: colors.text }]}>
+              現有欄位
+            </Text>
+            {existingFields.map((field) => (
+              <TouchableOpacity
+                key={field.key}
+                style={[
+                  styles.fieldOption,
+                  { 
+                    backgroundColor: colors.gray50,
+                    borderColor: colors.gray200,
+                  }
+                ]}
+                onPress={() => selectField(field.key)}
+              >
+                <View style={styles.fieldOptionContent}>
+                  <Text style={[styles.fieldOptionLabel, { color: colors.text }]}>
+                    {field.label}
+                  </Text>
+                  <Text style={[styles.fieldOptionKey, { color: colors.gray500 }]}>
+                    {field.key}
+                  </Text>
+                  <Text style={[styles.fieldOptionType, { color: colors.gray400 }]}>
+                    {field.type}
+                  </Text>
+                </View>
+                <MaterialIcons name="chevron-right" size={20} color={colors.gray400} />
+              </TouchableOpacity>
+            ))}
+            
+            {/* 建立新欄位 */}
+            <Text style={[styles.modalSectionTitle, { color: colors.text, marginTop: 24 }]}>
+              其他選項
+            </Text>
+            <TouchableOpacity
+              style={[
+                styles.fieldOption,
+                { 
+                  backgroundColor: colors.success + '10',
+                  borderColor: colors.success + '40',
+                }
+              ]}
+              onPress={() => selectField('new_field')}
+            >
+              <View style={styles.fieldOptionContent}>
+                <Text style={[styles.fieldOptionLabel, { color: colors.success }]}>
+                  建立新欄位
+                </Text>
+                <Text style={[styles.fieldOptionKey, { color: colors.success + 'CC' }]}>
+                  使用原 CSV 欄位名稱
+                </Text>
+              </View>
+              <MaterialIcons name="add-circle" size={20} color={colors.success} />
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
+      </View>
+    </Modal>
+    </>
   );
 };
 
@@ -1017,6 +1136,75 @@ const styles = StyleSheet.create({
   previewStatValue: {
     fontSize: 16,
     fontWeight: '600'
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20
+  },
+  modalContent: {
+    width: '90%',
+    maxWidth: 400,
+    maxHeight: '80%',
+    borderRadius: 12,
+    elevation: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB'
+  },
+  modalTitle: {
+    fontSize: 16,
+    fontWeight: '600'
+  },
+  modalCloseButton: {
+    padding: 4
+  },
+  modalBody: {
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    maxHeight: 400
+  },
+  modalSectionTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 12
+  },
+  fieldOption: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    marginBottom: 8
+  },
+  fieldOptionContent: {
+    flex: 1
+  },
+  fieldOptionLabel: {
+    fontSize: 14,
+    fontWeight: '500',
+    marginBottom: 2
+  },
+  fieldOptionKey: {
+    fontSize: 12,
+    marginBottom: 1
+  },
+  fieldOptionType: {
+    fontSize: 10,
+    textTransform: 'uppercase'
   }
 });
 
