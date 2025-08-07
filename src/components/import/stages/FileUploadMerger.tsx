@@ -15,7 +15,6 @@ import {
   Platform
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import * as DocumentPicker from 'expo-document-picker';
 import Papa from 'papaparse';
 import { DesignSystem } from '@/theme/designSystem';
 import {
@@ -113,18 +112,25 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
       } else {
         // 移動平台使用 DocumentPicker
         console.log('開始檔案選擇（移動平台）');
-        const result = await DocumentPicker.getDocumentAsync({
-          type: ['text/csv', 'text/plain'],
-          multiple: true
-        });
+        try {
+          // 動態導入 DocumentPicker 以避免 Web 平台的問題
+          const DocumentPicker = await import('expo-document-picker');
+          const result = await DocumentPicker.getDocumentAsync({
+            type: ['text/csv', 'text/plain'],
+            multiple: true
+          });
 
-        if (!result.canceled && result.assets) {
-          console.log(`選擇了 ${result.assets.length} 個檔案`);
-          for (const asset of result.assets) {
-            await processFileFromUri(asset);
+          if (!result.canceled && result.assets) {
+            console.log(`選擇了 ${result.assets.length} 個檔案`);
+            for (const asset of result.assets) {
+              await processFileFromUri(asset);
+            }
+          } else {
+            console.log('檔案選擇被取消');
           }
-        } else {
-          console.log('檔案選擇被取消');
+        } catch (pickerError) {
+          console.error('DocumentPicker 錯誤:', pickerError);
+          showErrorToast('檔案選擇器不可用，請使用瀏覽器的檔案選擇功能');
         }
       }
     } catch (error) {
