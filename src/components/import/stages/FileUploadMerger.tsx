@@ -62,34 +62,74 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
   const handleFileSelect = async () => {
     try {
       if (Platform.OS === 'web') {
+        console.log('開始檔案選擇（Web 平台）');
         // Web 平台使用 input element
         const input = document.createElement('input');
         input.type = 'file';
-        input.accept = '.csv,.txt';
+        input.accept = '.csv,text/csv,application/csv,text/plain';
         input.multiple = true;
-        input.onchange = async (e: any) => {
-          const files = Array.from(e.target.files || []);
-          for (const file of files) {
-            await processFile(file as File);
-          }
-        };
+        
+        // 建立 Promise 來處理非同步檔案選擇
+        const filePromise = new Promise((resolve, reject) => {
+          input.onchange = async (e: any) => {
+            try {
+              console.log('檔案選擇事件觸發', e.target.files);
+              const files = Array.from(e.target.files || []);
+              
+              if (files.length === 0) {
+                console.log('沒有選擇檔案');
+                resolve(null);
+                return;
+              }
+              
+              console.log(`選擇了 ${files.length} 個檔案`);
+              
+              // 處理每個檔案
+              for (const file of files) {
+                console.log(`處理檔案: ${(file as File).name}, 大小: ${(file as File).size} bytes`);
+                await processFile(file as File);
+              }
+              
+              resolve(files);
+            } catch (error) {
+              console.error('處理檔案時發生錯誤:', error);
+              reject(error);
+            }
+          };
+          
+          // 處理取消選擇
+          input.oncancel = () => {
+            console.log('檔案選擇被取消');
+            resolve(null);
+          };
+        });
+        
+        // 觸發檔案選擇
         input.click();
+        
+        // 等待檔案選擇完成
+        await filePromise;
+        
       } else {
         // 移動平台使用 DocumentPicker
+        console.log('開始檔案選擇（移動平台）');
         const result = await DocumentPicker.getDocumentAsync({
           type: ['text/csv', 'text/plain'],
           multiple: true
         });
 
         if (!result.canceled && result.assets) {
+          console.log(`選擇了 ${result.assets.length} 個檔案`);
           for (const asset of result.assets) {
             await processFileFromUri(asset);
           }
+        } else {
+          console.log('檔案選擇被取消');
         }
       }
     } catch (error) {
       console.error('選擇檔案失敗:', error);
-      showErrorToast('選擇檔案失敗');
+      showErrorToast(`選擇檔案失敗: ${error.message || '未知錯誤'}`);
     }
   };
 
@@ -97,15 +137,70 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
   const processFile = async (file: File) => {
     setLoading(true);
     try {
-      const text = await file.text();
+      console.log(`開始處理檔案: ${file.name}`);
+      
+      // 讀取檔案內容
+      let text = '';
+      try {
+        // 嘗試使用 UTF-8 編碼
+        text = await file.text();
+      } catch (error) {
+        console.error('使用 UTF-8 讀取失敗，嘗試其他方法:', error);
+        
+        // 如果 UTF-8 失敗，使用 FileReader 並嘗試不同編碼
+        text = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const result = e.target?.result;
+            if (typeof result === 'string') {
+              resolve(result);
+            } else {
+              reject(new Error('無法讀取檔案內容'));
+            }
+          };
+          reader.onerror = reject;
+          // 嘗試使用 Big5 編碼（繁體中文常用）
+          reader.readAsText(file, 'big5');
+        });
+      }
+      
+      console.log(`檔案內容長度: ${text.length} 字元`);
+      console.log('檔案前 100 字元:', text.substring(0, 100));
+      
+      // 解析 CSV
       const result = Papa.parse(text, {
         header: true,
         skipEmptyLines: true,
-        encoding: 'UTF-8'
+        dynamicTyping: true,
+        encoding: 'UTF-8',
+        transformHeader: (header) => {
+          // 清理表頭（移除 BOM 和空白）
+          return header.replace(/^\uFEFF/, '').trim();
+        }
+      });
+
+      console.log('CSV 解析結果:', {
+        data: result.data.length,
+        fields: result.meta.fields,
+        errors: result.errors
       });
 
       if (result.errors.length > 0) {
         console.warn('CSV 解析警告:', result.errors);
+        // 如果有嚴重錯誤，顯示給用戶
+        const criticalErrors = result.errors.filter(e => e.type === 'FieldMismatch');
+        if (criticalErrors.length > 0) {
+          showErrorToast('CSV 格式可能有問題，請檢查檔案');
+        }
+      }
+
+      // 檢查是否有有效資料
+      if (!result.data || result.data.length === 0) {
+        throw new Error('檔案中沒有找到有效資料');
+      }
+
+      if (!result.meta.fields || result.meta.fields.length === 0) {
+        throw new Error('無法識別檔案欄位');
       }
 
       const uploadedFile: UploadedFile = {
@@ -119,8 +214,17 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
         size: file.size
       };
 
+      console.log('建立上傳檔案物件:', {
+        id: uploadedFile.id,
+        name: uploadedFile.name,
+        headers: uploadedFile.headers,
+        rowCount: uploadedFile.rowCount
+      });
+
       // 偵測關鍵欄位候選
       const candidates = detectKeyFields(uploadedFile);
+      console.log('關鍵欄位候選:', candidates);
+      
       setKeyFieldCandidates(prev => ({
         ...prev,
         [uploadedFile.id]: candidates
@@ -132,6 +236,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
           ...prev,
           [uploadedFile.id]: candidates[0].field
         }));
+        console.log('自動選擇關鍵欄位:', candidates[0].field);
       }
 
       // 更新檔案列表
@@ -139,9 +244,10 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
       onFilesUploaded(newFiles);
 
       showSuccessToast(`成功載入 ${file.name}`);
+      console.log('檔案處理完成');
     } catch (error) {
       console.error('處理檔案失敗:', error);
-      showErrorToast(`處理 ${file.name} 失敗`);
+      showErrorToast(`處理 ${file.name} 失敗: ${error.message || '未知錯誤'}`);
     } finally {
       setLoading(false);
     }
