@@ -25,16 +25,31 @@ export async function cleanupDuplicateCustomers(
   organizationId: string,
   onProgress?: (progress: { message: string; percent: number }) => void
 ): Promise<CleanupResult> {
+  console.log('🧹 cleanupDuplicateCustomers 開始執行...');
+  console.log('📋 參數:', { organizationId, hasProgressCallback: !!onProgress });
+  
   const db = getFirebaseDb();
+  console.log('🔥 Firebase DB 實例獲取成功');
+  console.log('🔥 DB 實例詳情:', { 
+    app: db.app.name,
+    type: db.type,
+    toJSON: typeof db.toJSON
+  });
   
   try {
+    console.log('📊 發送進度更新: 正在載入客戶資料...');
     onProgress?.({ message: '正在載入客戶資料...', percent: 10 });
     
     // 取得所有客戶資料
+    console.log('📂 建立客戶集合引用...');
     const customersRef = collection(db, 'organizations', organizationId, 'customers');
+    console.log('🔍 執行查詢，取得所有客戶資料...');
+    
     const snapshot = await getDocs(customersRef);
+    console.log('📊 查詢完成，結果:', { size: snapshot.size, empty: snapshot.empty });
     
     const totalRecords = snapshot.size;
+    console.log(`📈 總記錄數: ${totalRecords}`);
     onProgress?.({ message: `找到 ${totalRecords} 筆記錄，正在分析重複項目...`, percent: 30 });
     
     // 按照 name + company 分組
@@ -154,7 +169,16 @@ export async function cleanupDuplicateCustomers(
     };
     
   } catch (error) {
-    console.error('清理重複資料時發生錯誤:', error);
-    throw new Error(`清理失敗: ${error instanceof Error ? error.message : '未知錯誤'}`);
+    console.error('❌ 清理重複資料時發生錯誤:', error);
+    console.error('❌ 錯誤類型:', typeof error);
+    console.error('❌ 錯誤詳情:', {
+      name: error instanceof Error ? error.name : 'Unknown',
+      message: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : 'No stack trace'
+    });
+    
+    const errorMessage = error instanceof Error ? error.message : '未知錯誤';
+    console.error('❌ 拋出錯誤:', errorMessage);
+    throw new Error(`清理失敗: ${errorMessage}`);
   }
 }

@@ -302,18 +302,39 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
 
   // 清理重複資料
   const handleCleanupDuplicates = useCallback(async () => {
+    console.log('🧹 開始執行清理重複資料...');
+    console.log('📋 參數檢查:', { organizationId, user: user?.uid });
+    
+    // 參數驗證
+    if (!organizationId) {
+      console.error('❌ organizationId 未提供');
+      Alert.alert('錯誤', '找不到組織 ID，無法執行清理操作');
+      return;
+    }
+    
+    if (!user?.uid) {
+      console.error('❌ 用戶未登入');
+      Alert.alert('錯誤', '用戶未登入，無法執行清理操作');
+      return;
+    }
+    
     try {
+      console.log('🔄 設定清理狀態為進行中...');
       setCleanupState({ isCleaningUp: true, progress: { message: '開始清理...', percent: 0 } });
       
+      console.log('🚀 呼叫 cleanupDuplicateCustomers...', organizationId);
       const result = await cleanupDuplicateCustomers(
         organizationId,
         (progress) => {
+          console.log('📊 清理進度更新:', progress);
           setCleanupState(prev => ({
             ...prev,
             progress
           }));
         }
       );
+      
+      console.log('✅ 清理完成，結果:', result);
       
       setCleanupState({ isCleaningUp: false, progress: { message: '', percent: 0 } });
       
@@ -326,10 +347,15 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
       showSuccessToast(`清理完成！已移除 ${result.duplicatesRemoved} 筆重複資料`);
       
     } catch (error) {
-      console.error('清理失敗:', error);
+      console.error('❌ 清理失敗 - 完整錯誤資訊:', error);
+      console.error('❌ 錯誤類型:', typeof error);
+      console.error('❌ 錯誤堆疊:', error instanceof Error ? error.stack : '無堆疊資訊');
+      
       setCleanupState({ isCleaningUp: false, progress: { message: '', percent: 0 } });
       
-      const errorMessage = error instanceof Error ? error.message : '未知錯誤';
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error('❌ 處理後的錯誤訊息:', errorMessage);
+      
       Alert.alert(
         '清理失敗',
         `清理過程中發生錯誤：${errorMessage}`,
