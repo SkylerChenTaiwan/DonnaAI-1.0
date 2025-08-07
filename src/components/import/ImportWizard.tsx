@@ -149,7 +149,18 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
 
   // 執行匯入
   const executeImport = useCallback(async () => {
+    console.log('開始執行匯入，當前狀態:', {
+      targetDatabase: wizardState.targetDatabase,
+      hasMergedTable: !!wizardState.mergedTable,
+      dataCount: wizardState.mergedTable?.data?.length || 0,
+      mappingsCount: wizardState.fieldMappings.length
+    });
+    
     if (!wizardState.targetDatabase || !wizardState.mergedTable) {
+      console.error('匯入設定不完整:', {
+        targetDatabase: wizardState.targetDatabase,
+        mergedTable: wizardState.mergedTable
+      });
       showErrorToast('匯入設定不完整');
       return;
     }
@@ -167,8 +178,10 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
     });
 
     try {
+      console.log('建立智能匯入器，organizationId:', organizationId);
       // 建立智能匯入器
       const importer = new SmartDataImporter(organizationId);
+      console.log('智能匯入器建立成功');
       
       // 準備映射配置
       const mappingConfig = {
@@ -249,6 +262,19 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
       }
     } catch (error) {
       console.error('匯入失敗:', error);
+      console.error('詳細錯誤資訊:', {
+        errorType: typeof error,
+        errorMessage: error instanceof Error ? error.message : String(error),
+        errorStack: error instanceof Error ? error.stack : undefined,
+        wizardState: {
+          targetDatabase: wizardState.targetDatabase,
+          mappingsCount: wizardState.fieldMappings.length,
+          dataCount: wizardState.mergedTable?.data?.length || 0
+        }
+      });
+      
+      const errorMessage = error instanceof Error ? error.message : '未知錯誤';
+      
       updateWizardState({
         importProgress: {
           ...wizardState.importProgress,
@@ -256,12 +282,12 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
           errorCount: wizardState.importProgress.errorCount + 1,
           errors: [...wizardState.importProgress.errors, {
             row: wizardState.importProgress.processedRows,
-            message: error instanceof Error ? error.message : '未知錯誤',
+            message: errorMessage,
             type: 'unknown'
           }]
         }
       });
-      showErrorToast('匯入失敗');
+      showErrorToast(`匯入失敗: ${errorMessage}`);
     }
   }, [wizardState, updateWizardState, onComplete, organizationId]);
 
