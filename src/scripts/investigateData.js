@@ -1,6 +1,6 @@
 /**
  * 調查資料庫中的資料
- * 使用方法：npx ts-node src/scripts/investigateData.ts
+ * 使用方法：node src/scripts/investigateData.js
  */
 
 const { initializeApp } = require('firebase/app');
@@ -54,8 +54,8 @@ async function analyzeCreatedByDistribution() {
   console.log('\n=== 分析 createdBy 分布 ===\n');
   
   const snapshot = await getDocs(collection(db, 'customers'));
-  const createdByMap = new Map<string, number>();
-  const sampleData = new Map<string, any[]>();
+  const createdByMap = new Map();
+  const sampleData = new Map();
   
   snapshot.docs.forEach(doc => {
     const data = doc.data();
@@ -68,7 +68,7 @@ async function analyzeCreatedByDistribution() {
     if (!sampleData.has(createdBy)) {
       sampleData.set(createdBy, []);
     }
-    const samples = sampleData.get(createdBy)!;
+    const samples = sampleData.get(createdBy);
     if (samples.length < 3) {
       samples.push({
         id: doc.id,
@@ -111,7 +111,7 @@ async function analyzeCreatedByDistribution() {
 /**
  * 查看特定用戶的資料
  */
-async function investigateUserData(userId: string) {
+async function investigateUserData(userId) {
   console.log(`\n=== 調查用戶 ${userId} 的資料 ===\n`);
   
   // 查詢該用戶建立的客戶
@@ -155,7 +155,7 @@ async function analyzeImportTiming() {
   console.log('\n=== 分析匯入時間分布 ===\n');
   
   const snapshot = await getDocs(collection(db, 'customers'));
-  const timeMap = new Map<string, number>();
+  const timeMap = new Map();
   
   snapshot.docs.forEach(doc => {
     const data = doc.data();
