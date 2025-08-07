@@ -679,12 +679,17 @@ export const OrganizationDetailScreen: React.FC = () => {
         <ImportWizard
           organizationId={organizationId}
           teamId={organization?.defaultTeamId}
+          initialTargetDatabase={importTargetType} // 傳遞預設的資料庫類型
           onComplete={(result) => {
             toast.success(`成功匯入 ${result.importedCount} 筆資料到 ${result.targetDatabase}`);
             setShowImportWizard(false);
+            setImportTargetType('customers'); // 重置為預設值
             loadOrganizationData(); // 重新載入組織資料
           }}
-          onCancel={() => setShowImportWizard(false)}
+          onCancel={() => {
+            setShowImportWizard(false);
+            setImportTargetType('customers'); // 重置為預設值
+          }}
         />
       </Modal>
     </>

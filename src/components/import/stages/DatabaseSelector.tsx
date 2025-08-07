@@ -60,6 +60,14 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
       color: '#4CAF50'
     },
     {
+      type: 'users',
+      label: '用戶資料庫',
+      description: '匯入業務員、團隊成員、管理人員等用戶資料',
+      icon: 'person-add',
+      iconFamily: 'MaterialIcons',
+      color: '#9C27B0'
+    },
+    {
       type: 'records',
       label: '訪談記錄',
       description: '匯入訪談記錄、會議筆記、互動歷史等',

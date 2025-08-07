@@ -37,6 +37,7 @@ import { cleanupDuplicateCustomers } from '@/services/firebase/cleanupService';
 interface ImportWizardProps {
   organizationId: string;
   teamId?: string;
+  initialTargetDatabase?: DatabaseType; // 新增：允許預設選擇的資料庫類型
   onComplete?: (result: {
     targetDatabase: DatabaseType;
     importedCount: number;
@@ -48,6 +49,7 @@ interface ImportWizardProps {
 const ImportWizard: React.FC<ImportWizardProps> = ({
   organizationId,
   teamId,
+  initialTargetDatabase,
   onComplete,
   onCancel
 }) => {
@@ -56,8 +58,8 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
   
   // 初始化精靈狀態
   const [wizardState, setWizardState] = useState<ImportWizardState>({
-    stage: 1,
-    targetDatabase: null,
+    stage: initialTargetDatabase ? 2 : 1, // 如果有預設資料庫，直接跳到第二階段
+    targetDatabase: initialTargetDatabase || null,
     existingFieldsLoaded: false,
     uploadedFiles: [],
     mergeConfig: null,
