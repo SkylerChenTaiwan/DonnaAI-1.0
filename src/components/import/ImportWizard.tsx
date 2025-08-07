@@ -31,7 +31,7 @@ import FieldMapper from './stages/FieldMapper';
 import { useAuthStore } from '@/stores/authStore';
 import { showSuccessToast, showErrorToast } from '@/utils/toast';
 import { SmartDataImporter } from '@/services/firebase/admin/dataImportService';
-import { getFirebaseDb } from '@/services/firebase/config';
+import { getFirebaseDb, getFirebaseAuth } from '@/services/firebase/config';
 import { cleanupDuplicateCustomers } from '@/services/firebase/cleanupService';
 
 interface ImportWizardProps {
@@ -303,7 +303,17 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
   // 清理重複資料
   const handleCleanupDuplicates = useCallback(async () => {
     console.log('🧹 開始執行清理重複資料...');
-    console.log('📋 參數檢查:', { organizationId, user: user?.uid });
+    
+    // 直接從 Firebase Auth 獲取用戶狀態
+    const auth = getFirebaseAuth();
+    const firebaseUser = auth.currentUser;
+    
+    console.log('📋 參數檢查:', { 
+      organizationId, 
+      storeUser: user?.uid, 
+      firebaseUser: firebaseUser?.uid,
+      authState: !!firebaseUser
+    });
     
     // 參數驗證
     if (!organizationId) {
@@ -312,9 +322,9 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
       return;
     }
     
-    if (!user?.uid) {
-      console.error('❌ 用戶未登入');
-      Alert.alert('錯誤', '用戶未登入，無法執行清理操作');
+    if (!firebaseUser?.uid) {
+      console.error('❌ Firebase 用戶未登入');
+      Alert.alert('錯誤', '用戶未登入，請重新登入後再試');
       return;
     }
     
@@ -363,7 +373,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
       );
       showErrorToast(`清理失敗: ${errorMessage}`);
     }
-  }, [organizationId]);
+  }, [organizationId, user]);
 
   // 渲染階段標題
   const renderStageTitle = () => {
