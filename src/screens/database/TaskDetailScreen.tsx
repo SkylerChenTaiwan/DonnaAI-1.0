@@ -10,9 +10,10 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import { Icon } from '@/components/common/Icon';
-import { SmartLayout } from '@/components/layout/SmartLayout';
+import { WebLayout } from '@/components/layout/WebLayout';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useTaskStore } from '@/stores/taskStore';
@@ -67,13 +68,21 @@ export const TaskDetailScreen: React.FC = () => {
   }, [task, user, isUpdating, updateTask]);
 
   if (taskLoading || !task) {
+    const loadingContent = (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#1A1A1A" />
+        <Text style={styles.loadingText}>載入中...</Text>
+      </View>
+    );
+    
+    if (Platform.OS === 'web') {
+      return loadingContent;
+    }
+    
     return (
-      <SmartLayout style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#1A1A1A" />
-          <Text style={styles.loadingText}>載入中...</Text>
-        </View>
-      </SmartLayout>
+      <WebLayout style={styles.container}>
+        {loadingContent}
+      </WebLayout>
     );
   }
 
@@ -94,8 +103,8 @@ export const TaskDetailScreen: React.FC = () => {
     }
   };
 
-  return (
-    <SmartLayout style={styles.container} scrollable={false}>
+  const content = (
+    <View style={styles.container}>
       {/* 自定義標題列 */}
       <View style={styles.header}>
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
@@ -203,7 +212,17 @@ export const TaskDetailScreen: React.FC = () => {
         )}
 
       </ScrollView>
-    </SmartLayout>
+    </View>
+  );
+  
+  if (Platform.OS === 'web') {
+    return content;
+  }
+  
+  return (
+    <WebLayout scrollable={false}>
+      {content}
+    </WebLayout>
   );
 };
 

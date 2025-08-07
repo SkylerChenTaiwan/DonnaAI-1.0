@@ -10,9 +10,10 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import { Icon } from '@/components/common/Icon';
-import { SmartLayout } from '@/components/layout/SmartLayout';
+import { WebLayout } from '@/components/layout/WebLayout';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useCustomerStore } from '@/stores/customerStore';
@@ -67,18 +68,26 @@ export const CustomerDetailScreen: React.FC = () => {
   };
 
   if (customerLoading || !customer) {
+    const loadingContent = (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#1A1A1A" />
+        <Text style={styles.loadingText}>載入中...</Text>
+      </View>
+    );
+    
+    if (Platform.OS === 'web') {
+      return loadingContent;
+    }
+    
     return (
-      <SmartLayout style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#1A1A1A" />
-          <Text style={styles.loadingText}>載入中...</Text>
-        </View>
-      </SmartLayout>
+      <WebLayout style={styles.container}>
+        {loadingContent}
+      </WebLayout>
     );
   }
 
-  return (
-    <SmartLayout style={styles.container} scrollable={false}>
+  const content = (
+    <View style={styles.container}>
       {/* 自定義標題列 */}
       <View style={styles.header}>
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
@@ -189,7 +198,17 @@ export const CustomerDetailScreen: React.FC = () => {
           )}
         </View>
       </ScrollView>
-    </SmartLayout>
+    </View>
+  );
+  
+  if (Platform.OS === 'web') {
+    return content;
+  }
+  
+  return (
+    <WebLayout scrollable={false}>
+      {content}
+    </WebLayout>
   );
 };
 
