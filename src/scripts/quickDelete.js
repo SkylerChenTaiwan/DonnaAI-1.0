@@ -63,18 +63,24 @@ async function deleteCustomers() {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     console.log(`✅ 登入成功！用戶 ID: ${userCredential.user.uid}\n`);
     
-    // 設定時間範圍（今天）
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const todayTimestamp = Timestamp.fromDate(today);
+    // 設定時間範圍（2025/8/7）
+    const targetDate = new Date('2025-08-07');
+    targetDate.setHours(0, 0, 0, 0);
+    const targetTimestamp = Timestamp.fromDate(targetDate);
     
-    console.log(`📅 將刪除 ${today.toLocaleDateString('zh-TW')} 之後建立的客戶資料\n`);
+    // 設定結束時間（2025/8/8 凌晨）
+    const endDate = new Date('2025-08-08');
+    endDate.setHours(0, 0, 0, 0);
+    const endTimestamp = Timestamp.fromDate(endDate);
     
-    // 查詢今天的客戶資料
+    console.log(`📅 將刪除 2025/8/7 建立的客戶資料\n`);
+    
+    // 查詢 8/7 的客戶資料
     console.log('🔍 查詢客戶資料...');
     const q = query(
       collection(db, 'customers'),
-      where('createdAt', '>=', todayTimestamp)
+      where('createdAt', '>=', targetTimestamp),
+      where('createdAt', '<', endTimestamp)
     );
     
     const snapshot = await getDocs(q);

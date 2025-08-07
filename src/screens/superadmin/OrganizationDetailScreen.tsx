@@ -81,6 +81,7 @@ export const OrganizationDetailScreen: React.FC = () => {
   const [showDataImportModal, setShowDataImportModal] = useState(false);
   const [showCustomFieldsModal, setShowCustomFieldsModal] = useState(false);
   const [showImportWizard, setShowImportWizard] = useState(false);
+  const [importTargetType, setImportTargetType] = useState<'customers' | 'users'>('customers');
 
   // 功能開關狀態
   const [features, setFeatures] = useState({
@@ -464,7 +465,11 @@ export const OrganizationDetailScreen: React.FC = () => {
                 
                 <TouchableOpacity
                   style={styles.bulkImportButton}
-                  onPress={() => setShowBulkImportModal(true)}
+                  onPress={() => {
+                    // 使用 ImportWizard 的用戶匯入模式
+                    setImportTargetType('users');
+                    setShowImportWizard(true);
+                  }}
                 >
                   <Icon name="cloud-upload-outline" size={16} color={DesignSystem.colors.success} />
                   <Text style={styles.bulkImportButtonText}>批量匯入</Text>
