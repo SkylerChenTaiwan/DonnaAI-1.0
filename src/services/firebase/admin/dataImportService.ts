@@ -848,6 +848,7 @@ export class SmartDataImporter {
     }
   }
 
+
   /**
    * 透過關聯找出對應的 ID
    */
@@ -1093,7 +1094,7 @@ export class SmartDataImporter {
       imported: { users: 0, teams: 0, customers: 0, records: 0 }
     };
 
-    const BATCH_SIZE = 50; // 每批最多處理 50 筆，避免寫入流量限制
+    const BATCH_SIZE = 25; // 每批最多處理 25 筆，進一步降低寫入壓力
     const currentFileIndex = this.fieldMappingsConfig.findIndex(m => m.mappings === mappings);
     let totalCount = 0;
 
@@ -1144,6 +1145,16 @@ export class SmartDataImporter {
           const tagsStr = row[mappings.tags] || '';
           const tags = tagsStr.split(/[;,；，]/).map((t: string) => t.trim()).filter(Boolean);
 
+          // 使用關鍵欄位檢查重複（比 Firestore 查詢更有效率）
+          const customerKey = keyField && row[keyField] 
+            ? row[keyField] 
+            : `${name}_${row[mappings.company] || ''}`;
+          
+          if (this.customerIdMap.has(customerKey)) {
+            console.log(`客戶 "${name}" 已存在於本次匯入中，跳過`);
+            continue; // 跳過重複的客戶
+          }
+
           // 建立客戶資料
           const customerId = doc(collection(this.db, 'customers')).id;
           const rawCustomerData = {
@@ -1175,7 +1186,6 @@ export class SmartDataImporter {
           if (keyField && row[keyField]) {
             this.customerIdMap.set(row[keyField], customerId);
           }
-          const customerKey = `${name}_${row[mappings.company] || ''}`;
           this.customerIdMap.set(customerKey, customerId);
           
           batchCount++;
@@ -1197,15 +1207,15 @@ export class SmartDataImporter {
           
           // 批次間延遲，避免 Firebase Write stream exhausted
           if (batchStart + BATCH_SIZE < rows.length) {
-            await new Promise(resolve => setTimeout(resolve, 500)); // 延遲 500ms
+            await new Promise(resolve => setTimeout(resolve, 1000)); // 增加延遲到 1 秒
           }
         } catch (error) {
           console.error(`批次提交失敗: ${error}`);
           
           // 如果是 resource-exhausted 錯誤，增加延遲後重試
           if (error instanceof Error && error.message.includes('resource-exhausted')) {
-            console.log('偵測到資源耗盡錯誤，等待 2 秒後重試...');
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            console.log('偵測到資源耗盡錯誤，等待 5 秒後重試...');
+            await new Promise(resolve => setTimeout(resolve, 5000)); // 增加等待時間到 5 秒
             
             try {
               await batch.commit();
@@ -1239,6 +1249,18 @@ export class SmartDataImporter {
     }
 
     result.imported!.customers = totalCount;
+
+    // 匯入完成後，清除欄位定義快取以反映新的自訂欄位
+    if (totalCount > 0) {
+      try {
+        const { clearFieldDefinitionCache } = await import('../fieldDefinitions');
+        clearFieldDefinitionCache();
+        console.log('已清除欄位定義快取，下次查詢將重新載入');
+      } catch (error) {
+        console.warn('清除欄位定義快取失敗:', error);
+      }
+    }
+
     return result;
   }
 
