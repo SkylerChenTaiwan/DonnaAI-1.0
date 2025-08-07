@@ -204,20 +204,19 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
         targetField: relation.targetField
       }));
 
-      // 執行匯入
-      // 將中文資料正確編碼為 base64
-      const jsonData = JSON.stringify(wizardState.mergedTable.data);
-      // 使用更安全的編碼方法處理中文
-      const base64String = btoa(unescape(encodeURIComponent(jsonData)));
+      // 執行匯入 - 直接處理資料而不透過檔案
+      console.log('準備匯入資料:', {
+        dataLength: wizardState.mergedTable.data.length,
+        mappingConfig,
+        relationConfigs
+      });
       
-      const importResult = await importer.importMultipleFilesWithMapping(
-        [{
-          uri: 'data:text/csv;base64,' + base64String,
-          name: 'merged_data.csv',
-          type: 'application/json'
-        }],
-        [mappingConfig],
-        relationConfigs,
+      // 直接使用 processFileWithCustomMapping 方法
+      const importResult = await importer.processFileWithCustomMapping(
+        wizardState.targetDatabase as any,
+        wizardState.mergedTable.data,
+        mappingConfig.mappings,
+        mappingConfig.keyField,
         (progress) => {
           updateWizardState({
             importProgress: {
