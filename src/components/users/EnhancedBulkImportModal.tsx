@@ -135,9 +135,9 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
   }, [importProgress.isImporting, resetStates, onClose]);
 
   /**
-   * 選擇 CSV 檔案
+   * 解析 CSV 檔案 - 移到 handleSelectFile 之前以避免初始化錯誤
    */
-  const handleSelectFile = useCallback(async () => {
+  const parseCSVFile = useCallback(async (fileUri: string): Promise<UserCSVParseResult> => {
     try {
       setIsProcessing(true);
       setError(null);
@@ -180,9 +180,9 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
   }, [parseCSVFile]);
 
   /**
-   * 解析 CSV 檔案
+   * 選擇 CSV 檔案
    */
-  const parseCSVFile = async (fileUri: string): Promise<UserCSVParseResult> => {
+  const handleSelectFile = useCallback(async () => {
     try {
       // 讀取檔案內容
       let csvText: string;
@@ -282,7 +282,7 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
     } catch (error) {
       throw new Error(`解析 CSV 檔案失敗: ${error instanceof Error ? error.message : '未知錯誤'}`);
     }
-  };
+  }, [validator, userImportService]);
 
   /**
    * 處理用戶編輯
