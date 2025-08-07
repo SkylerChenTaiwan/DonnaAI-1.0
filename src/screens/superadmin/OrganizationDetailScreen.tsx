@@ -42,7 +42,9 @@ import { BulkImportUsersModal } from '@/components/organization/BulkImportUsersM
 import { DataImportAssistModal } from '@/components/organization/DataImportAssistModal';
 import { CustomFieldsModal } from '@/components/organization/CustomFieldsModal';
 import ImportWizard from '@/components/import/ImportWizard';
-import { Modal } from 'react-native';
+import { Modal, Platform } from 'react-native';
+import { UnifiedWebLayout } from '@/components/layout/UnifiedWebLayout';
+import { isDesktopWeb, isTabletWeb } from '@/utils/web-detector';
 
 type RouteParams = RouteProp<RootStackParamList, 'OrganizationDetailScreen'>;
 type NavigationProp = StackNavigationProp<RootStackParamList, 'OrganizationDetailScreen'>;
@@ -262,8 +264,19 @@ export const OrganizationDetailScreen: React.FC = () => {
     return null;
   }
 
-  return (
-    <Layout scrollable={false}>
+  const content = (
+    <>
+      {/* 自定義標題列 */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Icon name="chevron-back" size={24} color={DesignSystem.colors.text.primary} />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle} numberOfLines={1}>
+          {organization?.name || '組織詳情'}
+        </Text>
+        <View style={styles.headerSpace} />
+      </View>
+
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         refreshControl={
@@ -656,11 +669,51 @@ export const OrganizationDetailScreen: React.FC = () => {
           onCancel={() => setShowImportWizard(false)}
         />
       </Modal>
+    </>
+  );
+
+  // 在 Web 平台使用 UnifiedWebLayout
+  if (Platform.OS === 'web') {
+    return (
+      <UnifiedWebLayout scrollable={false}>
+        {content}
+      </UnifiedWebLayout>
+    );
+  }
+
+  // 在移動平台使用 Layout
+  return (
+    <Layout scrollable={false}>
+      {content}
     </Layout>
   );
 };
 
 const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: DesignSystem.spacing.lg,
+    paddingVertical: DesignSystem.spacing.md,
+    backgroundColor: DesignSystem.colors.background.surface,
+    borderBottomWidth: 1,
+    borderBottomColor: DesignSystem.colors.border.light,
+    ...DesignSystem.shadows.sm,
+  },
+  backButton: {
+    padding: DesignSystem.spacing.sm,
+    marginRight: DesignSystem.spacing.sm,
+  },
+  headerTitle: {
+    ...DesignSystem.typography.h2,
+    color: DesignSystem.colors.text.primary,
+    flex: 1,
+    textAlign: 'center',
+  },
+  headerSpace: {
+    width: 40, // 平衡返回按鈕的空間
+  },
   scrollContent: {
     padding: DesignSystem.spacing.lg,
   },
