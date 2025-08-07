@@ -86,6 +86,7 @@
 | 80   | web-layout-optimization.md | 🔄 進行中 | Web 佈局架構統一優化 - 側邊欄一致性、響應式設計、Icon 系統完善 | 2025-08-07 |
 | 81v  | web-layout-complete-redesign.md | ✅ 已完成 | Web 版面完整重構與修復 - 修復導航、統一佈局、響應式設計 | 2025-08-07 |
 | 82v  | web-navigation-super-admin-fix.md | ✅ 已完成 | 修復 Web 導航系統與 Super Admin 頁面架構 - 側邊欄消失、返回導航、UX 改進 | 2025-08-07 |
+| 83   | enhanced-bulk-user-import-system.md | 📋 待執行 | 增強組織批量用戶匯入系統 - 兩階段處理、資料預覽編輯、驗證改進 | - |
 
 ## 命名規則
 
@@ -101,7 +102,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：83**
+**下一個新建的 PRP 應使用編號：84**
 
 ## PRP 類型說明
 

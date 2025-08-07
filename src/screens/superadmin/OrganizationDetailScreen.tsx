@@ -39,7 +39,7 @@ import { RootStackParamList } from '@/types/navigation';
 import { DesignSystem } from '@/theme/designSystem';
 import { toast } from '@/utils/toast';
 import { AddUserToOrganizationModal } from '@/components/organization/AddUserToOrganizationModal';
-import { BulkImportUsersModal } from '@/components/organization/BulkImportUsersModal';
+import { EnhancedBulkImportModal } from '@/components/users/EnhancedBulkImportModal';
 import { DataImportAssistModal } from '@/components/organization/DataImportAssistModal';
 import { CustomFieldsModal } from '@/components/organization/CustomFieldsModal';
 import ImportWizard from '@/components/import/ImportWizard';
@@ -476,9 +476,14 @@ export const OrganizationDetailScreen: React.FC = () => {
               <Text style={styles.userInfoTitle}>用戶管理說明</Text>
               <Text style={styles.userInfoText}>
                 • 新增用戶：為組織新增單個用戶{"\n"}
-                • 批量匯入：使用 CSV 檔案批量新增多個用戶{"\n"}
-                • 用戶會自動獲得 Firebase Auth 帳號{"\n"}
-                • 用戶可以設定為一般用戶或管理員角色
+                • 批量匯入：使用增強版五階段匯入流程{"\n"}
+                  - 上傳 CSV 檔案並自動解析驗證{"\n"}
+                  - 預覽和編輯用戶資料{"\n"}
+                  - 配置匯入選項（角色、重複處理等）{"\n"}
+                  - 即時進度追蹤和錯誤處理{"\n"}
+                  - 詳細匯入結果報告{"\n"}
+                • 支援批量編輯、驗證和篩選功能{"\n"}
+                • 用戶會自動獲得 Firebase Auth 帳號
               </Text>
             </View>
           </View>
@@ -633,7 +638,7 @@ export const OrganizationDetailScreen: React.FC = () => {
         }}
       />
       
-      <BulkImportUsersModal
+      <EnhancedBulkImportModal
         visible={showBulkImportModal}
         organization={organization}
         onClose={() => setShowBulkImportModal(false)}
@@ -642,7 +647,7 @@ export const OrganizationDetailScreen: React.FC = () => {
           if (result.success) {
             toast.success(`成功匯入 ${result.imported} 個用戶`);
           } else {
-            toast.error('批量匯入完成，但有部分失敗');
+            toast.error(`批量匯入完成，成功 ${result.imported} 個，失敗 ${result.failed} 個`);
           }
         }}
       />
