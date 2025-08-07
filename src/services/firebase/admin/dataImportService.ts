@@ -1177,7 +1177,8 @@ export class SmartDataImporter {
       imported: { users: 0, teams: 0, customers: 0, records: 0 }
     };
 
-    const BATCH_SIZE = 25; // 每批最多處理 25 筆，進一步降低寫入壓力
+    const BATCH_SIZE = 10; // 每批最多處理 10 筆，避免 Firebase 寫入佇列耗盡
+    const BATCH_DELAY = 2000; // 批次間延遲 2 秒，確保 Firebase 有時間處理
     const currentFileIndex = this.fieldMappingsConfig.findIndex(m => m.mappings === mappings);
     let totalCount = 0;
 
@@ -1341,15 +1342,26 @@ export class SmartDataImporter {
           
           // 批次間延遲，避免 Firebase Write stream exhausted
           if (batchStart + BATCH_SIZE < rows.length) {
-            await new Promise(resolve => setTimeout(resolve, 1000)); // 增加延遲到 1 秒
+            await new Promise(resolve => setTimeout(resolve, BATCH_DELAY));
           }
         } catch (error) {
           console.error(`批次提交失敗: ${error}`);
           
           // 如果是 resource-exhausted 錯誤，增加延遲後重試
           if (error instanceof Error && error.message.includes('resource-exhausted')) {
-            console.log('偵測到資源耗盡錯誤，等待 5 秒後重試...');
-            await new Promise(resolve => setTimeout(resolve, 5000)); // 增加等待時間到 5 秒
+            console.log('偵測到資源耗盡錯誤，等待 10 秒後重試...');
+            
+            // 通知用戶正在處理資源限制問題
+            if (onProgress) {
+              onProgress({
+                current: batchStart,
+                total: rows.length,
+                status: 'retrying',
+                message: `Firebase 資源限制，正在等待重試... (${Math.floor(batchStart * 100 / rows.length)}%)`
+              });
+            }
+            
+            await new Promise(resolve => setTimeout(resolve, 10000)); // 增加等待時間到 10 秒
             
             try {
               await batch.commit();

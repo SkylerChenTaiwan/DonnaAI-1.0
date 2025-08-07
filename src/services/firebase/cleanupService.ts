@@ -91,7 +91,7 @@ export async function cleanupDuplicateCustomers(
     }
     
     // 執行刪除（分批處理）
-    const batchSize = 25;
+    const batchSize = 10; // 降低批次大小避免 Firebase 寫入佇列耗盡
     let deletedCount = 0;
     
     for (let i = 0; i < toDelete.length; i += batchSize) {
@@ -103,18 +103,43 @@ export async function cleanupDuplicateCustomers(
         batch.delete(customerDoc);
       }
       
-      await batch.commit();
-      deletedCount += batchItems.length;
-      
-      const progress = Math.floor(50 + (deletedCount / toDelete.length) * 40);
-      onProgress?.({ 
-        message: `已清理 ${deletedCount}/${toDelete.length} 筆重複資料...`, 
-        percent: progress 
-      });
-      
-      // 避免過快操作導致 Firebase 限制
-      if (i + batchSize < toDelete.length) {
-        await new Promise(resolve => setTimeout(resolve, 200));
+      try {
+        await batch.commit();
+        deletedCount += batchItems.length;
+        
+        const progress = Math.floor(50 + (deletedCount / toDelete.length) * 40);
+        onProgress?.({ 
+          message: `已清理 ${deletedCount}/${toDelete.length} 筆重複資料...`, 
+          percent: progress 
+        });
+        
+        // 增加批次間延遲，避免 Firebase 限制
+        if (i + batchSize < toDelete.length) {
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+      } catch (error) {
+        console.error('清理批次失敗:', error);
+        
+        // 如果是 resource-exhausted 錯誤，等待更長時間後重試
+        if (error instanceof Error && error.message.includes('resource-exhausted')) {
+          onProgress?.({ 
+            message: `Firebase 資源限制，等待重試中...`, 
+            percent: Math.floor(50 + (deletedCount / toDelete.length) * 40) 
+          });
+          
+          await new Promise(resolve => setTimeout(resolve, 10000));
+          
+          try {
+            await batch.commit();
+            deletedCount += batchItems.length;
+            console.log('清理重試成功');
+          } catch (retryError) {
+            console.error('清理重試失敗:', retryError);
+            throw new Error(`批次清理失敗: ${retryError instanceof Error ? retryError.message : '未知錯誤'}`);
+          }
+        } else {
+          throw error;
+        }
       }
     }
     
