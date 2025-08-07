@@ -99,12 +99,30 @@ service cloud.firestore {
         getUserData().organizationId == resource.data.organizationId;
     }
     
-    // 客戶集合
+    // 組織內客戶集合
+    match /organizations/{orgId}/customers/{customerId} {
+      // Super Admin 可以讀寫所有客戶（包括刪除）
+      allow read, write, delete: if isSuperAdmin();
+      // 組織管理員可以管理組織內的所有客戶
+      allow read, write, delete: if isOrgAdmin(orgId);
+      // 組織成員可以讀寫組織內的客戶
+      allow read, write: if isOrgMember(orgId);
+      // 創建者可以讀寫自己建立的客戶
+      allow read, write: if request.auth != null && 
+        request.auth.uid == resource.data.createdBy;
+      // 團隊成員可以讀寫相關客戶
+      allow read, write: if request.auth != null && 
+        resource.data.teamMembers != null &&
+        request.auth.uid in resource.data.teamMembers;
+    }
+    
+    // 舊版客戶集合（向下相容）
     match /customers/{customerId} {
       // Super Admin 可以讀取（用於系統管理和統計）
       allow read: if isSuperAdmin();
       // 團隊成員可以讀寫
       allow read, write: if request.auth != null && 
+        resource.data.teamMembers != null &&
         request.auth.uid in resource.data.teamMembers;
       // 創建者可以讀寫
       allow read, write: if request.auth != null && 
@@ -113,7 +131,24 @@ service cloud.firestore {
       allow create: if request.auth != null;
     }
     
-    // 紀錄集合
+    // 組織內紀錄集合
+    match /organizations/{orgId}/records/{recordId} {
+      // Super Admin 可以讀寫所有紀錄（包括刪除）
+      allow read, write, delete: if isSuperAdmin();
+      // 組織管理員可以管理組織內的所有紀錄
+      allow read, write, delete: if isOrgAdmin(orgId);
+      // 組織成員可以讀寫組織內的紀錄
+      allow read, write: if isOrgMember(orgId);
+      // 創建者可以讀寫自己建立的紀錄
+      allow read, write: if request.auth != null && 
+        request.auth.uid == resource.data.createdBy;
+      // 團隊成員可以讀取相關紀錄
+      allow read: if request.auth != null && 
+        resource.data.teamMembers != null &&
+        request.auth.uid in resource.data.teamMembers;
+    }
+    
+    // 舊版紀錄集合（向下相容）
     match /records/{recordId} {
       // Super Admin 可以讀取（用於系統監控）
       allow read: if isSuperAdmin();
@@ -122,12 +157,29 @@ service cloud.firestore {
         request.auth.uid == resource.data.createdBy;
       // 團隊成員可以讀取
       allow read: if request.auth != null && 
+        resource.data.teamMembers != null &&
         request.auth.uid in resource.data.teamMembers;
       // 新增紀錄
       allow create: if request.auth != null;
     }
     
-    // 任務集合
+    // 組織內任務集合
+    match /organizations/{orgId}/tasks/{taskId} {
+      // Super Admin 可以讀寫所有任務（包括刪除）
+      allow read, write, delete: if isSuperAdmin();
+      // 組織管理員可以管理組織內的所有任務
+      allow read, write, delete: if isOrgAdmin(orgId);
+      // 組織成員可以讀寫組織內的任務
+      allow read, write: if isOrgMember(orgId);
+      // 指派對象可以讀寫被指派的任務
+      allow read, write: if request.auth != null && 
+        request.auth.uid == resource.data.assignedTo;
+      // 創建者可以讀寫自己建立的任務
+      allow read, write: if request.auth != null && 
+        request.auth.uid == resource.data.createdBy;
+    }
+    
+    // 舊版任務集合（向下相容）
     match /tasks/{taskId} {
       // Super Admin 可以讀取（用於系統監控）
       allow read: if isSuperAdmin();
