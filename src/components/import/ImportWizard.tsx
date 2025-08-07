@@ -218,14 +218,17 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
         mappingConfig.mappings,
         mappingConfig.keyField,
         (progress) => {
-          updateWizardState({
+          console.log('匯入進度更新:', progress);
+          setWizardState(prev => ({
+            ...prev,
             importProgress: {
-              ...wizardState.importProgress,
+              ...prev.importProgress,
               processedRows: progress.current,
               totalRows: progress.total,
-              successCount: progress.current // 簡化處理
+              successCount: progress.current,
+              isImporting: true
             }
-          });
+          }));
         }
       );
 

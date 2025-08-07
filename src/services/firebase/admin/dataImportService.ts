@@ -1093,7 +1093,7 @@ export class SmartDataImporter {
       imported: { users: 0, teams: 0, customers: 0, records: 0 }
     };
 
-    const BATCH_SIZE = 100; // 每批最多處理 100 筆
+    const BATCH_SIZE = 50; // 每批最多處理 50 筆，避免寫入流量限制
     const currentFileIndex = this.fieldMappingsConfig.findIndex(m => m.mappings === mappings);
     let totalCount = 0;
 
@@ -1194,17 +1194,46 @@ export class SmartDataImporter {
         try {
           await batch.commit();
           totalCount += batchCount;
+          
+          // 批次間延遲，避免 Firebase Write stream exhausted
+          if (batchStart + BATCH_SIZE < rows.length) {
+            await new Promise(resolve => setTimeout(resolve, 500)); // 延遲 500ms
+          }
         } catch (error) {
           console.error(`批次提交失敗: ${error}`);
-          // 如果批次提交失敗，記錄錯誤
-          for (let i = batchStart; i < batchEnd; i++) {
-            result.errors.push({
-              row: i + 2,
-              message: `批次提交失敗: ${error}`
-            });
-            result.failed++;
+          
+          // 如果是 resource-exhausted 錯誤，增加延遲後重試
+          if (error instanceof Error && error.message.includes('resource-exhausted')) {
+            console.log('偵測到資源耗盡錯誤，等待 2 秒後重試...');
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            try {
+              await batch.commit();
+              totalCount += batchCount;
+              console.log('重試成功');
+            } catch (retryError) {
+              console.error(`重試失敗: ${retryError}`);
+              // 記錄重試失敗的錯誤
+              for (let i = batchStart; i < batchEnd; i++) {
+                result.errors.push({
+                  row: i + 2,
+                  message: `批次提交失敗 (重試後): ${retryError}`
+                });
+                result.failed++;
+              }
+              result.success -= batchCount;
+            }
+          } else {
+            // 非資源耗盡錯誤，記錄錯誤
+            for (let i = batchStart; i < batchEnd; i++) {
+              result.errors.push({
+                row: i + 2,
+                message: `批次提交失敗: ${error}`
+              });
+              result.failed++;
+            }
+            result.success -= batchCount;
           }
-          result.success -= batchCount; // 扣回成功數
         }
       }
     }

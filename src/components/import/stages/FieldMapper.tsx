@@ -260,11 +260,11 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
       return chineseToEnglish[label];
     }
     
-    // 如果是純中文，生成 custom_field_X
+    // 如果是純中文，生成有意義的自訂欄位名稱
     if (/^[\u4e00-\u9fa5\s]+$/.test(label)) {
-      // 使用 label 的 hash 或時間戳確保唯一性
-      const hash = label.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-      return `customField_${hash}`;
+      // 清理標籤，移除空格並截短
+      const cleanLabel = label.replace(/\s+/g, '').substring(0, 10);
+      return `customField_${cleanLabel}`;
     }
     
     // 處理英文或混合的欄位名
@@ -272,12 +272,13 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
     const words = cleaned.split(/[\s_]+/).filter(w => w.length > 0);
     
     if (words.length === 0) {
-      return 'field_' + Date.now();
+      return `customField_${Date.now()}`;
     }
     
-    // 如果第一個字是中文，直接返回 customField
+    // 如果第一個字是中文，使用中文作為標識
     if (/^[\u4e00-\u9fa5]/.test(words[0])) {
-      return 'customField_' + Date.now();
+      const cleanLabel = words.join('').replace(/\s+/g, '').substring(0, 10);
+      return `customField_${cleanLabel}`;
     }
     
     // 轉換為 camelCase
