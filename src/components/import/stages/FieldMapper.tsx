@@ -155,6 +155,9 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
     console.log('CSV 欄位:', mergedTable.headers);
     
     mergedTable.headers.forEach(header => {
+      // 取得欄位統計資訊
+      const stats = getFieldStatistics(mergedTable.data, header);
+      
       // 嘗試自動匹配現有欄位
       const matchedField = existingFields.find(field => {
         const fieldLabel = field.label.toLowerCase();
@@ -191,24 +194,32 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
         return false;
       });
 
+      // 總是生成一個有效的 fieldKey
+      let fieldKey = generateFieldKey(header);
+      
+      // 確保 fieldKey 不為空
+      if (!fieldKey || fieldKey === '') {
+        console.error(`無法生成欄位鍵值 for "${header}"`);
+        fieldKey = 'field_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      }
+
       if (matchedField) {
-        // 匹配到現有欄位
+        // 匹配到現有欄位 - 預設啟用
         console.log(`欄位 "${header}" 匹配到 "${matchedField.key}"`);
         initialMappings.push({
           sourceColumn: header,
-          targetField: matchedField.key,
+          targetField: matchedField.key,  // 使用匹配的欄位
           isNew: false,
-          customLabel: matchedField.label
+          customLabel: matchedField.label,
+          fieldType: stats.type
         });
       } else {
         // 新建欄位 - 預設啟用所有欄位
-        const stats = getFieldStatistics(mergedTable.data, header);
-        const fieldKey = generateFieldKey(header);
         console.log(`欄位 "${header}" 將建立新欄位 "${fieldKey}"`);
         
         initialMappings.push({
           sourceColumn: header,
-          targetField: fieldKey,
+          targetField: fieldKey,  // 確保有值
           isNew: true,
           fieldType: stats.type,
           customLabel: header
@@ -223,12 +234,53 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
 
   // 生成欄位鍵值
   const generateFieldKey = (label: string): string => {
-    // 移除特殊字符，轉換為 camelCase
-    const cleaned = label.replace(/[^\w\s]/g, '').trim();
-    const words = cleaned.split(/\s+/);
+    // 處理中文欄位名稱
+    const chineseToEnglish: Record<string, string> = {
+      '負責業務': 'salesRep',
+      '建議方案': 'suggestedPlan',
+      '客戶名稱': 'customerName',
+      '客戶姓名': 'customerName',
+      '理財習慣': 'financialHabits',
+      '婚姻狀況': 'maritalStatus',
+      '負責業務': 'responsible',
+      '銷售階段': 'salesStage',
+      '客戶來源': 'customerSource',
+      '性別': 'gender',
+      '匯入時間': 'importTime',
+      '名單等級': 'listGrade',
+      '8/31講座': 'seminar0831',
+      '已成交': 'completed',
+      '建議方案': 'suggestion',
+      '銷售階段': 'salesPhase',
+      '名單等級': 'customerGrade'
+    };
     
-    if (words.length === 0) return 'field_' + Date.now();
+    // 檢查是否有對應的英文欄位名
+    if (chineseToEnglish[label]) {
+      return chineseToEnglish[label];
+    }
     
+    // 如果是純中文，生成 custom_field_X
+    if (/^[\u4e00-\u9fa5\s]+$/.test(label)) {
+      // 使用 label 的 hash 或時間戳確保唯一性
+      const hash = label.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      return `customField_${hash}`;
+    }
+    
+    // 處理英文或混合的欄位名
+    const cleaned = label.replace(/[^\w\s\u4e00-\u9fa5]/g, '').trim();
+    const words = cleaned.split(/[\s_]+/).filter(w => w.length > 0);
+    
+    if (words.length === 0) {
+      return 'field_' + Date.now();
+    }
+    
+    // 如果第一個字是中文，直接返回 customField
+    if (/^[\u4e00-\u9fa5]/.test(words[0])) {
+      return 'customField_' + Date.now();
+    }
+    
+    // 轉換為 camelCase
     return words[0].toLowerCase() + 
            words.slice(1).map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join('');
   };
@@ -251,7 +303,15 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
     if (!mapping.targetField || mapping.targetField === '') {
       // 如果當前是禁用狀態，恢復為啟用
       const stats = getFieldStatistics(mergedTable.data, mapping.sourceColumn);
-      const fieldKey = generateFieldKey(mapping.sourceColumn);
+      let fieldKey = generateFieldKey(mapping.sourceColumn);
+      
+      // 確保 fieldKey 有效
+      if (!fieldKey || fieldKey === '') {
+        console.error(`generateFieldKey 返回空值 for "${mapping.sourceColumn}"`);
+        fieldKey = 'field_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      }
+      
+      console.log('生成的 fieldKey:', fieldKey);
       
       // 嘗試找到匹配的現有欄位
       const matchedField = existingFields.find(field => {
@@ -266,7 +326,8 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
         updateMapping(index, {
           targetField: matchedField.key,
           isNew: false,
-          customLabel: matchedField.label
+          customLabel: matchedField.label,
+          fieldType: stats.type
         });
       } else {
         // 建立新欄位
@@ -344,22 +405,31 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
             </Text>
             <TouchableOpacity
               onPress={() => toggleMappingEnabled(index)}
-              style={[
-                styles.toggleButton,
-                {
-                  backgroundColor: isEnabled ? colors.primary : colors.gray200,
-                  borderColor: isEnabled ? colors.primary : colors.gray300
-                }
-              ]}
+              style={{
+                width: 48,
+                height: 28,
+                borderRadius: 14,
+                backgroundColor: isEnabled ? colors.primary : colors.gray200,
+                borderWidth: 1,
+                borderColor: isEnabled ? colors.primary : colors.gray300,
+                justifyContent: 'center',
+                paddingHorizontal: 2
+              }}
             >
               <View
-                style={[
-                  styles.toggleThumb,
-                  {
-                    backgroundColor: colors.white,
-                    transform: [{ translateX: isEnabled ? 20 : 0 }]
-                  }
-                ]}
+                style={{
+                  width: 22,
+                  height: 22,
+                  borderRadius: 11,
+                  backgroundColor: colors.white,
+                  position: 'absolute',
+                  left: isEnabled ? 23 : 3,
+                  elevation: 2,
+                  shadowColor: '#000',
+                  shadowOffset: { width: 0, height: 1 },
+                  shadowOpacity: 0.15,
+                  shadowRadius: 2
+                }}
               />
             </TouchableOpacity>
           </View>
