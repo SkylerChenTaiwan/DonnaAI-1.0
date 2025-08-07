@@ -118,14 +118,14 @@ service cloud.firestore {
     
     // 舊版客戶集合（向下相容）
     match /customers/{customerId} {
-      // Super Admin 可以讀取（用於系統管理和統計）
-      allow read: if isSuperAdmin();
-      // 團隊成員可以讀寫
-      allow read, write: if request.auth != null && 
+      // Super Admin 可以讀寫刪除（用於系統管理和統計）
+      allow read, write, delete: if isSuperAdmin();
+      // 團隊成員可以讀寫刪除
+      allow read, write, delete: if request.auth != null && 
         resource.data.teamMembers != null &&
         request.auth.uid in resource.data.teamMembers;
-      // 創建者可以讀寫
-      allow read, write: if request.auth != null && 
+      // 創建者可以讀寫刪除
+      allow read, write, delete: if request.auth != null && 
         request.auth.uid == resource.data.createdBy;
       // 新增客戶
       allow create: if request.auth != null;
@@ -150,13 +150,13 @@ service cloud.firestore {
     
     // 舊版紀錄集合（向下相容）
     match /records/{recordId} {
-      // Super Admin 可以讀取（用於系統監控）
-      allow read: if isSuperAdmin();
-      // 創建者可以讀寫
-      allow read, write: if request.auth != null && 
+      // Super Admin 可以讀寫刪除（用於系統監控）
+      allow read, write, delete: if isSuperAdmin();
+      // 創建者可以讀寫刪除
+      allow read, write, delete: if request.auth != null && 
         request.auth.uid == resource.data.createdBy;
-      // 團隊成員可以讀取
-      allow read: if request.auth != null && 
+      // 團隊成員可以讀取刪除
+      allow read, delete: if request.auth != null && 
         resource.data.teamMembers != null &&
         request.auth.uid in resource.data.teamMembers;
       // 新增紀錄
@@ -181,13 +181,13 @@ service cloud.firestore {
     
     // 舊版任務集合（向下相容）
     match /tasks/{taskId} {
-      // Super Admin 可以讀取（用於系統監控）
-      allow read: if isSuperAdmin();
-      // 指派對象可以讀寫
-      allow read, write: if request.auth != null && 
+      // Super Admin 可以讀寫刪除（用於系統監控）
+      allow read, write, delete: if isSuperAdmin();
+      // 指派對象可以讀寫刪除
+      allow read, write, delete: if request.auth != null && 
         request.auth.uid == resource.data.assignedTo;
-      // 創建者可以讀寫
-      allow read, write: if request.auth != null && 
+      // 創建者可以讀寫刪除
+      allow read, write, delete: if request.auth != null && 
         request.auth.uid == resource.data.createdBy;
       // 新增任務
       allow create: if request.auth != null;

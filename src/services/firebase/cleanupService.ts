@@ -3,7 +3,7 @@
  * 用於清理重複的客戶資料
  */
 
-import { collection, getDocs, writeBatch, doc, Timestamp, QuerySnapshot, DocumentData } from 'firebase/firestore';
+import { collection, getDocs, writeBatch, doc, Timestamp, QuerySnapshot, DocumentData, query, limit } from 'firebase/firestore';
 import { getFirebaseDb } from './config';
 
 interface Customer {
@@ -28,15 +28,21 @@ export async function cleanupDuplicateCustomers(
   console.log('🧹 cleanupDuplicateCustomers 開始執行...');
   console.log('📋 參數:', { organizationId, hasProgressCallback: !!onProgress });
   
-  const db = getFirebaseDb();
-  console.log('🔥 Firebase DB 實例獲取成功');
-  console.log('🔥 DB 實例詳情:', { 
-    app: db.app.name,
-    type: db.type,
-    toJSON: typeof db.toJSON
-  });
+  // 設定逾時保護 (10 分鐘)
+  const timeout = setTimeout(() => {
+    console.error('⏰ 清理作業逾時，強制中止');
+    throw new Error('清理作業逾時 (10 分鐘)，請稍後再試');
+  }, 10 * 60 * 1000);
   
   try {
+    const db = getFirebaseDb();
+    console.log('🔥 Firebase DB 實例獲取成功');
+    console.log('🔥 DB 實例詳情:', { 
+      app: db.app.name,
+      type: db.type,
+      toJSON: typeof db.toJSON
+    });
+  
     console.log('📊 發送進度更新: 正在載入客戶資料...');
     onProgress?.({ message: '正在載入客戶資料...', percent: 10 });
     
@@ -52,19 +58,33 @@ export async function cleanupDuplicateCustomers(
     // 如果組織內路徑沒有資料，嘗試舊版路徑
     if (snapshot.empty) {
       console.log('⚠️ 組織內路徑無資料，嘗試舊版路徑: /customers');
-      const oldCustomersRef = collection(db, 'customers');
-      const oldSnapshot = await getDocs(oldCustomersRef);
-      console.log('📊 舊版路徑查詢結果:', { size: oldSnapshot.size, empty: oldSnapshot.empty });
       
-      if (!oldSnapshot.empty) {
-        console.log('✅ 在舊版路徑找到資料，使用舊版路徑進行清理');
-        // 使用舊版路徑的資料
-        const totalRecords = oldSnapshot.size;
-        console.log(`📈 總記錄數: ${totalRecords}`);
-        onProgress?.({ message: `找到 ${totalRecords} 筆記錄，正在分析重複項目...`, percent: 30 });
+      // 先查詢少量資料確認路徑有效
+      const oldCustomersRef = collection(db, 'customers');
+      const testQuery = query(oldCustomersRef, limit(10));
+      const testSnapshot = await getDocs(testQuery);
+      
+      if (!testSnapshot.empty) {
+        console.log('✅ 舊版路徑有效，開始完整查詢...');
+        console.warn('⚠️ 即將載入大量資料，這可能需要幾分鐘時間');
+        onProgress?.({ message: '正在載入大量歷史資料，請稍候...', percent: 15 });
         
-        // 處理舊版路徑的邏輯...
-        return await cleanupOldPathCustomers(db, oldSnapshot, onProgress);
+        const oldSnapshot = await getDocs(oldCustomersRef);
+        console.log('📊 舊版路徑查詢結果:', { size: oldSnapshot.size, empty: oldSnapshot.empty });
+        
+        if (!oldSnapshot.empty) {
+          console.log('✅ 在舊版路徑找到資料，使用舊版路徑進行清理');
+          // 使用舊版路徑的資料
+          const totalRecords = oldSnapshot.size;
+          console.log(`📈 總記錄數: ${totalRecords}`);
+          onProgress?.({ message: `找到 ${totalRecords} 筆記錄，正在分析重複項目...`, percent: 30 });
+          
+          // 處理舊版路徑的邏輯...
+          clearTimeout(timeout); // 清除逾時計時器
+          return await cleanupOldPathCustomers(db, oldSnapshot, onProgress);
+        }
+      } else {
+        console.log('❌ 舊版路徑測試查詢無資料');
       }
     }
     
@@ -181,6 +201,8 @@ export async function cleanupDuplicateCustomers(
     const finalRecords = totalRecords - deletedCount;
     onProgress?.({ message: '清理完成！', percent: 100 });
     
+    clearTimeout(timeout); // 清除逾時計時器
+    
     return {
       totalRecords,
       duplicatesFound,
@@ -189,6 +211,7 @@ export async function cleanupDuplicateCustomers(
     };
     
   } catch (error) {
+    clearTimeout(timeout); // 發生錯誤時也要清除計時器
     console.error('❌ 清理重複資料時發生錯誤:', error);
     console.error('❌ 錯誤類型:', typeof error);
     console.error('❌ 錯誤詳情:', {
