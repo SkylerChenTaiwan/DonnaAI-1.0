@@ -99,30 +99,49 @@ export const OrganizationsScreen: React.FC = () => {
   };
 
   const handleToggleStatus = async (org: Organization) => {
+    console.log('🔄 handleToggleStatus called for:', org.name, 'Status:', org.status);
     const newStatus = org.status === 'active' ? 'suspended' : 'active';
     const action = newStatus === 'active' ? '啟用' : '停用';
     
-    Alert.alert(
-      `${action}組織`,
-      `確定要${action}「${org.name}」嗎？`,
-      [
-        { text: '取消', style: 'cancel' },
-        {
-          text: '確定',
-          style: newStatus === 'suspended' ? 'destructive' : 'default',
-          onPress: async () => {
-            try {
-              await updateOrganization(org.id, { status: newStatus });
-              await loadOrganizations();
-              toast.success(`已${action}組織`);
-            } catch (error) {
-              console.error('更新組織狀態失敗:', error);
-              toast.error(`${action}失敗`);
+    // Web 平台使用 window.confirm
+    if (Platform.OS === 'web') {
+      console.log('🌐 Using web confirm dialog');
+      const confirmed = window.confirm(`確定要${action}「${org.name}」嗎？`);
+      console.log('✅ User confirmed:', confirmed);
+      if (confirmed) {
+        try {
+          await updateOrganization(org.id, { status: newStatus });
+          await loadOrganizations();
+          toast.success(`已${action}組織`);
+        } catch (error) {
+          console.error('更新組織狀態失敗:', error);
+          toast.error(`${action}失敗`);
+        }
+      }
+    } else {
+      // 原生平台使用 Alert
+      Alert.alert(
+        `${action}組織`,
+        `確定要${action}「${org.name}」嗎？`,
+        [
+          { text: '取消', style: 'cancel' },
+          {
+            text: '確定',
+            style: newStatus === 'suspended' ? 'destructive' : 'default',
+            onPress: async () => {
+              try {
+                await updateOrganization(org.id, { status: newStatus });
+                await loadOrganizations();
+                toast.success(`已${action}組織`);
+              } catch (error) {
+                console.error('更新組織狀態失敗:', error);
+                toast.error(`${action}失敗`);
+              }
             }
           }
-        }
-      ]
-    );
+        ]
+      );
+    }
   };
 
   const getStatusColor = (status?: string) => {
@@ -144,6 +163,7 @@ export const OrganizationsScreen: React.FC = () => {
       style={styles.orgCard}
       onPress={() => handleOrganizationPress(item)}
       activeOpacity={0.7}
+      disabled={false}  // 確保卡片可點擊
     >
       <View style={styles.orgHeader}>
         <View style={styles.orgInfo}>
@@ -172,18 +192,29 @@ export const OrganizationsScreen: React.FC = () => {
 
       <View style={styles.orgActions}>
         <TouchableOpacity
-          style={styles.actionButton}
+          style={[
+            styles.actionButton,
+            item.status === 'active' ? styles.suspendButton : styles.activateButton
+          ]}
           onPress={(e) => {
-            e.stopPropagation(); // 防止觸發卡片點擊事件
+            console.log('🔘 Toggle button clicked for organization:', item.name, 'Current status:', item.status);
+            // 在 Web 平台上不需要 stopPropagation
+            if (Platform.OS !== 'web') {
+              e.stopPropagation();
+            }
             handleToggleStatus(item);
           }}
+          activeOpacity={0.7}
         >
           <Icon
             name={item.status === 'active' ? 'pause-circle-outline' : 'play-circle-outline'}
             size={20}
-            color={DesignSystem.colors.gray[700]}
+            color={item.status === 'active' ? DesignSystem.colors.warning : DesignSystem.colors.success}
           />
-          <Text style={styles.actionLabel}>
+          <Text style={[
+            styles.actionLabel,
+            item.status === 'active' ? styles.suspendLabel : styles.activateLabel
+          ]}>
             {item.status === 'active' ? '停用' : '啟用'}
           </Text>
         </TouchableOpacity>
@@ -376,10 +407,27 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: DesignSystem.spacing.xs,
+    borderRadius: DesignSystem.borderRadius.sm,
+    borderWidth: 1,
+    borderColor: DesignSystem.colors.border.light,
+  },
+  suspendButton: {
+    backgroundColor: DesignSystem.colors.warning + '10',
+    borderColor: DesignSystem.colors.warning + '30',
+  },
+  activateButton: {
+    backgroundColor: DesignSystem.colors.success + '10',
+    borderColor: DesignSystem.colors.success + '30',
   },
   actionLabel: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.gray[700],
+    fontWeight: '500',
+  },
+  suspendLabel: {
+    color: DesignSystem.colors.warning,
+  },
+  activateLabel: {
+    color: DesignSystem.colors.success,
   },
   separator: {
     height: DesignSystem.spacing.md,
