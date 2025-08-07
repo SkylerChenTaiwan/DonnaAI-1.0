@@ -235,8 +235,10 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
 
   // 更新單個映射
   const updateMapping = (index: number, updates: Partial<FieldMapping>) => {
+    console.log(`更新映射 [${index}]:`, updates);
     const newMappings = [...mappings];
     newMappings[index] = { ...newMappings[index], ...updates };
+    console.log('更新後的映射:', newMappings[index]);
     setMappings(newMappings);
     onMappingsChanged(newMappings);
   };
@@ -244,17 +246,46 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
   // 切換映射啟用狀態
   const toggleMappingEnabled = (index: number) => {
     const mapping = mappings[index];
-    if (!mapping.targetField) {
-      // 如果當前是禁用狀態，恢復預設值
-      updateMapping(index, {
-        targetField: generateFieldKey(mapping.sourceColumn),
-        isNew: true
+    console.log('切換映射狀態:', mapping.sourceColumn, '當前 targetField:', mapping.targetField);
+    
+    if (!mapping.targetField || mapping.targetField === '') {
+      // 如果當前是禁用狀態，恢復為啟用
+      const stats = getFieldStatistics(mergedTable.data, mapping.sourceColumn);
+      const fieldKey = generateFieldKey(mapping.sourceColumn);
+      
+      // 嘗試找到匹配的現有欄位
+      const matchedField = existingFields.find(field => {
+        const fieldLabel = field.label.toLowerCase();
+        const headerLower = mapping.sourceColumn.toLowerCase();
+        return fieldLabel === headerLower || field.key === fieldKey;
       });
+      
+      if (matchedField) {
+        // 使用現有欄位
+        console.log('啟用映射 - 使用現有欄位:', matchedField.key);
+        updateMapping(index, {
+          targetField: matchedField.key,
+          isNew: false,
+          customLabel: matchedField.label
+        });
+      } else {
+        // 建立新欄位
+        console.log('啟用映射 - 建立新欄位:', fieldKey);
+        updateMapping(index, {
+          targetField: fieldKey,
+          isNew: true,
+          fieldType: stats.type,
+          customLabel: mapping.sourceColumn
+        });
+      }
     } else {
       // 禁用映射
+      console.log('禁用映射');
       updateMapping(index, {
         targetField: '',
-        isNew: false
+        isNew: false,
+        fieldType: undefined,
+        customLabel: undefined
       });
     }
   };
@@ -311,12 +342,26 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
             <Text style={[styles.sourceLabel, { color: colors.gray500 }]}>
               CSV 欄位
             </Text>
-            <Switch
-              value={isEnabled}
-              onValueChange={() => toggleMappingEnabled(index)}
-              trackColor={{ false: colors.gray200, true: colors.primary }}
-              thumbColor={colors.white}
-            />
+            <TouchableOpacity
+              onPress={() => toggleMappingEnabled(index)}
+              style={[
+                styles.toggleButton,
+                {
+                  backgroundColor: isEnabled ? colors.primary : colors.gray200,
+                  borderColor: isEnabled ? colors.primary : colors.gray300
+                }
+              ]}
+            >
+              <View
+                style={[
+                  styles.toggleThumb,
+                  {
+                    backgroundColor: colors.white,
+                    transform: [{ translateX: isEnabled ? 20 : 0 }]
+                  }
+                ]}
+              />
+            </TouchableOpacity>
           </View>
           <Text style={[styles.sourceFieldName, { color: colors.text }]}>
             {mapping.sourceColumn}
@@ -743,6 +788,26 @@ const styles = StyleSheet.create({
   newFieldText: {
     fontSize: 10,
     fontWeight: '600'
+  },
+  toggleButton: {
+    width: 48,
+    height: 28,
+    borderRadius: 14,
+    borderWidth: 1,
+    justifyContent: 'center',
+    padding: 2
+  },
+  toggleThumb: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    position: 'absolute',
+    left: 3,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 2
   },
   existingFieldButton: {
     flexDirection: 'row',
