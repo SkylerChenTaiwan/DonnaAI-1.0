@@ -43,8 +43,6 @@ import { DataImportAssistModal } from '@/components/organization/DataImportAssis
 import { CustomFieldsModal } from '@/components/organization/CustomFieldsModal';
 import ImportWizard from '@/components/import/ImportWizard';
 import { Modal, Platform } from 'react-native';
-import { UnifiedWebLayout } from '@/components/layout/UnifiedWebLayout';
-import { isDesktopWeb, isTabletWeb } from '@/utils/web-detector';
 
 type RouteParams = RouteProp<RootStackParamList, 'OrganizationDetailScreen'>;
 type NavigationProp = StackNavigationProp<RootStackParamList, 'OrganizationDetailScreen'>;
@@ -688,13 +686,9 @@ export const OrganizationDetailScreen: React.FC = () => {
     </>
   );
 
-  // 在 Web 平台使用 UnifiedWebLayout
+  // 在 Web 平台直接返回內容（由 WebNavigator 管理佈局）
   if (Platform.OS === 'web') {
-    return (
-      <UnifiedWebLayout scrollable={false}>
-        {content}
-      </UnifiedWebLayout>
-    );
+    return content;
   }
 
   // 在移動平台使用 Layout

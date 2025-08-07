@@ -19,6 +19,15 @@
 
 ## 現況分析
 
+### 重要發現：資料庫頁面為何運作正常
+
+資料庫頁面運作正常的關鍵差異：
+1. **Web 平台直接返回內容**：`if (Platform.OS === 'web') return renderContent();`
+2. **不使用額外的佈局包裝**：避免了佈局系統的衝突
+3. **由 WebNavigator 統一管理佈局**：側邊欄和內容區都在同一層級
+
+這是正確的模式，其他頁面應該遵循相同架構。
+
 ### 1. 架構問題診斷
 
 #### 佈局系統混亂
@@ -199,18 +208,24 @@ export const useResponsive = () => {
 
 ### Phase 3: UI/UX 設計實作 (2-3天)
 
-#### 3.1 桌面版佈局設計
+#### 3.1 桌面版佈局設計（與資料庫頁面一致）
 ```
-┌─────────────────────────────────────────────────────┐
-│                    頂部導航欄 (60px)                   │
-├───────┬─────────────────────────────────────────────┤
+┌───────┬─────────────────────────────────────────────┐
 │       │                                             │
 │  側   │              主要內容區域                      │
-│  邊   │         (最大寬度 1200px, 置中)              │
+│  邊   │       (全寬，無頂部導航欄)                     │
 │  欄   │                                             │
-│(220px)│                                             │
+│(220px)│       資料庫頁面：直接渲染內容                  │
+│ 高度  │       其他頁面：透過 Layout 包裹               │
+│ 100%  │                                             │
 │       │                                             │
 └───────┴─────────────────────────────────────────────┘
+
+重要設計原則：
+- 側邊欄高度：100vh (到頂)
+- 桌面版無頂部導航欄（TopBar）
+- 只有平板和手機模式才顯示頂部導航欄
+- Web 平台的資料庫頁面直接返回內容，不用 Layout 包裹
 ```
 
 #### 3.2 平板版佈局設計
@@ -225,21 +240,37 @@ export const useResponsive = () => {
 └─────────────────────────────────────────────────────┘
 ```
 
-#### 3.3 組件層級結構
+#### 3.3 組件層級結構（基於現有架構）
 ```typescript
-<WebLayout>
-  <Sidebar 
-    visible={showSidebar}
-    collapsed={sidebarCollapsed}
-    onToggle={handleToggle}
-  />
-  <MainContent>
-    <Header visible={showHeader} />
-    <ContentArea maxWidth={maxWidth}>
-      {children}
-    </ContentArea>
-  </MainContent>
-</WebLayout>
+// WebNavigator.tsx 的實際結構
+<View style={styles.container}>  // height: 100vh
+  {/* 側邊欄容器 */}
+  <View style={styles.sidebarContainer}>  // height: 100%
+    <Sidebar 
+      collapsed={sidebarCollapsed}
+      onToggle={handleSidebarToggle}
+    />
+  </View>
+  
+  {/* 主內容區 */}
+  <View style={styles.mainContent}>  // flex: 1
+    {/* 只在平板/手機顯示 TopBar */}
+    {showTopBar && <TopBar />}
+    
+    {/* Stack Navigator 管理頁面路由 */}
+    <Stack.Navigator>
+      {/* 各頁面組件 */}
+    </Stack.Navigator>
+  </View>
+</View>
+
+// 關鍵樣式
+container: {
+  flex: 1,
+  flexDirection: 'row',
+  height: '100vh',  // 確保全高
+  position: 'relative'
+}
 ```
 
 ### Phase 4: 測試與優化 (1天)

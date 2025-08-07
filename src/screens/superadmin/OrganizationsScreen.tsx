@@ -17,9 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
-import { UnifiedWebLayout } from '@/components/layout/UnifiedWebLayout';
 import { Platform } from 'react-native';
-import { isDesktopWeb, isTabletWeb } from '@/utils/web-detector';
 import { SearchBar } from '@/components/common/SearchBar';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
@@ -198,16 +196,20 @@ export const OrganizationsScreen: React.FC = () => {
   );
 
   if (isLoading) {
+    const loadingContent = <LoadingSpinner message="載入組織列表..." />;
+    
+    // Web 平台直接返回內容
+    if (Platform.OS === 'web') {
+      return loadingContent;
+    }
+    
     return (
       <Layout>
-        <LoadingSpinner message="載入組織列表..." />
+        {loadingContent}
       </Layout>
     );
   }
 
-  // Web 平台使用統一的 Web 佈局
-  const shouldUseWebLayout = Platform.OS === 'web' && (isDesktopWeb() || isTabletWeb());
-  
   const content = (
     <>
       <View style={styles.searchContainer}>
@@ -261,13 +263,9 @@ export const OrganizationsScreen: React.FC = () => {
     </>
   );
   
-  // Web 平台使用 UnifiedWebLayout
-  if (shouldUseWebLayout) {
-    return (
-      <UnifiedWebLayout scrollable={false} maxWidth={1400}>
-        {content}
-      </UnifiedWebLayout>
-    );
+  // Web 平台直接返回內容（由 WebNavigator 管理佈局）
+  if (Platform.OS === 'web') {
+    return content;
   }
   
   // 其他平台使用原有 Layout

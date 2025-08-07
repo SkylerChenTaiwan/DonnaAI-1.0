@@ -146,7 +146,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
                     if (item.hasChildren && item.id === 'Database') {
                       setDatabaseExpanded(!databaseExpanded);
                     }
-                    navigation.navigate(item.id as any);
+                    // 修復導航邏輯 - 確保導航到正確的路由
+                    try {
+                      if (navigation && navigation.navigate) {
+                        navigation.navigate(item.id as never);
+                        console.log(`[Sidebar] Navigating to: ${item.id}`);
+                      } else {
+                        console.error('[Sidebar] Navigation not available');
+                      }
+                    } catch (error) {
+                      console.error(`[Sidebar] Navigation failed for ${item.id}:`, error);
+                    }
                   }}
                   onHoverIn={() => setHoveredItem(item.id)}
                   onHoverOut={() => setHoveredItem(null)}
@@ -193,9 +203,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
                         style={styles.subMenuItem}
                         onPress={() => {
                           // 導航到具體的資料庫分頁
-                          navigation.navigate('Database' as any, { 
-                            activeTab: subItem.id 
-                          });
+                          try {
+                            navigation.navigate('Database' as never, { 
+                              activeTab: subItem.id 
+                            } as never);
+                            console.log(`[Sidebar] Navigating to Database tab: ${subItem.id}`);
+                          } catch (error) {
+                            console.error(`[Sidebar] Database navigation failed:`, error);
+                          }
                         }}
                       >
                         <Icon 
