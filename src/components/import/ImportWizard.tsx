@@ -192,9 +192,14 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
       }));
 
       // 執行匯入
+      // 將中文資料正確編碼為 base64
+      const jsonData = JSON.stringify(wizardState.mergedTable.data);
+      // 使用更安全的編碼方法處理中文
+      const base64String = btoa(unescape(encodeURIComponent(jsonData)));
+      
       const importResult = await importer.importMultipleFilesWithMapping(
         [{
-          uri: 'data:text/csv;base64,' + btoa(JSON.stringify(wizardState.mergedTable.data)),
+          uri: 'data:text/csv;base64,' + base64String,
           name: 'merged_data.csv',
           type: 'application/json'
         }],

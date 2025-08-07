@@ -405,31 +405,37 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
             </Text>
             <TouchableOpacity
               onPress={() => toggleMappingEnabled(index)}
-              style={{
-                width: 48,
-                height: 28,
-                borderRadius: 14,
-                backgroundColor: isEnabled ? colors.primary : colors.gray200,
-                borderWidth: 1,
-                borderColor: isEnabled ? colors.primary : colors.gray300,
-                justifyContent: 'center',
-                paddingHorizontal: 2
-              }}
+              style={[
+                {
+                  width: 48,
+                  height: 28,
+                  borderRadius: 14,
+                  backgroundColor: isEnabled ? '#4F46E5' : '#E5E7EB',
+                  borderWidth: 1,
+                  borderColor: isEnabled ? '#4F46E5' : '#D1D5DB',
+                  justifyContent: 'center',
+                  padding: 2,
+                  position: 'relative'
+                }
+              ]}
             >
               <View
-                style={{
-                  width: 22,
-                  height: 22,
-                  borderRadius: 11,
-                  backgroundColor: colors.white,
-                  position: 'absolute',
-                  left: isEnabled ? 23 : 3,
-                  elevation: 2,
-                  shadowColor: '#000',
-                  shadowOffset: { width: 0, height: 1 },
-                  shadowOpacity: 0.15,
-                  shadowRadius: 2
-                }}
+                style={[
+                  {
+                    width: 22,
+                    height: 22,
+                    borderRadius: 11,
+                    backgroundColor: '#FFFFFF',
+                    position: 'absolute',
+                    transform: [{ translateX: isEnabled ? 22 : 2 }],
+                    top: 2,
+                    elevation: 2,
+                    shadowColor: '#000000',
+                    shadowOffset: { width: 0, height: 1 },
+                    shadowOpacity: 0.15,
+                    shadowRadius: 2
+                  }
+                ]}
               />
             </TouchableOpacity>
           </View>
