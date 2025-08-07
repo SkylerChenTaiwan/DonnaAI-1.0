@@ -84,7 +84,7 @@
 | 78   | three-stage-data-import.md | 📋 待執行 | 三階段資料匯入系統重構 - 選擇資料庫、多檔案合併、欄位映射與雙向關聯 | - |
 | 79v  | unified-permission-system.md | ✅ 已完成 | 統一權限系統完整重構 - 中央權限控制、自動修復、用戶建立安全化、完整測試 | 2025-08-06 |
 | 80   | web-layout-optimization.md | 🔄 進行中 | Web 佈局架構統一優化 - 側邊欄一致性、響應式設計、Icon 系統完善 | 2025-08-07 |
-| 81   | web-layout-complete-redesign.md | 📋 待執行 | Web 版面完整重構與修復 - 修復導航、統一佈局、響應式設計 | - |
+| 81v  | web-layout-complete-redesign.md | ✅ 已完成 | Web 版面完整重構與修復 - 修復導航、統一佈局、響應式設計 | 2025-08-07 |
 
 ## 命名規則
 

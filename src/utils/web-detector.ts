@@ -14,33 +14,47 @@ export const isWebPlatform = (): boolean => {
 
 /**
  * 檢測是否為行動裝置的 Web 瀏覽器
+ * 使用統一的斷點系統而非 User Agent 檢測
  */
 export const isMobileWeb = (): boolean => {
   if (!isWebPlatform()) return false;
   
-  const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : '';
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+  // 導入統一的斷點定義
+  const { UNIFIED_BREAKPOINTS } = require('@/theme/responsive');
+  const width = window.innerWidth;
+  
+  // 小於平板斷點視為手機
+  return width < UNIFIED_BREAKPOINTS.tablet;
 };
 
 /**
  * 檢測是否為平板電腦的 Web 瀏覽器
+ * 使用統一的斷點系統
  */
 export const isTabletWeb = (): boolean => {
   if (!isWebPlatform()) return false;
   
-  const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : '';
-  const isIPad = /iPad/i.test(userAgent) || 
-    (Platform.OS === 'web' && /Macintosh/i.test(userAgent) && 'ontouchend' in document);
-  const isAndroidTablet = /Android/i.test(userAgent) && !/Mobile/i.test(userAgent);
+  // 導入統一的斷點定義
+  const { UNIFIED_BREAKPOINTS } = require('@/theme/responsive');
+  const width = window.innerWidth;
   
-  return isIPad || isAndroidTablet;
+  // 在平板和桌面斷點之間視為平板
+  return width >= UNIFIED_BREAKPOINTS.tablet && width < UNIFIED_BREAKPOINTS.desktop;
 };
 
 /**
  * 檢測是否為桌面瀏覽器
+ * 使用統一的斷點系統
  */
 export const isDesktopWeb = (): boolean => {
-  return isWebPlatform() && !isMobileWeb() && !isTabletWeb();
+  if (!isWebPlatform()) return false;
+  
+  // 導入統一的斷點定義
+  const { UNIFIED_BREAKPOINTS } = require('@/theme/responsive');
+  const width = window.innerWidth;
+  
+  // 大於或等於桌面斷點視為桌面
+  return width >= UNIFIED_BREAKPOINTS.desktop;
 };
 
 /**

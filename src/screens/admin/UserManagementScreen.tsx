@@ -11,8 +11,9 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Alert,
+  Platform,
 } from 'react-native';
-import { SmartLayout } from '@/components/layout/SmartLayout';
+import { WebLayout } from '@/components/layout/WebLayout';
 import { SearchBar } from '@/components/common/SearchBar';
 import { ToolbarIcons } from '@/components/common/ToolbarIcons';
 import { DataTable } from '@/components/common/DataTable';
@@ -276,18 +277,27 @@ export const UserManagementScreen: React.FC = () => {
   };
   
   if (loading && users.length === 0) {
+    const loadingContent = (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={DesignSystem.colors.primary} />
+        <Text style={styles.loadingText}>載入用戶資料...</Text>
+      </View>
+    );
+    
+    // Web 平台直接返回內容
+    if (Platform.OS === 'web') {
+      return loadingContent;
+    }
+    
     return (
-      <Layout>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={DesignSystem.colors.primary} />
-          <Text style={styles.loadingText}>載入用戶資料...</Text>
-        </View>
-      </Layout>
+      <WebLayout>
+        {loadingContent}
+      </WebLayout>
     );
   }
   
-  return (
-    <SmartLayout style={styles.container} scrollable={false}>
+  const content = (
+    <View style={styles.container}>
         
         {/* 工具列 */}
         <View style={styles.toolbar}>
@@ -406,7 +416,19 @@ export const UserManagementScreen: React.FC = () => {
         ]}
         tabType="users"
       />
-    </SmartLayout>
+    </View>
+  );
+  
+  // Web 平台直接返回內容（由 WebNavigator 管理佈局）
+  if (Platform.OS === 'web') {
+    return content;
+  }
+  
+  // 其他平台使用 WebLayout
+  return (
+    <WebLayout scrollable={false}>
+      {content}
+    </WebLayout>
   );
 };
 

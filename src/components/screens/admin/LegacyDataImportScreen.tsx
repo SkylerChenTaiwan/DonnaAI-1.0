@@ -18,8 +18,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Icon } from '@/components/common/Icon';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
-import { Layout } from '@/components/common/Layout';
-import { migrateToUnifiedWebLayout } from '@/components/layout/withUnifiedWebLayout';
+import { WebLayout } from '@/components/layout/WebLayout';
 import { responsiveGrid } from '@/components/common/ResponsiveLayout';
 import { isDesktopWeb, isTabletWeb } from '@/utils/web-detector';
 import { DesignSystem } from '@/theme/designSystem';
@@ -613,6 +612,17 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
         </TouchableOpacity>
       </View>
     );
+    
+    // Web 平台直接返回內容
+    if (Platform.OS === 'web') {
+      return wizardContent;
+    }
+    
+    return (
+      <WebLayout scrollable={false}>
+        {wizardContent}
+      </WebLayout>
+    );
   };
 
   const renderValidation = () => (
@@ -730,7 +740,7 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
 
   // 使用新的三階段精靈
   if (useNewWizard) {
-    return migrateToUnifiedWebLayout(
+    const wizardContent = (
       <View style={styles.wizardContainer}>
         {/* 切換開關 */}
         <View style={styles.switchContainer}>
@@ -836,17 +846,17 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
     </ScrollView>
   );
 
-  return migrateToUnifiedWebLayout(content, {
-    maxWidth: 1400,
-    scrollable: false,
-    layoutProps: {
-      headerProps: {
-        title: '舊系統資料導入',
-        showBack: true,
-        onBack: () => navigation.goBack(),
-      }
-    }
-  });
+  // Web 平台直接返回內容
+  if (Platform.OS === 'web') {
+    return content;
+  }
+  
+  // 其他平台使用 WebLayout
+  return (
+    <WebLayout scrollable={false} maxWidth={1400}>
+      {content}
+    </WebLayout>
+  );
 }
 
 const styles = StyleSheet.create({

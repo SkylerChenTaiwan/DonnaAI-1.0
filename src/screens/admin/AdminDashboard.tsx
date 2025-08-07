@@ -12,12 +12,13 @@ import {
   TouchableOpacity,
   RefreshControl,
   Alert,
+  Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Icon } from '@/components/common/Icon';
-import { SmartLayout } from '@/components/layout/SmartLayout';
+import { WebLayout } from '@/components/layout/WebLayout';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useAuthStore } from '@/stores/authStore';
@@ -242,15 +243,22 @@ export const AdminDashboard: React.FC = () => {
   };
 
   if (isLoading) {
+    const loadingContent = <LoadingSpinner message="載入管理中心..." />;
+    
+    // Web 平台直接返回內容
+    if (Platform.OS === 'web') {
+      return loadingContent;
+    }
+    
     return (
-      <Layout>
-        <LoadingSpinner message="載入管理中心..." />
-      </Layout>
+      <WebLayout>
+        {loadingContent}
+      </WebLayout>
     );
   }
 
-  return (
-    <SmartLayout style={styles.container} scrollable={false}>
+  const content = (
+    <View style={styles.container}>
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         refreshControl={
@@ -264,7 +272,19 @@ export const AdminDashboard: React.FC = () => {
         {renderQuickActions()}
         {renderTodayActivity()}
       </ScrollView>
-    </SmartLayout>
+    </View>
+  );
+  
+  // Web 平台直接返回內容（由 WebNavigator 管理佈局）
+  if (Platform.OS === 'web') {
+    return content;
+  }
+  
+  // 其他平台使用 WebLayout
+  return (
+    <WebLayout scrollable={false}>
+      {content}
+    </WebLayout>
   );
 };
 
