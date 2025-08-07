@@ -80,6 +80,17 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
     }
   }, [existingFields, mergedTable]);
 
+  // 偵錯用：監聽狀態變化
+  useEffect(() => {
+    console.log('🔄 showFieldSelector 狀態變更:', showFieldSelector);
+    console.log('🔄 currentMappingIndex:', currentMappingIndex);
+  }, [showFieldSelector, currentMappingIndex]);
+
+  useEffect(() => {
+    console.log('🔄 showRelationEditor 狀態變更:', showRelationEditor);
+    console.log('🔄 selectedMapping:', selectedMapping);
+  }, [showRelationEditor, selectedMapping]);
+
   const loadExistingFields = async () => {
     setLoading(true);
     try {
@@ -492,10 +503,13 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                 <TouchableOpacity
                   style={[styles.existingFieldButton, { borderColor: colors.gray200 }]}
                   onPress={() => {
-                    console.log('打開欄位選擇器 for mapping:', index);
+                    console.log('🔍 打開欄位選擇器 for mapping:', index);
+                    console.log('Current mapping:', mapping);
+                    console.log('Setting showFieldSelector to true');
                     setCurrentMappingIndex(index);
                     setShowFieldSelector(true);
                   }}
+                  activeOpacity={0.7}
                 >
                   <Text style={[styles.existingFieldName, { color: colors.text }]}>
                     {existingFields.find(f => f.key === mapping.targetField)?.label || mapping.targetField}
@@ -508,9 +522,14 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
               <TouchableOpacity
                 style={[styles.relationButton, { borderColor: colors.primary }]}
                 onPress={() => {
+                  console.log('🔗 設定關聯按鈕被點擊');
+                  console.log('Selected mapping:', mapping);
                   setSelectedMapping(mapping);
                   setShowRelationEditor(true);
+                  // 暫時顯示提示，因為關聯編輯器尚未實作
+                  showSuccessToast('關聯設定功能開發中');
                 }}
+                activeOpacity={0.7}
               >
                 <MaterialIcons name="link" size={16} color={colors.primary} />
                 <Text style={[styles.relationButtonText, { color: colors.primary }]}>
@@ -807,12 +826,103 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
     </ScrollView>
     
     {/* 欄位選擇器 Modal */}
-    <Modal
-      visible={showFieldSelector}
-      animationType="slide"
-      transparent={true}
-      onRequestClose={() => setShowFieldSelector(false)}
-    >
+    {Platform.OS === 'web' ? (
+      // Web 平台使用絕對定位的 div 代替 Modal
+      showFieldSelector && (
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContent, { backgroundColor: colors.white }]}>
+            <View style={styles.modalHeader}>
+              <Text style={[styles.modalTitle, { color: colors.text }]}>
+                選擇系統欄位
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  console.log('關閉欄位選擇器');
+                  setShowFieldSelector(false);
+                }}
+                style={styles.modalCloseButton}
+                activeOpacity={0.7}
+              >
+                <MaterialIcons name="close" size={24} color={colors.gray500} />
+              </TouchableOpacity>
+            </View>
+            
+            <ScrollView style={styles.modalBody}>
+              {/* 現有欄位 */}
+              <Text style={[styles.modalSectionTitle, { color: colors.text }]}>
+                現有欄位
+              </Text>
+              {existingFields.map((field) => (
+                <TouchableOpacity
+                  key={field.key}
+                  style={[
+                    styles.fieldOption,
+                    { 
+                      backgroundColor: colors.gray50,
+                      borderColor: colors.gray200,
+                    }
+                  ]}
+                  onPress={() => {
+                    console.log('選擇欄位:', field.key);
+                    selectField(field.key);
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.fieldOptionContent}>
+                    <Text style={[styles.fieldOptionLabel, { color: colors.text }]}>
+                      {field.label}
+                    </Text>
+                    <Text style={[styles.fieldOptionKey, { color: colors.gray500 }]}>
+                      {field.key}
+                    </Text>
+                    <Text style={[styles.fieldOptionType, { color: colors.gray400 }]}>
+                      {field.type}
+                    </Text>
+                  </View>
+                  <MaterialIcons name="chevron-right" size={20} color={colors.gray400} />
+                </TouchableOpacity>
+              ))}
+              
+              {/* 建立新欄位 */}
+              <Text style={[styles.modalSectionTitle, { color: colors.text, marginTop: 24 }]}>
+                其他選項
+              </Text>
+              <TouchableOpacity
+                style={[
+                  styles.fieldOption,
+                  { 
+                    backgroundColor: colors.success + '10',
+                    borderColor: colors.success + '40',
+                  }
+                ]}
+                onPress={() => {
+                  console.log('建立新欄位');
+                  selectField('new_field');
+                }}
+                activeOpacity={0.7}
+              >
+                <View style={styles.fieldOptionContent}>
+                  <Text style={[styles.fieldOptionLabel, { color: colors.success }]}>
+                    建立新欄位
+                  </Text>
+                  <Text style={[styles.fieldOptionKey, { color: colors.success + 'CC' }]}>
+                    使用原 CSV 欄位名稱
+                  </Text>
+                </View>
+                <MaterialIcons name="add-circle" size={20} color={colors.success} />
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
+        </View>
+      )
+    ) : (
+      // Native 平台使用 Modal
+      <Modal
+        visible={showFieldSelector}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setShowFieldSelector(false)}
+      >
       <View style={styles.modalOverlay}>
         <View style={[styles.modalContent, { backgroundColor: colors.white }]}>
           <View style={styles.modalHeader}>
@@ -887,6 +997,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
         </View>
       </View>
     </Modal>
+    )}
     </>
   );
 };
@@ -1142,7 +1253,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20
+    padding: 20,
+    ...Platform.select({
+      web: {
+        position: 'fixed' as any,
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 9999
+      }
+    })
   },
   modalContent: {
     width: '90%',
