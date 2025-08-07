@@ -327,8 +327,8 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
       return;
     }
 
+    // 檢查是否所有檔案都選擇了關鍵欄位（單一檔案時為可選）
     if (uploadedFiles.length > 1) {
-      // 檢查是否所有檔案都選擇了關鍵欄位
       const missingKeyFields = uploadedFiles.filter(
         file => !selectedKeyFields[file.id]
       );
@@ -336,6 +336,12 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
       if (missingKeyFields.length > 0) {
         showErrorToast('請為所有檔案選擇關鍵欄位');
         return;
+      }
+    } else if (uploadedFiles.length === 1) {
+      // 單一檔案時，關鍵欄位為可選
+      const file = uploadedFiles[0];
+      if (!selectedKeyFields[file.id]) {
+        console.log('單一檔案未選擇關鍵欄位，將使用第一個欄位作為預設');
       }
     }
 
@@ -345,7 +351,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
       const config: MergeConfig = {
         files: uploadedFiles.map(file => ({
           id: file.id,
-          keyField: selectedKeyFields[file.id] || ''
+          keyField: selectedKeyFields[file.id] || file.headers[0] || ''
         })),
         mergeStrategy,
         handleDuplicates: 'rename',
@@ -418,62 +424,146 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
           </TouchableOpacity>
         </View>
 
-        {/* 關鍵欄位選擇 */}
-        {uploadedFiles.length > 1 && (
+        {/* 關鍵欄位選擇 - 即使單一檔案也允許選擇關鍵欄位 */}
+        {uploadedFiles.length > 0 && (
           <View style={[styles.keyFieldSection, { borderTopColor: colors.gray100 }]}>
-            <Text style={[styles.keyFieldLabel, { color: colors.gray600 }]}>
-              關鍵欄位（用於合併）
-            </Text>
+            <View style={styles.keyFieldHeader}>
+              <Text style={[styles.keyFieldLabel, { color: colors.gray600 }]}>
+                關鍵欄位{uploadedFiles.length > 1 ? '（用於合併）' : '（用於識別唯一記錄）'}
+              </Text>
+              <Text style={[styles.keyFieldHint, { color: colors.gray400 }]}>
+                可橫向滾動查看所有欄位
+              </Text>
+            </View>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <View style={styles.keyFieldOptions}>
-                {candidates.map(candidate => (
-                  <TouchableOpacity
-                    key={candidate.field}
-                    style={[
-                      styles.keyFieldOption,
-                      {
-                        backgroundColor: selectedKey === candidate.field 
-                          ? colors.primary 
-                          : colors.gray100,
-                        borderColor: candidate.confidence === 'high' 
-                          ? colors.success 
-                          : colors.gray200
-                      }
-                    ]}
-                    onPress={() => handleKeyFieldChange(file.id, candidate.field)}
-                  >
-                    <Text style={[
-                      styles.keyFieldText,
-                      { 
-                        color: selectedKey === candidate.field 
-                          ? colors.white 
-                          : colors.gray700 
-                      }
-                    ]}>
-                      {candidate.field}
-                    </Text>
-                    <View style={[
-                      styles.confidenceBadge,
-                      {
-                        backgroundColor: selectedKey === candidate.field
-                          ? colors.white + '30'
-                          : getConfidenceColor(candidate.confidence) + '20'
-                      }
-                    ]}>
-                      <Text style={[
-                        styles.confidenceText,
+                {/* 先顯示高信心度的候選 */}
+                {candidates
+                  .filter(c => c.confidence === 'high')
+                  .map(candidate => (
+                    <TouchableOpacity
+                      key={candidate.field}
+                      style={[
+                        styles.keyFieldOption,
                         {
-                          color: selectedKey === candidate.field
-                            ? colors.white
-                            : getConfidenceColor(candidate.confidence)
+                          backgroundColor: selectedKey === candidate.field 
+                            ? colors.primary 
+                            : colors.gray100,
+                          borderColor: colors.success
+                        }
+                      ]}
+                      onPress={() => handleKeyFieldChange(file.id, candidate.field)}
+                    >
+                      <Text style={[
+                        styles.keyFieldText,
+                        { 
+                          color: selectedKey === candidate.field 
+                            ? colors.white 
+                            : colors.gray700 
                         }
                       ]}>
-                        {candidate.confidence === 'high' ? '推薦' : 
-                         candidate.confidence === 'medium' ? '可用' : ''}
+                        {candidate.field}
                       </Text>
-                    </View>
-                  </TouchableOpacity>
-                ))}
+                      <View style={[
+                        styles.confidenceBadge,
+                        {
+                          backgroundColor: selectedKey === candidate.field
+                            ? colors.white + '30'
+                            : colors.success + '20'
+                        }
+                      ]}>
+                        <Text style={[
+                          styles.confidenceText,
+                          {
+                            color: selectedKey === candidate.field
+                              ? colors.white
+                              : colors.success
+                          }
+                        ]}>
+                          推薦
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                
+                {/* 再顯示中等信心度的候選 */}
+                {candidates
+                  .filter(c => c.confidence === 'medium')
+                  .map(candidate => (
+                    <TouchableOpacity
+                      key={candidate.field}
+                      style={[
+                        styles.keyFieldOption,
+                        {
+                          backgroundColor: selectedKey === candidate.field 
+                            ? colors.primary 
+                            : colors.gray100,
+                          borderColor: colors.warning
+                        }
+                      ]}
+                      onPress={() => handleKeyFieldChange(file.id, candidate.field)}
+                    >
+                      <Text style={[
+                        styles.keyFieldText,
+                        { 
+                          color: selectedKey === candidate.field 
+                            ? colors.white 
+                            : colors.gray700 
+                        }
+                      ]}>
+                        {candidate.field}
+                      </Text>
+                      <View style={[
+                        styles.confidenceBadge,
+                        {
+                          backgroundColor: selectedKey === candidate.field
+                            ? colors.white + '30'
+                            : colors.warning + '20'
+                        }
+                      ]}>
+                        <Text style={[
+                          styles.confidenceText,
+                          {
+                            color: selectedKey === candidate.field
+                              ? colors.white
+                              : colors.warning
+                          }
+                        ]}>
+                          可用
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                
+                {/* 最後顯示所有其他欄位（低信心度或未評估的） */}
+                {candidates
+                  .filter(c => c.confidence === 'low')
+                  .map(candidate => (
+                    <TouchableOpacity
+                      key={candidate.field}
+                      style={[
+                        styles.keyFieldOption,
+                        {
+                          backgroundColor: selectedKey === candidate.field 
+                            ? colors.primary 
+                            : colors.gray100,
+                          borderColor: colors.gray300
+                        }
+                      ]}
+                      onPress={() => handleKeyFieldChange(file.id, candidate.field)}
+                    >
+                      <Text style={[
+                        styles.keyFieldText,
+                        { 
+                          color: selectedKey === candidate.field 
+                            ? colors.white 
+                            : colors.gray700 
+                        }
+                      ]}>
+                        {candidate.field}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
               </View>
             </ScrollView>
           </View>
@@ -758,9 +848,17 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     padding: 12
   },
-  keyFieldLabel: {
-    fontSize: 12,
+  keyFieldHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 8
+  },
+  keyFieldLabel: {
+    fontSize: 12
+  },
+  keyFieldHint: {
+    fontSize: 10
   },
   keyFieldOptions: {
     flexDirection: 'row',
