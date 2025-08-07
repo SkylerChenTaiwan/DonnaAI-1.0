@@ -1177,8 +1177,8 @@ export class SmartDataImporter {
       imported: { users: 0, teams: 0, customers: 0, records: 0 }
     };
 
-    const BATCH_SIZE = 10; // 每批最多處理 10 筆，避免 Firebase 寫入佇列耗盡
-    const BATCH_DELAY = 2000; // 批次間延遲 2 秒，確保 Firebase 有時間處理
+    const BATCH_SIZE = 5; // 每批最多處理 5 筆，最保守設定避免 Firebase 寫入佇列耗盡
+    const BATCH_DELAY = 3000; // 批次間延遲 3 秒，給予 Firebase 充分處理時間
     const currentFileIndex = this.fieldMappingsConfig.findIndex(m => m.mappings === mappings);
     let totalCount = 0;
 
@@ -1361,7 +1361,7 @@ export class SmartDataImporter {
               });
             }
             
-            await new Promise(resolve => setTimeout(resolve, 10000)); // 增加等待時間到 10 秒
+            await new Promise(resolve => setTimeout(resolve, 15000)); // 增加等待時間到 15 秒
             
             try {
               await batch.commit();

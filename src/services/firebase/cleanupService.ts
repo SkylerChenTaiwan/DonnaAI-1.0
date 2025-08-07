@@ -91,7 +91,7 @@ export async function cleanupDuplicateCustomers(
     }
     
     // 執行刪除（分批處理）
-    const batchSize = 10; // 降低批次大小避免 Firebase 寫入佇列耗盡
+    const batchSize = 5; // 最保守的批次大小避免 Firebase 寫入佇列耗盡
     let deletedCount = 0;
     
     for (let i = 0; i < toDelete.length; i += batchSize) {
@@ -115,7 +115,7 @@ export async function cleanupDuplicateCustomers(
         
         // 增加批次間延遲，避免 Firebase 限制
         if (i + batchSize < toDelete.length) {
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          await new Promise(resolve => setTimeout(resolve, 2000));
         }
       } catch (error) {
         console.error('清理批次失敗:', error);
@@ -127,7 +127,7 @@ export async function cleanupDuplicateCustomers(
             percent: Math.floor(50 + (deletedCount / toDelete.length) * 40) 
           });
           
-          await new Promise(resolve => setTimeout(resolve, 10000));
+          await new Promise(resolve => setTimeout(resolve, 15000));
           
           try {
             await batch.commit();
