@@ -201,10 +201,7 @@ export const AppNavigator = () => {
               name="OrganizationDetailScreen"
               component={OrganizationDetailScreen}
               options={{ 
-                headerShown: true,
-                title: '組織詳情',
-                headerTintColor: '#1A1A1A',
-                headerBackTitleVisible: false,
+                headerShown: false, // 使用自定義 header
               }}
             />
             <Stack.Screen
