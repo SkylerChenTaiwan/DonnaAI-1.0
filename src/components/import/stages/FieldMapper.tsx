@@ -754,8 +754,23 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
     setCurrentMappingIndex(-1);
   };
 
+  // 調試訊息
+  useEffect(() => {
+    console.log('🔍 FieldMapper 收到的資料:', {
+      targetDatabase,
+      mergedTable: mergedTable ? {
+        headers: mergedTable.headers,
+        dataLength: mergedTable.data?.length,
+        firstRow: mergedTable.data?.[0]
+      } : null,
+      existingFields: existingFields.length,
+      mappings: mappings.length
+    });
+  }, [targetDatabase, mergedTable, existingFields, mappings]);
+
   // 如果沒有合併的資料表，顯示提示
   if (!mergedTable || !mergedTable.headers || mergedTable.headers.length === 0) {
+    console.log('⚠️ FieldMapper: 沒有 mergedTable 資料');
     return (
       <View style={[styles.container, { padding: 20, alignItems: 'center', justifyContent: 'center' }]}>
         <MaterialIcons name="info-outline" size={48} color={colors.gray400} />

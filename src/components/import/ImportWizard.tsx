@@ -116,10 +116,16 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
   }, [wizardState.stage, canGoBack, updateWizardState]);
 
   const goToNextStage = useCallback(() => {
+    console.log('➡️ ImportWizard: 嘗試進入下一階段', {
+      currentStage: wizardState.stage,
+      canGoNext: canGoNext(),
+      mergedTable: wizardState.mergedTable ? 'exists' : 'null',
+      targetDatabase: wizardState.targetDatabase
+    });
     if (canGoNext() && wizardState.stage < 3) {
       updateWizardState({ stage: (wizardState.stage + 1) as 1 | 2 | 3 });
     }
-  }, [wizardState.stage, canGoNext, updateWizardState]);
+  }, [wizardState.stage, canGoNext, updateWizardState, wizardState.mergedTable, wizardState.targetDatabase]);
 
   // 階段 1: 選擇資料庫
   const handleDatabaseSelect = useCallback((database: DatabaseType) => {
@@ -137,6 +143,13 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
   }, [updateWizardState]);
 
   const handleMergeConfigured = useCallback((config: MergeConfig, mergedTable: any) => {
+    console.log('📊 ImportWizard: 收到合併資料:', {
+      config,
+      mergedTable: mergedTable ? {
+        headers: mergedTable.headers,
+        dataLength: mergedTable.data?.length
+      } : null
+    });
     updateWizardState({
       mergeConfig: config,
       mergedTable
