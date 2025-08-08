@@ -1,35 +1,20 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-  <head>
-    <meta charset="utf-8" />
-    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>DonnaAI</title>
-    
-    <!-- 防止無限重載的 meta 標籤 -->
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    
-    <style id="expo-reset">
-      /* These styles make the body full-height */
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-      /* 修復滾動問題：移除 overflow: hidden */
-      /* body {
-        overflow: hidden;
-      } */
-      /* These styles make the root element full-height */
-      #root {
-        display: flex;
-        height: 100%;
-        flex: 1;
-      }
-    </style>
-  <link rel="preload" href="/_expo/static/css/NotionDatabaseV4-7336322c26816dcc53e491ed5ca71a99.css" as="style"><link rel="stylesheet" href="/_expo/static/css/NotionDatabaseV4-7336322c26816dcc53e491ed5ca71a99.css">
+/**
+ * 修復 Web 版圖標載入問題
+ * 在建構後插入正確的字體載入
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+const indexPath = path.join(__dirname, '../dist-web/index.html');
+
+if (fs.existsSync(indexPath)) {
+  let html = fs.readFileSync(indexPath, 'utf8');
+  
+  // 檢查是否已經有圖標字體載入
+  if (!html.includes('ionicons.css')) {
+    // 在 </head> 前插入 CDN 連結
+    const iconLinks = `
     <!-- Ionicons 字體 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/7.1.0/collection/components/icon/icon.min.css">
     
@@ -102,18 +87,11 @@
         font-family: 'Ionicons', 'MaterialIcons', 'FontAwesome', sans-serif !important;
       }
     </style>
+    `;
     
-</head>
-
-  <body>
-    <!-- Use static rendering with Expo Router to support running without JavaScript. -->
-    <noscript>
-      You need to enable JavaScript to run this app.
-    </noscript>
-    <!-- The root element for your Expo app. -->
-    <div id="root"></div>
-  <script src="/_expo/static/js/web/index-50be91fe4c73f3be3f415421f55ec261.js" defer></script>
-  <!-- Portal for Glide Data Grid overlay editor -->
-  <div id="portal"></div>
-</body>
-</html>
+    html = html.replace('</head>', `${iconLinks}\n</head>`);
+    
+    fs.writeFileSync(indexPath, html);
+    console.log('✅ 已添加圖標字體載入到 index.html');
+  }
+}
