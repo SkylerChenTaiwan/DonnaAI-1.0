@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { Platform, ViewStyle, View } from 'react-native';
+import { Platform, ViewStyle, View, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 // MaterialIcons 的圖標名稱類型
@@ -150,19 +150,23 @@ export const MaterialIcon: React.FC<MaterialIconProps> = (props) => {
     // 獲取 SVG 路徑，如果沒有則使用預設的問號圖標
     const svgPath = materialSvgIcons[iconName] || materialSvgIcons['help'] || materialSvgIcons['error'];
     
-    // 直接返回 SVG 元素（React Native Web 會處理）
+    // 建立完整的 SVG 內容
+    const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="${color}">${svgPath}</svg>`;
+    
+    // 轉換為 Data URI
+    const dataUri = `data:image/svg+xml;utf8,${encodeURIComponent(svgContent)}`;
+    
+    // 使用 Image 元件顯示 SVG
     return (
-      <svg
-        width={size}
-        height={size}
-        viewBox="0 0 24 24"
-        fill={color}
-        style={{
-          display: 'inline-block',
-          verticalAlign: 'middle',
-          ...(style as any),
-        }}
-        dangerouslySetInnerHTML={{ __html: svgPath }}
+      <Image
+        source={{ uri: dataUri }}
+        style={[
+          {
+            width: size,
+            height: size,
+          },
+          style as any,
+        ]}
       />
     );
   }
