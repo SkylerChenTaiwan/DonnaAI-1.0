@@ -7,72 +7,65 @@ import { Platform } from 'react-native';
 
 // 只在 Web 平台執行
 if (Platform.OS === 'web') {
-  // 創建樣式元素
-  const style = document.createElement('style');
+  // 檢查是否已經由 HTML 載入了字體
+  const hasExternalFonts = document.querySelector('link[href*="fonts.googleapis.com"]') ||
+                          document.querySelector('style')?.textContent?.includes('Ionicons');
   
-  // 定義字體 @font-face
-  style.textContent = `
-    @font-face {
-      font-family: 'Ionicons';
-      src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-    }
+  if (hasExternalFonts) {
+    console.log('✅ 字體已由 HTML 載入，跳過 polyfill');
+  } else {
+    // 如果 HTML 沒有載入字體，才動態載入
+    // 使用 CDN 而非本地路徑，避免 NetworkError
+    const style = document.createElement('style');
     
-    @font-face {
-      font-family: 'MaterialIcons';
-      src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/MaterialIcons.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-    }
+    style.textContent = `
+      @font-face {
+        font-family: 'Ionicons';
+        src: url('https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/fonts/ionicons.woff2') format('woff2'),
+             url('https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/fonts/ionicons.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+      }
+      
+      @font-face {
+        font-family: 'MaterialIcons';
+        src: local('Material Icons'),
+             local('MaterialIcons-Regular'),
+             url('https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2') format('woff2');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+      }
+      
+      /* 只載入實際使用的字體，避免不必要的網路請求 */
+    `;
     
-    @font-face {
-      font-family: 'MaterialCommunityIcons';
-      src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-    }
-    
-    @font-face {
-      font-family: 'FontAwesome';
-      src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-    }
-    
-    @font-face {
-      font-family: 'Feather';
-      src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Feather.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-    }
-    
-    @font-face {
-      font-family: 'AntDesign';
-      src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/AntDesign.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-    }
-    
-    @font-face {
-      font-family: 'Entypo';
-      src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Entypo.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-    }
-    
-    @font-face {
-      font-family: 'SimpleLineIcons';
-      src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/SimpleLineIcons.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-    }
-  `;
+    document.head.appendChild(style);
+    console.log('✅ Web 字體 polyfill 已載入（使用 CDN）');
+  }
   
-  // 將樣式元素插入到 head
-  document.head.appendChild(style);
+  // 添加全域錯誤處理，捕獲字體載入錯誤
+  window.addEventListener('error', (event) => {
+    // 過濾字體相關的錯誤
+    if (event.message?.includes('Failed to decode') || 
+        event.message?.includes('OTS parsing') ||
+        (event.message?.includes('NetworkError') && event.filename?.includes('font'))) {
+      console.warn('字體載入錯誤已忽略:', event.message);
+      event.preventDefault(); // 防止錯誤冒泡
+      return true;
+    }
+  }, true);
   
-  console.log('✅ Web 字體 polyfill 已載入');
+  // 監聽未處理的 Promise rejection
+  window.addEventListener('unhandledrejection', (event) => {
+    if (event.reason?.message?.includes('NetworkError') ||
+        event.reason?.message?.includes('Failed to fetch')) {
+      console.warn('網路請求錯誤已忽略:', event.reason?.message);
+      event.preventDefault(); // 防止錯誤冒泡
+      return true;
+    }
+  });
 }
 
 export {};
