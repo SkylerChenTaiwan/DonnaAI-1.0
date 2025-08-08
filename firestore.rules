@@ -245,6 +245,17 @@ service cloud.firestore {
       allow write: if isOrgAdmin(orgId) || isSuperAdmin();
     }
     
+    // 組織入職會話集合
+    match /onboardingSessions/{sessionId} {
+      // Super Admin 可以創建和管理所有會話
+      allow read, write: if isSuperAdmin();
+      // 創建者可以讀取和更新自己的會話
+      allow read, update: if request.auth != null && 
+        request.auth.uid == resource.data.startedBy;
+      // 允許 Super Admin 創建新會話
+      allow create: if request.auth != null && isSuperAdmin();
+    }
+    
     // 企業配置集合
     match /enterprise_configs/{configId} {
       // Super Admin 可以讀寫所有配置
