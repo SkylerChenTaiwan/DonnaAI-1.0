@@ -183,7 +183,7 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
                 uploadedAt: new Date(),
                 rowCount: data?.length || 0
               };
-              const keyFieldResults = detectKeyFields(tempFile);
+              const keyFieldResults = headers.length > 0 ? detectKeyFields(tempFile) : [];
               
               const uploadedFile: ParsedUserFile = {
                 id: `file_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -357,20 +357,56 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
                 <Text style={styles.fileMeta}>
                   {file.rowCount} 列 × {file.headers.length} 欄
                 </Text>
-                {mode === 'advanced' && keyFieldCandidates[file.id]?.length > 0 && (
+                {mode === 'advanced' && files.length > 1 && (
                   <View style={styles.keyFieldSelector}>
-                    <Text style={styles.keyFieldLabel}>關鍵欄位：</Text>
+                    <Text style={styles.keyFieldLabel}>合併關鍵欄位：</Text>
                     <TouchableOpacity
-                      style={styles.keyFieldDropdown}
+                      style={[
+                        styles.keyFieldDropdown,
+                        !selectedKeyFields[file.id] && !file.keyField && styles.keyFieldDropdownWarning
+                      ]}
                       onPress={() => setSelectedFileId(
                         selectedFileId === file.id ? null : file.id
                       )}
                     >
-                      <Text style={styles.keyFieldValue}>
-                        {selectedKeyFields[file.id] || '選擇欄位'}
+                      <Text style={[
+                        styles.keyFieldValue,
+                        !selectedKeyFields[file.id] && !file.keyField && styles.keyFieldValueWarning
+                      ]}>
+                        {selectedKeyFields[file.id] || file.keyField || '請選擇關鍵欄位'}
                       </Text>
                       <Icon name="chevron-down" size={16} />
                     </TouchableOpacity>
+                  </View>
+                )}
+                {/* 顯示欄位選項下拉選單 */}
+                {selectedFileId === file.id && (
+                  <View style={styles.keyFieldOptions}>
+                    {file.headers.map((header) => (
+                      <TouchableOpacity
+                        key={header}
+                        style={styles.keyFieldOption}
+                        onPress={() => {
+                          setSelectedKeyFields(prev => ({
+                            ...prev,
+                            [file.id]: header
+                          }));
+                          setSelectedFileId(null);
+                        }}
+                      >
+                        <Text style={[
+                          styles.keyFieldOptionText,
+                          selectedKeyFields[file.id] === header && styles.keyFieldOptionTextSelected
+                        ]}>
+                          {header}
+                        </Text>
+                        {keyFieldCandidates[file.id]?.find(c => c.field === header) && (
+                          <Text style={styles.keyFieldConfidence}>
+                            {Math.round((keyFieldCandidates[file.id].find(c => c.field === header)?.uniquenessRatio || 0) * 100)}%
+                          </Text>
+                        )}
+                      </TouchableOpacity>
+                    ))}
                   </View>
                 )}
               </View>
@@ -467,6 +503,9 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
       {mode === 'advanced' && files.length > 1 && (
         <View style={styles.mergeSection}>
           <Text style={styles.mergeSectionTitle}>合併選項</Text>
+          <Text style={styles.mergeHint}>
+            請在上方每個檔案選擇用於合併的關鍵欄位（例如：ID、Email 等唯一值）
+          </Text>
           <View style={styles.mergeOptions}>
             <Text style={styles.mergeOptionLabel}>合併策略：</Text>
             <View style={styles.mergeStrategyButtons}>
@@ -753,6 +792,48 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.secondary,
     marginLeft: DesignSystem.spacing.xs,
     flex: 1,
+  },
+  keyFieldOptions: {
+    backgroundColor: DesignSystem.colors.background.primary,
+    borderWidth: 1,
+    borderColor: DesignSystem.colors.border.medium,
+    borderRadius: DesignSystem.borderRadius.sm,
+    marginTop: DesignSystem.spacing.xs,
+    maxHeight: 200,
+  },
+  keyFieldOption: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: DesignSystem.spacing.sm,
+    paddingHorizontal: DesignSystem.spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: DesignSystem.colors.border.light,
+  },
+  keyFieldOptionText: {
+    ...DesignSystem.typography.body,
+    color: DesignSystem.colors.text.primary,
+    flex: 1,
+  },
+  keyFieldOptionTextSelected: {
+    color: DesignSystem.colors.primary,
+    fontWeight: '600',
+  },
+  keyFieldConfidence: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.secondary,
+    marginLeft: DesignSystem.spacing.xs,
+  },
+  mergeHint: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.secondary,
+    marginBottom: DesignSystem.spacing.md,
+  },
+  keyFieldDropdownWarning: {
+    borderColor: DesignSystem.colors.warning,
+  },
+  keyFieldValueWarning: {
+    color: DesignSystem.colors.warning,
   },
 });
 
