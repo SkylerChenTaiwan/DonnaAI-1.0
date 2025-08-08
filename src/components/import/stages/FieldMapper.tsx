@@ -96,15 +96,25 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
     setLoading(true);
     try {
       const fields = await getFieldDefinitions(targetDatabase, organizationId);
-      setExistingFields(fields);
-      console.log('✅ 成功載入欄位定義:', fields.length);
+      
+      // 對於 users 類型，如果沒有自訂欄位，使用預設欄位
+      if (targetDatabase === 'users' && (!fields || fields.length === 0)) {
+        console.log('⚠️ 用戶類型無自訂欄位，使用預設欄位定義');
+        const defaultFields = getDefaultFields('users');
+        setExistingFields(defaultFields);
+        console.log('✅ 使用預設用戶欄位:', defaultFields.length);
+      } else {
+        setExistingFields(fields);
+        console.log('✅ 成功載入欄位定義:', fields.length);
+      }
     } catch (error: any) {
       console.error('❌ 載入欄位定義失敗:', error);
       
-      // 如果是權限錯誤，使用預設欄位
-      if (error?.message?.includes('permission')) {
-        console.log('⚠️ 權限不足，使用預設欄位定義');
-        setExistingFields(getDefaultFields(targetDatabase));
+      // 如果是權限錯誤或任何錯誤，使用預設欄位
+      if (error?.message?.includes('permission') || targetDatabase === 'users') {
+        console.log('⚠️ 使用預設欄位定義');
+        const defaultFields = getDefaultFields(targetDatabase);
+        setExistingFields(defaultFields);
       } else {
         showErrorToast('載入欄位定義失敗');
       }
