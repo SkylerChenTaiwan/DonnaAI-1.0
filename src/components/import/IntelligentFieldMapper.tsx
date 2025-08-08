@@ -13,7 +13,7 @@ import {
   Platform,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcon } from '@/components/common/MaterialIcon';
 import { 
   FieldMappingEngine 
 } from '@/services/import/FieldMappingEngine';
@@ -235,7 +235,7 @@ export const IntelligentFieldMapper: React.FC<Props> = ({
         </View>
 
         <View style={styles.arrow}>
-          <MaterialIcons name="arrow-forward" size={20} color="#666" />
+          <MaterialIcon name="arrow-forward" size={20} color="#666" />
         </View>
 
         <View style={styles.targetField}>
@@ -348,7 +348,7 @@ export const IntelligentFieldMapper: React.FC<Props> = ({
     return (
       <View style={styles.unmappedSection}>
         <Text style={styles.unmappedTitle}>
-          <MaterialIcons name="info" size={16} color="#FF9800" />
+          <MaterialIcon name="info" size={16} color="#FF9800" />
           {' '}未映射的必填欄位
         </Text>
         {unmappedRequired.map(field => (
@@ -405,7 +405,7 @@ export const IntelligentFieldMapper: React.FC<Props> = ({
               style={styles.actionButton}
               onPress={applyAllSuggestions}
             >
-              <MaterialIcons name="auto-awesome" size={20} color="#fff" />
+              <MaterialIcon name="auto-awesome" size={20} color="#fff" />
               <Text style={styles.actionButtonText}>AI 建議全部</Text>
             </TouchableOpacity>
             
@@ -413,7 +413,7 @@ export const IntelligentFieldMapper: React.FC<Props> = ({
               style={[styles.actionButton, styles.secondaryButton]}
               onPress={resetMappings}
             >
-              <MaterialIcons name="refresh" size={20} color="#666" />
+              <MaterialIcon name="refresh" size={20} color="#666" />
               <Text style={[styles.actionButtonText, styles.secondaryText]}>
                 重置
               </Text>
@@ -423,7 +423,7 @@ export const IntelligentFieldMapper: React.FC<Props> = ({
               style={[styles.actionButton, styles.secondaryButton]}
               onPress={() => setShowAdvanced(!showAdvanced)}
             >
-              <MaterialIcons 
+              <MaterialIcon 
                 name={showAdvanced ? 'expand-less' : 'expand-more'} 
                 size={20} 
                 color="#666" 
@@ -470,21 +470,21 @@ export const IntelligentFieldMapper: React.FC<Props> = ({
             <Text style={styles.summaryTitle}>映射摘要</Text>
             <View style={styles.summaryStats}>
               <View style={styles.statItem}>
-                <MaterialIcons name="check-circle" size={20} color="#4CAF50" />
+                <MaterialIcon name="check-circle" size={20} color="#4CAF50" />
                 <Text style={styles.statLabel}>高信心度</Text>
                 <Text style={styles.statValue}>
                   {mappings.filter(m => m.confidence >= 0.9).length}
                 </Text>
               </View>
               <View style={styles.statItem}>
-                <MaterialIcons name="warning" size={20} color="#FF9800" />
+                <MaterialIcon name="warning" size={20} color="#FF9800" />
                 <Text style={styles.statLabel}>中信心度</Text>
                 <Text style={styles.statValue}>
                   {mappings.filter(m => m.confidence >= 0.7 && m.confidence < 0.9).length}
                 </Text>
               </View>
               <View style={styles.statItem}>
-                <MaterialIcons name="error" size={20} color="#F44336" />
+                <MaterialIcon name="error" size={20} color="#F44336" />
                 <Text style={styles.statLabel}>需確認</Text>
                 <Text style={styles.statValue}>
                   {sourceHeaders.length - mappings.length}

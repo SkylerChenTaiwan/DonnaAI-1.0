@@ -14,7 +14,7 @@ import {
   Alert,
   Platform
 } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcon } from '@/components/common/MaterialIcon';
 import { DesignSystem } from '@/theme/designSystem';
 import { 
   ImportWizardState, 
@@ -606,7 +606,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
         </View>
         {onCancel && (
           <TouchableOpacity onPress={onCancel} style={styles.closeButton}>
-            <MaterialIcons name="close" size={24} color={colors.gray600} />
+            <MaterialIcon name="close" size={24} color={colors.gray600} />
           </TouchableOpacity>
         )}
         
@@ -620,7 +620,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
           onPress={handleCleanupDuplicates}
           disabled={cleanupState.isCleaningUp || wizardState.importProgress.isImporting}
         >
-          <MaterialIcons 
+          <MaterialIcon 
             name={cleanupState.isCleaningUp ? "hourglass-empty" : "cleaning-services"} 
             size={16} 
             color={colors.status.warning} 
@@ -647,7 +647,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
               style={[styles.button, styles.secondaryButton, { borderColor: colors.gray300 }]}
               onPress={goToPreviousStage}
             >
-              <MaterialIcons name="arrow-back" size={20} color={colors.gray600} />
+              <MaterialIcon name="arrow-back" size={20} color={colors.gray600} />
               <Text style={[styles.buttonText, { color: colors.gray600 }]}>上一步</Text>
             </TouchableOpacity>
           )}
@@ -675,7 +675,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
               disabled={!canGoNext()}
             >
               <Text style={[styles.buttonText, { color: colors.white }]}>下一步</Text>
-              <MaterialIcons name="arrow-forward" size={20} color={colors.white} />
+              <MaterialIcon name="arrow-forward" size={20} color={colors.white} />
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
@@ -690,7 +690,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
               onPress={executeImport}
               disabled={!canGoNext() || wizardState.importProgress.isImporting}
             >
-              <MaterialIcons name="file-upload" size={20} color={colors.white} />
+              <MaterialIcon name="file-upload" size={20} color={colors.white} />
               <Text style={[styles.buttonText, { color: colors.white }]}>開始匯入</Text>
             </TouchableOpacity>
           )}

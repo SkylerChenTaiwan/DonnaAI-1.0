@@ -14,7 +14,7 @@ import {
   Alert,
   Platform
 } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcon } from '@/components/common/MaterialIcon';
 import Papa from 'papaparse';
 import { DesignSystem } from '@/theme/designSystem';
 import {
@@ -413,7 +413,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
         activeOpacity={0.7}
       >
         <View style={styles.fileHeader}>
-          <MaterialIcons name="insert-drive-file" size={24} color={colors.primary} />
+          <MaterialIcon name="insert-drive-file" size={24} color={colors.primary} />
           <View style={styles.fileInfo}>
             <Text style={[styles.fileName, { color: colors.text }]} numberOfLines={1}>
               {file.name}
@@ -426,7 +426,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
             onPress={() => handleRemoveFile(file.id)}
             style={styles.removeButton}
           >
-            <MaterialIcons name="close" size={20} color={colors.gray500} />
+            <MaterialIcon name="close" size={20} color={colors.gray500} />
           </TouchableOpacity>
         </View>
 
@@ -628,7 +628,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
             合併結果預覽
           </Text>
           <TouchableOpacity onPress={() => setShowMergePreview(false)}>
-            <MaterialIcons name="close" size={20} color={colors.gray500} />
+            <MaterialIcon name="close" size={20} color={colors.gray500} />
           </TouchableOpacity>
         </View>
 
@@ -707,7 +707,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
         onPress={handleFileSelect}
         activeOpacity={0.7}
       >
-        <MaterialIcons name="cloud-upload" size={48} color={colors.primary} />
+        <MaterialIcon name="cloud-upload" size={48} color={colors.primary} />
         <Text style={[styles.uploadText, { color: colors.text }]}>
           點擊上傳 CSV 檔案
         </Text>
@@ -779,7 +779,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
             <ActivityIndicator color={colors.white} />
           ) : (
             <>
-              <MaterialIcons name="merge-type" size={20} color={colors.white} />
+              <MaterialIcon name="merge-type" size={20} color={colors.white} />
               <Text style={[styles.mergeButtonText, { color: colors.white }]}>
                 {uploadedFiles.length === 1 ? '確認檔案' : '合併檔案'}
               </Text>

@@ -18,7 +18,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { Platform } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcon } from '@/components/common/MaterialIcon';
 import { SearchBar } from '@/components/common/SearchBar';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
@@ -253,7 +253,7 @@ export const OrganizationsScreen: React.FC = () => {
             style={styles.addButton}
             onPress={() => navigation.navigate('OnboardingWizardScreen', { mode: 'create' })}
           >
-            <MaterialIcons name="add" size={24} color={DesignSystem.colors.text.inverse} />
+            <MaterialIcon name="add" size={24} color={DesignSystem.colors.text.inverse} />
             <Text style={styles.addButtonText}>新增組織</Text>
           </TouchableOpacity>
         </View>

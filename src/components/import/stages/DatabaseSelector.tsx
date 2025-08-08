@@ -11,7 +11,8 @@ import {
   TouchableOpacity,
   ActivityIndicator
 } from 'react-native';
-import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialIcon } from '@/components/common/MaterialIcon';
+import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 import { DatabaseType } from '@/types/import';
 import { collection, query, where, getDocs } from 'firebase/firestore';
@@ -30,7 +31,7 @@ interface DatabaseOption {
   label: string;
   description: string;
   icon: string;
-  iconFamily: 'MaterialIcons' | 'MaterialCommunityIcons';
+  iconFamily: 'MaterialIcons' | 'Ionicons';
   color: string;
   stats?: {
     totalCount: number;
@@ -145,9 +146,9 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
     const stats = databaseStats[option.type];
     const fieldCount = fieldCounts[option.type] || 0;
 
-    const IconComponent = option.iconFamily === 'MaterialCommunityIcons' 
-      ? MaterialCommunityIcons 
-      : MaterialIcons;
+    const IconComponent = option.iconFamily === 'Ionicons' 
+      ? Icon 
+      : MaterialIcon;
 
     return (
       <TouchableOpacity
@@ -166,7 +167,7 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
         {/* 選中標記 */}
         {isSelected && (
           <View style={[styles.selectedBadge, { backgroundColor: colors.primary }]}>
-            <MaterialIcons name="check" size={16} color={colors.white} />
+            <Icon name="checkmark" size={16} color={colors.white} />
           </View>
         )}
 
@@ -222,19 +223,19 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
         {/* 功能標籤 */}
         <View style={styles.featuresContainer}>
           <View style={[styles.featureTag, { backgroundColor: colors.gray100 }]}>
-            <MaterialIcons name="merge-type" size={12} color={colors.gray600} />
+            <MaterialIcon name="merge-type" size={12} color={colors.gray600} />
             <Text style={[styles.featureText, { color: colors.gray600 }]}>
               支援合併
             </Text>
           </View>
           <View style={[styles.featureTag, { backgroundColor: colors.gray100 }]}>
-            <MaterialIcons name="link" size={12} color={colors.gray600} />
+            <MaterialIcon name="link" size={12} color={colors.gray600} />
             <Text style={[styles.featureText, { color: colors.gray600 }]}>
               跨表關聯
             </Text>
           </View>
           <View style={[styles.featureTag, { backgroundColor: colors.gray100 }]}>
-            <MaterialIcons name="add-circle-outline" size={12} color={colors.gray600} />
+            <MaterialIcon name="add-circle-outline" size={12} color={colors.gray600} />
             <Text style={[styles.featureText, { color: colors.gray600 }]}>
               動態欄位
             </Text>
@@ -248,7 +249,7 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
     <View style={styles.container}>
       {/* 說明文字 */}
       <View style={styles.instructionContainer}>
-        <MaterialIcons name="info-outline" size={20} color={colors.primary} />
+        <MaterialIcon name="info-outline" size={20} color={colors.primary} />
         <Text style={[styles.instruction, { color: colors.gray600 }]}>
           請選擇要匯入資料的目標資料庫。系統將根據您的選擇載入對應的欄位結構。
         </Text>
@@ -272,7 +273,7 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
       {/* 提示訊息 */}
       {selectedDatabase && (
         <View style={[styles.tipContainer, { backgroundColor: colors.primary + '10' }]}>
-          <MaterialIcons name="lightbulb-outline" size={16} color={colors.primary} />
+          <MaterialIcon name="lightbulb-outline" size={16} color={colors.primary} />
           <Text style={[styles.tipText, { color: colors.primary }]}>
             已選擇 {databaseOptions.find(o => o.type === selectedDatabase)?.label}
           </Text>

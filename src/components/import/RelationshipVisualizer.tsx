@@ -14,7 +14,7 @@ import {
   Platform
 } from 'react-native';
 import Svg, { Line, Circle, Text as SvgText, G, Rect, Path } from 'react-native-svg';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcon } from '@/components/common/MaterialIcon';
 import { DesignSystem } from '@/theme/designSystem';
 import { FieldRelation, DatabaseType } from '@/types/import';
 
@@ -280,7 +280,7 @@ const RelationshipVisualizer: React.FC<RelationshipVisualizerProps> = ({
       {/* 標題欄 */}
       <View style={styles.header}>
         <View style={styles.databaseLabel}>
-          <MaterialIcons 
+          <MaterialIcon 
             name="storage" 
             size={16} 
             color={colors.primary} 
@@ -290,14 +290,14 @@ const RelationshipVisualizer: React.FC<RelationshipVisualizerProps> = ({
           </Text>
         </View>
         
-        <MaterialIcons 
+        <MaterialIcon 
           name="sync-alt" 
           size={20} 
           color={colors.gray500} 
         />
         
         <View style={styles.databaseLabel}>
-          <MaterialIcons 
+          <MaterialIcon 
             name="storage" 
             size={16} 
             color={colors.success} 
@@ -373,7 +373,7 @@ const RelationshipVisualizer: React.FC<RelationshipVisualizerProps> = ({
                     style={[styles.deleteButton, { backgroundColor: colors.error }]}
                     onPress={() => onRelationDelete(edge.relation.id)}
                   >
-                    <MaterialIcons name="delete" size={16} color={colors.white} />
+                    <MaterialIcon name="delete" size={16} color={colors.white} />
                     <Text style={[styles.deleteButtonText, { color: colors.white }]}>
                       刪除關聯
                     </Text>

@@ -17,7 +17,7 @@ import {
   Modal,
   Pressable
 } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcon } from '@/components/common/MaterialIcon';
 import { DesignSystem } from '@/theme/designSystem';
 import {
   DatabaseType,
@@ -487,7 +487,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
         </View>
 
         {/* 映射箭頭 */}
-        <MaterialIcons 
+        <MaterialIcon 
           name="arrow-forward" 
           size={20} 
           color={isEnabled ? colors.primary : colors.gray300} 
@@ -515,7 +515,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                     placeholderTextColor={colors.gray400}
                   />
                   <View style={[styles.newFieldBadge, { backgroundColor: colors.success + '20' }]}>
-                    <MaterialIcons name="add-circle" size={12} color={colors.success} />
+                    <MaterialIcon name="add-circle" size={12} color={colors.success} />
                     <Text style={[styles.newFieldText, { color: colors.success }]}>
                       新建欄位
                     </Text>
@@ -545,7 +545,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                     <Text style={[styles.existingFieldName, { color: colors.text }]}>
                       {existingFields.find(f => f.key === mapping.targetField)?.label || mapping.targetField}
                     </Text>
-                    <MaterialIcons name="arrow-drop-down" size={20} color={colors.gray500} />
+                    <MaterialIcon name="arrow-drop-down" size={20} color={colors.gray500} />
                   </Pressable>
                 ) : (
                   <TouchableOpacity
@@ -562,7 +562,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                     <Text style={[styles.existingFieldName, { color: colors.text }]}>
                       {existingFields.find(f => f.key === mapping.targetField)?.label || mapping.targetField}
                     </Text>
-                    <MaterialIcons name="arrow-drop-down" size={20} color={colors.gray500} />
+                    <MaterialIcon name="arrow-drop-down" size={20} color={colors.gray500} />
                   </TouchableOpacity>
                 )
               )}
@@ -586,7 +586,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                   }}
                   accessibilityRole="button"
                 >
-                  <MaterialIcons name="link" size={16} color={colors.primary} />
+                  <MaterialIcon name="link" size={16} color={colors.primary} />
                   <Text style={[styles.relationButtonText, { color: colors.primary }]}>
                     設定關聯
                   </Text>
@@ -602,7 +602,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                   }}
                   activeOpacity={0.7}
                 >
-                  <MaterialIcons name="link" size={16} color={colors.primary} />
+                  <MaterialIcon name="link" size={16} color={colors.primary} />
                   <Text style={[styles.relationButtonText, { color: colors.primary }]}>
                     設定關聯
                   </Text>
@@ -624,7 +624,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
     if (relations.length === 0) {
       return (
         <View style={styles.emptyRelations}>
-          <MaterialIcons name="link-off" size={48} color={colors.gray300} />
+          <MaterialIcon name="link-off" size={48} color={colors.gray300} />
           <Text style={[styles.emptyText, { color: colors.gray500 }]}>
             尚未設定跨資料庫關聯
           </Text>
@@ -681,9 +681,9 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                 
                 <View style={styles.relationArrow}>
                   {relation.bidirectional ? (
-                    <MaterialIcons name="swap-horiz" size={20} color={colors.gray500} />
+                    <MaterialIcon name="swap-horiz" size={20} color={colors.gray500} />
                   ) : (
-                    <MaterialIcons name="arrow-forward" size={20} color={colors.gray500} />
+                    <MaterialIcon name="arrow-forward" size={20} color={colors.gray500} />
                   )}
                 </View>
                 
@@ -706,7 +706,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                 
                 {relation.bidirectional && (
                   <View style={[styles.bidirectionalBadge, { backgroundColor: colors.success + '20' }]}>
-                    <MaterialIcons name="sync" size={12} color={colors.success} />
+                    <MaterialIcon name="sync" size={12} color={colors.success} />
                     <Text style={[styles.bidirectionalText, { color: colors.success }]}>
                       雙向
                     </Text>
@@ -717,7 +717,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                   onPress={() => removeRelation(relation.id)}
                   style={styles.removeRelationButton}
                 >
-                  <MaterialIcons name="close" size={16} color={colors.gray500} />
+                  <MaterialIcon name="close" size={16} color={colors.gray500} />
                 </TouchableOpacity>
               </View>
             </View>
@@ -783,7 +783,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
     console.log('⚠️ FieldMapper: 沒有 mergedTable 資料');
     return (
       <View style={[styles.container, { padding: 20, alignItems: 'center', justifyContent: 'center' }]}>
-        <MaterialIcons name="info-outline" size={48} color={colors.gray400} />
+        <MaterialIcon name="info-outline" size={48} color={colors.gray400} />
         <Text style={[styles.emptyText, { color: colors.gray600, marginTop: 16, textAlign: 'center' }]}>
           請先上傳並處理檔案
         </Text>
@@ -804,7 +804,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
         activeOpacity={0.7}
       >
         <View style={styles.sectionTitle}>
-          <MaterialIcons name="table-chart" size={20} color={colors.primary} />
+          <MaterialIcon name="table-chart" size={20} color={colors.primary} />
           <Text style={[styles.sectionTitleText, { color: colors.text }]}>
             欄位映射設定
           </Text>
@@ -814,7 +814,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
             </Text>
           </View>
         </View>
-        <MaterialIcons 
+        <MaterialIcon 
           name={expandedSections.mapping ? 'expand-less' : 'expand-more'} 
           size={24} 
           color={colors.gray500} 
@@ -838,7 +838,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
         activeOpacity={0.7}
       >
         <View style={styles.sectionTitle}>
-          <MaterialIcons name="link" size={20} color={colors.primary} />
+          <MaterialIcon name="link" size={20} color={colors.primary} />
           <Text style={[styles.sectionTitleText, { color: colors.text }]}>
             跨資料庫關聯
           </Text>
@@ -850,7 +850,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
             </View>
           )}
         </View>
-        <MaterialIcons 
+        <MaterialIcon 
           name={expandedSections.relations ? 'expand-less' : 'expand-more'} 
           size={24} 
           color={colors.gray500} 
@@ -870,12 +870,12 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
         activeOpacity={0.7}
       >
         <View style={styles.sectionTitle}>
-          <MaterialIcons name="preview" size={20} color={colors.primary} />
+          <MaterialIcon name="preview" size={20} color={colors.primary} />
           <Text style={[styles.sectionTitleText, { color: colors.text }]}>
             匯入預覽
           </Text>
         </View>
-        <MaterialIcons 
+        <MaterialIcon 
           name={expandedSections.preview ? 'expand-less' : 'expand-more'} 
           size={24} 
           color={colors.gray500} 
@@ -945,7 +945,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                 style={styles.modalCloseButton}
                 activeOpacity={0.7}
               >
-                <MaterialIcons name="close" size={24} color={colors.gray500} />
+                <MaterialIcon name="close" size={24} color={colors.gray500} />
               </TouchableOpacity>
             </View>
             
@@ -981,7 +981,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                       {field.type}
                     </Text>
                   </View>
-                  <MaterialIcons name="chevron-right" size={20} color={colors.gray400} />
+                  <MaterialIcon name="chevron-right" size={20} color={colors.gray400} />
                 </TouchableOpacity>
               ))}
               
@@ -1011,7 +1011,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                     使用原 CSV 欄位名稱
                   </Text>
                 </View>
-                <MaterialIcons name="add-circle" size={20} color={colors.success} />
+                <MaterialIcon name="add-circle" size={20} color={colors.success} />
               </TouchableOpacity>
             </ScrollView>
           </View>
@@ -1035,7 +1035,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
               onPress={() => setShowFieldSelector(false)}
               style={styles.modalCloseButton}
             >
-              <MaterialIcons name="close" size={24} color={colors.gray500} />
+              <MaterialIcon name="close" size={24} color={colors.gray500} />
             </TouchableOpacity>
           </View>
           
@@ -1067,7 +1067,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                     {field.type}
                   </Text>
                 </View>
-                <MaterialIcons name="chevron-right" size={20} color={colors.gray400} />
+                <MaterialIcon name="chevron-right" size={20} color={colors.gray400} />
               </TouchableOpacity>
             ))}
             
@@ -1093,7 +1093,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                   使用原 CSV 欄位名稱
                 </Text>
               </View>
-              <MaterialIcons name="add-circle" size={20} color={colors.success} />
+              <MaterialIcon name="add-circle" size={20} color={colors.success} />
             </TouchableOpacity>
           </ScrollView>
         </View>
