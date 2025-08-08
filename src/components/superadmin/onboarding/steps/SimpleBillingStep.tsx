@@ -25,17 +25,13 @@ const SimpleBillingStep: React.FC<StepProps> = ({
   
   // 簡化的資料結構
   const [formData, setFormData] = useState({
-    totalSeats: 10,  // 總人數
-    freeSeats: 5,    // 免費人數
-    pricePerSeat: 10, // 每個付費席位的價格（美元）
+    freeSeats: 5,    // 免費人數（精確數量）
+    pricePerSeat: 10, // 超過免費人數後，每個付費席位的價格（美元）
     ...data,
   });
 
-  // 計算付費人數
-  const paidSeats = Math.max(0, formData.totalSeats - formData.freeSeats);
-  
-  // 計算月費
-  const monthlyPrice = paidSeats * formData.pricePerSeat;
+  // 注意：實際付費人數會根據組織實際使用人數動態計算
+  // 這裡只是顯示計費邏輯說明
 
   // 當資料變更時通知父元件
   useEffect(() => {
@@ -44,31 +40,20 @@ const SimpleBillingStep: React.FC<StepProps> = ({
       const billingData: BillingPlanData = {
         planId: 'custom',
         billingCycle: 'monthly',
-        seats: formData.totalSeats,
+        seats: formData.freeSeats, // 使用免費人數作為基礎席位
         addons: [],
         paymentMethod: 'invoice',
         billingEmail: '',
-        notes: `免費人數: ${formData.freeSeats}, 每人月費: $${formData.pricePerSeat}`,
+        notes: `免費人數: ${formData.freeSeats}, 超額每人月費: $${formData.pricePerSeat}`,
       };
       onChange(billingData);
     }
   }, [formData, isActive]);
 
   // 調整數量的函數
-  const adjustNumber = (field: 'totalSeats' | 'freeSeats' | 'pricePerSeat', delta: number) => {
+  const adjustNumber = (field: 'freeSeats' | 'pricePerSeat', delta: number) => {
     setFormData(prev => {
       const newValue = Math.max(0, prev[field] + delta);
-      
-      // 確保免費人數不超過總人數
-      if (field === 'freeSeats') {
-        return { ...prev, [field]: Math.min(newValue, prev.totalSeats) };
-      }
-      
-      // 確保總人數不少於免費人數
-      if (field === 'totalSeats') {
-        return { ...prev, [field]: Math.max(newValue, prev.freeSeats) };
-      }
-      
       return { ...prev, [field]: newValue };
     });
   };
@@ -77,52 +62,10 @@ const SimpleBillingStep: React.FC<StepProps> = ({
     <View style={styles.container}>
       {/* 標題說明 */}
       <View style={styles.header}>
-        <Text style={styles.title}>設定組織人數與費用</Text>
+        <Text style={styles.title}>設定計費方案</Text>
         <Text style={styles.subtitle}>
-          設定這個組織可以有多少使用者，以及其中多少是免費名額
+          設定免費使用者名額，超過的使用者將按人數收費
         </Text>
-      </View>
-
-      {/* 總人數設定 */}
-      <View style={styles.settingCard}>
-        <View style={styles.settingHeader}>
-          <Ionicons name="people-outline" size={24} color={colors.primary} />
-          <Text style={styles.settingTitle}>組織總人數</Text>
-        </View>
-        
-        <View style={styles.numberSelector}>
-          <TouchableOpacity
-            style={styles.adjustButton}
-            onPress={() => adjustNumber('totalSeats', -10)}
-          >
-            <Ionicons name="remove" size={20} color={colors.gray600} />
-          </TouchableOpacity>
-          
-          <TextInput
-            style={styles.numberInput}
-            value={formData.totalSeats.toString()}
-            onChangeText={(text) => {
-              const value = parseInt(text) || 0;
-              // 不設定上限，只確保不少於免費人數
-              setFormData(prev => ({ 
-                ...prev, 
-                totalSeats: Math.max(value, prev.freeSeats) 
-              }));
-            }}
-            keyboardType="number-pad"
-            textAlign="center"
-            placeholder="人數"
-          />
-          
-          <TouchableOpacity
-            style={styles.adjustButton}
-            onPress={() => adjustNumber('totalSeats', 10)}
-          >
-            <Ionicons name="add" size={20} color={colors.gray600} />
-          </TouchableOpacity>
-        </View>
-        
-        <Text style={styles.hint}>可以加入組織的人數（無上限）</Text>
       </View>
 
       {/* 免費人數設定 */}
@@ -135,7 +78,7 @@ const SimpleBillingStep: React.FC<StepProps> = ({
         <View style={styles.numberSelector}>
           <TouchableOpacity
             style={styles.adjustButton}
-            onPress={() => adjustNumber('freeSeats', -5)}
+            onPress={() => adjustNumber('freeSeats', -1)}
           >
             <Ionicons name="remove" size={20} color={colors.gray600} />
           </TouchableOpacity>
@@ -147,7 +90,7 @@ const SimpleBillingStep: React.FC<StepProps> = ({
               const value = parseInt(text) || 0;
               setFormData(prev => ({ 
                 ...prev, 
-                freeSeats: Math.min(value, prev.totalSeats) 
+                freeSeats: Math.max(0, value) 
               }));
             }}
             keyboardType="number-pad"
@@ -157,13 +100,13 @@ const SimpleBillingStep: React.FC<StepProps> = ({
           
           <TouchableOpacity
             style={styles.adjustButton}
-            onPress={() => adjustNumber('freeSeats', 5)}
+            onPress={() => adjustNumber('freeSeats', 1)}
           >
             <Ionicons name="add" size={20} color={colors.gray600} />
           </TouchableOpacity>
         </View>
         
-        <Text style={styles.hint}>不需付費的使用者數量</Text>
+        <Text style={styles.hint}>組織內不需付費的精確使用者數量</Text>
       </View>
 
       {/* 每人月費設定 */}
@@ -206,14 +149,9 @@ const SimpleBillingStep: React.FC<StepProps> = ({
         <Text style={styles.hint}>超過免費名額後，每位使用者的月費</Text>
       </View>
 
-      {/* 費用摘要 */}
+      {/* 計費說明 */}
       <View style={styles.summaryCard}>
-        <Text style={styles.summaryTitle}>費用摘要</Text>
-        
-        <View style={styles.summaryRow}>
-          <Text style={styles.summaryLabel}>總人數</Text>
-          <Text style={styles.summaryValue}>{formData.totalSeats} 人</Text>
-        </View>
+        <Text style={styles.summaryTitle}>計費方式說明</Text>
         
         <View style={styles.summaryRow}>
           <Text style={styles.summaryLabel}>免費名額</Text>
@@ -223,24 +161,38 @@ const SimpleBillingStep: React.FC<StepProps> = ({
         </View>
         
         <View style={styles.summaryRow}>
-          <Text style={styles.summaryLabel}>付費人數</Text>
-          <Text style={styles.summaryValue}>{paidSeats} 人</Text>
+          <Text style={styles.summaryLabel}>超額費用</Text>
+          <Text style={styles.summaryValue}>
+            ${formData.pricePerSeat}/人/月
+          </Text>
         </View>
         
         <View style={styles.divider} />
         
-        <View style={styles.summaryRow}>
-          <Text style={styles.totalLabel}>預估月費</Text>
-          <Text style={styles.totalValue}>
-            ${monthlyPrice.toLocaleString()}
+        <Text style={styles.billingNote}>
+          <Ionicons name="information-circle-outline" size={16} color={colors.primary} />
+          {' '}計費方式
+        </Text>
+        
+        <Text style={styles.billingDescription}>
+          • 前 {formData.freeSeats} 位使用者免費
+        </Text>
+        <Text style={styles.billingDescription}>
+          • 超過免費名額的使用者，每人每月收費 ${formData.pricePerSeat}
+        </Text>
+        <Text style={styles.billingDescription}>
+          • 實際費用依當月使用人數計算
+        </Text>
+        
+        <View style={styles.exampleBox}>
+          <Text style={styles.exampleTitle}>計費範例：</Text>
+          <Text style={styles.exampleText}>
+            若組織有 {formData.freeSeats + 10} 位使用者：
+          </Text>
+          <Text style={styles.exampleCalculation}>
+            月費 = ({formData.freeSeats + 10} - {formData.freeSeats}) × ${formData.pricePerSeat} = ${10 * formData.pricePerSeat}
           </Text>
         </View>
-        
-        {paidSeats > 0 && (
-          <Text style={styles.calculation}>
-            {paidSeats} 人 × ${formData.pricePerSeat}/月
-          </Text>
-        )}
       </View>
     </View>
   );
@@ -388,6 +340,44 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.gray[600],
     textAlign: 'right',
     marginTop: 4,
+  },
+  billingNote: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: DesignSystem.colors.primary,
+    marginBottom: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  billingDescription: {
+    fontSize: 13,
+    color: DesignSystem.colors.gray[700],
+    marginBottom: 6,
+    lineHeight: 20,
+  },
+  exampleBox: {
+    backgroundColor: DesignSystem.colors.background.surface,
+    borderRadius: 8,
+    padding: 12,
+    marginTop: 12,
+    borderWidth: 1,
+    borderColor: DesignSystem.colors.gray[200],
+  },
+  exampleTitle: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: DesignSystem.colors.text.primary,
+    marginBottom: 6,
+  },
+  exampleText: {
+    fontSize: 12,
+    color: DesignSystem.colors.gray[600],
+    marginBottom: 4,
+  },
+  exampleCalculation: {
+    fontSize: 12,
+    color: DesignSystem.colors.primary,
+    fontWeight: '500',
   },
 });
 
