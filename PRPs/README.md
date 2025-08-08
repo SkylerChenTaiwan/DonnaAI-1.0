@@ -87,7 +87,9 @@
 | 81v  | web-layout-complete-redesign.md | ✅ 已完成 | Web 版面完整重構與修復 - 修復導航、統一佈局、響應式設計 | 2025-08-07 |
 | 82v  | web-navigation-super-admin-fix.md | ✅ 已完成 | 修復 Web 導航系統與 Super Admin 頁面架構 - 側邊欄消失、返回導航、UX 改進 | 2025-08-07 |
 | 83v  | enhanced-bulk-user-import-system.md | ✅ 已完成 | 增強組織批量用戶匯入系統 - 五階段流程、CSV 解析、批量操作、資料驗證 | 2025-08-07 |
-| 84   | organization-onboarding-wizard.md | 📋 待執行 | 組織入職精靈 - 引導式設置流程、Google 登入整合、批量用戶匯入、進度追蹤 | - |
+| 84   | organization-onboarding-wizard.md | 📋 待執行 | 組織入職精靈 - 引導式設置、計費配置、用戶管理、Google 登入整合 | - |
+| 85   | bulk-data-import-intelligent-mapping.md | 📋 待執行 | 批量資料匯入與智能映射 - AI 欄位識別、多檔案合併、批次處理、資料清理 | - |
+| 86   | organization-audit-logging-system.md | 📋 待執行 | 組織審計日誌系統 - 自動日誌收集、合規報告、安全監控、異常偵測 | - |
 
 ## 命名規則
 
@@ -103,7 +105,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：85**
+**下一個新建的 PRP 應使用編號：87**
 
 ## PRP 類型說明
 
