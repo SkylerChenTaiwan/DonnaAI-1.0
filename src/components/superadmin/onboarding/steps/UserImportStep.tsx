@@ -747,7 +747,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text,
+    color: DesignSystem.colors.text.primary,
   },
   methodSelector: {
     flexDirection: 'row',
@@ -764,8 +764,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray300,
-    backgroundColor: DesignSystem.colors.white,
+    borderColor: DesignSystem.colors.gray[300],
+    backgroundColor: DesignSystem.colors.background.surface,
   },
   methodCardActive: {
     borderColor: DesignSystem.colors.primary,
@@ -773,7 +773,7 @@ const styles = StyleSheet.create({
   },
   methodLabel: {
     fontSize: 12,
-    color: DesignSystem.colors.gray700,
+    color: DesignSystem.colors.gray[700],
     marginTop: 8,
     fontWeight: '500',
   },
@@ -785,23 +785,23 @@ const styles = StyleSheet.create({
   },
   uploadBox: {
     borderWidth: 2,
-    borderColor: DesignSystem.colors.gray300,
+    borderColor: DesignSystem.colors.gray[300],
     borderStyle: 'dashed',
     borderRadius: 8,
     paddingVertical: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: DesignSystem.colors.gray50,
+    backgroundColor: DesignSystem.colors.gray[50],
   },
   uploadText: {
     fontSize: 14,
-    color: DesignSystem.colors.gray700,
+    color: DesignSystem.colors.gray[700],
     marginTop: 12,
     fontWeight: '500',
   },
   uploadHint: {
     fontSize: 12,
-    color: DesignSystem.colors.gray500,
+    color: DesignSystem.colors.gray[50]0,
     marginTop: 4,
   },
   csvExample: {
@@ -809,32 +809,32 @@ const styles = StyleSheet.create({
   },
   exampleTitle: {
     fontSize: 13,
-    color: DesignSystem.colors.gray700,
+    color: DesignSystem.colors.gray[700],
     marginBottom: 8,
     fontWeight: '500',
   },
   codeBlock: {
-    backgroundColor: DesignSystem.colors.gray100,
+    backgroundColor: DesignSystem.colors.gray[100],
     borderRadius: 6,
     padding: 12,
   },
   codeText: {
     fontSize: 12,
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    color: DesignSystem.colors.gray800,
+    color: DesignSystem.colors.gray[800],
   },
   jsonContainer: {
     marginBottom: 24,
   },
   jsonInput: {
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray300,
+    borderColor: DesignSystem.colors.gray[300],
     borderRadius: 8,
     padding: 12,
     fontSize: 13,
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    color: DesignSystem.colors.text,
-    backgroundColor: DesignSystem.colors.white,
+    color: DesignSystem.colors.text.primary,
+    backgroundColor: DesignSystem.colors.background.surface,
     minHeight: 200,
   },
   submitButton: {
@@ -845,7 +845,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   submitButtonText: {
-    color: DesignSystem.colors.white,
+    color: DesignSystem.colors.background.surface,
     fontSize: 14,
     fontWeight: '500',
   },
@@ -854,7 +854,7 @@ const styles = StyleSheet.create({
   },
   googleNotice: {
     flexDirection: 'row',
-    backgroundColor: DesignSystem.colors.info + '10',
+    backgroundColor: DesignSystem.colors.status.info + '10',
     borderRadius: 8,
     padding: 12,
     marginBottom: 16,
@@ -863,7 +863,7 @@ const styles = StyleSheet.create({
   googleNoticeText: {
     flex: 1,
     fontSize: 13,
-    color: DesignSystem.colors.info,
+    color: DesignSystem.colors.status.info,
     lineHeight: 18,
   },
   googleButton: {
@@ -876,7 +876,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   googleButtonText: {
-    color: DesignSystem.colors.white,
+    color: DesignSystem.colors.background.surface,
     fontSize: 14,
     fontWeight: '500',
   },
@@ -895,23 +895,23 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     fontSize: 14,
-    color: DesignSystem.colors.gray700,
+    color: DesignSystem.colors.gray[700],
     marginBottom: 8,
     fontWeight: '500',
   },
   input: {
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray300,
+    borderColor: DesignSystem.colors.gray[300],
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 14,
-    color: DesignSystem.colors.text,
-    backgroundColor: DesignSystem.colors.white,
+    color: DesignSystem.colors.text.primary,
+    backgroundColor: DesignSystem.colors.background.surface,
   },
   inputHint: {
     fontSize: 12,
-    color: DesignSystem.colors.gray500,
+    color: DesignSystem.colors.gray[50]0,
     marginTop: 4,
   },
   roleSelector: {
@@ -924,7 +924,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray300,
+    borderColor: DesignSystem.colors.gray[300],
     alignItems: 'center',
   },
   roleOptionActive: {
@@ -933,7 +933,7 @@ const styles = StyleSheet.create({
   },
   roleText: {
     fontSize: 13,
-    color: DesignSystem.colors.gray700,
+    color: DesignSystem.colors.gray[700],
   },
   roleTextActive: {
     color: DesignSystem.colors.primary,
@@ -949,7 +949,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   addButtonText: {
-    color: DesignSystem.colors.white,
+    color: DesignSystem.colors.background.surface,
     fontSize: 14,
     fontWeight: '500',
   },
@@ -965,11 +965,11 @@ const styles = StyleSheet.create({
   listTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: DesignSystem.colors.text,
+    color: DesignSystem.colors.text.primary,
   },
   clearLink: {
     fontSize: 13,
-    color: DesignSystem.colors.error,
+    color: DesignSystem.colors.status.error,
     fontWeight: '500',
   },
   listScroll: {
@@ -978,12 +978,12 @@ const styles = StyleSheet.create({
   userItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: DesignSystem.colors.white,
+    backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: 8,
     padding: 12,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray200,
+    borderColor: DesignSystem.colors.gray[200],
   },
   userAvatar: {
     width: 36,
@@ -1005,16 +1005,16 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 14,
     fontWeight: '500',
-    color: DesignSystem.colors.text,
+    color: DesignSystem.colors.text.primary,
   },
   userEmail: {
     fontSize: 12,
-    color: DesignSystem.colors.gray600,
+    color: DesignSystem.colors.gray[600],
     marginTop: 2,
   },
   userDepartment: {
     fontSize: 12,
-    color: DesignSystem.colors.gray500,
+    color: DesignSystem.colors.gray[50]0,
     marginTop: 2,
   },
   userRole: {
@@ -1036,19 +1036,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 40,
-    backgroundColor: DesignSystem.colors.gray50,
+    backgroundColor: DesignSystem.colors.gray[50],
     borderRadius: 8,
     marginBottom: 24,
   },
   emptyText: {
     fontSize: 14,
-    color: DesignSystem.colors.gray700,
+    color: DesignSystem.colors.gray[700],
     marginTop: 12,
     fontWeight: '500',
   },
   emptyHint: {
     fontSize: 12,
-    color: DesignSystem.colors.gray500,
+    color: DesignSystem.colors.gray[50]0,
     marginTop: 4,
   },
   authSection: {
@@ -1073,11 +1073,11 @@ const styles = StyleSheet.create({
   switchLabel: {
     fontSize: 14,
     fontWeight: '500',
-    color: DesignSystem.colors.text,
+    color: DesignSystem.colors.text.primary,
   },
   switchHint: {
     fontSize: 12,
-    color: DesignSystem.colors.gray600,
+    color: DesignSystem.colors.gray[600],
     marginTop: 2,
   },
   strategyOptions: {
@@ -1091,8 +1091,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray300,
-    backgroundColor: DesignSystem.colors.white,
+    borderColor: DesignSystem.colors.gray[300],
+    backgroundColor: DesignSystem.colors.background.surface,
     gap: 12,
   },
   strategyOptionActive: {
@@ -1102,7 +1102,7 @@ const styles = StyleSheet.create({
   strategyText: {
     flex: 1,
     fontSize: 14,
-    color: DesignSystem.colors.gray700,
+    color: DesignSystem.colors.gray[700],
   },
   strategyTextActive: {
     color: DesignSystem.colors.primary,
@@ -1121,7 +1121,7 @@ const styles = StyleSheet.create({
   processingText: {
     marginTop: 12,
     fontSize: 14,
-    color: DesignSystem.colors.gray600,
+    color: DesignSystem.colors.gray[600],
   },
 });
 

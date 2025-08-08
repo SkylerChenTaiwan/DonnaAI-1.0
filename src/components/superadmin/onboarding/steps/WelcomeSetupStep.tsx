@@ -472,7 +472,7 @@ const styles = StyleSheet.create({
   editorTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text,
+    color: DesignSystem.colors.text.primary,
   },
   previewButton: {
     flexDirection: 'row',
@@ -489,19 +489,19 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     fontSize: 14,
-    color: DesignSystem.colors.gray700,
+    color: DesignSystem.colors.gray[700],
     marginBottom: 8,
     fontWeight: '500',
   },
   input: {
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray300,
+    borderColor: DesignSystem.colors.gray[300],
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 14,
-    color: DesignSystem.colors.text,
-    backgroundColor: DesignSystem.colors.white,
+    color: DesignSystem.colors.text.primary,
+    backgroundColor: DesignSystem.colors.background.surface,
   },
   textArea: {
     minHeight: 200,
@@ -512,7 +512,7 @@ const styles = StyleSheet.create({
   },
   variablesTitle: {
     fontSize: 13,
-    color: DesignSystem.colors.gray700,
+    color: DesignSystem.colors.gray[700],
     marginBottom: 8,
     fontWeight: '500',
   },
@@ -538,26 +538,26 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   emailPreview: {
-    backgroundColor: DesignSystem.colors.white,
+    backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray200,
+    borderColor: DesignSystem.colors.gray[200],
     padding: 20,
   },
   previewSubject: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text,
+    color: DesignSystem.colors.text.primary,
     marginBottom: 12,
   },
   previewDivider: {
     height: 1,
-    backgroundColor: DesignSystem.colors.gray200,
+    backgroundColor: DesignSystem.colors.gray[200],
     marginBottom: 12,
   },
   previewBody: {
     fontSize: 14,
-    color: DesignSystem.colors.gray700,
+    color: DesignSystem.colors.gray[700],
     lineHeight: 20,
   },
   templateOptions: {
@@ -575,7 +575,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text,
+    color: DesignSystem.colors.text.primary,
   },
   switchRow: {
     flexDirection: 'row',
@@ -590,11 +590,11 @@ const styles = StyleSheet.create({
   switchLabel: {
     fontSize: 14,
     fontWeight: '500',
-    color: DesignSystem.colors.text,
+    color: DesignSystem.colors.text.primary,
   },
   switchHint: {
     fontSize: 12,
-    color: DesignSystem.colors.gray600,
+    color: DesignSystem.colors.gray[600],
     marginTop: 2,
   },
   dashboardOptions: {
@@ -610,8 +610,8 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray300,
-    backgroundColor: DesignSystem.colors.white,
+    borderColor: DesignSystem.colors.gray[300],
+    backgroundColor: DesignSystem.colors.background.surface,
     gap: 8,
   },
   dashboardOptionActive: {
@@ -620,7 +620,7 @@ const styles = StyleSheet.create({
   },
   dashboardText: {
     fontSize: 12,
-    color: DesignSystem.colors.gray700,
+    color: DesignSystem.colors.gray[700],
     fontWeight: '500',
   },
   dashboardTextActive: {
@@ -637,20 +637,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray300,
+    borderColor: DesignSystem.colors.gray[300],
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
-    backgroundColor: DesignSystem.colors.white,
+    backgroundColor: DesignSystem.colors.background.surface,
     gap: 8,
   },
   datePickerText: {
     fontSize: 14,
-    color: DesignSystem.colors.text,
+    color: DesignSystem.colors.text.primary,
   },
   infoBox: {
     flexDirection: 'row',
-    backgroundColor: DesignSystem.colors.info + '10',
+    backgroundColor: DesignSystem.colors.status.info + '10',
     borderRadius: 8,
     padding: 12,
     marginTop: 12,
@@ -659,11 +659,11 @@ const styles = StyleSheet.create({
   infoText: {
     flex: 1,
     fontSize: 13,
-    color: DesignSystem.colors.info,
+    color: DesignSystem.colors.status.info,
     lineHeight: 18,
   },
   summarySection: {
-    backgroundColor: DesignSystem.colors.gray50,
+    backgroundColor: DesignSystem.colors.gray[50],
     borderRadius: 12,
     padding: 20,
     marginBottom: 24,
@@ -671,7 +671,7 @@ const styles = StyleSheet.create({
   summaryTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text,
+    color: DesignSystem.colors.text.primary,
     marginBottom: 16,
   },
   summaryGrid: {
@@ -685,7 +685,7 @@ const styles = StyleSheet.create({
   summaryLabel: {
     flex: 1,
     fontSize: 14,
-    color: DesignSystem.colors.gray700,
+    color: DesignSystem.colors.gray[700],
   },
   summaryValue: {
     fontSize: 14,
@@ -693,7 +693,7 @@ const styles = StyleSheet.create({
   },
   tipBox: {
     flexDirection: 'row',
-    backgroundColor: DesignSystem.colors.warning + '10',
+    backgroundColor: DesignSystem.colors.status.warning + '10',
     borderRadius: 8,
     padding: 16,
     marginBottom: 24,
@@ -705,12 +705,12 @@ const styles = StyleSheet.create({
   tipTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: DesignSystem.colors.warning,
+    color: DesignSystem.colors.status.warning,
     marginBottom: 8,
   },
   tipText: {
     fontSize: 13,
-    color: DesignSystem.colors.gray700,
+    color: DesignSystem.colors.gray[700],
     lineHeight: 18,
     marginBottom: 4,
   },

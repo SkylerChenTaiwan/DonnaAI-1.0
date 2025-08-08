@@ -577,7 +577,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.gray200,
+    borderBottomColor: DesignSystem.colors.gray[200],
   },
   headerContent: {
     flex: 1,
@@ -585,12 +585,12 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: DesignSystem.colors.text,
+    color: DesignSystem.colors.text.primary,
     marginBottom: 4,
   },
   headerSubtitle: {
     fontSize: 14,
-    color: DesignSystem.colors.gray600,
+    color: DesignSystem.colors.text.secondary,
   },
   closeButton: {
     padding: 8,
@@ -599,11 +599,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.gray200,
+    borderBottomColor: DesignSystem.colors.gray[200],
   },
   progressBar: {
     height: 4,
-    backgroundColor: DesignSystem.colors.gray200,
+    backgroundColor: DesignSystem.colors.gray[200],
     borderRadius: 2,
     overflow: 'hidden',
     marginBottom: 16,
@@ -624,13 +624,13 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: DesignSystem.colors.gray200,
+    backgroundColor: DesignSystem.colors.gray[200],
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
   },
   stepCompleted: {
-    backgroundColor: DesignSystem.colors.success,
+    backgroundColor: DesignSystem.colors.status.success,
   },
   stepCurrent: {
     backgroundColor: DesignSystem.colors.primary,
@@ -642,18 +642,18 @@ const styles = StyleSheet.create({
   stepNumber: {
     fontSize: 14,
     fontWeight: '600',
-    color: DesignSystem.colors.gray600,
+    color: DesignSystem.colors.gray[600],
   },
   stepNumberActive: {
-    color: DesignSystem.colors.white,
+    color: DesignSystem.colors.background.surface,
   },
   stepLabel: {
     fontSize: 12,
-    color: DesignSystem.colors.gray500,
+    color: DesignSystem.colors.gray[500],
     textAlign: 'center',
   },
   stepLabelCurrent: {
-    color: DesignSystem.colors.text,
+    color: DesignSystem.colors.text.primary,
     fontWeight: '500',
   },
   content: {
@@ -668,12 +668,12 @@ const styles = StyleSheet.create({
   stepTitle: {
     fontSize: 24,
     fontWeight: '600',
-    color: DesignSystem.colors.text,
+    color: DesignSystem.colors.text.primary,
     marginBottom: 8,
   },
   stepDescription: {
     fontSize: 14,
-    color: DesignSystem.colors.gray600,
+    color: DesignSystem.colors.text.secondary,
   },
   loadingContainer: {
     flex: 1,
@@ -684,17 +684,17 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: DesignSystem.colors.gray600,
+    color: DesignSystem.colors.gray[600],
   },
   errorContainer: {
-    backgroundColor: DesignSystem.colors.error + '10',
+    backgroundColor: DesignSystem.colors.status.error + '10',
     borderRadius: 8,
     padding: 12,
     marginTop: 16,
   },
   errorText: {
     fontSize: 14,
-    color: DesignSystem.colors.error,
+    color: DesignSystem.colors.status.error,
     marginBottom: 4,
   },
   footer: {
@@ -704,7 +704,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderTopWidth: 1,
-    borderTopColor: DesignSystem.colors.gray200,
+    borderTopColor: DesignSystem.colors.gray[200],
   },
   footerLeft: {
     flexDirection: 'row',
@@ -726,17 +726,17 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.primary,
   },
   primaryButtonText: {
-    color: DesignSystem.colors.white,
+    color: DesignSystem.colors.text.inverse,
     fontSize: 14,
     fontWeight: '500',
   },
   secondaryButton: {
-    backgroundColor: DesignSystem.colors.gray100,
+    backgroundColor: DesignSystem.colors.background.surface,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray300,
+    borderColor: DesignSystem.colors.border.light,
   },
   secondaryButtonText: {
-    color: DesignSystem.colors.gray700,
+    color: DesignSystem.colors.text.primary,
     fontSize: 14,
     fontWeight: '500',
   },
@@ -744,7 +744,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   ghostButtonText: {
-    color: DesignSystem.colors.gray600,
+    color: DesignSystem.colors.text.secondary,
     fontSize: 14,
     fontWeight: '500',
   },
@@ -754,7 +754,7 @@ const styles = StyleSheet.create({
     right: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: DesignSystem.colors.white,
+    backgroundColor: DesignSystem.colors.background.surface,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
@@ -767,7 +767,7 @@ const styles = StyleSheet.create({
   },
   savingText: {
     fontSize: 12,
-    color: DesignSystem.colors.gray600,
+    color: DesignSystem.colors.gray[600],
   },
 });
 

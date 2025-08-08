@@ -414,7 +414,7 @@ const styles = StyleSheet.create({
   },
   billingCycleContainer: {
     flexDirection: 'row',
-    backgroundColor: DesignSystem.colors.gray100,
+    backgroundColor: DesignSystem.colors.gray[100],
     borderRadius: 8,
     padding: 4,
     marginBottom: 20,
@@ -429,7 +429,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   cycleOptionActive: {
-    backgroundColor: DesignSystem.colors.white,
+    backgroundColor: DesignSystem.colors.background.surface,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
@@ -438,14 +438,14 @@ const styles = StyleSheet.create({
   },
   cycleText: {
     fontSize: 14,
-    color: DesignSystem.colors.gray600,
+    color: DesignSystem.colors.gray[600],
     fontWeight: '500',
   },
   cycleTextActive: {
-    color: DesignSystem.colors.text,
+    color: DesignSystem.colors.text.primary,
   },
   discountBadge: {
-    backgroundColor: DesignSystem.colors.success,
+    backgroundColor: DesignSystem.colors.status.success,
     borderRadius: 10,
     paddingHorizontal: 6,
     paddingVertical: 2,
@@ -453,7 +453,7 @@ const styles = StyleSheet.create({
   },
   discountText: {
     fontSize: 11,
-    color: DesignSystem.colors.white,
+    color: DesignSystem.colors.background.surface,
     fontWeight: '600',
   },
   plansGrid: {
@@ -465,10 +465,10 @@ const styles = StyleSheet.create({
   planCard: {
     flex: 1,
     minWidth: Platform.OS === 'web' ? 280 : '100%',
-    backgroundColor: DesignSystem.colors.white,
+    backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray200,
+    borderColor: DesignSystem.colors.gray[200],
     padding: 20,
     position: 'relative',
   },
@@ -490,7 +490,7 @@ const styles = StyleSheet.create({
   },
   popularText: {
     fontSize: 11,
-    color: DesignSystem.colors.white,
+    color: DesignSystem.colors.background.surface,
     fontWeight: '600',
   },
   planHeader: {
@@ -499,7 +499,7 @@ const styles = StyleSheet.create({
   planName: {
     fontSize: 20,
     fontWeight: '600',
-    color: DesignSystem.colors.text,
+    color: DesignSystem.colors.text.primary,
     marginBottom: 8,
   },
   planNameSelected: {
@@ -508,14 +508,14 @@ const styles = StyleSheet.create({
   planPrice: {
     fontSize: 28,
     fontWeight: '700',
-    color: DesignSystem.colors.text,
+    color: DesignSystem.colors.text.primary,
   },
   planPriceSelected: {
     color: DesignSystem.colors.primary,
   },
   planPriceUnit: {
     fontSize: 14,
-    color: DesignSystem.colors.gray600,
+    color: DesignSystem.colors.gray[600],
     marginTop: 4,
   },
   planPriceUnitSelected: {
@@ -532,11 +532,11 @@ const styles = StyleSheet.create({
   featureText: {
     flex: 1,
     fontSize: 14,
-    color: DesignSystem.colors.gray700,
+    color: DesignSystem.colors.gray[700],
     lineHeight: 20,
   },
   featureTextSelected: {
-    color: DesignSystem.colors.text,
+    color: DesignSystem.colors.text.primary,
   },
   selectedIndicator: {
     position: 'absolute',
@@ -549,7 +549,7 @@ const styles = StyleSheet.create({
   seatsLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text,
+    color: DesignSystem.colors.text.primary,
     marginBottom: 12,
   },
   seatsSelector: {
@@ -561,7 +561,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: DesignSystem.colors.gray100,
+    backgroundColor: DesignSystem.colors.gray[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -569,18 +569,18 @@ const styles = StyleSheet.create({
     flex: 1,
     maxWidth: 100,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray300,
+    borderColor: DesignSystem.colors.gray[300],
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 8,
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text,
-    backgroundColor: DesignSystem.colors.white,
+    color: DesignSystem.colors.text.primary,
+    backgroundColor: DesignSystem.colors.background.surface,
   },
   seatsHint: {
     fontSize: 13,
-    color: DesignSystem.colors.gray600,
+    color: DesignSystem.colors.gray[600],
     marginTop: 8,
   },
   paymentContainer: {
@@ -589,7 +589,7 @@ const styles = StyleSheet.create({
   paymentLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text,
+    color: DesignSystem.colors.text.primary,
     marginBottom: 12,
   },
   paymentOptions: {
@@ -603,8 +603,8 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray300,
-    backgroundColor: DesignSystem.colors.white,
+    borderColor: DesignSystem.colors.gray[300],
+    backgroundColor: DesignSystem.colors.background.surface,
     gap: 8,
   },
   paymentOptionActive: {
@@ -613,7 +613,7 @@ const styles = StyleSheet.create({
   },
   paymentText: {
     fontSize: 12,
-    color: DesignSystem.colors.gray700,
+    color: DesignSystem.colors.gray[700],
     fontWeight: '500',
   },
   paymentTextActive: {
@@ -625,7 +625,7 @@ const styles = StyleSheet.create({
   additionalLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text,
+    color: DesignSystem.colors.text.primary,
     marginBottom: 16,
   },
   inputGroup: {
@@ -633,26 +633,26 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     fontSize: 14,
-    color: DesignSystem.colors.gray700,
+    color: DesignSystem.colors.gray[700],
     marginBottom: 8,
     fontWeight: '500',
   },
   input: {
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray300,
+    borderColor: DesignSystem.colors.gray[300],
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 14,
-    color: DesignSystem.colors.text,
-    backgroundColor: DesignSystem.colors.white,
+    color: DesignSystem.colors.text.primary,
+    backgroundColor: DesignSystem.colors.background.surface,
   },
   textArea: {
     minHeight: 80,
     textAlignVertical: 'top',
   },
   priceSummary: {
-    backgroundColor: DesignSystem.colors.gray50,
+    backgroundColor: DesignSystem.colors.gray[50],
     borderRadius: 12,
     padding: 20,
     marginBottom: 24,
@@ -660,7 +660,7 @@ const styles = StyleSheet.create({
   summaryTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text,
+    color: DesignSystem.colors.text.primary,
     marginBottom: 16,
   },
   summaryRow: {
@@ -671,19 +671,19 @@ const styles = StyleSheet.create({
   },
   summaryLabel: {
     fontSize: 14,
-    color: DesignSystem.colors.gray600,
+    color: DesignSystem.colors.gray[600],
   },
   summaryValue: {
     fontSize: 14,
-    color: DesignSystem.colors.text,
+    color: DesignSystem.colors.text.primary,
     fontWeight: '500',
   },
   discountValue: {
-    color: DesignSystem.colors.success,
+    color: DesignSystem.colors.status.success,
   },
   summaryTotal: {
     borderTopWidth: 1,
-    borderTopColor: DesignSystem.colors.gray200,
+    borderTopColor: DesignSystem.colors.gray[200],
     paddingTop: 12,
     marginTop: 12,
     marginBottom: 0,
@@ -691,7 +691,7 @@ const styles = StyleSheet.create({
   totalLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text,
+    color: DesignSystem.colors.text.primary,
   },
   totalValue: {
     fontSize: 20,
