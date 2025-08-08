@@ -11,14 +11,15 @@ config.resolver.sourceExts.push('cjs');
 config.resolver.unstable_enablePackageExports = false;
 
 // 處理字體檔案的特殊配置
-// 首先移除字體副檔名（如果存在）
+// 確保字體檔案被正確處理為二進制資源
 const fontExts = ['ttf', 'otf', 'woff', 'woff2', 'eot'];
-config.resolver.assetExts = config.resolver.assetExts.filter(
-  ext => !fontExts.includes(ext)
-);
 
-// 重新加入字體副檔名，確保它們被視為資源
-config.resolver.assetExts.push(...fontExts);
+// 確保字體副檔名在 assetExts 中
+fontExts.forEach(ext => {
+  if (!config.resolver.assetExts.includes(ext)) {
+    config.resolver.assetExts.push(ext);
+  }
+});
 
 // 確保支援所有圖片格式
 const imageExts = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'];
@@ -32,11 +33,16 @@ imageExts.forEach(ext => {
 // 指定模組解析欄位順序，優先使用 react-native，其次是 browser，最後是 main
 config.resolver.resolverMainFields = ['react-native', 'browser', 'main'];
 
-// 暫時移除自定義資源轉換器，讓 Metro 使用預設處理
-// config.transformer.assetPlugins = [
-//   ...(config.transformer.assetPlugins || []),
-//   require.resolve('./fontAssetPlugin.js')
-// ];
+// 設定資源註冊格式，避免字體檔案被處理
+config.transformer.assetRegistryFormat = 'png';
+
+// 關閉字體檔案的程式碼內嵌，強制使用檔案引用
+config.transformer.getTransformOptions = async () => ({
+  transform: {
+    experimentalImportSupport: false,
+    inlineRequires: false,
+  },
+});
 
 // 簡化配置以確保正常啟動
 // 快取配置暫時移除，避免配置問題
