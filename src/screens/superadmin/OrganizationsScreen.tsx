@@ -242,7 +242,7 @@ export const OrganizationsScreen: React.FC = () => {
     <>
       <View style={styles.searchContainer}>
         <View style={styles.searchRow}>
-          <View style={{ flex: 1 }}>
+          <View style={styles.searchBarWrapper}>
             <SearchBar
               value={searchQuery}
               onChangeText={setSearchQuery}
@@ -251,7 +251,10 @@ export const OrganizationsScreen: React.FC = () => {
           </View>
           <TouchableOpacity
             style={styles.addButton}
-            onPress={() => navigation.navigate('OnboardingWizardScreen', { mode: 'create' })}
+            onPress={() => {
+              console.log('新增組織按鈕被點擊');
+              navigation.navigate('OnboardingWizardScreen', { mode: 'create' });
+            }}
           >
             <MaterialIcons name="add" size={24} color={DesignSystem.colors.text.inverse} />
             <Text style={styles.addButtonText}>新增組織</Text>
@@ -323,16 +326,23 @@ const styles = StyleSheet.create({
   searchRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: DesignSystem.spacing.sm,
+    gap: 12,
+    justifyContent: 'space-between',
+  },
+  searchBarWrapper: {
+    flex: 1,
+    maxWidth: 400,
   },
   addButton: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: DesignSystem.colors.primary,
     borderRadius: DesignSystem.borderRadius.md,
-    paddingHorizontal: DesignSystem.spacing.md,
-    paddingVertical: DesignSystem.spacing.sm,
-    gap: DesignSystem.spacing.xs,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    gap: 8,
+    minWidth: 120,
+    justifyContent: 'center',
   },
   addButtonText: {
     color: DesignSystem.colors.text.inverse,
