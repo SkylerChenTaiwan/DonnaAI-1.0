@@ -9,6 +9,9 @@ import '@expo/metro-runtime';
 // 導入 Web 平台專用樣式
 import './src/components/database/web/styles/NotionDatabaseV4.css';
 
+// 導入 Web 字體 polyfill
+import './src/utils/webFontPolyfill';
+
 import React, { useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';

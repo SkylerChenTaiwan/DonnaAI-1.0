@@ -18,7 +18,9 @@ module.exports = function(api) {
             '@stores': './src/stores',
             '@navigation': './src/navigation',
             '@theme': './src/theme',
-            '@assets': './assets'
+            '@assets': './assets',
+            // 修復 @expo/vector-icons 在 Web 平台的問題
+            'react-native-vector-icons': '@expo/vector-icons'
           }
         }
       ],
