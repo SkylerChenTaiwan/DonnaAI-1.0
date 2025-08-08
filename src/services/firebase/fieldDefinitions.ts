@@ -46,7 +46,7 @@ const CACHE_TTL = 5 * 60 * 1000;
  * @returns 取消訂閱函數
  */
 export function subscribeToFieldDefinitions(
-  collectionName: 'customers' | 'tasks' | 'records',
+  collectionName: 'customers' | 'tasks' | 'records' | 'users',
   organizationId: string,
   callback: (fields: FieldConfig[]) => void
 ): Unsubscribe {
@@ -131,7 +131,7 @@ export function subscribeToFieldDefinitions(
  * @returns 欄位配置陣列
  */
 export async function getFieldDefinitions(
-  collectionName: 'customers' | 'tasks' | 'records',
+  collectionName: 'customers' | 'tasks' | 'records' | 'users',
   organizationId: string
 ): Promise<FieldConfig[]> {
   console.log(`📥 取得欄位定義: ${collectionName} (組織: ${organizationId})`);

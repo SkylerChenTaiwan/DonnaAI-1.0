@@ -157,7 +157,15 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
         { key: 'priority', label: '優先級', type: 'text' as FieldType, isRequired: false, isSystem: false },
         { key: 'status', label: '狀態', type: 'text' as FieldType, isRequired: false, isSystem: false }
       ],
-      users: []
+      users: [
+        { key: 'email', label: 'Email', type: 'text' as FieldType, isRequired: true, isSystem: false },
+        { key: 'name', label: '姓名', type: 'text' as FieldType, isRequired: true, isSystem: false },
+        { key: 'role', label: '角色', type: 'text' as FieldType, isRequired: true, isSystem: false },
+        { key: 'department', label: '部門', type: 'text' as FieldType, isRequired: false, isSystem: false },
+        { key: 'position', label: '職位', type: 'text' as FieldType, isRequired: false, isSystem: false },
+        { key: 'phoneNumber', label: '電話', type: 'text' as FieldType, isRequired: false, isSystem: false },
+        { key: 'isActive', label: '啟用狀態', type: 'boolean' as FieldType, isRequired: false, isSystem: false }
+      ]
     };
 
     return defaultFields[database] || [];
@@ -185,14 +193,18 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
         
         // 常見別名匹配（擴展匹配規則）
         const aliases: Record<string, string[]> = {
-          'name': ['姓名', '客戶姓名', '名稱', '客戶名稱', 'customer_name', '客戶'],
+          'name': ['姓名', '客戶姓名', '名稱', '客戶名稱', 'customer_name', '客戶', '用戶姓名', '員工姓名'],
           'phone': ['電話', '手機', '聯絡電話', 'mobile', 'tel', '電話號碼', '聯絡方式'],
+          'phoneNumber': ['電話', '手機', '聯絡電話', 'mobile', 'tel', '電話號碼', '聯絡方式'],
           'email': ['郵件', '電子郵件', 'mail', 'e-mail', '郵箱', 'email'],
           'company': ['公司', '公司名稱', '企業', 'organization', '單位'],
           'address': ['地址', '住址', '聯絡地址', '地點'],
           'title': ['標題', '主題', '任務名稱', '名稱'],
           'description': ['描述', '說明', '內容', '備註', '記錄'],
           'notes': ['備註', '筆記', '註記', '說明'],
+          'role': ['角色', '權限', '身份', '職級', 'permission', 'level'],
+          'department': ['部門', '部門名稱', 'dept', 'division', '單位'],
+          'position': ['職位', '職稱', '崗位', 'title', 'job'],
           'customField1': ['負責業務', '業務', '業務員', '銷售', '銷售員'],
           'customField2': ['建議方案', '方案', '建議', '推薦'],
           'customField3': ['客戶等級', '等級', '級別', 'VIP']

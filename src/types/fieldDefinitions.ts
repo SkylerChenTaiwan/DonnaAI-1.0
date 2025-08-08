@@ -157,6 +157,91 @@ export const DEFAULT_CUSTOMER_FIELDS: FieldConfig[] = [
 ];
 
 /**
+ * 預設欄位定義 - 用戶
+ */
+export const DEFAULT_USER_FIELDS: FieldConfig[] = [
+  {
+    key: 'email',
+    label: 'Email',
+    type: 'email',
+    required: true,
+    isDefault: true,
+    protected: true,
+    order: 1,
+    placeholder: '請輸入 Email',
+    visible: true,
+    validation: [
+      { type: 'pattern', value: '^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$', message: '請輸入有效的電子郵件' }
+    ]
+  },
+  {
+    key: 'name',
+    label: '姓名',
+    type: 'text',
+    required: true,
+    isDefault: true,
+    order: 2,
+    placeholder: '請輸入姓名',
+    visible: true
+  },
+  {
+    key: 'role',
+    label: '角色',
+    type: 'select',
+    required: true,
+    isDefault: true,
+    order: 3,
+    visible: true,
+    options: [
+      { value: 'admin', label: '管理員' },
+      { value: 'manager', label: '主管' },
+      { value: 'salesperson', label: '業務員' },
+      { value: 'member', label: '一般成員' }
+    ]
+  },
+  {
+    key: 'department',
+    label: '部門',
+    type: 'text',
+    required: false,
+    isDefault: true,
+    order: 4,
+    placeholder: '請輸入部門',
+    visible: true
+  },
+  {
+    key: 'position',
+    label: '職位',
+    type: 'text',
+    required: false,
+    isDefault: true,
+    order: 5,
+    placeholder: '請輸入職位',
+    visible: true
+  },
+  {
+    key: 'phoneNumber',
+    label: '電話',
+    type: 'phone',
+    required: false,
+    isDefault: true,
+    order: 6,
+    placeholder: '請輸入電話號碼',
+    visible: true
+  },
+  {
+    key: 'isActive',
+    label: '啟用狀態',
+    type: 'boolean',
+    required: false,
+    isDefault: true,
+    order: 7,
+    visible: true,
+    defaultValue: true
+  }
+];
+
+/**
  * 預設欄位定義 - 任務
  */
 export const DEFAULT_TASK_FIELDS: FieldConfig[] = [
@@ -224,6 +309,8 @@ export function getDefaultFieldDefinitions(collectionName: string): FieldConfig[
   switch (collectionName) {
     case 'customers':
       return DEFAULT_CUSTOMER_FIELDS;
+    case 'users':
+      return DEFAULT_USER_FIELDS;
     case 'tasks':
       return DEFAULT_TASK_FIELDS;
     default:
