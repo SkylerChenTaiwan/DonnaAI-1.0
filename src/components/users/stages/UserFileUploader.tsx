@@ -124,104 +124,124 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
     return new Promise((resolve) => {
       const fileUrl = file.uri || file;
       
-      // 讀取檔案內容
-      fetch(fileUrl)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.text();
-        })
-        .then(text => {
-          if (!text || text.trim() === '') {
-            throw new Error('檔案內容為空');
-          }
-          // 解析 CSV
-          Papa.parse(text, {
-            header: true,
-            skipEmptyLines: true,
-            encoding: 'UTF-8',
-            transformHeader: (header) => header?.trim() || '',
-            transform: (value) => value?.trim() || '',
-            complete: (result) => {
-              if (result.errors?.length > 0) {
-                console.warn('CSV 解析警告:', result.errors);
-              }
-
-              // 確保有正確的資料結構
-              if (!result.data || !Array.isArray(result.data)) {
-                console.error('解析結果無效:', result);
-                showErrorToast('檔案格式錯誤或檔案為空');
-                resolve(null);
-                return;
-              }
-
-              const headers = result.meta?.fields || [];
-              if (headers.length === 0) {
-                console.error('無法取得檔案標題:', result);
-                showErrorToast('無法讀取檔案欄位');
-                resolve(null);
-                return;
-              }
-              const data = result.data || [];
-
-              // 檢查是否包含用戶欄位（不再強制要求）
-              const hasEmailLike = headers?.some(h => 
-                /email|mail|信箱|郵件|e-mail/i.test(h)
-              ) || false;
-              const hasNameLike = headers?.some(h => 
-                /name|姓名|名字|用戶|使用者/i.test(h)
-              ) || false;
-
-              // 自動檢測關鍵欄位
-              const tempFile = {
-                id: '',
-                name: file.name || 'imported.csv',
-                headers,
-                data: data || [],
-                keyField: null,
-                uploadedAt: new Date(),
-                rowCount: data?.length || 0
-              };
-              const keyFieldResults = headers.length > 0 ? detectKeyFields(tempFile) : [];
-              
-              const uploadedFile: ParsedUserFile = {
-                id: `file_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-                name: file.name || 'imported.csv',
-                headers,
-                data,
-                keyField: keyFieldResults.length > 0 ? keyFieldResults[0].field : null,
-                uploadedAt: new Date(),
-                rowCount: data.length,
-                hasEmailField: hasEmailLike,
-                hasNameField: hasNameLike,
-              };
-
-              setKeyFieldCandidates(prev => ({
-                ...prev,
-                [uploadedFile.id]: keyFieldResults,
-              }));
-
-              resolve(uploadedFile);
-            },
-            error: (error) => {
-              console.error('CSV 解析錯誤:', error);
-              showErrorToast(`解析檔案失敗: ${error.message || '未知錯誤'}`);
-              resolve(null);
-            },
-          });
-        })
-        .catch(error => {
-          console.error('讀取檔案失敗:', error);
-          if (error.message.includes('NetworkError') || error.message.includes('network')) {
-            showErrorToast('網路錯誤，請檢查網路連線');
-          } else if (error.message.includes('檔案內容為空')) {
-            showErrorToast('檔案內容為空，請確認檔案格式');
-          } else {
-            showErrorToast(`讀取檔案失敗: ${error.message}`);
-          }
+      // 處理檔案內容的函數
+      const parseCSVContent = (text: string) => {
+        if (!text || text.trim() === '') {
+          showErrorToast('檔案內容為空，請確認檔案格式');
           resolve(null);
+          return;
+        }
+        
+        // 解析 CSV
+        Papa.parse(text, {
+          header: true,
+          skipEmptyLines: true,
+          encoding: 'UTF-8',
+          transformHeader: (header) => header?.trim() || '',
+          transform: (value) => value?.trim() || '',
+          complete: (result) => {
+            if (result.errors?.length > 0) {
+              console.warn('CSV 解析警告:', result.errors);
+            }
+
+            // 確保有正確的資料結構
+            if (!result.data || !Array.isArray(result.data)) {
+              console.error('解析結果無效:', result);
+              showErrorToast('檔案格式錯誤或檔案為空');
+              resolve(null);
+              return;
+            }
+
+            const headers = result.meta?.fields || [];
+            if (headers.length === 0) {
+              console.error('無法取得檔案標題:', result);
+              showErrorToast('無法讀取檔案欄位');
+              resolve(null);
+              return;
+            }
+            const data = result.data || [];
+
+            // 檢查是否包含用戶欄位（不再強制要求）
+            const hasEmailLike = headers?.some(h => 
+              /email|mail|信箱|郵件|e-mail/i.test(h)
+            ) || false;
+            const hasNameLike = headers?.some(h => 
+              /name|姓名|名字|用戶|使用者/i.test(h)
+            ) || false;
+
+            // 自動檢測關鍵欄位
+            const tempFile = {
+              id: '',
+              name: file.name || 'imported.csv',
+              headers,
+              data: data || [],
+              keyField: null,
+              uploadedAt: new Date(),
+              rowCount: data?.length || 0
+            };
+            const keyFieldResults = headers.length > 0 ? detectKeyFields(tempFile) : [];
+            
+            const uploadedFile: ParsedUserFile = {
+              id: `file_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+              name: file.name || 'imported.csv',
+              headers,
+              data,
+              keyField: keyFieldResults.length > 0 ? keyFieldResults[0].field : null,
+              uploadedAt: new Date(),
+              rowCount: data.length,
+              hasEmailField: hasEmailLike,
+              hasNameField: hasNameLike,
+            };
+
+            setKeyFieldCandidates(prev => ({
+              ...prev,
+              [uploadedFile.id]: keyFieldResults,
+            }));
+
+            resolve(uploadedFile);
+          },
+          error: (error) => {
+            console.error('CSV 解析錯誤:', error);
+            showErrorToast(`解析檔案失敗: ${error.message || '未知錯誤'}`);
+            resolve(null);
+          },
         });
+      };
+      
+      // 檢查是否為 data URL
+      if (fileUrl.startsWith('data:')) {
+        try {
+          // 直接從 data URL 解析內容
+          const base64Data = fileUrl.split(',')[1];
+          const text = atob(base64Data);
+          parseCSVContent(text);
+        } catch (error) {
+          console.error('解析 data URL 失敗:', error);
+          showErrorToast('檔案格式錯誤，無法解析');
+          resolve(null);
+        }
+      } else {
+        // 使用 fetch 讀取其他類型的 URL
+        fetch(fileUrl)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.text();
+          })
+          .then(text => {
+            parseCSVContent(text);
+          })
+          .catch(error => {
+            console.error('讀取檔案失敗:', error);
+            if (error.message.includes('NetworkError') || error.message.includes('network')) {
+              showErrorToast('網路錯誤，請檢查網路連線');
+            } else {
+              showErrorToast(`讀取檔案失敗: ${error.message}`);
+            }
+            resolve(null);
+          });
+      }
     });
   };
 
