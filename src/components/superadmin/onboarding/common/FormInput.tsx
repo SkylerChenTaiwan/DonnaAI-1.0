@@ -1,0 +1,110 @@
+/**
+ * 統一的表單輸入元件
+ * Unified Form Input Component
+ */
+
+import React from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TextInputProps,
+  Platform,
+} from 'react-native';
+import { DesignSystem } from '@/theme/designSystem';
+
+interface FormInputProps extends TextInputProps {
+  label: string;
+  required?: boolean;
+  error?: string;
+  hint?: string;
+}
+
+export const FormInput: React.FC<FormInputProps> = ({
+  label,
+  required = false,
+  error,
+  hint,
+  style,
+  ...props
+}) => {
+  return (
+    <View style={styles.container}>
+      <View style={styles.labelContainer}>
+        <Text style={styles.label}>
+          {label}
+          {required && <Text style={styles.required}> *</Text>}
+        </Text>
+      </View>
+      
+      <TextInput
+        style={[
+          styles.input,
+          error && styles.inputError,
+          style,
+        ]}
+        placeholderTextColor={DesignSystem.colors.text.tertiary}
+        {...props}
+      />
+      
+      {hint && !error && (
+        <Text style={styles.hint}>{hint}</Text>
+      )}
+      
+      {error && (
+        <Text style={styles.error}>{error}</Text>
+      )}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    marginBottom: 16,
+  },
+  labelContainer: {
+    flexDirection: 'row',
+    marginBottom: 8,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: DesignSystem.colors.text.secondary,
+  },
+  required: {
+    color: DesignSystem.colors.status.error,
+    fontWeight: '600',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: DesignSystem.colors.border.light,
+    borderRadius: DesignSystem.borderRadius.md,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    fontSize: 14,
+    lineHeight: 20,
+    color: DesignSystem.colors.text.primary,
+    backgroundColor: DesignSystem.colors.background.surface,
+    minHeight: 48,
+    ...Platform.select({
+      web: {
+        outlineStyle: 'none',
+        outlineWidth: 0,
+      } as any,
+    }),
+  },
+  inputError: {
+    borderColor: DesignSystem.colors.status.error,
+  },
+  hint: {
+    fontSize: 12,
+    color: DesignSystem.colors.text.tertiary,
+    marginTop: 4,
+  },
+  error: {
+    fontSize: 12,
+    color: DesignSystem.colors.status.error,
+    marginTop: 4,
+  },
+});
