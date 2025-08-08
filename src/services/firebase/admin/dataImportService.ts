@@ -12,6 +12,7 @@ import {
   where,
   getDocs,
   setDoc,
+  updateDoc,
   limit,
 } from 'firebase/firestore';
 import { getFirebaseDb } from '../config';
@@ -373,6 +374,17 @@ export async function importData(
     message: '匯入完成',
   });
   
+  // 匯入完成後，更新組織統計
+  if (result.success > 0) {
+    console.log('📊 更新組織統計...');
+    try {
+      await updateOrganizationStatsAfterImport(organizationId, type, result.success);
+    } catch (error) {
+      console.error('更新組織統計失敗:', error);
+      // 不影響匯入結果
+    }
+  }
+  
   return result;
 }
 
@@ -477,6 +489,56 @@ async function importTask(
   };
   
   batch.set(taskRef, task);
+}
+
+/**
+ * 更新組織統計（匯入後）
+ */
+async function updateOrganizationStatsAfterImport(
+  organizationId: string,
+  dataType: string,
+  importedCount: number
+): Promise<void> {
+  const db = getFirebaseDb();
+  
+  try {
+    // 獲取當前統計
+    const usersQuery = query(
+      collection(db, 'users'),
+      where('organizationId', '==', organizationId)
+    );
+    const customersQuery = query(
+      collection(db, 'customers'),
+      where('organizationId', '==', organizationId)
+    );
+    
+    const [usersSnapshot, customersSnapshot] = await Promise.all([
+      getDocs(usersQuery),
+      getDocs(customersQuery)
+    ]);
+    
+    const userCount = usersSnapshot.size;
+    const customerCount = customersSnapshot.size;
+    
+    // 更新組織文件
+    const orgRef = doc(db, 'organizations', organizationId);
+    const currentMonth = new Date().toISOString().substring(0, 7);
+    
+    await updateDoc(orgRef, {
+      'stats.userCount': userCount,
+      'stats.activeUsers': userCount,
+      'stats.customerCount': customerCount,
+      'monthlyUsage.period': currentMonth,
+      'monthlyUsage.activeUsers': userCount,
+      'monthlyUsage.recordCount': customerCount,
+      updatedAt: Timestamp.now()
+    });
+    
+    console.log(`✅ 組織統計已更新: ${userCount} 用戶, ${customerCount} 客戶`);
+  } catch (error) {
+    console.error('更新組織統計失敗:', error);
+    throw error;
+  }
 }
 
 /**

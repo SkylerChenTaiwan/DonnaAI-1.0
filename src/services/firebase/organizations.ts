@@ -80,17 +80,20 @@ export async function getOrganization(orgId: string): Promise<OrganizationDetail
       subscriptionPlan: orgData.subscriptionPlan,
       aiMinutesQuota: orgData.aiMinutesQuota,
       aiMinutesUsed: orgData.aiMinutesUsed,
-      userCount,
-      activeUserCount: userCount, // TODO: 實作活躍用戶統計
-      teamCount,
+      userCount: orgData.monthlyUsage?.activeUsers || orgData.stats?.userCount || userCount,
+      activeUserCount: orgData.monthlyUsage?.activeUsers || orgData.stats?.activeUsers || userCount,
+      teamCount: orgData.stats?.teamCount || teamCount,
       dataVolume: {
-        customers: 0, // TODO: 實作資料量統計
-        records: 0,
+        customers: orgData.stats?.customerCount || 0,
+        records: orgData.monthlyUsage?.recordCount || 0,
         tasks: 0,
       },
       createdAt: orgData.createdAt,
       lastActivityAt: orgData.lastActivityAt,
       config: configDoc || undefined,
+      // 保留原始資料供除錯
+      monthlyUsage: orgData.monthlyUsage,
+      stats: orgData.stats,
     };
   } catch (error) {
     console.error('getOrganization 錯誤:', error);
