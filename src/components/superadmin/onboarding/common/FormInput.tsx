@@ -44,6 +44,7 @@ export const FormInput: React.FC<FormInputProps> = ({
           error && styles.inputError,
           style,
         ]}
+        className={Platform.OS === 'web' ? 'onboarding-form-input' : undefined}
         placeholderTextColor={DesignSystem.colors.text.tertiary}
         {...props}
       />

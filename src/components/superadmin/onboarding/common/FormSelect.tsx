@@ -55,6 +55,7 @@ export const FormSelect: React.FC<FormSelectProps> = ({
               value={value}
               onChange={(e) => onChange(e.target.value)}
               style={styles.webSelect}
+              className="onboarding-form-select"
             >
               <option value="" disabled>
                 {placeholder}
