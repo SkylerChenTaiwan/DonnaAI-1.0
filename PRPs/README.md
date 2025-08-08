@@ -90,7 +90,7 @@
 | 84   | organization-onboarding-wizard.md | 📋 待執行 | 組織入職精靈 - 引導式設置、計費配置、用戶管理、Google 登入整合 | - |
 | 85v  | bulk-data-import-intelligent-mapping.md | ✅ 已完成 | 批量資料匯入與智能映射 - AI 欄位識別、多檔案合併、批次處理、資料清理 | 2025-08-08 |
 | 86v  | organization-audit-logging-system.md | ✅ 已完成 | 組織審計日誌系統 - 自動日誌收集、合規報告、安全監控、異常偵測 | 2025-08-08 |
-| 87   | intelligent-user-import-mapping.md | 📋 待執行 | 智能用戶批量匯入系統 - 整合智能欄位對應、AI 輔助映射、多檔案合併 | - |
+| 87v  | intelligent-user-import-mapping.md | ✅ 已完成 | 智能用戶批量匯入系統 - 整合智能欄位對應、AI 輔助映射、多檔案合併 | 2025-08-08 |
 
 ## 命名規則
 
