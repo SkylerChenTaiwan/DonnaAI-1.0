@@ -569,8 +569,6 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                     }
                   ]}
                   onPress={() => {
-                    console.log('🔗 [Pressable] 設定關聯按鈕被點擊');
-                    console.log('Selected mapping:', mapping);
                     setSelectedMapping(mapping);
                     setShowRelationEditor(true);
                     // 暫時顯示提示，因為關聯編輯器尚未實作
@@ -587,8 +585,6 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                 <TouchableOpacity
                   style={[styles.relationButton, { borderColor: colors.primary }]}
                   onPress={() => {
-                    console.log('🔗 設定關聯按鈕被點擊');
-                    console.log('Selected mapping:', mapping);
                     setSelectedMapping(mapping);
                     setShowRelationEditor(true);
                     // 暫時顯示提示，因為關聯編輯器尚未實作
@@ -758,27 +754,24 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
     setCurrentMappingIndex(-1);
   };
 
+  // 如果沒有合併的資料表，顯示提示
+  if (!mergedTable || !mergedTable.headers || mergedTable.headers.length === 0) {
+    return (
+      <View style={[styles.container, { padding: 20, alignItems: 'center', justifyContent: 'center' }]}>
+        <MaterialIcons name="info-outline" size={48} color={colors.gray400} />
+        <Text style={[styles.emptyText, { color: colors.gray600, marginTop: 16, textAlign: 'center' }]}>
+          請先上傳並處理檔案
+        </Text>
+        <Text style={[styles.emptyDescription, { color: colors.gray500, marginTop: 8, textAlign: 'center' }]}>
+          完成檔案上傳後，即可進行欄位映射設定
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* 測試按鈕 - 調試用 */}
-      {Platform.OS === 'web' && (
-        <TouchableOpacity 
-          style={{
-            backgroundColor: '#FF6B6B',
-            padding: 12,
-            marginBottom: 16,
-            borderRadius: 8,
-            alignItems: 'center'
-          }}
-          onPress={() => {
-            console.log('🚨 測試按鈕被點擊！');
-            alert('測試按鈕工作正常！');
-          }}
-        >
-          <Text style={{ color: 'white', fontWeight: 'bold' }}>測試按鈕 - 點我測試</Text>
-        </TouchableOpacity>
-      )}
       {/* 欄位映射區塊 */}
       <TouchableOpacity
         style={[styles.sectionHeader, { borderBottomColor: colors.gray200 }]}
