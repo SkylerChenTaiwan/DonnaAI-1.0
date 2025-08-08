@@ -32,11 +32,11 @@ imageExts.forEach(ext => {
 // 指定模組解析欄位順序，優先使用 react-native，其次是 browser，最後是 main
 config.resolver.resolverMainFields = ['react-native', 'browser', 'main'];
 
-// 自定義資源轉換器，處理字體檔案
-config.transformer.assetPlugins = [
-  ...(config.transformer.assetPlugins || []),
-  require.resolve('./fontAssetPlugin.js')
-];
+// 暫時移除自定義資源轉換器，讓 Metro 使用預設處理
+// config.transformer.assetPlugins = [
+//   ...(config.transformer.assetPlugins || []),
+//   require.resolve('./fontAssetPlugin.js')
+// ];
 
 // 簡化配置以確保正常啟動
 // 快取配置暫時移除，避免配置問題
