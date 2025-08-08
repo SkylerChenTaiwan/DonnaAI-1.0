@@ -135,54 +135,9 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
   }, [importProgress.isImporting, resetStates, onClose]);
 
   /**
-   * 解析 CSV 檔案 - 移到 handleSelectFile 之前以避免初始化錯誤
+   * 解析 CSV 檔案
    */
   const parseCSVFile = useCallback(async (fileUri: string): Promise<UserCSVParseResult> => {
-    try {
-      setIsProcessing(true);
-      setError(null);
-      
-      const result = await pickDocument({
-        type: ['text/csv', 'text/comma-separated-values'],
-        multiple: false
-      });
-
-      if (result.canceled || !result.assets?.[0]) {
-        setIsProcessing(false);
-        return;
-      }
-
-      const file = result.assets[0];
-      setSelectedFile(file);
-      
-      // 解析 CSV 檔案
-      const parseResult = await parseCSVFile(file.uri);
-      
-      if (parseResult.data.length === 0) {
-        throw new Error('CSV 檔案沒有有效資料');
-      }
-      
-      setUsers(parseResult.data);
-      
-      // 標記上傳階段完成，進入預覽階段
-      setCompletedStages(['upload']);
-      setCurrentStage('preview');
-      
-      toast.success(`成功解析 ${parseResult.data.length} 筆用戶資料`);
-    } catch (error) {
-      console.error('選擇檔案失敗:', error);
-      const errorMessage = error instanceof Error ? error.message : '選擇檔案失敗';
-      setError(errorMessage);
-      toast.error(errorMessage);
-    } finally {
-      setIsProcessing(false);
-    }
-  }, [parseCSVFile]);
-
-  /**
-   * 選擇 CSV 檔案
-   */
-  const handleSelectFile = useCallback(async () => {
     try {
       // 讀取檔案內容
       let csvText: string;
@@ -282,7 +237,52 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
     } catch (error) {
       throw new Error(`解析 CSV 檔案失敗: ${error instanceof Error ? error.message : '未知錯誤'}`);
     }
-  }, [validator, userImportService]);
+  }, [validator]);
+
+  /**
+   * 選擇 CSV 檔案
+   */
+  const handleSelectFile = useCallback(async () => {
+    try {
+      setIsProcessing(true);
+      setError(null);
+      
+      const result = await pickDocument({
+        type: ['text/csv', 'text/comma-separated-values'],
+        multiple: false
+      });
+
+      if (result.canceled || !result.assets?.[0]) {
+        setIsProcessing(false);
+        return;
+      }
+
+      const file = result.assets[0];
+      setSelectedFile(file);
+      
+      // 解析 CSV 檔案
+      const parseResult = await parseCSVFile(file.uri);
+      
+      if (parseResult.data.length === 0) {
+        throw new Error('CSV 檔案沒有有效資料');
+      }
+      
+      setUsers(parseResult.data);
+      
+      // 標記上傳階段完成，進入預覽階段
+      setCompletedStages(['upload']);
+      setCurrentStage('preview');
+      
+      toast.success(`成功解析 ${parseResult.data.length} 筆用戶資料`);
+    } catch (error) {
+      console.error('選擇檔案失敗:', error);
+      const errorMessage = error instanceof Error ? error.message : '選擇檔案失敗';
+      setError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setIsProcessing(false);
+    }
+  }, [parseCSVFile, pickDocument]);
 
   /**
    * 處理用戶編輯
