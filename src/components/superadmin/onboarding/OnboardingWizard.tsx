@@ -40,7 +40,7 @@ import { getFirebaseAuth } from '@/services/firebase/config';
 
 // 匯入步驟元件
 import BasicInfoStep from './steps/BasicInfoStep';
-import BillingPlanStep from './steps/BillingPlanStep';
+import SimpleBillingStep from './steps/SimpleBillingStep';
 import UserImportStep from './steps/UserImportStep';
 import WelcomeSetupStep from './steps/WelcomeSetupStep';
 
@@ -56,9 +56,9 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   },
   {
     id: 'billing-plan',
-    title: '選擇計費方案',
-    description: '設定訂閱方案和付費資訊',
-    component: BillingPlanStep,
+    title: '設定組織人數',
+    description: '設定組織人數與計費',
+    component: SimpleBillingStep,
     validation: validateBillingPlan,
     canSkip: false,
   },
