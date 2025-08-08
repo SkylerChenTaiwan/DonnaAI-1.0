@@ -4,8 +4,29 @@
 
 在開發 DonnaAI Web 版本時，我們遇到了嚴重的樣式衝突問題：
 - 輸入框沒有內邊距（文字貼邊）
-- 圖標顯示為方框
+- 圖標顯示為方框（□）
 - 樣式修改後部署不生效
+
+### 圖標載入問題（已解決）
+**問題**：所有圖標顯示為方框（□）
+**原因**：React Native Web 不會自動處理 @expo/vector-icons 的字體載入
+**解決方案**：手動創建 @font-face 定義
+
+```css
+/* src/styles/iconFonts.css */
+@font-face {
+  font-family: 'Ionicons';
+  src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.[hash].ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+```
+
+在 App.tsx 導入：
+```typescript
+import './src/styles/iconFonts.css';
+```
 
 ## 🔍 問題根源分析
 
