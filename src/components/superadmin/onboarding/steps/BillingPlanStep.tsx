@@ -36,7 +36,7 @@ const BillingPlanStep: React.FC<StepProps> = ({
     billingCycle: 'monthly',
     seats: 10,
     addons: [],
-    paymentMethod: undefined,
+    paymentMethod: 'card', // 預設為信用卡
     billingEmail: '',
     notes: '',
     ...data,

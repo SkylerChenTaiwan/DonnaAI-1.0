@@ -151,8 +151,11 @@ export async function saveStepData(
     const db = getFirebaseDb();
     const sessionRef = doc(db, COLLECTION_NAME, sessionId);
     
+    // 清理 undefined 值
+    const cleanData = cleanUndefinedFields(data);
+    
     const updates: any = {
-      [`stepData.${step}`]: data,
+      [`stepData.${step}`]: cleanData,
       lastUpdated: serverTimestamp(),
     };
     
@@ -161,6 +164,32 @@ export async function saveStepData(
     console.error(`儲存步驟資料失敗 (${step}):`, error);
     throw error;
   }
+}
+
+// 輔助函數：清理 undefined 欄位
+function cleanUndefinedFields(obj: any): any {
+  if (obj === null || obj === undefined) {
+    return null;
+  }
+  
+  if (Array.isArray(obj)) {
+    return obj.map(item => cleanUndefinedFields(item));
+  }
+  
+  if (typeof obj === 'object') {
+    const cleaned: any = {};
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        const value = obj[key];
+        if (value !== undefined) {
+          cleaned[key] = cleanUndefinedFields(value);
+        }
+      }
+    }
+    return cleaned;
+  }
+  
+  return obj;
 }
 
 /**
