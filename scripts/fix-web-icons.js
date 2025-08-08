@@ -1,6 +1,9 @@
 /**
  * 修復 Web 版圖標載入問題
  * 在建構後插入正確的字體載入
+ * 
+ * 根據 docs/troubleshooting/expo-web-icons-solution.md 的解決方案
+ * 使用 CDN 載入未損壞的字體檔案
  */
 
 const fs = require('fs');
@@ -16,64 +19,102 @@ if (fs.existsSync(indexPath)) {
   html = html.replace(/<link[^>]*@expo\/vector-icons[^>]*>/g, '');
   
   // 檢查是否已經有圖標字體載入
-  if (!html.includes('ionicons') && !html.includes('Ionicons')) {
+  if (!html.includes('react-native-vector-icons')) {
     // 在 </head> 前插入 CDN 連結和修復方案
     const iconLinks = `
-    <!-- Web 圖標字體載入 -->
+    <!-- 修復 @expo/vector-icons 在 Web 平台的問題 -->
+    <!-- 使用 CDN 載入未損壞的字體檔案 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com">
     
-    <!-- Material Icons (Google Fonts) -->
+    <!-- Material Icons -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     
-    <!-- Ionicons 使用官方 CDN -->
-    <link rel="stylesheet" href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css">
-    
-    <!-- 備用字體定義 -->
+    <!-- 使用 unpkg CDN 載入未損壞的字體 -->
     <style>
-      /* Ionicons 字體定義 - 使用多個 CDN 作為備用 */
       @font-face {
         font-family: 'Ionicons';
-        src: url('https://unpkg.com/ionicons@4.5.10-0/dist/fonts/ionicons.woff2?v=4.5.10-0') format('woff2'),
-             url('https://unpkg.com/ionicons@4.5.10-0/dist/fonts/ionicons.woff?v=4.5.10-0') format('woff'),
-             url('https://unpkg.com/ionicons@4.5.10-0/dist/fonts/ionicons.ttf?v=4.5.10-0') format('truetype');
+        src: url('https://unpkg.com/react-native-vector-icons@10.0.0/Fonts/Ionicons.ttf') format('truetype');
         font-weight: normal;
         font-style: normal;
         font-display: swap;
       }
       
-      /* Material Icons 字體定義 */
       @font-face {
         font-family: 'MaterialIcons';
-        src: local('Material Icons'),
-             local('MaterialIcons-Regular'),
-             url('https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2') format('woff2');
+        src: url('https://unpkg.com/react-native-vector-icons@10.0.0/Fonts/MaterialIcons.ttf') format('truetype');
         font-weight: normal;
         font-style: normal;
         font-display: swap;
       }
       
-      /* 通用圖標樣式 */
-      .icon {
-        font-family: 'Ionicons', 'MaterialIcons', 'Material Icons', sans-serif !important;
+      @font-face {
+        font-family: 'MaterialCommunityIcons';
+        src: url('https://unpkg.com/react-native-vector-icons@10.0.0/Fonts/MaterialCommunityIcons.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+      }
+      
+      @font-face {
+        font-family: 'FontAwesome';
+        src: url('https://unpkg.com/react-native-vector-icons@10.0.0/Fonts/FontAwesome.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+      }
+      
+      @font-face {
+        font-family: 'Feather';
+        src: url('https://unpkg.com/react-native-vector-icons@10.0.0/Fonts/Feather.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+      }
+      
+      @font-face {
+        font-family: 'AntDesign';
+        src: url('https://unpkg.com/react-native-vector-icons@10.0.0/Fonts/AntDesign.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+      }
+      
+      @font-face {
+        font-family: 'Entypo';
+        src: url('https://unpkg.com/react-native-vector-icons@10.0.0/Fonts/Entypo.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+      }
+      
+      @font-face {
+        font-family: 'SimpleLineIcons';
+        src: url('https://unpkg.com/react-native-vector-icons@10.0.0/Fonts/SimpleLineIcons.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+      }
+      
+      /* 確保圖標元素使用正確的字體 */
+      [data-testid*="icon"] {
+        font-family: 'Ionicons', 'MaterialIcons', 'FontAwesome', sans-serif !important;
+      }
+      
+      /* 修正 React Native Web 生成的字體類 */
+      [style*="font-family"] {
         font-synthesis: none;
         text-rendering: optimizeLegibility;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-      }
-      
-      /* 隱藏 Expo 自動載入的錯誤字體 */
-      @font-face {
-        font-family: 'ExpoIcons';
-        src: url('data:font/woff2;base64,') format('woff2');
-        font-display: optional;
       }
     </style>
     
     <!-- 錯誤處理腳本 -->
     <script>
       (function() {
-        // 移除 Expo 自動生成的字體載入
+        // 移除 Expo 自動生成的錯誤字體載入
         document.addEventListener('DOMContentLoaded', function() {
           var links = document.querySelectorAll('link[href*="@expo/vector-icons"], link[href*="fonts/Ionicons"]');
           links.forEach(function(link) {
@@ -83,20 +124,14 @@ if (fs.existsSync(indexPath)) {
         
         // 字體載入監控
         if ('fonts' in document) {
-          var timeout = setTimeout(function() {
-            console.log('字體載入超時，使用系統字體');
-          }, 5000);
-          
           document.fonts.ready.then(function() {
-            clearTimeout(timeout);
-            console.log('字體載入完成');
+            console.log('✅ 圖標字體載入完成');
           }).catch(function(error) {
-            clearTimeout(timeout);
-            console.warn('字體載入失敗:', error);
+            console.warn('⚠️ 字體載入失敗:', error);
           });
         }
         
-        // 全域錯誤處理
+        // 全域錯誤處理 - 忽略字體相關錯誤
         window.addEventListener('error', function(event) {
           var msg = event.message || '';
           if (msg.includes('Failed to decode') || 
@@ -124,7 +159,7 @@ if (fs.existsSync(indexPath)) {
     html = html.replace('</head>', `${iconLinks}\n</head>`);
     
     fs.writeFileSync(indexPath, html);
-    console.log('✅ 已添加圖標字體載入到 index.html');
+    console.log('✅ 已添加圖標字體載入到 index.html (使用 react-native-vector-icons CDN)');
   } else {
     console.log('⚠️ 字體載入已存在，跳過');
   }
