@@ -8,7 +8,10 @@
 - [Claude Code Hooks 通知設定問題](./claude-code-hooks-notification.md) - 解決 hooks 無法觸發通知的問題
 
 ### React Native / Expo 相關
-- 待新增
+- [Expo Web 圖標載入問題（OTS parsing error）](./expo-web-icons-solution.md) - 解決 @expo/vector-icons 在 Web 平台無法顯示的問題
+- [Metro Bundler 與 Firebase 相容性問題](./metro-bundler-firebase-issue.md) - 解決 Metro bundler 和 Firebase SDK 的衝突
+- [React 19 升級完成總結](./react-19-upgrade-complete.md) - React 19 升級過程和解決方案
+- [React 19 升級摘要](./react-19-upgrade-summary.md) - React 19 升級的關鍵變更
 
 ### Firebase 相關
 - 待新增
@@ -32,3 +35,7 @@
 - `hooks` - Claude Code hooks 問題
 - `firebase` - Firebase 整合問題
 - `navigation` - React Navigation 問題
+- `expo` - Expo SDK 相關問題
+- `web` - Web 平台特定問題
+- `icons` - 圖標顯示問題
+- `metro` - Metro bundler 設定問題
