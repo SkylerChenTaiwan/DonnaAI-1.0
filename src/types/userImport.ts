@@ -1,12 +1,15 @@
 /**
  * 用戶匯入系統類型定義
  * 支援批量用戶匯入、預覽編輯、驗證和處理
+ * 整合智能欄位映射功能
  */
 
+import { UploadedFile, MergedTable, MergeConfig } from './import';
+
 /**
- * 用戶匯入階段
+ * 用戶匯入階段 - 更新為三階段流程
  */
-export type UserImportStage = 'upload' | 'preview' | 'configure' | 'importing' | 'complete';
+export type UserImportStage = 'upload' | 'mapping' | 'preview';
 
 /**
  * 匯入錯誤
@@ -132,4 +135,63 @@ export interface UserImportStats {
   duplicates: number;
   selected: number;
   errors: number;
+}
+
+/**
+ * 用戶欄位映射
+ */
+export interface UserFieldMapping {
+  sourceField: string;      // 來源檔案的欄位名
+  targetField: string;      // 目標用戶屬性
+  confidence: number;       // AI 建議的信心度 (0-1)
+  isRequired: boolean;      // 是否必填
+  dataType: 'email' | 'text' | 'phone' | 'select' | 'date';
+  transform?: (value: any) => any;  // 資料轉換函數
+  method?: 'pattern' | 'ai' | 'exact' | 'fuzzy' | 'manual'; // 映射方法
+}
+
+/**
+ * 用戶匯入配置（擴展版）
+ */
+export interface UserImportConfigExtended extends UserImportConfig {
+  fieldMappings: UserFieldMapping[];
+  mergeStrategy?: 'left' | 'inner' | 'outer';
+  keyField?: string;          // 用於合併的關鍵欄位
+  aiAssisted: boolean;        // 是否使用 AI 輔助
+  mode: 'simple' | 'advanced'; // 匯入模式
+}
+
+/**
+ * 用戶匯入精靈狀態
+ */
+export interface UserImportWizardState {
+  stage: UserImportStage;
+  mode: 'simple' | 'advanced';
+  files: UploadedFile[];
+  mergedTable: MergedTable | null;
+  mergeConfig: MergeConfig | null;
+  mappings: UserFieldMapping[];
+  importData: ImportUserData[];
+  validationResults: ValidationResult[];
+  importProgress: UserImportProgress;
+  config: UserImportConfigExtended;
+}
+
+/**
+ * 驗證結果
+ */
+export interface ValidationResult {
+  field: string;
+  isValid: boolean;
+  errors: string[];
+  warnings: string[];
+}
+
+/**
+ * 解析後的檔案（用於用戶匯入）
+ */
+export interface ParsedUserFile extends UploadedFile {
+  hasEmailField: boolean;
+  hasNameField: boolean;
+  suggestedMappings?: UserFieldMapping[];
 }
