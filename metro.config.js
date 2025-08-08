@@ -33,17 +33,6 @@ imageExts.forEach(ext => {
 // 指定模組解析欄位順序，優先使用 react-native，其次是 browser，最後是 main
 config.resolver.resolverMainFields = ['react-native', 'browser', 'main'];
 
-// 設定資源註冊格式，避免字體檔案被處理
-config.transformer.assetRegistryFormat = 'png';
-
-// 關閉字體檔案的程式碼內嵌，強制使用檔案引用
-config.transformer.getTransformOptions = async () => ({
-  transform: {
-    experimentalImportSupport: false,
-    inlineRequires: false,
-  },
-});
-
 // 簡化配置以確保正常啟動
 // 快取配置暫時移除，避免配置問題
 
