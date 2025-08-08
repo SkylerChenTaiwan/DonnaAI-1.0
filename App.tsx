@@ -18,6 +18,7 @@ import { errorLogger } from '@/services/error/ErrorLogger';
 import { environmentManager } from '@/config/environment';
 import { initializeMonitoring } from '@/services/firebase/monitoring';
 import { NetworkStatusBar } from '@/components/NetworkStatusBar';
+import { useIconFonts } from '@/hooks/useIconFonts';
 
 
 // 載入強制登出工具（用於緊急情況）
@@ -85,6 +86,8 @@ if (__DEV__) {
 }
 
 export default function App() {
+  const fontsLoaded = useIconFonts();
+
   useEffect(() => {
     // 初始化應用程式
     const initializeApp = async () => {
@@ -95,11 +98,14 @@ export default function App() {
         // 初始化監控服務（Crashlytics 和 Performance）
         await initializeMonitoring();
         
-        // 隱藏啟動畫面
-        await SplashScreen.hideAsync();
-        
-        if (__DEV__) {
-          console.log('🚀 DonnaAI 已啟動 - 環境:', environmentManager.getConfig().name);
+        // 等待字體載入完成（Web 平台）
+        if (fontsLoaded) {
+          // 隱藏啟動畫面
+          await SplashScreen.hideAsync();
+          
+          if (__DEV__) {
+            console.log('🚀 DonnaAI 已啟動 - 環境:', environmentManager.getConfig().name);
+          }
         }
       } catch (error) {
         console.error('應用程式初始化失敗:', error);
@@ -108,8 +114,15 @@ export default function App() {
       }
     };
     
-    initializeApp();
-  }, []);
+    if (fontsLoaded) {
+      initializeApp();
+    }
+  }, [fontsLoaded]);
+
+  // 在字體載入完成前不渲染應用程式
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <ErrorBoundary
