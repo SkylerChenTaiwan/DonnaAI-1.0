@@ -28,10 +28,10 @@ interface UserFieldMapperProps {
   onMappingUpdate: (mappings: UserFieldMapping[]) => void;
 }
 
-// 用戶系統的目標欄位
+// 用戶系統的目標欄位 - 所有欄位都是選填的，由使用者自行決定映射
 const TARGET_FIELDS = [
-  { key: 'email', label: '電子郵件', required: true, type: 'email' as const },
-  { key: 'name', label: '姓名', required: true, type: 'text' as const },
+  { key: 'email', label: '電子郵件', required: false, type: 'email' as const },
+  { key: 'name', label: '姓名', required: false, type: 'text' as const },
   { key: 'role', label: '角色', required: false, type: 'select' as const },
   { key: 'department', label: '部門', required: false, type: 'text' as const },
   { key: 'position', label: '職位', required: false, type: 'text' as const },

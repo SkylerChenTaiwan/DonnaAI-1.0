@@ -74,13 +74,12 @@ export class UserDataValidator {
   validateUser(userData: Partial<ImportUserData>): ValidationResult {
     const errors: string[] = [];
     
-    // 必填欄位檢查
-    if (!userData.email || userData.email.trim() === '') {
-      errors.push('電子郵件為必填');
-    }
+    // 欄位檢查 - 至少需要 email 或 name 其中一個
+    const hasEmail = userData.email && userData.email.trim() !== '';
+    const hasName = userData.name && userData.name.trim() !== '';
     
-    if (!userData.name || userData.name.trim() === '') {
-      errors.push('姓名為必填');
+    if (!hasEmail && !hasName) {
+      errors.push('至少需要提供電子郵件或姓名其中一項');
     }
     
     // 格式驗證

@@ -181,8 +181,10 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
       // 取得合併後的欄位
       const headers = wizardState.mergedTable?.headers || wizardState.files[0].headers;
       
-      // 使用映射引擎生成建議
-      const suggestions = await mappingEngine.suggestMappings(headers);
+      // 使用映射引擎生成建議，傳入樣本資料以提高準確性
+      const sampleData = wizardState.mergedTable?.data?.slice(0, 5) || 
+                        wizardState.files[0]?.data?.slice(0, 5) || [];
+      const suggestions = await mappingEngine.suggestMappings(headers, sampleData);
       
       setWizardState(prev => ({
         ...prev,

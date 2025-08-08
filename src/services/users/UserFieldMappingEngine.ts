@@ -68,10 +68,10 @@ export class UserFieldMappingEngine extends FieldMappingEngine {
     const mappings: UserFieldMapping[] = [];
     const usedSources = new Set<string>();
 
-    // 定義目標欄位的優先順序
+    // 定義目標欄位的優先順序 - 所有欄位都是選填的
     const targetFields = [
-      { field: 'email', required: true },
-      { field: 'name', required: true },
+      { field: 'email', required: false },
+      { field: 'name', required: false },
       { field: 'role', required: false },
       { field: 'department', required: false },
       { field: 'position', required: false },
