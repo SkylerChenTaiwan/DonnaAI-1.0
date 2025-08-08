@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>清除快取 - DonnaAI</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            margin-bottom: 30px;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .status {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        .success {
+            color: #4caf50;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 正在清除快取...</h1>
+        <p>系統正在為您清除舊版本</p>
+        <button onclick="clearAndReload()">強制清除並重新載入</button>
+        <button onclick="openIncognito()">使用無痕模式開啟</button>
+        
+        <div class="status" id="status"></div>
+        
+        <script>
+            // 自動清除快取
+            async function clearCaches() {
+                const status = document.getElementById('status');
+                
+                // 清除 Service Worker
+                if ('serviceWorker' in navigator) {
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+                    for(let registration of registrations) {
+                        await registration.unregister();
+                        status.innerHTML += '<br>✅ 已清除 Service Worker';
+                    }
+                }
+                
+                // 清除 Cache Storage
+                if ('caches' in window) {
+                    const names = await caches.keys();
+                    for(let name of names) {
+                        await caches.delete(name);
+                        status.innerHTML += '<br>✅ 已清除快取: ' + name;
+                    }
+                }
+                
+                // 清除 localStorage 和 sessionStorage
+                localStorage.clear();
+                sessionStorage.clear();
+                status.innerHTML += '<br>✅ 已清除本地儲存';
+                
+                // 添加時間戳防止快取
+                const timestamp = Date.now();
+                const newUrl = 'https://donnaai-5e601.web.app/?v=' + timestamp;
+                
+                setTimeout(() => {
+                    status.innerHTML += '<div class="success">✨ 快取已清除！正在重新導向...</div>';
+                    window.location.href = newUrl;
+                }, 1500);
+            }
+            
+            function clearAndReload() {
+                clearCaches();
+            }
+            
+            function openIncognito() {
+                alert('請手動開啟無痕/隱私瀏覽模式：\n\nChrome/Edge: Ctrl+Shift+N (Windows) 或 Cmd+Shift+N (Mac)\nFirefox: Ctrl+Shift+P (Windows) 或 Cmd+Shift+P (Mac)\nSafari: Cmd+Shift+N\n\n然後訪問：https://donnaai-5e601.web.app');
+            }
+            
+            // 頁面載入時自動執行
+            window.onload = () => {
+                clearCaches();
+            };
+        </script>
+    </div>
+</body>
+</html>

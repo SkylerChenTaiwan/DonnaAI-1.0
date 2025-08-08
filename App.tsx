@@ -3,6 +3,9 @@
  * 主要應用程式入口點
  */
 
+// 最先載入全域錯誤處理器
+import './src/utils/globalErrorHandler';
+
 // 導入 Metro runtime 以支援 Web 版的 HMR
 import '@expo/metro-runtime';
 
