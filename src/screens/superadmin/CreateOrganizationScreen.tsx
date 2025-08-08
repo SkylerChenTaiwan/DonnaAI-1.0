@@ -24,10 +24,15 @@ import { createOrganization, CreateOrganizationData } from '@/services/firebase/
 import { BILLING_CONFIG } from '@/config/billing';
 import { DesignSystem } from '@/theme/designSystem';
 import { toast } from '@/utils/toast';
+import UserImportWizard from '@/components/users/UserImportWizard';
+import { Organization } from '@/types/entities';
 
 export const CreateOrganizationScreen: React.FC = () => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
+  const [currentStep, setCurrentStep] = useState<'create' | 'import'>('create');
+  const [createdOrganization, setCreatedOrganization] = useState<Organization | null>(null);
+  const [showImportWizard, setShowImportWizard] = useState(false);
   
   // 組織資料
   const [orgName, setOrgName] = useState('');
@@ -110,11 +115,31 @@ export const CreateOrganizationScreen: React.FC = () => {
       };
       
       const organization = await createOrganization(organizationData);
+      setCreatedOrganization(organization as Organization);
 
-      toast.success('組織建立成功！管理員帳號資訊將發送至指定信箱。');
-      
-      // 導航回組織列表
-      navigation.goBack();
+      // 詢問是否要批量匯入用戶
+      Alert.alert(
+        '組織建立成功',
+        '是否要立即批量匯入用戶？',
+        [
+          {
+            text: '稍後再說',
+            style: 'cancel',
+            onPress: () => {
+              toast.success('組織建立成功！管理員帳號資訊將發送至指定信箱。');
+              navigation.goBack();
+            },
+          },
+          {
+            text: '批量匯入用戶',
+            onPress: () => {
+              setCurrentStep('import');
+              setShowImportWizard(true);
+            },
+          },
+        ],
+        { cancelable: false }
+      );
     } catch (error: any) {
       console.error('建立組織失敗:', error);
       toast.error('建立組織失敗：' + (error.message || '未知錯誤'));
@@ -123,11 +148,36 @@ export const CreateOrganizationScreen: React.FC = () => {
     }
   };
 
+  const handleImportComplete = (result: any) => {
+    if (result?.imported > 0) {
+      toast.success(`成功匯入 ${result.imported} 個用戶`);
+    }
+    navigation.goBack();
+  };
+
+  const handleImportClose = () => {
+    setShowImportWizard(false);
+    navigation.goBack();
+  };
+
   if (isLoading) {
     return (
       <Layout>
         <LoadingSpinner message="正在建立組織..." />
       </Layout>
+    );
+  }
+
+  // 如果正在匯入用戶階段，顯示匯入精靈
+  if (currentStep === 'import' && createdOrganization) {
+    return (
+      <UserImportWizard
+        visible={showImportWizard}
+        organization={createdOrganization}
+        onClose={handleImportClose}
+        onImportComplete={handleImportComplete}
+        useIntelligentMapping={true}
+      />
     );
   }
 

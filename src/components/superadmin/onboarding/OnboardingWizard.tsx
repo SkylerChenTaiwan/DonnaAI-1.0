@@ -41,7 +41,7 @@ import { getFirebaseAuth } from '@/services/firebase/config';
 // 匯入步驟元件
 import BasicInfoStep from './steps/BasicInfoStep';
 import SimpleBillingStep from './steps/SimpleBillingStep';
-import UserImportStep from './steps/UserImportStep';
+import UserImportStepV2 from './steps/UserImportStepV2';
 import WelcomeSetupStep from './steps/WelcomeSetupStep';
 
 // 定義精靈步驟
@@ -66,7 +66,7 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
     id: 'user-import',
     title: '匯入用戶',
     description: '批量建立組織用戶',
-    component: UserImportStep,
+    component: UserImportStepV2,
     validation: validateUserImport,
     canSkip: true,
   },
