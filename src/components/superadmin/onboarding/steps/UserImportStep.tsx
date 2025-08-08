@@ -801,7 +801,7 @@ const styles = StyleSheet.create({
   },
   uploadHint: {
     fontSize: 12,
-    color: DesignSystem.colors.gray[50]0,
+    color: DesignSystem.colors.gray[500],
     marginTop: 4,
   },
   csvExample: {
@@ -911,7 +911,7 @@ const styles = StyleSheet.create({
   },
   inputHint: {
     fontSize: 12,
-    color: DesignSystem.colors.gray[50]0,
+    color: DesignSystem.colors.gray[500],
     marginTop: 4,
   },
   roleSelector: {
@@ -1014,7 +1014,7 @@ const styles = StyleSheet.create({
   },
   userDepartment: {
     fontSize: 12,
-    color: DesignSystem.colors.gray[50]0,
+    color: DesignSystem.colors.gray[500],
     marginTop: 2,
   },
   userRole: {
@@ -1048,7 +1048,7 @@ const styles = StyleSheet.create({
   },
   emptyHint: {
     fontSize: 12,
-    color: DesignSystem.colors.gray[50]0,
+    color: DesignSystem.colors.gray[500],
     marginTop: 4,
   },
   authSection: {
