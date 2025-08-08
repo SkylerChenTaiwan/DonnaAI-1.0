@@ -12,6 +12,20 @@
 }
 ```
 
+### Web 平台樣式系統 ⚠️ 重要
+```typescript
+{
+  "style_system": "React Native Web + 內聯樣式",
+  "global_css": "NotionDatabaseV4.css (需限制作用域)",
+  "best_practice": "Web 平台使用原生 HTML 元素 + 內聯樣式",
+  "common_issues": {
+    "css_conflicts": "全域 CSS 會覆蓋 React Native Web 樣式",
+    "solution": "使用內聯樣式或原生 HTML 元素",
+    "docs": "參考 /docs/WEB-STYLE-SYSTEM.md"
+  }
+}
+```
+
 ### 狀態管理與資料處理
 ```typescript
 // 推薦的技術組合（Firebase 優化版）

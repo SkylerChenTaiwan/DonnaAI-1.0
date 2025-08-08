@@ -98,6 +98,31 @@
 - **保持一致的導航體驗** - 不要在不同頁面使用不同的 header 樣式
 - **避免重複實作導航元件** - 使用統一的 Layout 元件管理所有頁面的 header、返回按鈕等
 
+### 🌐 Web 平台樣式系統（重要！）
+- **問題背景** - React Native Web 樣式經常被全域 CSS（如 NotionDatabaseV4.css）覆蓋
+- **解決方案** - Web 平台使用原生 HTML 元素 + 內聯樣式
+- **實作範例**：
+  ```typescript
+  if (Platform.OS === 'web') {
+    // 使用原生 HTML + 內聯樣式（優先級最高）
+    return <input style={{ padding: '12px 16px', border: '1px solid #E3E1DC' }} />;
+  }
+  // Native 平台使用 React Native 元件
+  return <TextInput style={styles.input} />;
+  ```
+- **必讀文件**：
+  - `/docs/WEB-STYLE-SYSTEM.md` - 詳細問題分析和解決方案
+  - `/docs/STYLE-DEVELOPMENT-GUIDE.md` - 開發指南和檢查清單
+- **開發前檢查**：
+  1. 是否有全域 CSS 會影響？
+  2. 是否需要為 Web 平台特殊處理？
+  3. 內聯樣式是否完整？
+- **部署前清理快取**：
+  ```bash
+  rm -rf .expo node_modules/.cache
+  npm run web:build
+  ```
+
 ### 🔐 Firebase 安全規則管理
 - **新增集合時必須同步更新 Firestore 規則** - 任何新的集合都需要在 `firestore.rules` 中定義相應的權限
 - **開發時先在 Firebase 模擬器測試** - 使用 `firebase emulators:start` 在本地測試規則，避免部署後才發現權限問題
