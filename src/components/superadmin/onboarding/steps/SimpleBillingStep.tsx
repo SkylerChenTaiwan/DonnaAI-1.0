@@ -93,7 +93,7 @@ const SimpleBillingStep: React.FC<StepProps> = ({
         <View style={styles.numberSelector}>
           <TouchableOpacity
             style={styles.adjustButton}
-            onPress={() => adjustNumber('totalSeats', -5)}
+            onPress={() => adjustNumber('totalSeats', -10)}
           >
             <Ionicons name="remove" size={20} color={colors.gray600} />
           </TouchableOpacity>
@@ -103,6 +103,7 @@ const SimpleBillingStep: React.FC<StepProps> = ({
             value={formData.totalSeats.toString()}
             onChangeText={(text) => {
               const value = parseInt(text) || 0;
+              // 不設定上限，只確保不少於免費人數
               setFormData(prev => ({ 
                 ...prev, 
                 totalSeats: Math.max(value, prev.freeSeats) 
@@ -110,17 +111,18 @@ const SimpleBillingStep: React.FC<StepProps> = ({
             }}
             keyboardType="number-pad"
             textAlign="center"
+            placeholder="人數"
           />
           
           <TouchableOpacity
             style={styles.adjustButton}
-            onPress={() => adjustNumber('totalSeats', 5)}
+            onPress={() => adjustNumber('totalSeats', 10)}
           >
             <Ionicons name="add" size={20} color={colors.gray600} />
           </TouchableOpacity>
         </View>
         
-        <Text style={styles.hint}>可以加入組織的最大人數</Text>
+        <Text style={styles.hint}>可以加入組織的人數（無上限）</Text>
       </View>
 
       {/* 免費人數設定 */}
@@ -133,7 +135,7 @@ const SimpleBillingStep: React.FC<StepProps> = ({
         <View style={styles.numberSelector}>
           <TouchableOpacity
             style={styles.adjustButton}
-            onPress={() => adjustNumber('freeSeats', -1)}
+            onPress={() => adjustNumber('freeSeats', -5)}
           >
             <Ionicons name="remove" size={20} color={colors.gray600} />
           </TouchableOpacity>
@@ -150,11 +152,12 @@ const SimpleBillingStep: React.FC<StepProps> = ({
             }}
             keyboardType="number-pad"
             textAlign="center"
+            placeholder="人數"
           />
           
           <TouchableOpacity
             style={styles.adjustButton}
-            onPress={() => adjustNumber('freeSeats', 1)}
+            onPress={() => adjustNumber('freeSeats', 5)}
           >
             <Ionicons name="add" size={20} color={colors.gray600} />
           </TouchableOpacity>
