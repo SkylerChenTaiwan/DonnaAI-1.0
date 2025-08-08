@@ -129,10 +129,8 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
       case 'upload':
         return wizardState.files.length > 0;
       case 'mapping':
-        // 檢查必填欄位是否都有映射
-        const hasEmail = wizardState.mappings.some(m => m.targetField === 'email' && m.sourceField);
-        const hasName = wizardState.mappings.some(m => m.targetField === 'name' && m.sourceField);
-        return hasEmail && hasName;
+        // 至少需要有一個欄位被映射
+        return wizardState.mappings.some(m => m.sourceField && m.targetField);
       case 'preview':
         return wizardState.importData.length > 0 && wizardState.importData.some(u => u.isValid);
       default:

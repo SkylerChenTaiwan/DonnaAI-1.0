@@ -74,11 +74,19 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
 
       setLoading(true);
       const newFiles: UploadedFile[] = [];
+      const failedFiles: string[] = [];
 
       for (const asset of result.assets) {
-        const file = await processFile(asset);
-        if (file) {
-          newFiles.push(file);
+        try {
+          const file = await processFile(asset);
+          if (file) {
+            newFiles.push(file);
+          } else {
+            failedFiles.push(asset.name || '未知檔案');
+          }
+        } catch (error) {
+          console.error(`處理檔案 ${asset.name} 失敗:`, error);
+          failedFiles.push(asset.name || '未知檔案');
         }
       }
 
@@ -93,9 +101,17 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
         
         showSuccessToast(`成功上傳 ${newFiles.length} 個檔案`);
       }
+
+      if (failedFiles.length > 0) {
+        showErrorToast(`${failedFiles.length} 個檔案處理失敗: ${failedFiles.join(', ')}`);
+      }
     } catch (error) {
       console.error('選擇檔案失敗:', error);
-      showErrorToast('選擇檔案失敗');
+      if (error instanceof Error) {
+        showErrorToast(`選擇檔案失敗: ${error.message}`);
+      } else {
+        showErrorToast('選擇檔案失敗');
+      }
     } finally {
       setLoading(false);
     }
@@ -110,35 +126,64 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
       
       // 讀取檔案內容
       fetch(fileUrl)
-        .then(response => response.text())
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.text();
+        })
         .then(text => {
+          if (!text || text.trim() === '') {
+            throw new Error('檔案內容為空');
+          }
           // 解析 CSV
           Papa.parse(text, {
             header: true,
             skipEmptyLines: true,
             encoding: 'UTF-8',
+            transformHeader: (header) => header?.trim() || '',
+            transform: (value) => value?.trim() || '',
             complete: (result) => {
-              if (result.errors.length > 0) {
+              if (result.errors?.length > 0) {
                 console.warn('CSV 解析警告:', result.errors);
               }
 
-              const headers = result.meta.fields || [];
-              const data = result.data;
-
-              // 檢查是否包含用戶必要欄位
-              const hasEmailLike = headers.some(h => 
-                /email|mail|信箱|郵件|e-mail/i.test(h)
-              );
-              const hasNameLike = headers.some(h => 
-                /name|姓名|名字|用戶|使用者/i.test(h)
-              );
-
-              if (!hasEmailLike && !hasNameLike) {
-                showErrorToast('檔案似乎不包含用戶資料（缺少姓名或電子郵件欄位）');
+              // 確保有正確的資料結構
+              if (!result.data || !Array.isArray(result.data)) {
+                console.error('解析結果無效:', result);
+                showErrorToast('檔案格式錯誤或檔案為空');
+                resolve(null);
+                return;
               }
 
+              const headers = result.meta?.fields || [];
+              if (headers.length === 0) {
+                console.error('無法取得檔案標題:', result);
+                showErrorToast('無法讀取檔案欄位');
+                resolve(null);
+                return;
+              }
+              const data = result.data || [];
+
+              // 檢查是否包含用戶欄位（不再強制要求）
+              const hasEmailLike = headers?.some(h => 
+                /email|mail|信箱|郵件|e-mail/i.test(h)
+              ) || false;
+              const hasNameLike = headers?.some(h => 
+                /name|姓名|名字|用戶|使用者/i.test(h)
+              ) || false;
+
               // 自動檢測關鍵欄位
-              const keyFieldResults = detectKeyFields(headers, data);
+              const tempFile = {
+                id: '',
+                name: file.name || 'imported.csv',
+                headers,
+                data: data || [],
+                keyField: null,
+                uploadedAt: new Date(),
+                rowCount: data?.length || 0
+              };
+              const keyFieldResults = detectKeyFields(tempFile);
               
               const uploadedFile: ParsedUserFile = {
                 id: `file_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -161,14 +206,20 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
             },
             error: (error) => {
               console.error('CSV 解析錯誤:', error);
-              showErrorToast('解析檔案失敗');
+              showErrorToast(`解析檔案失敗: ${error.message || '未知錯誤'}`);
               resolve(null);
             },
           });
         })
         .catch(error => {
           console.error('讀取檔案失敗:', error);
-          showErrorToast('讀取檔案失敗');
+          if (error.message.includes('NetworkError') || error.message.includes('network')) {
+            showErrorToast('網路錯誤，請檢查網路連線');
+          } else if (error.message.includes('檔案內容為空')) {
+            showErrorToast('檔案內容為空，請確認檔案格式');
+          } else {
+            showErrorToast(`讀取檔案失敗: ${error.message}`);
+          }
           resolve(null);
         });
     });
@@ -456,7 +507,7 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
         <Icon name="information-circle-outline" size={16} color={DesignSystem.colors.text.tertiary} />
         <Text style={styles.tipsText}>
           {mode === 'simple' 
-            ? '檔案應包含 email（電子郵件）和 name（姓名）欄位'
+            ? '上傳 CSV 或 Excel 檔案，稍後可選擇欄位對應'
             : '可上傳多個檔案，系統會根據關鍵欄位自動合併'
           }
         </Text>
