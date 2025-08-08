@@ -28,16 +28,26 @@ import {
 import DatabaseSelector from './stages/DatabaseSelector';
 import FileUploadMerger from './stages/FileUploadMerger';
 import FieldMapper from './stages/FieldMapper';
+import { IntelligentFieldMapper } from './IntelligentFieldMapper';
 import { useAuthStore } from '@/stores/authStore';
 import { showSuccessToast, showErrorToast } from '@/utils/toast';
 import { SmartDataImporter } from '@/services/firebase/admin/dataImportService';
 import { getFirebaseDb, getFirebaseAuth } from '@/services/firebase/config';
 import { cleanupDuplicateCustomers } from '@/services/firebase/cleanupService';
+import { FieldMappingEngine } from '@/services/import/FieldMappingEngine';
+import { DataTypeInferrer } from '@/services/import/DataTypeInferrer';
+import { ValidationEngine } from '@/services/import/ValidationEngine';
+import { DataCleaner } from '@/services/import/DataCleaner';
+import { StreamProcessor } from '@/services/import/StreamProcessor';
+import { DataMerger } from '@/services/import/DataMerger';
+import { RelationBuilder } from '@/services/import/RelationBuilder';
 
 interface ImportWizardProps {
   organizationId: string;
   teamId?: string;
   initialTargetDatabase?: DatabaseType; // 新增：允許預設選擇的資料庫類型
+  useIntelligentMapping?: boolean; // 新增：使用智能映射
+  openAIKey?: string; // 新增：OpenAI API 金鑰（用於 AI 輔助映射）
   onComplete?: (result: {
     targetDatabase: DatabaseType;
     importedCount: number;
@@ -50,6 +60,8 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
   organizationId,
   teamId,
   initialTargetDatabase,
+  useIntelligentMapping = false,
+  openAIKey,
   onComplete,
   onCancel
 }) => {
@@ -93,6 +105,47 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
   const updateWizardState = useCallback((updates: Partial<ImportWizardState>) => {
     setWizardState(prev => ({ ...prev, ...updates }));
   }, []);
+
+  // 獲取目標資料庫的欄位定義
+  const getTargetFieldsForDatabase = (database: DatabaseType) => {
+    // 這裡應該從 Firebase 或配置中獲取實際的欄位定義
+    // 暫時返回預設欄位
+    const fieldsByDatabase = {
+      customers: [
+        { name: 'name', label: '客戶姓名', type: 'text' as const, required: true },
+        { name: 'email', label: '電子郵件', type: 'email' as const, required: false },
+        { name: 'phone', label: '電話', type: 'phone' as const, required: false },
+        { name: 'company', label: '公司名稱', type: 'text' as const, required: false },
+        { name: 'address', label: '地址', type: 'address' as const, required: false },
+        { name: 'tags', label: '標籤', type: 'text' as const, required: false },
+        { name: 'notes', label: '備註', type: 'text' as const, required: false },
+      ],
+      users: [
+        { name: 'email', label: '電子郵件', type: 'email' as const, required: true },
+        { name: 'name', label: '姓名', type: 'text' as const, required: true },
+        { name: 'role', label: '角色', type: 'text' as const, required: true },
+        { name: 'department', label: '部門', type: 'text' as const, required: false },
+        { name: 'phone', label: '電話', type: 'phone' as const, required: false },
+      ],
+      records: [
+        { name: 'title', label: '標題', type: 'text' as const, required: true },
+        { name: 'date', label: '日期', type: 'date' as const, required: true },
+        { name: 'customer', label: '客戶', type: 'text' as const, required: false },
+        { name: 'amount', label: '金額', type: 'currency' as const, required: false },
+        { name: 'status', label: '狀態', type: 'text' as const, required: false },
+      ],
+      tasks: [
+        { name: 'title', label: '任務標題', type: 'text' as const, required: true },
+        { name: 'description', label: '描述', type: 'text' as const, required: false },
+        { name: 'assignee', label: '負責人', type: 'text' as const, required: false },
+        { name: 'dueDate', label: '到期日', type: 'date' as const, required: false },
+        { name: 'priority', label: '優先級', type: 'text' as const, required: false },
+        { name: 'status', label: '狀態', type: 'text' as const, required: false },
+      ],
+    };
+
+    return fieldsByDatabase[database] || [];
+  };
 
   // 階段導航
   const canGoBack = wizardState.stage > 1 && !wizardState.importProgress.isImporting;
@@ -458,6 +511,33 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
         );
       
       case 3:
+        // 使用智能映射或傳統映射
+        if (useIntelligentMapping && wizardState.mergedTable) {
+          return (
+            <IntelligentFieldMapper
+              sourceHeaders={wizardState.mergedTable.headers}
+              sampleData={wizardState.mergedTable.data.slice(0, 100)}
+              targetFields={wizardState.targetDatabase ? 
+                getTargetFieldsForDatabase(wizardState.targetDatabase) : []
+              }
+              onMappingChange={(mappings) => {
+                const fieldMappings = mappings.map(m => ({
+                  sourceField: m.sourceField,
+                  targetField: m.targetField,
+                  transform: m.transform
+                }));
+                handleFieldMappingsChanged(fieldMappings);
+              }}
+              onCreateField={(fieldName, fieldType) => {
+                console.log('建立新欄位:', fieldName, fieldType);
+                // 這裡可以加入動態建立欄位的邏輯
+              }}
+              openAIKey={openAIKey}
+            />
+          );
+        }
+        
+        // 傳統映射介面
         return (
           <FieldMapper
             targetDatabase={wizardState.targetDatabase!}
