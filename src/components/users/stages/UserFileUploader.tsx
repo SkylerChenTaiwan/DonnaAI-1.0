@@ -380,52 +380,132 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
                 {mode === 'advanced' && files.length > 1 && (
                   <View style={styles.keyFieldSelector}>
                     <Text style={styles.keyFieldLabel}>合併關鍵欄位：</Text>
-                    <TouchableOpacity
-                      style={[
-                        styles.keyFieldDropdown,
-                        !selectedKeyFields[file.id] && !file.keyField && styles.keyFieldDropdownWarning
-                      ]}
-                      onPress={() => setSelectedFileId(
-                        selectedFileId === file.id ? null : file.id
-                      )}
-                    >
-                      <Text style={[
-                        styles.keyFieldValue,
-                        !selectedKeyFields[file.id] && !file.keyField && styles.keyFieldValueWarning
-                      ]}>
-                        {selectedKeyFields[file.id] || file.keyField || '請選擇關鍵欄位'}
-                      </Text>
-                      <Icon name="chevron-down" size={16} />
-                    </TouchableOpacity>
+                    {Platform.OS === 'web' ? (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          backgroundColor: DesignSystem.colors.background.primary,
+                          paddingLeft: '12px',
+                          paddingRight: '12px',
+                          paddingTop: '8px',
+                          paddingBottom: '8px',
+                          borderRadius: '8px',
+                          border: `1px solid ${!selectedKeyFields[file.id] && !file.keyField ? DesignSystem.colors.warning : DesignSystem.colors.border.light}`,
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => setSelectedFileId(
+                          selectedFileId === file.id ? null : file.id
+                        )}
+                      >
+                        <span style={{
+                          fontSize: '12px',
+                          color: !selectedKeyFields[file.id] && !file.keyField ? DesignSystem.colors.warning : DesignSystem.colors.text.primary,
+                          marginRight: '8px',
+                        }}>
+                          {selectedKeyFields[file.id] || file.keyField || '請選擇關鍵欄位'}
+                        </span>
+                        <Icon name="chevron-down" size={16} />
+                      </div>
+                    ) : (
+                      <TouchableOpacity
+                        style={[
+                          styles.keyFieldDropdown,
+                          !selectedKeyFields[file.id] && !file.keyField && styles.keyFieldDropdownWarning
+                        ]}
+                        onPress={() => setSelectedFileId(
+                          selectedFileId === file.id ? null : file.id
+                        )}
+                      >
+                        <Text style={[
+                          styles.keyFieldValue,
+                          !selectedKeyFields[file.id] && !file.keyField && styles.keyFieldValueWarning
+                        ]}>
+                          {selectedKeyFields[file.id] || file.keyField || '請選擇關鍵欄位'}
+                        </Text>
+                        <Icon name="chevron-down" size={16} />
+                      </TouchableOpacity>
+                    )}
                   </View>
                 )}
                 {/* 顯示欄位選項下拉選單 */}
                 {selectedFileId === file.id && (
                   <View style={styles.keyFieldOptions}>
                     {file.headers.map((header) => (
-                      <TouchableOpacity
-                        key={header}
-                        style={styles.keyFieldOption}
-                        onPress={() => {
-                          setSelectedKeyFields(prev => ({
-                            ...prev,
-                            [file.id]: header
-                          }));
-                          setSelectedFileId(null);
-                        }}
-                      >
-                        <Text style={[
-                          styles.keyFieldOptionText,
-                          selectedKeyFields[file.id] === header && styles.keyFieldOptionTextSelected
-                        ]}>
-                          {header}
-                        </Text>
-                        {keyFieldCandidates[file.id]?.find(c => c.field === header) && (
-                          <Text style={styles.keyFieldConfidence}>
-                            {Math.round((keyFieldCandidates[file.id].find(c => c.field === header)?.uniquenessRatio || 0) * 100)}%
+                      Platform.OS === 'web' ? (
+                        <div
+                          key={header}
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            paddingTop: '12px',
+                            paddingBottom: '12px',
+                            paddingLeft: '16px',
+                            paddingRight: '16px',
+                            borderBottom: `1px solid ${DesignSystem.colors.border.light}`,
+                            cursor: 'pointer',
+                            backgroundColor: 'transparent',
+                          }}
+                          onClick={() => {
+                            setSelectedKeyFields(prev => ({
+                              ...prev,
+                              [file.id]: header
+                            }));
+                            setSelectedFileId(null);
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = DesignSystem.colors.background.surface;
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = 'transparent';
+                          }}
+                        >
+                          <span style={{
+                            fontSize: '14px',
+                            color: selectedKeyFields[file.id] === header ? DesignSystem.colors.primary : DesignSystem.colors.text.primary,
+                            fontWeight: selectedKeyFields[file.id] === header ? '600' : 'normal',
+                            flex: 1,
+                          }}>
+                            {header}
+                          </span>
+                          {keyFieldCandidates[file.id]?.find(c => c.field === header) && (
+                            <span style={{
+                              fontSize: '12px',
+                              color: DesignSystem.colors.text.secondary,
+                              marginLeft: '8px',
+                            }}>
+                              {Math.round((keyFieldCandidates[file.id].find(c => c.field === header)?.uniquenessRatio || 0) * 100)}%
+                            </span>
+                          )}
+                        </div>
+                      ) : (
+                        <TouchableOpacity
+                          key={header}
+                          style={styles.keyFieldOption}
+                          onPress={() => {
+                            setSelectedKeyFields(prev => ({
+                              ...prev,
+                              [file.id]: header
+                            }));
+                            setSelectedFileId(null);
+                          }}
+                        >
+                          <Text style={[
+                            styles.keyFieldOptionText,
+                            selectedKeyFields[file.id] === header && styles.keyFieldOptionTextSelected
+                          ]}>
+                            {header}
                           </Text>
-                        )}
-                      </TouchableOpacity>
+                          {keyFieldCandidates[file.id]?.find(c => c.field === header) && (
+                            <Text style={styles.keyFieldConfidence}>
+                              {Math.round((keyFieldCandidates[file.id].find(c => c.field === header)?.uniquenessRatio || 0) * 100)}%
+                            </Text>
+                          )}
+                        </TouchableOpacity>
+                      )
                     ))}
                   </View>
                 )}
