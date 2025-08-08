@@ -26,6 +26,7 @@ import { SuperAdminDashboard } from '@/screens/superadmin/SuperAdminDashboard';
 import { OrganizationsScreen } from '@/screens/superadmin/OrganizationsScreen';
 import { OrganizationDetailScreen } from '@/screens/superadmin/OrganizationDetailScreen';
 import { CreateOrganizationScreen } from '@/screens/superadmin/CreateOrganizationScreen';
+import { OnboardingWizardScreen } from '@/screens/superadmin/OnboardingWizardScreen';
 import { PlatformDashboard } from '@/screens/superadmin/PlatformDashboard';
 
 // Import Enterprise Admin screens
@@ -145,6 +146,7 @@ export const WebNavigator = () => {
           <Stack.Screen name="OrganizationsScreen" component={OrganizationsScreen} />
           <Stack.Screen name="OrganizationDetailScreen" component={OrganizationDetailScreen} />
           <Stack.Screen name="CreateOrganizationScreen" component={CreateOrganizationScreen} />
+          <Stack.Screen name="OnboardingWizardScreen" component={OnboardingWizardScreen} />
           <Stack.Screen name="PlatformDashboard" component={PlatformDashboard} />
           
           {/* Enterprise Admin 頁面 */}

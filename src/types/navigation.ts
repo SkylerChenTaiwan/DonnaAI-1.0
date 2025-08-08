@@ -41,6 +41,10 @@ export type RootStackParamList = {
   OrganizationsScreen: undefined;
   CreateOrganizationScreen: undefined;
   OrganizationDetailScreen: { organizationId: string };
+  OnboardingWizardScreen: { 
+    mode?: 'create' | 'resume';
+    sessionId?: string;
+  } | undefined;
   PlatformDashboard: undefined;
   
   // Enterprise Admin 頁面

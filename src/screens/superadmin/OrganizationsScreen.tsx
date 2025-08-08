@@ -18,6 +18,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { Platform } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 import { SearchBar } from '@/components/common/SearchBar';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
@@ -240,11 +241,22 @@ export const OrganizationsScreen: React.FC = () => {
   const content = (
     <>
       <View style={styles.searchContainer}>
-        <SearchBar
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          placeholder="搜尋組織名稱或信箱..."
-        />
+        <View style={styles.searchRow}>
+          <View style={{ flex: 1 }}>
+            <SearchBar
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+              placeholder="搜尋組織名稱或信箱..."
+            />
+          </View>
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => navigation.navigate('OnboardingWizardScreen', { mode: 'create' })}
+          >
+            <MaterialIcons name="add" size={24} color={colors.white} />
+            <Text style={styles.addButtonText}>新增組織</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View style={styles.statsContainer}>
@@ -308,13 +320,24 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: DesignSystem.colors.background.primary,
   },
-  addButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: DesignSystem.colors.primary,
-    justifyContent: 'center',
+  searchRow: {
+    flexDirection: 'row',
     alignItems: 'center',
+    gap: DesignSystem.spacing.sm,
+  },
+  addButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: DesignSystem.colors.primary,
+    borderRadius: DesignSystem.borderRadius.md,
+    paddingHorizontal: DesignSystem.spacing.md,
+    paddingVertical: DesignSystem.spacing.sm,
+    gap: DesignSystem.spacing.xs,
+  },
+  addButtonText: {
+    color: DesignSystem.colors.text.inverse,
+    fontSize: 14,
+    fontWeight: '600',
   },
   searchContainer: {
     padding: DesignSystem.spacing.md,
