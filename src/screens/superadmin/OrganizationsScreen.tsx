@@ -240,11 +240,6 @@ export const OrganizationsScreen: React.FC = () => {
 
   const content = (
     <>
-      {/* 測試元素 - 確認程式碼有更新 */}
-      <View style={{ backgroundColor: 'red', padding: 10 }}>
-        <Text style={{ color: 'white', textAlign: 'center' }}>測試：新增組織按鈕應該在下方搜尋框右邊</Text>
-      </View>
-      
       <View style={styles.searchContainer}>
         <View style={styles.searchRow}>
           <View style={styles.searchBarWrapper}>
@@ -256,10 +251,7 @@ export const OrganizationsScreen: React.FC = () => {
           </View>
           <TouchableOpacity
             style={styles.addButton}
-            onPress={() => {
-              console.log('新增組織按鈕被點擊');
-              navigation.navigate('OnboardingWizardScreen', { mode: 'create' });
-            }}
+            onPress={() => navigation.navigate('OnboardingWizardScreen', { mode: 'create' })}
           >
             <MaterialIcons name="add" size={24} color={DesignSystem.colors.text.inverse} />
             <Text style={styles.addButtonText}>新增組織</Text>
@@ -267,23 +259,6 @@ export const OrganizationsScreen: React.FC = () => {
         </View>
       </View>
 
-      <TouchableOpacity
-        style={{
-          backgroundColor: '#007AFF',
-          paddingHorizontal: 20,
-          paddingVertical: 10,
-          borderRadius: 8,
-          margin: 16,
-          alignSelf: 'flex-end',
-        }}
-        onPress={() => {
-          console.log('新增組織按鈕被點擊 - 測試版本');
-          navigation.navigate('OnboardingWizardScreen', { mode: 'create' });
-        }}
-      >
-        <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>+ 新增組織</Text>
-      </TouchableOpacity>
-      
       <View style={styles.statsContainer}>
         <View style={styles.statItem}>
           <Text style={styles.statValue}>{organizations.length}</Text>
