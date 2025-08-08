@@ -29,6 +29,54 @@ export const FormInput: React.FC<FormInputProps> = ({
   style,
   ...props
 }) => {
+  // Web 平台使用原生 HTML input 並套用內聯樣式
+  if (Platform.OS === 'web') {
+    const webInputStyle = {
+      width: '100%',
+      padding: '12px 16px',
+      border: `1px solid ${error ? DesignSystem.colors.status.error : DesignSystem.colors.border.light}`,
+      borderRadius: '8px',
+      fontSize: '14px',
+      lineHeight: '20px',
+      minHeight: '48px',
+      backgroundColor: DesignSystem.colors.background.surface,
+      color: DesignSystem.colors.text.primary,
+      outline: 'none',
+      boxSizing: 'border-box' as const,
+      fontFamily: 'inherit',
+    };
+
+    return (
+      <View style={styles.container}>
+        <View style={styles.labelContainer}>
+          <Text style={styles.label}>
+            {label}
+            {required && <Text style={styles.required}> *</Text>}
+          </Text>
+        </View>
+        
+        <input
+          type="text"
+          style={webInputStyle}
+          placeholder={props.placeholder}
+          value={props.value}
+          onChange={(e: any) => props.onChangeText?.(e.target.value)}
+          maxLength={props.maxLength}
+          disabled={props.editable === false}
+        />
+        
+        {hint && !error && (
+          <Text style={styles.hint}>{hint}</Text>
+        )}
+        
+        {error && (
+          <Text style={styles.error}>{error}</Text>
+        )}
+      </View>
+    );
+  }
+
+  // Native 平台使用 React Native TextInput
   return (
     <View style={styles.container}>
       <View style={styles.labelContainer}>

@@ -54,7 +54,21 @@ export const FormSelect: React.FC<FormSelectProps> = ({
             <select
               value={value}
               onChange={(e) => onChange(e.target.value)}
-              style={styles.webSelect}
+              style={{
+                width: '100%',
+                height: '48px',
+                padding: '12px 40px 12px 16px',
+                fontSize: '14px',
+                color: DesignSystem.colors.text.primary,
+                backgroundColor: 'transparent',
+                border: 'none',
+                outline: 'none',
+                appearance: 'none',
+                WebkitAppearance: 'none',
+                MozAppearance: 'none',
+                cursor: 'pointer',
+                fontFamily: 'inherit',
+              } as any}
             >
               <option value="" disabled>
                 {placeholder}
