@@ -15,7 +15,7 @@ import {
   ActivityIndicator,
   Platform,
 } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { DesignSystem } from '@/theme/designSystem';
 import {
   StepProps,
@@ -211,10 +211,10 @@ const UserImportStep: React.FC<StepProps> = ({
   // 渲染匯入方式選擇
   const renderImportMethodSelector = () => {
     const methods = [
-      { value: 'csv', label: 'CSV 檔案', icon: 'insert-drive-file' },
-      { value: 'json', label: 'JSON 格式', icon: 'code' },
-      { value: 'google', label: 'Google Workspace', icon: 'domain' },
-      { value: 'manual', label: '手動輸入', icon: 'edit' },
+      { value: 'csv', label: 'CSV 檔案', icon: 'document-text-outline' },
+      { value: 'json', label: 'JSON 格式', icon: 'code-slash-outline' },
+      { value: 'google', label: 'Google Workspace', icon: 'logo-google' },
+      { value: 'manual', label: '手動輸入', icon: 'create-outline' },
     ];
     
     return (
@@ -231,7 +231,7 @@ const UserImportStep: React.FC<StepProps> = ({
               importMethod: method.value as any 
             }))}
           >
-            <MaterialIcons
+            <Ionicons
               name={method.icon as any}
               size={32}
               color={formData.importMethod === method.value ? colors.primary : colors.gray600}
@@ -262,7 +262,7 @@ const UserImportStep: React.FC<StepProps> = ({
             }
           }}
         >
-          <MaterialIcons name="cloud-upload" size={48} color={colors.gray400} />
+          <Ionicons name="cloud-upload-outline" size={48} color={colors.gray400} />
           <Text style={styles.uploadText}>點擊或拖放 CSV 檔案</Text>
           <Text style={styles.uploadHint}>支援 .csv 格式，最大 10MB</Text>
         </TouchableOpacity>
@@ -331,7 +331,7 @@ const UserImportStep: React.FC<StepProps> = ({
     return (
       <View style={styles.googleContainer}>
         <View style={styles.googleNotice}>
-          <MaterialIcons name="info" size={20} color={colors.info} />
+          <Ionicons name="info" size={20} color={colors.info} />
           <Text style={styles.googleNoticeText}>
             需要設定 Google OAuth 2.0 憑證才能使用此功能
           </Text>
@@ -344,7 +344,7 @@ const UserImportStep: React.FC<StepProps> = ({
             showErrorToast('Google 整合功能開發中');
           }}
         >
-          <MaterialIcons name="link" size={20} color={colors.white} />
+          <Ionicons name="link" size={20} color={colors.white} />
           <Text style={styles.googleButtonText}>連接 Google Workspace</Text>
         </TouchableOpacity>
         
@@ -464,7 +464,7 @@ const UserImportStep: React.FC<StepProps> = ({
           style={styles.addButton}
           onPress={handleManualAdd}
         >
-          <MaterialIcons name="add" size={20} color={colors.white} />
+          <Ionicons name="add" size={20} color={colors.white} />
           <Text style={styles.addButtonText}>新增用戶</Text>
         </TouchableOpacity>
       </View>
@@ -476,7 +476,7 @@ const UserImportStep: React.FC<StepProps> = ({
     if (formData.users.length === 0) {
       return (
         <View style={styles.emptyList}>
-          <MaterialIcons name="people-outline" size={48} color={colors.gray400} />
+          <Ionicons name="people-outline" size={48} color={colors.gray400} />
           <Text style={styles.emptyText}>尚未新增任何用戶</Text>
           <Text style={styles.emptyHint}>請選擇上方的匯入方式開始新增用戶</Text>
         </View>
@@ -521,7 +521,7 @@ const UserImportStep: React.FC<StepProps> = ({
                 style={styles.removeButton}
                 onPress={() => removeUser(index)}
               >
-                <MaterialIcons name="close" size={20} color={colors.gray600} />
+                <Ionicons name="close" size={20} color={colors.gray600} />
               </TouchableOpacity>
             </View>
           ))}
@@ -535,7 +535,7 @@ const UserImportStep: React.FC<StepProps> = ({
     return (
       <View style={styles.authSection}>
         <View style={styles.sectionHeader}>
-          <MaterialIcons name="security" size={20} color={colors.primary} />
+          <Ionicons name="security" size={20} color={colors.primary} />
           <Text style={styles.sectionTitle}>Google 登入設定</Text>
         </View>
         
@@ -595,7 +595,7 @@ const UserImportStep: React.FC<StepProps> = ({
     return (
       <View style={styles.passwordSection}>
         <View style={styles.sectionHeader}>
-          <MaterialIcons name="lock" size={20} color={colors.primary} />
+          <Ionicons name="lock-closed-outline" size={20} color={colors.primary} />
           <Text style={styles.sectionTitle}>密碼設定</Text>
         </View>
         
@@ -615,7 +615,7 @@ const UserImportStep: React.FC<StepProps> = ({
                 },
               }))}
             >
-              <MaterialIcons
+              <Ionicons
                 name={strategy.icon as any}
                 size={20}
                 color={formData.passwordStrategy.type === strategy.value ? colors.primary : colors.gray600}
@@ -627,7 +627,7 @@ const UserImportStep: React.FC<StepProps> = ({
                 {strategy.label}
               </Text>
               {formData.passwordStrategy.type === strategy.value && (
-                <MaterialIcons name="check-circle" size={16} color={colors.primary} />
+                <Ionicons name="checkmark-circle" size={16} color={colors.primary} />
               )}
             </TouchableOpacity>
           ))}

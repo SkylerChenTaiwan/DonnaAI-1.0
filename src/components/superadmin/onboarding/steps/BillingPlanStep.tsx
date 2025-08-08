@@ -13,7 +13,7 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { DesignSystem } from '@/theme/designSystem';
 import {
   StepProps,
@@ -136,8 +136,8 @@ const BillingPlanStep: React.FC<StepProps> = ({
         <View style={styles.planFeatures}>
           {plan.features.map((feature, index) => (
             <View key={index} style={styles.featureRow}>
-              <MaterialIcons 
-                name="check-circle" 
+              <Ionicons 
+                name="checkmark-circle-outline" 
                 size={16} 
                 color={isSelected ? colors.primary : colors.success}
               />
@@ -153,7 +153,7 @@ const BillingPlanStep: React.FC<StepProps> = ({
         
         {isSelected && (
           <View style={styles.selectedIndicator}>
-            <MaterialIcons name="check-circle" size={24} color={colors.primary} />
+            <Ionicons name="checkmark-circle-outline" size={24} color={colors.primary} />
           </View>
         )}
       </TouchableOpacity>
@@ -221,7 +221,7 @@ const BillingPlanStep: React.FC<StepProps> = ({
               seats: Math.max(1, prev.seats - 10) 
             }))}
           >
-            <MaterialIcons name="remove" size={20} color={colors.gray600} />
+            <Ionicons name="remove" size={20} color={colors.gray600} />
           </TouchableOpacity>
           
           <TextInput
@@ -242,7 +242,7 @@ const BillingPlanStep: React.FC<StepProps> = ({
               seats: prev.seats + 10 
             }))}
           >
-            <MaterialIcons name="add" size={20} color={colors.gray600} />
+            <Ionicons name="add" size={20} color={colors.gray600} />
           </TouchableOpacity>
         </View>
         <Text style={styles.seatsHint}>
@@ -259,9 +259,9 @@ const BillingPlanStep: React.FC<StepProps> = ({
     }
     
     const paymentMethods = [
-      { value: 'credit_card', label: '信用卡', icon: 'credit-card' },
-      { value: 'invoice', label: '發票', icon: 'receipt' },
-      { value: 'bank_transfer', label: '銀行轉帳', icon: 'account-balance' },
+      { value: 'credit_card', label: '信用卡', icon: 'card-outline' },
+      { value: 'invoice', label: '發票', icon: 'receipt-outline' },
+      { value: 'bank_transfer', label: '銀行轉帳', icon: 'cash-outline' },
     ];
     
     return (
@@ -280,7 +280,7 @@ const BillingPlanStep: React.FC<StepProps> = ({
                 paymentMethod: method.value as any 
               }))}
             >
-              <MaterialIcons 
+              <Ionicons 
                 name={method.icon as any} 
                 size={24} 
                 color={formData.paymentMethod === method.value ? colors.primary : colors.gray600}

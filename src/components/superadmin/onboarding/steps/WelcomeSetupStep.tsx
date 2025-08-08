@@ -14,7 +14,7 @@ import {
   Switch,
   Platform,
 } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { DesignSystem } from '@/theme/designSystem';
 import {
   StepProps,
@@ -118,7 +118,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
             style={styles.previewButton}
             onPress={() => setPreviewMode(!previewMode)}
           >
-            <MaterialIcons 
+            <Ionicons 
               name={previewMode ? 'edit' : 'preview'} 
               size={20} 
               color={colors.primary}
@@ -224,7 +224,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
     return (
       <View style={styles.experienceSection}>
         <View style={styles.sectionHeader}>
-          <MaterialIcons name="explore" size={20} color={colors.primary} />
+          <Ionicons name="explore" size={20} color={colors.primary} />
           <Text style={styles.sectionTitle}>首次登入體驗</Text>
         </View>
         
@@ -265,7 +265,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
                 ]}
                 onPress={() => updateField('firstLoginExperience.defaultDashboard', option.value)}
               >
-                <MaterialIcons
+                <Ionicons
                   name={option.icon as any}
                   size={24}
                   color={formData.firstLoginExperience.defaultDashboard === option.value 
@@ -292,7 +292,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
     return (
       <View style={styles.scheduleSection}>
         <View style={styles.sectionHeader}>
-          <MaterialIcons name="schedule" size={20} color={colors.primary} />
+          <Ionicons name="schedule" size={20} color={colors.primary} />
           <Text style={styles.sectionTitle}>發送設定</Text>
         </View>
         
@@ -316,7 +316,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
                 style={styles.datePickerButton}
                 onPress={() => setShowDatePicker(true)}
               >
-                <MaterialIcons name="event" size={20} color={colors.gray600} />
+                <Ionicons name="event" size={20} color={colors.gray600} />
                 <Text style={styles.datePickerText}>
                   {formData.scheduledSend.sendAt?.toLocaleString() || '選擇時間'}
                 </Text>
@@ -359,7 +359,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
         
         {!formData.scheduledSend?.enabled && (
           <View style={styles.infoBox}>
-            <MaterialIcons name="info-outline" size={16} color={colors.info} />
+            <Ionicons name="information-circle-outline" size={16} color={colors.info} />
             <Text style={styles.infoText}>
               歡迎郵件將在完成設置後立即發送
             </Text>
@@ -406,7 +406,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
         <View style={styles.summaryGrid}>
           {settings.map(setting => (
             <View key={setting.label} style={styles.summaryItem}>
-              <MaterialIcons 
+              <Ionicons 
                 name={setting.icon as any} 
                 size={20} 
                 color={setting.color}
@@ -438,7 +438,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
       
       {/* 提示訊息 */}
       <View style={styles.tipBox}>
-        <MaterialIcons name="lightbulb-outline" size={20} color={colors.warning} />
+        <Ionicons name="lightbulb-outline" size={20} color={colors.warning} />
         <View style={styles.tipContent}>
           <Text style={styles.tipTitle}>小提示</Text>
           <Text style={styles.tipText}>
