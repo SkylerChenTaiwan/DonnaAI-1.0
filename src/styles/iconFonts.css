@@ -1,65 +1,75 @@
 /**
  * Icon Font Definitions for Web Platform
- * Ensures all icon fonts are properly loaded
- * Uses hashed font filenames from build output
+ * Using CDN fonts as fallback to avoid build issues
  */
 
-/* Ionicons - Primary font family */
+/* Ionicons - From jsDelivr CDN */
 @font-face {
   font-family: 'Ionicons';
-  src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.6148e7019854f3bde85b633cb88f3c25.ttf') format('truetype');
+  src: url('https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/fonts/ionicons.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/fonts/ionicons.woff') format('woff'),
+       url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.6148e7019854f3bde85b633cb88f3c25.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: block;
 }
 
-/* MaterialIcons - Multiple names for compatibility */
-@font-face {
-  font-family: 'MaterialIcons';
-  src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/MaterialIcons.4e85bc9ebe07e0340c9c4fc2f6c38908.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: block;
-}
-
+/* Material Icons - From Google Fonts */
 @font-face {
   font-family: 'Material Icons';
-  src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/MaterialIcons.4e85bc9ebe07e0340c9c4fc2f6c38908.ttf') format('truetype');
+  src: url('https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2') format('woff2'),
+       url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/MaterialIcons.4e85bc9ebe07e0340c9c4fc2f6c38908.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: block;
 }
 
-/* MaterialCommunityIcons - Multiple names */
 @font-face {
-  font-family: 'MaterialCommunityIcons';
-  src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/MaterialCommunityIcons.b62641afc9ab487008e996a5c5865e56.ttf') format('truetype');
+  font-family: 'MaterialIcons';
+  src: url('https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2') format('woff2'),
+       url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/MaterialIcons.4e85bc9ebe07e0340c9c4fc2f6c38908.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: block;
 }
 
+/* Material Design Icons (MaterialCommunityIcons) - From jsDelivr CDN */
 @font-face {
   font-family: 'Material Design Icons';
-  src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/MaterialCommunityIcons.b62641afc9ab487008e996a5c5865e56.ttf') format('truetype');
+  src: url('https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/fonts/materialdesignicons-webfont.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/fonts/materialdesignicons-webfont.woff') format('woff'),
+       url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/MaterialCommunityIcons.b62641afc9ab487008e996a5c5865e56.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: block;
 }
 
-/* FontAwesome */
+@font-face {
+  font-family: 'MaterialCommunityIcons';
+  src: url('https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/fonts/materialdesignicons-webfont.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/fonts/materialdesignicons-webfont.woff') format('woff'),
+       url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/MaterialCommunityIcons.b62641afc9ab487008e996a5c5865e56.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+/* FontAwesome - From CDN */
 @font-face {
   font-family: 'FontAwesome';
-  src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome.b06871f281fee6b241d60582ae9369b9.ttf') format('truetype');
+  src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2') format('woff2'),
+       url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.woff') format('woff'),
+       url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome.b06871f281fee6b241d60582ae9369b9.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: block;
 }
 
-/* Feather - Multiple names */
+/* Feather Icons - From jsDelivr CDN */
 @font-face {
   font-family: 'Feather';
-  src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Feather.a76d309774d33d9856f650bed4292a23.ttf') format('truetype');
+  src: url('https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/feather.ttf') format('truetype'),
+       url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Feather.a76d309774d33d9856f650bed4292a23.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -67,13 +77,14 @@
 
 @font-face {
   font-family: 'feather';
-  src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Feather.a76d309774d33d9856f650bed4292a23.ttf') format('truetype');
+  src: url('https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/feather.ttf') format('truetype'),
+       url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Feather.a76d309774d33d9856f650bed4292a23.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: block;
 }
 
-/* AntDesign - Multiple names */
+/* AntDesign - Local only (no reliable CDN) */
 @font-face {
   font-family: 'AntDesign';
   src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/AntDesign.3a2ba31570920eeb9b1d217cabe58315.ttf') format('truetype');
@@ -90,7 +101,7 @@
   font-display: block;
 }
 
-/* Additional fonts from the dist folder */
+/* Additional fonts - Local only */
 @font-face {
   font-family: 'Entypo';
   src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Entypo.31b5ffea3daddc69dd01a1f3d6cf63c5.ttf') format('truetype');
@@ -163,10 +174,11 @@
   font-display: block;
 }
 
-/* FontAwesome 5 */
+/* FontAwesome 5 - From CDN */
 @font-face {
   font-family: 'FontAwesome5_Brands';
-  src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome5_Brands.3b89dd103490708d19a95adcae52210e.ttf') format('truetype');
+  src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/webfonts/fa-brands-400.woff2') format('woff2'),
+       url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome5_Brands.3b89dd103490708d19a95adcae52210e.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -174,7 +186,8 @@
 
 @font-face {
   font-family: 'FontAwesome5Brands-Regular';
-  src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome5_Brands.3b89dd103490708d19a95adcae52210e.ttf') format('truetype');
+  src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/webfonts/fa-brands-400.woff2') format('woff2'),
+       url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome5_Brands.3b89dd103490708d19a95adcae52210e.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -182,7 +195,8 @@
 
 @font-face {
   font-family: 'FontAwesome5_Regular';
-  src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome5_Regular.1f77739ca9ff2188b539c36f30ffa2be.ttf') format('truetype');
+  src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/webfonts/fa-regular-400.woff2') format('woff2'),
+       url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome5_Regular.1f77739ca9ff2188b539c36f30ffa2be.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -190,7 +204,8 @@
 
 @font-face {
   font-family: 'FontAwesome5Free-Regular';
-  src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome5_Regular.1f77739ca9ff2188b539c36f30ffa2be.ttf') format('truetype');
+  src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/webfonts/fa-regular-400.woff2') format('woff2'),
+       url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome5_Regular.1f77739ca9ff2188b539c36f30ffa2be.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -198,7 +213,8 @@
 
 @font-face {
   font-family: 'FontAwesome5_Solid';
-  src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome5_Solid.605ed7926cf39a2ad5ec2d1f9d391d3d.ttf') format('truetype');
+  src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/webfonts/fa-solid-900.woff2') format('woff2'),
+       url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome5_Solid.605ed7926cf39a2ad5ec2d1f9d391d3d.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -206,16 +222,18 @@
 
 @font-face {
   font-family: 'FontAwesome5Free-Solid';
-  src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome5_Solid.605ed7926cf39a2ad5ec2d1f9d391d3d.ttf') format('truetype');
+  src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/webfonts/fa-solid-900.woff2') format('woff2'),
+       url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome5_Solid.605ed7926cf39a2ad5ec2d1f9d391d3d.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: block;
 }
 
-/* FontAwesome 6 */
+/* FontAwesome 6 - From CDN */
 @font-face {
   font-family: 'FontAwesome6_Brands';
-  src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome6_Brands.56c8d80832e37783f12c05db7c8849e2.ttf') format('truetype');
+  src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2') format('woff2'),
+       url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome6_Brands.56c8d80832e37783f12c05db7c8849e2.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -223,7 +241,8 @@
 
 @font-face {
   font-family: 'FontAwesome6Brands-Regular';
-  src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome6_Brands.56c8d80832e37783f12c05db7c8849e2.ttf') format('truetype');
+  src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2') format('woff2'),
+       url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome6_Brands.56c8d80832e37783f12c05db7c8849e2.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -231,7 +250,8 @@
 
 @font-face {
   font-family: 'FontAwesome6_Regular';
-  src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome6_Regular.370dd5af19f8364907b6e2c41f45dbbf.ttf') format('truetype');
+  src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-regular-400.woff2') format('woff2'),
+       url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome6_Regular.370dd5af19f8364907b6e2c41f45dbbf.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -239,7 +259,8 @@
 
 @font-face {
   font-family: 'FontAwesome6Free-Regular';
-  src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome6_Regular.370dd5af19f8364907b6e2c41f45dbbf.ttf') format('truetype');
+  src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-regular-400.woff2') format('woff2'),
+       url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome6_Regular.370dd5af19f8364907b6e2c41f45dbbf.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -247,7 +268,8 @@
 
 @font-face {
   font-family: 'FontAwesome6_Solid';
-  src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome6_Solid.adec7d6f310bc577f05e8fe06a5daccf.ttf') format('truetype');
+  src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2') format('woff2'),
+       url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome6_Solid.adec7d6f310bc577f05e8fe06a5daccf.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -255,7 +277,8 @@
 
 @font-face {
   font-family: 'FontAwesome6Free-Solid';
-  src: url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome6_Solid.adec7d6f310bc577f05e8fe06a5daccf.ttf') format('truetype');
+  src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2') format('woff2'),
+       url('/assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome6_Solid.adec7d6f310bc577f05e8fe06a5daccf.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -278,13 +301,28 @@
   font-feature-settings: 'liga';
 }
 
+/* Material Icons specific styles */
+.material-icons {
+  font-family: 'Material Icons', 'MaterialIcons' !important;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'liga';
+}
+
 /* Force specific font families for known icon classes */
 .ionicons {
   font-family: 'Ionicons' !important;
-}
-
-.material-icons {
-  font-family: 'Material Icons', 'MaterialIcons' !important;
 }
 
 .material-community {
