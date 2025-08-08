@@ -24,60 +24,60 @@ if (fs.existsSync(indexPath)) {
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     
     
-    <!-- 使用 GitHub 作為 CDN 載入未損壞的字體 -->
+    <!-- 使用 unpkg CDN 載入未損壞的字體 -->
     <style>
       @font-face {
         font-family: 'Ionicons';
-        src: url('https://raw.githubusercontent.com/oblador/react-native-vector-icons/master/Fonts/Ionicons.ttf') format('truetype');
+        src: url('https://unpkg.com/react-native-vector-icons@10.0.0/Fonts/Ionicons.ttf') format('truetype');
         font-weight: normal;
         font-style: normal;
       }
       
       @font-face {
         font-family: 'MaterialIcons';
-        src: url('https://raw.githubusercontent.com/oblador/react-native-vector-icons/master/Fonts/MaterialIcons.ttf') format('truetype');
+        src: url('https://unpkg.com/react-native-vector-icons@10.0.0/Fonts/MaterialIcons.ttf') format('truetype');
         font-weight: normal;
         font-style: normal;
       }
       
       @font-face {
         font-family: 'MaterialCommunityIcons';
-        src: url('https://raw.githubusercontent.com/oblador/react-native-vector-icons/master/Fonts/MaterialCommunityIcons.ttf') format('truetype');
+        src: url('https://unpkg.com/react-native-vector-icons@10.0.0/Fonts/MaterialCommunityIcons.ttf') format('truetype');
         font-weight: normal;
         font-style: normal;
       }
       
       @font-face {
         font-family: 'FontAwesome';
-        src: url('https://raw.githubusercontent.com/oblador/react-native-vector-icons/master/Fonts/FontAwesome.ttf') format('truetype');
+        src: url('https://unpkg.com/react-native-vector-icons@10.0.0/Fonts/FontAwesome.ttf') format('truetype');
         font-weight: normal;
         font-style: normal;
       }
       
       @font-face {
         font-family: 'Feather';
-        src: url('https://raw.githubusercontent.com/oblador/react-native-vector-icons/master/Fonts/Feather.ttf') format('truetype');
+        src: url('https://unpkg.com/react-native-vector-icons@10.0.0/Fonts/Feather.ttf') format('truetype');
         font-weight: normal;
         font-style: normal;
       }
       
       @font-face {
         font-family: 'AntDesign';
-        src: url('https://raw.githubusercontent.com/oblador/react-native-vector-icons/master/Fonts/AntDesign.ttf') format('truetype');
+        src: url('https://unpkg.com/react-native-vector-icons@10.0.0/Fonts/AntDesign.ttf') format('truetype');
         font-weight: normal;
         font-style: normal;
       }
       
       @font-face {
         font-family: 'Entypo';
-        src: url('https://raw.githubusercontent.com/oblador/react-native-vector-icons/master/Fonts/Entypo.ttf') format('truetype');
+        src: url('https://unpkg.com/react-native-vector-icons@10.0.0/Fonts/Entypo.ttf') format('truetype');
         font-weight: normal;
         font-style: normal;
       }
       
       @font-face {
         font-family: 'SimpleLineIcons';
-        src: url('https://raw.githubusercontent.com/oblador/react-native-vector-icons/master/Fonts/SimpleLineIcons.ttf') format('truetype');
+        src: url('https://unpkg.com/react-native-vector-icons@10.0.0/Fonts/SimpleLineIcons.ttf') format('truetype');
         font-weight: normal;
         font-style: normal;
       }
