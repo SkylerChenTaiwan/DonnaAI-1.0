@@ -1,12 +1,9 @@
 /* === Notion 設計系統 V4 - 精確還原 === */
 
-/* 全域重置 - 確保樣式優先級 */
-body {
-  background-color: #fbfbfa !important;
-}
-
-#root {
-  background-color: transparent !important;
+/* 全域重置 - 僅在 Notion 元件內生效 */
+.notion-database-wrapper {
+  /* 移動背景色到這裡，避免影響全域 */
+  background-color: #fbfbfa;
 }
 
 :root {
@@ -65,6 +62,7 @@ body {
   padding: 0 96px !important;
   overflow: auto !important;
   box-sizing: border-box !important;
+  background-color: #fbfbfa !important;
 }
 
 /* === 資料庫容器 === */

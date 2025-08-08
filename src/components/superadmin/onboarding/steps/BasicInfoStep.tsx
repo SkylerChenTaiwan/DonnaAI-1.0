@@ -16,11 +16,6 @@ import { DesignSystem } from '@/theme/designSystem';
 import { FormInput } from '../common/FormInput';
 import { FormSelect } from '../common/FormSelect';
 import { SectionHeader } from '../common/SectionHeader';
-
-// 在 Web 平台導入覆蓋樣式
-if (Platform.OS === 'web') {
-  require('../styles/override.css');
-}
 import {
   StepProps,
   BasicInfoData,
