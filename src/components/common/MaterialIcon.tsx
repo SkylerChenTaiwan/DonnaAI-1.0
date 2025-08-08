@@ -17,52 +17,56 @@ interface MaterialIconProps {
   style?: ViewStyle;
 }
 
-// Material Icons 的 Unicode 對應表
-const materialIconUnicodeMap: Record<string, string> = {
-  'add': '\ue145',
-  'arrow-back': '\ue5c4',
-  'arrow-forward': '\ue5c8',
-  'business': '\ue0af',
-  'check': '\ue5ca',
-  'check-circle': '\ue86c',
-  'chevron-left': '\ue5cb',
-  'chevron-right': '\ue5cc',
-  'close': '\ue5cd',
-  'dashboard': '\ue871',
-  'delete': '\ue872',
-  'description': '\ue873',
-  'done': '\ue876',
-  'edit': '\ue3c9',
-  'error': '\ue000',
-  'folder': '\ue2c7',
-  'group': '\ue7ef',
-  'help': '\ue887',
-  'home': '\ue88a',
-  'info': '\ue88e',
-  'link': '\ue157',
-  'logout': '\ue879',
-  'menu': '\ue5d2',
-  'more-vert': '\ue5d4',
-  'people': '\ue7fb',
-  'person': '\ue7fd',
-  'person-add': '\ue7fe',
-  'refresh': '\ue5d5',
-  'search': '\ue8b6',
-  'settings': '\ue8b8',
-  'star': '\ue838',
-  'visibility': '\ue8f4',
-  'warning': '\ue002',
+// Material Icons 名稱映射表
+const materialIconNameMap: Record<string, string> = {
+  // 常用圖標
+  'add': 'add',
+  'arrow-back': 'arrow_back',
+  'arrow-forward': 'arrow_forward',
+  'business': 'business',
+  'check': 'check',
+  'check-circle': 'check_circle',
+  'chevron-left': 'chevron_left',
+  'chevron-right': 'chevron_right',
+  'close': 'close',
+  'dashboard': 'dashboard',
+  'delete': 'delete',
+  'description': 'description',
+  'done': 'done',
+  'edit': 'edit',
+  'error': 'error',
+  'folder': 'folder',
+  'group': 'group',
+  'help': 'help',
+  'home': 'home',
+  'info': 'info',
+  'link': 'link',
+  'logout': 'logout',
+  'menu': 'menu',
+  'more-vert': 'more_vert',
+  'people': 'people',
+  'person': 'person',
+  'person-add': 'person_add',
+  'refresh': 'refresh',
+  'search': 'search',
+  'settings': 'settings',
+  'star': 'star',
+  'visibility': 'visibility',
+  'warning': 'warning',
   // 智能匯入相關
-  'upload-file': '\ue9fc',
-  'cloud-upload': '\ue2c3',
-  'file-copy': '\ue173',
-  'table-chart': '\ue265',
-  'schema': '\ue265',
-  'merge-type': '\ue252',
-  'sync': '\ue627',
-  'auto-fix-high': '\ue663',
-  'psychology': '\ue8e5',
-  'smart-toy': '\ue9e9',
+  'upload-file': 'upload_file',
+  'cloud-upload': 'cloud_upload',
+  'file-copy': 'file_copy',
+  'file_upload': 'file_upload',
+  'table-chart': 'table_chart',
+  'schema': 'schema',
+  'merge-type': 'merge_type',
+  'sync': 'sync',
+  'auto-fix-high': 'auto_fix_high',
+  'psychology': 'psychology',
+  'smart-toy': 'smart_toy',
+  'hourglass-empty': 'hourglass_empty',
+  'cleaning-services': 'cleaning_services',
 };
 
 /**
@@ -73,16 +77,15 @@ export const MaterialIcon: React.FC<MaterialIconProps> = (props) => {
   const { name, size = 24, color = '#000', style } = props;
   const iconName = typeof name === 'string' ? name : String(name);
   
-  // Web 平台使用 HTML 元素直接渲染
+  // Web 平台使用 Material Icons 字體類名方式
   if (Platform.OS === 'web') {
-    // 嘗試獲取 Unicode，如果沒有則使用預設值
-    const unicode = materialIconUnicodeMap[iconName] || materialIconUnicodeMap['help'] || '\ue887';
+    // 獲取對應的圖標名稱
+    const materialIconName = materialIconNameMap[iconName] || iconName || 'help';
     
     return (
       <span
-        className="material-icon"
+        className="material-icons"
         style={{
-          fontFamily: 'Material Icons, MaterialIcons, sans-serif',
           fontSize: size,
           color: color,
           display: 'inline-block',
@@ -98,11 +101,12 @@ export const MaterialIcon: React.FC<MaterialIconProps> = (props) => {
           textRendering: 'optimizeLegibility',
           MozOsxFontSmoothing: 'grayscale',
           fontFeatureSettings: 'liga',
+          userSelect: 'none',
           ...(style as any),
         }}
         aria-hidden="true"
       >
-        {unicode}
+        {materialIconName}
       </span>
     );
   }

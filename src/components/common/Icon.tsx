@@ -17,73 +17,76 @@ interface IconProps {
   style?: ViewStyle;
 }
 
-// Ionicons 4.5.10 的 Unicode 對應表
-const iconUnicodeMap: Record<string, string> = {
-  'add': '\uf101',
-  'add-circle': '\uf101',
-  'add-circle-outline': '\uf158',
-  'arrow-back': '\uf106',
-  'arrow-down': '\uf107',
-  'arrow-forward': '\uf10b',
-  'arrow-up': '\uf112',
-  'calendar': '\uf117',
-  'calendar-outline': '\uf116',
-  'call': '\uf118',
-  'camera': '\uf119',
-  'checkmark': '\uf121',
-  'checkmark-circle': '\uf120',
-  'checkmark-circle-outline': '\uf375',
-  'chevron-back': '\uf124',
-  'chevron-down': '\uf123',
-  'chevron-forward': '\uf125',
-  'chevron-up': '\uf126',
-  'close': '\uf129',
-  'close-circle': '\uf128',
-  'close-circle-outline': '\uf36d',
-  'cloud-upload': '\uf13b',
-  'copy': '\uf13f',
-  'create': '\uf2bf',
-  'document': '\uf14f',
-  'download': '\uf14d',
-  'ellipsis-horizontal': '\uf350',
-  'ellipsis-vertical': '\uf355',
-  'eye': '\uf16f',
-  'filter': '\uf172',
-  'folder': '\uf180',
-  'folder-open': '\uf180',
-  'help-circle': '\uf142',
-  'home': '\uf144',
-  'information-circle': '\uf14a',
-  'link': '\uf1fe',
-  'list': '\uf201',
-  'lock-closed': '\uf200',
-  'log-out': '\uf203',
-  'mail': '\uf20b',
-  'menu': '\uf20c',
-  'more': '\uf214',
-  'open': '\uf216',
-  'people': '\uf21b',
-  'person': '\uf213',
-  'person-add': '\uf211',
-  'person-circle': '\uf213',
-  'refresh': '\uf21c',
-  'remove': '\uf229',
-  'save': '\uf22e',
-  'search': '\uf21f',
-  'settings': '\uf2ad',
-  'share': '\uf211',
-  'star': '\uf24e',
-  'star-outline': '\uf24d',
-  'sync': '\uf25e',
-  'time': '\uf250',
-  'trash': '\uf252',
-  'warning': '\uf267',
+// Ionicons 名稱映射 - 將 Ionicons v5 名稱映射到 v4 類名
+const iconNameMap: Record<string, string> = {
+  // 常用圖標映射
+  'add': 'ion-md-add',
+  'add-circle': 'ion-md-add-circle',
+  'add-circle-outline': 'ion-md-add-circle-outline',
+  'arrow-back': 'ion-md-arrow-back',
+  'arrow-down': 'ion-md-arrow-down',
+  'arrow-forward': 'ion-md-arrow-forward',
+  'arrow-up': 'ion-md-arrow-up',
+  'calendar': 'ion-md-calendar',
+  'calendar-outline': 'ion-ios-calendar-outline',
+  'call': 'ion-md-call',
+  'camera': 'ion-md-camera',
+  'checkmark': 'ion-md-checkmark',
+  'checkmark-circle': 'ion-md-checkmark-circle',
+  'checkmark-circle-outline': 'ion-md-checkmark-circle-outline',
+  'chevron-back': 'ion-ios-arrow-back',
+  'chevron-down': 'ion-ios-arrow-down',
+  'chevron-forward': 'ion-ios-arrow-forward',
+  'chevron-up': 'ion-ios-arrow-up',
+  'close': 'ion-md-close',
+  'close-circle': 'ion-md-close-circle',
+  'close-circle-outline': 'ion-md-close-circle-outline',
+  'cloud-upload': 'ion-md-cloud-upload',
+  'copy': 'ion-md-copy',
+  'create': 'ion-md-create',
+  'document': 'ion-md-document',
+  'download': 'ion-md-download',
+  'ellipsis-horizontal': 'ion-md-more',
+  'ellipsis-vertical': 'ion-md-more',
+  'eye': 'ion-md-eye',
+  'filter': 'ion-md-funnel',
+  'folder': 'ion-md-folder',
+  'folder-open': 'ion-md-folder-open',
+  'help-circle': 'ion-md-help-circle',
+  'home': 'ion-md-home',
+  'information-circle': 'ion-md-information-circle',
+  'link': 'ion-md-link',
+  'list': 'ion-md-list',
+  'lock-closed': 'ion-md-lock',
+  'log-out': 'ion-md-log-out',
+  'mail': 'ion-md-mail',
+  'menu': 'ion-md-menu',
+  'more': 'ion-md-more',
+  'open': 'ion-md-open',
+  'people': 'ion-md-people',
+  'people-outline': 'ion-ios-people-outline',
+  'person': 'ion-md-person',
+  'person-add': 'ion-md-person-add',
+  'person-circle': 'ion-md-contact',
+  'refresh': 'ion-md-refresh',
+  'remove': 'ion-md-remove',
+  'save': 'ion-md-save',
+  'search': 'ion-md-search',
+  'settings': 'ion-md-settings',
+  'share': 'ion-md-share',
+  'star': 'ion-md-star',
+  'star-outline': 'ion-md-star-outline',
+  'sync': 'ion-md-sync',
+  'time': 'ion-md-time',
+  'time-outline': 'ion-ios-time-outline',
+  'trash': 'ion-md-trash',
+  'warning': 'ion-md-warning',
   // Material Icons 兼容
-  'business': '\uf1a4',
-  'description': '\uf14f',
-  'dashboard': '\uf11b',
-  'group': '\uf21b',
-  'visibility': '\uf16f',
+  'business': 'ion-md-business',
+  'description': 'ion-md-document',
+  'dashboard': 'ion-md-speedometer',
+  'group': 'ion-md-people',
+  'visibility': 'ion-md-eye',
 };
 
 /**
@@ -94,16 +97,15 @@ export const Icon: React.FC<IconProps> = (props) => {
   const { name, size = 24, color = '#000', style } = props;
   const iconName = typeof name === 'string' ? name : String(name);
   
-  // Web 平台使用 HTML 元素直接渲染
+  // Web 平台使用 HTML 元素與類名渲染
   if (Platform.OS === 'web') {
-    // 嘗試獲取 Unicode，如果沒有則使用預設值
-    const unicode = iconUnicodeMap[iconName] || iconUnicodeMap['help-circle'] || '\uf142';
+    // 獲取對應的類名，如果沒有則使用預設值
+    const className = iconNameMap[iconName] || `ion-md-${iconName}` || 'ion-md-help-circle';
     
     return (
-      <span
-        className="icon"
+      <i
+        className={className}
         style={{
-          fontFamily: 'Ionicons, Material Icons, sans-serif',
           fontSize: size,
           color: color,
           display: 'inline-block',
@@ -118,13 +120,10 @@ export const Icon: React.FC<IconProps> = (props) => {
           WebkitFontSmoothing: 'antialiased',
           textRendering: 'optimizeLegibility',
           MozOsxFontSmoothing: 'grayscale',
-          fontFeatureSettings: 'liga',
           ...(style as any),
         }}
         aria-hidden="true"
-      >
-        {unicode}
-      </span>
+      />
     );
   }
   
