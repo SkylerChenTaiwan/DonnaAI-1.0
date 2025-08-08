@@ -71,6 +71,7 @@
     "expo-splash-screen": "~0.30.10",
     "expo-status-bar": "~2.2.3",
     "firebase": "^10.12.2",
+    "openai": "^5.12.2",
     "papaparse": "^5.5.3",
     "react": "19.0.0",
     "react-hook-form": "^7.52.0",
