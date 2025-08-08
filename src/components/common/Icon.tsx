@@ -147,20 +147,20 @@ export const Icon: React.FC<IconProps> = (props) => {
     // 獲取 SVG 路徑，如果沒有則使用預設的問號圖標
     const svgPath = svgIcons[iconName] || svgIcons['help-circle'];
     
+    // 直接返回 SVG 元素（React Native Web 會處理）
     return (
-      <View style={[{ width: size, height: size }, style as any]}>
-        <svg
-          width={size}
-          height={size}
-          viewBox="0 0 24 24"
-          fill={color}
-          style={{
-            display: 'block',
-          }}
-        >
-          <g dangerouslySetInnerHTML={{ __html: svgPath }} />
-        </svg>
-      </View>
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill={color}
+        style={{
+          display: 'inline-block',
+          verticalAlign: 'middle',
+          ...(style as any),
+        }}
+        dangerouslySetInnerHTML={{ __html: svgPath }}
+      />
     );
   }
   
