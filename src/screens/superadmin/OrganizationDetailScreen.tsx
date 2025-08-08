@@ -44,6 +44,7 @@ import { DataImportAssistModal } from '@/components/organization/DataImportAssis
 import { CustomFieldsModal } from '@/components/organization/CustomFieldsModal';
 import ImportWizard from '@/components/import/ImportWizard';
 import { Modal, Platform } from 'react-native';
+import { updateOrganizationStats } from '@/services/firebase/updateOrgStats';
 
 type RouteParams = RouteProp<RootStackParamList, 'OrganizationDetailScreen'>;
 type NavigationProp = StackNavigationProp<RootStackParamList, 'OrganizationDetailScreen'>;
@@ -108,6 +109,14 @@ export const OrganizationDetailScreen: React.FC = () => {
           giftedSeats: String(orgData.giftedSeats || 0),
           status: orgData.status || 'active',
         });
+        
+        // 自動更新統計（如果需要）
+        if (!orgData.monthlyUsage?.activeUsers) {
+          console.log('🔄 自動更新組織統計...');
+          updateOrganizationStats(organizationId).catch(err => {
+            console.error('自動更新統計失敗:', err);
+          });
+        }
         
         // TODO: 載入計費資訊（暫時停用，等實際有資料時再啟用）
         // loadBillingData(organizationId);
@@ -411,7 +420,25 @@ export const OrganizationDetailScreen: React.FC = () => {
         {/* 概覽分頁 */}
         {selectedTab === 'overview' && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>使用統計</Text>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>使用統計</Text>
+              <TouchableOpacity
+                style={styles.updateStatsButton}
+                onPress={async () => {
+                  try {
+                    toast.info('正在更新統計...');
+                    await updateOrganizationStats(organizationId);
+                    toast.success('統計已更新');
+                    await loadOrganizationData();
+                  } catch (error) {
+                    toast.error('更新失敗');
+                  }
+                }}
+              >
+                <Icon name="refresh-outline" size={18} color={DesignSystem.colors.primary} />
+                <Text style={styles.updateStatsText}>更新</Text>
+              </TouchableOpacity>
+            </View>
             <View style={styles.statsGrid}>
               <View style={styles.statCard}>
                 <Text style={styles.statValue}>{billingSummary?.activeUsers || 0}</Text>
@@ -724,6 +751,20 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: DesignSystem.spacing.md,
+  },
+  updateStatsButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 6,
+    backgroundColor: '#F0F0F0',
+    gap: 4,
+  },
+  updateStatsText: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: DesignSystem.colors.primary,
   },
   sectionTitle: {
     ...DesignSystem.typography.h3,
