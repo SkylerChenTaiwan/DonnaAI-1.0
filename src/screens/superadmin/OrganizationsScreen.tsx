@@ -253,7 +253,7 @@ export const OrganizationsScreen: React.FC = () => {
             style={styles.addButton}
             onPress={() => navigation.navigate('OnboardingWizardScreen', { mode: 'create' })}
           >
-            <MaterialIcons name="add" size={24} color={colors.white} />
+            <MaterialIcons name="add" size={24} color={DesignSystem.colors.text.inverse} />
             <Text style={styles.addButtonText}>新增組織</Text>
           </TouchableOpacity>
         </View>
