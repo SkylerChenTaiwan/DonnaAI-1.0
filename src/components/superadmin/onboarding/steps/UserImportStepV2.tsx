@@ -208,8 +208,7 @@ const UserImportStepV2: React.FC<StepProps> = ({
     return (
       <View style={styles.summaryCard}>
         <View style={styles.summaryHeader}>
-          <Ionicons 
-            name={importResult.success ? "checkmark-circle" : "alert-circle"} 
+          <Icon name={importResult.success ? "checkmark-circle" : "alert-circle"} 
             size={24} 
             color={importResult.success ? colors.success : colors.error} 
           />

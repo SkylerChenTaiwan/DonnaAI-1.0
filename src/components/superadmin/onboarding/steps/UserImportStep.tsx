@@ -232,8 +232,7 @@ const UserImportStep: React.FC<StepProps> = ({
               importMethod: method.value as any 
             }))}
           >
-            <Ionicons
-              name={method.icon as any}
+            <Icon name={method.icon}
               size={32}
               color={formData.importMethod === method.value ? colors.primary : colors.gray600}
             />
@@ -616,8 +615,7 @@ const UserImportStep: React.FC<StepProps> = ({
                 },
               }))}
             >
-              <Ionicons
-                name={strategy.icon as any}
+              <Icon name={strategy.icon}
                 size={20}
                 color={formData.passwordStrategy.type === strategy.value ? colors.primary : colors.gray600}
               />

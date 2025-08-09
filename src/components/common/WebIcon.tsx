@@ -5,6 +5,7 @@
 
 import React from 'react';
 import { View, Text, Platform } from 'react-native';
+import { Icon } from '@/components/common/Icon';
 // Icon import removed - using platform-specific Icon component;
 
 interface WebIconProps {
@@ -17,7 +18,7 @@ interface WebIconProps {
 export const WebIcon: React.FC<WebIconProps> = ({ name, size = 24, color = '#000', style }) => {
   // 原生平台使用原本的 Ionicons
   if (Platform.OS !== 'web') {
-    return <Ionicons name={name} size={size} color={color} style={style} />;
+    return <Icon name={name} size={size} color={color} style={style} />;
   }
 
   // Web 平台使用 ion-icon web component

@@ -9,7 +9,7 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
-// Icon import removed - using platform-specific Icon component;
+import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 
 interface SectionHeaderProps {
@@ -23,7 +23,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
 }) => {
   return (
     <View style={styles.container}>
-      <Ionicons
+      <Icon
         name={icon}
         size={20}
         color={DesignSystem.colors.primary}

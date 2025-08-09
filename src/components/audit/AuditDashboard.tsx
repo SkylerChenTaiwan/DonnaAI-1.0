@@ -171,14 +171,13 @@ export const AuditDashboard: React.FC<AuditDashboardProps> = ({
   const renderStatCard = (title: string, value: string | number, icon: string, color: string, trend?: string) => (
     <View style={[styles.statCard, { borderLeftColor: color }]}>
       <View style={styles.statCardHeader}>
-        <Ionicons name={icon as any} size={24} color={color} />
+        <Icon name={icon} size={24} color={color} />
         <Text style={styles.statCardTitle}>{title}</Text>
       </View>
       <Text style={styles.statCardValue}>{value}</Text>
       {trend && (
         <View style={styles.statCardTrend}>
-          <Ionicons 
-            name={trend === 'up' ? 'trending-up' : 'trending-down'} 
+          <Icon name={trend === 'up' ? 'trending-up' : 'trending-down'} 
             size={16} 
             color={trend === 'up' ? '#F44336' : '#4CAF50'} 
           />
@@ -418,8 +417,7 @@ export const AuditDashboard: React.FC<AuditDashboardProps> = ({
         {recentActivity.map((log) => (
           <View key={log.id} style={styles.activityItem}>
             <View style={styles.activityIcon}>
-              <Ionicons 
-                name={getActionIcon(log.action.type) as any} 
+              <Icon name={getActionIcon(log.action.type)} 
                 size={20} 
                 color={getStatusColor(log.result.status)} 
               />
@@ -485,8 +483,7 @@ export const AuditDashboard: React.FC<AuditDashboardProps> = ({
             style={styles.autoRefreshButton}
             onPress={() => setAutoRefresh(!autoRefresh)}
           >
-            <Ionicons 
-              name={autoRefresh ? 'sync' : 'sync-outline'} 
+            <Icon name={autoRefresh ? 'sync' : 'sync-outline'} 
               size={20} 
               color={autoRefresh ? '#0066CC' : '#666666'} 
             />
@@ -520,8 +517,7 @@ export const AuditDashboard: React.FC<AuditDashboardProps> = ({
           <View style={styles.riskSummaryContent}>
             <Text style={styles.riskScore}>風險分數: {riskAssessment.riskScore.toFixed(2)}</Text>
             <View style={styles.riskTrend}>
-              <Ionicons 
-                name={
+              <Icon name={
                   riskAssessment.trend === 'increasing' ? 'trending-up' :
                   riskAssessment.trend === 'decreasing' ? 'trending-down' :
                   'remove'

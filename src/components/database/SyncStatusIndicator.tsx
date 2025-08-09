@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { Icon } from '@/components/common/Icon';
 // Icon import removed - using platform-specific Icon component;
 
 interface SyncStatusIndicatorProps {
@@ -59,8 +60,7 @@ export function SyncStatusIndicator({ syncStatus }: SyncStatusIndicatorProps) {
   return (
     <View style={styles.container}>
       <View style={[styles.statusBadge, { backgroundColor: getStatusColor() + '20' }]}>
-        <Ionicons 
-          name={getStatusIcon() as any} 
+        <Icon name={getStatusIcon()} 
           size={16} 
           color={getStatusColor()} 
         />

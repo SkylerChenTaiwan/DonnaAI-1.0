@@ -279,8 +279,7 @@ const BillingPlanStep: React.FC<StepProps> = ({
                 paymentMethod: method.value as any 
               }))}
             >
-              <Ionicons 
-                name={method.icon as any} 
+              <Icon name={method.icon} 
                 size={24} 
                 color={formData.paymentMethod === method.value ? colors.primary : colors.gray600}
               />

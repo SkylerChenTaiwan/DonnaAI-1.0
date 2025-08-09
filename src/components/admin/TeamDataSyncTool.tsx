@@ -152,8 +152,7 @@ export const TeamDataSyncTool: React.FC = () => {
           onPress={() => setExpanded(!expanded)}
           style={styles.expandButton}
         >
-          <Ionicons
-            name={expanded ? 'chevron-up' : 'chevron-down'}
+          <Icon name={expanded ? 'chevron-up' : 'chevron-down'}
             size={24}
             color="#666"
           />
@@ -217,7 +216,7 @@ export const TeamDataSyncTool: React.FC = () => {
                       <View style={styles.listItemContent}>
                         <View style={styles.chipContainer}>
                           <View style={[styles.chip, { backgroundColor: info.color + '20' }]}>
-                            <Ionicons name={info.icon as any} size={16} color={info.color} />
+                            <Icon name={info.icon} size={16} color={info.color} />
                             <Text style={[styles.chipText, { color: info.color }]}>
                               {item.type === 'user_missing_team' ? '使用者缺少團隊' : '團隊缺少使用者'}
                             </Text>

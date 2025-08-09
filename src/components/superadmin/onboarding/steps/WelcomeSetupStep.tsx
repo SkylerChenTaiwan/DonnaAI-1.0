@@ -119,8 +119,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
             style={styles.previewButton}
             onPress={() => setPreviewMode(!previewMode)}
           >
-            <Ionicons 
-              name={previewMode ? 'edit' : 'preview'} 
+            <Icon name={previewMode ? 'edit' : 'preview'} 
               size={20} 
               color={colors.primary}
             />
@@ -266,8 +265,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
                 ]}
                 onPress={() => updateField('firstLoginExperience.defaultDashboard', option.value)}
               >
-                <Ionicons
-                  name={option.icon as any}
+                <Icon name={option.icon}
                   size={24}
                   color={formData.firstLoginExperience.defaultDashboard === option.value 
                     ? colors.primary 
@@ -407,8 +405,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
         <View style={styles.summaryGrid}>
           {settings.map(setting => (
             <View key={setting.label} style={styles.summaryItem}>
-              <Ionicons 
-                name={setting.icon as any} 
+              <Icon name={setting.icon} 
                 size={20} 
                 color={setting.color}
               />
