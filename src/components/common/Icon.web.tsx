@@ -2,6 +2,13 @@ import React from 'react';
 import { ViewStyle } from 'react-native';
 import * as IoniconsWeb from './icons/ionicons';
 
+// 擴展 Window 介面以支援警告記錄
+declare global {
+  interface Window {
+    _warnedIcons?: Set<string>;
+  }
+}
+
 interface IconProps {
   name: string | any;
   size?: number;
@@ -146,15 +153,18 @@ export const Icon: React.FC<IconProps> = ({ name, size = 24, color = '#000', sty
   const iconName = typeof name === 'string' ? name : String(name);
   const IconComponent = iconMap[iconName];
   
-  // Debug logging
-  if (iconName === 'build' || iconName === 'build-outline' || 
-      iconName === 'people-circle' || iconName === 'people-circle-outline') {
-    console.log(`[Icon Debug] Requesting icon: ${iconName}, Found: ${!!IconComponent}`);
-  }
-  
   if (!IconComponent) {
-    // Fallback to help circle for unknown icons
-    console.warn(`Icon "${iconName}" not found in web icons, using fallback`);
+    // Fallback to help circle for unknown icons - 只在開發環境且只記錄一次
+    if (process.env.NODE_ENV === 'development') {
+      // 使用 Set 來記錄已經警告過的圖標，避免重複警告
+      if (!window._warnedIcons) {
+        window._warnedIcons = new Set();
+      }
+      if (!window._warnedIcons.has(iconName)) {
+        window._warnedIcons.add(iconName);
+        console.warn(`Icon "${iconName}" not found in web icons, using fallback`);
+      }
+    }
     return <IoniconsWeb.HelpCircleOutlineIcon size={size} color={color} style={style} />;
   }
   
