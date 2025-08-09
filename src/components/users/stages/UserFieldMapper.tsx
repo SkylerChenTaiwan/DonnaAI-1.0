@@ -50,6 +50,8 @@ const UserFieldMapper: React.FC<UserFieldMapperProps> = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [draggedField, setDraggedField] = useState<string | null>(null);
   const [hoveredTarget, setHoveredTarget] = useState<string | null>(null);
+  const [selectedTarget, setSelectedTarget] = useState<string | null>(null);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   // 取得來源欄位
   const sourceFields = mergedTable?.headers || files[0]?.headers || [];
@@ -319,18 +321,85 @@ const UserFieldMapper: React.FC<UserFieldMapperProps> = ({
           color={mapping.sourceField ? DesignSystem.colors.success : DesignSystem.colors.text.tertiary}
         />
 
-        <TouchableOpacity
-          style={[
-            styles.sourceField,
-            !mapping.sourceField && styles.sourceFieldEmpty,
-            hoveredTarget === mapping.targetField && styles.sourceFieldHovered,
-          ]}
-          onPress={() => {
-            // 在簡易模式下不允許手動選擇
-            if (mode === 'simple') return;
-            // 這裡可以打開一個選擇器
-          }}
-        >
+        {Platform.OS === 'web' && mode === 'advanced' ? (
+          <div style={{ position: 'relative', flex: 1, marginLeft: 16 }}>
+            <select
+              value={mapping.sourceField}
+              onChange={(e) => handleMappingChange(mapping.targetField, e.target.value)}
+              style={{
+                width: '100%',
+                padding: '8px 12px',
+                border: `1px solid ${mapping.sourceField ? DesignSystem.colors.border.light : DesignSystem.colors.border.medium}`,
+                borderRadius: DesignSystem.borderRadius.sm,
+                backgroundColor: DesignSystem.colors.background.surface,
+                color: mapping.sourceField ? DesignSystem.colors.text.primary : DesignSystem.colors.text.tertiary,
+                fontSize: 14,
+                cursor: mode === 'simple' ? 'not-allowed' : 'pointer',
+                outline: 'none',
+                appearance: 'none',
+                WebkitAppearance: 'none',
+                backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23666\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpolyline points=\'6 9 12 15 18 9\'%3E%3C/polyline%3E%3C/svg%3E")',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right 12px center',
+                paddingRight: '36px',
+              }}
+              disabled={mode === 'simple'}
+            >
+              <option value="" style={{ color: DesignSystem.colors.text.tertiary }}>
+                {mode === 'simple' ? '未映射' : '選擇欄位...'}
+              </option>
+              {sourceFields.map(field => {
+                // 檢查此欄位是否已被其他目標欄位使用
+                const isUsed = localMappings.some(m => 
+                  m.targetField !== mapping.targetField && m.sourceField === field
+                );
+                return (
+                  <option 
+                    key={field} 
+                    value={field}
+                    disabled={isUsed}
+                    style={{ 
+                      color: isUsed ? DesignSystem.colors.text.tertiary : DesignSystem.colors.text.primary 
+                    }}
+                  >
+                    {field} {isUsed ? '(已使用)' : ''}
+                  </option>
+                );
+              })}
+            </select>
+            {mapping.sourceField && mapping.confidence > 0 && (
+              <span style={{
+                position: 'absolute',
+                right: '40px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                padding: '2px 6px',
+                borderRadius: 4,
+                backgroundColor: mapping.confidence > 0.8 
+                  ? `${DesignSystem.colors.success}20`
+                  : `${DesignSystem.colors.warning}20`,
+                fontSize: 10,
+                fontWeight: 600,
+                color: mapping.confidence > 0.8 
+                  ? DesignSystem.colors.success
+                  : DesignSystem.colors.warning,
+              }}>
+                {Math.round(mapping.confidence * 100)}%
+              </span>
+            )}
+          </div>
+        ) : (
+          <TouchableOpacity
+            style={[
+              styles.sourceField,
+              !mapping.sourceField && styles.sourceFieldEmpty,
+              hoveredTarget === mapping.targetField && styles.sourceFieldHovered,
+            ]}
+            onPress={() => {
+              if (mode === 'simple') return;
+              setOpenDropdown(openDropdown === mapping.targetField ? null : mapping.targetField);
+            }}
+          >
           {mapping.sourceField ? (
             <>
               <Text style={styles.sourceFieldText}>{mapping.sourceField}</Text>
@@ -346,14 +415,15 @@ const UserFieldMapper: React.FC<UserFieldMapperProps> = ({
                 </View>
               )}
             </>
-          ) : (
-            <Text style={styles.sourceFieldPlaceholder}>
-              {mode === 'simple' ? '未映射' : '點擊選擇欄位'}
-            </Text>
-          )}
-        </TouchableOpacity>
+            ) : (
+              <Text style={styles.sourceFieldPlaceholder}>
+                {mode === 'simple' ? '未映射' : '點擊選擇欄位'}
+              </Text>
+            )}
+          </TouchableOpacity>
+        )}
 
-        {mode === 'advanced' && mapping.sourceField && (
+        {mode === 'advanced' && mapping.sourceField && Platform.OS !== 'web' && (
           <TouchableOpacity
             onPress={() => handleMappingChange(mapping.targetField, '')}
             style={styles.clearButton}
