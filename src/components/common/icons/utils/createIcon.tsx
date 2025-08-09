@@ -11,11 +11,11 @@ export function createIcon(
   paths: string[], 
   viewBox: string = "0 0 24 24",
   fillRule?: 'nonzero' | 'evenodd'
-) {
-  return React.memo<IconProps>(({ size = 24, color = '#000', style }) => {
-    // SSR support
+): React.FC<IconProps> {
+  const IconComponent: React.FC<IconProps> = ({ size = 24, color = '#000', style }) => {
+    // SSR support - render empty div instead of null
     if (typeof window === 'undefined') {
-      return null;
+      return <View style={{ width: size, height: size }} />;
     }
 
     // Convert ViewStyle to CSS style
@@ -43,7 +43,9 @@ export function createIcon(
         alt=""
       />
     );
-  });
+  };
+  
+  return React.memo(IconComponent);
 }
 
 // Create icon with multiple paths and custom viewBox
