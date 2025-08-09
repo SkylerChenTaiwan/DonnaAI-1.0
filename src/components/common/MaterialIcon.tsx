@@ -1,47 +1,10 @@
 /**
- * Material Icon 元件
- * 支援 Native 和 Web 平台
+ * MaterialIcon 元件 - 預設匯出
+ * Metro bundler 會根據平台自動選擇 .web.tsx 或 .native.tsx
  */
 
-import React from 'react';
-import { Platform, ViewStyle } from 'react-native';
+// 這個檔案只是為了 TypeScript 類型定義
+// 實際的實現在 MaterialIcon.web.tsx 和 MaterialIcon.native.tsx
 
-// Platform-specific imports
-let MaterialIconImplementation: React.FC<any>;
-let MaterialIconProps: any;
-
-if (Platform.OS === 'web') {
-  // Web platform - use SVG icons
-  const WebMaterialIcon = require('./MaterialIcon.web');
-  MaterialIconImplementation = WebMaterialIcon.MaterialIcon;
-  MaterialIconProps = WebMaterialIcon.MaterialIconProps;
-} else {
-  // Native platforms - use @expo/vector-icons
-  const { MaterialIcons } = require('@expo/vector-icons');
-  
-  // MaterialIcons 的圖標名稱類型
-  type MaterialIconNames = keyof typeof MaterialIcons.glyphMap;
-  
-  interface NativeMaterialIconProps {
-    name: MaterialIconNames | string;
-    size?: number;
-    color?: string;
-    style?: ViewStyle;
-  }
-  
-  MaterialIconImplementation = (props: NativeMaterialIconProps) => {
-    const iconName = typeof props.name === 'string' ? props.name : String(props.name);
-    return <MaterialIcons {...props} name={iconName as MaterialIconNames} />;
-  };
-  
-  MaterialIconProps = {} as NativeMaterialIconProps;
-}
-
-/**
- * Material Icon 元件
- * Web 平台使用 SVG，Native 平台使用 @expo/vector-icons
- */
-export const MaterialIcon = MaterialIconImplementation;
-
-// 匯出類型供外部使用
-export type { MaterialIconProps };
+export { MaterialIcon } from './MaterialIcon.web';
+export type { MaterialIconProps } from './MaterialIcon.web';

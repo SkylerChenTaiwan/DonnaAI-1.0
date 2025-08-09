@@ -119,18 +119,19 @@ const iconMap: Record<string, React.ComponentType<any>> = {
   'warning': IoniconsWeb.WarningIcon,
   'warning-outline': IoniconsWeb.WarningOutlineIcon,
   
-  // Additional aliases for compatibility
-  'list': IoniconsWeb.FilterIcon, // Fallback
-  'sparkles': IoniconsWeb.BulbIcon, // Fallback
-  'analytics-outline': IoniconsWeb.DatabaseIcon, // Fallback
-  'bar-chart-outline': IoniconsWeb.DatabaseIcon, // Fallback
-  'card-outline': IoniconsWeb.DocumentTextOutlineIcon, // Fallback
-  'file-tray-outline': IoniconsWeb.FolderOpenOutlineIcon, // Fallback
-  'gift-outline': IoniconsWeb.BulbIcon, // Fallback
-  'key-outline': IoniconsWeb.LockClosedIcon, // Fallback
-  'receipt-outline': IoniconsWeb.DocumentTextOutlineIcon, // Fallback
-  'reorder-three': IoniconsWeb.FilterIcon, // Fallback
-  'swap-vertical': IoniconsWeb.ArrowForwardIcon, // Fallback
+  // Additional icons
+  'analytics-outline': IoniconsWeb.AnalyticsOutlineIcon,
+  'bar-chart-outline': IoniconsWeb.BarChartOutlineIcon,
+  'card-outline': IoniconsWeb.CardOutlineIcon,
+  'construct-outline': IoniconsWeb.ConstructOutlineIcon,
+  'file-tray-outline': IoniconsWeb.FileTrayOutlineIcon,
+  'gift-outline': IoniconsWeb.GiftOutlineIcon,
+  'key-outline': IoniconsWeb.KeyOutlineIcon,
+  'list': IoniconsWeb.ListIcon,
+  'receipt-outline': IoniconsWeb.ReceiptOutlineIcon,
+  'reorder-three': IoniconsWeb.ReorderThreeIcon,
+  'sparkles': IoniconsWeb.SparklesIcon,
+  'swap-vertical': IoniconsWeb.SwapVerticalIcon
 };
 
 export const Icon: React.FC<IconProps> = ({ name, size = 24, color = '#000', style }) => {
