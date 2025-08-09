@@ -62,6 +62,11 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
    */
   const handleFileSelect = async () => {
     try {
+      // 簡易模式下，如果已有檔案，先移除
+      if (mode === 'simple' && files.length > 0) {
+        onFilesUploaded([]);
+      }
+      
       const result = await pickDocument({
         type: ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel', 
                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
@@ -591,11 +596,11 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
           <>
             <Icon name="cloud-upload-outline" size={48} color={DesignSystem.colors.primary} />
             <Text style={styles.uploadTitle}>
-              {mode === 'simple' ? '上傳用戶資料' : '上傳用戶檔案'}
+              上傳用戶資料
             </Text>
             <Text style={styles.uploadHint}>
               支援 CSV、Excel 格式
-              {mode === 'advanced' && '（可選擇多個檔案）'}
+              {mode === 'simple' ? '（簡易模式：單一檔案）' : '（進階模式：可選擇多個檔案合併）'}
             </Text>
           </>
         )}
@@ -604,8 +609,8 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
       {/* 檔案列表 */}
       {renderFileList()}
 
-      {/* 合併選項（當有多個檔案時顯示） */}
-      {files.length > 1 && (
+      {/* 合併選項（進階模式且有多個檔案時顯示） */}
+      {mode === 'advanced' && files.length > 1 && (
         <View style={styles.mergeSection}>
           <Text style={styles.mergeSectionTitle}>合併選項</Text>
           <Text style={styles.mergeHint}>
@@ -622,31 +627,29 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
               </Text>
             </View>
           )}
-          {mode === 'advanced' && (
-            <View style={styles.mergeOptions}>
-              <Text style={styles.mergeOptionLabel}>合併策略：</Text>
-              <View style={styles.mergeStrategyButtons}>
-                {(['left', 'inner', 'outer'] as MergeStrategy[]).map((strategy) => (
-                  <TouchableOpacity
-                    key={strategy}
-                    style={[
-                      styles.strategyButton,
-                      mergeStrategy === strategy && styles.strategyButtonActive,
-                    ]}
-                    onPress={() => setMergeStrategy(strategy)}
-                  >
-                    <Text style={[
-                      styles.strategyButtonText,
-                      mergeStrategy === strategy && styles.strategyButtonTextActive,
-                    ]}>
-                      {strategy === 'left' ? '左連接' : 
-                       strategy === 'inner' ? '內連接' : '外連接'}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
+          <View style={styles.mergeOptions}>
+            <Text style={styles.mergeOptionLabel}>合併策略：</Text>
+            <View style={styles.mergeStrategyButtons}>
+              {(['left', 'inner', 'outer'] as MergeStrategy[]).map((strategy) => (
+                <TouchableOpacity
+                  key={strategy}
+                  style={[
+                    styles.strategyButton,
+                    mergeStrategy === strategy && styles.strategyButtonActive,
+                  ]}
+                  onPress={() => setMergeStrategy(strategy)}
+                >
+                  <Text style={[
+                    styles.strategyButtonText,
+                    mergeStrategy === strategy && styles.strategyButtonTextActive,
+                  ]}>
+                    {strategy === 'left' ? '左連接' : 
+                     strategy === 'inner' ? '內連接' : '外連接'}
+                  </Text>
+                </TouchableOpacity>
+              ))}
             </View>
-          )}
+          </View>
           <Button
             title={showMergePreview ? "重新合併" : "預覽及合併"}
             onPress={handleMerge}

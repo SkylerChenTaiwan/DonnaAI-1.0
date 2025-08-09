@@ -127,12 +127,17 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
   const canProceed = useCallback(() => {
     switch (wizardState.stage) {
       case 'upload':
-        // 如果有多個檔案，必須先合併
-        if (wizardState.files.length > 1) {
-          return wizardState.mergedTable !== null;
+        // 簡易模式：只允許單一檔案
+        // 進階模式：可以多個檔案，但需要合併
+        if (wizardState.mode === 'simple') {
+          return wizardState.files.length === 1;
+        } else {
+          // 進階模式
+          if (wizardState.files.length > 1) {
+            return wizardState.mergedTable !== null;
+          }
+          return wizardState.files.length > 0;
         }
-        // 單一檔案可以直接進入下一步
-        return wizardState.files.length > 0;
       case 'mapping':
         // 至少需要有一個欄位被映射
         return wizardState.mappings.some(m => m.sourceField && m.targetField);
