@@ -4,29 +4,45 @@
  */
 
 import React from 'react';
-import { ViewStyle } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Platform, ViewStyle } from 'react-native';
 
-// Ionicons 的所有可用圖標名稱類型
-type IoniconsGlyphNames = keyof typeof Ionicons.glyphMap;
+// Platform-specific imports
+let IconImplementation: React.FC<any>;
+let IconProps: any;
 
-interface IconProps {
-  name: IoniconsGlyphNames | string;
-  size?: number;
-  color?: string;
-  style?: ViewStyle;
+if (Platform.OS === 'web') {
+  // Web platform - use SVG icons
+  const WebIcon = require('./Icon.web');
+  IconImplementation = WebIcon.Icon;
+  IconProps = WebIcon.IconProps;
+} else {
+  // Native platforms - use @expo/vector-icons
+  const { Ionicons } = require('@expo/vector-icons');
+  
+  // Ionicons 的所有可用圖標名稱類型
+  type IoniconsGlyphNames = keyof typeof Ionicons.glyphMap;
+  
+  interface NativeIconProps {
+    name: IoniconsGlyphNames | string;
+    size?: number;
+    color?: string;
+    style?: ViewStyle;
+  }
+  
+  IconImplementation = (props: NativeIconProps) => {
+    // 確保 name 是字串類型
+    const iconName = typeof props.name === 'string' ? props.name : String(props.name);
+    return <Ionicons {...props} name={iconName as IoniconsGlyphNames} />;
+  };
+  
+  IconProps = {} as NativeIconProps;
 }
 
 /**
  * 統一的 Icon 元件
- * 使用 @expo/vector-icons，依賴 CDN 載入字體（Web 平台）
+ * Web 平台使用 SVG，Native 平台使用 @expo/vector-icons
  */
-export const Icon: React.FC<IconProps> = (props) => {
-  // 確保 name 是字串類型
-  const iconName = typeof props.name === 'string' ? props.name : String(props.name);
-  
-  return <Ionicons {...props} name={iconName as IoniconsGlyphNames} />;
-};
+export const Icon = IconImplementation;
 
 // 匯出類型供外部使用
 export type { IconProps };
