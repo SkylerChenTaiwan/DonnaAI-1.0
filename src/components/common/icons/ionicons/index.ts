@@ -89,3 +89,5 @@ export { OptionsIcon } from './options';
 export { PersonOutlineIcon } from './person-outline';
 export { RefreshOutlineIcon } from './refresh-outline';
 export { TimeOutlineIcon } from './time-outline';
+export { BuildIcon } from './build';
+export { PeopleCircleIcon } from './people-circle';

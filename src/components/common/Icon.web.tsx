@@ -122,6 +122,7 @@ const iconMap: Record<string, React.ComponentType<any>> = {
   // Additional icons
   'analytics-outline': IoniconsWeb.AnalyticsOutlineIcon,
   'bar-chart-outline': IoniconsWeb.BarChartOutlineIcon,
+  'build': IoniconsWeb.BuildIcon,
   'business-outline': IoniconsWeb.BusinessOutlineIcon,
   'card-outline': IoniconsWeb.CardOutlineIcon,
   'checkbox': IoniconsWeb.CheckboxIcon,
@@ -138,6 +139,7 @@ const iconMap: Record<string, React.ComponentType<any>> = {
   'key-outline': IoniconsWeb.KeyOutlineIcon,
   'list': IoniconsWeb.ListIcon,
   'options': IoniconsWeb.OptionsIcon,
+  'people-circle': IoniconsWeb.PeopleCircleIcon,
   'person-outline': IoniconsWeb.PersonOutlineIcon,
   'receipt-outline': IoniconsWeb.ReceiptOutlineIcon,
   'refresh-outline': IoniconsWeb.RefreshOutlineIcon,
