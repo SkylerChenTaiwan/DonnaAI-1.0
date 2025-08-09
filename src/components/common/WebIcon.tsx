@@ -5,10 +5,10 @@
 
 import React from 'react';
 import { View, Text, Platform } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 
 interface WebIconProps {
-  name: keyof typeof Ionicons.glyphMap;
+  name: string;
   size?: number;
   color?: string;
   style?: any;

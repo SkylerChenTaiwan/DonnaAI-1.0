@@ -1,3 +1,4 @@
+import { MaterialIcon } from '../components/common/MaterialIcon';
 /**
  * 智能匯入系統使用範例
  * 展示如何使用新的批量資料匯入與智能映射功能
@@ -6,7 +7,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { ImportWizard } from '@/components/import/ImportWizard';
-import { MaterialIcons } from '@expo/vector-icons';
+// MaterialIcon import removed - using platform-specific MaterialIcon component;
 
 /**
  * 範例：智能匯入系統的使用
@@ -53,7 +54,7 @@ export const IntelligentImportExample: React.FC = () => {
         <Text style={styles.sectionTitle}>🚀 新功能特點</Text>
         
         <View style={styles.featureItem}>
-          <MaterialIcons name="auto-awesome" size={20} color="#4CAF50" />
+          <MaterialIcon name="auto-awesome" size={20} color="#4CAF50"  />
           <View style={styles.featureContent}>
             <Text style={styles.featureTitle}>AI 智能映射</Text>
             <Text style={styles.featureDesc}>
@@ -63,7 +64,7 @@ export const IntelligentImportExample: React.FC = () => {
         </View>
 
         <View style={styles.featureItem}>
-          <MaterialIcons name="merge-type" size={20} color="#2196F3" />
+          <MaterialIcon name="merge-type" size={20} color="#2196F3"  />
           <View style={styles.featureContent}>
             <Text style={styles.featureTitle}>多檔案合併</Text>
             <Text style={styles.featureDesc}>
@@ -73,17 +74,17 @@ export const IntelligentImportExample: React.FC = () => {
         </View>
 
         <View style={styles.featureItem}>
-          <MaterialIcons name="speed" size={20} color="#FF9800" />
+          <MaterialIcon name="speed" size={20} color="#FF9800"  />
           <View style={styles.featureContent}>
             <Text style={styles.featureTitle}>串流處理</Text>
             <Text style={styles.featureDesc}>
-              處理大型檔案（>100MB），支援暫停/恢復
+              處理大型檔案（大於100MB），支援暫停/恢復
             </Text>
           </View>
         </View>
 
         <View style={styles.featureItem}>
-          <MaterialIcons name="check-circle" size={20} color="#9C27B0" />
+          <MaterialIcon name="check-circle" size={20} color="#9C27B0"  />
           <View style={styles.featureContent}>
             <Text style={styles.featureTitle}>資料驗證</Text>
             <Text style={styles.featureDesc}>
@@ -93,7 +94,7 @@ export const IntelligentImportExample: React.FC = () => {
         </View>
 
         <View style={styles.featureItem}>
-          <MaterialIcons name="cleaning-services" size={20} color="#00BCD4" />
+          <MaterialIcon name="cleaning-services" size={20} color="#00BCD4"  />
           <View style={styles.featureContent}>
             <Text style={styles.featureTitle}>資料清理</Text>
             <Text style={styles.featureDesc}>
@@ -156,7 +157,7 @@ export const IntelligentImportExample: React.FC = () => {
         style={styles.startButton}
         onPress={() => setShowImportWizard(true)}
       >
-        <MaterialIcons name="upload-file" size={24} color="#fff" />
+        <MaterialIcon name="upload-file" size={24} color="#fff"  />
         <Text style={styles.startButtonText}>開始智能匯入</Text>
       </TouchableOpacity>
 

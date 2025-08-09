@@ -9,11 +9,11 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { DesignSystem } from '@/theme/designSystem';
 
 interface SectionHeaderProps {
-  icon: keyof typeof Ionicons.glyphMap;
+  icon: string;
   title: string;
 }
 

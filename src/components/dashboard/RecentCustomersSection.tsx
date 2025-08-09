@@ -11,7 +11,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -117,7 +117,7 @@ export const RecentCustomersSection: React.FC<RecentCustomersProps> = ({
   }, [navigation]);
 
   // 取得互動類型圖標
-  const getInteractionIcon = (type: string): keyof typeof Ionicons.glyphMap => {
+  const getInteractionIcon = (type: string): string => {
     switch (type) {
       case 'call':
         return 'call-outline';

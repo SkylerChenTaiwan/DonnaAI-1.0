@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { DesignSystem } from '@/theme/designSystem';
@@ -13,7 +13,7 @@ import { DesignSystem } from '@/theme/designSystem';
 interface AdminPlaceholderProps {
   title: string;
   description: string;
-  icon?: keyof typeof Ionicons.glyphMap;
+  icon?: string;
 }
 
 export const AdminPlaceholder: React.FC<AdminPlaceholderProps> = ({

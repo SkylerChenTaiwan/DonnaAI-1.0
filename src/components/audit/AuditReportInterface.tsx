@@ -1,3 +1,4 @@
+import { Icon } from '../../components/common/Icon';
 /**
  * 審計報告介面元件
  * 提供報告生成、排程和匯出功能
@@ -23,7 +24,7 @@ import {
   TimeRange,
 } from '@/types/audit';
 import { auditReportGenerator } from '@/services/audit/AuditReportGenerator';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { format } from 'date-fns';
 import { zhTW } from 'date-fns/locale';
 import * as FileSystem from 'expo-file-system';
@@ -265,7 +266,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
             style={[styles.reportTypeButton, reportType === 'compliance' && styles.reportTypeButtonActive]}
             onPress={() => setReportType('compliance')}
           >
-            <Ionicons name="shield-checkmark" size={24} color={reportType === 'compliance' ? '#FFFFFF' : '#666666'} />
+            <Icon name="shield-checkmark" size={24} color={reportType === 'compliance' ? '#FFFFFF' : '#666666'}  />
             <Text style={[styles.reportTypeText, reportType === 'compliance' && styles.reportTypeTextActive]}>
               合規報告
             </Text>
@@ -278,7 +279,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
             style={[styles.reportTypeButton, reportType === 'security' && styles.reportTypeButtonActive]}
             onPress={() => setReportType('security')}
           >
-            <Ionicons name="lock-closed" size={24} color={reportType === 'security' ? '#FFFFFF' : '#666666'} />
+            <Icon name="lock-closed" size={24} color={reportType === 'security' ? '#FFFFFF' : '#666666'}  />
             <Text style={[styles.reportTypeText, reportType === 'security' && styles.reportTypeTextActive]}>
               安全報告
             </Text>
@@ -402,7 +403,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
                 style={styles.dateButton}
                 onPress={() => setShowDatePicker('start')}
               >
-                <Ionicons name="calendar" size={20} color="#666666" />
+                <Icon name="calendar" size={20} color="#666666"  />
                 <Text style={styles.dateButtonText}>
                   開始日期: {format(dateRange.start, 'yyyy-MM-dd', { locale: zhTW })}
                 </Text>
@@ -412,7 +413,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
                 style={styles.dateButton}
                 onPress={() => setShowDatePicker('end')}
               >
-                <Ionicons name="calendar" size={20} color="#666666" />
+                <Icon name="calendar" size={20} color="#666666"  />
                 <Text style={styles.dateButtonText}>
                   結束日期: {format(dateRange.end, 'yyyy-MM-dd', { locale: zhTW })}
                 </Text>
@@ -432,7 +433,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
           <ActivityIndicator size="small" color="#FFFFFF" />
         ) : (
           <>
-            <Ionicons name="document-text" size={20} color="#FFFFFF" />
+            <Icon name="document-text" size={20} color="#FFFFFF"  />
             <Text style={styles.generateButtonText}>生成報告</Text>
           </>
         )}
@@ -442,7 +443,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
       {generatedReport && (
         <View style={styles.generatedReportContainer}>
           <View style={styles.generatedReportHeader}>
-            <Ionicons name="checkmark-circle" size={24} color="#4CAF50" />
+            <Icon name="checkmark-circle" size={24} color="#4CAF50"  />
             <Text style={styles.generatedReportTitle}>報告已生成</Text>
           </View>
           
@@ -480,7 +481,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
               onPress={() => handleExportReport('pdf')}
               disabled={exporting}
             >
-              <Ionicons name="document" size={18} color="#FFFFFF" />
+              <Icon name="document" size={18} color="#FFFFFF"  />
               <Text style={styles.exportButtonText}>匯出 PDF</Text>
             </TouchableOpacity>
             
@@ -489,7 +490,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
               onPress={() => handleExportReport('excel')}
               disabled={exporting}
             >
-              <Ionicons name="grid" size={18} color="#FFFFFF" />
+              <Icon name="grid" size={18} color="#FFFFFF"  />
               <Text style={styles.exportButtonText}>匯出 Excel</Text>
             </TouchableOpacity>
           </View>
@@ -587,7 +588,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
           style={styles.scheduleButton}
           onPress={handleScheduleReport}
         >
-          <Ionicons name="time" size={20} color="#FFFFFF" />
+          <Icon name="time" size={20} color="#FFFFFF"  />
           <Text style={styles.scheduleButtonText}>設定排程</Text>
         </TouchableOpacity>
       </View>
@@ -596,7 +597,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>現有排程</Text>
         <View style={styles.emptyState}>
-          <Ionicons name="calendar-outline" size={48} color="#999999" />
+          <Icon name="calendar-outline" size={48} color="#999999"  />
           <Text style={styles.emptyStateText}>尚無排程設定</Text>
         </View>
       </View>
@@ -613,14 +614,14 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
         
         {reportHistory.length === 0 ? (
           <View style={styles.emptyState}>
-            <Ionicons name="document-text-outline" size={48} color="#999999" />
+            <Icon name="document-text-outline" size={48} color="#999999"  />
             <Text style={styles.emptyStateText}>尚無報告歷史</Text>
           </View>
         ) : (
           reportHistory.map((item) => (
             <View key={item.id} style={styles.historyItem}>
               <View style={styles.historyItemIcon}>
-                <Ionicons name="document-text" size={24} color="#0066CC" />
+                <Icon name="document-text" size={24} color="#0066CC"  />
               </View>
               <View style={styles.historyItemContent}>
                 <Text style={styles.historyItemType}>{item.type}</Text>
@@ -631,7 +632,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
               </View>
               {item.downloadUrl && (
                 <TouchableOpacity style={styles.historyItemDownload}>
-                  <Ionicons name="download" size={20} color="#0066CC" />
+                  <Icon name="download" size={20} color="#0066CC"  />
                 </TouchableOpacity>
               )}
             </View>
@@ -649,11 +650,9 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
           style={[styles.tab, activeTab === 'generate' && styles.tabActive]}
           onPress={() => setActiveTab('generate')}
         >
-          <Ionicons 
-            name="create" 
-            size={20} 
+          <Icon name="create" size={20} 
             color={activeTab === 'generate' ? '#0066CC' : '#666666'} 
-          />
+           />
           <Text style={[styles.tabText, activeTab === 'generate' && styles.tabTextActive]}>
             生成報告
           </Text>
@@ -663,11 +662,9 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
           style={[styles.tab, activeTab === 'schedule' && styles.tabActive]}
           onPress={() => setActiveTab('schedule')}
         >
-          <Ionicons 
-            name="time" 
-            size={20} 
+          <Icon name="time" size={20} 
             color={activeTab === 'schedule' ? '#0066CC' : '#666666'} 
-          />
+           />
           <Text style={[styles.tabText, activeTab === 'schedule' && styles.tabTextActive]}>
             排程設定
           </Text>
@@ -677,11 +674,9 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
           style={[styles.tab, activeTab === 'history' && styles.tabActive]}
           onPress={() => setActiveTab('history')}
         >
-          <Ionicons 
-            name="archive" 
-            size={20} 
+          <Icon name="archive" size={20} 
             color={activeTab === 'history' ? '#0066CC' : '#666666'} 
-          />
+           />
           <Text style={[styles.tabText, activeTab === 'history' && styles.tabTextActive]}>
             歷史記錄
           </Text>

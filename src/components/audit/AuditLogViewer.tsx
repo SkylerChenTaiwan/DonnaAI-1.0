@@ -1,3 +1,4 @@
+import { Icon } from '../../components/common/Icon';
 /**
  * 審計日誌檢視器元件
  * 提供審計日誌的搜尋、檢視和過濾功能
@@ -28,7 +29,7 @@ import {
 import { auditLogQuery } from '@/services/audit/AuditLogQuery';
 import { format } from 'date-fns';
 import { zhTW } from 'date-fns/locale';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { DocumentSnapshot } from 'firebase/firestore';
 
 interface AuditLogViewerProps {
@@ -194,7 +195,7 @@ export const AuditLogViewer: React.FC<AuditLogViewerProps> = ({
       <View style={styles.filtersContainer}>
         {/* 搜尋輸入 */}
         <View style={styles.searchContainer}>
-          <Ionicons name="search" size={20} color="#666" style={styles.searchIcon} />
+          <Icon name="search" size={20} color="#666" style={styles.searchIcon}  />
           <TextInput
             style={styles.searchInput}
             placeholder="搜尋審計日誌..."
@@ -375,12 +376,12 @@ export const AuditLogViewer: React.FC<AuditLogViewerProps> = ({
         {/* 執行者資訊 */}
         <View style={styles.logFooter}>
           <Text style={styles.actor}>
-            <Ionicons name="person" size={12} color="#666" />
+            <Icon name="person" size={12} color="#666"  />
             {' '}{log.actor.userName} ({log.actor.userEmail})
           </Text>
           {log.result.duration && (
             <Text style={styles.duration}>
-              <Ionicons name="time" size={12} color="#666" />
+              <Icon name="time" size={12} color="#666"  />
               {' '}{log.result.duration}ms
             </Text>
           )}
@@ -407,7 +408,7 @@ export const AuditLogViewer: React.FC<AuditLogViewerProps> = ({
         <View style={styles.detailsHeader}>
           <Text style={styles.detailsTitle}>審計日誌詳情</Text>
           <TouchableOpacity onPress={() => setSelectedLog(null)}>
-            <Ionicons name="close" size={24} color="#666" />
+            <Icon name="close" size={24} color="#666"  />
           </TouchableOpacity>
         </View>
 
@@ -541,7 +542,7 @@ export const AuditLogViewer: React.FC<AuditLogViewerProps> = ({
         
         {!loading && logs.length === 0 && (
           <View style={styles.emptyContainer}>
-            <Ionicons name="document-text-outline" size={48} color="#999" />
+            <Icon name="document-text-outline" size={48} color="#999"  />
             <Text style={styles.emptyText}>沒有找到審計日誌</Text>
           </View>
         )}

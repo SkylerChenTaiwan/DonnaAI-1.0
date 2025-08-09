@@ -1,3 +1,4 @@
+import { Icon } from '../../../../components/common/Icon';
 /**
  * 步驟 3: 用戶匯入（含 Google 整合）
  * Step 3: User Import with Google Integration
@@ -15,7 +16,7 @@ import {
   ActivityIndicator,
   Platform,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { DesignSystem } from '@/theme/designSystem';
 import {
   StepProps,
@@ -262,7 +263,7 @@ const UserImportStep: React.FC<StepProps> = ({
             }
           }}
         >
-          <Ionicons name="cloud-upload-outline" size={48} color={colors.gray400} />
+          <Icon name="cloud-upload-outline" size={48} color={colors.gray400}  />
           <Text style={styles.uploadText}>點擊或拖放 CSV 檔案</Text>
           <Text style={styles.uploadHint}>支援 .csv 格式，最大 10MB</Text>
         </TouchableOpacity>
@@ -331,7 +332,7 @@ const UserImportStep: React.FC<StepProps> = ({
     return (
       <View style={styles.googleContainer}>
         <View style={styles.googleNotice}>
-          <Ionicons name="info" size={20} color={colors.info} />
+          <Icon name="info" size={20} color={colors.info}  />
           <Text style={styles.googleNoticeText}>
             需要設定 Google OAuth 2.0 憑證才能使用此功能
           </Text>
@@ -344,7 +345,7 @@ const UserImportStep: React.FC<StepProps> = ({
             showErrorToast('Google 整合功能開發中');
           }}
         >
-          <Ionicons name="link" size={20} color={colors.white} />
+          <Icon name="link" size={20} color={colors.white}  />
           <Text style={styles.googleButtonText}>連接 Google Workspace</Text>
         </TouchableOpacity>
         
@@ -464,7 +465,7 @@ const UserImportStep: React.FC<StepProps> = ({
           style={styles.addButton}
           onPress={handleManualAdd}
         >
-          <Ionicons name="add" size={20} color={colors.white} />
+          <Icon name="add" size={20} color={colors.white}  />
           <Text style={styles.addButtonText}>新增用戶</Text>
         </TouchableOpacity>
       </View>
@@ -476,7 +477,7 @@ const UserImportStep: React.FC<StepProps> = ({
     if (formData.users.length === 0) {
       return (
         <View style={styles.emptyList}>
-          <Ionicons name="people-outline" size={48} color={colors.gray400} />
+          <Icon name="people-outline" size={48} color={colors.gray400}  />
           <Text style={styles.emptyText}>尚未新增任何用戶</Text>
           <Text style={styles.emptyHint}>請選擇上方的匯入方式開始新增用戶</Text>
         </View>
@@ -521,7 +522,7 @@ const UserImportStep: React.FC<StepProps> = ({
                 style={styles.removeButton}
                 onPress={() => removeUser(index)}
               >
-                <Ionicons name="close" size={20} color={colors.gray600} />
+                <Icon name="close" size={20} color={colors.gray600}  />
               </TouchableOpacity>
             </View>
           ))}
@@ -535,7 +536,7 @@ const UserImportStep: React.FC<StepProps> = ({
     return (
       <View style={styles.authSection}>
         <View style={styles.sectionHeader}>
-          <Ionicons name="security" size={20} color={colors.primary} />
+          <Icon name="security" size={20} color={colors.primary}  />
           <Text style={styles.sectionTitle}>Google 登入設定</Text>
         </View>
         
@@ -595,7 +596,7 @@ const UserImportStep: React.FC<StepProps> = ({
     return (
       <View style={styles.passwordSection}>
         <View style={styles.sectionHeader}>
-          <Ionicons name="lock-closed-outline" size={20} color={colors.primary} />
+          <Icon name="lock-closed-outline" size={20} color={colors.primary}  />
           <Text style={styles.sectionTitle}>密碼設定</Text>
         </View>
         
@@ -627,7 +628,7 @@ const UserImportStep: React.FC<StepProps> = ({
                 {strategy.label}
               </Text>
               {formData.passwordStrategy.type === strategy.value && (
-                <Ionicons name="checkmark-circle" size={16} color={colors.primary} />
+                <Icon name="checkmark-circle" size={16} color={colors.primary}  />
               )}
             </TouchableOpacity>
           ))}

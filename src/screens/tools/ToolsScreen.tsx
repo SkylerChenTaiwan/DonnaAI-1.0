@@ -10,7 +10,7 @@ import {
   StyleSheet,
   RefreshControl,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { Layout } from '@/components/common/Layout';
 import { SearchBar } from '@/components/common/SearchBar';
 import { ToolCard } from '@/components/common/ToolCard';
@@ -24,7 +24,7 @@ interface Tool {
   id: string;
   title: string;
   description: string;
-  icon: keyof typeof Ionicons.glyphMap;
+  icon: string;
   color: string;
   category: string;
   webApp?: {

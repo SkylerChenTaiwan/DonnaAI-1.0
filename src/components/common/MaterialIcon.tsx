@@ -1,10 +1,22 @@
 /**
- * MaterialIcon 元件 - 預設匯出
- * Metro bundler 會根據平台自動選擇 .web.tsx 或 .native.tsx
+ * MaterialIcon 元件
+ * 
+ * 這個檔案不應該有實際的實作
+ * Metro bundler 會自動根據平台選擇：
+ * - Web: MaterialIcon.web.tsx
+ * - Native: MaterialIcon.native.tsx
  */
 
-// 這個檔案只是為了 TypeScript 類型定義
-// 實際的實現在 MaterialIcon.web.tsx 和 MaterialIcon.native.tsx
+import { ViewStyle } from 'react-native';
 
-export { MaterialIcon } from './MaterialIcon.web';
-export type { MaterialIconProps } from './MaterialIcon.web';
+export interface MaterialIconProps {
+  name: string;
+  size?: number;
+  color?: string;
+  style?: ViewStyle;
+}
+
+// 這是一個佔位符，實際的實作在平台特定檔案中
+export const MaterialIcon: React.FC<MaterialIconProps> = () => {
+  throw new Error('MaterialIcon component should be imported from platform-specific file');
+};

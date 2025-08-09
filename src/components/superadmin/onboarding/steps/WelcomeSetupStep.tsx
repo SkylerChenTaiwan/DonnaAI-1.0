@@ -1,3 +1,4 @@
+import { Icon } from '../../../../components/common/Icon';
 /**
  * 步驟 4: 歡迎設定
  * Step 4: Welcome Setup
@@ -14,7 +15,7 @@ import {
   Switch,
   Platform,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { DesignSystem } from '@/theme/designSystem';
 import {
   StepProps,
@@ -224,7 +225,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
     return (
       <View style={styles.experienceSection}>
         <View style={styles.sectionHeader}>
-          <Ionicons name="explore" size={20} color={colors.primary} />
+          <Icon name="explore" size={20} color={colors.primary}  />
           <Text style={styles.sectionTitle}>首次登入體驗</Text>
         </View>
         
@@ -292,7 +293,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
     return (
       <View style={styles.scheduleSection}>
         <View style={styles.sectionHeader}>
-          <Ionicons name="schedule" size={20} color={colors.primary} />
+          <Icon name="schedule" size={20} color={colors.primary}  />
           <Text style={styles.sectionTitle}>發送設定</Text>
         </View>
         
@@ -316,7 +317,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
                 style={styles.datePickerButton}
                 onPress={() => setShowDatePicker(true)}
               >
-                <Ionicons name="event" size={20} color={colors.gray600} />
+                <Icon name="event" size={20} color={colors.gray600}  />
                 <Text style={styles.datePickerText}>
                   {formData.scheduledSend.sendAt?.toLocaleString() || '選擇時間'}
                 </Text>
@@ -359,7 +360,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
         
         {!formData.scheduledSend?.enabled && (
           <View style={styles.infoBox}>
-            <Ionicons name="information-circle-outline" size={16} color={colors.info} />
+            <Icon name="information-circle-outline" size={16} color={colors.info}  />
             <Text style={styles.infoText}>
               歡迎郵件將在完成設置後立即發送
             </Text>
@@ -438,7 +439,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
       
       {/* 提示訊息 */}
       <View style={styles.tipBox}>
-        <Ionicons name="lightbulb-outline" size={20} color={colors.warning} />
+        <Icon name="lightbulb-outline" size={20} color={colors.warning}  />
         <View style={styles.tipContent}>
           <Text style={styles.tipTitle}>小提示</Text>
           <Text style={styles.tipText}>

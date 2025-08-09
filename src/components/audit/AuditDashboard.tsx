@@ -24,7 +24,7 @@ import {
 } from '@/types/audit';
 import { auditLogQuery } from '@/services/audit/AuditLogQuery';
 import { auditAnalytics } from '@/services/audit/AuditAnalytics';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { LineChart, BarChart, PieChart } from 'react-native-chart-kit';
 import { format, subDays, subHours, startOfDay, endOfDay } from 'date-fns';
 import { zhTW } from 'date-fns/locale';

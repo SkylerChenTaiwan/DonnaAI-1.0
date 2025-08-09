@@ -10,7 +10,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 
@@ -21,7 +21,7 @@ export const AdminDashboard: React.FC = () => {
       id: 'organization-management',
       title: '組織管理',
       subtitle: '管理組織設定',
-      icon: 'business' as keyof typeof Ionicons.glyphMap,
+      icon: 'business' as string,
       color: '#007AFF',
       onPress: () => {
         console.log('組織管理');
@@ -31,7 +31,7 @@ export const AdminDashboard: React.FC = () => {
       id: 'user-management',
       title: '使用者管理',
       subtitle: '新增/編輯使用者',
-      icon: 'people' as keyof typeof Ionicons.glyphMap,
+      icon: 'people' as string,
       color: '#34C759',
       onPress: () => {
         console.log('使用者管理');
@@ -41,7 +41,7 @@ export const AdminDashboard: React.FC = () => {
       id: 'ai-usage',
       title: 'AI 使用統計',
       subtitle: '查看 AI 使用情況',
-      icon: 'analytics' as keyof typeof Ionicons.glyphMap,
+      icon: 'analytics' as string,
       color: '#FF9500',
       onPress: () => {
         console.log('AI 使用統計');
@@ -51,7 +51,7 @@ export const AdminDashboard: React.FC = () => {
       id: 'billing',
       title: '計費管理',
       subtitle: '訂閱與帳單',
-      icon: 'card' as keyof typeof Ionicons.glyphMap,
+      icon: 'card' as string,
       color: '#FF3B30',
       onPress: () => {
         console.log('計費管理');

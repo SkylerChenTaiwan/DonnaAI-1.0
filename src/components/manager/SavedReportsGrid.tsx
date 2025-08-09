@@ -13,7 +13,7 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
@@ -147,7 +147,7 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
   };
 
   // 獲取圖表類型圖標
-  const getChartIcon = (chartType: string): keyof typeof Ionicons.glyphMap => {
+  const getChartIcon = (chartType: string): string => {
     switch (chartType) {
       case 'bar':
         return 'bar-chart';

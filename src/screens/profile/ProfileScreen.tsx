@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { Button } from '@/components/common/Button';
@@ -30,25 +30,25 @@ export const ProfileScreen: React.FC = () => {
 
   const profileItems = [
     {
-      icon: 'person-outline' as keyof typeof Ionicons.glyphMap,
+      icon: 'person-outline' as string,
       title: '編輯個人資料',
       subtitle: '更新您的基本資訊',
       onPress: () => console.log('編輯個人資料'),
     },
     {
-      icon: 'notifications-outline' as keyof typeof Ionicons.glyphMap,
+      icon: 'notifications-outline' as string,
       title: '通知設定',
       subtitle: '管理推播通知偏好',
       onPress: () => console.log('通知設定'),
     },
     {
-      icon: 'lock-closed-outline' as keyof typeof Ionicons.glyphMap,
+      icon: 'lock-closed-outline' as string,
       title: '隱私設定',
       subtitle: '資料安全與隱私控制',
       onPress: () => console.log('隱私設定'),
     },
     {
-      icon: 'help-circle-outline' as keyof typeof Ionicons.glyphMap,
+      icon: 'help-circle-outline' as string,
       title: '幫助與支援',
       subtitle: '常見問題與聯絡客服',
       onPress: () => console.log('幫助與支援'),

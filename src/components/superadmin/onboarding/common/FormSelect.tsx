@@ -1,3 +1,4 @@
+import { Icon } from '../../../../components/common/Icon';
 /**
  * 統一的表單選擇器元件
  * Unified Form Select Component
@@ -13,7 +14,7 @@ import {
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { DesignSystem } from '@/theme/designSystem';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 
 interface Option {
   label: string;
@@ -79,12 +80,10 @@ export const FormSelect: React.FC<FormSelectProps> = ({
                 </option>
               ))}
             </select>
-            <Ionicons
-              name="chevron-down"
-              size={20}
+            <Icon name="chevron-down" size={20}
               color={DesignSystem.colors.text.secondary}
               style={styles.selectIcon}
-            />
+             />
           </>
         ) : (
           <Picker

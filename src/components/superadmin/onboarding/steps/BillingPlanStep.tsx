@@ -1,3 +1,4 @@
+import { Icon } from '../../../../components/common/Icon';
 /**
  * 步驟 2: 計費方案選擇
  * Step 2: Billing Plan Selection
@@ -13,7 +14,7 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { DesignSystem } from '@/theme/designSystem';
 import {
   StepProps,
@@ -136,11 +137,9 @@ const BillingPlanStep: React.FC<StepProps> = ({
         <View style={styles.planFeatures}>
           {plan.features.map((feature, index) => (
             <View key={index} style={styles.featureRow}>
-              <Ionicons 
-                name="checkmark-circle-outline" 
-                size={16} 
+              <Icon name="checkmark-circle-outline" size={16} 
                 color={isSelected ? colors.primary : colors.success}
-              />
+               />
               <Text style={[
                 styles.featureText,
                 isSelected && styles.featureTextSelected,
@@ -153,7 +152,7 @@ const BillingPlanStep: React.FC<StepProps> = ({
         
         {isSelected && (
           <View style={styles.selectedIndicator}>
-            <Ionicons name="checkmark-circle-outline" size={24} color={colors.primary} />
+            <Icon name="checkmark-circle-outline" size={24} color={colors.primary}  />
           </View>
         )}
       </TouchableOpacity>
@@ -221,7 +220,7 @@ const BillingPlanStep: React.FC<StepProps> = ({
               seats: Math.max(1, prev.seats - 10) 
             }))}
           >
-            <Ionicons name="remove" size={20} color={colors.gray600} />
+            <Icon name="remove" size={20} color={colors.gray600}  />
           </TouchableOpacity>
           
           <TextInput
@@ -242,7 +241,7 @@ const BillingPlanStep: React.FC<StepProps> = ({
               seats: prev.seats + 10 
             }))}
           >
-            <Ionicons name="add" size={20} color={colors.gray600} />
+            <Icon name="add" size={20} color={colors.gray600}  />
           </TouchableOpacity>
         </View>
         <Text style={styles.seatsHint}>

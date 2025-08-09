@@ -5,13 +5,13 @@
 
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 import { StatCardData } from '@/types/charts';
 
 interface StatCardProps extends StatCardData {
-  icon?: keyof typeof Ionicons.glyphMap;
+  icon?: string;
   color?: string;
   size?: 'small' | 'medium' | 'large';
 }

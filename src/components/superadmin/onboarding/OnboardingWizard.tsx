@@ -1,3 +1,4 @@
+import { Icon } from '../../../components/common/Icon';
 /**
  * 組織入職精靈主元件
  * Organization Onboarding Wizard Main Component
@@ -13,7 +14,7 @@ import {
   ActivityIndicator,
   Platform,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { DesignSystem } from '@/theme/designSystem';
 import {
   OnboardingWizardProps,
@@ -391,7 +392,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
                   isPast && styles.stepPast,
                 ]}>
                   {isCompleted ? (
-                    <Ionicons name="checkmark" size={16} color={colors.text.inverse} />
+                    <Icon name="checkmark" size={16} color={colors.text.inverse}  />
                   ) : (
                     <Text style={[
                       styles.stepNumber,
@@ -473,7 +474,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
               onPress={handleBack}
               disabled={state.isSaving}
             >
-              <Ionicons name="arrow-back" size={20} color={DesignSystem.colors.gray[600]} />
+              <Icon name="arrow-back" size={20} color={DesignSystem.colors.gray[600]}  />
               <Text style={styles.secondaryButtonText}>上一步</Text>
             </TouchableOpacity>
           )}
@@ -483,7 +484,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
             onPress={handleSaveDraft}
             disabled={state.isSaving}
           >
-            <Ionicons name="save" size={20} color={DesignSystem.colors.gray[600]} />
+            <Icon name="save" size={20} color={DesignSystem.colors.gray[600]}  />
             <Text style={styles.ghostButtonText}>儲存草稿</Text>
           </TouchableOpacity>
         </View>
@@ -505,7 +506,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
               onPress={handleComplete}
               disabled={state.isSaving || state.isLoading}
             >
-              <Ionicons name="checkmark" size={20} color={DesignSystem.colors.text.inverse} />
+              <Icon name="checkmark" size={20} color={DesignSystem.colors.text.inverse}  />
               <Text style={styles.primaryButtonText}>完成建立</Text>
             </TouchableOpacity>
           ) : (
@@ -515,7 +516,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
               disabled={state.isSaving}
             >
               <Text style={styles.primaryButtonText}>下一步</Text>
-              <Ionicons name="arrow-forward" size={20} color={DesignSystem.colors.text.inverse} />
+              <Icon name="arrow-forward" size={20} color={DesignSystem.colors.text.inverse}  />
             </TouchableOpacity>
           )}
         </View>
@@ -540,7 +541,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
           style={styles.closeButton}
           onPress={onCancel}
         >
-          <Ionicons name="close" size={24} color={DesignSystem.colors.gray[600]} />
+          <Icon name="close" size={24} color={DesignSystem.colors.gray[600]}  />
         </TouchableOpacity>
       </View>
       

@@ -1,3 +1,4 @@
+import { Icon } from '../../../../components/common/Icon';
 /**
  * 基本資訊步驟元件
  * Basic Information Step Component
@@ -11,7 +12,7 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { DesignSystem } from '@/theme/designSystem';
 import { FormInput } from '../common/FormInput';
 import { FormSelect } from '../common/FormSelect';
@@ -266,11 +267,9 @@ const BasicInfoStep: React.FC<StepProps> = ({
 
       {/* 提示訊息 */}
       <View style={styles.infoBox}>
-        <Ionicons
-          name="information-circle-outline"
-          size={16}
+        <Icon name="information-circle-outline" size={16}
           color={DesignSystem.colors.status.info}
-        />
+         />
         <Text style={styles.infoText}>
           這些資訊將用於建立組織和發送通知。請確保聯絡資訊正確。
         </Text>

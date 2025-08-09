@@ -11,11 +11,11 @@ import {
   ViewStyle,
   ActivityIndicator,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 
-type IconName = keyof typeof Ionicons.glyphMap;
+type IconName = string;
 
 interface IconButtonProps {
   icon: IconName;

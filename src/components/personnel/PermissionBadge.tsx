@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 import { EnhancedUser } from '@/types/personnel';
@@ -21,14 +21,14 @@ export function PermissionBadge({ user, compact = false }: PermissionBadgeProps)
     switch (role) {
       case 'admin':
         return {
-          icon: 'shield-checkmark' as keyof typeof Ionicons.glyphMap,
+          icon: 'shield-checkmark' as string,
           label: '管理員',
           color: '#FF3B30',
           bgColor: '#FF3B301A',
         };
       case 'manager':
         return {
-          icon: 'people' as keyof typeof Ionicons.glyphMap,
+          icon: 'people' as string,
           label: '主管',
           color: '#007AFF',
           bgColor: '#007AFF1A',
@@ -36,7 +36,7 @@ export function PermissionBadge({ user, compact = false }: PermissionBadgeProps)
       case 'salesperson':
       default:
         return {
-          icon: 'person' as keyof typeof Ionicons.glyphMap,
+          icon: 'person' as string,
           label: '業務',
           color: '#34C759',
           bgColor: '#34C7591A',

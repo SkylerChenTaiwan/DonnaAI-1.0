@@ -110,6 +110,7 @@
     "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-react-native": "^4.1.0",
     "firebase-admin": "^13.4.0",
+    "glob": "^11.0.3",
     "jsdom": "^24.0.0",
     "metro-cache": "^0.82.5",
     "patch-package": "^8.0.0",

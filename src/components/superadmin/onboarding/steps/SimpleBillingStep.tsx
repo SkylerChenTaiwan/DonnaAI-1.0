@@ -1,3 +1,4 @@
+import { Icon } from '../../../../components/common/Icon';
 /**
  * 簡化版計費設定
  * 只設定總人數和免費人數
@@ -11,7 +12,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { DesignSystem } from '@/theme/designSystem';
 import { StepProps, BillingPlanData } from '@/types/onboarding';
 
@@ -71,7 +72,7 @@ const SimpleBillingStep: React.FC<StepProps> = ({
       {/* 免費人數設定 */}
       <View style={styles.settingCard}>
         <View style={styles.settingHeader}>
-          <Ionicons name="gift-outline" size={24} color={colors.success} />
+          <Icon name="gift-outline" size={24} color={colors.success}  />
           <Text style={styles.settingTitle}>免費名額</Text>
         </View>
         
@@ -80,7 +81,7 @@ const SimpleBillingStep: React.FC<StepProps> = ({
             style={styles.adjustButton}
             onPress={() => adjustNumber('freeSeats', -1)}
           >
-            <Ionicons name="remove" size={20} color={colors.gray600} />
+            <Icon name="remove" size={20} color={colors.gray600}  />
           </TouchableOpacity>
           
           <TextInput
@@ -102,7 +103,7 @@ const SimpleBillingStep: React.FC<StepProps> = ({
             style={styles.adjustButton}
             onPress={() => adjustNumber('freeSeats', 1)}
           >
-            <Ionicons name="add" size={20} color={colors.gray600} />
+            <Icon name="add" size={20} color={colors.gray600}  />
           </TouchableOpacity>
         </View>
         
@@ -112,7 +113,7 @@ const SimpleBillingStep: React.FC<StepProps> = ({
       {/* 每人月費設定 */}
       <View style={styles.settingCard}>
         <View style={styles.settingHeader}>
-          <Ionicons name="cash-outline" size={24} color={colors.warning} />
+          <Icon name="cash-outline" size={24} color={colors.warning}  />
           <Text style={styles.settingTitle}>每人月費（美元）</Text>
         </View>
         
@@ -121,7 +122,7 @@ const SimpleBillingStep: React.FC<StepProps> = ({
             style={styles.adjustButton}
             onPress={() => adjustNumber('pricePerSeat', -5)}
           >
-            <Ionicons name="remove" size={20} color={colors.gray600} />
+            <Icon name="remove" size={20} color={colors.gray600}  />
           </TouchableOpacity>
           
           <View style={styles.priceInputWrapper}>
@@ -142,7 +143,7 @@ const SimpleBillingStep: React.FC<StepProps> = ({
             style={styles.adjustButton}
             onPress={() => adjustNumber('pricePerSeat', 5)}
           >
-            <Ionicons name="add" size={20} color={colors.gray600} />
+            <Icon name="add" size={20} color={colors.gray600}  />
           </TouchableOpacity>
         </View>
         
@@ -170,7 +171,7 @@ const SimpleBillingStep: React.FC<StepProps> = ({
         <View style={styles.divider} />
         
         <Text style={styles.billingNote}>
-          <Ionicons name="information-circle-outline" size={16} color={colors.primary} />
+          <Icon name="information-circle-outline" size={16} color={colors.primary}  />
           {' '}計費方式
         </Text>
         

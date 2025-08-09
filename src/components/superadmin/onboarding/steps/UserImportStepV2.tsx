@@ -1,3 +1,4 @@
+import { Icon } from '../../../../components/common/Icon';
 /**
  * 步驟 3: 用戶匯入 V2 - 使用新的智能映射系統
  * Step 3: User Import V2 with Intelligent Mapping
@@ -12,7 +13,7 @@ import {
   ScrollView,
   Switch,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { DesignSystem } from '@/theme/designSystem';
 import { StepProps, UserImportData } from '@/types/onboarding';
 import UserImportWizard from '@/components/users/UserImportWizard';
@@ -100,7 +101,7 @@ const UserImportStepV2: React.FC<StepProps> = ({
     return (
       <View style={styles.authSection}>
         <View style={styles.sectionHeader}>
-          <Ionicons name="shield-checkmark-outline" size={20} color={colors.primary} />
+          <Icon name="shield-checkmark-outline" size={20} color={colors.primary}  />
           <Text style={styles.sectionTitle}>登入設定</Text>
         </View>
         
@@ -130,7 +131,7 @@ const UserImportStepV2: React.FC<StepProps> = ({
     return (
       <View style={styles.passwordSection}>
         <View style={styles.sectionHeader}>
-          <Ionicons name="lock-closed-outline" size={20} color={colors.primary} />
+          <Icon name="lock-closed-outline" size={20} color={colors.primary}  />
           <Text style={styles.sectionTitle}>密碼策略</Text>
         </View>
         
@@ -178,7 +179,7 @@ const UserImportStepV2: React.FC<StepProps> = ({
     return (
       <View style={styles.emailSection}>
         <View style={styles.sectionHeader}>
-          <Ionicons name="mail-outline" size={20} color={colors.primary} />
+          <Icon name="mail-outline" size={20} color={colors.primary}  />
           <Text style={styles.sectionTitle}>通知設定</Text>
         </View>
         
@@ -241,7 +242,7 @@ const UserImportStepV2: React.FC<StepProps> = ({
         {/* 主要操作區 */}
         <View style={styles.mainSection}>
           <View style={styles.importPrompt}>
-            <Ionicons name="people-outline" size={48} color={colors.primary} />
+            <Icon name="people-outline" size={48} color={colors.primary}  />
             <Text style={styles.promptTitle}>批量匯入用戶</Text>
             <Text style={styles.promptDescription}>
               使用智能欄位映射系統，支援 CSV、Excel 檔案上傳，
@@ -252,7 +253,7 @@ const UserImportStepV2: React.FC<StepProps> = ({
               style={styles.importButton}
               onPress={() => setShowImportWizard(true)}
             >
-              <Ionicons name="cloud-upload-outline" size={20} color={colors.white} />
+              <Icon name="cloud-upload-outline" size={20} color={colors.white}  />
               <Text style={styles.importButtonText}>開始匯入用戶</Text>
             </TouchableOpacity>
           </View>
@@ -263,7 +264,7 @@ const UserImportStepV2: React.FC<StepProps> = ({
           {/* 已匯入用戶數量 */}
           {formData.users.length > 0 && (
             <View style={styles.userCount}>
-              <Ionicons name="people" size={20} color={colors.primary} />
+              <Icon name="people" size={20} color={colors.primary}  />
               <Text style={styles.userCountText}>
                 已設定 {formData.users.length} 個用戶
               </Text>
@@ -280,7 +281,7 @@ const UserImportStepV2: React.FC<StepProps> = ({
         
         {/* 提示訊息 */}
         <View style={styles.tipCard}>
-          <Ionicons name="information-circle-outline" size={20} color={colors.info} />
+          <Icon name="information-circle-outline" size={20} color={colors.info}  />
           <Text style={styles.tipText}>
             您可以稍後在組織管理頁面中隨時新增或移除用戶
           </Text>

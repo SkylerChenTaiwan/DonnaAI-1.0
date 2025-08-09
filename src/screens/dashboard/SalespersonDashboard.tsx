@@ -10,7 +10,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { useAuthStore } from '@/stores/authStore';
@@ -23,7 +23,7 @@ export const SalespersonDashboard: React.FC = () => {
       id: 'new-meeting',
       title: '新增會議',
       subtitle: '記錄客戶會議',
-      icon: 'add-circle' as keyof typeof Ionicons.glyphMap,
+      icon: 'add-circle' as string,
       color: '#007AFF',
       onPress: () => {
         // TODO: 導航到新增會議畫面
@@ -34,7 +34,7 @@ export const SalespersonDashboard: React.FC = () => {
       id: 'record-audio',
       title: 'AI 錄音',
       subtitle: '會議錄音轉文字',
-      icon: 'mic' as keyof typeof Ionicons.glyphMap,
+      icon: 'mic' as string,
       color: '#FF3B30',
       onPress: () => {
         // TODO: 開始錄音功能
@@ -45,7 +45,7 @@ export const SalespersonDashboard: React.FC = () => {
       id: 'view-customers',
       title: '我的客戶',
       subtitle: '查看客戶列表',
-      icon: 'people' as keyof typeof Ionicons.glyphMap,
+      icon: 'people' as string,
       color: '#34C759',
       onPress: () => {
         // TODO: 導航到客戶列表
@@ -56,7 +56,7 @@ export const SalespersonDashboard: React.FC = () => {
       id: 'quick-note',
       title: '快速筆記',
       subtitle: '記錄重要事項',
-      icon: 'document-text' as keyof typeof Ionicons.glyphMap,
+      icon: 'document-text' as string,
       color: '#FF9500',
       onPress: () => {
         // TODO: 開啟筆記功能

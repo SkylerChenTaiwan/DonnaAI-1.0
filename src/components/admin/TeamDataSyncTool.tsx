@@ -1,3 +1,4 @@
+import { Icon } from '../../components/common/Icon';
 /**
  * 團隊資料同步工具元件
  * 用於管理員檢查和修復團隊成員資料不一致的問題
@@ -13,7 +14,7 @@ import {
   ActivityIndicator,
   Alert as RNAlert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { useAuthStore } from '@/stores/authStore';
 import {
   checkTeamDataConsistency,
@@ -172,7 +173,7 @@ export const TeamDataSyncTool: React.FC = () => {
                 onPress={() => setMessage(null)}
                 style={styles.alertClose}
               >
-                <Ionicons name="close" size={20} color="#666" />
+                <Icon name="close" size={20} color="#666"  />
               </TouchableOpacity>
             </View>
           )}
@@ -183,7 +184,7 @@ export const TeamDataSyncTool: React.FC = () => {
               onPress={handleCheckConsistency}
               disabled={loading || syncing}
             >
-              <Ionicons name="sync" size={20} color="#1976d2" style={{ marginRight: 8 }} />
+              <Icon name="sync" size={20} color="#1976d2" style={{ marginRight: 8 }}  />
               <Text style={styles.outlineButtonText}>檢查一致性</Text>
             </TouchableOpacity>
             
@@ -192,7 +193,7 @@ export const TeamDataSyncTool: React.FC = () => {
               onPress={handleFullSync}
               disabled={syncing || loading || inconsistencies.length === 0}
             >
-              <Ionicons name="sync" size={20} color="white" style={{ marginRight: 8 }} />
+              <Icon name="sync" size={20} color="white" style={{ marginRight: 8 }}  />
               <Text style={styles.primaryButtonText}>執行完整同步</Text>
             </TouchableOpacity>
           </View>
@@ -232,7 +233,7 @@ export const TeamDataSyncTool: React.FC = () => {
                         onPress={() => handleSyncItem(item)}
                         disabled={syncing}
                       >
-                        <Ionicons name="sync" size={16} color="#1976d2" style={{ marginRight: 4 }} />
+                        <Icon name="sync" size={16} color="#1976d2" style={{ marginRight: 4 }}  />
                         <Text style={styles.syncButtonText}>同步</Text>
                       </TouchableOpacity>
                     </View>
@@ -244,7 +245,7 @@ export const TeamDataSyncTool: React.FC = () => {
 
           {inconsistencies.length === 0 && !loading && (
             <View style={styles.successContainer}>
-              <Ionicons name="checkmark-circle" size={48} color="#4caf50" />
+              <Icon name="checkmark-circle" size={48} color="#4caf50"  />
               <Text style={styles.successText}>
                 資料檢查完成，所有團隊成員資料都是一致的！
               </Text>

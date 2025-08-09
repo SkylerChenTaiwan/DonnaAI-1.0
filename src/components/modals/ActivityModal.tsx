@@ -12,7 +12,7 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '../../theme/DesignSystem';
 import { User } from '../../types/user';
@@ -91,7 +91,7 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({
     }
   };
 
-  const getActionIcon = (action: string): keyof typeof Ionicons.glyphMap => {
+  const getActionIcon = (action: string): string => {
     switch (action) {
       case 'login':
         return 'log-in-outline';

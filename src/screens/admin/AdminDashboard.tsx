@@ -14,7 +14,7 @@ import {
   Alert,
   Platform,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+// Icon import removed - using platform-specific Icon component;
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Icon } from '@/components/common/Icon';
@@ -34,7 +34,7 @@ type NavigationProp = StackNavigationProp<RootStackParamList, 'AdminDashboard'>;
 interface QuickAction {
   id: string;
   title: string;
-  icon: keyof typeof Ionicons.glyphMap;
+  icon: string;
   color: string;
   route: keyof RootStackParamList;
   permission?: string;
