@@ -1,0 +1,6 @@
+姓名,電子信箱,部門
+王小明,,業務部
+李美玲,invalid-email,行銷部
+,chen@example.com,人資部
+劉志偉,duplicate@example.com,財務部
+陳雅琪,duplicate@example.com,行政部

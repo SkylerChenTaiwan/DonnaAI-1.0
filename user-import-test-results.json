@@ -1,0 +1,161 @@
+{
+  "summary": {
+    "totalTests": 7,
+    "passedTests": 7,
+    "failedTests": 0,
+    "passRate": 100,
+    "timestamp": "2025-08-09T16:48:52.363Z"
+  },
+  "results": [
+    {
+      "testName": "檔案解析",
+      "success": true,
+      "message": "解析出 5 筆資料，5 個欄位",
+      "data": {
+        "headers": [
+          "姓名",
+          "電子信箱",
+          "部門",
+          "職位",
+          "電話"
+        ],
+        "sampleData": {
+          "姓名": "張小明",
+          "電子信箱": "zhang@example.com",
+          "部門": "業務部",
+          "職位": "業務專員",
+          "電話": "0912-345-678"
+        }
+      },
+      "timestamp": "2025-08-09T16:48:52.361Z"
+    },
+    {
+      "testName": "智能欄位映射",
+      "success": true,
+      "message": "映射 5 個欄位，平均信心度: 87%",
+      "data": {
+        "mappings": [
+          {
+            "source": "姓名",
+            "target": "name",
+            "confidence": 0.9
+          },
+          {
+            "source": "電子信箱",
+            "target": "email",
+            "confidence": 0.95
+          },
+          {
+            "source": "部門",
+            "target": "department",
+            "confidence": 0.85
+          },
+          {
+            "source": "職位",
+            "target": "position",
+            "confidence": 0.8
+          },
+          {
+            "source": "電話",
+            "target": "phoneNumber",
+            "confidence": 0.85
+          }
+        ]
+      },
+      "timestamp": "2025-08-09T16:48:52.361Z"
+    },
+    {
+      "testName": "資料轉換",
+      "success": true,
+      "message": "成功轉換 5 筆資料",
+      "data": {
+        "sampleTransformed": {
+          "id": "user_0",
+          "isValid": true,
+          "validationErrors": [],
+          "isDuplicate": false,
+          "isEdited": false,
+          "isSelected": true,
+          "name": "張小明",
+          "email": "zhang@example.com",
+          "department": "業務部",
+          "position": "業務專員",
+          "phoneNumber": "0912-345-678"
+        }
+      },
+      "timestamp": "2025-08-09T16:48:52.362Z"
+    },
+    {
+      "testName": "資料驗證",
+      "success": true,
+      "message": "驗證完成: 5 筆有效，0 筆錯誤，0 筆警告",
+      "data": {
+        "stats": {
+          "validCount": 5,
+          "errorCount": 0,
+          "warningCount": 0
+        },
+        "sampleErrors": []
+      },
+      "timestamp": "2025-08-09T16:48:52.362Z"
+    },
+    {
+      "testName": "空檔案處理",
+      "success": true,
+      "message": "正確處理空檔案",
+      "data": null,
+      "timestamp": "2025-08-09T16:48:52.362Z"
+    },
+    {
+      "testName": "錯誤資料檢測",
+      "success": true,
+      "message": "正確檢測出 3 筆無效資料",
+      "data": {
+        "totalData": 5,
+        "invalidData": 3,
+        "sampleErrors": [
+          {
+            "id": "user_0",
+            "name": "王小明",
+            "email": "",
+            "department": "業務部",
+            "isValid": false,
+            "validationErrors": [
+              "電子信箱為必填欄位"
+            ]
+          },
+          {
+            "id": "user_1",
+            "name": "李美玲",
+            "email": "invalid-email",
+            "department": "行銷部",
+            "isValid": false,
+            "validationErrors": [
+              "電子信箱格式無效"
+            ]
+          }
+        ]
+      },
+      "timestamp": "2025-08-09T16:48:52.362Z"
+    },
+    {
+      "testName": "多檔案合併",
+      "success": true,
+      "message": "合併結果: 7 筆資料，來源: 4 + 3 筆",
+      "data": {
+        "originalCounts": [
+          4,
+          3
+        ],
+        "mergedCount": 7,
+        "sampleMerged": {
+          "name": "黃大明",
+          "email": "huang@example.com",
+          "dept": "業務部",
+          "source": "file1"
+        }
+      },
+      "timestamp": "2025-08-09T16:48:52.363Z"
+    }
+  ]
+}
