@@ -134,7 +134,11 @@ const iconMap: Record<string, React.ComponentType<any>> = {
   'receipt-outline': IoniconsWeb.ReceiptOutlineIcon,
   'reorder-three': IoniconsWeb.ReorderThreeIcon,
   'sparkles': IoniconsWeb.SparklesIcon,
-  'swap-vertical': IoniconsWeb.SwapVerticalIcon
+  'swap-vertical': IoniconsWeb.SwapVerticalIcon,
+  'menu': IoniconsWeb.MenuIcon,
+  'cash-outline': IoniconsWeb.CashOutlineIcon,
+  'trending-down-outline': IoniconsWeb.TrendingDownOutlineIcon,
+  'cloud-download-outline': IoniconsWeb.CloudDownloadOutlineIcon
 };
 
 export const Icon: React.FC<IconProps> = ({ name, size = 24, color = '#000', style }) => {

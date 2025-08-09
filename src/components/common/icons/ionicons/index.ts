@@ -93,3 +93,7 @@ export { BuildIcon } from './build';
 export { PeopleCircleIcon } from './people-circle';
 export { PeopleCircleOutlineIcon } from './people-circle-outline';
 export { BuildOutlineIcon } from './build-outline';
+export { MenuIcon } from './menu';
+export { CashOutlineIcon } from './cash-outline';
+export { TrendingDownOutlineIcon } from './trending-down-outline';
+export { CloudDownloadOutlineIcon } from './cloud-download-outline';
