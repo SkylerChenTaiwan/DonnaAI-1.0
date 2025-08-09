@@ -10,7 +10,7 @@
     "web": "expo start --web",
     "web:dev": "expo export --platform web --output-dir dist-web && cd dist-web && npx serve -l 3002",
     "web:3002": "expo export --platform web --output-dir dist-web && cd dist-web && npx serve -l 3002",
-    "web:build": "expo export --platform web --output-dir dist-web && node scripts/fix-portal.js && node scripts/fix-web-icons.js",
+    "web:build": "expo export --platform web --output-dir dist-web && node scripts/fix-portal.js",
     "web:preview": "cd dist-web && npx serve -l 3002",
     "web:clean": "rm -rf dist-web",
     "web:deploy": "npm run web:build && firebase deploy --only hosting",
