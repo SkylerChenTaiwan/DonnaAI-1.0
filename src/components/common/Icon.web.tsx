@@ -23,21 +23,21 @@ const iconMap: Record<string, React.ComponentType<any>> = {
   'arrow-forward': IoniconsWeb.ArrowForwardIcon,
   'chevron-back': IoniconsWeb.ChevronBackIcon,
   'chevron-down': IoniconsWeb.ChevronDownIcon,
-  'chevron-down-outline': IoniconsWeb.ChevronDownIcon,
+  'chevron-down-outline': IoniconsWeb.ChevronDownOutlineIcon,
   'chevron-forward': IoniconsWeb.ChevronForwardIcon,
-  'chevron-right': IoniconsWeb.ChevronForwardIcon, // Alias
+  'chevron-right': IoniconsWeb.ChevronRightIcon,
   
   // Actions
   'bookmark-outline': IoniconsWeb.BookmarkOutlineIcon,
   'bulb': IoniconsWeb.BulbIcon,
   'bulb-outline': IoniconsWeb.BulbOutlineIcon,
   'business': IoniconsWeb.BusinessIcon,
-  'business-outline': IoniconsWeb.BusinessIcon, // Use filled as fallback
+  'business-outline': IoniconsWeb.BusinessOutlineIcon,
   
   // Calendar & Time
   'calendar': IoniconsWeb.CalendarIcon,
   'calendar-outline': IoniconsWeb.CalendarOutlineIcon,
-  'time-outline': IoniconsWeb.CalendarOutlineIcon, // Fallback
+  'time-outline': IoniconsWeb.TimeOutlineIcon,
   
   // Communication
   'call-outline': IoniconsWeb.CallOutlineIcon,
@@ -52,7 +52,7 @@ const iconMap: Record<string, React.ComponentType<any>> = {
   'checkmark-circle-outline': IoniconsWeb.CheckmarkCircleOutlineIcon,
   'checkmark-done-outline': IoniconsWeb.CheckmarkDoneOutlineIcon,
   'checkmark-square': IoniconsWeb.CheckmarkSquareIcon,
-  'checkbox': IoniconsWeb.CheckmarkSquareIcon, // Alias
+  'checkbox': IoniconsWeb.CheckboxIcon,
   'square-outline': IoniconsWeb.SquareOutlineIcon,
   
   // Close & Remove
@@ -66,21 +66,21 @@ const iconMap: Record<string, React.ComponentType<any>> = {
   'cloud-upload-outline': IoniconsWeb.CloudUploadOutlineIcon,
   'copy-outline': IoniconsWeb.CopyOutlineIcon,
   'database': IoniconsWeb.DatabaseIcon,
-  'database-outline': IoniconsWeb.DatabaseIcon, // Use filled as fallback
-  'document-text': IoniconsWeb.DocumentTextOutlineIcon, // Use outline as fallback
+  'database-outline': IoniconsWeb.DatabaseOutlineIcon,
+  'document-text': IoniconsWeb.DocumentTextIcon,
   'document-text-outline': IoniconsWeb.DocumentTextOutlineIcon,
-  'document-outline': IoniconsWeb.DocumentTextOutlineIcon, // Alias
-  'download': IoniconsWeb.DownloadOutlineIcon, // Use outline as fallback
+  'document-outline': IoniconsWeb.DocumentOutlineIcon,
+  'download': IoniconsWeb.DownloadIcon,
   'download-outline': IoniconsWeb.DownloadOutlineIcon,
-  'folder-open': IoniconsWeb.FolderOpenOutlineIcon, // Use outline as fallback
+  'folder-open': IoniconsWeb.FolderOpenIcon,
   'folder-open-outline': IoniconsWeb.FolderOpenOutlineIcon,
   
   // Edit & Settings
   'create-outline': IoniconsWeb.CreateOutlineIcon,
   'pencil': IoniconsWeb.PencilIcon,
   'settings-outline': IoniconsWeb.SettingsOutlineIcon,
-  'construct-outline': IoniconsWeb.SettingsOutlineIcon, // Fallback
-  'options': IoniconsWeb.SettingsOutlineIcon, // Fallback
+  'construct-outline': IoniconsWeb.ConstructOutlineIcon,
+  'options': IoniconsWeb.OptionsIcon,
   
   // Filter & Search
   'filter': IoniconsWeb.FilterIcon,
@@ -105,7 +105,7 @@ const iconMap: Record<string, React.ComponentType<any>> = {
   'person-add': IoniconsWeb.PersonAddIcon,
   'person-add-outline': IoniconsWeb.PersonAddOutlineIcon,
   'person-circle': IoniconsWeb.PersonCircleIcon,
-  'person-outline': IoniconsWeb.PersonIcon, // Use filled as fallback
+  'person-outline': IoniconsWeb.PersonOutlineIcon,
   
   // Misc
   'flag': IoniconsWeb.FlagIcon,
@@ -114,39 +114,27 @@ const iconMap: Record<string, React.ComponentType<any>> = {
   'lock-closed': IoniconsWeb.LockClosedIcon,
   'open-outline': IoniconsWeb.OpenOutlineIcon,
   'refresh': IoniconsWeb.RefreshIcon,
-  'refresh-outline': IoniconsWeb.RefreshIcon, // Use filled as fallback
+  'refresh-outline': IoniconsWeb.RefreshOutlineIcon,
   'trash-outline': IoniconsWeb.TrashOutlineIcon,
   'warning': IoniconsWeb.WarningIcon,
   'warning-outline': IoniconsWeb.WarningOutlineIcon,
   
-  // Additional icons
+  // Additional icons (non-duplicates only)
   'analytics-outline': IoniconsWeb.AnalyticsOutlineIcon,
   'bar-chart-outline': IoniconsWeb.BarChartOutlineIcon,
   'build': IoniconsWeb.BuildIcon,
-  'business-outline': IoniconsWeb.BusinessOutlineIcon,
+  'build-outline': IoniconsWeb.BuildOutlineIcon,
   'card-outline': IoniconsWeb.CardOutlineIcon,
-  'checkbox': IoniconsWeb.CheckboxIcon,
-  'chevron-down-outline': IoniconsWeb.ChevronDownOutlineIcon,
-  'chevron-right': IoniconsWeb.ChevronRightIcon,
-  'construct-outline': IoniconsWeb.ConstructOutlineIcon,
-  'database-outline': IoniconsWeb.DatabaseOutlineIcon,
-  'document-outline': IoniconsWeb.DocumentOutlineIcon,
-  'document-text': IoniconsWeb.DocumentTextIcon,
-  'download': IoniconsWeb.DownloadIcon,
   'file-tray-outline': IoniconsWeb.FileTrayOutlineIcon,
-  'folder-open': IoniconsWeb.FolderOpenIcon,
   'gift-outline': IoniconsWeb.GiftOutlineIcon,
   'key-outline': IoniconsWeb.KeyOutlineIcon,
   'list': IoniconsWeb.ListIcon,
-  'options': IoniconsWeb.OptionsIcon,
   'people-circle': IoniconsWeb.PeopleCircleIcon,
-  'person-outline': IoniconsWeb.PersonOutlineIcon,
+  'people-circle-outline': IoniconsWeb.PeopleCircleOutlineIcon,
   'receipt-outline': IoniconsWeb.ReceiptOutlineIcon,
-  'refresh-outline': IoniconsWeb.RefreshOutlineIcon,
   'reorder-three': IoniconsWeb.ReorderThreeIcon,
   'sparkles': IoniconsWeb.SparklesIcon,
-  'swap-vertical': IoniconsWeb.SwapVerticalIcon,
-  'time-outline': IoniconsWeb.TimeOutlineIcon
+  'swap-vertical': IoniconsWeb.SwapVerticalIcon
 };
 
 export const Icon: React.FC<IconProps> = ({ name, size = 24, color = '#000', style }) => {

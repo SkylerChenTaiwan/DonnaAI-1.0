@@ -91,3 +91,5 @@ export { RefreshOutlineIcon } from './refresh-outline';
 export { TimeOutlineIcon } from './time-outline';
 export { BuildIcon } from './build';
 export { PeopleCircleIcon } from './people-circle';
+export { PeopleCircleOutlineIcon } from './people-circle-outline';
+export { BuildOutlineIcon } from './build-outline';
