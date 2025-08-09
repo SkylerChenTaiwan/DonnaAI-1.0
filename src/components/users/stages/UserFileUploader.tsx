@@ -317,7 +317,7 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
         caseSensitive: false,
       };
 
-      const merged = await mergeFiles(filesToMerge, config);
+      const merged = mergeFiles(filesToMerge, config);
       onMergeCompleted(config, merged);
       showSuccessToast('檔案已自動合併');
     } catch (error) {
@@ -363,15 +363,38 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
         caseSensitive: false,
       };
 
-      // 驗證合併
-      const validation = validateMerge(files, config);
-      if (!validation.isValid) {
-        showErrorToast(`合併驗證失敗: ${validation.errors.join(', ')}`);
-        return;
+      // 先檢查關鍵欄位是否存在
+      for (const fileConfig of config.files) {
+        const file = files.find(f => f.id === fileConfig.id);
+        if (!file) {
+          showErrorToast(`找不到檔案 ${fileConfig.id}`);
+          return;
+        }
+        if (!fileConfig.keyField) {
+          showErrorToast(`檔案 ${file.name} 沒有選擇關鍵欄位`);
+          return;
+        }
+        if (!file.headers.includes(fileConfig.keyField)) {
+          showErrorToast(`檔案 ${file.name} 沒有欄位 ${fileConfig.keyField}`);
+          return;
+        }
       }
 
       // 執行合併
-      const merged = await mergeFiles(files, config);
+      const merged = mergeFiles(files, config);
+      
+      // 驗證合併結果
+      const validation = validateMerge(merged);
+      if (!validation.isValid) {
+        showErrorToast(`合併驗證失敗: ${validation.issues.join(', ')}`);
+        return;
+      }
+      
+      // 顯示警告（如果有）
+      if (validation.warnings && validation.warnings.length > 0) {
+        console.warn('合併警告:', validation.warnings);
+      }
+      
       onMergeCompleted(config, merged);
       
       showSuccessToast(
