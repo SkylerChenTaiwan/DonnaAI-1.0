@@ -330,14 +330,23 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
    * 手動執行合併
    */
   const handleMerge = async () => {
+    console.log('handleMerge called', { files, selectedKeyFields });
+    
     if (files.length < 2) {
       showErrorToast('需要至少兩個檔案才能合併');
       return;
     }
 
     // 檢查是否所有檔案都選擇了關鍵欄位
-    const filesWithKey = files.filter(f => selectedKeyFields[f.id]);
+    const filesWithKey = files.filter(f => {
+      const hasKey = selectedKeyFields[f.id] || f.keyField;
+      console.log(`File ${f.id}: selectedKey=${selectedKeyFields[f.id]}, keyField=${f.keyField}, hasKey=${hasKey}`);
+      return hasKey;
+    });
+    
     if (filesWithKey.length < files.length) {
+      const missingKeyFiles = files.filter(f => !selectedKeyFields[f.id] && !f.keyField);
+      console.error('Missing key fields for files:', missingKeyFiles);
       showErrorToast('請為所有檔案選擇關鍵欄位');
       return;
     }
@@ -715,19 +724,48 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
 };
 
 // 匯入 Button 元件（避免循環依賴）
-const Button: React.FC<any> = ({ title, onPress, disabled, style }) => (
-  <TouchableOpacity
-    style={[
-      styles.button,
-      disabled && styles.buttonDisabled,
-      style,
-    ]}
-    onPress={onPress}
-    disabled={disabled}
-  >
-    <Text style={styles.buttonText}>{title}</Text>
-  </TouchableOpacity>
-);
+const Button: React.FC<any> = ({ title, onPress, disabled, style }) => {
+  if (Platform.OS === 'web') {
+    return (
+      <button
+        style={{
+          backgroundColor: disabled ? DesignSystem.colors.border.medium : DesignSystem.colors.primary,
+          color: DesignSystem.colors.text.inverse,
+          paddingTop: '12px',
+          paddingBottom: '12px',
+          paddingLeft: '24px',
+          paddingRight: '24px',
+          borderRadius: '8px',
+          border: 'none',
+          fontSize: '14px',
+          fontWeight: '600',
+          cursor: disabled ? 'not-allowed' : 'pointer',
+          opacity: disabled ? 0.5 : 1,
+          marginTop: '16px',
+          width: '100%',
+        }}
+        onClick={disabled ? undefined : onPress}
+        disabled={disabled}
+      >
+        {title}
+      </button>
+    );
+  }
+  
+  return (
+    <TouchableOpacity
+      style={[
+        styles.button,
+        disabled && styles.buttonDisabled,
+        style,
+      ]}
+      onPress={onPress}
+      disabled={disabled}
+    >
+      <Text style={styles.buttonText}>{title}</Text>
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
