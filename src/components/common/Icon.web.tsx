@@ -142,11 +142,15 @@ export const Icon: React.FC<IconProps> = ({ name, size = 24, color = '#000', sty
   const iconName = typeof name === 'string' ? name : String(name);
   const IconComponent = iconMap[iconName];
   
+  // Debug logging
+  if (iconName === 'build' || iconName === 'build-outline' || 
+      iconName === 'people-circle' || iconName === 'people-circle-outline') {
+    console.log(`[Icon Debug] Requesting icon: ${iconName}, Found: ${!!IconComponent}`);
+  }
+  
   if (!IconComponent) {
     // Fallback to help circle for unknown icons
-    if (process.env.NODE_ENV === 'development') {
-      console.warn(`Icon "${iconName}" not found in web icons, using fallback`);
-    }
+    console.warn(`Icon "${iconName}" not found in web icons, using fallback`);
     return <IoniconsWeb.HelpCircleOutlineIcon size={size} color={color} style={style} />;
   }
   
