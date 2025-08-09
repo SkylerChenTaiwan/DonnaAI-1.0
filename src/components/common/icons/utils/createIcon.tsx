@@ -27,12 +27,12 @@ export function createIcon(
       ...(style as any)
     };
 
-    // Create SVG string
-    const svgPaths = paths.map(d => `<path d="${d}" fill="${color}" fill-rule="${fillRule || 'nonzero'}"/>`).join('');
-    const svgString = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="${viewBox}" fill="${color}">${svgPaths}</svg>`;
+    // Create SVG string with proper attributes
+    const svgPaths = paths.map(d => `<path d="${d}" fill="${color}" fillRule="${fillRule || 'nonzero'}"/>`).join('');
+    const svgString = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="${viewBox}">${svgPaths}</svg>`;
     
-    // Encode as data URI
-    const dataUri = `data:image/svg+xml;utf8,${encodeURIComponent(svgString)}`;
+    // Encode as data URI with base64 for better compatibility
+    const dataUri = `data:image/svg+xml;base64,${btoa(svgString)}`;
 
     return (
       <img 
