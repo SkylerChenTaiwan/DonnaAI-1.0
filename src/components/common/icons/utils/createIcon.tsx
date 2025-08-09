@@ -18,41 +18,30 @@ export function createIcon(
       return null;
     }
 
-    // Use inline styles for highest priority
-    const svgStyle = {
-      display: 'block',
-      width: `${size}px`,
-      height: `${size}px`
+    // Convert ViewStyle to CSS style
+    const cssStyle: React.CSSProperties = {
+      width: size,
+      height: size,
+      display: 'inline-block',
+      verticalAlign: 'middle',
+      ...(style as any)
     };
 
-    const containerStyle = {
-      width: `${size}px`,
-      height: `${size}px`,
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      ...style
-    };
+    // Create SVG string
+    const svgPaths = paths.map(d => `<path d="${d}" fill="${color}" fill-rule="${fillRule || 'nonzero'}"/>`).join('');
+    const svgString = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="${viewBox}" fill="${color}">${svgPaths}</svg>`;
+    
+    // Encode as data URI
+    const dataUri = `data:image/svg+xml;utf8,${encodeURIComponent(svgString)}`;
 
     return (
-      <div style={containerStyle}>
-        <svg
-          width={size}
-          height={size}
-          viewBox={viewBox}
-          fill={color}
-          style={svgStyle}
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          {paths.map((d, index) => (
-            <path 
-              key={index} 
-              d={d} 
-              fillRule={fillRule || 'nonzero'}
-            />
-          ))}
-        </svg>
-      </div>
+      <img 
+        src={dataUri}
+        width={size}
+        height={size}
+        style={cssStyle}
+        alt=""
+      />
     );
   });
 }
