@@ -147,7 +147,14 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
           header: true,
           skipEmptyLines: true,
           encoding: 'UTF-8',
-          transformHeader: (header) => header?.trim() || '',
+          transformHeader: (header) => {
+            // 清理標題：移除 BOM、空白、特殊字元
+            const cleaned = header
+              ?.replace(/^\uFEFF/, '') // 移除 BOM
+              ?.replace(/[\r\n]/g, '') // 移除換行
+              ?.trim() || '';
+            return cleaned;
+          },
           transform: (value) => value?.trim() || '',
           complete: (result) => {
             if (result.errors?.length > 0) {
@@ -162,10 +169,30 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
               return;
             }
 
-            const headers = result.meta?.fields || [];
+            // 取得並驗證標題
+            let headers = result.meta?.fields || [];
+            
+            // 過濾掉無效的標題（太長或包含奇怪字元的）
+            headers = headers.filter(h => {
+              // 排除空標題
+              if (!h || h.trim() === '') return false;
+              // 排除太長的標題（可能是資料被誤認為標題）
+              if (h.length > 50) {
+                console.warn('排除過長的標題:', h.substring(0, 50) + '...');
+                return false;
+              }
+              // 排除包含太多特殊字元的標題
+              const specialCharCount = (h.match(/[^\w\s\u4e00-\u9fa5\-_@.]/g) || []).length;
+              if (specialCharCount > h.length * 0.3) {
+                console.warn('排除包含太多特殊字元的標題:', h);
+                return false;
+              }
+              return true;
+            });
+            
             if (headers.length === 0) {
-              console.error('無法取得檔案標題:', result);
-              showErrorToast('無法讀取檔案欄位');
+              console.error('無法取得有效的檔案標題:', result.meta?.fields);
+              showErrorToast('無法讀取檔案欄位，請確認 CSV 格式是否正確');
               resolve(null);
               return;
             }
@@ -223,7 +250,18 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
         try {
           // 直接從 data URL 解析內容
           const base64Data = fileUrl.split(',')[1];
-          const text = atob(base64Data);
+          
+          // 正確解碼 base64 並處理 UTF-8
+          const binaryString = atob(base64Data);
+          const bytes = new Uint8Array(binaryString.length);
+          for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+          
+          // 使用 TextDecoder 正確處理 UTF-8 編碼
+          const decoder = new TextDecoder('utf-8');
+          const text = decoder.decode(bytes);
+          
           parseCSVContent(text);
         } catch (error) {
           console.error('解析 data URL 失敗:', error);
