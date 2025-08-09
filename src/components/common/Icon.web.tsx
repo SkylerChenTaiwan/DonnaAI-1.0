@@ -122,16 +122,29 @@ const iconMap: Record<string, React.ComponentType<any>> = {
   // Additional icons
   'analytics-outline': IoniconsWeb.AnalyticsOutlineIcon,
   'bar-chart-outline': IoniconsWeb.BarChartOutlineIcon,
+  'business-outline': IoniconsWeb.BusinessOutlineIcon,
   'card-outline': IoniconsWeb.CardOutlineIcon,
+  'checkbox': IoniconsWeb.CheckboxIcon,
+  'chevron-down-outline': IoniconsWeb.ChevronDownOutlineIcon,
+  'chevron-right': IoniconsWeb.ChevronRightIcon,
   'construct-outline': IoniconsWeb.ConstructOutlineIcon,
+  'database-outline': IoniconsWeb.DatabaseOutlineIcon,
+  'document-outline': IoniconsWeb.DocumentOutlineIcon,
+  'document-text': IoniconsWeb.DocumentTextIcon,
+  'download': IoniconsWeb.DownloadIcon,
   'file-tray-outline': IoniconsWeb.FileTrayOutlineIcon,
+  'folder-open': IoniconsWeb.FolderOpenIcon,
   'gift-outline': IoniconsWeb.GiftOutlineIcon,
   'key-outline': IoniconsWeb.KeyOutlineIcon,
   'list': IoniconsWeb.ListIcon,
+  'options': IoniconsWeb.OptionsIcon,
+  'person-outline': IoniconsWeb.PersonOutlineIcon,
   'receipt-outline': IoniconsWeb.ReceiptOutlineIcon,
+  'refresh-outline': IoniconsWeb.RefreshOutlineIcon,
   'reorder-three': IoniconsWeb.ReorderThreeIcon,
   'sparkles': IoniconsWeb.SparklesIcon,
-  'swap-vertical': IoniconsWeb.SwapVerticalIcon
+  'swap-vertical': IoniconsWeb.SwapVerticalIcon,
+  'time-outline': IoniconsWeb.TimeOutlineIcon
 };
 
 export const Icon: React.FC<IconProps> = ({ name, size = 24, color = '#000', style }) => {
