@@ -609,8 +609,19 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
         <View style={styles.mergeSection}>
           <Text style={styles.mergeSectionTitle}>合併選項</Text>
           <Text style={styles.mergeHint}>
-            請在上方每個檔案選擇用於合併的關鍵欄位（例如：ID、Email 等唯一值）
+            {mergedTable ? 
+              `已成功合併 ${files.length} 個檔案，共 ${mergedTable.data.length} 筆資料` :
+              '請在上方每個檔案選擇用於合併的關鍵欄位（例如：ID、Email 等唯一值）'
+            }
           </Text>
+          {!mergedTable && (
+            <View style={styles.mergeWarning}>
+              <Icon name="alert-circle-outline" size={16} color={DesignSystem.colors.warning} />
+              <Text style={styles.mergeWarningText}>
+                需要先合併檔案才能進入下一步
+              </Text>
+            </View>
+          )}
           {mode === 'advanced' && (
             <View style={styles.mergeOptions}>
               <Text style={styles.mergeOptionLabel}>合併策略：</Text>
@@ -820,6 +831,21 @@ const styles = StyleSheet.create({
   },
   mergeButton: {
     marginTop: DesignSystem.spacing.md,
+  },
+  mergeWarning: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: DesignSystem.colors.warning + '15',
+    padding: DesignSystem.spacing.sm,
+    borderRadius: DesignSystem.borderRadius.sm,
+    marginTop: DesignSystem.spacing.sm,
+    marginBottom: DesignSystem.spacing.sm,
+  },
+  mergeWarningText: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.warning,
+    marginLeft: DesignSystem.spacing.xs,
+    fontWeight: '500',
   },
   button: {
     backgroundColor: DesignSystem.colors.primary,
