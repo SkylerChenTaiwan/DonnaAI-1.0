@@ -27,21 +27,25 @@ export function createIcon(
       ...(style as any)
     };
 
-    // Create SVG string with proper attributes
-    const svgPaths = paths.map(d => `<path d="${d}" fill="${color}" fillRule="${fillRule || 'nonzero'}"/>`).join('');
-    const svgString = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="${viewBox}">${svgPaths}</svg>`;
-    
-    // Encode as data URI with base64 for better compatibility
-    const dataUri = `data:image/svg+xml;base64,${btoa(svgString)}`;
-
+    // 直接使用 React 創建 SVG 元素，避免 data URI 問題
     return (
-      <img 
-        src={dataUri}
+      <svg 
+        xmlns="http://www.w3.org/2000/svg"
         width={size}
         height={size}
+        viewBox={viewBox}
+        fill={color}
         style={cssStyle}
-        alt=""
-      />
+      >
+        {paths.map((d, index) => (
+          <path 
+            key={index}
+            d={d} 
+            fill={color} 
+            fillRule={fillRule || 'nonzero'}
+          />
+        ))}
+      </svg>
     );
   };
   
