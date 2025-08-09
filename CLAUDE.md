@@ -166,6 +166,25 @@
   - 必須保持此檔案為最新狀態，方便追蹤專案進度
   - 未執行的 PRP 保持原編號：`02-another-feature.md`
 
+### 🛠️ 自動化工作流程觸發器
+
+#### 錯誤報告產生器
+**觸發條件**: 當使用者說「產生錯誤報告」、「整理問題」、「幫我整理給工程師」或類似語句
+**自動執行**:
+1. 分析最近對話記錄（20-50則訊息）
+2. 識別主要技術問題
+3. 整理所有嘗試過的解決方案和結果
+4. 收集相關程式碼片段和錯誤訊息
+5. 產生結構化報告並儲存至 `/docs/error-reports/[日期]-[問題描述].md`
+6. 使用以下模板格式：
+   - 問題描述
+   - 環境資訊
+   - 問題時間軸
+   - 嘗試過的解決方案（包含程式碼）
+   - 當前狀況
+   - 需要協助的具體問題
+   - 相關資源連結
+
 ### 🤖 Contains Studio Agents 整合
 
 #### Trouble-shooting 工作流程
@@ -216,3 +235,35 @@
 - `/agent [agent-name]`: 直接調用特定 agent
 - 例如：`/agent bug-hunter` 來追蹤特定 bug 的來源
 - 可用 agents 列表請參考 [contains-studio/agents](https://github.com/contains-studio/agents)
+
+## 🔧 錯誤報告產生器
+  觸發關鍵字: `/error-report` 或 `/錯誤報告`
+  自動執行:
+  1. 分析當前對話中的技術問題
+  2. 產生結構化錯誤報告
+  3. 儲存至 ./docs/error-reports/[date]-[issue].md
+  4. 提供報告摘要和分享建議
+
+  2. 在專案 CLAUDE.md 中加入（專案設定）
+
+  編輯當前專案的 CLAUDE.md，確保有文件目錄結構：
+
+  ### 📁 文件目錄結構
+  ./docs/
+  ├── error-reports/      # 錯誤報告（/error-report 產生）
+  ├── solutions/          # 解決方案文件
+  └── guides/            # 開發指南
+
+  使用方式
+
+  設定完成後，你可以：
+  - 輸入 /error-report - 產生標準錯誤報告
+  - 輸入 /error-report brief - 產生簡短版本
+  - 輸入 /error-report detailed - 產生詳細版本
+
+  這個指令會自動：
+  1. 分析對話記錄
+  2. 識別問題和解決嘗試
+  3. 整理程式碼範例
+  4. 產生結構化報告
+  5. 儲存到 /docs/error-reports/ 目錄
