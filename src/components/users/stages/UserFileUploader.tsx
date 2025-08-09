@@ -94,12 +94,17 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
         const updatedFiles = [...files, ...newFiles];
         onFilesUploaded(updatedFiles);
         
-        // 簡易模式自動合併（如果有多個檔案）
-        if (mode === 'simple' && updatedFiles.length > 1) {
-          await autoMergeFiles(updatedFiles);
-        }
+        // 不再自動合併，讓用戶手動點擊合併按鈕
+        // if (mode === 'simple' && updatedFiles.length > 1) {
+        //   await autoMergeFiles(updatedFiles);
+        // }
         
         showSuccessToast(`成功上傳 ${newFiles.length} 個檔案`);
+        
+        // 如果有多個檔案，提示用戶可以合併
+        if (updatedFiles.length > 1) {
+          showSuccessToast('您可以點擊下方的「預覽及合併」按鈕來合併檔案');
+        }
       }
 
       if (failedFiles.length > 0) {
@@ -599,38 +604,40 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
       {/* 檔案列表 */}
       {renderFileList()}
 
-      {/* 合併選項（進階模式） */}
-      {mode === 'advanced' && files.length > 1 && (
+      {/* 合併選項（當有多個檔案時顯示） */}
+      {files.length > 1 && (
         <View style={styles.mergeSection}>
           <Text style={styles.mergeSectionTitle}>合併選項</Text>
           <Text style={styles.mergeHint}>
             請在上方每個檔案選擇用於合併的關鍵欄位（例如：ID、Email 等唯一值）
           </Text>
-          <View style={styles.mergeOptions}>
-            <Text style={styles.mergeOptionLabel}>合併策略：</Text>
-            <View style={styles.mergeStrategyButtons}>
-              {(['left', 'inner', 'outer'] as MergeStrategy[]).map((strategy) => (
-                <TouchableOpacity
-                  key={strategy}
-                  style={[
-                    styles.strategyButton,
-                    mergeStrategy === strategy && styles.strategyButtonActive,
-                  ]}
-                  onPress={() => setMergeStrategy(strategy)}
-                >
-                  <Text style={[
-                    styles.strategyButtonText,
-                    mergeStrategy === strategy && styles.strategyButtonTextActive,
-                  ]}>
-                    {strategy === 'left' ? '左連接' : 
-                     strategy === 'inner' ? '內連接' : '外連接'}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+          {mode === 'advanced' && (
+            <View style={styles.mergeOptions}>
+              <Text style={styles.mergeOptionLabel}>合併策略：</Text>
+              <View style={styles.mergeStrategyButtons}>
+                {(['left', 'inner', 'outer'] as MergeStrategy[]).map((strategy) => (
+                  <TouchableOpacity
+                    key={strategy}
+                    style={[
+                      styles.strategyButton,
+                      mergeStrategy === strategy && styles.strategyButtonActive,
+                    ]}
+                    onPress={() => setMergeStrategy(strategy)}
+                  >
+                    <Text style={[
+                      styles.strategyButtonText,
+                      mergeStrategy === strategy && styles.strategyButtonTextActive,
+                    ]}>
+                      {strategy === 'left' ? '左連接' : 
+                       strategy === 'inner' ? '內連接' : '外連接'}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
             </View>
-          </View>
+          )}
           <Button
-            title="合併檔案"
+            title={showMergePreview ? "重新合併" : "預覽及合併"}
             onPress={handleMerge}
             disabled={loading || files.length < 2}
             style={styles.mergeButton}
