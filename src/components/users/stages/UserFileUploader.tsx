@@ -29,6 +29,7 @@ import {
   detectKeyFields,
   validateMerge,
   previewMergedData,
+  getFieldStatistics,
 } from '@/components/import/utils/fileMerger';
 import { showErrorToast, showSuccessToast } from '@/utils/toast';
 import { pickDocument } from '@/utils/web-file-picker';
@@ -56,6 +57,8 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
   const [selectedKeyFields, setSelectedKeyFields] = useState<Record<string, string>>({});
   const [mergeStrategy, setMergeStrategy] = useState<MergeStrategy>('left');
   const [showMergePreview, setShowMergePreview] = useState(false);
+  const [fieldTypes, setFieldTypes] = useState<Record<string, string>>({});
+  const [showFieldEditor, setShowFieldEditor] = useState(false);
 
   /**
    * 處理檔案選擇
@@ -395,6 +398,14 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
         console.warn('合併警告:', validation.warnings);
       }
       
+      // 自動偵測欄位類型
+      const detectedTypes: Record<string, string> = {};
+      merged.headers.forEach(header => {
+        const stats = getFieldStatistics(merged.data, header);
+        detectedTypes[header] = stats.type || 'text';
+      });
+      setFieldTypes(detectedTypes);
+      
       onMergeCompleted(config, merged);
       
       showSuccessToast(
@@ -613,9 +624,18 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
       <View style={styles.mergePreview}>
         <View style={styles.mergePreviewHeader}>
           <Text style={styles.mergePreviewTitle}>合併結果預覽</Text>
-          <TouchableOpacity onPress={() => setShowMergePreview(false)}>
-            <Icon name="close" size={20} />
-          </TouchableOpacity>
+          <View style={styles.previewActions}>
+            <TouchableOpacity 
+              style={styles.fieldEditorButton}
+              onPress={() => setShowFieldEditor(!showFieldEditor)}
+            >
+              <Icon name="settings-outline" size={18} color={DesignSystem.colors.primary} />
+              <Text style={styles.fieldEditorButtonText}>欄位定義</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setShowMergePreview(false)}>
+              <Icon name="close" size={20} />
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.mergeStats}>
           <Text style={styles.mergeStat}>
@@ -628,13 +648,81 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
             匹配: {mergedTable.mergeInfo.matchedRows} 筆
           </Text>
         </View>
+        
+        {/* 欄位類型編輯器 */}
+        {showFieldEditor && (
+          <View style={styles.fieldEditor}>
+            <Text style={styles.fieldEditorTitle}>欄位類型定義</Text>
+            <ScrollView style={styles.fieldEditorContent}>
+              {mergedTable.headers.map((header) => (
+                <View key={header} style={styles.fieldTypeRow}>
+                  <Text style={styles.fieldName}>{header}</Text>
+                  {Platform.OS === 'web' ? (
+                    <select
+                      value={fieldTypes[header] || 'text'}
+                      onChange={(e) => {
+                        setFieldTypes({
+                          ...fieldTypes,
+                          [header]: e.target.value
+                        });
+                      }}
+                      style={{
+                        padding: '4px 8px',
+                        border: `1px solid ${DesignSystem.colors.border.light}`,
+                        borderRadius: 4,
+                        backgroundColor: DesignSystem.colors.background.surface,
+                        fontSize: 14,
+                        minWidth: 120,
+                      }}
+                    >
+                      <option value="text">文字</option>
+                      <option value="number">數字</option>
+                      <option value="date">日期</option>
+                      <option value="email">電子郵件</option>
+                      <option value="phone">電話</option>
+                      <option value="boolean">布林值</option>
+                      <option value="url">網址</option>
+                    </select>
+                  ) : (
+                    <TouchableOpacity style={styles.fieldTypeSelector}>
+                      <Text style={styles.fieldTypeText}>
+                        {fieldTypes[header] || 'text'}
+                      </Text>
+                      <Icon name="chevron-down" size={16} />
+                    </TouchableOpacity>
+                  )}
+                  <View style={styles.fieldTypeBadge}>
+                    <Text style={styles.fieldTypeBadgeText}>
+                      自動: {fieldTypes[header] || 'text'}
+                    </Text>
+                  </View>
+                </View>
+              ))}
+            </ScrollView>
+            <TouchableOpacity 
+              style={styles.applyButton}
+              onPress={() => {
+                showSuccessToast('欄位類型已更新');
+                setShowFieldEditor(false);
+              }}
+            >
+              <Text style={styles.applyButtonText}>套用變更</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        
         <ScrollView horizontal style={styles.previewTable}>
           <View>
             <View style={styles.previewRow}>
               {mergedTable.headers.slice(0, 5).map((header, index) => (
-                <Text key={index} style={styles.previewHeader}>
-                  {header}
-                </Text>
+                <View key={index} style={styles.previewHeaderCell}>
+                  <Text style={styles.previewHeader}>
+                    {header}
+                  </Text>
+                  <Text style={styles.previewHeaderType}>
+                    ({fieldTypes[header] || 'text'})
+                  </Text>
+                </View>
               ))}
             </View>
             {mergedTable.data.slice(0, 3).map((row, rowIndex) => (
@@ -720,12 +808,18 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
               ))}
             </View>
           </View>
-          <Button
-            title={showMergePreview ? "重新合併" : "預覽及合併"}
+          <TouchableOpacity
             onPress={handleMerge}
             disabled={loading || files.length < 2}
-            style={styles.mergeButton}
-          />
+            style={[
+              styles.mergeButton,
+              (loading || files.length < 2) && styles.mergeButtonDisabled
+            ]}
+          >
+            <Text style={styles.mergeButtonText}>
+              {showMergePreview ? "重新合併" : "預覽及合併"}
+            </Text>
+          </TouchableOpacity>
         </View>
       )}
 
@@ -1069,6 +1163,118 @@ const styles = StyleSheet.create({
   },
   keyFieldValueWarning: {
     color: DesignSystem.colors.warning,
+  },
+  mergeButton: {
+    backgroundColor: DesignSystem.colors.primary,
+    paddingVertical: DesignSystem.spacing.md,
+    borderRadius: DesignSystem.borderRadius.md,
+    alignItems: 'center',
+    marginTop: DesignSystem.spacing.md,
+  },
+  mergeButtonDisabled: {
+    backgroundColor: DesignSystem.colors.gray300,
+  },
+  mergeButtonText: {
+    ...DesignSystem.typography.body,
+    color: DesignSystem.colors.text.white,
+    fontWeight: '600',
+  },
+  // 欄位編輯器樣式
+  previewActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: DesignSystem.spacing.sm,
+  },
+  fieldEditorButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: DesignSystem.spacing.sm,
+    paddingVertical: DesignSystem.spacing.xs,
+    backgroundColor: `${DesignSystem.colors.primary}10`,
+    borderRadius: DesignSystem.borderRadius.sm,
+    gap: DesignSystem.spacing.xs,
+  },
+  fieldEditorButtonText: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.primary,
+    fontWeight: '500',
+  },
+  fieldEditor: {
+    backgroundColor: DesignSystem.colors.background.secondary,
+    borderRadius: DesignSystem.borderRadius.md,
+    padding: DesignSystem.spacing.md,
+    marginVertical: DesignSystem.spacing.sm,
+  },
+  fieldEditorTitle: {
+    ...DesignSystem.typography.subtitle,
+    color: DesignSystem.colors.text.primary,
+    fontWeight: '600',
+    marginBottom: DesignSystem.spacing.sm,
+  },
+  fieldEditorContent: {
+    maxHeight: 200,
+  },
+  fieldTypeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: DesignSystem.spacing.xs,
+    borderBottomWidth: 1,
+    borderBottomColor: DesignSystem.colors.border.light,
+  },
+  fieldName: {
+    ...DesignSystem.typography.body,
+    color: DesignSystem.colors.text.primary,
+    flex: 1,
+  },
+  fieldTypeSelector: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: DesignSystem.spacing.sm,
+    paddingVertical: DesignSystem.spacing.xs,
+    backgroundColor: DesignSystem.colors.background.surface,
+    borderRadius: DesignSystem.borderRadius.sm,
+    borderWidth: 1,
+    borderColor: DesignSystem.colors.border.light,
+    minWidth: 120,
+  },
+  fieldTypeText: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.primary,
+    flex: 1,
+  },
+  fieldTypeBadge: {
+    marginLeft: DesignSystem.spacing.sm,
+    paddingHorizontal: DesignSystem.spacing.xs,
+    paddingVertical: 2,
+    backgroundColor: `${DesignSystem.colors.info}20`,
+    borderRadius: DesignSystem.borderRadius.xs,
+  },
+  fieldTypeBadgeText: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.info,
+    fontSize: 10,
+  },
+  applyButton: {
+    backgroundColor: DesignSystem.colors.primary,
+    paddingVertical: DesignSystem.spacing.sm,
+    borderRadius: DesignSystem.borderRadius.sm,
+    alignItems: 'center',
+    marginTop: DesignSystem.spacing.md,
+  },
+  applyButtonText: {
+    ...DesignSystem.typography.body,
+    color: DesignSystem.colors.text.white,
+    fontWeight: '600',
+  },
+  previewHeaderCell: {
+    paddingHorizontal: DesignSystem.spacing.sm,
+    paddingVertical: DesignSystem.spacing.xs,
+  },
+  previewHeaderType: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.tertiary,
+    fontSize: 10,
+    marginTop: 2,
   },
 });
 
