@@ -58,7 +58,7 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
   const [mergeStrategy, setMergeStrategy] = useState<MergeStrategy>('left');
   const [showMergePreview, setShowMergePreview] = useState(false);
   const [fieldTypes, setFieldTypes] = useState<Record<string, string>>({});
-  const [showFieldEditor, setShowFieldEditor] = useState(false);
+  const [showFieldEditor, setShowFieldEditor] = useState<string | null>(null);
 
   /**
    * 處理檔案選擇
@@ -101,6 +101,17 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
       if (newFiles.length > 0) {
         const updatedFiles = [...files, ...newFiles];
         onFilesUploaded(updatedFiles);
+        
+        // 偵測每個檔案的欄位類型
+        const newFieldTypes = { ...fieldTypes };
+        for (const file of newFiles) {
+          file.headers.forEach(header => {
+            const fieldKey = `${file.id}:${header}`;
+            const stats = getFieldStatistics(file.data, header);
+            newFieldTypes[fieldKey] = stats.type || 'text';
+          });
+        }
+        setFieldTypes(newFieldTypes);
         
         // 不再自動合併，讓用戶手動點擊合併按鈕
         // if (mode === 'simple' && updatedFiles.length > 1) {
@@ -398,13 +409,34 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
         console.warn('合併警告:', validation.warnings);
       }
       
-      // 自動偵測欄位類型
-      const detectedTypes: Record<string, string> = {};
+      // 保留使用者定義的欄位類型到合併後的欄位
+      const mergedFieldTypes: Record<string, string> = {};
       merged.headers.forEach(header => {
-        const stats = getFieldStatistics(merged.data, header);
-        detectedTypes[header] = stats.type || 'text';
+        // 嘗試從原始檔案的欄位類型定義中找到對應的類型
+        let foundType: string | null = null;
+        
+        // 檢查每個檔案是否有這個欄位
+        for (const file of files) {
+          if (file.headers.includes(header)) {
+            const fieldKey = `${file.id}:${header}`;
+            if (fieldTypes[fieldKey]) {
+              foundType = fieldTypes[fieldKey];
+              break;
+            }
+          }
+        }
+        
+        // 如果找不到使用者定義的類型，則自動偵測
+        if (!foundType) {
+          const stats = getFieldStatistics(merged.data, header);
+          foundType = stats.type || 'text';
+        }
+        
+        mergedFieldTypes[header] = foundType;
       });
-      setFieldTypes(detectedTypes);
+      
+      // 更新欄位類型（現在是合併後的欄位）
+      setFieldTypes(mergedFieldTypes);
       
       onMergeCompleted(config, merged);
       
@@ -468,6 +500,70 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
                 <Text style={styles.fileMeta}>
                   {file.rowCount} 列 × {file.headers.length} 欄
                 </Text>
+                
+                {/* 欄位類型檢視按鈕 */}
+                <TouchableOpacity
+                  style={styles.fieldTypeButton}
+                  onPress={() => setShowFieldEditor(showFieldEditor === file.id ? null : file.id)}
+                >
+                  <Icon name="settings-outline" size={14} color={DesignSystem.colors.primary} />
+                  <Text style={styles.fieldTypeButtonText}>檢視欄位定義</Text>
+                </TouchableOpacity>
+                
+                {/* 顯示欄位類型編輯器 */}
+                {showFieldEditor === file.id && (
+                  <View style={styles.fileFieldEditor}>
+                    <Text style={styles.fileFieldEditorTitle}>欄位類型定義</Text>
+                    <ScrollView style={styles.fileFieldList}>
+                      {file.headers.map((header) => {
+                        const fieldKey = `${file.id}:${header}`;
+                        return (
+                          <View key={header} style={styles.fileFieldRow}>
+                            <Text style={styles.fileFieldName}>{header}</Text>
+                            {Platform.OS === 'web' ? (
+                              <select
+                                value={fieldTypes[fieldKey] || 'text'}
+                                onChange={(e) => {
+                                  setFieldTypes({
+                                    ...fieldTypes,
+                                    [fieldKey]: e.target.value
+                                  });
+                                }}
+                                style={{
+                                  padding: '4px 8px',
+                                  border: `1px solid ${DesignSystem.colors.border.light}`,
+                                  borderRadius: 4,
+                                  backgroundColor: DesignSystem.colors.background.surface,
+                                  fontSize: 12,
+                                  minWidth: 100,
+                                }}
+                              >
+                                <option value="text">文字</option>
+                                <option value="number">數字</option>
+                                <option value="date">日期</option>
+                                <option value="email">電子郵件</option>
+                                <option value="phone">電話</option>
+                                <option value="boolean">布林值</option>
+                                <option value="url">網址</option>
+                              </select>
+                            ) : (
+                              <TouchableOpacity style={styles.fileFieldTypeSelector}>
+                                <Text style={styles.fileFieldTypeText}>
+                                  {fieldTypes[fieldKey] || 'text'}
+                                </Text>
+                                <Icon name="chevron-down" size={14} />
+                              </TouchableOpacity>
+                            )}
+                            <Text style={styles.fileFieldTypeHint}>
+                              (自動: {fieldTypes[fieldKey] || 'text'})
+                            </Text>
+                          </View>
+                        );
+                      })}
+                    </ScrollView>
+                  </View>
+                )}
+                
                 {mode === 'advanced' && files.length > 1 && (
                   <View style={styles.keyFieldSelector}>
                     <Text style={styles.keyFieldLabel}>合併關鍵欄位：</Text>
@@ -624,18 +720,9 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
       <View style={styles.mergePreview}>
         <View style={styles.mergePreviewHeader}>
           <Text style={styles.mergePreviewTitle}>合併結果預覽</Text>
-          <View style={styles.previewActions}>
-            <TouchableOpacity 
-              style={styles.fieldEditorButton}
-              onPress={() => setShowFieldEditor(!showFieldEditor)}
-            >
-              <Icon name="settings-outline" size={18} color={DesignSystem.colors.primary} />
-              <Text style={styles.fieldEditorButtonText}>欄位定義</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setShowMergePreview(false)}>
-              <Icon name="close" size={20} />
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity onPress={() => setShowMergePreview(false)}>
+            <Icon name="close" size={20} />
+          </TouchableOpacity>
         </View>
         <View style={styles.mergeStats}>
           <Text style={styles.mergeStat}>
@@ -648,68 +735,6 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
             匹配: {mergedTable.mergeInfo.matchedRows} 筆
           </Text>
         </View>
-        
-        {/* 欄位類型編輯器 */}
-        {showFieldEditor && (
-          <View style={styles.fieldEditor}>
-            <Text style={styles.fieldEditorTitle}>欄位類型定義</Text>
-            <ScrollView style={styles.fieldEditorContent}>
-              {mergedTable.headers.map((header) => (
-                <View key={header} style={styles.fieldTypeRow}>
-                  <Text style={styles.fieldName}>{header}</Text>
-                  {Platform.OS === 'web' ? (
-                    <select
-                      value={fieldTypes[header] || 'text'}
-                      onChange={(e) => {
-                        setFieldTypes({
-                          ...fieldTypes,
-                          [header]: e.target.value
-                        });
-                      }}
-                      style={{
-                        padding: '4px 8px',
-                        border: `1px solid ${DesignSystem.colors.border.light}`,
-                        borderRadius: 4,
-                        backgroundColor: DesignSystem.colors.background.surface,
-                        fontSize: 14,
-                        minWidth: 120,
-                      }}
-                    >
-                      <option value="text">文字</option>
-                      <option value="number">數字</option>
-                      <option value="date">日期</option>
-                      <option value="email">電子郵件</option>
-                      <option value="phone">電話</option>
-                      <option value="boolean">布林值</option>
-                      <option value="url">網址</option>
-                    </select>
-                  ) : (
-                    <TouchableOpacity style={styles.fieldTypeSelector}>
-                      <Text style={styles.fieldTypeText}>
-                        {fieldTypes[header] || 'text'}
-                      </Text>
-                      <Icon name="chevron-down" size={16} />
-                    </TouchableOpacity>
-                  )}
-                  <View style={styles.fieldTypeBadge}>
-                    <Text style={styles.fieldTypeBadgeText}>
-                      自動: {fieldTypes[header] || 'text'}
-                    </Text>
-                  </View>
-                </View>
-              ))}
-            </ScrollView>
-            <TouchableOpacity 
-              style={styles.applyButton}
-              onPress={() => {
-                showSuccessToast('欄位類型已更新');
-                setShowFieldEditor(false);
-              }}
-            >
-              <Text style={styles.applyButtonText}>套用變更</Text>
-            </TouchableOpacity>
-          </View>
-        )}
         
         <ScrollView horizontal style={styles.previewTable}>
           <View>
@@ -1179,7 +1204,75 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.white,
     fontWeight: '600',
   },
-  // 欄位編輯器樣式
+  // 檔案層級的欄位編輯器樣式
+  fieldTypeButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: DesignSystem.spacing.xs,
+    paddingHorizontal: DesignSystem.spacing.xs,
+    paddingVertical: 4,
+    backgroundColor: `${DesignSystem.colors.primary}10`,
+    borderRadius: DesignSystem.borderRadius.xs,
+    alignSelf: 'flex-start',
+    gap: 4,
+  },
+  fieldTypeButtonText: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.primary,
+    fontSize: 12,
+  },
+  fileFieldEditor: {
+    backgroundColor: DesignSystem.colors.background.secondary,
+    borderRadius: DesignSystem.borderRadius.sm,
+    padding: DesignSystem.spacing.sm,
+    marginTop: DesignSystem.spacing.sm,
+  },
+  fileFieldEditorTitle: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.primary,
+    fontWeight: '600',
+    marginBottom: DesignSystem.spacing.xs,
+  },
+  fileFieldList: {
+    maxHeight: 150,
+  },
+  fileFieldRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: DesignSystem.colors.border.light,
+  },
+  fileFieldName: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.primary,
+    flex: 1,
+    fontSize: 12,
+  },
+  fileFieldTypeSelector: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: DesignSystem.spacing.xs,
+    paddingVertical: 2,
+    backgroundColor: DesignSystem.colors.background.surface,
+    borderRadius: DesignSystem.borderRadius.xs,
+    borderWidth: 1,
+    borderColor: DesignSystem.colors.border.light,
+    minWidth: 80,
+  },
+  fileFieldTypeText: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.primary,
+    fontSize: 11,
+    flex: 1,
+  },
+  fileFieldTypeHint: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.text.tertiary,
+    fontSize: 10,
+    marginLeft: DesignSystem.spacing.xs,
+  },
+  // 欄位編輯器樣式（已移除，改為在檔案項目中顯示）
   previewActions: {
     flexDirection: 'row',
     alignItems: 'center',
