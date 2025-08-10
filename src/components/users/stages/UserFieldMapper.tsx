@@ -321,7 +321,7 @@ const UserFieldMapper: React.FC<UserFieldMapperProps> = ({
           color={mapping.sourceField ? DesignSystem.colors.success : DesignSystem.colors.text.tertiary}
         />
 
-        {Platform.OS === 'web' && mode === 'advanced' ? (
+        {Platform.OS === 'web' ? (
           <div style={{ position: 'relative', flex: 1, marginLeft: 16 }}>
             <select
               value={mapping.sourceField}
