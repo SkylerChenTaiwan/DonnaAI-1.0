@@ -444,27 +444,64 @@ export function getFieldStatistics(
   const nonNullValues = values.filter(v => v !== null && v !== undefined && v !== '');
   const uniqueValues = new Set(nonNullValues);
   
-  // 推測欄位類型
+  // 推測欄位類型 - 檢查所有值而非只看第一個
   let fieldType: any = 'text';
   if (nonNullValues.length > 0) {
-    const sample = nonNullValues[0];
+    // 統計各種類型的出現次數
+    const typeVotes: Record<string, number> = {
+      boolean: 0,
+      number: 0,
+      date: 0,
+      email: 0,
+      url: 0,
+      phone: 0,
+      text: 0
+    };
     
-    if (typeof sample === 'boolean') {
-      fieldType = 'boolean';
-    } else if (typeof sample === 'number') {
-      fieldType = 'number';
-    } else if (typeof sample === 'string') {
-      // 檢查是否為日期
-      if (/^\d{4}-\d{2}-\d{2}/.test(sample)) {
-        fieldType = 'date';
-      } else if (/^[\w.-]+@[\w.-]+\.\w+$/.test(sample)) {
-        fieldType = 'email';
-      } else if (/^https?:\/\//.test(sample)) {
-        fieldType = 'url';
-      } else if (/^[\d\s()+-]+$/.test(sample) && sample.length >= 7) {
-        fieldType = 'phone';
+    // 檢查前100個值（避免處理太多資料）
+    const samplesToCheck = nonNullValues.slice(0, Math.min(100, nonNullValues.length));
+    
+    samplesToCheck.forEach(sample => {
+      if (typeof sample === 'boolean') {
+        typeVotes.boolean++;
+      } else if (typeof sample === 'number') {
+        typeVotes.number++;
+      } else if (typeof sample === 'string') {
+        const stringSample = String(sample).trim();
+        
+        // 檢查是否為純數字（但排除包含中文的情況）
+        if (/^-?\d+(\.\d+)?$/.test(stringSample) && !/[\u4e00-\u9fa5]/.test(stringSample)) {
+          typeVotes.number++;
+        } else if (/^\d{4}-\d{2}-\d{2}/.test(stringSample)) {
+          typeVotes.date++;
+        } else if (/^[\w.-]+@[\w.-]+\.\w+$/.test(stringSample)) {
+          typeVotes.email++;
+        } else if (/^https?:\/\//.test(stringSample)) {
+          typeVotes.url++;
+        } else if (/^[\d\s()+-]+$/.test(stringSample) && stringSample.length >= 7) {
+          typeVotes.phone++;
+        } else {
+          typeVotes.text++;
+        }
+      } else {
+        typeVotes.text++;
       }
-    }
+    });
+    
+    // 找出最常見的類型（至少要有70%的一致性才判定為特定類型）
+    const threshold = samplesToCheck.length * 0.7;
+    let maxVotes = 0;
+    let detectedType = 'text';
+    
+    Object.entries(typeVotes).forEach(([type, votes]) => {
+      if (votes > maxVotes && votes >= threshold) {
+        maxVotes = votes;
+        detectedType = type;
+      }
+    });
+    
+    // 如果沒有明確的類型佔優勢，預設為文字
+    fieldType = detectedType;
   }
   
   // 計算統計資訊
@@ -479,7 +516,15 @@ export function getFieldStatistics(
   
   // 根據類型計算額外統計
   if (fieldType === 'number') {
-    const numbers = nonNullValues.map(v => Number(v)).filter(n => !isNaN(n));
+    // 只計算真正是數字的值（排除包含中文或其他非數字字元的值）
+    const numbers = nonNullValues
+      .filter(v => {
+        const str = String(v).trim();
+        return /^-?\d+(\.\d+)?$/.test(str) && !/[\u4e00-\u9fa5]/.test(str);
+      })
+      .map(v => Number(v))
+      .filter(n => !isNaN(n));
+    
     if (numbers.length > 0) {
       stats.minValue = Math.min(...numbers);
       stats.maxValue = Math.max(...numbers);
