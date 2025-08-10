@@ -92,6 +92,7 @@
 | 86v  | organization-audit-logging-system.md | ✅ 已完成 | 組織審計日誌系統 - 自動日誌收集、合規報告、安全監控、異常偵測 | 2025-08-08 |
 | 87v  | intelligent-user-import-mapping.md | ✅ 已完成 | 智能用戶批量匯入系統 - 整合智能欄位對應、AI 輔助映射、多檔案合併 | 2025-08-08 |
 | 88v  | web-specific-icon-components.md | ✅ 已完成 | Web 專用圖標元件系統 - 徹底解決 NetworkError 與字體載入問題 | 2025-08-09 |
+| 89   | fix-user-import-completely.md | 📋 待執行 | 徹底修復用戶批量匯入功能 - 修復所有錯誤、API 對齊、完整測試覆蓋 | - |
 
 ## 命名規則
 
@@ -107,7 +108,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：89**
+**下一個新建的 PRP 應使用編號：90**
 
 ## PRP 類型說明
 
