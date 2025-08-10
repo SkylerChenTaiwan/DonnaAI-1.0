@@ -1,0 +1,11 @@
+姓名,電子郵件,部門,職位,電話
+正常用戶,normal.user@example.com,業務部,業務經理,0912345678
+,missing.name@example.com,技術部,工程師,0923456789
+缺少郵件,,行銷部,行銷專員,0934567890
+重複郵件1,duplicate@example.com,人事部,人事主管,0945678901
+重複郵件2,duplicate@example.com,財務部,會計,0956789012
+特殊字元!@#,special.chars@example.com,業務部,業務代表,0967890123
+很長的名字很長的名字很長的名字很長的名字很長的名字,long.name@example.com,技術部,資深工程師,0978901234
+,,,,,
+空白用戶,   ,   ,   ,   
+正常用戶2,normal.user2@example.com,客服部,客服專員,0989012345

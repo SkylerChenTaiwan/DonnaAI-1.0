@@ -26,14 +26,30 @@ export const createUsersForImport = onCall({
     throw new HttpsError("unauthenticated", "必須登入才能執行此操作");
   }
 
-  const { users, organizationId, teamId, defaultPassword } = request.data;
+  // 支援新舊 API 格式
+  let { users, organizationId, teamId, defaultPassword, userData, options } = request.data;
+  
+  // 處理新格式（來自 UserCreationService）
+  if (!organizationId && users && users.length > 0 && users[0].customClaims?.organizationId) {
+    organizationId = users[0].customClaims.organizationId;
+  }
+  
+  // 如果沒有提供 teamId，設為 null（可選）
+  teamId = teamId || null;
+  
+  // 處理新格式的選項
+  if (options) {
+    if (options.generatePasswords && !defaultPassword) {
+      defaultPassword = "DonnaAI2024!";
+    }
+  }
   
   if (!users || !Array.isArray(users)) {
     throw new HttpsError("invalid-argument", "users 必須是陣列");
   }
   
-  if (!organizationId || !teamId) {
-    throw new HttpsError("invalid-argument", "必須提供 organizationId 和 teamId");
+  if (!organizationId) {
+    throw new HttpsError("invalid-argument", "必須提供 organizationId");
   }
 
   const auth = getAuth();
@@ -50,28 +66,50 @@ export const createUsersForImport = onCall({
   }
 
   // 批量處理用戶建立
-  for (const userData of users) {
+  // 支援新格式：如果有 userData 陣列，使用它；否則使用 users
+  const usersToProcess = userData || users;
+  
+  for (let i = 0; i < usersToProcess.length; i++) {
+    const userInfo = usersToProcess[i];
+    const authInfo = users[i]; // 可能包含密碼和其他認證資訊
     try {
       // 檢查用戶是否已存在
       let uid: string;
       let userRecord;
+      let isExisting = false;
       
       try {
         // 嘗試取得現有用戶
-        userRecord = await auth.getUserByEmail(userData.email);
+        userRecord = await auth.getUserByEmail(userInfo.email);
         uid = userRecord.uid;
-        console.log(`用戶已存在: ${userData.email}, UID: ${uid}`);
+        isExisting = true;
+        console.log(`用戶已存在: ${userInfo.email}, UID: ${uid}`);
+        
+        // 如果選項指定跳過已存在的用戶
+        if (options?.skipExisting) {
+          results.push({
+            email: userInfo.email,
+            uid: uid,
+            success: true,
+            isExisting: true,
+            skipped: true,
+          });
+          continue;
+        }
       } catch (error: any) {
         // 用戶不存在，建立新用戶
         if (error.code === "auth/user-not-found") {
+          // 使用提供的密碼或生成密碼
+          const password = authInfo?.password || defaultPassword || "DonnaAI2024!";
+          
           userRecord = await auth.createUser({
-            email: userData.email,
-            password: defaultPassword || "DonnaAI2024!",
-            displayName: userData.name || userData.businessName,
+            email: userInfo.email,
+            password: password,
+            displayName: authInfo?.displayName || userInfo.name || userInfo.businessName,
             disabled: false,
           });
           uid = userRecord.uid;
-          console.log(`建立新用戶: ${userData.email}, UID: ${uid}`);
+          console.log(`建立新用戶: ${userInfo.email}, UID: ${uid}`);
         } else {
           throw error;
         }
@@ -81,35 +119,46 @@ export const createUsersForImport = onCall({
       const userDocData = {
         id: uid,
         uid: uid,
-        email: userData.email,
-        name: userData.name || userData.businessName,
-        role: userData.role || "salesperson",
+        email: userInfo.email,
+        name: userInfo.name || userInfo.businessName,
+        role: userInfo.role || "user",
         organizationId: organizationId,
-        teamIds: [teamId],
-        department: userData.department || null,
-        phone: userData.phone || null,
-        isActive: userData.isActive !== false,
-        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        teamIds: teamId ? [teamId] : userInfo.teamIds || [],
+        department: userInfo.department || userInfo.jobTitle || null,
+        phone: userInfo.phone || userInfo.phoneNumber || null,
+        isActive: userInfo.isActive !== false,
+        createdAt: isExisting ? undefined : admin.firestore.FieldValue.serverTimestamp(),
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
         lastLoginAt: null,
-        supervisorId: userData.supervisorId || null,
+        supervisorId: userInfo.supervisorId || null,
         personalGoals: {},
-        ...(userData.customFields ? { customFields: userData.customFields } : {}),
+        platformPermissions: userInfo.platformPermissions || {},
+        ...(userInfo.customFields ? { customFields: userInfo.customFields } : {}),
       };
+      
+      // 移除 undefined 的欄位
+      const cleanedUserDocData: any = {};
+      Object.keys(userDocData).forEach(key => {
+        if ((userDocData as any)[key] !== undefined) {
+          cleanedUserDocData[key] = (userDocData as any)[key];
+        }
+      });
+      const finalUserDocData = cleanedUserDocData;
 
-      await db.collection("users").doc(uid).set(userDocData, { merge: true });
+      await db.collection("users").doc(uid).set(finalUserDocData, { merge: true });
 
       results.push({
-        email: userData.email,
+        email: userInfo.email,
         uid: uid,
         success: true,
-        isNew: !userRecord.metadata.creationTime || 
-                (Date.now() - new Date(userRecord.metadata.creationTime).getTime() < 1000),
+        isExisting: isExisting,
+        isNew: !isExisting,
       });
 
     } catch (error: any) {
-      console.error(`建立用戶失敗 ${userData.email}:`, error);
+      console.error(`建立用戶失敗 ${userInfo.email}:`, error);
       errors.push({
-        email: userData.email,
+        email: userInfo.email,
         error: error.message || "未知錯誤",
         code: error.code,
       });

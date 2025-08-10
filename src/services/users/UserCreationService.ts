@@ -345,13 +345,22 @@ class UserCreationService {
         };
       });
       
+      // 確保有 organizationId
+      const organizationId = users[0]?.organizationId;
+      if (!organizationId) {
+        throw new Error('用戶資料缺少 organizationId');
+      }
+      
       const response = await createUsersFunction({
         users: usersData,
         userData: userData,
+        organizationId: organizationId,
+        teamId: users[0]?.teamIds?.[0] || null,
         options: {
           skipExisting: options.skipExisting,
           updateExisting: options.updateExisting,
-          sendWelcomeEmail: options.sendWelcomeEmail
+          sendWelcomeEmail: options.sendWelcomeEmail,
+          generatePasswords: options.generatePasswords
         }
       });
       

@@ -179,18 +179,28 @@ export class UserImportService {
     // };
 
     try {
-      // 逐個處理以提供詳細進度
-      for (let i = 0; i < createUserDataArray.length; i++) {
-        const userData = createUserDataArray[i];
-        progress.currentUser = `正在創建: ${userData.email}`;
+      // 使用批量建立方法以提高效率
+      progress.currentUser = `正在批量創建 ${createUserDataArray.length} 個用戶...`;
+      onProgress?.(progress);
+      
+      const batchResults = await userCreationService.createUsers(
+        createUserDataArray,
+        {
+          skipExisting: config.skipDuplicates,
+          updateExisting: config.updateExisting,
+          generatePasswords: config.generatePasswords,
+          sendWelcomeEmail: config.sendWelcomeEmail
+        }
+      );
+      
+      results.push(...batchResults);
+      
+      // 更新進度顯示
+      for (const result of batchResults) {
+        progress.currentUser = `已處理: ${result.email}`;
         onProgress?.(progress);
-        
-        // 創建單個用戶
-        const result = await userCreationService.createUser(userData);
-        results.push(result);
-        
-        // 短暫延遲
-        await new Promise(resolve => setTimeout(resolve, 50));
+        // 短暫延遲以顯示進度
+        await new Promise(resolve => setTimeout(resolve, 20));
       }
       
       return results;
