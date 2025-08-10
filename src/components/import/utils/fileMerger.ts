@@ -128,6 +128,15 @@ export function mergeFiles(
       processedBaseKeys.add(baseKeyValue);
       const matchedRow = lookupMap.get(baseKeyValue);
       
+      // 除錯：如果是中文且沒有匹配，記錄詳細資訊
+      if (!matchedRow && /[\u4e00-\u9fa5]/.test(baseKeyValue)) {
+        console.warn('中文關鍵值未匹配:', {
+          原始值: baseRow[baseKeyField],
+          標準化後: baseKeyValue,
+          可用的關鍵值: Array.from(lookupMap.keys()).slice(0, 5),
+        });
+      }
+      
       if (matchedRow) {
         matchedRows++;
         // 合併欄位
@@ -219,8 +228,69 @@ function normalizeKeyValue(value: any, caseSensitive?: boolean): string {
     return '';
   }
   
-  let normalized = String(value).trim();
+  let normalized = String(value);
   
+  // 移除各種空白字元（包括全形空格、零寬度空格等）
+  normalized = normalized
+    .replace(/\u3000/g, ' ')  // 全形空格轉半形
+    .replace(/\u00A0/g, ' ')  // 不換行空格
+    .replace(/\u200B/g, '')   // 零寬度空格
+    .replace(/\uFEFF/g, '')   // 零寬度不換行空格（BOM）
+    .replace(/[\u200C\u200D]/g, '') // 零寬度連接符
+    .trim();                  // 移除頭尾空白
+  
+  // 標準化全形字元為半形（數字和英文）
+  normalized = normalized
+    .replace(/[０-９]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0xFEE0))
+    .replace(/[Ａ-Ｚ]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0xFEE0))
+    .replace(/[ａ-ｚ]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0xFEE0));
+  
+  // 標準化常見的全形標點符號為半形
+  const punctuationMap: Record<string, string> = {
+    '，': ',',
+    '。': '.',
+    '；': ';',
+    '：': ':',
+    '！': '!',
+    '？': '?',
+    '（': '(',
+    '）': ')',
+    '［': '[',
+    '］': ']',
+    '｛': '{',
+    '｝': '}',
+    '＜': '<',
+    '＞': '>',
+    '／': '/',
+    '＼': '\\',
+    '｜': '|',
+    '＋': '+',
+    '－': '-',
+    '＊': '*',
+    '＝': '=',
+    '＆': '&',
+    '％': '%',
+    '＄': '$',
+    '＃': '#',
+    '＠': '@',
+    '～': '~',
+    '｀': '`',
+    '＾': '^',
+    '＿': '_',
+    '"': '"',
+    '"': '"',
+    "'": "'",
+    "'": "'",
+  };
+  
+  Object.entries(punctuationMap).forEach(([fullWidth, halfWidth]) => {
+    normalized = normalized.replace(new RegExp(fullWidth, 'g'), halfWidth);
+  });
+  
+  // 移除多餘的空格（連續空格變成單一空格）
+  normalized = normalized.replace(/\s+/g, ' ');
+  
+  // 大小寫處理（只對英文字元有效，中文不受影響）
   if (!caseSensitive) {
     normalized = normalized.toLowerCase();
   }
