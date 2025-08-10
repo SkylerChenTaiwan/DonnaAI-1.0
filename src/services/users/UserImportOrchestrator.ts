@@ -11,8 +11,9 @@ import {
   UserImportResult,
   ImportError,
 } from '@/types/userImport';
-import { importUsersInBatches } from '@/services/firebase/admin/userAssistService';
+// import { importUsersInBatches } from '@/services/firebase/admin/userAssistService'; // 此函數不存在
 import { UserDataValidator } from './UserDataValidator';
+import { UserCreationService } from './UserCreationService';
 import { auth } from '@/services/firebase/config';
 import { 
   collection, 
@@ -25,7 +26,7 @@ import {
   writeBatch,
   serverTimestamp,
 } from 'firebase/firestore';
-import { db } from '@/services/firebase/config';
+import { getFirebaseDb } from '@/services/firebase/config';
 
 export class UserImportOrchestrator {
   private validator: UserDataValidator;
@@ -224,6 +225,7 @@ export class UserImportOrchestrator {
     organizationId: string
   ): Promise<Set<string>> {
     const existingEmails = new Set<string>();
+    const db = getFirebaseDb(); // 獲取 db 實例
 
     try {
       // 查詢組織中的現有用戶
@@ -296,21 +298,39 @@ export class UserImportOrchestrator {
         sendWelcomeEmail: config.sendWelcomeEmail,
       }));
 
-      // 調用後端 API 批量建立用戶
-      const result = await importUsersInBatches(usersToCreate, config.organizationId);
-      
-      successCount = result.successCount;
-      failedCount = result.failedCount;
-      
-      if (result.errors && result.errors.length > 0) {
-        for (const error of result.errors) {
-          errors.push({
-            row: 0,
-            email: error.email || '',
-            error: error.message,
-          });
+      // 調用批量建立用戶服務
+      const userCreationService = UserCreationService.getInstance();
+      const createResults = await userCreationService.createUsers(
+        usersToCreate.map(user => ({
+          email: user.email,
+          name: user.name,
+          role: user.role || 'user',
+          organizationId: config.organizationId,
+          department: user.department,
+          jobTitle: user.position,
+          phoneNumber: user.phoneNumber,
+        })),
+        {
+          skipExisting: config.skipExisting,
+          generatePasswords: true,
         }
-      }
+      );
+      
+      // 處理批量建立結果
+      const successResults = createResults.filter(r => r.success);
+      const failedResults = createResults.filter(r => !r.success);
+      
+      successCount = successResults.length;
+      failedCount = failedResults.length;
+      
+      // 處理錯誤結果
+      failedResults.forEach((result, index) => {
+        errors.push({
+          row: index + 1,
+          email: result.email,
+          error: result.error || '建立失敗',
+        });
+      });
     } catch (error) {
       console.error('批量建立用戶失敗:', error);
       failedCount = users.length;
