@@ -90,6 +90,9 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
   useEffect(() => {
     console.log('🔄 showRelationEditor 狀態變更:', showRelationEditor);
     console.log('🔄 selectedMapping:', selectedMapping);
+    if (showRelationEditor && selectedMapping) {
+      console.log('✅ Modal 應該顯示了');
+    }
   }, [showRelationEditor, selectedMapping]);
 
   const loadExistingFields = async () => {
@@ -579,9 +582,12 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                     }
                   ]}
                   onPress={() => {
-                    console.log('🔗 開啟關聯編輯器 for field:', mapping.targetField);
+                    console.log('🔗 [Pressable] 開啟關聯編輯器 for field:', mapping.targetField);
+                    console.log('🔗 當前 mapping:', mapping);
+                    console.log('🔗 設定 selectedMapping 和 showRelationEditor');
                     setSelectedMapping(mapping);
                     setShowRelationEditor(true);
+                    console.log('🔗 狀態設定完成');
                   }}
                   accessibilityRole="button"
                 >
@@ -594,9 +600,12 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                 <TouchableOpacity
                   style={[styles.relationButton, { borderColor: colors.primary }]}
                   onPress={() => {
-                    console.log('🔗 開啟關聯編輯器 for field:', mapping.targetField);
+                    console.log('🔗 [TouchableOpacity] 開啟關聯編輯器 for field:', mapping.targetField);
+                    console.log('🔗 當前 mapping:', mapping);
+                    console.log('🔗 設定 selectedMapping 和 showRelationEditor');
                     setSelectedMapping(mapping);
                     setShowRelationEditor(true);
+                    console.log('🔗 狀態設定完成');
                   }}
                   activeOpacity={0.7}
                 >

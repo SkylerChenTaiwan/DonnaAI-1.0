@@ -13,6 +13,7 @@ export const DesignSystem = {
       primary: '#FFFFFF',  // 主背景 - 純白
       surface: '#FFFFFF',  // 卡片背景 - 純白
       elevated: '#FFFFFF', // 提升的背景 - 純白
+      input: '#FAFAFA',    // 輸入欄位背景 - 極淺灰
     },
     
     // 按鈕專用色彩系統
@@ -61,6 +62,7 @@ export const DesignSystem = {
     border: {
       light: '#E5E7EB',    // 淺邊框
       default: '#D1D5DB',  // 預設邊框
+      medium: '#B5B5B5',   // 中等邊框 - 提升對比度
       dark: '#9CA3AF',     // 深邊框
     },
     
@@ -75,7 +77,7 @@ export const DesignSystem = {
     // 灰階
     gray: {
       50: '#FAFAFA',
-      100: '#F5F5F5',
+      100: '#F8F8F8',
       200: '#E5E5E5',
       300: '#D4D4D4',
       400: '#A3A3A3',

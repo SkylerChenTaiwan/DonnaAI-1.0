@@ -329,7 +329,7 @@ const UserFieldMapper: React.FC<UserFieldMapperProps> = ({
               style={{
                 width: '100%',
                 padding: '8px 12px',
-                border: `1px solid ${mapping.sourceField ? DesignSystem.colors.border.light : DesignSystem.colors.border.medium}`,
+                border: `1px solid ${mapping.sourceField ? DesignSystem.colors.border.medium : DesignSystem.colors.border.default}`,
                 borderRadius: DesignSystem.borderRadius.sm,
                 backgroundColor: DesignSystem.colors.background.surface,
                 color: mapping.sourceField ? DesignSystem.colors.text.primary : DesignSystem.colors.text.tertiary,
@@ -343,7 +343,7 @@ const UserFieldMapper: React.FC<UserFieldMapperProps> = ({
                 backgroundPosition: 'right 12px center',
                 paddingRight: '36px',
               }}
-              disabled={mode === 'simple'}
+              disabled={false}
             >
               <option value="" style={{ color: DesignSystem.colors.text.tertiary }}>
                 {mode === 'simple' ? '未映射' : '選擇欄位...'}
@@ -396,7 +396,6 @@ const UserFieldMapper: React.FC<UserFieldMapperProps> = ({
               hoveredTarget === mapping.targetField && styles.sourceFieldHovered,
             ]}
             onPress={() => {
-              if (mode === 'simple') return;
               setOpenDropdown(openDropdown === mapping.targetField ? null : mapping.targetField);
             }}
           >
