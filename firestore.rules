@@ -416,6 +416,45 @@ service cloud.firestore {
         request.resource.data.createdBy == request.auth.uid;
     }
     
+    // 分配歷史集合
+    match /assignment_history/{historyId} {
+      // Super Admin 可以讀寫所有分配歷史
+      allow read, write: if isSuperAdmin();
+      
+      // 被分配者可以讀取自己的分配歷史
+      allow read: if request.auth != null && 
+        request.auth.uid == resource.data.assigneeId;
+      
+      // 分配者可以讀取自己執行的分配
+      allow read: if request.auth != null && 
+        request.auth.uid == resource.data.assignerId;
+      
+      // 組織管理員可以讀取組織內的分配歷史
+      allow read: if request.auth != null && 
+        getUserData().role == 'admin' &&
+        getUserData().organizationId == resource.data.organizationId;
+      
+      // 系統可以建立分配歷史（由匯入服務建立）
+      allow create: if request.auth != null &&
+        request.resource.data.organizationId != null &&
+        getUserData().organizationId == request.resource.data.organizationId;
+    }
+    
+    // 分配報告集合
+    match /assignment_reports/{reportId} {
+      // Super Admin 可以讀寫所有報告
+      allow read, write: if isSuperAdmin();
+      
+      // 組織管理員可以讀取和建立組織內的報告
+      allow read, create: if request.auth != null && 
+        getUserData().role == 'admin' &&
+        getUserData().organizationId == resource.data.organizationId;
+      
+      // 報告建立者可以讀取
+      allow read: if request.auth != null && 
+        request.auth.uid == resource.data.createdBy;
+    }
+    
     // 預設拒絕所有其他存取
     match /{document=**} {
       allow read, write: if false;

@@ -75,6 +75,7 @@
     "openai": "^5.12.2",
     "papaparse": "^5.5.3",
     "react": "19.0.0",
+    "react-dom": "19.0.0",
     "react-hook-form": "^7.52.0",
     "react-native": "0.79.5",
     "react-native-gesture-handler": "~2.24.0",
@@ -89,8 +90,7 @@
     "victory-native": "^41.17.4",
     "xlsx": "^0.18.5",
     "zod": "^3.23.8",
-    "zustand": "^4.5.2",
-    "react-dom": "19.0.0"
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",

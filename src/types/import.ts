@@ -5,6 +5,7 @@
 
 import { Timestamp } from 'firebase/firestore';
 import { FieldType } from './fieldDefinitions';
+import { ImportAssignmentConfig, AssignmentPreview } from './assignment';
 
 /**
  * 資料庫類型
@@ -103,7 +104,7 @@ export interface FieldMapping {
  */
 export interface ImportWizardState {
   // 當前階段
-  stage: 1 | 2 | 3;
+  stage: 1 | 2 | 3 | 4;  // 新增階段 4: 資料分配
   
   // 階段 1: 選擇目標資料庫
   targetDatabase: DatabaseType | null;
@@ -117,6 +118,11 @@ export interface ImportWizardState {
   // 階段 3: 欄位映射與關聯
   fieldMappings: FieldMapping[];
   fieldRelations: FieldRelation[];
+  
+  // 階段 4: 資料分配（新增）
+  assignmentConfig?: ImportAssignmentConfig;
+  assignmentPreview?: AssignmentPreview[];
+  skipAssignment?: boolean;  // 是否跳過分配步驟
   
   // 匯入選項
   importOptions: {

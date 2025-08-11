@@ -22,6 +22,9 @@ import { Customer, Record, Task } from '@/types/firebase';
 import { User, CreateUserData } from '@/types/entities';
 import { Team, CreateTeamData } from '@/types/entities/team';
 import { isOrgAdmin } from '../permissions';
+import { ImportAssignmentConfig, AssignmentPreview } from '@/types/assignment';
+import { AssignmentEngine } from '@/services/import/AssignmentEngine';
+import { createBatchAssignmentHistory } from '../assignmentHistory';
 import * as Papa from 'papaparse';
 import * as XLSX from 'xlsx';
 import { 
@@ -707,9 +710,29 @@ export class SmartDataImporter {
   private userIdMap = new Map<string, string>(); // 姓名/Email -> Firebase ID
   private customerIdMap = new Map<string, string>(); // 客戶識別 -> Firebase ID
   private teamIdMap = new Map<string, string>(); // 團隊名稱 -> Firebase ID
+  private assignmentConfig?: ImportAssignmentConfig; // 分配配置
+  private assignmentEngine?: AssignmentEngine; // 分配引擎
+  private importSessionId: string; // 匯入會話 ID
   
   constructor(organizationId: string) {
     this.organizationId = organizationId;
+    this.importSessionId = `import-${Date.now()}`;
+  }
+
+  /**
+   * 設定分配配置
+   */
+  async setAssignmentConfig(config: ImportAssignmentConfig | null): Promise<void> {
+    if (config && config !== null) {
+      this.assignmentConfig = config;
+      this.assignmentEngine = new AssignmentEngine(this.organizationId);
+      await this.assignmentEngine.initialize();
+      console.log('✅ 已設定分配配置:', config);
+    } else {
+      this.assignmentConfig = undefined;
+      this.assignmentEngine = undefined;
+      console.log('⚠️ 跳過分配設定');
+    }
   }
 
   /**
@@ -897,18 +920,154 @@ export class SmartDataImporter {
     keyField: string | undefined,
     onProgress?: ProgressCallback
   ): Promise<ImportResult> {
+    let result: ImportResult;
+    
+    // 執行資料匯入
     switch (type) {
       case 'users':
-        return this.importUsersWithMapping(data, mappings, keyField, onProgress);
+        result = await this.importUsersWithMapping(data, mappings, keyField, onProgress);
+        break;
       case 'customers':
-        return this.importCustomersWithMapping(data, mappings, keyField, onProgress);
+        result = await this.importCustomersWithMapping(data, mappings, keyField, onProgress);
+        break;
       case 'records':
-        return this.importRecordsWithMapping(data, mappings, keyField, onProgress);
+        result = await this.importRecordsWithMapping(data, mappings, keyField, onProgress);
+        break;
       case 'hierarchy':
-        return this.importHierarchyWithMapping(data, mappings, keyField, onProgress);
+        result = await this.importHierarchyWithMapping(data, mappings, keyField, onProgress);
+        break;
       default:
-        return this.importCustomersWithMapping(data, mappings, keyField, onProgress);
+        result = await this.importCustomersWithMapping(data, mappings, keyField, onProgress);
     }
+    
+    // 如果有分配配置，執行分配
+    if (this.assignmentConfig && this.assignmentEngine && type === 'customers') {
+      await this.applyDataAssignment(data, result, type, onProgress);
+    }
+    
+    return result;
+  }
+
+  /**
+   * 應用資料分配
+   */
+  private async applyDataAssignment(
+    data: any[],
+    importResult: ImportResult,
+    dataType: ImportType,
+    onProgress?: ProgressCallback
+  ): Promise<void> {
+    if (!this.assignmentEngine || !this.assignmentConfig) {
+      console.log('⚠️ 未設定分配引擎或配置，跳過分配');
+      return;
+    }
+
+    try {
+      console.log('🔄 開始執行資料分配...');
+      
+      if (onProgress) {
+        onProgress({
+          current: 0,
+          total: data.length,
+          status: 'importing',
+          message: '正在分配資料給用戶...'
+        });
+      }
+
+      // 產生分配預覽
+      const preview = await this.assignmentEngine.generatePreview(
+        data,
+        this.assignmentConfig
+      );
+
+      // 執行分配
+      const assignments = await this.assignmentEngine.executeAssignment(
+        data,
+        this.assignmentConfig
+      );
+
+      // 建立分配歷史記錄
+      const histories = [];
+      const currentUserId = this.assignmentConfig.assignerId || 'system';
+      
+      for (const assignment of assignments) {
+        if (assignment.assigneeId) {
+          histories.push({
+            organizationId: this.organizationId,
+            importSessionId: this.importSessionId,
+            dataType: dataType as any,
+            dataCount: assignment.items.length,
+            assignerId: currentUserId,
+            assignerName: 'System Import',
+            assigneeId: assignment.assigneeId,
+            assigneeName: assignment.assigneeName || 'Unknown',
+            strategy: this.assignmentConfig.strategy,
+            successRate: assignment.confidence || 100,
+            errors: []
+          });
+
+          // 更新客戶資料的 assignedTo 欄位
+          if (dataType === 'customers') {
+            const batch = writeBatch(this.db);
+            let batchCount = 0;
+            
+            for (const item of assignment.items) {
+              // 使用 customerIdMap 找到對應的 Firebase 文檔 ID
+              const customerKey = this.generateCustomerKey(item.rowData);
+              const customerId = this.customerIdMap.get(customerKey);
+              
+              if (customerId) {
+                const customerRef = doc(this.db, 'customers', customerId);
+                batch.update(customerRef, {
+                  assignedTo: assignment.assigneeId,
+                  assignedAt: Timestamp.now(),
+                  assignedBy: currentUserId
+                });
+                batchCount++;
+                
+                // Firebase 每批最多 500 操作
+                if (batchCount >= 500) {
+                  await batch.commit();
+                  batchCount = 0;
+                }
+              }
+            }
+            
+            // 提交剩餘的更新
+            if (batchCount > 0) {
+              await batch.commit();
+            }
+          }
+        }
+      }
+
+      // 批量建立分配歷史
+      if (histories.length > 0) {
+        await createBatchAssignmentHistory(histories);
+        console.log(`✅ 已建立 ${histories.length} 筆分配歷史記錄`);
+      }
+
+      if (onProgress) {
+        onProgress({
+          current: data.length,
+          total: data.length,
+          status: 'complete',
+          message: `分配完成：${assignments.length} 個用戶`
+        });
+      }
+
+      console.log(`✅ 分配完成：${assignments.length} 個用戶獲得資料`);
+    } catch (error) {
+      console.error('❌ 分配失敗:', error);
+      // 分配失敗不影響匯入結果
+    }
+  }
+
+  /**
+   * 產生客戶識別鍵
+   */
+  private generateCustomerKey(data: any): string {
+    return `${data.name || data['客戶姓名'] || ''}_${data.company || data['公司名稱'] || ''}`;
   }
 
   /**

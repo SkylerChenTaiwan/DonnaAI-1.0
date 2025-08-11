@@ -144,6 +144,132 @@ export const getAccessibleTeamMembers = async (userId: string): Promise<User[]> 
 };
 
 /**
+ * 檢查是否可以分配資料給特定用戶
+ */
+export const canAssignDataTo = async (
+  assignerId: string, 
+  assigneeId: string,
+  organizationId: string
+): Promise<boolean> => {
+  try {
+    // 檢查分配者權限
+    const isAdmin = await isOrgAdmin(assignerId);
+    if (isAdmin) {
+      // 管理員可以分配給組織內任何用戶
+      const assigneeDoc = await getDoc(doc(getFirebaseDb(), 'users', assigneeId));
+      if (!assigneeDoc.exists()) return false;
+      
+      const assignee = assigneeDoc.data() as User;
+      return assignee.organizationId === organizationId;
+    }
+    
+    // 檢查是否為有權限的主管
+    const isManager = await isManagerOfUser(assignerId, assigneeId);
+    if (!isManager) return false;
+    
+    // 檢查被分配者是否在同組織
+    const assigneeDoc = await getDoc(doc(getFirebaseDb(), 'users', assigneeId));
+    if (!assigneeDoc.exists()) return false;
+    
+    const assignee = assigneeDoc.data() as User;
+    return assignee.organizationId === organizationId;
+  } catch (error) {
+    console.error('檢查資料分配權限時發生錯誤:', error);
+    return false;
+  }
+};
+
+/**
+ * 檢查用戶是否可以接收分配的資料
+ */
+export const canReceiveAssignedData = async (
+  userId: string,
+  dataType: 'customers' | 'records' | 'tasks' | 'users'
+): Promise<boolean> => {
+  try {
+    const userDoc = await getDoc(doc(getFirebaseDb(), 'users', userId));
+    if (!userDoc.exists()) return false;
+    
+    const user = userDoc.data() as User;
+    
+    // 檢查用戶狀態
+    if (!user.isActive) return false;
+    
+    // 根據資料類型檢查權限
+    switch (dataType) {
+      case 'customers':
+        // 業務員、主管和管理員可以接收客戶資料
+        return ['salesperson', 'manager', 'admin'].includes(user.role);
+      
+      case 'records':
+        // 業務員、主管和管理員可以接收記錄
+        return ['salesperson', 'manager', 'admin'].includes(user.role);
+      
+      case 'tasks':
+        // 所有活躍用戶都可以接收任務
+        return true;
+      
+      case 'users':
+        // 只有管理員可以處理用戶資料
+        return user.role === 'admin';
+      
+      default:
+        return false;
+    }
+  } catch (error) {
+    console.error('檢查接收資料權限時發生錯誤:', error);
+    return false;
+  }
+};
+
+/**
+ * 檢查分配歷史記錄的存取權限
+ */
+export const canAccessAssignmentHistory = async (
+  userId: string,
+  historyId: string
+): Promise<boolean> => {
+  try {
+    // 管理員可以查看所有分配歷史
+    const isAdmin = await isOrgAdmin(userId);
+    if (isAdmin) return true;
+    
+    // 取得分配歷史記錄
+    const historyDoc = await getDoc(doc(getFirebaseDb(), 'assignment_history', historyId));
+    if (!historyDoc.exists()) return false;
+    
+    const history = historyDoc.data();
+    
+    // 被分配者可以查看自己的分配歷史
+    if (history.assigneeId === userId) return true;
+    
+    // 分配者可以查看自己執行的分配
+    if (history.assignerId === userId) return true;
+    
+    // 主管可以查看其團隊成員的分配歷史
+    const userDoc = await getDoc(doc(getFirebaseDb(), 'users', userId));
+    if (!userDoc.exists()) return false;
+    
+    const user = userDoc.data() as User;
+    if (user.role === 'manager' && user.managedTeamIds) {
+      // 檢查被分配者是否在主管管理的團隊中
+      const assigneeDoc = await getDoc(doc(getFirebaseDb(), 'users', history.assigneeId));
+      if (assigneeDoc.exists()) {
+        const assignee = assigneeDoc.data() as User;
+        return assignee.teamIds?.some(teamId => 
+          user.managedTeamIds?.includes(teamId)
+        ) || false;
+      }
+    }
+    
+    return false;
+  } catch (error) {
+    console.error('檢查分配歷史存取權限時發生錯誤:', error);
+    return false;
+  }
+};
+
+/**
  * 取得使用者管理的所有團隊
  */
 export const getManagedTeams = async (userId: string): Promise<Team[]> => {

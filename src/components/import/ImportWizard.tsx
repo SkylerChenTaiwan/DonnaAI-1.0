@@ -25,9 +25,11 @@ import {
   FieldRelation,
   ImportError
 } from '@/types/import';
+import { ImportAssignmentConfig, AssignmentPreview } from '@/types/assignment';
 import DatabaseSelector from './stages/DatabaseSelector';
 import FileUploadMerger from './stages/FileUploadMerger';
 import FieldMapper from './stages/FieldMapper';
+import DataAssignmentStep from './stages/DataAssignmentStep';
 import { IntelligentFieldMapper } from './IntelligentFieldMapper';
 import { useAuthStore } from '@/stores/authStore';
 import { showSuccessToast, showErrorToast } from '@/utils/toast';
@@ -78,6 +80,8 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
     mergedTable: null,
     fieldMappings: [],
     fieldRelations: [],
+    assignmentConfig: undefined,
+    assignmentPreview: undefined,
     importOptions: {
       skipDuplicates: true,
       updateExisting: false,
@@ -157,6 +161,9 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
         return wizardState.mergedTable !== null;
       case 3:
         return wizardState.fieldMappings.length > 0;
+      case 4:
+        // 第四階段可以選擇跳過分配或已配置分配
+        return wizardState.assignmentConfig !== undefined || wizardState.assignmentConfig === null;
       default:
         return false;
     }
@@ -164,7 +171,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
 
   const goToPreviousStage = useCallback(() => {
     if (canGoBack) {
-      updateWizardState({ stage: (wizardState.stage - 1) as 1 | 2 | 3 });
+      updateWizardState({ stage: (wizardState.stage - 1) as 1 | 2 | 3 | 4 });
     }
   }, [wizardState.stage, canGoBack, updateWizardState]);
 
@@ -175,8 +182,8 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
       mergedTable: wizardState.mergedTable ? 'exists' : 'null',
       targetDatabase: wizardState.targetDatabase
     });
-    if (canGoNext() && wizardState.stage < 3) {
-      updateWizardState({ stage: (wizardState.stage + 1) as 1 | 2 | 3 });
+    if (canGoNext() && wizardState.stage < 4) {
+      updateWizardState({ stage: (wizardState.stage + 1) as 1 | 2 | 3 | 4 });
     }
   }, [wizardState.stage, canGoNext, updateWizardState, wizardState.mergedTable, wizardState.targetDatabase]);
 
@@ -222,6 +229,21 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
     });
   }, [updateWizardState]);
 
+  // 階段 4: 資料分配
+  const handleAssignmentConfigChanged = useCallback((config: ImportAssignmentConfig | undefined) => {
+    updateWizardState({
+      assignmentConfig: config
+    });
+  }, [updateWizardState]);
+
+  const handleSkipAssignment = useCallback((skip: boolean) => {
+    if (skip) {
+      updateWizardState({
+        assignmentConfig: null // null 表示跳過分配
+      });
+    }
+  }, [updateWizardState]);
+
   // 執行匯入
   const executeImport = useCallback(async () => {
     console.log('開始執行匯入，當前狀態:', {
@@ -256,6 +278,20 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
       console.log('建立智能匯入器，organizationId:', organizationId);
       // 建立智能匯入器
       const importer = new SmartDataImporter(organizationId);
+      
+      // 設定分配配置（如果有）
+      if (wizardState.assignmentConfig && wizardState.assignmentConfig !== null) {
+        console.log('設定分配配置:', wizardState.assignmentConfig);
+        // 設定分配者 ID
+        const configWithAssigner = {
+          ...wizardState.assignmentConfig,
+          assignerId: user?.uid
+        };
+        await importer.setAssignmentConfig(configWithAssigner);
+      } else {
+        // 明確設定不使用分配
+        await importer.setAssignmentConfig(null);
+      }
       console.log('智能匯入器建立成功');
       
       // 準備映射配置
@@ -448,7 +484,8 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
     const titles = [
       '選擇目標資料庫',
       '上傳並合併檔案',
-      '設定欄位映射與關聯'
+      '設定欄位映射與關聯',
+      '分配資料給用戶'
     ];
     return titles[wizardState.stage - 1];
   };
@@ -457,7 +494,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
   const renderProgressIndicator = () => {
     return (
       <View style={styles.progressContainer}>
-        {[1, 2, 3].map(stage => (
+        {[1, 2, 3, 4].map(stage => (
           <View key={stage} style={styles.progressItem}>
             <View style={[
               styles.progressCircle,
@@ -480,6 +517,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
               {stage === 1 && '選擇資料庫'}
               {stage === 2 && '檔案處理'}
               {stage === 3 && '欄位設定'}
+              {stage === 4 && '資料分配'}
             </Text>
           </View>
         ))}
@@ -547,6 +585,19 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
             onMappingsChanged={handleFieldMappingsChanged}
             onRelationsChanged={handleFieldRelationsChanged}
             organizationId={organizationId}
+          />
+        );
+      
+      case 4:
+        // 資料分配階段
+        return (
+          <DataAssignmentStep
+            data={wizardState.mergedTable?.data || []}
+            targetDatabase={wizardState.targetDatabase!}
+            organizationId={organizationId}
+            currentUserId={user?.uid || ''}
+            onAssignmentChange={handleAssignmentConfigChanged}
+            onSkipAssignment={handleSkipAssignment}
           />
         );
       
@@ -661,7 +712,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
             </TouchableOpacity>
           )}
 
-          {wizardState.stage < 3 ? (
+          {wizardState.stage < 4 ? (
             <TouchableOpacity
               style={[
                 styles.button, 
