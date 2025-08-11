@@ -455,6 +455,24 @@ service cloud.firestore {
         request.auth.uid == resource.data.createdBy;
     }
     
+    // 審計日誌集合
+    match /audit_logs/{logId} {
+      // Super Admin 可以讀寫所有審計日誌
+      allow read, write: if isSuperAdmin();
+      
+      // 系統可以建立審計日誌（任何已登入用戶都可以記錄日誌）
+      allow create: if request.auth != null;
+      
+      // 組織管理員可以讀取自己組織的審計日誌
+      allow read: if request.auth != null && 
+        getUserData().role == 'admin' &&
+        getUserData().organizationId == resource.data.organizationId;
+      
+      // 用戶可以讀取自己執行的操作日誌
+      allow read: if request.auth != null && 
+        request.auth.uid == resource.data.performedBy;
+    }
+    
     // 預設拒絕所有其他存取
     match /{document=**} {
       allow read, write: if false;
