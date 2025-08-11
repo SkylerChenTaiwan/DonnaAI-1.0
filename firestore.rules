@@ -278,22 +278,30 @@ service cloud.firestore {
     match /billingRecords/{recordId} {
       // Super Admin 可以讀寫所有計費記錄
       allow read, write: if isSuperAdmin();
-      // 組織管理員可以讀取和查詢計費記錄
+      // 組織管理員可以讀取自己組織的計費記錄
       allow read: if request.auth != null && 
-        getUserData().role == 'admin';
-      // 組織成員可以讀取計費記錄（需要在查詢中限制 organizationId）
-      allow read: if request.auth != null;
+        hasUserDoc() &&
+        getUserData().role == 'admin' &&
+        getUserData().organizationId == resource.data.organizationId;
+      // 組織成員可以讀取自己組織的計費記錄
+      allow read: if request.auth != null && 
+        hasUserDoc() &&
+        getUserData().organizationId == resource.data.organizationId;
     }
     
     // 計費記錄集合（底線分隔）
     match /billing_records/{recordId} {
       // Super Admin 可以讀寫所有計費記錄
       allow read, write: if isSuperAdmin();
-      // 組織管理員可以讀取和查詢計費記錄
+      // 組織管理員可以讀取自己組織的計費記錄
       allow read: if request.auth != null && 
-        getUserData().role == 'admin';
-      // 組織成員可以讀取計費記錄（需要在查詢中限制 organizationId）
-      allow read: if request.auth != null;
+        hasUserDoc() &&
+        getUserData().role == 'admin' &&
+        getUserData().organizationId == resource.data.organizationId;
+      // 組織成員可以讀取自己組織的計費記錄
+      allow read: if request.auth != null && 
+        hasUserDoc() &&
+        getUserData().organizationId == resource.data.organizationId;
     }
     
     // 工具使用記錄集合
