@@ -27,6 +27,7 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { getFirebaseDb } from '@/services/firebase/config';
+import { updateOrganizationStats } from '@/services/firebase/updateOrgStats';
 
 export class UserImportOrchestrator {
   private validator: UserDataValidator;
@@ -206,6 +207,19 @@ export class UserImportOrchestrator {
     // 完成
     progress.isImporting = false;
     onProgress?.(progress);
+
+    // 如果有成功匯入的用戶，更新組織統計
+    if (successCount > 0) {
+      try {
+        console.log(`📊 更新組織 ${config.organizationId} 的統計資料...`);
+        await updateOrganizationStats(config.organizationId);
+        console.log('✅ 組織統計更新完成');
+      } catch (statsError) {
+        console.error('更新組織統計失敗:', statsError);
+        // 統計更新失敗不影響匯入結果
+        warnings.push('用戶已成功匯入，但組織統計更新失敗');
+      }
+    }
 
     return {
       success: successCount > 0,

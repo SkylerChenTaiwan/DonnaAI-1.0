@@ -172,10 +172,59 @@ export const createUsersForImport = onCall({
     }
   }
 
+  // 如果有成功建立的用戶，更新組織統計
+  const successCount = results.filter(r => r.success).length;
+  if (successCount > 0 && organizationId) {
+    try {
+      console.log(`更新組織 ${organizationId} 的統計資料...`);
+      
+      // 統計用戶數量
+      const usersSnapshot = await db.collection("users")
+        .where("organizationId", "==", organizationId)
+        .get();
+      const userCount = usersSnapshot.size;
+      
+      // 統計客戶數量
+      const customersSnapshot = await db.collection("customers")
+        .where("organizationId", "==", organizationId)
+        .get();
+      const customerCount = customersSnapshot.size;
+      
+      // 統計團隊數量
+      const teamsSnapshot = await db.collection("teams")
+        .where("organizationId", "==", organizationId)
+        .get();
+      const teamCount = teamsSnapshot.size;
+      
+      // 更新組織文檔
+      const currentMonth = new Date().toISOString().substring(0, 7);
+      await db.collection("organizations").doc(organizationId).update({
+        "stats.userCount": userCount,
+        "stats.activeUsers": userCount,
+        "stats.customerCount": customerCount,
+        "stats.teamCount": teamCount,
+        monthlyUsage: {
+          period: currentMonth,
+          activeUsers: userCount,
+          recordCount: customerCount,
+          aiProcessingCount: 0,
+          toolUsage: {},
+          calculatedAt: admin.firestore.FieldValue.serverTimestamp(),
+        },
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+      
+      console.log(`✅ 組織統計更新完成: 用戶數=${userCount}, 客戶數=${customerCount}, 團隊數=${teamCount}`);
+    } catch (error) {
+      console.error("更新組織統計失敗:", error);
+      // 統計更新失敗不影響用戶建立結果
+    }
+  }
+  
   return {
     success: true,
     totalProcessed: users.length,
-    successCount: results.filter(r => r.success).length,
+    successCount: successCount,
     failureCount: results.filter(r => !r.success).length,
     results: results,
     errors: errors,
