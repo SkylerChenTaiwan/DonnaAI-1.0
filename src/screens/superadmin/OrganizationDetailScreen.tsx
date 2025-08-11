@@ -118,8 +118,8 @@ export const OrganizationDetailScreen: React.FC = () => {
           });
         }
         
-        // TODO: 載入計費資訊（暫時停用，等實際有資料時再啟用）
-        // loadBillingData(organizationId);
+        // 載入計費資訊
+        loadBillingData(organizationId);
         
         // TODO: 載入工具使用統計（暫時停用，等實際有資料時再啟用）
         // loadToolUsageData(organizationId);
@@ -441,7 +441,7 @@ export const OrganizationDetailScreen: React.FC = () => {
             </View>
             <View style={styles.statsGrid}>
               <View style={styles.statCard}>
-                <Text style={styles.statValue}>{billingSummary?.activeUsers || 0}</Text>
+                <Text style={styles.statValue}>{organization.monthlyUsage?.activeUsers || 0}</Text>
                 <Text style={styles.statLabel}>活躍用戶</Text>
               </View>
               <View style={styles.statCard}>
