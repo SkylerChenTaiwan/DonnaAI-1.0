@@ -10,6 +10,7 @@
 | 02v  | database-functionality.md | ✅ 已完成 | 資料庫功能實作 - 使用者、客戶、紀錄、任務資料庫 | 2025-07-17 |
 | 03v  | ai-meeting-recorder.md | ✅ 已完成 | AI 會議記錄與智能分析系統 - 音訊錄製、AI 分析、智能確認 | 2025-07-17 |
 | 04v  | frontend-pages-implementation.md | ✅ 已完成 | 完整前端頁面系統 - 底部導航、首頁模式切換、資料庫Table、小工具、設定頁面 | 2025-07-17 |
+| 05   | import-data-ownership.md | 📋 待執行 | 匯入資料所有權分配系統 - CSV 資料分配給特定用戶、多種分配策略、權限整合 | - |
 | 05v  | test-environment-error-monitoring.md | ✅ 已完成 | 測試環境與錯誤監控系統 - 環境配置、錯誤邊界、開發者工具、協作優化 | 2025-07-17 |
 | 06   | expo-sdk-upgrade-and-dependency-optimization.md | 📋 待執行 | Expo SDK 升級與依賴優化 - 版本升級、相容性修復、功能驗證、效能優化 | - |
 | 07   | expo-sdk-53-upgrade.md | 📋 待執行 | Expo SDK 53 升級 - 解決 Firebase 相容性、維持 React 18、Metro 配置優化 | - |
