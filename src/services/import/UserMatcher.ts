@@ -5,7 +5,7 @@
 
 import { UserMatchResult } from '@/types/assignment';
 import { User } from '@/types/user';
-import { getFirebaseDb } from '@/config/firebase';
+import { getFirebaseDb } from '@/services/firebase/config';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 
 export class UserMatcher {
@@ -13,15 +13,28 @@ export class UserMatcher {
   private emailIndex: Map<string, User> = new Map();
   private nameIndex: Map<string, User> = new Map();
   private employeeIdIndex: Map<string, User> = new Map();
+  private phoneIndex: Map<string, User> = new Map();
+  private organizationId?: string;
   
-  constructor(private organizationId: string) {}
+  constructor(organizationIdOrUsers: string | User[]) {
+    if (typeof organizationIdOrUsers === 'string') {
+      this.organizationId = organizationIdOrUsers;
+    } else {
+      // 支援直接傳入用戶陣列（用於測試）
+      this.organizationUsers = organizationIdOrUsers;
+      this.buildIndexes();
+    }
+  }
 
   /**
    * 初始化匹配器，建立索引
    */
   async initialize(): Promise<void> {
-    await this.loadOrganizationUsers();
-    this.buildIndexes();
+    // 如果已經有用戶資料（從建構函數傳入），則不需要再載入
+    if (this.organizationUsers.length === 0 && this.organizationId) {
+      await this.loadOrganizationUsers();
+      this.buildIndexes();
+    }
   }
 
   /**
@@ -72,6 +85,11 @@ export class UserMatcher {
       if (user.employeeId) {
         this.employeeIdIndex.set(user.employeeId.toLowerCase(), user);
       }
+      
+      // 電話號碼索引
+      if (user.phoneNumber) {
+        this.phoneIndex.set(user.phoneNumber.toLowerCase(), user);
+      }
     }
   }
 
@@ -105,11 +123,13 @@ export class UserMatcher {
     if (this.emailIndex.has(input)) {
       const user = this.emailIndex.get(input)!;
       return {
+        user,
         userId: user.id,
         userName: user.name || user.email,
         userEmail: user.email,
         matchType: 'exact',
         matchField: 'email',
+        matchedField: 'email',
         confidence: 100
       };
     }
@@ -118,11 +138,13 @@ export class UserMatcher {
     if (this.nameIndex.has(input)) {
       const user = this.nameIndex.get(input)!;
       return {
+        user,
         userId: user.id,
         userName: user.name || user.email,
         userEmail: user.email,
         matchType: 'exact',
         matchField: 'name',
+        matchedField: 'name',
         confidence: 100
       };
     }
@@ -131,11 +153,28 @@ export class UserMatcher {
     if (this.employeeIdIndex.has(input)) {
       const user = this.employeeIdIndex.get(input)!;
       return {
+        user,
         userId: user.id,
         userName: user.name || user.email,
         userEmail: user.email,
         matchType: 'exact',
         matchField: 'employeeId',
+        matchedField: 'employeeId',
+        confidence: 100
+      };
+    }
+    
+    // 檢查電話號碼
+    if (this.phoneIndex.has(input)) {
+      const user = this.phoneIndex.get(input)!;
+      return {
+        user,
+        userId: user.id,
+        userName: user.name || user.email,
+        userEmail: user.email,
+        matchType: 'exact',
+        matchField: 'phoneNumber',
+        matchedField: 'phoneNumber',
         confidence: 100
       };
     }
@@ -157,11 +196,13 @@ export class UserMatcher {
         if (score > highestScore && score > 0.7) {
           highestScore = score;
           bestMatch = {
+            user,
             userId: user.id,
             userName: user.name || user.email,
             userEmail: user.email,
             matchType: 'fuzzy',
             matchField: 'email',
+            matchedField: 'email',
             confidence: Math.round(score * 100),
             score
           };
@@ -172,14 +213,16 @@ export class UserMatcher {
     // 姓名模糊匹配
     for (const [name, user] of this.nameIndex) {
       const score = this.calculateSimilarity(input, name);
-      if (score > highestScore && score > 0.6) {
+      if (score > highestScore && score > 0.5) { // 降低門檻以匹配部分名稱
         highestScore = score;
         bestMatch = {
+          user,
           userId: user.id,
           userName: user.name || user.email,
           userEmail: user.email,
           matchType: 'fuzzy',
           matchField: 'name',
+          matchedField: 'name',
           confidence: Math.round(score * 100),
           score
         };
@@ -192,14 +235,59 @@ export class UserMatcher {
       if (score > highestScore && score > 0.8) {
         highestScore = score;
         bestMatch = {
+          user,
           userId: user.id,
           userName: user.name || user.email,
           userEmail: user.email,
           matchType: 'fuzzy',
           matchField: 'employeeId',
+          matchedField: 'employeeId',
           confidence: Math.round(score * 100),
           score
         };
+      }
+    }
+    
+    // 電話號碼模糊匹配
+    for (const [phone, user] of this.phoneIndex) {
+      const score = this.calculateSimilarity(input, phone);
+      if (score > highestScore && score > 0.8) {
+        highestScore = score;
+        bestMatch = {
+          user,
+          userId: user.id,
+          userName: user.name || user.email,
+          userEmail: user.email,
+          matchType: 'fuzzy',
+          matchField: 'phoneNumber',
+          matchedField: 'phoneNumber',
+          confidence: Math.round(score * 100),
+          score
+        };
+      }
+    }
+    
+    // 如果沒有找到足夠好的匹配，再嘗試部分匹配
+    if (!bestMatch || highestScore < 0.5) {
+      for (const user of this.organizationUsers) {
+        // 檢查是否部分匹配
+        if (user.name && user.name.toLowerCase().includes(input)) {
+          const score = input.length / user.name.length; // 簡單的部分匹配分數
+          if (score > highestScore) {
+            highestScore = score;
+            bestMatch = {
+              user,
+              userId: user.id,
+              userName: user.name || user.email,
+              userEmail: user.email,
+              matchType: 'fuzzy',
+              matchField: 'name',
+              matchedField: 'name',
+              confidence: Math.round(score * 100),
+              score
+            };
+          }
+        }
       }
     }
     
@@ -207,9 +295,84 @@ export class UserMatcher {
   }
 
   /**
+   * 標準化字串
+   */
+  normalizeString(str: string): string {
+    if (!str) return '';
+    return str.toString().toLowerCase().trim().replace(/\s+/g, ' ');
+  }
+
+  /**
+   * 尋找最佳匹配
+   */
+  findBestMatch(input: string): UserMatchResult | null {
+    return this.fuzzyMatch(this.normalizeString(input));
+  }
+
+  /**
+   * 尋找所有匹配
+   */
+  findAllMatches(input: string, limit: number = 10): UserMatchResult[] {
+    const normalizedInput = this.normalizeString(input);
+    const matches: UserMatchResult[] = [];
+    
+    // 檢查精確匹配
+    const exactMatch = this.exactMatch(normalizedInput);
+    if (exactMatch) {
+      matches.push(exactMatch);
+    }
+    
+    // 模糊匹配所有用戶
+    for (const user of this.organizationUsers) {
+      if (matches.length >= limit) break;
+      
+      const scores = [];
+      let matchField = 'multiple';
+      
+      if (user.email) {
+        const emailScore = this.calculateSimilarity(normalizedInput, user.email.toLowerCase());
+        scores.push(emailScore);
+        if (emailScore === Math.max(...scores)) matchField = 'email';
+      }
+      if (user.name) {
+        const nameScore = this.calculateSimilarity(normalizedInput, user.name.toLowerCase());
+        scores.push(nameScore);
+        if (nameScore === Math.max(...scores)) matchField = 'name';
+      }
+      if (user.employeeId) {
+        const idScore = this.calculateSimilarity(normalizedInput, user.employeeId.toLowerCase());
+        scores.push(idScore);
+        if (idScore === Math.max(...scores)) matchField = 'employeeId';
+      }
+      if (user.phoneNumber) {
+        const phoneScore = this.calculateSimilarity(normalizedInput, user.phoneNumber.toLowerCase());
+        scores.push(phoneScore);
+        if (phoneScore === Math.max(...scores)) matchField = 'phoneNumber';
+      }
+      
+      const maxScore = Math.max(...scores, 0);
+      if (maxScore > 0.3 && !matches.find(m => m.userId === user.id)) {
+        matches.push({
+          user,
+          userId: user.id,
+          userName: user.name || user.email,
+          userEmail: user.email,
+          matchType: 'fuzzy',
+          matchField: matchField,
+          matchedField: matchField,
+          confidence: Math.round(maxScore * 100)
+        });
+      }
+    }
+    
+    // 按信心度排序
+    return matches.sort((a, b) => b.confidence - a.confidence).slice(0, limit);
+  }
+
+  /**
    * 計算字符串相似度
    */
-  private calculateSimilarity(str1: string, str2: string): number {
+  calculateSimilarity(str1: string, str2: string): number {
     // 使用 Levenshtein 距離計算相似度
     const maxLength = Math.max(str1.length, str2.length);
     if (maxLength === 0) return 1.0;
@@ -221,20 +384,24 @@ export class UserMatcher {
   /**
    * Levenshtein 距離算法
    */
-  private levenshteinDistance(str1: string, str2: string): number {
+  levenshteinDistance(str1: string, str2: string): number {
+    // 將字串轉換為小寫以實現大小寫不敏感
+    const s1 = str1.toLowerCase();
+    const s2 = str2.toLowerCase();
+    
     const matrix: number[][] = [];
     
-    for (let i = 0; i <= str2.length; i++) {
+    for (let i = 0; i <= s2.length; i++) {
       matrix[i] = [i];
     }
     
-    for (let j = 0; j <= str1.length; j++) {
+    for (let j = 0; j <= s1.length; j++) {
       matrix[0][j] = j;
     }
     
-    for (let i = 1; i <= str2.length; i++) {
-      for (let j = 1; j <= str1.length; j++) {
-        if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
+    for (let i = 1; i <= s2.length; i++) {
+      for (let j = 1; j <= s1.length; j++) {
+        if (s2.charAt(i - 1) === s1.charAt(j - 1)) {
           matrix[i][j] = matrix[i - 1][j - 1];
         } else {
           matrix[i][j] = Math.min(
@@ -246,7 +413,7 @@ export class UserMatcher {
       }
     }
     
-    return matrix[str2.length][str1.length];
+    return matrix[s2.length][s1.length];
   }
 
   /**

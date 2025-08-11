@@ -17,11 +17,6 @@ import { AssignmentHistory, AssignmentReport } from '@/types/assignment';
 import { Timestamp } from 'firebase/firestore';
 import * as permissions from '@/services/firebase/permissions';
 
-// Mock Firebase
-vi.mock('@/services/firebase/config', () => ({
-  getFirebaseDb: vi.fn(() => mockDb)
-}));
-
 // Mock Firestore 函數
 const mockDoc = vi.fn();
 const mockCollection = vi.fn();
@@ -37,6 +32,11 @@ const mockServerTimestamp = vi.fn(() => Timestamp.now());
 const mockDb = {
   collection: mockCollection
 };
+
+// Mock Firebase
+vi.mock('@/services/firebase/config', () => ({
+  getFirebaseDb: vi.fn(() => mockDb)
+}));
 
 vi.mock('firebase/firestore', () => ({
   collection: mockCollection,

@@ -92,21 +92,37 @@ export const mockCSVData = [
 // Mock 部門規則
 export const mockDepartmentRules: DepartmentAssignmentRule[] = [
   {
-    department: '業務部',
-    conditions: {
-      customerType: 'enterprise',
-      region: 'north'
-    },
-    assigneeIds: ['user1', 'user2'],
-    priority: 1
+    departmentId: 'dept1',
+    departmentName: '業務部',
+    assigneeId: 'user1',
+    assigneeName: '張三',
+    priority: 1,
+    conditions: [
+      {
+        fieldName: 'customerType',
+        operator: 'equals' as const,
+        value: 'enterprise'
+      },
+      {
+        fieldName: 'region',
+        operator: 'equals' as const,
+        value: 'north'
+      }
+    ]
   },
   {
-    department: '管理部',
-    conditions: {
-      customerType: 'vip'
-    },
-    assigneeIds: ['user3'],
-    priority: 2
+    departmentId: 'dept2',
+    departmentName: '管理部',
+    assigneeId: 'user3',
+    assigneeName: 'John Doe',
+    priority: 2,
+    conditions: [
+      {
+        fieldName: 'customerType',
+        operator: 'equals' as const,
+        value: 'vip'
+      }
+    ]
   }
 ];
 

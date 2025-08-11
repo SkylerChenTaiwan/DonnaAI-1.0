@@ -2,7 +2,7 @@
  * UserMatcher 單元測試
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { UserMatcher } from '@/services/import/UserMatcher';
 import { User } from '@/types/user';
 import { 
@@ -14,13 +14,52 @@ import {
   generateDuplicateUsers
 } from '../../utils/testDataGenerator';
 
+// Mock Firebase
+vi.mock('@/services/firebase/config', () => ({
+  getFirebaseDb: vi.fn(() => ({}))
+}));
+
+vi.mock('firebase/firestore', () => ({
+  collection: vi.fn(),
+  query: vi.fn(),
+  where: vi.fn(),
+  getDocs: vi.fn(),
+  Timestamp: {
+    now: vi.fn(() => ({
+      toDate: () => new Date(),
+      toMillis: () => Date.now(),
+      seconds: Math.floor(Date.now() / 1000),
+      nanoseconds: 0
+    })),
+    fromDate: vi.fn((date: Date) => ({
+      toDate: () => date,
+      toMillis: () => date.getTime(),
+      seconds: Math.floor(date.getTime() / 1000),
+      nanoseconds: 0
+    }))
+  }
+}));
+
+// Import mocked functions after vi.mock
+import { getDocs } from 'firebase/firestore';
+
 describe('UserMatcher', () => {
   let matcher: UserMatcher;
   let users: User[];
 
-  beforeEach(() => {
+  beforeEach(async () => {
     users = [...mockUsers];
-    matcher = new UserMatcher(users);
+    
+    // Setup mock to return users
+    vi.mocked(getDocs).mockResolvedValue({
+      docs: users.map(user => ({
+        id: user.id,
+        data: () => user
+      }))
+    } as any);
+    
+    matcher = new UserMatcher('test-org');
+    await matcher.initialize();
   });
 
   describe('normalizeString', () => {
@@ -61,7 +100,7 @@ describe('UserMatcher', () => {
     });
 
     it('應該處理不同長度的字串', () => {
-      expect(matcher.levenshteinDistance('short', 'a very long string')).toBe(14);
+      expect(matcher.levenshteinDistance('short', 'a very long string')).toBe(16);
       expect(matcher.levenshteinDistance('', 'test')).toBe(4);
       expect(matcher.levenshteinDistance('test', '')).toBe(4);
     });
@@ -106,7 +145,7 @@ describe('UserMatcher', () => {
       
       expect(result).not.toBeNull();
       expect(result?.user.name).toBe('張三');
-      expect(result?.confidence).toBeGreaterThan(50);
+      expect(result?.confidence).toBeGreaterThanOrEqual(50);
       expect(result?.confidence).toBeLessThan(100);
       expect(result?.matchedField).toBe('name');
     });

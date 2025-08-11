@@ -16,7 +16,8 @@ import {
 } from '@/types/audit';
 import { auditLogQuery } from './AuditLogQuery';
 import { auditAnalytics } from './AuditAnalytics';
-import { db } from '@/config/firebase';
+import { getFirebaseDb } from '@/services/firebase/config';
+const db = getFirebaseDb();
 import { collection, query, where, getDocs, Timestamp } from 'firebase/firestore';
 import { format, startOfMonth, endOfMonth, startOfQuarter, endOfQuarter, startOfYear, endOfYear } from 'date-fns';
 import { zhTW } from 'date-fns/locale';

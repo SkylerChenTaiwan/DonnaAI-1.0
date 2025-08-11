@@ -110,11 +110,13 @@ export interface AssignmentHistory {
  * 用戶匹配結果
  */
 export interface UserMatchResult {
+  user?: any;  // 完整的用戶物件（用於測試）
   userId: string;
   userName: string;
   userEmail?: string;
   matchType: 'exact' | 'fuzzy' | 'partial';
-  matchField: 'email' | 'name' | 'employeeId' | 'customField';
+  matchField: 'email' | 'name' | 'employeeId' | 'phoneNumber' | 'customField' | 'multiple';
+  matchedField?: string;  // 實際匹配到的欄位（用於測試）
   confidence: number;  // 0-100
   score?: number;      // 匹配分數
 }

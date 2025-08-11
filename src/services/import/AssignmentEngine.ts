@@ -14,7 +14,7 @@ import {
 import { DatabaseType } from '@/types/import';
 import { User } from '@/types/user';
 import { UserMatcher } from './UserMatcher';
-import { getFirebaseDb } from '@/config/firebase';
+import { getFirebaseDb } from '@/services/firebase/config';
 import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 
 export class AssignmentEngine {
@@ -310,6 +310,45 @@ export class AssignmentEngine {
         matchConfidence: 0,
         matchedBy: 'default' as const
       };
+    });
+  }
+
+  /**
+   * 執行分配（包含結果格式化）
+   */
+  async executeAssignment(
+    data: any[],
+    config: ImportAssignmentConfig
+  ): Promise<any[]> {
+    const assignments = await this.processAssignments(data, config);
+    const userResults = new Map<string, any>();
+
+    assignments.forEach((assignment, index) => {
+      if (assignment.assigneeId) {
+        if (!userResults.has(assignment.assigneeId)) {
+          userResults.set(assignment.assigneeId, {
+            assigneeId: assignment.assigneeId,
+            assigneeName: assignment.assigneeName,
+            items: [],
+            confidence: 0,
+            totalConfidence: 0,
+            count: 0
+          });
+        }
+        
+        const result = userResults.get(assignment.assigneeId)!;
+        result.items.push(data[index]);
+        result.totalConfidence += assignment.matchConfidence || 0;
+        result.count++;
+      }
+    });
+
+    // 計算平均信心度
+    return Array.from(userResults.values()).map(result => {
+      result.confidence = result.count > 0 ? Math.round(result.totalConfidence / result.count) : 0;
+      delete result.totalConfidence;
+      delete result.count;
+      return result;
     });
   }
 

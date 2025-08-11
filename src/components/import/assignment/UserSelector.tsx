@@ -18,7 +18,7 @@ import { MaterialIcon } from '@/components/common/MaterialIcon';
 import { DesignSystem } from '@/theme/designSystem';
 import { User, UserRole } from '@/types/user';
 import { AssignableUserFilter } from '@/types/assignment';
-import { getFirebaseDb } from '@/config/firebase';
+import { getFirebaseDb } from '@/services/firebase/config';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 
 interface UserSelectorProps {

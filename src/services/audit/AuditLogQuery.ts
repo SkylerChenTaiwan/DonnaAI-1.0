@@ -14,7 +14,8 @@ import {
   ActionCategory,
   RiskLevel,
 } from '@/types/audit';
-import { db } from '@/config/firebase';
+import { getFirebaseDb } from '@/services/firebase/config';
+const db = getFirebaseDb();
 import {
   collection,
   query,

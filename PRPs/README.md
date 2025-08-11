@@ -95,7 +95,7 @@
 | 89v  | fix-user-import-completely.md | ✅ 已完成 | 徹底修復用戶批量匯入功能 - 修復所有錯誤、API 對齊、完整測試覆蓋 | 2025-08-11 |
 | 90v  | import-data-ownership.md | ✅ 已完成 | 匯入資料所有權分配系統 - CSV 資料分配給特定用戶、多種分配策略、權限整合 | 2025-08-11 |
 | 91v  | import-assignment-testing.md | ✅ 已完成 | 資料匯入分配系統完整測試 - 單元測試、整合測試、UI測試、效能測試、安全性測試 | 2025-08-11 |
-| 92   | fix-assignment-integration.md | 📋 待執行 | 修復資料分配功能整合問題 - Firebase 路徑修正、測試設定調整、端到端驗證 | - |
+| 92v  | fix-assignment-integration.md | ✅ 已完成 | 修復資料分配功能整合問題 - Firebase 路徑修正、測試設定調整、端到端驗證 | 2025-01-12 |
 
 ## 命名規則
 

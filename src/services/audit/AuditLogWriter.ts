@@ -7,7 +7,8 @@ import {
   AuditLog,
   RetentionPolicy,
 } from '@/types/audit';
-import { db } from '@/config/firebase';
+import { getFirebaseDb } from '@/services/firebase/config';
+const db = getFirebaseDb();
 import {
   collection,
   doc,

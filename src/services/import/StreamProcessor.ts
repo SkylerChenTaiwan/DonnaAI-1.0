@@ -9,7 +9,8 @@ import {
   ImportProgress,
   ImportError,
 } from '@/types/intelligentImport';
-import { db } from '@/config/firebase';
+import { getFirebaseDb } from '@/services/firebase/config';
+const db = getFirebaseDb();
 import { 
   collection, 
   doc, 

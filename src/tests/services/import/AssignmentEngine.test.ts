@@ -24,23 +24,31 @@ vi.mock('@/services/firebase/config', () => ({
   getFirebaseDb: vi.fn(() => ({}))
 }));
 
-// Mock Firestore functions
-const mockGetDocs = vi.fn(() => ({
-  forEach: vi.fn((callback: any) => {
-    mockUsers.forEach(user => {
-      callback({ id: user.id, data: () => user });
-    });
-  })
-}));
-
 vi.mock('firebase/firestore', () => ({
   collection: vi.fn(),
   query: vi.fn(),
   where: vi.fn(),
-  getDocs: mockGetDocs,
+  getDocs: vi.fn(),
   doc: vi.fn(),
-  getDoc: vi.fn()
+  getDoc: vi.fn(),
+  Timestamp: {
+    now: vi.fn(() => ({
+      toDate: () => new Date(),
+      toMillis: () => Date.now(),
+      seconds: Math.floor(Date.now() / 1000),
+      nanoseconds: 0
+    })),
+    fromDate: vi.fn((date: Date) => ({
+      toDate: () => date,
+      toMillis: () => date.getTime(),
+      seconds: Math.floor(date.getTime() / 1000),
+      nanoseconds: 0
+    }))
+  }
 }));
+
+// Import mocked functions after vi.mock
+import { getDocs } from 'firebase/firestore';
 
 // Mock UserMatcher
 vi.mock('@/services/import/UserMatcher');
@@ -52,9 +60,24 @@ describe('AssignmentEngine', () => {
   beforeEach(async () => {
     vi.clearAllMocks();
     
+    // Setup mock to return users with forEach method
+    const mockDocs = mockUsers.map(user => ({
+      id: user.id,
+      data: () => user
+    }));
+    
+    vi.mocked(getDocs).mockResolvedValue({
+      docs: mockDocs,
+      forEach: (callback: any) => mockDocs.forEach(callback),
+      empty: mockDocs.length === 0,
+      size: mockDocs.length
+    } as any);
+    
     // Setup UserMatcher mock
     mockUserMatcher = {
-      findBestMatch: vi.fn()
+      findBestMatch: vi.fn(),
+      matchUser: vi.fn().mockResolvedValue(null),
+      initialize: vi.fn().mockResolvedValue(undefined)
     };
     vi.mocked(UserMatcher).mockImplementation(() => mockUserMatcher);
     
@@ -81,19 +104,21 @@ describe('AssignmentEngine', () => {
     });
 
     it('應該處理無用戶的組織', async () => {
-      mockGetDocs.mockResolvedValueOnce({
-        forEach: vi.fn()
+      vi.mocked(getDocs).mockResolvedValueOnce({
+        docs: [],
+        forEach: (callback: any) => {},
+        empty: true,
+        size: 0
       } as any);
       
       const newEngine = new AssignmentEngine('empty-org');
       await newEngine.initialize();
       
-      const preview = await newEngine.generatePreview(mockCSVData, {
+      // 因為組織沒有用戶，會拋出錯誤
+      await expect(newEngine.generatePreview(mockCSVData, {
         strategy: 'single_user',
         assigneeId: 'user1'
-      });
-      
-      expect(preview).toEqual([]);
+      })).rejects.toThrow('找不到用戶 ID: user1');
     });
   });
 
@@ -119,9 +144,9 @@ describe('AssignmentEngine', () => {
           assigneeId: 'invalid-user'
         };
         
-        const preview = await engine.generatePreview(mockCSVData, config);
-        
-        expect(preview).toEqual([]);
+        // 預期會拋出錯誤
+        await expect(engine.generatePreview(mockCSVData, config))
+          .rejects.toThrow('找不到用戶 ID: invalid-user');
       });
     });
 
@@ -153,20 +178,20 @@ describe('AssignmentEngine', () => {
           assigneeIds: []
         };
         
-        const preview = await engine.generatePreview(mockCSVData, config);
-        
-        expect(preview).toEqual([]);
+        // 預期會拋出錯誤
+        await expect(engine.generatePreview(mockCSVData, config))
+          .rejects.toThrow('輪流分配需要至少一個用戶');
       });
     });
 
     describe('csv_column 策略', () => {
       it('應該根據 CSV 欄位分配資料', async () => {
-        mockUserMatcher.findBestMatch
-          .mockReturnValueOnce({ user: mockUsers[0], confidence: 100 })
-          .mockReturnValueOnce({ user: mockUsers[0], confidence: 85 })
-          .mockReturnValueOnce({ user: mockUsers[2], confidence: 90 })
-          .mockReturnValueOnce({ user: mockUsers[1], confidence: 95 })
-          .mockReturnValueOnce({ user: mockUsers[2], confidence: 80 });
+        mockUserMatcher.matchUser
+          .mockResolvedValueOnce({ userId: 'user1', userName: '張三', confidence: 100 })
+          .mockResolvedValueOnce({ userId: 'user1', userName: '張三', confidence: 85 })
+          .mockResolvedValueOnce({ userId: 'user3', userName: 'John Doe', confidence: 90 })
+          .mockResolvedValueOnce({ userId: 'user2', userName: '李四', confidence: 95 })
+          .mockResolvedValueOnce({ userId: 'user3', userName: 'John Doe', confidence: 80 });
         
         const config: ImportAssignmentConfig = {
           strategy: 'csv_column',
@@ -177,7 +202,7 @@ describe('AssignmentEngine', () => {
         const preview = await engine.generatePreview(mockCSVData, config);
         
         expect(preview.length).toBeGreaterThan(0);
-        expect(mockUserMatcher.findBestMatch).toHaveBeenCalledTimes(mockCSVData.length);
+        expect(mockUserMatcher.matchUser).toHaveBeenCalledTimes(mockCSVData.length);
       });
 
       it('應該處理不存在的 CSV 欄位', async () => {
@@ -192,7 +217,7 @@ describe('AssignmentEngine', () => {
       });
 
       it('應該使用預設用戶處理無法匹配的資料', async () => {
-        mockUserMatcher.findBestMatch.mockReturnValue(null);
+        mockUserMatcher.matchUser.mockResolvedValue(null);
         
         const config: ImportAssignmentConfig = {
           strategy: 'csv_column',
@@ -312,8 +337,9 @@ describe('AssignmentEngine', () => {
     });
 
     it('應該包含正確的信心度分數', async () => {
-      mockUserMatcher.findBestMatch.mockReturnValue({
-        user: mockUsers[0],
+      mockUserMatcher.matchUser.mockResolvedValue({
+        userId: 'user1',
+        userName: '張三',
         confidence: 85
       });
       
@@ -330,7 +356,7 @@ describe('AssignmentEngine', () => {
     });
 
     it('應該處理 skipUnassigned 選項', async () => {
-      mockUserMatcher.findBestMatch.mockReturnValue(null);
+      mockUserMatcher.matchUser.mockResolvedValue(null);
       
       const config: ImportAssignmentConfig = {
         strategy: 'csv_column',
@@ -355,8 +381,8 @@ describe('AssignmentEngine', () => {
       
       expect(validation.isValid).toBe(true);
       expect(validation.errors).toHaveLength(0);
-      expect(validation.stats.totalData).toBe(mockCSVData.length);
-      expect(validation.stats.assignedData).toBe(mockCSVData.length);
+      expect(validation.statistics.totalRows).toBe(mockCSVData.length);
+      expect(validation.statistics.assignableRows).toBe(mockCSVData.length);
     });
 
     it('應該檢測無效的配置', async () => {
@@ -372,7 +398,7 @@ describe('AssignmentEngine', () => {
     });
 
     it('應該警告未分配的資料', async () => {
-      mockUserMatcher.findBestMatch.mockReturnValue(null);
+      mockUserMatcher.matchUser.mockResolvedValue(null);
       
       const config: ImportAssignmentConfig = {
         strategy: 'csv_column',
@@ -382,7 +408,7 @@ describe('AssignmentEngine', () => {
       const validation = await engine.validateAssignment(mockCSVData, config);
       
       expect(validation.warnings.length).toBeGreaterThan(0);
-      expect(validation.stats.unassignedData).toBeGreaterThan(0);
+      expect(validation.statistics.unassignedRows).toBeGreaterThan(0);
     });
   });
 
@@ -403,19 +429,23 @@ describe('AssignmentEngine', () => {
         strategy: 'invalid_strategy' as any
       };
       
-      const preview = await engine.generatePreview(mockCSVData, config);
-      
-      expect(preview).toEqual([]);
+      // 預期會拋出錯誤
+      await expect(engine.generatePreview(mockCSVData, config))
+        .rejects.toThrow('不支援的分配策略: invalid_strategy');
     });
 
     it('應該處理非活躍用戶', async () => {
       const inactiveUsers = mockUsers.map(u => ({ ...u, isActive: false }));
-      mockGetDocs.mockResolvedValueOnce({
-        forEach: vi.fn((callback: any) => {
-          inactiveUsers.forEach(user => {
-            callback({ id: user.id, data: () => user });
-          });
-        })
+      const mockDocs = inactiveUsers.map(user => ({
+        id: user.id,
+        data: () => user
+      }));
+      
+      vi.mocked(getDocs).mockResolvedValueOnce({
+        docs: mockDocs,
+        forEach: (callback: any) => mockDocs.forEach(callback),
+        empty: mockDocs.length === 0,
+        size: mockDocs.length
       } as any);
       
       const newEngine = new AssignmentEngine('test-org');
@@ -426,18 +456,18 @@ describe('AssignmentEngine', () => {
         assigneeId: 'user1'
       };
       
-      const preview = await newEngine.generatePreview(mockCSVData, config);
-      
-      expect(preview).toEqual([]);
+      // 因為用戶是非活躍的，所以不應該被載入，會拋出錯誤
+      await expect(newEngine.generatePreview(mockCSVData, config))
+        .rejects.toThrow('找不到用戶 ID: user1');
     });
 
     it('應該處理混合語言資料', async () => {
       const mixedData = edgeCaseData.mixedLanguageData;
       
-      mockUserMatcher.findBestMatch
-        .mockReturnValueOnce({ user: mockUsers[0], confidence: 100 })
-        .mockReturnValueOnce({ user: mockUsers[2], confidence: 90 })
-        .mockReturnValueOnce({ user: mockUsers[1], confidence: 85 });
+      mockUserMatcher.matchUser
+        .mockResolvedValueOnce({ userId: 'user1', userName: '張三', confidence: 100 })
+        .mockResolvedValueOnce({ userId: 'user3', userName: 'John Doe', confidence: 90 })
+        .mockResolvedValueOnce({ userId: 'user2', userName: '李四', confidence: 85 });
       
       const config: ImportAssignmentConfig = {
         strategy: 'csv_column',
@@ -452,8 +482,9 @@ describe('AssignmentEngine', () => {
     it('應該處理特殊字元資料', async () => {
       const specialData = edgeCaseData.specialCharData;
       
-      mockUserMatcher.findBestMatch.mockReturnValue({
-        user: mockUsers[0],
+      mockUserMatcher.matchUser.mockResolvedValue({
+        userId: 'user1',
+        userName: '張三',
         confidence: 70
       });
       

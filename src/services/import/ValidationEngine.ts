@@ -9,7 +9,8 @@ import {
   ValidationResult,
   ValidationError,
 } from '@/types/intelligentImport';
-import { db } from '@/config/firebase';
+import { getFirebaseDb } from '@/services/firebase/config';
+const db = getFirebaseDb();
 import { collection, query, where, getDocs } from 'firebase/firestore';
 
 export class ValidationEngine implements IValidationEngine {
