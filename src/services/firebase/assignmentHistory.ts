@@ -163,23 +163,28 @@ export const getUserAssignmentHistory = async (
       const histories: AssignmentHistory[] = [];
       
       assigneeSnapshot.forEach(doc => {
-        histories.push({
-          ...doc.data(),
-          id: doc.id
-        } as AssignmentHistory);
-      });
-      
-      assignerSnapshot.forEach(doc => {
-        if (!histories.find(h => h.id === doc.id)) {
+        const data = doc.data();
+        if (data) {
           histories.push({
-            ...doc.data(),
+            ...data,
             id: doc.id
           } as AssignmentHistory);
         }
       });
       
-      // 排序並限制數量
+      assignerSnapshot.forEach(doc => {
+        const data = doc.data();
+        if (data && !histories.find(h => h.id === doc.id)) {
+          histories.push({
+            ...data,
+            id: doc.id
+          } as AssignmentHistory);
+        }
+      });
+      
+      // 排序並限制數量 - 過濾掉沒有 assignedAt 的資料
       return histories
+        .filter(h => h.assignedAt)
         .sort((a, b) => b.assignedAt.toMillis() - a.assignedAt.toMillis())
         .slice(0, limitCount);
     }
@@ -188,10 +193,13 @@ export const getUserAssignmentHistory = async (
     const histories: AssignmentHistory[] = [];
     
     snapshot.forEach(doc => {
-      histories.push({
-        ...doc.data(),
-        id: doc.id
-      } as AssignmentHistory);
+      const data = doc.data();
+      if (data) {
+        histories.push({
+          ...data,
+          id: doc.id
+        } as AssignmentHistory);
+      }
     });
     
     return histories;
@@ -273,10 +281,13 @@ export const getImportSessionAssignmentHistory = async (
     const histories: AssignmentHistory[] = [];
     
     snapshot.forEach(doc => {
-      histories.push({
-        ...doc.data(),
-        id: doc.id
-      } as AssignmentHistory);
+      const data = doc.data();
+      if (data) {
+        histories.push({
+          ...data,
+          id: doc.id
+        } as AssignmentHistory);
+      }
     });
     
     return histories;
@@ -374,8 +385,12 @@ export const generateAssignmentReport = async (
     });
     
     return report;
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ 生成分配報告失敗:', error);
+    // 保留原始錯誤訊息
+    if (error.message === '找不到相關的分配歷史') {
+      throw error;
+    }
     throw new Error('無法生成分配報告');
   }
 };

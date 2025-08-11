@@ -17,21 +17,42 @@ import { AssignmentHistory, AssignmentReport } from '@/types/assignment';
 import { Timestamp } from 'firebase/firestore';
 import * as permissions from '@/services/firebase/permissions';
 
-// Mock Firestore 函數
-const mockDoc = vi.fn();
-const mockCollection = vi.fn();
-const mockSetDoc = vi.fn();
-const mockGetDoc = vi.fn();
-const mockGetDocs = vi.fn();
-const mockQuery = vi.fn();
-const mockWhere = vi.fn();
-const mockOrderBy = vi.fn();
-const mockLimit = vi.fn();
-const mockServerTimestamp = vi.fn(() => Timestamp.now());
-
-const mockDb = {
-  collection: mockCollection
-};
+// 使用 vi.hoisted 確保 mock 函數在模組載入前就存在
+const { mockDoc, mockCollection, mockSetDoc, mockGetDoc, mockGetDocs, mockQuery, mockWhere, mockOrderBy, mockLimit, mockServerTimestamp, mockDb } = vi.hoisted(() => {
+  const mockDoc = vi.fn();
+  const mockCollection = vi.fn();
+  const mockSetDoc = vi.fn();
+  const mockGetDoc = vi.fn();
+  const mockGetDocs = vi.fn();
+  const mockQuery = vi.fn();
+  const mockWhere = vi.fn();
+  const mockOrderBy = vi.fn();
+  const mockLimit = vi.fn();
+  const mockServerTimestamp = vi.fn(() => ({
+    toDate: () => new Date(),
+    toMillis: () => Date.now(),
+    seconds: Math.floor(Date.now() / 1000),
+    nanoseconds: 0
+  }));
+  
+  const mockDb = {
+    collection: mockCollection
+  };
+  
+  return {
+    mockDoc,
+    mockCollection,
+    mockSetDoc,
+    mockGetDoc,
+    mockGetDocs,
+    mockQuery,
+    mockWhere,
+    mockOrderBy,
+    mockLimit,
+    mockServerTimestamp,
+    mockDb
+  };
+});
 
 // Mock Firebase
 vi.mock('@/services/firebase/config', () => ({

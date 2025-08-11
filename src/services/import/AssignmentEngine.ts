@@ -69,10 +69,10 @@ export class AssignmentEngine {
         return await this.assignFromCSV(data, config);
       
       case 'department_rule':
-        return this.assignByDepartmentRules(data, config.departmentRules || []);
+        return this.assignByDepartmentRules(data, config.departmentRules || [], config.defaultAssignee);
       
       case 'manual_mapping':
-        return this.assignByManualMapping(data, config.assigneeMapping || new Map());
+        return this.assignByManualMapping(data, config.assigneeMapping || new Map(), config.defaultAssignee);
       
       default:
         throw new Error(`不支援的分配策略: ${config.strategy}`);
@@ -217,7 +217,8 @@ export class AssignmentEngine {
    */
   private assignByDepartmentRules(
     data: any[],
-    rules: DepartmentAssignmentRule[]
+    rules: DepartmentAssignmentRule[],
+    defaultAssignee?: string
   ): AssignmentResult[] {
     const sortedRules = [...rules].sort((a, b) => a.priority - b.priority);
     const results: AssignmentResult[] = [];
@@ -242,11 +243,23 @@ export class AssignmentEngine {
       }
 
       if (!assigned) {
-        results.push({
-          assigneeId: '',
-          matchConfidence: 0,
-          matchedBy: 'default' as const
-        });
+        if (defaultAssignee) {
+          const defaultUser = this.organizationUsers.get(defaultAssignee);
+          results.push({
+            assigneeId: defaultAssignee,
+            assigneeName: defaultUser?.name || defaultUser?.email,
+            teamId: defaultUser?.teamId,
+            department: defaultUser?.department,
+            matchConfidence: 50,
+            matchedBy: 'default' as const
+          });
+        } else {
+          results.push({
+            assigneeId: '',
+            matchConfidence: 0,
+            matchedBy: 'default' as const
+          });
+        }
       }
     }
 
@@ -288,10 +301,14 @@ export class AssignmentEngine {
    */
   private assignByManualMapping(
     data: any[],
-    mapping: Map<string, string>
+    mapping: Map<string, string>,
+    defaultAssignee?: string,
+    mappingKey: string = 'name'
   ): AssignmentResult[] {
     return data.map((row, index) => {
-      const assigneeId = mapping.get(index.toString()) || '';
+      // 嘗試從映射中找到對應的分配
+      const keyValue = row[mappingKey] || row.name || index.toString();
+      const assigneeId = mapping.get(keyValue) || defaultAssignee || '';
       const user = assigneeId ? this.organizationUsers.get(assigneeId) : null;
 
       if (user) {
@@ -300,8 +317,8 @@ export class AssignmentEngine {
           assigneeName: user.name || user.email,
           teamId: user.teamId,
           department: user.department,
-          matchConfidence: 100,
-          matchedBy: 'csvColumn' as const
+          matchConfidence: mapping.has(keyValue) ? 100 : 50,
+          matchedBy: mapping.has(keyValue) ? 'csvColumn' as const : 'default' as const
         };
       }
 
