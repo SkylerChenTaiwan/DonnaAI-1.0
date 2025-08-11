@@ -455,7 +455,7 @@ service cloud.firestore {
         request.auth.uid == resource.data.createdBy;
     }
     
-    // 審計日誌集合
+    // 審計日誌集合（兼容兩種名稱）
     match /audit_logs/{logId} {
       // Super Admin 可以讀寫所有審計日誌
       allow read, write: if isSuperAdmin();
@@ -471,6 +471,25 @@ service cloud.firestore {
       // 用戶可以讀取自己執行的操作日誌
       allow read: if request.auth != null && 
         request.auth.uid == resource.data.performedBy;
+    }
+    
+    // 權限審計日誌集合（實際使用的集合名稱）
+    match /permission_audits/{auditId} {
+      // Super Admin 可以讀寫所有審計日誌
+      allow read, write: if isSuperAdmin();
+      
+      // 系統可以建立審計日誌（任何已登入用戶都可以記錄日誌）
+      allow create: if request.auth != null;
+      
+      // 組織管理員可以讀取自己組織的審計日誌
+      allow read: if request.auth != null && 
+        hasUserDoc() &&
+        getUserData().role == 'admin';
+      
+      // 用戶可以讀取與自己相關的審計日誌
+      allow read: if request.auth != null && 
+        (request.auth.uid == resource.data.userId ||
+         request.auth.uid == resource.data.performedBy);
     }
     
     // 預設拒絕所有其他存取
