@@ -93,7 +93,7 @@
 | 87v  | intelligent-user-import-mapping.md | ✅ 已完成 | 智能用戶批量匯入系統 - 整合智能欄位對應、AI 輔助映射、多檔案合併 | 2025-08-08 |
 | 88v  | web-specific-icon-components.md | ✅ 已完成 | Web 專用圖標元件系統 - 徹底解決 NetworkError 與字體載入問題 | 2025-08-09 |
 | 89v  | fix-user-import-completely.md | ✅ 已完成 | 徹底修復用戶批量匯入功能 - 修復所有錯誤、API 對齊、完整測試覆蓋 | 2025-08-11 |
-| 90   | import-data-ownership.md | 📋 待執行 | 匯入資料所有權分配系統 - CSV 資料分配給特定用戶、多種分配策略、權限整合 | - |
+| 90v  | import-data-ownership.md | ✅ 已完成 | 匯入資料所有權分配系統 - CSV 資料分配給特定用戶、多種分配策略、權限整合 | 2025-08-11 |
 
 ## 命名規則
 
