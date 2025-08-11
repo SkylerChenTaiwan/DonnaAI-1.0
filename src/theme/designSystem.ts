@@ -1,7 +1,10 @@
 /**
  * 設計系統常量
  * 基於 Notion 風格的單色灰階設計系統
+ * 擴展支援跨平台 Web 和 Native
  */
+
+import type { WebTokens, DesignTokens } from './platformTokens';
 
 export const DesignSystem = {
   colors: {
@@ -298,5 +301,100 @@ export const getTextStyle = (variant: 'primary' | 'secondary' | 'tertiary' = 'pr
   return {
     color: colors[variant],
     ...DesignSystem.typography.body,
+  };
+};
+
+// Web 平台專用的設計 Tokens
+export const webTokens: Partial<WebTokens> = {
+  // CSS 變數定義
+  cssVariables: {
+    // 顏色
+    '--color-primary': DesignSystem.colors.primary,
+    '--color-background-primary': DesignSystem.colors.background.primary,
+    '--color-background-surface': DesignSystem.colors.background.surface,
+    '--color-background-input': DesignSystem.colors.background.input,
+    '--color-text-primary': DesignSystem.colors.text.primary,
+    '--color-text-secondary': DesignSystem.colors.text.secondary,
+    '--color-border-default': DesignSystem.colors.border.default,
+    '--color-border-light': DesignSystem.colors.border.light,
+    '--color-success': DesignSystem.colors.status.success,
+    '--color-warning': DesignSystem.colors.status.warning,
+    '--color-error': DesignSystem.colors.status.error,
+    
+    // 間距
+    '--spacing-xs': `${DesignSystem.spacing.xs}px`,
+    '--spacing-sm': `${DesignSystem.spacing.sm}px`,
+    '--spacing-md': `${DesignSystem.spacing.md}px`,
+    '--spacing-lg': `${DesignSystem.spacing.lg}px`,
+    '--spacing-xl': `${DesignSystem.spacing.xl}px`,
+    '--spacing-xxl': `${DesignSystem.spacing.xxl}px`,
+    
+    // 字體
+    '--font-size-h1': `${DesignSystem.typography.h1.fontSize}px`,
+    '--font-size-h2': `${DesignSystem.typography.h2.fontSize}px`,
+    '--font-size-h3': `${DesignSystem.typography.h3.fontSize}px`,
+    '--font-size-body': `${DesignSystem.typography.body.fontSize}px`,
+    
+    // 圓角
+    '--border-radius-sm': `${DesignSystem.borderRadius.sm}px`,
+    '--border-radius-md': `${DesignSystem.borderRadius.md}px`,
+    '--border-radius-lg': `${DesignSystem.borderRadius.lg}px`,
+    
+    // 動畫
+    '--transition-fast': `${DesignSystem.transitions.fast}ms`,
+    '--transition-normal': `${DesignSystem.transitions.normal}ms`,
+    '--transition-slow': `${DesignSystem.transitions.slow}ms`,
+  },
+  
+  // 媒體查詢斷點
+  breakpoints: {
+    mobile: '(max-width: 767px)',
+    tablet: '(min-width: 768px) and (max-width: 1023px)',
+    desktop: '(min-width: 1024px)',
+    wide: '(min-width: 1440px)',
+  },
+  
+  // Web 專用陰影（轉換 React Native 陰影到 CSS）
+  webShadows: {
+    none: 'none',
+    sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
+    md: '0 2px 4px rgba(0, 0, 0, 0.08)',
+    lg: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    xl: '0 8px 16px rgba(0, 0, 0, 0.15)',
+  },
+  
+  // Z-index 層級管理
+  zIndex: {
+    hide: -1,
+    base: 0,
+    dropdown: 1000,
+    overlay: 1100,
+    modal: 1200,
+    popover: 1300,
+    tooltip: 1400,
+  },
+};
+
+// 生成 CSS 變數字串（用於注入到 document）
+export const generateCSSVariables = (): string => {
+  return Object.entries(webTokens.cssVariables || {})
+    .map(([key, value]) => `${key}: ${value};`)
+    .join('\n');
+};
+
+// 取得響應式斷點檢查函數
+export const createBreakpointChecker = () => {
+  const checkBreakpoint = (breakpoint: keyof typeof webTokens.breakpoints) => {
+    if (typeof window === 'undefined') return false;
+    
+    const query = webTokens.breakpoints?.[breakpoint];
+    return query ? window.matchMedia(query).matches : false;
+  };
+  
+  return {
+    isMobile: () => checkBreakpoint('mobile'),
+    isTablet: () => checkBreakpoint('tablet'),
+    isDesktop: () => checkBreakpoint('desktop'),
+    isWide: () => checkBreakpoint('wide'),
   };
 };

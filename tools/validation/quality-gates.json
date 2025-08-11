@@ -1,0 +1,277 @@
+{
+  "version": "1.0.0",
+  "description": "Adaptive Architecture 品質門檻配置",
+  "lastUpdated": "2025-01-11",
+  
+  "overallScore": {
+    "description": "整體品質分數閾值",
+    "excellent": {
+      "threshold": 90,
+      "description": "優秀 - 程式碼品質極佳",
+      "action": "continue"
+    },
+    "good": {
+      "threshold": 75,
+      "description": "良好 - 程式碼品質良好",
+      "action": "continue"
+    },
+    "warning": {
+      "threshold": 60,
+      "description": "警告 - 需要改進",
+      "action": "review_required"
+    },
+    "critical": {
+      "threshold": 0,
+      "description": "嚴重 - 必須修復",
+      "action": "block_deployment"
+    }
+  },
+
+  "architecture": {
+    "description": "架構合規性門檻",
+    "adaptiveCoverage": {
+      "minimum": 80,
+      "target": 95,
+      "description": "Adaptive 元件使用率",
+      "severity": "high"
+    },
+    "platformUsageLimit": {
+      "maximum": 5,
+      "description": "允許的直接 Platform.OS 使用次數",
+      "severity": "high"
+    },
+    "designSystemUsage": {
+      "minimum": 70,
+      "target": 90,
+      "description": "設計系統使用率",
+      "severity": "medium"
+    },
+    "architectureViolations": {
+      "errors": {
+        "maximum": 0,
+        "severity": "critical"
+      },
+      "warnings": {
+        "maximum": 5,
+        "severity": "medium"
+      }
+    }
+  },
+
+  "designSystem": {
+    "description": "設計系統合規性門檻",
+    "coverage": {
+      "minimum": 80,
+      "target": 95,
+      "description": "設計系統 token 覆蓋率",
+      "severity": "medium"
+    },
+    "hardcodedValues": {
+      "maximum": 20,
+      "description": "允許的硬編碼值數量",
+      "severity": "medium"
+    },
+    "tokenUsage": {
+      "colors": {
+        "minimum": 70,
+        "description": "顏色 token 使用率"
+      },
+      "spacing": {
+        "minimum": 60,
+        "description": "間距 token 使用率"
+      },
+      "typography": {
+        "minimum": 50,
+        "description": "字體 token 使用率"
+      }
+    }
+  },
+
+  "migration": {
+    "description": "遷移準備度門檻",
+    "readiness": {
+      "minimum": 70,
+      "target": 95,
+      "description": "遷移準備度百分比",
+      "severity": "low"
+    },
+    "highRiskMigrations": {
+      "maximum": 10,
+      "description": "高風險遷移項目數量上限",
+      "severity": "medium"
+    },
+    "manualMigrations": {
+      "maximum": 50,
+      "description": "需要手動遷移的項目數量上限",
+      "severity": "low"
+    }
+  },
+
+  "linting": {
+    "description": "程式碼品質檢查門檻",
+    "eslint": {
+      "errors": {
+        "maximum": 0,
+        "description": "ESLint 錯誤數量上限",
+        "severity": "critical"
+      },
+      "warnings": {
+        "maximum": 10,
+        "description": "ESLint 警告數量上限",
+        "severity": "medium"
+      }
+    },
+    "adaptiveRules": {
+      "noPlatformOS": {
+        "severity": "error",
+        "description": "禁止直接使用 Platform.OS"
+      },
+      "preferAdaptiveComponents": {
+        "severity": "warning",
+        "description": "建議使用 Adaptive 元件"
+      },
+      "enforceDesignSystem": {
+        "severity": "warning",
+        "description": "強制使用設計系統 tokens"
+      }
+    }
+  },
+
+  "visualRegression": {
+    "description": "視覺回歸測試門檻",
+    "passRate": {
+      "minimum": 95,
+      "target": 100,
+      "description": "視覺測試通過率",
+      "severity": "high"
+    },
+    "pixelDifference": {
+      "threshold": 0.2,
+      "description": "像素差異閾值 (0-1)",
+      "severity": "medium"
+    },
+    "failureThreshold": {
+      "percentage": 0.01,
+      "description": "失敗閾值百分比",
+      "severity": "medium"
+    }
+  },
+
+  "cicd": {
+    "description": "CI/CD 流程設定",
+    "prChecks": {
+      "required": [
+        "architecture",
+        "designSystem", 
+        "linting"
+      ],
+      "optional": [
+        "migration",
+        "visualRegression"
+      ]
+    },
+    "deploymentGates": {
+      "staging": {
+        "overallScore": 70,
+        "criticalErrors": 0
+      },
+      "production": {
+        "overallScore": 85,
+        "criticalErrors": 0,
+        "highSeverityIssues": 0
+      }
+    },
+    "notifications": {
+      "onFailure": true,
+      "onSuccess": false,
+      "onImprovement": true
+    }
+  },
+
+  "metrics": {
+    "description": "追蹤指標定義",
+    "codeQualityTrend": {
+      "period": "weekly",
+      "targets": {
+        "adaptiveCoverage": "+2%",
+        "designSystemUsage": "+1%",
+        "overallScore": "+1 point"
+      }
+    },
+    "technicalDebt": {
+      "measurement": "hours",
+      "threshold": 40,
+      "description": "預估修復時間上限 (小時)"
+    }
+  },
+
+  "exceptions": {
+    "description": "例外情況處理",
+    "allowedFiles": {
+      "platformUsage": [
+        "src/components/adaptive/platform/PlatformAdapter.ts",
+        "src/components/adaptive/platform/WebStyleAdapter.ts",
+        "src/components/adaptive/platform/NativeStyleAdapter.ts"
+      ],
+      "legacyComponents": [
+        "src/legacy/**/*",
+        "src/vendor/**/*"
+      ]
+    },
+    "temporaryWaivers": {
+      "description": "暫時性豁免 (包含到期日期)",
+      "items": []
+    }
+  },
+
+  "reporting": {
+    "description": "報告生成設定",
+    "formats": ["json", "html", "markdown"],
+    "retention": {
+      "days": 30,
+      "description": "報告保留天數"
+    },
+    "distribution": {
+      "email": [],
+      "slack": "",
+      "teams": ""
+    }
+  },
+
+  "profiles": {
+    "description": "不同環境的門檻設定檔",
+    "development": {
+      "description": "開發環境 - 較寬鬆的門檻",
+      "overallScore": {
+        "warning": 50
+      },
+      "linting": {
+        "warnings": {
+          "maximum": 20
+        }
+      }
+    },
+    "staging": {
+      "description": "測試環境 - 中等門檻",
+      "overallScore": {
+        "warning": 70
+      },
+      "architecture": {
+        "adaptiveCoverage": {
+          "minimum": 70
+        }
+      }
+    },
+    "production": {
+      "description": "生產環境 - 嚴格門檻",
+      "overallScore": {
+        "warning": 85
+      },
+      "linting": {
+        "warnings": {
+          "maximum": 5
+        }
+      }
+    }
+  }
+}

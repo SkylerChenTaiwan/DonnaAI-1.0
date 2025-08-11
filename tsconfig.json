@@ -10,7 +10,9 @@
       "@services/*": ["src/services/*"],
       "@utils/*": ["src/utils/*"],
       "@types/*": ["src/types/*"],
-      "@assets/*": ["assets/*"]
+      "@assets/*": ["assets/*"],
+      "@theme/*": ["src/theme/*"],
+      "@tools/*": ["tools/*"]
     },
     "jsx": "react-native",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
