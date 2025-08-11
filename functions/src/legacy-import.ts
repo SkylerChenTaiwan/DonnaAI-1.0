@@ -27,7 +27,8 @@ export const createUsersForImport = onCall({
   }
 
   // 支援新舊 API 格式
-  let { users, organizationId, teamId, defaultPassword, userData, options } = request.data;
+  const { users, userData, options } = request.data;
+  let { organizationId, teamId, defaultPassword } = request.data;
   
   // 處理新格式（來自 UserCreationService）
   if (!organizationId && users && users.length > 0 && users[0].customClaims?.organizationId) {
