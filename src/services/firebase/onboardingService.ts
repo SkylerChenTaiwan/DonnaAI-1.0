@@ -565,19 +565,22 @@ async function batchCreateUsers(
   for (const userData of users) {
     const userRef = doc(collection(db, 'users'));
     
-    const userDoc = {
+    // 建立基礎文檔，只包含必要欄位
+    const userDoc: any = {
       email: userData.email,
       name: userData.name,
       role: userData.role || 'user',
-      department: userData.department,
-      phone: userData.phone,
-      photoUrl: userData.photoUrl,
       organizationId,
       authMethod: userData.authMethod || 'password',
       createdAt: serverTimestamp(),
       isActive: true,
       // 密碼將由 Firebase Auth 處理
     };
+    
+    // 只加入非 undefined 的可選欄位
+    if (userData.department !== undefined) userDoc.department = userData.department;
+    if (userData.phone !== undefined) userDoc.phone = userData.phone;
+    if (userData.photoUrl !== undefined) userDoc.photoUrl = userData.photoUrl;
     
     batch.set(userRef, userDoc);
   }
