@@ -579,10 +579,9 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                     }
                   ]}
                   onPress={() => {
+                    console.log('🔗 開啟關聯編輯器 for field:', mapping.targetField);
                     setSelectedMapping(mapping);
                     setShowRelationEditor(true);
-                    // 暫時顯示提示，因為關聯編輯器尚未實作
-                    showSuccessToast('關聯設定功能開發中');
                   }}
                   accessibilityRole="button"
                 >
@@ -595,10 +594,9 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                 <TouchableOpacity
                   style={[styles.relationButton, { borderColor: colors.primary }]}
                   onPress={() => {
+                    console.log('🔗 開啟關聯編輯器 for field:', mapping.targetField);
                     setSelectedMapping(mapping);
                     setShowRelationEditor(true);
-                    // 暫時顯示提示，因為關聯編輯器尚未實作
-                    showSuccessToast('關聯設定功能開發中');
                   }}
                   activeOpacity={0.7}
                 >
@@ -1100,6 +1098,288 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
       </View>
     </Modal>
     )}
+    
+    {/* 關聯編輯器 Modal */}
+    {Platform.OS === 'web' ? (
+      // Web 平台使用絕對定位的 div
+      showRelationEditor && selectedMapping && (
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContent, { backgroundColor: colors.white }]}>
+            <View style={styles.modalHeader}>
+              <Text style={[styles.modalTitle, { color: colors.text }]}>
+                設定欄位關聯
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  console.log('關閉關聯編輯器');
+                  setShowRelationEditor(false);
+                  setSelectedMapping(null);
+                }}
+                style={styles.modalCloseButton}
+                activeOpacity={0.7}
+              >
+                <MaterialIcon name="close" size={24} color={colors.gray500} />
+              </TouchableOpacity>
+            </View>
+            
+            <ScrollView style={styles.modalBody}>
+              {/* 當前欄位資訊 */}
+              <View style={[styles.relationFieldInfo, { backgroundColor: colors.gray50, borderRadius: 8, padding: 12, marginBottom: 16 }]}>
+                <Text style={[styles.modalSectionTitle, { color: colors.text, marginBottom: 8 }]}>
+                  來源欄位
+                </Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                  <Text style={[{ fontSize: 14, fontWeight: '600', color: colors.primary }]}>
+                    {targetDatabase}
+                  </Text>
+                  <MaterialIcon name="arrow-forward" size={16} color={colors.gray400} />
+                  <Text style={[{ fontSize: 14, color: colors.text }]}>
+                    {selectedMapping.targetField || selectedMapping.sourceColumn}
+                  </Text>
+                </View>
+              </View>
+
+              {/* 選擇目標資料庫 */}
+              <Text style={[styles.modalSectionTitle, { color: colors.text }]}>
+                選擇目標資料庫
+              </Text>
+              {(['customers', 'records', 'tasks', 'users'] as DatabaseType[])
+                .filter(db => db !== targetDatabase)
+                .map((database) => (
+                <TouchableOpacity
+                  key={database}
+                  style={[
+                    styles.fieldOption,
+                    { 
+                      backgroundColor: colors.gray50,
+                      borderColor: colors.gray200,
+                    }
+                  ]}
+                  onPress={() => {
+                    console.log('選擇目標資料庫:', database);
+                    // 建立關聯
+                    const newRelation: FieldRelation = {
+                      id: `temp-${Date.now()}`,
+                      sourceDatabase: targetDatabase,
+                      sourceField: selectedMapping.targetField || selectedMapping.sourceColumn,
+                      targetDatabase: database,
+                      targetField: '', // 需要進一步選擇
+                      relationType: 'one-to-many',
+                      bidirectional: true,
+                      createdAt: new Date() as any,
+                      organizationId,
+                      createdBy: ''
+                    };
+                    
+                    // 暫時顯示成功訊息
+                    showSuccessToast(`已建立與 ${database} 的關聯`);
+                    
+                    // 關閉對話框
+                    setShowRelationEditor(false);
+                    setSelectedMapping(null);
+                    
+                    // 更新關聯列表
+                    const newRelations = [...relations, newRelation];
+                    setRelations(newRelations);
+                    onRelationsChanged(newRelations);
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.fieldOptionContent}>
+                    <Text style={[styles.fieldOptionLabel, { color: colors.text }]}>
+                      {database === 'customers' ? '客戶' : 
+                       database === 'records' ? '記錄' : 
+                       database === 'tasks' ? '任務' : '用戶'}
+                    </Text>
+                    <Text style={[styles.fieldOptionKey, { color: colors.gray500 }]}>
+                      {database}
+                    </Text>
+                  </View>
+                  <MaterialIcon name="chevron-right" size={20} color={colors.gray400} />
+                </TouchableOpacity>
+              ))}
+
+              {/* 關聯類型選擇 */}
+              <Text style={[styles.modalSectionTitle, { color: colors.text, marginTop: 24 }]}>
+                關聯類型
+              </Text>
+              <View style={{ gap: 8 }}>
+                {[
+                  { value: 'one-to-one', label: '一對一', icon: 'linear-scale' },
+                  { value: 'one-to-many', label: '一對多', icon: 'call-split' },
+                  { value: 'many-to-many', label: '多對多', icon: 'shuffle' }
+                ].map((type) => (
+                  <TouchableOpacity
+                    key={type.value}
+                    style={[
+                      styles.fieldOption,
+                      { 
+                        backgroundColor: colors.gray50,
+                        borderColor: colors.gray200,
+                      }
+                    ]}
+                    onPress={() => {
+                      console.log('選擇關聯類型:', type.value);
+                    }}
+                    activeOpacity={0.7}
+                  >
+                    <View style={[styles.fieldOptionContent, { flexDirection: 'row', alignItems: 'center', gap: 12 }]}>
+                      <MaterialIcon name={type.icon} size={20} color={colors.primary} />
+                      <View>
+                        <Text style={[styles.fieldOptionLabel, { color: colors.text }]}>
+                          {type.label}
+                        </Text>
+                      </View>
+                    </View>
+                    <MaterialIcon name="chevron-right" size={20} color={colors.gray400} />
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
+          </View>
+        </View>
+      )
+    ) : (
+      // Native 平台使用 Modal
+      <Modal
+        visible={showRelationEditor && !!selectedMapping}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => {
+          setShowRelationEditor(false);
+          setSelectedMapping(null);
+        }}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContent, { backgroundColor: colors.white }]}>
+            <View style={styles.modalHeader}>
+              <Text style={[styles.modalTitle, { color: colors.text }]}>
+                設定欄位關聯
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  setShowRelationEditor(false);
+                  setSelectedMapping(null);
+                }}
+                style={styles.modalCloseButton}
+              >
+                <MaterialIcon name="close" size={24} color={colors.gray500} />
+              </TouchableOpacity>
+            </View>
+            
+            <ScrollView style={styles.modalBody}>
+              {/* 當前欄位資訊 */}
+              <View style={[styles.relationFieldInfo, { backgroundColor: colors.gray50, borderRadius: 8, padding: 12, marginBottom: 16 }]}>
+                <Text style={[styles.modalSectionTitle, { color: colors.text, marginBottom: 8 }]}>
+                  來源欄位
+                </Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                  <Text style={[{ fontSize: 14, fontWeight: '600', color: colors.primary }]}>
+                    {targetDatabase}
+                  </Text>
+                  <MaterialIcon name="arrow-forward" size={16} color={colors.gray400} />
+                  <Text style={[{ fontSize: 14, color: colors.text }]}>
+                    {selectedMapping?.targetField || selectedMapping?.sourceColumn}
+                  </Text>
+                </View>
+              </View>
+
+              {/* 選擇目標資料庫 */}
+              <Text style={[styles.modalSectionTitle, { color: colors.text }]}>
+                選擇目標資料庫
+              </Text>
+              {(['customers', 'records', 'tasks', 'users'] as DatabaseType[])
+                .filter(db => db !== targetDatabase)
+                .map((database) => (
+                <TouchableOpacity
+                  key={database}
+                  style={[
+                    styles.fieldOption,
+                    { 
+                      backgroundColor: colors.gray50,
+                      borderColor: colors.gray200,
+                    }
+                  ]}
+                  onPress={() => {
+                    if (selectedMapping) {
+                      // 建立關聯
+                      const newRelation: FieldRelation = {
+                        id: `temp-${Date.now()}`,
+                        sourceDatabase: targetDatabase,
+                        sourceField: selectedMapping.targetField || selectedMapping.sourceColumn,
+                        targetDatabase: database,
+                        targetField: '',
+                        relationType: 'one-to-many',
+                        bidirectional: true,
+                        createdAt: new Date() as any,
+                        organizationId,
+                        createdBy: ''
+                      };
+                      
+                      showSuccessToast(`已建立與 ${database} 的關聯`);
+                      setShowRelationEditor(false);
+                      setSelectedMapping(null);
+                      
+                      const newRelations = [...relations, newRelation];
+                      setRelations(newRelations);
+                      onRelationsChanged(newRelations);
+                    }
+                  }}
+                >
+                  <View style={styles.fieldOptionContent}>
+                    <Text style={[styles.fieldOptionLabel, { color: colors.text }]}>
+                      {database === 'customers' ? '客戶' : 
+                       database === 'records' ? '記錄' : 
+                       database === 'tasks' ? '任務' : '用戶'}
+                    </Text>
+                    <Text style={[styles.fieldOptionKey, { color: colors.gray500 }]}>
+                      {database}
+                    </Text>
+                  </View>
+                  <MaterialIcon name="chevron-right" size={20} color={colors.gray400} />
+                </TouchableOpacity>
+              ))}
+
+              {/* 關聯類型選擇 */}
+              <Text style={[styles.modalSectionTitle, { color: colors.text, marginTop: 24 }]}>
+                關聯類型
+              </Text>
+              <View style={{ gap: 8 }}>
+                {[
+                  { value: 'one-to-one', label: '一對一', icon: 'linear-scale' },
+                  { value: 'one-to-many', label: '一對多', icon: 'call-split' },
+                  { value: 'many-to-many', label: '多對多', icon: 'shuffle' }
+                ].map((type) => (
+                  <TouchableOpacity
+                    key={type.value}
+                    style={[
+                      styles.fieldOption,
+                      { 
+                        backgroundColor: colors.gray50,
+                        borderColor: colors.gray200,
+                      }
+                    ]}
+                    onPress={() => {
+                      console.log('選擇關聯類型:', type.value);
+                    }}
+                  >
+                    <View style={[styles.fieldOptionContent, { flexDirection: 'row', alignItems: 'center', gap: 12 }]}>
+                      <MaterialIcon name={type.icon} size={20} color={colors.primary} />
+                      <View>
+                        <Text style={[styles.fieldOptionLabel, { color: colors.text }]}>
+                          {type.label}
+                        </Text>
+                      </View>
+                    </View>
+                    <MaterialIcon name="chevron-right" size={20} color={colors.gray400} />
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
+    )}
     </>
   );
 };
@@ -1442,6 +1722,9 @@ const styles = StyleSheet.create({
   fieldOptionType: {
     fontSize: 10,
     textTransform: 'uppercase'
+  },
+  relationFieldInfo: {
+    // 關聯欄位資訊樣式
   }
 });
 
