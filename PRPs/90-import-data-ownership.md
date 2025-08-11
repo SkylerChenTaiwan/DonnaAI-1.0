@@ -1,4 +1,4 @@
-# PRP-05: 匯入資料所有權分配系統
+# PRP-90: 匯入資料所有權分配系統
 
 ## Executive Summary
 實作 CSV 資料匯入時支援分配給特定用戶帳戶的功能，讓管理員可以將從舊系統匯出的客戶資料、記錄或任務直接分配給組織內的特定業務人員，建立清楚的資料所有權和權限管理。
@@ -487,4 +487,4 @@ GET /api/assignment/history
 
 ---
 
-*PRP-05: Import Data Ownership Assignment System | Version 1.0 | Created: 2025-01-11*
+*PRP-90: Import Data Ownership Assignment System | Version 1.0 | Created: 2025-01-11*
