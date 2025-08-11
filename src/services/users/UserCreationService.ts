@@ -194,25 +194,29 @@ class UserCreationService {
       const permissions = getRolePermissions(role);
       
       // 建立用戶文檔
-      await setDoc(doc(db, 'users', tempUid), {
+      const userDocData: any = {
         id: tempUid,
         email: userData.email,
         name: userData.name,
         role: role,
         organizationId: userData.organizationId,
         teamIds: userData.teamIds || [],
-        department: userData.department,
-        jobTitle: userData.jobTitle,
-        supervisorId: userData.supervisorId,
-        phoneNumber: userData.phoneNumber,
         platformPermissions: permissions,
         isTemporary: true, // 標記為臨時用戶
         needsAuthCreation: true, // 需要後續建立 Auth 帳號
-        legacyId: userData.legacyId,
-        isLegacyImport: userData.isLegacyImport,
         createdAt: serverTimestamp(),
         createdBy: getAuth().currentUser?.uid || 'system'
-      });
+      };
+      
+      // 只加入非 undefined 的欄位
+      if (userData.department !== undefined) userDocData.department = userData.department;
+      if (userData.jobTitle !== undefined) userDocData.jobTitle = userData.jobTitle;
+      if (userData.supervisorId !== undefined) userDocData.supervisorId = userData.supervisorId;
+      if (userData.phoneNumber !== undefined) userDocData.phoneNumber = userData.phoneNumber;
+      if (userData.legacyId !== undefined) userDocData.legacyId = userData.legacyId;
+      if (userData.isLegacyImport !== undefined) userDocData.isLegacyImport = userData.isLegacyImport;
+      
+      await setDoc(doc(db, 'users', tempUid), userDocData);
       
       // 記錄審計日誌
       await this.auditUserCreation(tempUid, userData, 'firestore_fallback');
@@ -238,23 +242,28 @@ class UserCreationService {
       const role = normalizeRole(userData.role as string);
       const permissions = getRolePermissions(role);
       
-      await setDoc(doc(db, 'users', uid), {
+      // 建立基礎文檔資料，只包含必要欄位
+      const userDocData: any = {
         id: uid,
         email: userData.email,
         name: userData.name,
         role: role,
         organizationId: userData.organizationId,
         teamIds: userData.teamIds || [],
-        department: userData.department,
-        jobTitle: userData.jobTitle,
-        supervisorId: userData.supervisorId,
-        phoneNumber: userData.phoneNumber,
         platformPermissions: permissions,
-        legacyId: userData.legacyId,
-        isLegacyImport: userData.isLegacyImport,
         createdAt: serverTimestamp(),
         createdBy: getAuth().currentUser?.uid || 'system'
-      });
+      };
+      
+      // 只加入非 undefined 的可選欄位
+      if (userData.department !== undefined) userDocData.department = userData.department;
+      if (userData.jobTitle !== undefined) userDocData.jobTitle = userData.jobTitle;
+      if (userData.supervisorId !== undefined) userDocData.supervisorId = userData.supervisorId;
+      if (userData.phoneNumber !== undefined) userDocData.phoneNumber = userData.phoneNumber;
+      if (userData.legacyId !== undefined) userDocData.legacyId = userData.legacyId;
+      if (userData.isLegacyImport !== undefined) userDocData.isLegacyImport = userData.isLegacyImport;
+      
+      await setDoc(doc(db, 'users', uid), userDocData);
       
       console.log('✅ 用戶文檔建立成功');
     } catch (error) {

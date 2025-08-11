@@ -301,15 +301,27 @@ export class UserImportOrchestrator {
       // 調用批量建立用戶服務
       const userCreationService = UserCreationService.getInstance();
       const createResults = await userCreationService.createUsers(
-        usersToCreate.map(user => ({
-          email: user.email,
-          name: user.name,
-          role: user.role || 'user',
-          organizationId: config.organizationId,
-          department: user.department,
-          jobTitle: user.position,
-          phoneNumber: user.phoneNumber,
-        })),
+        usersToCreate.map(user => {
+          const userData: any = {
+            email: user.email,
+            name: user.name,
+            role: user.role || 'user',
+            organizationId: config.organizationId,
+          };
+          
+          // 只加入非空字串的可選欄位
+          if (user.department && user.department.trim()) {
+            userData.department = user.department.trim();
+          }
+          if (user.position && user.position.trim()) {
+            userData.jobTitle = user.position.trim();
+          }
+          if (user.phoneNumber && user.phoneNumber.trim()) {
+            userData.phoneNumber = user.phoneNumber.trim();
+          }
+          
+          return userData;
+        }),
         {
           skipExisting: config.skipExisting,
           generatePasswords: true,
