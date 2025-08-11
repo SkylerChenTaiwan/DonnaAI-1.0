@@ -255,6 +255,34 @@
           "order": "DESCENDING"
         }
       ]
+    },
+    {
+      "collectionGroup": "billing_records",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "organizationId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "period",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "billingRecords",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "organizationId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "period",
+          "order": "DESCENDING"
+        }
+      ]
     }
   ],
   "fieldOverrides": []
