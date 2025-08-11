@@ -102,6 +102,15 @@ export const OrganizationDetailScreen: React.FC = () => {
       const orgData = await getOrganization(organizationId);
       
       if (orgData) {
+        // 調試：檢查讀取到的組織資料
+        console.log('📊 讀取到的組織資料:', {
+          id: orgData.id,
+          name: orgData.name,
+          monthlyUsage: orgData.monthlyUsage,
+          stats: orgData.stats,
+          activeUsers: orgData.monthlyUsage?.activeUsers
+        });
+        
         setOrganization(orgData);
         setFormData({
           name: orgData.name,
@@ -111,7 +120,7 @@ export const OrganizationDetailScreen: React.FC = () => {
         });
         
         // 自動更新統計（如果需要）
-        if (!orgData.monthlyUsage?.activeUsers) {
+        if (!orgData.monthlyUsage?.activeUsers && orgData.monthlyUsage?.activeUsers !== 0) {
           console.log('🔄 自動更新組織統計...');
           updateOrganizationStats(organizationId).catch(err => {
             console.error('自動更新統計失敗:', err);
