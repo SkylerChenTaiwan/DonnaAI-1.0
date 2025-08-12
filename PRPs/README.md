@@ -96,6 +96,14 @@
 | 90v  | import-data-ownership.md | ✅ 已完成 | 匯入資料所有權分配系統 - CSV 資料分配給特定用戶、多種分配策略、權限整合 | 2025-08-11 |
 | 91v  | import-assignment-testing.md | ✅ 已完成 | 資料匯入分配系統完整測試 - 單元測試、整合測試、UI測試、效能測試、安全性測試 | 2025-08-11 |
 | 92v  | fix-assignment-integration.md | ✅ 已完成 | 修復資料分配功能整合問題 - Firebase 路徑修正、測試設定調整、端到端驗證 | 2025-01-12 |
+| 93   | [預留] | 📋 待執行 | - | - |
+| 94v  | web-adaptive-architecture-foundation.md | ✅ 已完成 | 統一跨平台架構基礎 - Platform Adapter、Adaptive Components、Style System | 2025-08-12 |
+| 95v  | style-system-unification.md | ✅ 已完成 | 樣式系統統一 - CSS-in-JS 遷移、設計 tokens 擴展、主題系統 | 2025-08-12 |
+| 96v  | file-uploader-component-refactoring.md | ✅ 已完成 | 檔案上傳元件重構 - UserFileUploader 跨平台統一、API 一致性 | 2025-08-12 |
+| 97v  | database-screen-modularization.md | ✅ 已完成 | 資料庫螢幕模組化 - 拆分巨型元件、邏輯分離、效能優化 | 2025-08-12 |
+| 98v  | complex-form-component-decoupling.md | ✅ 已完成 | 複雜表單元件解耦 - 多模態輸入、匯入功能模組化 | 2025-08-12 |
+| 99   | cross-platform-testing-framework.md | 📋 待執行 | 跨平台測試框架 - 視覺回歸測試、端到端測試、效能測試 | - |
+| 100  | production-deployment-monitoring.md | 📋 待執行 | 生產環境部署與監控 - 部署流程、錯誤追蹤、效能監控 | - |
 
 ## 命名規則
 
@@ -111,7 +119,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：93**
+**下一個新建的 PRP 應使用編號：101**
 
 ## PRP 類型說明
 
