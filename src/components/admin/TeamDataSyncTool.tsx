@@ -1,4 +1,5 @@
 import { Icon } from '../../components/common/Icon';
+import { withAlpha } from '@/utils/colorUtils';
 /**
  * 團隊資料同步工具元件
  * 用於管理員檢查和修復團隊成員資料不一致的問題
@@ -215,7 +216,7 @@ export const TeamDataSyncTool: React.FC = () => {
                     <View key={index} style={styles.listItem}>
                       <View style={styles.listItemContent}>
                         <View style={styles.chipContainer}>
-                          <View style={[styles.chip, { backgroundColor: info.color + '20' }]}>
+                          <View style={[styles.chip, { backgroundColor: withAlpha(info.color, 0.125) }]}>
                             <Icon name={info.icon} size={16} color={info.color} />
                             <Text style={[styles.chipText, { color: info.color }]}>
                               {item.type === 'user_missing_team' ? '使用者缺少團隊' : '團隊缺少使用者'}

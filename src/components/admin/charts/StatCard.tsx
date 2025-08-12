@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { withAlpha } from '@/utils/colorUtils';
 import { View, Text, StyleSheet } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
@@ -76,7 +77,7 @@ export const StatCard: React.FC<StatCardProps> = ({
   return (
     <View style={[styles.container, sizeStyles.container]}>
       {icon && (
-        <View style={[styles.iconContainer, { backgroundColor: color + '20' }]}>
+        <View style={[styles.iconContainer, { backgroundColor: withAlpha(color, 0.125) }]}>
           <Icon name={icon} size={24} color={color} />
         </View>
       )}

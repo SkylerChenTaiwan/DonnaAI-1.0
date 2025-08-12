@@ -211,7 +211,7 @@ const AssignmentPreview: React.FC<AssignmentPreviewProps> = ({
                           style={[
                             styles.confidenceBadge,
                             { 
-                              backgroundColor: getConfidenceColor(item.matchConfidence, colors) + '20'
+                              backgroundColor: withAlpha(getConfidenceColor(item.matchConfidence, colors), 0.125)
                             }
                           ]}
                         >

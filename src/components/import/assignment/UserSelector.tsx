@@ -325,7 +325,7 @@ const UserSelector: React.FC<UserSelectorProps> = ({
                   <View 
                     style={[
                       styles.avatar,
-                      { backgroundColor: getRoleColor(user.role) + '20' }
+                      { backgroundColor: withAlpha(getRoleColor(user.role), 0.125) }
                     ]}
                   >
                     <Text style={[styles.avatarText, { color: getRoleColor(user.role) }]}>
@@ -342,7 +342,7 @@ const UserSelector: React.FC<UserSelectorProps> = ({
                       <View
                         style={[
                           styles.roleBadge,
-                          { backgroundColor: getRoleColor(user.role) + '20' }
+                          { backgroundColor: withAlpha(getRoleColor(user.role), 0.125) }
                         ]}
                       >
                         <Text

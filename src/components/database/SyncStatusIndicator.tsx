@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { withAlpha } from '@/utils/colorUtils';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 // Icon import removed - using platform-specific Icon component;
@@ -59,7 +60,7 @@ export function SyncStatusIndicator({ syncStatus }: SyncStatusIndicatorProps) {
 
   return (
     <View style={styles.container}>
-      <View style={[styles.statusBadge, { backgroundColor: getStatusColor() + '20' }]}>
+      <View style={[styles.statusBadge, { backgroundColor: withAlpha(getStatusColor(), 0.125) }]}>
         <Icon name={getStatusIcon()} 
           size={16} 
           color={getStatusColor()} 

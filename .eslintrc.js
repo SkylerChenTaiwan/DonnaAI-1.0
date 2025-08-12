@@ -30,9 +30,20 @@ module.exports = {
     // 防止顏色字串連接錯誤（React Native Web 兼容性）
     'no-restricted-syntax': [
       'error',
+      // 規則 1: 屬性名包含 color 的拼接
       {
-        selector: "BinaryExpression[operator='+'][left.property.name=/color/i][right.type='Literal']",
-        message: '請使用 withAlpha() 函數處理顏色透明度，避免 Web 平台錯誤。參考 /docs/COLOR-SYSTEM-MIGRATION.md'
+        selector: "BinaryExpression[operator='+'][left.property.name=/[Cc]olor/][right.type='Literal']",
+        message: '禁止顏色字串拼接！使用 withAlpha(color, alpha) 替代。參考 /docs/COLOR-SYSTEM-MIGRATION.md'
+      },
+      // 規則 2: 變數名包含 color 的拼接  
+      {
+        selector: "BinaryExpression[operator='+'][left.name=/[Cc]olor/][right.type='Literal']",
+        message: '禁止顏色字串拼接！使用 withAlpha(color, alpha) 替代。'
+      },
+      // 規則 3: 函數調用返回顏色的拼接
+      {
+        selector: "BinaryExpression[operator='+'][left.type='CallExpression'][left.callee.name=/[Cc]olor/][right.type='Literal']",
+        message: '禁止顏色字串拼接！使用 withAlpha(getColor(), alpha) 替代。'
       }
     ],
   },

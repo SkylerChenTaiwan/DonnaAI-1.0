@@ -180,7 +180,7 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
 
         {/* 圖標和標題 */}
         <View style={styles.cardHeader}>
-          <View style={[styles.iconContainer, { backgroundColor: option.color + '20' }]}>
+          <View style={[styles.iconContainer, { backgroundColor: withAlpha(option.color, 0.125) }]}>
             <IconComponent 
               name={option.icon as any} 
               size={32} 
