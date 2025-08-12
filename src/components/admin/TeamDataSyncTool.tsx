@@ -166,7 +166,7 @@ export const TeamDataSyncTool: React.FC = () => {
           </Text>
 
           {message && (
-            <View style={[styles.alert, styles[`alert${message.type}`]]}>
+            <View style={[styles.alert, message.type === 'success' ? styles.alertsuccess : message.type === 'error' ? styles.alerterror : styles.alertinfo]}>
               <Text style={styles.alertText}>{message.text}</Text>
               <TouchableOpacity
                 onPress={() => setMessage(null)}

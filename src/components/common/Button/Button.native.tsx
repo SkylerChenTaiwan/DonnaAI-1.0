@@ -37,16 +37,16 @@ export const Button = ({
 }: ButtonProps) => {
   const buttonStyle = [
     styles.base,
-    styles[variant],
-    styles[size],
+    variant === 'primary' ? styles.primary : variant === 'secondary' ? styles.secondary : variant === 'tertiary' ? styles.tertiary : variant === 'danger' ? styles.danger : undefined,
+    size === 'small' ? styles.small : size === 'medium' ? styles.medium : size === 'large' ? styles.large : undefined,
     disabled && styles.disabled,
     style,
   ].filter(Boolean);
 
   const buttonTextStyle = [
     styles.textBase,
-    styles[`${variant}Text` as keyof typeof styles],
-    styles[`${size}Text` as keyof typeof styles],
+    variant === 'primary' ? styles.primaryText : variant === 'secondary' ? styles.secondaryText : variant === 'tertiary' ? styles.tertiaryText : variant === 'danger' ? styles.dangerText : undefined,
+    size === 'small' ? styles.smallText : size === 'medium' ? styles.mediumText : size === 'large' ? styles.largeText : undefined,
     disabled && styles.disabledText,
     textStyle,
   ].filter(Boolean);
