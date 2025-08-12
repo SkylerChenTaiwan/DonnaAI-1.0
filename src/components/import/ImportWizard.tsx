@@ -499,13 +499,14 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
             <View style={[
               styles.progressCircle,
               {
-                backgroundColor: stage <= wizardState.stage ? colors.primary : colors.gray200,
-                borderColor: stage === wizardState.stage ? colors.primary : colors.gray200
+                backgroundColor: stage <= wizardState.stage ? colors.primary : Platform.OS === 'web' ? '#FFFFFF' : colors.gray100,
+                borderColor: stage === wizardState.stage ? colors.primary : Platform.OS === 'web' ? '#666666' : colors.gray600,
+                borderWidth: Platform.OS === 'web' ? 2 : 1.5
               }
             ]}>
               <Text style={[
                 styles.progressNumber,
-                { color: stage <= wizardState.stage ? colors.white : colors.gray600 }
+                { color: stage <= wizardState.stage ? colors.white : Platform.OS === 'web' ? '#333333' : colors.gray700 }
               ]}>
                 {stage}
               </Text>
