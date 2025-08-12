@@ -48,7 +48,7 @@ function processFile(filePath) {
   // 匹配所有顏色字串連接的模式
   const pattern = /((?:DesignSystem\.)?colors?\.[\w.]+|[\w]+Color)\s*\+\s*['"]([0-9A-Fa-f]+)['"]/g;
   
-  const newContent = content.replace(pattern, (match, colorExpr, alphaHex) => {
+  let newContent = content.replace(pattern, (match, colorExpr, alphaHex) => {
     modified = true;
     const alpha = convertAlpha(alphaHex);
     return `withAlpha(${colorExpr}, ${alpha})`;

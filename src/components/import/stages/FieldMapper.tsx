@@ -32,6 +32,7 @@ import { getFieldRelations } from '@/services/firebase/fieldRelations';
 import { getFieldStatistics } from '../utils/fileMerger';
 import { showSuccessToast, showErrorToast } from '@/utils/toast';
 import RelationshipVisualizer from '../RelationshipVisualizer';
+import { withAlpha } from '@/utils/colorUtils';
 
 interface FieldMapperProps {
   targetDatabase: DatabaseType;
@@ -517,7 +518,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                     placeholder="欄位名稱"
                     placeholderTextColor={colors.gray400}
                   />
-                  <View style={[styles.newFieldBadge, { backgroundColor: colors.success + '20' }]}>
+                  <View style={[styles.newFieldBadge, { backgroundColor: withAlpha(colors.success, 0.125) }]}>
                     <MaterialIcon name="add-circle" size={12} color={colors.success} />
                     <Text style={[styles.newFieldText, { color: colors.success }]}>
                       新建欄位
@@ -577,7 +578,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                     styles.relationButton, 
                     { 
                       borderColor: colors.primary,
-                      backgroundColor: pressed ? colors.primary + '10' : 'transparent',
+                      backgroundColor: pressed ? withAlpha(colors.primary, 0.063) : 'transparent',
                       opacity: pressed ? 0.8 : 1
                     }
                   ]}
@@ -712,7 +713,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                 </View>
                 
                 {relation.bidirectional && (
-                  <View style={[styles.bidirectionalBadge, { backgroundColor: colors.success + '20' }]}>
+                  <View style={[styles.bidirectionalBadge, { backgroundColor: withAlpha(colors.success, 0.125) }]}>
                     <MaterialIcon name="sync" size={12} color={colors.success} />
                     <Text style={[styles.bidirectionalText, { color: colors.success }]}>
                       雙向
@@ -815,7 +816,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
           <Text style={[styles.sectionTitleText, { color: colors.text }]}>
             欄位映射設定
           </Text>
-          <View style={[styles.badge, { backgroundColor: colors.primary + '20' }]}>
+          <View style={[styles.badge, { backgroundColor: withAlpha(colors.primary, 0.125) }]}>
             <Text style={[styles.badgeText, { color: colors.primary }]}>
               {mappings.filter(m => m.targetField).length} / {mappings.length}
             </Text>
@@ -850,7 +851,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
             跨資料庫關聯
           </Text>
           {relations.length > 0 && (
-            <View style={[styles.badge, { backgroundColor: colors.primary + '20' }]}>
+            <View style={[styles.badge, { backgroundColor: withAlpha(colors.primary, 0.125) }]}>
               <Text style={[styles.badgeText, { color: colors.primary }]}>
                 {relations.length}
               </Text>
@@ -1000,8 +1001,8 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                 style={[
                   styles.fieldOption,
                   { 
-                    backgroundColor: colors.success + '10',
-                    borderColor: colors.success + '40',
+                    backgroundColor: withAlpha(colors.success, 0.063),
+                    borderColor: withAlpha(colors.success, 0.25),
                   }
                 ]}
                 onPress={() => {
@@ -1014,7 +1015,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                   <Text style={[styles.fieldOptionLabel, { color: colors.success }]}>
                     建立新欄位
                   </Text>
-                  <Text style={[styles.fieldOptionKey, { color: colors.success + 'CC' }]}>
+                  <Text style={[styles.fieldOptionKey, { color: withAlpha(colors.success, 0.8) }]}>
                     使用原 CSV 欄位名稱
                   </Text>
                 </View>
@@ -1086,8 +1087,8 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
               style={[
                 styles.fieldOption,
                 { 
-                  backgroundColor: colors.success + '10',
-                  borderColor: colors.success + '40',
+                  backgroundColor: withAlpha(colors.success, 0.063),
+                  borderColor: withAlpha(colors.success, 0.25),
                 }
               ]}
               onPress={() => selectField('new_field')}
@@ -1096,7 +1097,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                 <Text style={[styles.fieldOptionLabel, { color: colors.success }]}>
                   建立新欄位
                 </Text>
-                <Text style={[styles.fieldOptionKey, { color: colors.success + 'CC' }]}>
+                <Text style={[styles.fieldOptionKey, { color: withAlpha(colors.success, 0.8) }]}>
                   使用原 CSV 欄位名稱
                 </Text>
               </View>

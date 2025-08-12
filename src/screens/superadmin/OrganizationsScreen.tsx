@@ -27,6 +27,7 @@ import { Organization } from '@/types/entities';
 import { RootStackParamList } from '@/types/navigation';
 import { DesignSystem } from '@/theme/designSystem';
 import { toast } from '@/utils/toast';
+import { withAlpha } from '@/utils/colorUtils';
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'OrganizationsScreen'>;
 
@@ -442,12 +443,12 @@ const styles = StyleSheet.create({
     borderColor: DesignSystem.colors.border.light,
   },
   suspendButton: {
-    backgroundColor: DesignSystem.colors.warning + '10',
-    borderColor: DesignSystem.colors.warning + '30',
+    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.063),
+    borderColor: withAlpha(DesignSystem.colors.warning, 0.188),
   },
   activateButton: {
-    backgroundColor: DesignSystem.colors.success + '10',
-    borderColor: DesignSystem.colors.success + '30',
+    backgroundColor: withAlpha(DesignSystem.colors.success, 0.063),
+    borderColor: withAlpha(DesignSystem.colors.success, 0.188),
   },
   actionLabel: {
     ...DesignSystem.typography.caption,

@@ -31,6 +31,7 @@ import AssignmentStrategySelector from '../assignment/AssignmentStrategySelector
 import { AssignmentEngine } from '@/services/import/AssignmentEngine';
 import { showSuccessToast, showErrorToast } from '@/utils/toast';
 import { useOrganization } from '@/hooks/useOrganization';
+import { withAlpha } from '@/utils/colorUtils';
 
 interface DataAssignmentStepProps {
   data: any[];
@@ -247,7 +248,7 @@ const DataAssignmentStep: React.FC<DataAssignmentStepProps> = ({
     if (!validation || validation.warnings.length === 0) return null;
 
     return (
-      <View style={[styles.warningsCard, { backgroundColor: colors.warning + '10' }]}>
+      <View style={[styles.warningsCard, { backgroundColor: withAlpha(colors.warning, 0.063) }]}>
         <View style={styles.warningHeader}>
           <MaterialIcon name="warning" size={20} color={colors.warning} />
           <Text style={[styles.warningTitle, { color: colors.warning }]}>

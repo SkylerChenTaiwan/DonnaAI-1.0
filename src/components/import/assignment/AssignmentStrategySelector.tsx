@@ -14,6 +14,7 @@ import {
 import { MaterialIcon } from '@/components/common/MaterialIcon';
 import { DesignSystem } from '@/theme/designSystem';
 import { AssignmentStrategy } from '@/types/assignment';
+import { withAlpha } from '@/utils/colorUtils';
 
 interface AssignmentStrategySelectorProps {
   strategy: AssignmentStrategy;
@@ -89,7 +90,7 @@ const AssignmentStrategySelector: React.FC<AssignmentStrategySelectorProps> = ({
         style={[
           styles.strategyCard,
           {
-            backgroundColor: isSelected ? colors.primary + '10' : colors.white,
+            backgroundColor: isSelected ? withAlpha(colors.primary, 0.063) : colors.white,
             borderColor: isSelected ? colors.primary : colors.gray200,
             borderWidth: isSelected ? 2 : 1
           }
@@ -119,7 +120,7 @@ const AssignmentStrategySelector: React.FC<AssignmentStrategySelectorProps> = ({
               styles.iconContainer,
               {
                 backgroundColor: isSelected 
-                  ? colors.primary + '20' 
+                  ? withAlpha(colors.primary, 0.125) 
                   : colors.gray100
               }
             ]}
@@ -165,10 +166,10 @@ const AssignmentStrategySelector: React.FC<AssignmentStrategySelectorProps> = ({
               styles.exampleContainer,
               { 
                 backgroundColor: isSelected 
-                  ? colors.primary + '05' 
+                  ? withAlpha(colors.primary, 0.020) 
                   : colors.gray50,
                 borderTopColor: isSelected 
-                  ? colors.primary + '20' 
+                  ? withAlpha(colors.primary, 0.125) 
                   : colors.gray100
               }
             ]}
@@ -191,7 +192,7 @@ const AssignmentStrategySelector: React.FC<AssignmentStrategySelectorProps> = ({
     <View style={styles.container}>
       {/* 資料數量提示 */}
       {dataCount > 0 && (
-        <View style={[styles.dataInfo, { backgroundColor: colors.info + '10' }]}>
+        <View style={[styles.dataInfo, { backgroundColor: withAlpha(colors.info, 0.063) }]}>
           <MaterialIcon name="info-outline" size={16} color={colors.info} />
           <Text style={[styles.dataInfoText, { color: colors.info }]}>
             將分配 {dataCount} 筆資料

@@ -15,6 +15,7 @@ import {
 // Icon import removed - using platform-specific Icon component;
 import { DesignSystem } from '@/theme/designSystem';
 import { StepProps, BillingPlanData } from '@/types/onboarding';
+import { withAlpha } from '@/utils/colorUtils';
 
 const SimpleBillingStep: React.FC<StepProps> = ({
   data,
@@ -290,12 +291,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   summaryCard: {
-    backgroundColor: DesignSystem.colors.primary + '10',
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
     borderRadius: 12,
     padding: 20,
     marginTop: 8,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.primary + '30',
+    borderColor: withAlpha(DesignSystem.colors.primary, 0.188),
   },
   summaryTitle: {
     fontSize: 16,

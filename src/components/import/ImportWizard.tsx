@@ -44,6 +44,7 @@ import { DataCleaner } from '@/services/import/DataCleaner';
 import { StreamProcessor } from '@/services/import/StreamProcessor';
 import { DataMerger } from '@/services/import/DataMerger';
 import { RelationBuilder } from '@/services/import/RelationBuilder';
+import { withAlpha } from '@/utils/colorUtils';
 
 interface ImportWizardProps {
   organizationId: string;
@@ -720,7 +721,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
         <Button
           variant="outline"
           style={[styles.cleanupButton, {
-            backgroundColor: colors.status.warning + '20',
+            backgroundColor: withAlpha(colors.status.warning, 0.125),
             borderColor: colors.status.warning,
             opacity: cleanupState.isCleaningUp ? 0.6 : 1
           }]}

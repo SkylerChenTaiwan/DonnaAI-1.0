@@ -22,6 +22,7 @@ import {
   BillingPlan,
   DEFAULT_BILLING_PLANS,
 } from '@/types/onboarding';
+import { withAlpha } from '@/utils/colorUtils';
 
 const BillingPlanStep: React.FC<StepProps> = ({
   data,
@@ -607,7 +608,7 @@ const styles = StyleSheet.create({
   },
   paymentOptionActive: {
     borderColor: DesignSystem.colors.primary,
-    backgroundColor: DesignSystem.colors.primary + '10',
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
   },
   paymentText: {
     fontSize: 12,

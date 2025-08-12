@@ -98,6 +98,12 @@
 - **保持一致的導航體驗** - 不要在不同頁面使用不同的 header 樣式
 - **避免重複實作導航元件** - 使用統一的 Layout 元件管理所有頁面的 header、返回按鈕等
 
+### 🎨 顏色系統規範（重要！）
+- **禁止使用** `color + 'XX'` 格式處理透明度 - 會導致 Web 平台 CSSStyleDeclaration 錯誤
+- **必須使用** `withAlpha(color, alpha)` 函數處理顏色透明度
+- **參考文件** `/docs/COLOR-SYSTEM-MIGRATION.md`
+- **自動修復** 執行 `node scripts/fix-color-styles.js` 可自動修復所有問題
+
 ### 🌐 Web 平台樣式系統（重要！）
 - **問題背景** - React Native Web 樣式經常被全域 CSS（如 NotionDatabaseV4.css）覆蓋
 - **解決方案** - Web 平台使用原生 HTML 元素 + 內聯樣式

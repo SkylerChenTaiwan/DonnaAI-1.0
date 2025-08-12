@@ -18,6 +18,7 @@ import { DesignSystem } from '@/theme/designSystem';
 import { UserFieldMapping } from '@/types/userImport';
 import { UploadedFile, MergedTable } from '@/types/import';
 import { showSuccessToast, showErrorToast } from '@/utils/toast';
+import { withAlpha } from '@/utils/colorUtils';
 
 interface UserFieldMapperProps {
   files: UploadedFile[];
@@ -643,13 +644,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: DesignSystem.spacing.xs,
     paddingVertical: 2,
     borderRadius: DesignSystem.borderRadius.xs,
-    backgroundColor: DesignSystem.colors.warning + '20',
+    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.125),
   },
   confidenceBadgeHigh: {
-    backgroundColor: DesignSystem.colors.success + '20',
+    backgroundColor: withAlpha(DesignSystem.colors.success, 0.125),
   },
   confidenceBadgeMedium: {
-    backgroundColor: DesignSystem.colors.warning + '20',
+    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.125),
   },
   confidenceText: {
     ...DesignSystem.typography.caption,

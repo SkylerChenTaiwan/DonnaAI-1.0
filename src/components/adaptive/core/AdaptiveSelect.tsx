@@ -10,6 +10,7 @@ import { PlatformAdapter } from '../platform/PlatformAdapter';
 import { DesignSystem } from '../../../theme/designSystem';
 import AdaptiveView from './AdaptiveView';
 import AdaptiveText from './AdaptiveText';
+import { withAlpha } from '@/utils/colorUtils';
 
 // 選項介面
 export interface SelectOption<T = any> {
@@ -323,7 +324,7 @@ const WebSelect = forwardRef<HTMLDivElement, AdaptiveSelectProps>(
         padding: `${DesignSystem.spacing.sm}px ${DesignSystem.spacing.md}px`,
         cursor: option.disabled ? 'not-allowed' : 'pointer',
         color: option.disabled ? DesignSystem.colors.text.disabled : DesignSystem.colors.text.primary,
-        backgroundColor: isSelected ? DesignSystem.colors.primary + '20' : 
+        backgroundColor: isSelected ? withAlpha(DesignSystem.colors.primary, 0.125) : 
                         isHovered ? DesignSystem.colors.gray[50] : 'transparent',
         transition: 'background-color 150ms ease',
       };
@@ -796,7 +797,7 @@ const NativeSelect = forwardRef<any, AdaptiveSelectProps>(
                       borderBottomWidth: index < processedOptions.length - 1 ? 1 : 0,
                       borderBottomColor: DesignSystem.colors.border.light,
                       backgroundColor: isOptionSelected(option) ? 
-                        DesignSystem.colors.primary + '20' : 'transparent',
+                        withAlpha(DesignSystem.colors.primary, 0.125) : 'transparent',
                     }}
                     onPress={() => handleOptionSelect(option)}
                     disabled={option.disabled}

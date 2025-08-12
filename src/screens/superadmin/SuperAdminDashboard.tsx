@@ -25,6 +25,7 @@ import { RootStackParamList } from '@/types/navigation';
 import { useAuthStore } from '@/stores/authStore';
 import { DesignSystem } from '@/theme/designSystem';
 import { useSuperAdminStats } from '@/hooks/useSuperAdminStats';
+import { withAlpha } from '@/utils/colorUtils';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -413,7 +414,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: DesignSystem.colors.primary + '15',
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.094),
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,

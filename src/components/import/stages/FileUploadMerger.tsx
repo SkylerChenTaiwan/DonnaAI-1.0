@@ -32,6 +32,7 @@ import {
   getFieldStatistics
 } from '../utils/fileMerger';
 import { showErrorToast, showSuccessToast } from '@/utils/toast';
+import { withAlpha } from '@/utils/colorUtils';
 
 interface FileUploadMergerProps {
   uploadedFiles: UploadedFile[];
@@ -474,8 +475,8 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
                         styles.confidenceBadge,
                         {
                           backgroundColor: selectedKey === candidate.field
-                            ? colors.white + '30'
-                            : colors.success + '20'
+                            ? withAlpha(colors.white, 0.188)
+                            : withAlpha(colors.success, 0.125)
                         }
                       ]}>
                         <Text style={[
@@ -523,8 +524,8 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
                         styles.confidenceBadge,
                         {
                           backgroundColor: selectedKey === candidate.field
-                            ? colors.white + '30'
-                            : colors.warning + '20'
+                            ? withAlpha(colors.white, 0.188)
+                            : withAlpha(colors.warning, 0.125)
                         }
                       ]}>
                         <Text style={[

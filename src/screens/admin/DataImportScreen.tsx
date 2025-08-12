@@ -32,6 +32,7 @@ import {
 } from '@/services/firebase/admin/dataImportService';
 import { useAuth } from '@/hooks/useAuth';
 import { FieldMappingModal, FieldMapping, RelationMapping } from '@/components/import/FieldMappingModal';
+import { withAlpha } from '@/utils/colorUtils';
 
 export const DataImportScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -564,7 +565,7 @@ const styles = StyleSheet.create({
   },
   typeCardActive: {
     borderColor: DesignSystem.colors.primary,
-    backgroundColor: DesignSystem.colors.primary + '10',
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
   },
   typeLabel: {
     ...DesignSystem.typography.body,

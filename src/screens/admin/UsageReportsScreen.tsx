@@ -28,6 +28,7 @@ import {
   exportUsageReport,
   generateReportSummary,
 } from '@/services/firebase/admin/reportExportService';
+import { withAlpha } from '@/utils/colorUtils';
 
 const { width: screenWidth } = Dimensions.get('window');
 const chartWidth = screenWidth - 40;
@@ -528,7 +529,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   metricButtonActive: {
-    backgroundColor: DesignSystem.colors.primary + '20',
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.125),
     borderWidth: 1,
     borderColor: DesignSystem.colors.primary,
   },
@@ -592,7 +593,7 @@ const styles = StyleSheet.create({
   },
   exportOptionActive: {
     borderColor: DesignSystem.colors.primary,
-    backgroundColor: DesignSystem.colors.primary + '10',
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
   },
   exportOptionText: {
     ...DesignSystem.typography.body,

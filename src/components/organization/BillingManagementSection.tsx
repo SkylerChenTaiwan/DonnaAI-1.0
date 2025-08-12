@@ -22,6 +22,7 @@ import { getUsageHistory, generateBillingRecord } from '@/services/firebase/admi
 import { Organization, BillingRecord } from '@/types/entities';
 import { DesignSystem } from '@/theme/designSystem';
 import { toast } from '@/utils/toast';
+import { withAlpha } from '@/utils/colorUtils';
 
 interface BillingManagementSectionProps {
   organization: Organization;
@@ -410,7 +411,7 @@ const styles = StyleSheet.create({
   trialInfo: {
     marginTop: DesignSystem.spacing.md,
     padding: DesignSystem.spacing.md,
-    backgroundColor: DesignSystem.colors.warning + '20',
+    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.125),
     borderRadius: DesignSystem.borderRadius.sm,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -563,7 +564,7 @@ const styles = StyleSheet.create({
     gap: DesignSystem.spacing.sm,
     marginTop: DesignSystem.spacing.md,
     padding: DesignSystem.spacing.md,
-    backgroundColor: DesignSystem.colors.primary + '10',
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
     borderRadius: DesignSystem.borderRadius.sm,
   },
   pricingNoteText: {
@@ -573,11 +574,11 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   developmentNotice: {
-    backgroundColor: DesignSystem.colors.warning + '20',
+    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.125),
     padding: DesignSystem.spacing.lg,
     borderRadius: DesignSystem.borderRadius.md,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.warning + '40',
+    borderColor: withAlpha(DesignSystem.colors.warning, 0.25),
     alignItems: 'center',
     marginBottom: DesignSystem.spacing.lg,
   },

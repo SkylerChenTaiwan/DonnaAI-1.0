@@ -26,6 +26,15 @@ module.exports = {
     
     // Adaptive Architecture 相關警告
     'no-console': ['warn', { allow: ['warn', 'error'] }],
+    
+    // 防止顏色字串連接錯誤（React Native Web 兼容性）
+    'no-restricted-syntax': [
+      'error',
+      {
+        selector: "BinaryExpression[operator='+'][left.property.name=/color/i][right.type='Literal']",
+        message: '請使用 withAlpha() 函數處理顏色透明度，避免 Web 平台錯誤。參考 /docs/COLOR-SYSTEM-MIGRATION.md'
+      }
+    ],
   },
   env: {
     jest: true,

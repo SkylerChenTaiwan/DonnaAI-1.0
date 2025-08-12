@@ -44,6 +44,7 @@ import BasicInfoStep from './steps/BasicInfoStep';
 import SimpleBillingStep from './steps/SimpleBillingStep';
 import UserImportStepV2 from './steps/UserImportStepV2';
 import WelcomeSetupStep from './steps/WelcomeSetupStep';
+import { withAlpha } from '@/utils/colorUtils';
 
 // 定義精靈步驟
 const ONBOARDING_STEPS: OnboardingStep[] = [
@@ -688,7 +689,7 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.gray[600],
   },
   errorContainer: {
-    backgroundColor: DesignSystem.colors.status.error + '10',
+    backgroundColor: withAlpha(DesignSystem.colors.status.error, 0.063),
     borderRadius: 8,
     padding: 12,
     marginTop: 16,

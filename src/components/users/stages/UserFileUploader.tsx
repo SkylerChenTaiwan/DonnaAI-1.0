@@ -33,6 +33,7 @@ import {
 } from '@/components/import/utils/fileMerger';
 import { showErrorToast, showSuccessToast } from '@/utils/toast';
 import { pickDocument } from '@/utils/web-file-picker';
+import { withAlpha } from '@/utils/colorUtils';
 
 interface UserFileUploaderProps {
   files: UploadedFile[];
@@ -1056,7 +1057,7 @@ const styles = StyleSheet.create({
   mergeWarning: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: DesignSystem.colors.warning + '15',
+    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.094),
     padding: DesignSystem.spacing.sm,
     borderRadius: DesignSystem.borderRadius.sm,
     marginTop: DesignSystem.spacing.sm,

@@ -22,6 +22,7 @@ import {
   WelcomeSetupData,
 } from '@/types/onboarding';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { withAlpha } from '@/utils/colorUtils';
 
 const WelcomeSetupStep: React.FC<StepProps> = ({
   data,
@@ -520,12 +521,12 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   variableChip: {
-    backgroundColor: DesignSystem.colors.primary + '10',
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
     borderRadius: 16,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.primary + '30',
+    borderColor: withAlpha(DesignSystem.colors.primary, 0.188),
   },
   variableText: {
     fontSize: 12,
@@ -614,7 +615,7 @@ const styles = StyleSheet.create({
   },
   dashboardOptionActive: {
     borderColor: DesignSystem.colors.primary,
-    backgroundColor: DesignSystem.colors.primary + '10',
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
   },
   dashboardText: {
     fontSize: 12,
@@ -648,7 +649,7 @@ const styles = StyleSheet.create({
   },
   infoBox: {
     flexDirection: 'row',
-    backgroundColor: DesignSystem.colors.status.info + '10',
+    backgroundColor: withAlpha(DesignSystem.colors.status.info, 0.063),
     borderRadius: 8,
     padding: 12,
     marginTop: 12,
@@ -691,7 +692,7 @@ const styles = StyleSheet.create({
   },
   tipBox: {
     flexDirection: 'row',
-    backgroundColor: DesignSystem.colors.status.warning + '10',
+    backgroundColor: withAlpha(DesignSystem.colors.status.warning, 0.063),
     borderRadius: 8,
     padding: 16,
     marginBottom: 24,

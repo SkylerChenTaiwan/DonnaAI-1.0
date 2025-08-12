@@ -18,6 +18,7 @@ import { Organization } from '@/types/entities';
 import { DesignSystem } from '@/theme/designSystem';
 import { toast } from '@/utils/toast';
 import { getCustomFieldConfig, CustomFieldConfig } from '@/services/firebase/admin/userAssistService';
+import { withAlpha } from '@/utils/colorUtils';
 
 interface CustomFieldsModalProps {
   visible: boolean;
@@ -375,7 +376,7 @@ const styles = StyleSheet.create({
   infoBox: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: DesignSystem.colors.primary + '10',
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
     padding: DesignSystem.spacing.md,
     borderRadius: DesignSystem.borderRadius.sm,
     marginTop: DesignSystem.spacing.lg,
@@ -462,7 +463,7 @@ const styles = StyleSheet.create({
   fieldIconContainer: {
     width: 32,
     height: 32,
-    backgroundColor: DesignSystem.colors.primary + '20',
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.125),
     borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',

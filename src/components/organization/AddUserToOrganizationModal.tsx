@@ -22,6 +22,7 @@ import { Button } from '@/components/common/Button';
 import { Organization, User } from '@/types/entities';
 import { DesignSystem } from '@/theme/designSystem';
 import { toast } from '@/utils/toast';
+import { withAlpha } from '@/utils/colorUtils';
 
 interface AddUserToOrganizationModalProps {
   visible: boolean;
@@ -335,7 +336,7 @@ const styles = StyleSheet.create({
   },
   roleOptionActive: {
     borderColor: DesignSystem.colors.primary,
-    backgroundColor: DesignSystem.colors.primary + '10',
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
   },
   roleOptionText: {
     ...DesignSystem.typography.body,
@@ -348,7 +349,7 @@ const styles = StyleSheet.create({
   infoBox: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: DesignSystem.colors.primary + '10',
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
     padding: DesignSystem.spacing.md,
     borderRadius: DesignSystem.borderRadius.sm,
     marginTop: DesignSystem.spacing.lg,

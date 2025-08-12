@@ -27,6 +27,7 @@ import {
 import { Organization, ImportResult, FieldMapping } from '@/types/entities';
 import { DesignSystem } from '@/theme/designSystem';
 import { toast } from '@/utils/toast';
+import { withAlpha } from '@/utils/colorUtils';
 
 interface UserAssistanceSectionProps {
   organization: Organization;
@@ -410,7 +411,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   actionButton: {
-    backgroundColor: DesignSystem.colors.primary + '20',
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.125),
     paddingHorizontal: DesignSystem.spacing.md,
     paddingVertical: DesignSystem.spacing.sm,
     borderRadius: DesignSystem.borderRadius.sm,
@@ -491,7 +492,7 @@ const styles = StyleSheet.create({
     borderColor: DesignSystem.colors.primary,
     borderStyle: 'dashed',
     borderRadius: DesignSystem.borderRadius.md,
-    backgroundColor: DesignSystem.colors.primary + '10',
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
   },
   fileSelectText: {
     ...DesignSystem.typography.body,

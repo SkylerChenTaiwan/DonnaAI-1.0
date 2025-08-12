@@ -20,6 +20,7 @@ import { User, UserRole } from '@/types/user';
 import { AssignableUserFilter } from '@/types/assignment';
 import { getFirebaseDb } from '@/services/firebase/config';
 import { collection, query, where, getDocs } from 'firebase/firestore';
+import { withAlpha } from '@/utils/colorUtils';
 
 interface UserSelectorProps {
   organizationId: string;
@@ -312,7 +313,7 @@ const UserSelector: React.FC<UserSelectorProps> = ({
                 style={[
                   styles.userItem,
                   {
-                    backgroundColor: isSelected ? colors.primary + '10' : colors.white,
+                    backgroundColor: isSelected ? withAlpha(colors.primary, 0.063) : colors.white,
                     borderColor: isSelected ? colors.primary : colors.gray200
                   }
                 ]}

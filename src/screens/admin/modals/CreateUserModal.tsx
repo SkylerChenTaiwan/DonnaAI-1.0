@@ -27,6 +27,7 @@ import { showToast } from '@/utils/toast';
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 import { User } from '@/types/entities';
+import { withAlpha } from '@/utils/colorUtils';
 
 type RouteParams = {
   CreateUserModal: {
@@ -333,7 +334,7 @@ const styles = StyleSheet.create({
   infoBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: DesignSystem.colors.info + '20',
+    backgroundColor: withAlpha(DesignSystem.colors.info, 0.125),
     padding: 16,
     borderRadius: 8,
     marginTop: 24,

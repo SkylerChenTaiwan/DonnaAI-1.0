@@ -26,6 +26,7 @@ import { DesignSystem } from '@/theme/designSystem';
 import { toast } from '@/utils/toast';
 import UserImportWizard from '@/components/users/UserImportWizard';
 import { Organization } from '@/types/entities';
+import { withAlpha } from '@/utils/colorUtils';
 
 export const CreateOrganizationScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -406,7 +407,7 @@ const styles = StyleSheet.create({
   },
   planCardActive: {
     borderColor: DesignSystem.colors.primary,
-    backgroundColor: DesignSystem.colors.primary + '10',
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
   },
   planName: {
     ...DesignSystem.typography.h4,
@@ -479,7 +480,7 @@ const styles = StyleSheet.create({
   },
   cycleOptionActive: {
     borderColor: DesignSystem.colors.primary,
-    backgroundColor: DesignSystem.colors.primary + '10',
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
   },
   cycleText: {
     ...DesignSystem.typography.body,

@@ -26,6 +26,7 @@ import {
   PasswordStrategy,
 } from '@/types/onboarding';
 import { showErrorToast, showSuccessToast } from '@/utils/toast';
+import { withAlpha } from '@/utils/colorUtils';
 
 const UserImportStep: React.FC<StepProps> = ({
   data,
@@ -768,7 +769,7 @@ const styles = StyleSheet.create({
   },
   methodCardActive: {
     borderColor: DesignSystem.colors.primary,
-    backgroundColor: DesignSystem.colors.primary + '10',
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
   },
   methodLabel: {
     fontSize: 12,
@@ -855,7 +856,7 @@ const styles = StyleSheet.create({
   },
   googleNotice: {
     flexDirection: 'row',
-    backgroundColor: DesignSystem.colors.status.info + '10',
+    backgroundColor: withAlpha(DesignSystem.colors.status.info, 0.063),
     borderRadius: 8,
     padding: 12,
     marginBottom: 16,
@@ -932,7 +933,7 @@ const styles = StyleSheet.create({
   },
   roleOptionActive: {
     borderColor: DesignSystem.colors.primary,
-    backgroundColor: DesignSystem.colors.primary + '10',
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
   },
   roleText: {
     fontSize: 13,
@@ -992,7 +993,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: DesignSystem.colors.primary + '20',
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.125),
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -1026,7 +1027,7 @@ const styles = StyleSheet.create({
   roleTag: {
     fontSize: 11,
     color: DesignSystem.colors.primary,
-    backgroundColor: DesignSystem.colors.primary + '10',
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 4,
@@ -1100,7 +1101,7 @@ const styles = StyleSheet.create({
   },
   strategyOptionActive: {
     borderColor: DesignSystem.colors.primary,
-    backgroundColor: DesignSystem.colors.primary + '10',
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
   },
   strategyText: {
     flex: 1,

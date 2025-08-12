@@ -21,6 +21,7 @@ import {
   StepProps,
   BasicInfoData,
 } from '@/types/onboarding';
+import { withAlpha } from '@/utils/colorUtils';
 
 // 時區選項
 const TIMEZONES = [
@@ -287,7 +288,7 @@ const styles = StyleSheet.create({
   },
   infoBox: {
     flexDirection: 'row',
-    backgroundColor: DesignSystem.colors.status.info + '10',
+    backgroundColor: withAlpha(DesignSystem.colors.status.info, 0.063),
     borderRadius: DesignSystem.borderRadius.md,
     padding: 12,
     marginTop: 8,

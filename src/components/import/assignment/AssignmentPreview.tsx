@@ -15,6 +15,7 @@ import {
 import { MaterialIcon } from '@/components/common/MaterialIcon';
 import { DesignSystem } from '@/theme/designSystem';
 import { AssignmentPreview as AssignmentPreviewType, AssignmentAdjustment } from '@/types/assignment';
+import { withAlpha } from '@/utils/colorUtils';
 
 interface AssignmentPreviewProps {
   preview: AssignmentPreviewType[];
@@ -141,7 +142,7 @@ const AssignmentPreview: React.FC<AssignmentPreviewProps> = ({
                   <View 
                     style={[
                       styles.userAvatar,
-                      { backgroundColor: colors.primary + '20' }
+                      { backgroundColor: withAlpha(colors.primary, 0.125) }
                     ]}
                   >
                     <Text style={[styles.userAvatarText, { color: colors.primary }]}>
@@ -160,7 +161,7 @@ const AssignmentPreview: React.FC<AssignmentPreviewProps> = ({
                 </View>
                 
                 <View style={styles.userStats}>
-                  <View style={[styles.statBadge, { backgroundColor: colors.primary + '10' }]}>
+                  <View style={[styles.statBadge, { backgroundColor: withAlpha(colors.primary, 0.063) }]}>
                     <Text style={[styles.statNumber, { color: colors.primary }]}>
                       {user.assignedCount}
                     </Text>
@@ -243,7 +244,7 @@ const AssignmentPreview: React.FC<AssignmentPreviewProps> = ({
           <View 
             style={[
               styles.unassignedCard,
-              { backgroundColor: colors.error + '10', borderColor: colors.error + '30' }
+              { backgroundColor: withAlpha(colors.error, 0.063), borderColor: withAlpha(colors.error, 0.188) }
             ]}
           >
             <MaterialIcon name="warning" size={20} color={colors.error} />

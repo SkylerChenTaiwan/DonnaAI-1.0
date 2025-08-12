@@ -21,6 +21,7 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { getFirebaseDb } from '@/services/firebase/config';
 import { getFieldDefinitions } from '@/services/firebase/fieldDefinitions';
 import { FieldConfig } from '@/types/fieldDefinitions';
+import { withAlpha } from '@/utils/colorUtils';
 
 interface DatabaseSelectorProps {
   selectedDatabase: DatabaseType | null;
@@ -282,7 +283,7 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
 
       {/* 提示訊息 */}
       {selectedDatabase && (
-        <View style={[styles.tipContainer, { backgroundColor: colors.primary + '10' }]}>
+        <View style={[styles.tipContainer, { backgroundColor: withAlpha(colors.primary, 0.063) }]}>
           <MaterialIcon name="lightbulb-outline" size={16} color={colors.primary} />
           <Text style={[styles.tipText, { color: colors.primary }]}>
             已選擇 {databaseOptions.find(o => o.type === selectedDatabase)?.label}
