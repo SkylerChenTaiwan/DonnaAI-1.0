@@ -41,8 +41,6 @@ import { toast } from '@/utils/toast';
 import { withAlpha } from '@/utils/colorUtils';
 import { AddUserToOrganizationModal } from '@/components/organization/AddUserToOrganizationModal';
 import { EnhancedBulkImportModal } from '@/components/users/EnhancedBulkImportModal';
-import { DataImportAssistModal } from '@/components/organization/DataImportAssistModal';
-import { CustomFieldsModal } from '@/components/organization/CustomFieldsModal';
 import ImportWizard from '@/components/import/ImportWizard';
 import { Modal, Platform } from 'react-native';
 import { updateOrganizationStats } from '@/services/firebase/updateOrgStats';
@@ -80,8 +78,6 @@ export const OrganizationDetailScreen: React.FC = () => {
   const [showBulkImportModal, setShowBulkImportModal] = useState(false);
   
   // 用戶協助 Modal 狀態
-  const [showDataImportModal, setShowDataImportModal] = useState(false);
-  const [showCustomFieldsModal, setShowCustomFieldsModal] = useState(false);
   const [showImportWizard, setShowImportWizard] = useState(false);
   const [importTargetType, setImportTargetType] = useState<'customers' | 'users'>('customers');
 
@@ -694,18 +690,6 @@ export const OrganizationDetailScreen: React.FC = () => {
         }}
       />
       
-      {/* 用戶協助 Modal */}
-      <DataImportAssistModal
-        visible={showDataImportModal}
-        organization={organization}
-        onClose={() => setShowDataImportModal(false)}
-      />
-      
-      <CustomFieldsModal
-        visible={showCustomFieldsModal}
-        organization={organization}
-        onClose={() => setShowCustomFieldsModal(false)}
-      />
       
       {/* 新的三階段匯入精靈 */}
       <Modal
