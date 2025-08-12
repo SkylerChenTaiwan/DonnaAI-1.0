@@ -267,7 +267,7 @@ export const OrganizationDetailScreen: React.FC = () => {
       case 'cancelled':
         return DesignSystem.colors.error;
       default:
-        return DesignSystem.colors.gray[500];
+        return DesignSystem.colors.gray500;
     }
   };
 
@@ -1161,7 +1161,7 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.secondary,
   },
   disabledButton: {
-    backgroundColor: DesignSystem.colors.gray[300],
+    backgroundColor: DesignSystem.colors.gray300,
   },
   disabledButtonText: {
     color: DesignSystem.colors.text.secondary,

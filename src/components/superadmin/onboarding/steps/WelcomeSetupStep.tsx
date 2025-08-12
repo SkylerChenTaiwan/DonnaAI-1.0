@@ -488,13 +488,13 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     fontSize: 14,
-    color: DesignSystem.colors.gray[700],
+    color: DesignSystem.colors.gray700,
     marginBottom: 8,
     fontWeight: '500',
   },
   input: {
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray[300],
+    borderColor: DesignSystem.colors.gray300,
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
@@ -511,7 +511,7 @@ const styles = StyleSheet.create({
   },
   variablesTitle: {
     fontSize: 13,
-    color: DesignSystem.colors.gray[700],
+    color: DesignSystem.colors.gray700,
     marginBottom: 8,
     fontWeight: '500',
   },
@@ -540,7 +540,7 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray[200],
+    borderColor: DesignSystem.colors.gray200,
     padding: 20,
   },
   previewSubject: {
@@ -551,12 +551,12 @@ const styles = StyleSheet.create({
   },
   previewDivider: {
     height: 1,
-    backgroundColor: DesignSystem.colors.gray[200],
+    backgroundColor: DesignSystem.colors.gray200,
     marginBottom: 12,
   },
   previewBody: {
     fontSize: 14,
-    color: DesignSystem.colors.gray[700],
+    color: DesignSystem.colors.gray700,
     lineHeight: 20,
   },
   templateOptions: {
@@ -593,7 +593,7 @@ const styles = StyleSheet.create({
   },
   switchHint: {
     fontSize: 12,
-    color: DesignSystem.colors.gray[600],
+    color: DesignSystem.colors.gray600,
     marginTop: 2,
   },
   dashboardOptions: {
@@ -609,7 +609,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray[300],
+    borderColor: DesignSystem.colors.gray300,
     backgroundColor: DesignSystem.colors.background.surface,
     gap: 8,
   },
@@ -619,7 +619,7 @@ const styles = StyleSheet.create({
   },
   dashboardText: {
     fontSize: 12,
-    color: DesignSystem.colors.gray[700],
+    color: DesignSystem.colors.gray700,
     fontWeight: '500',
   },
   dashboardTextActive: {
@@ -636,7 +636,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray[300],
+    borderColor: DesignSystem.colors.gray300,
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
@@ -662,7 +662,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   summarySection: {
-    backgroundColor: DesignSystem.colors.gray[50],
+    backgroundColor: DesignSystem.colors.gray50,
     borderRadius: 12,
     padding: 20,
     marginBottom: 24,
@@ -684,7 +684,7 @@ const styles = StyleSheet.create({
   summaryLabel: {
     flex: 1,
     fontSize: 14,
-    color: DesignSystem.colors.gray[700],
+    color: DesignSystem.colors.gray700,
   },
   summaryValue: {
     fontSize: 14,
@@ -709,7 +709,7 @@ const styles = StyleSheet.create({
   },
   tipText: {
     fontSize: 13,
-    color: DesignSystem.colors.gray[700],
+    color: DesignSystem.colors.gray700,
     lineHeight: 18,
     marginBottom: 4,
   },

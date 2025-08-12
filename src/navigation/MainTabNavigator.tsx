@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: DesignSystem.colors.gray[700], // #404040 深灰色以保持辨識度
+    backgroundColor: DesignSystem.colors.gray700, // #404040 深灰色以保持辨識度
     alignItems: 'center',
     justifyContent: 'center',
     // 較輕的陰影以配合灰色調

@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 14,
-    color: DesignSystem.colors.gray[600],
+    color: DesignSystem.colors.gray600,
     lineHeight: 20,
   },
   settingCard: {
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray[200],
+    borderColor: DesignSystem.colors.gray200,
   },
   settingHeader: {
     flexDirection: 'row',
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: DesignSystem.colors.gray[100],
+    backgroundColor: DesignSystem.colors.gray100,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
   currencySymbol: {
     fontSize: 20,
     fontWeight: '600',
-    color: DesignSystem.colors.gray[600],
+    color: DesignSystem.colors.gray600,
     marginRight: 4,
   },
   priceInput: {
@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
   },
   hint: {
     fontSize: 13,
-    color: DesignSystem.colors.gray[600],
+    color: DesignSystem.colors.gray600,
     marginTop: 8,
     textAlign: 'center',
   },
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
   },
   summaryLabel: {
     fontSize: 14,
-    color: DesignSystem.colors.gray[700],
+    color: DesignSystem.colors.gray700,
   },
   summaryValue: {
     fontSize: 14,
@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: DesignSystem.colors.gray[300],
+    backgroundColor: DesignSystem.colors.gray300,
     marginVertical: 12,
   },
   totalLabel: {
@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
   },
   calculation: {
     fontSize: 12,
-    color: DesignSystem.colors.gray[600],
+    color: DesignSystem.colors.gray600,
     textAlign: 'right',
     marginTop: 4,
   },
@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
   },
   billingDescription: {
     fontSize: 13,
-    color: DesignSystem.colors.gray[700],
+    color: DesignSystem.colors.gray700,
     marginBottom: 6,
     lineHeight: 20,
   },
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
     padding: 12,
     marginTop: 12,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray[200],
+    borderColor: DesignSystem.colors.gray200,
   },
   exampleTitle: {
     fontSize: 13,
@@ -373,7 +373,7 @@ const styles = StyleSheet.create({
   },
   exampleText: {
     fontSize: 12,
-    color: DesignSystem.colors.gray[600],
+    color: DesignSystem.colors.gray600,
     marginBottom: 4,
   },
   exampleCalculation: {

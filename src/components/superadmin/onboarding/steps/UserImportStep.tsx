@@ -764,7 +764,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray[300],
+    borderColor: DesignSystem.colors.gray300,
     backgroundColor: DesignSystem.colors.background.surface,
   },
   methodCardActive: {
@@ -773,7 +773,7 @@ const styles = StyleSheet.create({
   },
   methodLabel: {
     fontSize: 12,
-    color: DesignSystem.colors.gray[700],
+    color: DesignSystem.colors.gray700,
     marginTop: 8,
     fontWeight: '500',
   },
@@ -785,23 +785,23 @@ const styles = StyleSheet.create({
   },
   uploadBox: {
     borderWidth: 2,
-    borderColor: DesignSystem.colors.gray[300],
+    borderColor: DesignSystem.colors.gray300,
     borderStyle: 'dashed',
     borderRadius: 8,
     paddingVertical: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: DesignSystem.colors.gray[50],
+    backgroundColor: DesignSystem.colors.gray50,
   },
   uploadText: {
     fontSize: 14,
-    color: DesignSystem.colors.gray[700],
+    color: DesignSystem.colors.gray700,
     marginTop: 12,
     fontWeight: '500',
   },
   uploadHint: {
     fontSize: 12,
-    color: DesignSystem.colors.gray[500],
+    color: DesignSystem.colors.gray500,
     marginTop: 4,
   },
   csvExample: {
@@ -809,26 +809,26 @@ const styles = StyleSheet.create({
   },
   exampleTitle: {
     fontSize: 13,
-    color: DesignSystem.colors.gray[700],
+    color: DesignSystem.colors.gray700,
     marginBottom: 8,
     fontWeight: '500',
   },
   codeBlock: {
-    backgroundColor: DesignSystem.colors.gray[100],
+    backgroundColor: DesignSystem.colors.gray100,
     borderRadius: 6,
     padding: 12,
   },
   codeText: {
     fontSize: 12,
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    color: DesignSystem.colors.gray[800],
+    color: DesignSystem.colors.gray800,
   },
   jsonContainer: {
     marginBottom: 24,
   },
   jsonInput: {
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray[300],
+    borderColor: DesignSystem.colors.gray300,
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -897,13 +897,13 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     fontSize: 14,
-    color: DesignSystem.colors.gray[700],
+    color: DesignSystem.colors.gray700,
     marginBottom: 8,
     fontWeight: '500',
   },
   input: {
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray[300],
+    borderColor: DesignSystem.colors.gray300,
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -915,7 +915,7 @@ const styles = StyleSheet.create({
   },
   inputHint: {
     fontSize: 12,
-    color: DesignSystem.colors.gray[500],
+    color: DesignSystem.colors.gray500,
     marginTop: 4,
   },
   roleSelector: {
@@ -928,7 +928,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray[300],
+    borderColor: DesignSystem.colors.gray300,
     alignItems: 'center',
   },
   roleOptionActive: {
@@ -937,7 +937,7 @@ const styles = StyleSheet.create({
   },
   roleText: {
     fontSize: 13,
-    color: DesignSystem.colors.gray[700],
+    color: DesignSystem.colors.gray700,
   },
   roleTextActive: {
     color: DesignSystem.colors.primary,
@@ -987,7 +987,7 @@ const styles = StyleSheet.create({
     padding: 12,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray[200],
+    borderColor: DesignSystem.colors.gray200,
   },
   userAvatar: {
     width: 36,
@@ -1013,12 +1013,12 @@ const styles = StyleSheet.create({
   },
   userEmail: {
     fontSize: 12,
-    color: DesignSystem.colors.gray[600],
+    color: DesignSystem.colors.gray600,
     marginTop: 2,
   },
   userDepartment: {
     fontSize: 12,
-    color: DesignSystem.colors.gray[500],
+    color: DesignSystem.colors.gray500,
     marginTop: 2,
   },
   userRole: {
@@ -1040,19 +1040,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 40,
-    backgroundColor: DesignSystem.colors.gray[50],
+    backgroundColor: DesignSystem.colors.gray50,
     borderRadius: 8,
     marginBottom: 24,
   },
   emptyText: {
     fontSize: 14,
-    color: DesignSystem.colors.gray[700],
+    color: DesignSystem.colors.gray700,
     marginTop: 12,
     fontWeight: '500',
   },
   emptyHint: {
     fontSize: 12,
-    color: DesignSystem.colors.gray[500],
+    color: DesignSystem.colors.gray500,
     marginTop: 4,
   },
   authSection: {
@@ -1081,7 +1081,7 @@ const styles = StyleSheet.create({
   },
   switchHint: {
     fontSize: 12,
-    color: DesignSystem.colors.gray[600],
+    color: DesignSystem.colors.gray600,
     marginTop: 2,
   },
   strategyOptions: {
@@ -1095,7 +1095,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray[300],
+    borderColor: DesignSystem.colors.gray300,
     backgroundColor: DesignSystem.colors.background.surface,
     gap: 12,
   },
@@ -1106,7 +1106,7 @@ const styles = StyleSheet.create({
   strategyText: {
     flex: 1,
     fontSize: 14,
-    color: DesignSystem.colors.gray[700],
+    color: DesignSystem.colors.gray700,
   },
   strategyTextActive: {
     color: DesignSystem.colors.primary,
@@ -1125,7 +1125,7 @@ const styles = StyleSheet.create({
   processingText: {
     marginTop: 12,
     fontSize: 14,
-    color: DesignSystem.colors.gray[600],
+    color: DesignSystem.colors.gray600,
   },
 });
 

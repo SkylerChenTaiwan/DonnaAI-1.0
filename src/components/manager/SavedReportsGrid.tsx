@@ -166,7 +166,7 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
   const getChartColor = (chartType: string, isDefault?: boolean): string => {
     // 預設報表使用較淺的灰色
     if (isDefault) {
-      return colors.gray[600];
+      return colors.gray600;
     }
     
     // 用戶報表使用深灰黑
@@ -396,7 +396,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   defaultBadge: {
-    backgroundColor: colors.gray[200],
+    backgroundColor: colors.gray200,
     paddingHorizontal: DesignSystem.spacing.sm,
     paddingVertical: 2,
     borderRadius: DesignSystem.borderRadius.sm,
@@ -431,7 +431,7 @@ const styles = StyleSheet.create({
     gap: DesignSystem.spacing.xs,
   },
   tag: {
-    backgroundColor: colors.gray[100],
+    backgroundColor: colors.gray100,
     paddingHorizontal: DesignSystem.spacing.sm,
     paddingVertical: DesignSystem.spacing.xs,
     borderRadius: DesignSystem.borderRadius.sm,

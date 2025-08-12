@@ -464,7 +464,7 @@ const styles = StyleSheet.create({
     ...transitions.default,
   },
   actionButtonManager: {
-    backgroundColor: DesignSystem.colors.gray[700],
+    backgroundColor: DesignSystem.colors.gray700,
   },
   actionButtonHover: {
     transform: [{ scale: 1.05 }],

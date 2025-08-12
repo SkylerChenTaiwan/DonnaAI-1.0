@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     ...DesignSystem.shadows.none,
   },
   disabled: {
-    backgroundColor: DesignSystem.colors.gray[400], // #A3A3A3
+    backgroundColor: DesignSystem.colors.gray400, // #A3A3A3
     opacity: 0.5,
   },
 });

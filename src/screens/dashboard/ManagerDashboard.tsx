@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     ...DesignSystem.shadows.none,
   },
   primaryButton: {
-    backgroundColor: DesignSystem.colors.gray[600], // 使用較淺的灰色
+    backgroundColor: DesignSystem.colors.gray600, // 使用較淺的灰色
   },
   quickActionText: {
     ...DesignSystem.typography.button,

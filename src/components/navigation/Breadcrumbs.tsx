@@ -30,7 +30,7 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, style }) => {
             <Icon 
               name="chevron-forward" 
               size={16} 
-              color={DesignSystem.colors.gray[500]} 
+              color={DesignSystem.colors.gray500} 
               style={styles.separator}
             />
           )}

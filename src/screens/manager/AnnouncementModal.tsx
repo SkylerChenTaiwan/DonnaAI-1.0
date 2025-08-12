@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   input: {
-    backgroundColor: DesignSystem.colors.gray[50],
+    backgroundColor: DesignSystem.colors.gray50,
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   cancelButton: {
-    backgroundColor: DesignSystem.colors.gray[100],
+    backgroundColor: DesignSystem.colors.gray100,
   },
   cancelButtonText: {
     fontSize: 16,

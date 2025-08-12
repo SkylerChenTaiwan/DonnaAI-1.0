@@ -682,7 +682,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   importButtonDisabled: {
-    backgroundColor: DesignSystem.colors.gray[400],
+    backgroundColor: DesignSystem.colors.gray400,
   },
   importButtonText: {
     ...DesignSystem.typography.button,

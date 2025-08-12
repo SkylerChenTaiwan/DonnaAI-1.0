@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
     height: 44
   },
   submitButtonDisabled: {
-    backgroundColor: colors.gray[300]
+    backgroundColor: colors.gray300
   },
   submitButtonText: {
     color: colors.background,

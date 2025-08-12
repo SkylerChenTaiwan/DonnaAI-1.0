@@ -128,9 +128,9 @@ export const BillingManagementSection: React.FC<BillingManagementSectionProps> =
       case 'overdue':
         return DesignSystem.colors.error;
       case 'cancelled':
-        return DesignSystem.colors.gray[500];
+        return DesignSystem.colors.gray500;
       default:
-        return DesignSystem.colors.gray[500];
+        return DesignSystem.colors.gray500;
     }
   };
 

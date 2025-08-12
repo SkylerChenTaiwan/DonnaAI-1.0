@@ -133,7 +133,7 @@ const createSelectStyles = (state: SelectState, size: SelectSize, hasError: bool
         break;
       case 'disabled':
         stateStyle = {
-          backgroundColor: DesignSystem.colors.gray[100],
+          backgroundColor: DesignSystem.colors.gray100,
           borderColor: DesignSystem.colors.border.light,
           color: DesignSystem.colors.text.disabled,
           opacity: 0.6,
@@ -325,7 +325,7 @@ const WebSelect = forwardRef<HTMLDivElement, AdaptiveSelectProps>(
         cursor: option.disabled ? 'not-allowed' : 'pointer',
         color: option.disabled ? DesignSystem.colors.text.disabled : DesignSystem.colors.text.primary,
         backgroundColor: isSelected ? withAlpha(DesignSystem.colors.primary, 0.125) : 
-                        isHovered ? DesignSystem.colors.gray[50] : 'transparent',
+                        isHovered ? DesignSystem.colors.gray50 : 'transparent',
         transition: 'background-color 150ms ease',
       };
       
@@ -853,7 +853,7 @@ const NativeSelect = forwardRef<any, AdaptiveSelectProps>(
                   <TouchableOpacity
                     style={{
                       padding: DesignSystem.spacing.sm,
-                      backgroundColor: DesignSystem.colors.gray[100],
+                      backgroundColor: DesignSystem.colors.gray100,
                       borderRadius: DesignSystem.borderRadius.md,
                       alignItems: 'center',
                     }}

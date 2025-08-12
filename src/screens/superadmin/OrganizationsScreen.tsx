@@ -156,7 +156,7 @@ export const OrganizationsScreen: React.FC = () => {
       case 'expired':
         return DesignSystem.colors.error;
       default:
-        return DesignSystem.colors.gray[500];
+        return DesignSystem.colors.gray500;
     }
   };
 
@@ -179,13 +179,13 @@ export const OrganizationsScreen: React.FC = () => {
 
       <View style={styles.orgDetails}>
         <View style={styles.detailRow}>
-          <Icon name="people-outline" size={16} color={DesignSystem.colors.gray[600]} />
+          <Icon name="people-outline" size={16} color={DesignSystem.colors.gray600} />
           <Text style={styles.detailText}>
             {item.maxUsers || 0} 用戶
           </Text>
         </View>
         <View style={styles.detailRow}>
-          <Icon name="time-outline" size={16} color={DesignSystem.colors.gray[600]} />
+          <Icon name="time-outline" size={16} color={DesignSystem.colors.gray600} />
           <Text style={styles.detailText}>
             {item.aiMinutesUsed || 0} / {item.aiMinutesQuota || 0} AI 分鐘
           </Text>
@@ -287,7 +287,7 @@ export const OrganizationsScreen: React.FC = () => {
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Icon name="business-outline" size={48} color={DesignSystem.colors.gray[400]} />
+            <Icon name="business-outline" size={48} color={DesignSystem.colors.gray400} />
             <Text style={styles.emptyText}>
               {searchQuery ? '沒有符合的組織' : '尚無組織'}
             </Text>
