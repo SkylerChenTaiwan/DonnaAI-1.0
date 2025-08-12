@@ -9,11 +9,13 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
+  Platform
 } from 'react-native';
 import { MaterialIcon } from '@/components/common/MaterialIcon';
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
+import { webColorOverrides, getAdaptiveColor } from '@/theme/webOverrides';
 import { DatabaseType } from '@/types/import';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { getFirebaseDb } from '@/services/firebase/config';
@@ -45,7 +47,9 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
   onSelect,
   organizationId
 }) => {
-  const colors = DesignSystem.colors;
+  const colors = Platform.OS === 'web' 
+    ? { ...DesignSystem.colors, ...webColorOverrides } 
+    : DesignSystem.colors;
   const [loading, setLoading] = useState(false);
   const [databaseStats, setDatabaseStats] = useState<Record<DatabaseType, any>>({});
   const [fieldCounts, setFieldCounts] = useState<Record<DatabaseType, number>>({});
@@ -156,8 +160,10 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
         style={[
           styles.card,
           {
-            backgroundColor: colors.white,
-            borderColor: isSelected ? colors.primary : colors.gray200,
+            backgroundColor: Platform.OS === 'web' ? webColorOverrides.background.surface : colors.white,
+            borderColor: isSelected 
+              ? (Platform.OS === 'web' ? webColorOverrides.button.primary.default : colors.primary)
+              : (Platform.OS === 'web' ? webColorOverrides.border.default : colors.gray200),
             borderWidth: isSelected ? 2 : 1
           }
         ]}
@@ -181,10 +187,14 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
             />
           </View>
           <View style={styles.cardTitleContainer}>
-            <Text style={[styles.cardTitle, { color: colors.text }]}>
+            <Text style={[styles.cardTitle, { 
+              color: Platform.OS === 'web' ? webColorOverrides.text.primary : colors.text.primary 
+            }]}>
               {option.label}
             </Text>
-            <Text style={[styles.cardDescription, { color: colors.gray600 }]}>
+            <Text style={[styles.cardDescription, { 
+              color: Platform.OS === 'web' ? webColorOverrides.text.secondary : colors.gray600 
+            }]}>
               {option.description}
             </Text>
           </View>

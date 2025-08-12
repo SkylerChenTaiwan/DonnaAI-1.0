@@ -1,3 +1,4 @@
+import React from 'react';
 import { render, RenderOptions } from '@testing-library/react';
 import { ReactElement, ReactNode } from 'react';
 import { vi } from 'vitest';
@@ -20,7 +21,7 @@ export function renderWithProviders(
   // 建立 Providers
   const AllTheProviders = ({ children }: { children: ReactNode }) => {
     // 這裡可以加入各種 Provider (Theme, Auth, Database 等)
-    return <>{children}</>;
+    return React.createElement(React.Fragment, null, children);
   };
 
   return render(ui, { wrapper: AllTheProviders, ...renderOptions });

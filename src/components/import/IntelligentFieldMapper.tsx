@@ -12,8 +12,8 @@ import {
   ActivityIndicator,
   Platform,
 } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
 import { MaterialIcon } from '@/components/common/MaterialIcon';
+import { Dropdown } from '@/components/common/Dropdown';
 import { 
   FieldMappingEngine 
 } from '@/services/import/FieldMappingEngine';
@@ -239,43 +239,25 @@ export const IntelligentFieldMapper: React.FC<Props> = ({
         </View>
 
         <View style={styles.targetField}>
-          {Platform.OS === 'web' ? (
-            <select
-              style={styles.webPicker}
-              value={mapping?.targetField || ''}
-              onChange={(e) => updateMapping(header, e.target.value)}
-            >
-              <option value="">選擇欄位</option>
-              {targetFields.map(field => (
-                <option key={field.name} value={field.name}>
-                  {field.label}
-                </option>
-              ))}
-              <option value="__new__">建立新欄位</option>
-            </select>
-          ) : (
-            <Picker
-              selectedValue={mapping?.targetField || ''}
-              onValueChange={(value) => {
-                if (value === '__new__') {
-                  handleCreateField(header);
-                } else {
-                  updateMapping(header, value);
-                }
-              }}
-              style={styles.picker}
-            >
-              <Picker.Item label="選擇欄位" value="" />
-              {targetFields.map(field => (
-                <Picker.Item
-                  key={field.name}
-                  label={field.label}
-                  value={field.name}
-                />
-              ))}
-              <Picker.Item label="建立新欄位" value="__new__" />
-            </Picker>
-          )}
+          <Dropdown
+            options={[
+              ...targetFields.map(field => ({
+                value: field.name,
+                label: field.label
+              })),
+              { value: '__new__', label: '建立新欄位' }
+            ]}
+            value={mapping?.targetField || ''}
+            placeholder="選擇欄位"
+            onChange={(value) => {
+              if (value === '__new__') {
+                handleCreateField(header);
+              } else {
+                updateMapping(header, value);
+              }
+            }}
+            style={Platform.OS === 'web' ? {} : styles.picker}
+          />
 
           {suggestion && !mapping && (
             <TouchableOpacity
