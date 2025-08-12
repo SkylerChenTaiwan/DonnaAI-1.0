@@ -1,0 +1,43 @@
+{
+  "validCustomer": {
+    "id": "customer-test-001",
+    "name": "張三",
+    "company": "測試公司",
+    "email": "customer@example.com",
+    "phone": "0912345678",
+    "address": "台北市信義區信義路五段7號",
+    "status": "active",
+    "assignedTo": "user-test-001",
+    "organizationId": "org-test-001",
+    "tags": ["VIP", "重要客戶"],
+    "notes": "這是一個測試客戶",
+    "createdAt": "2024-01-01T00:00:00Z",
+    "updatedAt": "2024-01-01T00:00:00Z"
+  },
+  "customerList": [
+    {
+      "id": "customer-001",
+      "name": "王小明",
+      "company": "ABC公司",
+      "email": "wang@abc.com",
+      "phone": "0911111111",
+      "status": "active"
+    },
+    {
+      "id": "customer-002",
+      "name": "李小華",
+      "company": "XYZ公司",
+      "email": "lee@xyz.com",
+      "phone": "0922222222",
+      "status": "prospect"
+    },
+    {
+      "id": "customer-003",
+      "name": "陳大文",
+      "company": "123企業",
+      "email": "chen@123.com",
+      "phone": "0933333333",
+      "status": "inactive"
+    }
+  ]
+}

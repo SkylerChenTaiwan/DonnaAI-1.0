@@ -1,0 +1,304 @@
+name: Deploy to Production
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag to deploy'
+        required: true
+        type: string
+      skip_tests:
+        description: 'Skip tests (emergency only)'
+        required: false
+        type: boolean
+        default: false
+
+env:
+  NODE_VERSION: '18'
+  FIREBASE_PROJECT: 'donnaai-production'
+
+jobs:
+  # 生產環境驗證
+  production-validation:
+    name: Production Validation
+    runs-on: ubuntu-latest
+    if: ${{ !inputs.skip_tests }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.version || github.ref }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run comprehensive tests
+        run: |
+          npm run test:run
+          npm run test:e2e -- --project=chromium
+          npm run test:e2e -- --project=firefox
+          npm run test:e2e -- --project=webkit
+
+      - name: Security audit
+        run: |
+          npm audit --audit-level=high
+          npm run security:scan
+
+      - name: License compliance check
+        run: npm run license:check
+        continue-on-error: true
+
+  # 建構生產版本
+  build-production:
+    name: Build Production
+    needs: production-validation
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.version || github.ref }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --production
+
+      - name: Build production bundle
+        run: npm run web:build:prod
+        env:
+          NODE_ENV: production
+          VITE_ENV: production
+          VITE_FIREBASE_PROJECT_ID: ${{ secrets.PROD_FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_API_KEY: ${{ secrets.PROD_FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.PROD_FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.PROD_FIREBASE_STORAGE_BUCKET }}
+          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.PROD_FIREBASE_MESSAGING_SENDER_ID }}
+          VITE_FIREBASE_APP_ID: ${{ secrets.PROD_FIREBASE_APP_ID }}
+          VITE_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          VITE_GA_MEASUREMENT_ID: ${{ secrets.GA_MEASUREMENT_ID }}
+
+      - name: Optimize bundle
+        run: |
+          npm run optimize:images
+          npm run optimize:bundle
+
+      - name: Generate source maps
+        run: npm run build:sourcemaps
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-build
+          path: dist/
+          retention-days: 30
+
+      - name: Upload source maps to Sentry
+        run: |
+          npx @sentry/cli releases files ${{ github.ref }} upload-sourcemaps ./dist \
+            --auth-token ${{ secrets.SENTRY_AUTH_TOKEN }} \
+            --org ${{ secrets.SENTRY_ORG }} \
+            --project ${{ secrets.SENTRY_PROJECT }}
+
+  # 金絲雀部署
+  canary-deployment:
+    name: Canary Deployment
+    needs: build-production
+    runs-on: ubuntu-latest
+    environment: production-canary
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: production-build
+          path: dist/
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Deploy to canary channel (5% traffic)
+        run: |
+          firebase use ${{ env.FIREBASE_PROJECT }}
+          firebase hosting:channel:deploy canary --expires 1h --token ${{ secrets.FIREBASE_TOKEN }}
+
+      - name: Monitor canary metrics
+        run: |
+          npm run monitor:canary -- --duration=15m --threshold=0.01
+        env:
+          MONITORING_API_KEY: ${{ secrets.MONITORING_API_KEY }}
+
+      - name: Canary validation
+        id: canary-check
+        run: |
+          # Check error rate, performance metrics, etc.
+          ERROR_RATE=$(npm run metrics:error-rate --silent)
+          if (( $(echo "$ERROR_RATE > 0.01" | bc -l) )); then
+            echo "Error rate too high: $ERROR_RATE"
+            echo "canary_passed=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          echo "canary_passed=true" >> $GITHUB_OUTPUT
+
+  # 完整生產部署
+  production-deployment:
+    name: Production Deployment
+    needs: canary-deployment
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: production-build
+          path: dist/
+
+      - name: Backup current production
+        run: |
+          firebase use ${{ env.FIREBASE_PROJECT }}
+          firebase hosting:clone production backup-$(date +%Y%m%d-%H%M%S) --token ${{ secrets.FIREBASE_TOKEN }}
+
+      - name: Deploy to production
+        run: |
+          firebase deploy --only hosting --token ${{ secrets.FIREBASE_TOKEN }}
+
+      - name: Verify deployment
+        run: |
+          for i in {1..5}; do
+            response=$(curl -s -o /dev/null -w "%{http_code}" https://donnaai.com/health)
+            if [ $response -eq 200 ]; then
+              echo "Deployment verified"
+              break
+            fi
+            if [ $i -eq 5 ]; then
+              echo "Deployment verification failed"
+              exit 1
+            fi
+            sleep 10
+          done
+
+      - name: Warm up cache
+        run: |
+          npm run cache:warmup -- --url=https://donnaai.com
+
+      - name: Update CDN
+        run: |
+          npm run cdn:purge
+          npm run cdn:preload
+
+  # 生產環境監控
+  post-deployment-monitoring:
+    name: Post-deployment Monitoring
+    needs: production-deployment
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Monitor application health
+        run: |
+          npm run monitor:production -- --duration=30m
+        env:
+          MONITORING_API_KEY: ${{ secrets.MONITORING_API_KEY }}
+
+      - name: Check Core Web Vitals
+        run: |
+          npm run vitals:check -- --url=https://donnaai.com
+        
+      - name: Generate performance report
+        run: |
+          npm run report:performance -- --url=https://donnaai.com
+          
+      - name: Upload monitoring reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: monitoring-reports
+          path: reports/
+
+  # 自動回滾
+  auto-rollback:
+    name: Auto Rollback
+    needs: production-deployment
+    runs-on: ubuntu-latest
+    if: failure()
+    
+    steps:
+      - name: Initiate rollback
+        run: |
+          firebase use ${{ env.FIREBASE_PROJECT }}
+          firebase hosting:rollback --token ${{ secrets.FIREBASE_TOKEN }}
+
+      - name: Notify rollback
+        uses: 8398a7/action-slack@v3
+        with:
+          status: 'failure'
+          text: 'CRITICAL: Production deployment failed and rolled back!'
+          webhook_url: ${{ secrets.SLACK_WEBHOOK_CRITICAL }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow
+
+      - name: Create incident
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 Production deployment failed - Incident ${new Date().toISOString()}`,
+              body: `Production deployment failed and was automatically rolled back.\n\n**Version**: ${context.ref}\n**Time**: ${new Date().toISOString()}\n\n## Impact\n- Deployment rolled back\n- Service restored to previous version\n\n## Next Steps\n1. Investigate root cause\n2. Fix issues\n3. Re-deploy when ready`,
+              labels: ['incident', 'production', 'critical', 'deployment-failure'],
+              assignees: ['engineering-oncall']
+            })
+
+  # 成功通知
+  success-notification:
+    name: Success Notification
+    needs: [production-deployment, post-deployment-monitoring]
+    runs-on: ubuntu-latest
+    if: success()
+    
+    steps:
+      - name: Notify success
+        uses: 8398a7/action-slack@v3
+        with:
+          status: 'success'
+          text: '✅ Production deployment successful!'
+          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow
+
+      - name: Update status page
+        run: |
+          curl -X POST ${{ secrets.STATUS_PAGE_API_URL }} \
+            -H "Authorization: Bearer ${{ secrets.STATUS_PAGE_API_KEY }}" \
+            -d '{"status": "operational", "message": "Deployment completed successfully"}'
+
+      - name: Tag deployment
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const date = new Date().toISOString().split('T')[0];
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `refs/tags/deployed-${date}`,
+              sha: context.sha
+            })

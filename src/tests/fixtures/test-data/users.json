@@ -1,0 +1,43 @@
+{
+  "validUser": {
+    "id": "user-test-001",
+    "email": "test@example.com",
+    "name": "Test User",
+    "role": "user",
+    "organizationId": "org-test-001",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00Z",
+    "updatedAt": "2024-01-01T00:00:00Z"
+  },
+  "adminUser": {
+    "id": "admin-test-001",
+    "email": "admin@example.com",
+    "name": "Admin User",
+    "role": "admin",
+    "organizationId": "org-test-001",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00Z",
+    "updatedAt": "2024-01-01T00:00:00Z"
+  },
+  "superAdmin": {
+    "id": "super-admin-001",
+    "email": "super@example.com",
+    "name": "Super Admin",
+    "role": "superAdmin",
+    "organizationId": null,
+    "isActive": true,
+    "isSuperAdmin": true,
+    "createdAt": "2024-01-01T00:00:00Z",
+    "updatedAt": "2024-01-01T00:00:00Z"
+  },
+  "inactiveUser": {
+    "id": "user-inactive-001",
+    "email": "inactive@example.com",
+    "name": "Inactive User",
+    "role": "user",
+    "organizationId": "org-test-001",
+    "isActive": false,
+    "createdAt": "2024-01-01T00:00:00Z",
+    "updatedAt": "2024-01-01T00:00:00Z"
+  }
+}
