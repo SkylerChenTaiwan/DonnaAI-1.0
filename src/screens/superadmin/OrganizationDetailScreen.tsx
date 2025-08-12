@@ -38,6 +38,7 @@ import { Organization, BillingRecord, ToolUsageStats } from '@/types/entities';
 import { RootStackParamList } from '@/types/navigation';
 import { DesignSystem } from '@/theme/designSystem';
 import { toast } from '@/utils/toast';
+import { withAlpha } from '@/utils/colorUtils';
 import { AddUserToOrganizationModal } from '@/components/organization/AddUserToOrganizationModal';
 import { EnhancedBulkImportModal } from '@/components/users/EnhancedBulkImportModal';
 import { DataImportAssistModal } from '@/components/organization/DataImportAssistModal';
@@ -944,7 +945,7 @@ const styles = StyleSheet.create({
   trialInfo: {
     marginTop: DesignSystem.spacing.md,
     padding: DesignSystem.spacing.md,
-    backgroundColor: DesignSystem.colors.warning + '20',
+    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.125),
     borderRadius: DesignSystem.borderRadius.sm,
   },
   trialText: {
@@ -1025,11 +1026,11 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   developmentNotice: {
-    backgroundColor: DesignSystem.colors.warning + '20',
+    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.125),
     padding: DesignSystem.spacing.lg,
     borderRadius: DesignSystem.borderRadius.md,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.warning + '40',
+    borderColor: withAlpha(DesignSystem.colors.warning, 0.25),
     alignItems: 'center',
   },
   developmentTitle: {
@@ -1076,8 +1077,8 @@ const styles = StyleSheet.create({
   },
   dangerSection: {
     borderWidth: 1,
-    borderColor: DesignSystem.colors.error + '30',
-    backgroundColor: DesignSystem.colors.error + '10',
+    borderColor: withAlpha(DesignSystem.colors.error, 0.188),
+    backgroundColor: withAlpha(DesignSystem.colors.error, 0.063),
   },
   dangerTitle: {
     ...DesignSystem.typography.h4,
@@ -1136,11 +1137,11 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   userInfoCard: {
-    backgroundColor: DesignSystem.colors.primary + '10',
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
     padding: DesignSystem.spacing.lg,
     borderRadius: DesignSystem.borderRadius.sm,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.primary + '20',
+    borderColor: withAlpha(DesignSystem.colors.primary, 0.125),
   },
   userInfoTitle: {
     ...DesignSystem.typography.body,
