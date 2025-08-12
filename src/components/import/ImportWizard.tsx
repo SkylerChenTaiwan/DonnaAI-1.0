@@ -9,11 +9,11 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
   ActivityIndicator,
   Alert,
   Platform
 } from 'react-native';
+import { Button } from '@/components/common/Button';
 import { MaterialIcon } from '@/components/common/MaterialIcon';
 import { ProgressIndicator } from '@/components/common/ProgressIndicator';
 import { DesignSystem } from '@/theme/designSystem';
@@ -708,13 +708,17 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
           </Text>
         </View>
         {onCancel && (
-          <TouchableOpacity onPress={onCancel} style={styles.closeButton}>
-            <MaterialIcon name="close" size={24} color={colors.gray600} />
-          </TouchableOpacity>
+          <Button
+            variant="ghost"
+            onPress={onCancel}
+            icon={<MaterialIcon name="close" size={24} color={colors.gray600} />}
+            style={styles.closeButton}
+          />
         )}
         
         {/* 資料清理按鈕 */}
-        <TouchableOpacity
+        <Button
+          variant="outline"
           style={[styles.cleanupButton, {
             backgroundColor: colors.status.warning + '20',
             borderColor: colors.status.warning,
@@ -722,16 +726,14 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
           }]}
           onPress={handleCleanupDuplicates}
           disabled={cleanupState.isCleaningUp || wizardState.importProgress.isImporting}
-        >
-          <MaterialIcon 
+          icon={<MaterialIcon 
             name={cleanupState.isCleaningUp ? "hourglass-empty" : "cleaning-services"} 
             size={16} 
             color={colors.status.warning} 
-          />
-          <Text style={[styles.cleanupButtonText, { color: colors.status.warning }]}>
-            {cleanupState.isCleaningUp ? '清理中...' : '清理重複資料'}
-          </Text>
-        </TouchableOpacity>
+          />}
+          iconPosition="left"
+          title={cleanupState.isCleaningUp ? '清理中...' : '清理重複資料'}
+        />
       </View>
 
       {/* 進度指示器 */}
@@ -746,56 +748,42 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
       <View style={[styles.footer, { borderTopColor: colors.gray200 }]}>
         <View style={styles.footerButtons}>
           {canGoBack && (
-            <TouchableOpacity
-              style={[styles.button, styles.secondaryButton, { borderColor: colors.gray300 }]}
+            <Button
+              variant="secondary"
               onPress={goToPreviousStage}
-            >
-              <MaterialIcon name="arrow-back" size={20} color={colors.gray600} />
-              <Text style={[styles.buttonText, { color: colors.gray600 }]}>上一步</Text>
-            </TouchableOpacity>
+              icon={<MaterialIcon name="arrow-back" size={20} color={colors.gray600} />}
+              iconPosition="left"
+              title="上一步"
+            />
           )}
 
           {onCancel && wizardState.stage === 1 && (
-            <TouchableOpacity
-              style={[styles.button, styles.secondaryButton, { borderColor: colors.gray300 }]}
+            <Button
+              variant="secondary"
               onPress={onCancel}
-            >
-              <Text style={[styles.buttonText, { color: colors.gray600 }]}>取消</Text>
-            </TouchableOpacity>
+              title="取消"
+            />
           )}
 
           {wizardState.stage < 4 ? (
-            <TouchableOpacity
-              style={[
-                styles.button, 
-                styles.primaryButton,
-                { 
-                  backgroundColor: canGoNext() ? colors.primary : colors.gray300,
-                  opacity: canGoNext() ? 1 : 0.6
-                }
-              ]}
+            <Button
+              variant="primary"
               onPress={goToNextStage}
               disabled={!canGoNext()}
-            >
-              <Text style={[styles.buttonText, { color: colors.white }]}>下一步</Text>
-              <MaterialIcon name="arrow-forward" size={20} color={colors.white} />
-            </TouchableOpacity>
+              title="下一步"
+              icon={<MaterialIcon name="arrow-forward" size={20} color="#FFFFFF" />}
+              iconPosition="right"
+            />
           ) : (
-            <TouchableOpacity
-              style={[
-                styles.button, 
-                styles.primaryButton,
-                { 
-                  backgroundColor: canGoNext() ? colors.primary : colors.gray300,
-                  opacity: canGoNext() ? 1 : 0.6
-                }
-              ]}
+            <Button
+              variant="primary"
               onPress={executeImport}
               disabled={!canGoNext() || wizardState.importProgress.isImporting}
-            >
-              <MaterialIcon name="file-upload" size={20} color={colors.white} />
-              <Text style={[styles.buttonText, { color: colors.white }]}>開始匯入</Text>
-            </TouchableOpacity>
+              loading={wizardState.importProgress.isImporting}
+              title="開始匯入"
+              icon={<MaterialIcon name="file-upload" size={20} color="#FFFFFF" />}
+              iconPosition="left"
+            />
           )}
         </View>
       </View>

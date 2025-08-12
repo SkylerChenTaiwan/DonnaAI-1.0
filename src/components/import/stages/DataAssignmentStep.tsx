@@ -14,6 +14,7 @@ import {
   Switch,
   Platform
 } from 'react-native';
+import { Button } from '@/components/common/Button';
 import { MaterialIcon } from '@/components/common/MaterialIcon';
 import { DesignSystem } from '@/theme/designSystem';
 import {
@@ -398,22 +399,16 @@ const DataAssignmentStep: React.FC<DataAssignmentStepProps> = ({
           </View>
 
           {/* 生成預覽按鈕 */}
-          <TouchableOpacity
-            style={[styles.previewButton, { backgroundColor: colors.primary }]}
+          <Button
+            variant="primary"
+            style={styles.previewButton}
             onPress={generatePreview}
             disabled={loading}
-          >
-            {loading ? (
-              <ActivityIndicator size="small" color={colors.white} />
-            ) : (
-              <>
-                <MaterialIcon name="preview" size={20} color={colors.white} />
-                <Text style={[styles.previewButtonText, { color: colors.white }]}>
-                  生成分配預覽
-                </Text>
-              </>
-            )}
-          </TouchableOpacity>
+            loading={loading}
+            icon={!loading && <MaterialIcon name="preview" size={20} color={colors.white} />}
+            iconPosition="left"
+            title="生成分配預覽"
+          />
 
           {/* 預覽結果 */}
           {showPreview && preview.length > 0 && (
