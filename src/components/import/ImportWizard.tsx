@@ -15,6 +15,7 @@ import {
   Platform
 } from 'react-native';
 import { MaterialIcon } from '@/components/common/MaterialIcon';
+import { ProgressIndicator } from '@/components/common/ProgressIndicator';
 import { DesignSystem } from '@/theme/designSystem';
 import { 
   ImportWizardState, 
@@ -492,6 +493,24 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
 
   // 渲染進度指示器
   const renderProgressIndicator = () => {
+    const stageLabels = [
+      '選擇資料庫',
+      '檔案處理',
+      '欄位映射',
+      '資料分配'
+    ];
+    
+    return (
+      <ProgressIndicator 
+        currentStage={wizardState.stage}
+        totalStages={4}
+        labels={stageLabels}
+      />
+    );
+  };
+
+  // 舊版本備份（已被 ProgressIndicator 元件取代）
+  const renderProgressIndicatorOld = () => {
     // Web 平台使用完全內聯樣式來避免被 CSS 覆蓋
     if (Platform.OS === 'web') {
       return (
@@ -510,7 +529,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
                 boxSizing: 'border-box'
               }}>
                 <span style={{
-                  fontSize: 16,
+                  fontSize: 14,
                   fontWeight: 600,
                   color: stage <= wizardState.stage ? '#FFFFFF' : '#000000'
                 }}>
