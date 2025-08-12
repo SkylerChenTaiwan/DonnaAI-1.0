@@ -492,6 +492,38 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
 
   // 渲染進度指示器
   const renderProgressIndicator = () => {
+    // Web 平台使用完全內聯樣式來避免被 CSS 覆蓋
+    if (Platform.OS === 'web') {
+      return (
+        <View style={styles.progressContainer}>
+          {[1, 2, 3, 4].map(stage => (
+            <View key={stage} style={styles.progressItem}>
+              <div style={{
+                width: 36,
+                height: 36,
+                borderRadius: 18,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: stage <= wizardState.stage ? '#2C2C2C' : '#FFFFFF',
+                border: stage === wizardState.stage ? '2px solid #2C2C2C' : '2px solid #4A4A4A',
+                boxSizing: 'border-box'
+              }}>
+                <span style={{
+                  fontSize: 16,
+                  fontWeight: 600,
+                  color: stage <= wizardState.stage ? '#FFFFFF' : '#000000'
+                }}>
+                  {stage}
+                </span>
+              </div>
+            </View>
+          ))}
+        </View>
+      );
+    }
+    
+    // Native 平台保持原樣
     return (
       <View style={styles.progressContainer}>
         {[1, 2, 3, 4].map(stage => (
@@ -499,14 +531,14 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
             <View style={[
               styles.progressCircle,
               {
-                backgroundColor: stage <= wizardState.stage ? colors.primary : Platform.OS === 'web' ? '#FFFFFF' : colors.gray100,
-                borderColor: stage === wizardState.stage ? colors.primary : Platform.OS === 'web' ? '#666666' : colors.gray600,
-                borderWidth: Platform.OS === 'web' ? 2 : 1.5
+                backgroundColor: stage <= wizardState.stage ? colors.primary : colors.gray100,
+                borderColor: stage === wizardState.stage ? colors.primary : colors.gray600,
+                borderWidth: 1.5
               }
             ]}>
               <Text style={[
                 styles.progressNumber,
-                { color: stage <= wizardState.stage ? colors.white : Platform.OS === 'web' ? '#333333' : colors.gray700 }
+                { color: stage <= wizardState.stage ? colors.white : colors.gray700 }
               ]}>
                 {stage}
               </Text>
