@@ -9,10 +9,10 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Switch,
   Alert } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { AdaptiveModal } from '@/components/adaptive/core/AdaptiveModal';
+import { AdaptiveSwitch } from '@/components/adaptive';
 import { TableColumn } from '@/types/table';
 
 interface ColumnSettingsModalProps {
@@ -162,10 +162,10 @@ export const ColumnSettingsModal: React.FC<ColumnSettingsModalProps> = ({
                   <Icon name="reorder-three" size={24} color="#BEBEBE" />
                   <Text style={styles.columnLabel}>{column.title}</Text>
                 </View>
-                <Switch
+                <AdaptiveSwitch
                   value={visibleColumns.has(column.key)}
                   onValueChange={() => toggleColumn(column.key)}
-                  trackColor={{ false: '#E3E1DC', true: '#1A1A1A' }}
+                  trackColor={{ false: '#E3E1DC', true: '#FE7821' }}
                 />
               </View>
             );

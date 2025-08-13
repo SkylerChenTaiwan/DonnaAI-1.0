@@ -110,6 +110,12 @@ export {
   type ModalAnimationType,
   type ModalPosition } from './AdaptiveModal';
 
+// 開關元件
+export {
+  AdaptiveSwitch,
+  type AdaptiveSwitchProps,
+  DEFAULT_COLORS as SWITCH_DEFAULT_COLORS } from './AdaptiveSwitch';
+
 // 預設匯出 - 最常用的元件
 export {
   AdaptiveView as View,
@@ -127,3 +133,4 @@ export { AdaptiveInput as Input } from './AdaptiveInput';
 export { AdaptiveSelect as Select } from './AdaptiveSelect';
 export { AdaptiveImage as Image } from './AdaptiveImage';
 export { AdaptiveModal as Modal } from './AdaptiveModal';
+export { AdaptiveSwitch as Switch } from './AdaptiveSwitch';

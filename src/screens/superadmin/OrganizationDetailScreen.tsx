@@ -11,7 +11,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Switch,
   Alert,
   RefreshControl } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -22,6 +21,7 @@ import { TextInput } from '@/components/common/TextInput';
 import { Button } from '@/components/common/Button';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
+import { AdaptiveSwitch } from '@/components/adaptive';
 import { 
   getOrganization, 
   updateOrganization,
@@ -543,7 +543,7 @@ export const OrganizationDetailScreen: React.FC = () => {
                 <Text style={styles.featureName}>資料匯入</Text>
                 <Text style={styles.featureDesc}>允許匯入 CSV/Excel 檔案</Text>
               </View>
-              <Switch
+              <AdaptiveSwitch
                 value={features.allowDataImport}
                 onValueChange={(value) => setFeatures({ ...features, allowDataImport: value })}
                 disabled={!isEditing}
@@ -555,7 +555,7 @@ export const OrganizationDetailScreen: React.FC = () => {
                 <Text style={styles.featureName}>資料匯出</Text>
                 <Text style={styles.featureDesc}>允許匯出資料為 CSV/Excel</Text>
               </View>
-              <Switch
+              <AdaptiveSwitch
                 value={features.allowDataExport}
                 onValueChange={(value) => setFeatures({ ...features, allowDataExport: value })}
                 disabled={!isEditing}
@@ -567,7 +567,7 @@ export const OrganizationDetailScreen: React.FC = () => {
                 <Text style={styles.featureName}>自訂欄位</Text>
                 <Text style={styles.featureDesc}>允許建立客戶自訂欄位</Text>
               </View>
-              <Switch
+              <AdaptiveSwitch
                 value={features.allowCustomFields}
                 onValueChange={(value) => setFeatures({ ...features, allowCustomFields: value })}
                 disabled={!isEditing || organization?.subscriptionPlan === 'trial'}
@@ -579,7 +579,7 @@ export const OrganizationDetailScreen: React.FC = () => {
                 <Text style={styles.featureName}>API 存取</Text>
                 <Text style={styles.featureDesc}>允許使用 API 整合</Text>
               </View>
-              <Switch
+              <AdaptiveSwitch
                 value={features.allowAPIAccess}
                 onValueChange={(value) => setFeatures({ ...features, allowAPIAccess: value })}
                 disabled={!isEditing || organization?.subscriptionPlan === 'trial'}

@@ -11,13 +11,13 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Switch,
   ActivityIndicator,
   Platform
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Popover } from '@/components/common/Popover';
 import { Icon } from '@/components/common/Icon';
+import { AdaptiveSwitch } from '@/components/adaptive';
 import { processFieldDescription } from '@/services/api/ai-integration';
 import { DesignSystem } from '@/theme/designSystem';
 import { ColumnConfig } from './types';
@@ -213,7 +213,7 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
                 <Text style={styles.fieldLabel}>必填欄位</Text>
                 <Text style={styles.fieldHint}>用戶必須填寫此欄位</Text>
               </View>
-              <Switch
+              <AdaptiveSwitch
                 value={isRequired}
                 onValueChange={setIsRequired}
                 disabled={!canEdit}
@@ -226,7 +226,7 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
                 <Text style={styles.fieldLabel}>顯示欄位</Text>
                 <Text style={styles.fieldHint}>在表格中顯示此欄位</Text>
               </View>
-              <Switch
+              <AdaptiveSwitch
                 value={isVisible}
                 onValueChange={setIsVisible}
                 disabled={!canEdit}

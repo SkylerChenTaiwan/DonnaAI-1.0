@@ -10,10 +10,10 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  TextInput,
-  Switch
+  TextInput
 } from 'react-native';
 import { MaterialIcon } from '@/components/common/MaterialIcon';
+import { AdaptiveSwitch } from '@/components/adaptive';
 import { DesignSystem } from '@/theme/designSystem';
 import { FieldMapping, FieldRelation, RelationType, DatabaseType } from '@/types/import';
 import { FieldConfig } from '@/types/fieldDefinitions';
@@ -208,7 +208,7 @@ export const RelationEditorModalContent: React.FC<RelationEditorModalContentProp
             匯入時必須有對應的關聯資料
           </Text>
         </View>
-        <Switch
+        <AdaptiveSwitch
           value={isRequired}
           onValueChange={setIsRequired}
           trackColor={{ false: colors.border.light, true: colors.primary }}
@@ -225,7 +225,7 @@ export const RelationEditorModalContent: React.FC<RelationEditorModalContentProp
             若關聯資料不存在則自動建立
           </Text>
         </View>
-        <Switch
+        <AdaptiveSwitch
           value={autoCreate}
           onValueChange={setAutoCreate}
           trackColor={{ false: colors.border.light, true: colors.primary }}
@@ -242,7 +242,7 @@ export const RelationEditorModalContent: React.FC<RelationEditorModalContentProp
             刪除主資料時一併刪除關聯資料
           </Text>
         </View>
-        <Switch
+        <AdaptiveSwitch
           value={cascadeDelete}
           onValueChange={setCascadeDelete}
           trackColor={{ false: colors.border.light, true: colors.primary }}
