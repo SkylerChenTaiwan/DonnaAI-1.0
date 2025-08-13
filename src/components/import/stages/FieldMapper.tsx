@@ -569,8 +569,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                       styles.existingFieldButton, 
                       { 
                         borderColor: colors.gray200,
-                        backgroundColor: pressed ? colors.gray50 : 'transparent',
-                        opacity: pressed ? 0.8 : 1
+                        backgroundColor: pressed ? colors.gray50 : 'transparent'
                       }
                     ]}
                     onPress={() => {
@@ -614,8 +613,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                     styles.relationButton, 
                     { 
                       borderColor: colors.primary,
-                      backgroundColor: pressed ? withAlpha(colors.primary, 0.063) : 'transparent',
-                      opacity: pressed ? 0.8 : 1
+                      backgroundColor: pressed ? withAlpha(colors.primary, 0.063) : 'transparent'
                     }
                   ]}
                   onPress={() => {
