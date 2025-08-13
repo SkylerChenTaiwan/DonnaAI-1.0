@@ -631,7 +631,7 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
   // Loading state
   if (loading) {
     return (
-      <View style={[tableStyles.container, tableStyles.loadingContainer]}>
+      <View style={StyleSheet.flatten([tableStyles.container, tableStyles.loadingContainer])}>
         <ActivityIndicator size="large" color={NotionColors.text.gray} />
       </View>
     );
@@ -640,9 +640,9 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
   // Error state
   if (error) {
     return (
-      <View style={[tableStyles.container, tableStyles.emptyContainer]}>
+      <View style={StyleSheet.flatten([tableStyles.container, tableStyles.emptyContainer])}>
         <Icon name="alert-circle" size={48} color={NotionColors.text.red} />
-        <Text style={[tableStyles.emptyText, { color: NotionColors.text.red, marginTop: 16 }]}>
+        <Text style={StyleSheet.flatten([tableStyles.emptyText, { color: NotionColors.text.red, marginTop: 16 }])}>
           載入資料時發生錯誤
         </Text>
       </View>
@@ -1183,9 +1183,9 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
   // React Native 空狀態
   if (processedData.length === 0) {
     return (
-      <View style={[tableStyles.container, tableStyles.emptyContainer]}>
+      <View style={StyleSheet.flatten([tableStyles.container, tableStyles.emptyContainer])}>
         <Icon name="folder-open" size={48} color={NotionColors.text.lightGray} />
-        <Text style={[tableStyles.emptyText, { marginTop: 16 }]}>
+        <Text style={StyleSheet.flatten([tableStyles.emptyText, { marginTop: 16 }])}>
           {emptyMessage}
         </Text>
         {onRowAdd && (

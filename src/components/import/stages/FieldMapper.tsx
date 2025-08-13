@@ -431,24 +431,24 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
     return (
       <View 
         key={index} 
-        style={[
+        style={StyleSheet.flatten([
           styles.mappingItem,
           { 
             backgroundColor: colors.white,
             borderColor: isEnabled ? colors.gray200 : colors.gray100,
             opacity: isEnabled ? 1 : 0.6
           }
-        ]}
+        ])}
       >
         {/* 來源欄位 */}
         <View style={styles.sourceField}>
           <View style={styles.fieldHeader}>
-            <Text style={[styles.sourceLabel, { color: colors.gray500 }]}>
+            <Text style={StyleSheet.flatten([styles.sourceLabel, { color: colors.gray500 }])}>
               CSV 欄位
             </Text>
             <TouchableOpacity
               onPress={() => toggleMappingEnabled(index)}
-              style={[
+              style={StyleSheet.flatten([
                 {
                   width: 48,
                   height: 28,
@@ -460,7 +460,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                   padding: 2,
                   position: 'relative'
                 }
-              ]}
+              ])}
             >
               <View
                 style={[
@@ -482,10 +482,10 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
               />
             </TouchableOpacity>
           </View>
-          <Text style={[styles.sourceFieldName, { color: colors.text }]}>
+          <Text style={StyleSheet.flatten([styles.sourceFieldName, { color: colors.text }])}>
             {mapping.sourceColumn}
           </Text>
-          <Text style={[styles.fieldStats, { color: colors.gray400 }]}>
+          <Text style={StyleSheet.flatten([styles.fieldStats, { color: colors.gray400 }])}>
             {stats.nonNullCount} 筆資料 • {stats.type}
           </Text>
         </View>
@@ -499,7 +499,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
 
         {/* 目標欄位 */}
         <View style={styles.targetField}>
-          <Text style={[styles.targetLabel, { color: colors.gray500 }]}>
+          <Text style={StyleSheet.flatten([styles.targetLabel, { color: colors.gray500 }])}>
             系統欄位
           </Text>
           
@@ -509,18 +509,18 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                 // 新建欄位
                 <View>
                   <TextInput
-                    style={[styles.fieldInput, { 
+                    style={StyleSheet.flatten([styles.fieldInput, { 
                       color: colors.text,
                       borderColor: colors.gray200
-                    }]}
+                    }])}
                     value={mapping.customLabel || mapping.targetField}
                     onChangeText={(text) => updateMapping(index, { customLabel: text })}
                     placeholder="欄位名稱"
                     placeholderTextColor={colors.gray400}
                   />
-                  <View style={[styles.newFieldBadge, { backgroundColor: withAlpha(colors.success, 0.125) }]}>
+                  <View style={StyleSheet.flatten([styles.newFieldBadge, { backgroundColor: withAlpha(colors.success, 0.125) }])}>
                     <MaterialIcon name="add-circle" size={12} color={colors.success} />
-                    <Text style={[styles.newFieldText, { color: colors.success }]}>
+                    <Text style={StyleSheet.flatten([styles.newFieldText, { color: colors.success }])}>
                       新建欄位
                     </Text>
                   </View>
@@ -546,14 +546,14 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                     }}
                     accessibilityRole="button"
                   >
-                    <Text style={[styles.existingFieldName, { color: colors.text }]}>
+                    <Text style={StyleSheet.flatten([styles.existingFieldName, { color: colors.text }])}>
                       {existingFields.find(f => f.key === mapping.targetField)?.label || mapping.targetField}
                     </Text>
                     <MaterialIcon name="arrow-drop-down" size={20} color={colors.gray500} />
                   </Pressable>
                 ) : (
                   <TouchableOpacity
-                    style={[styles.existingFieldButton, { borderColor: colors.gray200 }]}
+                    style={StyleSheet.flatten([styles.existingFieldButton, { borderColor: colors.gray200 }])}
                     onPress={() => {
                       console.log('🔍 打開欄位選擇器 for mapping:', index);
                       console.log('Current mapping:', mapping);
@@ -563,7 +563,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                     }}
                     activeOpacity={0.7}
                   >
-                    <Text style={[styles.existingFieldName, { color: colors.text }]}>
+                    <Text style={StyleSheet.flatten([styles.existingFieldName, { color: colors.text }])}>
                       {existingFields.find(f => f.key === mapping.targetField)?.label || mapping.targetField}
                     </Text>
                     <MaterialIcon name="arrow-drop-down" size={20} color={colors.gray500} />
@@ -593,13 +593,13 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                   accessibilityRole="button"
                 >
                   <MaterialIcon name="link" size={16} color={colors.primary} />
-                  <Text style={[styles.relationButtonText, { color: colors.primary }]}>
+                  <Text style={StyleSheet.flatten([styles.relationButtonText, { color: colors.primary }])}>
                     設定關聯
                   </Text>
                 </Pressable>
               ) : (
                 <TouchableOpacity
-                  style={[styles.relationButton, { borderColor: colors.primary }]}
+                  style={StyleSheet.flatten([styles.relationButton, { borderColor: colors.primary }])}
                   onPress={() => {
                     console.log('🔗 [TouchableOpacity] 開啟關聯編輯器 for field:', mapping.targetField);
                     console.log('🔗 當前 mapping:', mapping);
@@ -611,14 +611,14 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                   activeOpacity={0.7}
                 >
                   <MaterialIcon name="link" size={16} color={colors.primary} />
-                  <Text style={[styles.relationButtonText, { color: colors.primary }]}>
+                  <Text style={StyleSheet.flatten([styles.relationButtonText, { color: colors.primary }])}>
                     設定關聯
                   </Text>
                 </TouchableOpacity>
               )}
             </>
           ) : (
-            <Text style={[styles.disabledText, { color: colors.gray400 }]}>
+            <Text style={StyleSheet.flatten([styles.disabledText, { color: colors.gray400 }])}>
               不匯入此欄位
             </Text>
           )}
@@ -633,10 +633,10 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
       return (
         <View style={styles.emptyRelations}>
           <MaterialIcon name="link-off" size={48} color={colors.gray300} />
-          <Text style={[styles.emptyText, { color: colors.gray500 }]}>
+          <Text style={StyleSheet.flatten([styles.emptyText, { color: colors.gray500 }])}>
             尚未設定跨資料庫關聯
           </Text>
-          <Text style={[styles.emptyHint, { color: colors.gray400 }]}>
+          <Text style={StyleSheet.flatten([styles.emptyHint, { color: colors.gray400 }])}>
             點擊欄位的「設定關聯」按鈕來建立關聯
           </Text>
         </View>
@@ -669,20 +669,20 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
         
         {/* 關聯列表 */}
         <View style={styles.relationsList}>
-          <Text style={[styles.relationsListTitle, { color: colors.text }]}>
+          <Text style={StyleSheet.flatten([styles.relationsListTitle, { color: colors.text }])}>
             關聯詳情
           </Text>
           {relations.map((relation, index) => (
             <View 
               key={relation.id} 
-              style={[styles.relationItem, { backgroundColor: colors.white }]}
+              style={StyleSheet.flatten([styles.relationItem, { backgroundColor: colors.white }])}
             >
               <View style={styles.relationInfo}>
                 <View style={styles.relationPath}>
-                  <Text style={[styles.relationDatabase, { color: colors.primary }]}>
+                  <Text style={StyleSheet.flatten([styles.relationDatabase, { color: colors.primary }])}>
                     {relation.sourceDatabase}
                   </Text>
-                  <Text style={[styles.relationField, { color: colors.text }]}>
+                  <Text style={StyleSheet.flatten([styles.relationField, { color: colors.text }])}>
                     .{relation.sourceField}
                   </Text>
                 </View>
@@ -696,26 +696,26 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                 </View>
                 
                 <View style={styles.relationPath}>
-                  <Text style={[styles.relationDatabase, { color: colors.primary }]}>
+                  <Text style={StyleSheet.flatten([styles.relationDatabase, { color: colors.primary }])}>
                     {relation.targetDatabase}
                   </Text>
-                  <Text style={[styles.relationField, { color: colors.text }]}>
+                  <Text style={StyleSheet.flatten([styles.relationField, { color: colors.text }])}>
                     .{relation.targetField}
                   </Text>
                 </View>
               </View>
               
               <View style={styles.relationMeta}>
-                <View style={[styles.relationTypeBadge, { backgroundColor: colors.gray100 }]}>
-                  <Text style={[styles.relationTypeText, { color: colors.gray600 }]}>
+                <View style={StyleSheet.flatten([styles.relationTypeBadge, { backgroundColor: colors.gray100 }])}>
+                  <Text style={StyleSheet.flatten([styles.relationTypeText, { color: colors.gray600 }])}>
                     {relation.relationType}
                   </Text>
                 </View>
                 
                 {relation.bidirectional && (
-                  <View style={[styles.bidirectionalBadge, { backgroundColor: withAlpha(colors.success, 0.125) }]}>
+                  <View style={StyleSheet.flatten([styles.bidirectionalBadge, { backgroundColor: withAlpha(colors.success, 0.125) }])}>
                     <MaterialIcon name="sync" size={12} color={colors.success} />
-                    <Text style={[styles.bidirectionalText, { color: colors.success }]}>
+                    <Text style={StyleSheet.flatten([styles.bidirectionalText, { color: colors.success }])}>
                       雙向
                     </Text>
                   </View>
@@ -790,12 +790,12 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
   if (!mergedTable || !mergedTable.headers || mergedTable.headers.length === 0) {
     console.log('⚠️ FieldMapper: 沒有 mergedTable 資料');
     return (
-      <View style={[styles.container, { padding: 20, alignItems: 'center', justifyContent: 'center' }]}>
+      <View style={StyleSheet.flatten([styles.container, { padding: 20, alignItems: 'center', justifyContent: 'center' }])}>
         <MaterialIcon name="info-outline" size={48} color={colors.gray400} />
-        <Text style={[styles.emptyText, { color: colors.gray600, marginTop: 16, textAlign: 'center' }]}>
+        <Text style={StyleSheet.flatten([styles.emptyText, { color: colors.gray600, marginTop: 16, textAlign: 'center' }])}>
           請先上傳並處理檔案
         </Text>
-        <Text style={[styles.emptyDescription, { color: colors.gray500, marginTop: 8, textAlign: 'center' }]}>
+        <Text style={StyleSheet.flatten([styles.emptyDescription, { color: colors.gray500, marginTop: 8, textAlign: 'center' }])}>
           完成檔案上傳後，即可進行欄位映射設定
         </Text>
       </View>
@@ -807,17 +807,17 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* 欄位映射區塊 */}
       <TouchableOpacity
-        style={[styles.sectionHeader, { borderBottomColor: colors.gray200 }]}
+        style={StyleSheet.flatten([styles.sectionHeader, { borderBottomColor: colors.gray200 }])}
         onPress={() => toggleSection('mapping')}
         activeOpacity={0.7}
       >
         <View style={styles.sectionTitle}>
           <MaterialIcon name="table-chart" size={20} color={colors.primary} />
-          <Text style={[styles.sectionTitleText, { color: colors.text }]}>
+          <Text style={StyleSheet.flatten([styles.sectionTitleText, { color: colors.text }])}>
             欄位映射設定
           </Text>
-          <View style={[styles.badge, { backgroundColor: withAlpha(colors.primary, 0.125) }]}>
-            <Text style={[styles.badgeText, { color: colors.primary }]}>
+          <View style={StyleSheet.flatten([styles.badge, { backgroundColor: withAlpha(colors.primary, 0.125) }])}>
+            <Text style={StyleSheet.flatten([styles.badgeText, { color: colors.primary }])}>
               {mappings.filter(m => m.targetField).length} / {mappings.length}
             </Text>
           </View>
@@ -841,18 +841,18 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
 
       {/* 關聯設定區塊 */}
       <TouchableOpacity
-        style={[styles.sectionHeader, { borderBottomColor: colors.gray200 }]}
+        style={StyleSheet.flatten([styles.sectionHeader, { borderBottomColor: colors.gray200 }])}
         onPress={() => toggleSection('relations')}
         activeOpacity={0.7}
       >
         <View style={styles.sectionTitle}>
           <MaterialIcon name="link" size={20} color={colors.primary} />
-          <Text style={[styles.sectionTitleText, { color: colors.text }]}>
+          <Text style={StyleSheet.flatten([styles.sectionTitleText, { color: colors.text }])}>
             跨資料庫關聯
           </Text>
           {relations.length > 0 && (
-            <View style={[styles.badge, { backgroundColor: withAlpha(colors.primary, 0.125) }]}>
-              <Text style={[styles.badgeText, { color: colors.primary }]}>
+            <View style={StyleSheet.flatten([styles.badge, { backgroundColor: withAlpha(colors.primary, 0.125) }])}>
+              <Text style={StyleSheet.flatten([styles.badgeText, { color: colors.primary }])}>
                 {relations.length}
               </Text>
             </View>
@@ -873,13 +873,13 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
 
       {/* 匯入預覽區塊 */}
       <TouchableOpacity
-        style={[styles.sectionHeader, { borderBottomColor: colors.gray200 }]}
+        style={StyleSheet.flatten([styles.sectionHeader, { borderBottomColor: colors.gray200 }])}
         onPress={() => toggleSection('preview')}
         activeOpacity={0.7}
       >
         <View style={styles.sectionTitle}>
           <MaterialIcon name="preview" size={20} color={colors.primary} />
-          <Text style={[styles.sectionTitleText, { color: colors.text }]}>
+          <Text style={StyleSheet.flatten([styles.sectionTitleText, { color: colors.text }])}>
             匯入預覽
           </Text>
         </View>
@@ -892,40 +892,40 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
       
       {expandedSections.preview && (
         <View style={styles.sectionContent}>
-          <View style={[styles.previewCard, { backgroundColor: colors.gray50 }]}>
-            <Text style={[styles.previewTitle, { color: colors.text }]}>
+          <View style={StyleSheet.flatten([styles.previewCard, { backgroundColor: colors.gray50 }])}>
+            <Text style={StyleSheet.flatten([styles.previewTitle, { color: colors.text }])}>
               匯入摘要
             </Text>
             <View style={styles.previewStats}>
               <View style={styles.previewStat}>
-                <Text style={[styles.previewStatLabel, { color: colors.gray500 }]}>
+                <Text style={StyleSheet.flatten([styles.previewStatLabel, { color: colors.gray500 }])}>
                   目標資料庫
                 </Text>
-                <Text style={[styles.previewStatValue, { color: colors.text }]}>
+                <Text style={StyleSheet.flatten([styles.previewStatValue, { color: colors.text }])}>
                   {targetDatabase}
                 </Text>
               </View>
               <View style={styles.previewStat}>
-                <Text style={[styles.previewStatLabel, { color: colors.gray500 }]}>
+                <Text style={StyleSheet.flatten([styles.previewStatLabel, { color: colors.gray500 }])}>
                   總筆數
                 </Text>
-                <Text style={[styles.previewStatValue, { color: colors.text }]}>
+                <Text style={StyleSheet.flatten([styles.previewStatValue, { color: colors.text }])}>
                   {mergedTable.data.length}
                 </Text>
               </View>
               <View style={styles.previewStat}>
-                <Text style={[styles.previewStatLabel, { color: colors.gray500 }]}>
+                <Text style={StyleSheet.flatten([styles.previewStatLabel, { color: colors.gray500 }])}>
                   匯入欄位
                 </Text>
-                <Text style={[styles.previewStatValue, { color: colors.text }]}>
+                <Text style={StyleSheet.flatten([styles.previewStatValue, { color: colors.text }])}>
                   {mappings.filter(m => m.targetField).length}
                 </Text>
               </View>
               <View style={styles.previewStat}>
-                <Text style={[styles.previewStatLabel, { color: colors.gray500 }]}>
+                <Text style={StyleSheet.flatten([styles.previewStatLabel, { color: colors.gray500 }])}>
                   新建欄位
                 </Text>
-                <Text style={[styles.previewStatValue, { color: colors.text }]}>
+                <Text style={StyleSheet.flatten([styles.previewStatValue, { color: colors.text }])}>
                   {mappings.filter(m => m.isNew && m.targetField).length}
                 </Text>
               </View>
@@ -940,9 +940,9 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
       // Web 平台使用絕對定位的 div 代替 Modal
       showFieldSelector && (
         <View style={styles.modalOverlay}>
-          <View style={[styles.modalContent, { backgroundColor: colors.white }]}>
+          <View style={StyleSheet.flatten([styles.modalContent, { backgroundColor: colors.white }])}>
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: colors.text }]}>
+              <Text style={StyleSheet.flatten([styles.modalTitle, { color: colors.text }])}>
                 選擇系統欄位
               </Text>
               <TouchableOpacity
@@ -959,18 +959,18 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
             
             <ScrollView style={styles.modalBody}>
               {/* 現有欄位 */}
-              <Text style={[styles.modalSectionTitle, { color: colors.text }]}>
+              <Text style={StyleSheet.flatten([styles.modalSectionTitle, { color: colors.text }])}>
                 現有欄位
               </Text>
               {existingFields.map((field) => (
                 <TouchableOpacity
                   key={field.key}
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.fieldOption,
                     { 
                       backgroundColor: colors.gray50,
                       borderColor: colors.gray200 }
-                  ]}
+                  ])}
                   onPress={() => {
                     console.log('選擇欄位:', field.key);
                     selectField(field.key);
@@ -978,13 +978,13 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                   activeOpacity={0.7}
                 >
                   <View style={styles.fieldOptionContent}>
-                    <Text style={[styles.fieldOptionLabel, { color: colors.text }]}>
+                    <Text style={StyleSheet.flatten([styles.fieldOptionLabel, { color: colors.text }])}>
                       {field.label}
                     </Text>
-                    <Text style={[styles.fieldOptionKey, { color: colors.gray500 }]}>
+                    <Text style={StyleSheet.flatten([styles.fieldOptionKey, { color: colors.gray500 }])}>
                       {field.key}
                     </Text>
-                    <Text style={[styles.fieldOptionType, { color: colors.gray400 }]}>
+                    <Text style={StyleSheet.flatten([styles.fieldOptionType, { color: colors.gray400 }])}>
                       {field.type}
                     </Text>
                   </View>
@@ -993,16 +993,16 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
               ))}
               
               {/* 建立新欄位 */}
-              <Text style={[styles.modalSectionTitle, { color: colors.text, marginTop: 24 }]}>
+              <Text style={StyleSheet.flatten([styles.modalSectionTitle, { color: colors.text, marginTop: 24 }])}>
                 其他選項
               </Text>
               <TouchableOpacity
-                style={[
+                style={StyleSheet.flatten([
                   styles.fieldOption,
                   { 
                     backgroundColor: withAlpha(colors.success, 0.063),
                     borderColor: withAlpha(colors.success, 0.25) }
-                ]}
+                ])}
                 onPress={() => {
                   console.log('建立新欄位');
                   selectField('new_field');
@@ -1010,10 +1010,10 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                 activeOpacity={0.7}
               >
                 <View style={styles.fieldOptionContent}>
-                  <Text style={[styles.fieldOptionLabel, { color: colors.success }]}>
+                  <Text style={StyleSheet.flatten([styles.fieldOptionLabel, { color: colors.success }])}>
                     建立新欄位
                   </Text>
-                  <Text style={[styles.fieldOptionKey, { color: withAlpha(colors.success, 0.8) }]}>
+                  <Text style={StyleSheet.flatten([styles.fieldOptionKey, { color: withAlpha(colors.success, 0.8) }])}>
                     使用原 CSV 欄位名稱
                   </Text>
                 </View>
@@ -1032,9 +1032,9 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
         onRequestClose={() => setShowFieldSelector(false)}
       >
       <View style={styles.modalOverlay}>
-        <View style={[styles.modalContent, { backgroundColor: colors.white }]}>
+        <View style={StyleSheet.flatten([styles.modalContent, { backgroundColor: colors.white }])}>
           <View style={styles.modalHeader}>
-            <Text style={[styles.modalTitle, { color: colors.text }]}>
+            <Text style={StyleSheet.flatten([styles.modalTitle, { color: colors.text }])}>
               選擇系統欄位
             </Text>
             <TouchableOpacity
@@ -1047,28 +1047,28 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
           
           <ScrollView style={styles.modalBody}>
             {/* 現有欄位 */}
-            <Text style={[styles.modalSectionTitle, { color: colors.text }]}>
+            <Text style={StyleSheet.flatten([styles.modalSectionTitle, { color: colors.text }])}>
               現有欄位
             </Text>
             {existingFields.map((field) => (
               <TouchableOpacity
                 key={field.key}
-                style={[
+                style={StyleSheet.flatten([
                   styles.fieldOption,
                   { 
                     backgroundColor: colors.gray50,
                     borderColor: colors.gray200 }
-                ]}
+                ])}
                 onPress={() => selectField(field.key)}
               >
                 <View style={styles.fieldOptionContent}>
-                  <Text style={[styles.fieldOptionLabel, { color: colors.text }]}>
+                  <Text style={StyleSheet.flatten([styles.fieldOptionLabel, { color: colors.text }])}>
                     {field.label}
                   </Text>
-                  <Text style={[styles.fieldOptionKey, { color: colors.gray500 }]}>
+                  <Text style={StyleSheet.flatten([styles.fieldOptionKey, { color: colors.gray500 }])}>
                     {field.key}
                   </Text>
-                  <Text style={[styles.fieldOptionType, { color: colors.gray400 }]}>
+                  <Text style={StyleSheet.flatten([styles.fieldOptionType, { color: colors.gray400 }])}>
                     {field.type}
                   </Text>
                 </View>
@@ -1077,23 +1077,23 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
             ))}
             
             {/* 建立新欄位 */}
-            <Text style={[styles.modalSectionTitle, { color: colors.text, marginTop: 24 }]}>
+            <Text style={StyleSheet.flatten([styles.modalSectionTitle, { color: colors.text, marginTop: 24 }])}>
               其他選項
             </Text>
             <TouchableOpacity
-              style={[
+              style={StyleSheet.flatten([
                 styles.fieldOption,
                 { 
                   backgroundColor: withAlpha(colors.success, 0.063),
                   borderColor: withAlpha(colors.success, 0.25) }
-              ]}
+              ])}
               onPress={() => selectField('new_field')}
             >
               <View style={styles.fieldOptionContent}>
-                <Text style={[styles.fieldOptionLabel, { color: colors.success }]}>
+                <Text style={StyleSheet.flatten([styles.fieldOptionLabel, { color: colors.success }])}>
                   建立新欄位
                 </Text>
-                <Text style={[styles.fieldOptionKey, { color: withAlpha(colors.success, 0.8) }]}>
+                <Text style={StyleSheet.flatten([styles.fieldOptionKey, { color: withAlpha(colors.success, 0.8) }])}>
                   使用原 CSV 欄位名稱
                 </Text>
               </View>
@@ -1110,9 +1110,9 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
       // Web 平台使用絕對定位的 div
       showRelationEditor && selectedMapping && (
         <View style={styles.modalOverlay}>
-          <View style={[styles.modalContent, { backgroundColor: colors.white }]}>
+          <View style={StyleSheet.flatten([styles.modalContent, { backgroundColor: colors.white }])}>
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: colors.text }]}>
+              <Text style={StyleSheet.flatten([styles.modalTitle, { color: colors.text }])}>
                 設定欄位關聯
               </Text>
               <TouchableOpacity
@@ -1130,23 +1130,23 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
             
             <ScrollView style={styles.modalBody}>
               {/* 當前欄位資訊 */}
-              <View style={[styles.relationFieldInfo, { backgroundColor: colors.gray50, borderRadius: 8, padding: 12, marginBottom: 16 }]}>
-                <Text style={[styles.modalSectionTitle, { color: colors.text, marginBottom: 8 }]}>
+              <View style={StyleSheet.flatten([styles.relationFieldInfo, { backgroundColor: colors.gray50, borderRadius: 8, padding: 12, marginBottom: 16 }])}>
+                <Text style={StyleSheet.flatten([styles.modalSectionTitle, { color: colors.text, marginBottom: 8 }])}>
                   來源欄位
                 </Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                  <Text style={[{ fontSize: 14, fontWeight: '600', color: colors.primary }]}>
+                  <Text style={StyleSheet.flatten([{ fontSize: 14, fontWeight: '600', color: colors.primary }])}>
                     {targetDatabase}
                   </Text>
                   <MaterialIcon name="arrow-forward" size={16} color={colors.gray400} />
-                  <Text style={[{ fontSize: 14, color: colors.text }]}>
+                  <Text style={StyleSheet.flatten([{ fontSize: 14, color: colors.text }])}>
                     {selectedMapping.targetField || selectedMapping.sourceColumn}
                   </Text>
                 </View>
               </View>
 
               {/* 選擇目標資料庫 */}
-              <Text style={[styles.modalSectionTitle, { color: colors.text }]}>
+              <Text style={StyleSheet.flatten([styles.modalSectionTitle, { color: colors.text }])}>
                 選擇目標資料庫
               </Text>
               {(['customers', 'records', 'tasks', 'users'] as DatabaseType[])
@@ -1154,12 +1154,12 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                 .map((database) => (
                 <TouchableOpacity
                   key={database}
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.fieldOption,
                     { 
                       backgroundColor: colors.gray50,
                       borderColor: colors.gray200 }
-                  ]}
+                  ])}
                   onPress={() => {
                     console.log('選擇目標資料庫:', database);
                     // 建立關聯
@@ -1191,12 +1191,12 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                   activeOpacity={0.7}
                 >
                   <View style={styles.fieldOptionContent}>
-                    <Text style={[styles.fieldOptionLabel, { color: colors.text }]}>
+                    <Text style={StyleSheet.flatten([styles.fieldOptionLabel, { color: colors.text }])}>
                       {database === 'customers' ? '客戶' : 
                        database === 'records' ? '記錄' : 
                        database === 'tasks' ? '任務' : '用戶'}
                     </Text>
-                    <Text style={[styles.fieldOptionKey, { color: colors.gray500 }]}>
+                    <Text style={StyleSheet.flatten([styles.fieldOptionKey, { color: colors.gray500 }])}>
                       {database}
                     </Text>
                   </View>
@@ -1205,7 +1205,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
               ))}
 
               {/* 關聯類型選擇 */}
-              <Text style={[styles.modalSectionTitle, { color: colors.text, marginTop: 24 }]}>
+              <Text style={StyleSheet.flatten([styles.modalSectionTitle, { color: colors.text, marginTop: 24 }])}>
                 關聯類型
               </Text>
               <View style={{ gap: 8 }}>
@@ -1216,21 +1216,21 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                 ].map((type) => (
                   <TouchableOpacity
                     key={type.value}
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.fieldOption,
                       { 
                         backgroundColor: colors.gray50,
                         borderColor: colors.gray200 }
-                    ]}
+                    ])}
                     onPress={() => {
                       console.log('選擇關聯類型:', type.value);
                     }}
                     activeOpacity={0.7}
                   >
-                    <View style={[styles.fieldOptionContent, { flexDirection: 'row', alignItems: 'center', gap: 12 }]}>
+                    <View style={StyleSheet.flatten([styles.fieldOptionContent, { flexDirection: 'row', alignItems: 'center', gap: 12 }])}>
                       <MaterialIcon name={type.icon} size={20} color={colors.primary} />
                       <View>
-                        <Text style={[styles.fieldOptionLabel, { color: colors.text }]}>
+                        <Text style={StyleSheet.flatten([styles.fieldOptionLabel, { color: colors.text }])}>
                           {type.label}
                         </Text>
                       </View>
@@ -1255,9 +1255,9 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
         }}
       >
         <View style={styles.modalOverlay}>
-          <View style={[styles.modalContent, { backgroundColor: colors.white }]}>
+          <View style={StyleSheet.flatten([styles.modalContent, { backgroundColor: colors.white }])}>
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: colors.text }]}>
+              <Text style={StyleSheet.flatten([styles.modalTitle, { color: colors.text }])}>
                 設定欄位關聯
               </Text>
               <TouchableOpacity
@@ -1273,23 +1273,23 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
             
             <ScrollView style={styles.modalBody}>
               {/* 當前欄位資訊 */}
-              <View style={[styles.relationFieldInfo, { backgroundColor: colors.gray50, borderRadius: 8, padding: 12, marginBottom: 16 }]}>
-                <Text style={[styles.modalSectionTitle, { color: colors.text, marginBottom: 8 }]}>
+              <View style={StyleSheet.flatten([styles.relationFieldInfo, { backgroundColor: colors.gray50, borderRadius: 8, padding: 12, marginBottom: 16 }])}>
+                <Text style={StyleSheet.flatten([styles.modalSectionTitle, { color: colors.text, marginBottom: 8 }])}>
                   來源欄位
                 </Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                  <Text style={[{ fontSize: 14, fontWeight: '600', color: colors.primary }]}>
+                  <Text style={StyleSheet.flatten([{ fontSize: 14, fontWeight: '600', color: colors.primary }])}>
                     {targetDatabase}
                   </Text>
                   <MaterialIcon name="arrow-forward" size={16} color={colors.gray400} />
-                  <Text style={[{ fontSize: 14, color: colors.text }]}>
+                  <Text style={StyleSheet.flatten([{ fontSize: 14, color: colors.text }])}>
                     {selectedMapping?.targetField || selectedMapping?.sourceColumn}
                   </Text>
                 </View>
               </View>
 
               {/* 選擇目標資料庫 */}
-              <Text style={[styles.modalSectionTitle, { color: colors.text }]}>
+              <Text style={StyleSheet.flatten([styles.modalSectionTitle, { color: colors.text }])}>
                 選擇目標資料庫
               </Text>
               {(['customers', 'records', 'tasks', 'users'] as DatabaseType[])
@@ -1297,12 +1297,12 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                 .map((database) => (
                 <TouchableOpacity
                   key={database}
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.fieldOption,
                     { 
                       backgroundColor: colors.gray50,
                       borderColor: colors.gray200 }
-                  ]}
+                  ])}
                   onPress={() => {
                     if (selectedMapping) {
                       // 建立關聯
@@ -1330,12 +1330,12 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                   }}
                 >
                   <View style={styles.fieldOptionContent}>
-                    <Text style={[styles.fieldOptionLabel, { color: colors.text }]}>
+                    <Text style={StyleSheet.flatten([styles.fieldOptionLabel, { color: colors.text }])}>
                       {database === 'customers' ? '客戶' : 
                        database === 'records' ? '記錄' : 
                        database === 'tasks' ? '任務' : '用戶'}
                     </Text>
-                    <Text style={[styles.fieldOptionKey, { color: colors.gray500 }]}>
+                    <Text style={StyleSheet.flatten([styles.fieldOptionKey, { color: colors.gray500 }])}>
                       {database}
                     </Text>
                   </View>
@@ -1344,7 +1344,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
               ))}
 
               {/* 關聯類型選擇 */}
-              <Text style={[styles.modalSectionTitle, { color: colors.text, marginTop: 24 }]}>
+              <Text style={StyleSheet.flatten([styles.modalSectionTitle, { color: colors.text, marginTop: 24 }])}>
                 關聯類型
               </Text>
               <View style={{ gap: 8 }}>
@@ -1355,20 +1355,20 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                 ].map((type) => (
                   <TouchableOpacity
                     key={type.value}
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.fieldOption,
                       { 
                         backgroundColor: colors.gray50,
                         borderColor: colors.gray200 }
-                    ]}
+                    ])}
                     onPress={() => {
                       console.log('選擇關聯類型:', type.value);
                     }}
                   >
-                    <View style={[styles.fieldOptionContent, { flexDirection: 'row', alignItems: 'center', gap: 12 }]}>
+                    <View style={StyleSheet.flatten([styles.fieldOptionContent, { flexDirection: 'row', alignItems: 'center', gap: 12 }])}>
                       <MaterialIcon name={type.icon} size={20} color={colors.primary} />
                       <View>
-                        <Text style={[styles.fieldOptionLabel, { color: colors.text }]}>
+                        <Text style={StyleSheet.flatten([styles.fieldOptionLabel, { color: colors.text }])}>
                           {type.label}
                         </Text>
                       </View>

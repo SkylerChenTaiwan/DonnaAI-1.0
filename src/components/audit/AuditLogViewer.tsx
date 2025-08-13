@@ -307,7 +307,7 @@ export const AuditLogViewer: React.FC<AuditLogViewerProps> = ({
           <TouchableOpacity style={styles.filterButton} onPress={applyFilters}>
             <Text style={styles.filterButtonText}>套用過濾</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.filterButton, styles.resetButton]} onPress={resetFilters}>
+          <TouchableOpacity style={StyleSheet.flatten([styles.filterButton, styles.resetButton])} onPress={resetFilters}>
             <Text style={styles.resetButtonText}>重設</Text>
           </TouchableOpacity>
         </View>
@@ -336,7 +336,7 @@ export const AuditLogViewer: React.FC<AuditLogViewerProps> = ({
     return (
       <TouchableOpacity
         key={log.id}
-        style={[styles.logItem, isSelected && styles.selectedLogItem]}
+        style={StyleSheet.flatten([styles.logItem, isSelected && styles.selectedLogItem])}
         onPress={() => {
           setSelectedLog(log);
           onLogSelect?.(log);
@@ -349,11 +349,11 @@ export const AuditLogViewer: React.FC<AuditLogViewerProps> = ({
           </Text>
           <View style={styles.badges}>
             {log.metadata?.risk && (
-              <View style={[styles.badge, { backgroundColor: riskColor }]}>
+              <View style={StyleSheet.flatten([styles.badge, { backgroundColor: riskColor }])}>
                 <Text style={styles.badgeText}>{getRiskLabel(log.metadata.risk)}</Text>
               </View>
             )}
-            <View style={[styles.badge, { backgroundColor: statusColor }]}>
+            <View style={StyleSheet.flatten([styles.badge, { backgroundColor: statusColor }])}>
               <Text style={styles.badgeText}>{getStatusLabel(log.result.status)}</Text>
             </View>
           </View>

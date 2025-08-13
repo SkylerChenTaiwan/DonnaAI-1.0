@@ -278,7 +278,7 @@ export const SimplifiedVoiceTaskInput: React.FC<SimplifiedVoiceTaskInputProps> =
 
   // 渲染錄音介面
   const renderRecording = () => (
-    <Animated.View style={[styles.recordingContainer, { opacity: fadeAnim }]}>
+    <Animated.View style={StyleSheet.flatten([styles.recordingContainer, { opacity: fadeAnim }])}>
       <View style={styles.topSection}>
         <Icon name="mic" size={48} color="#FF6B6B" />
         <Text style={styles.title}>語音建立任務</Text>
@@ -337,10 +337,10 @@ export const SimplifiedVoiceTaskInput: React.FC<SimplifiedVoiceTaskInputProps> =
           <Text style={styles.progressMessage}>{processingProgress.message}</Text>
           <View style={styles.progressBar}>
             <View 
-              style={[
+              style={StyleSheet.flatten([
                 styles.progressFill,
                 { width: `${processingProgress.percentage}%` }
-              ]} 
+              ])} 
             />
           </View>
         </View>

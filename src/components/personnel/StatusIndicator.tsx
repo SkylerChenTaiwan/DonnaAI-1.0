@@ -55,16 +55,16 @@ export function StatusIndicator({
     <View style={styles.container}>
       <View style={styles.statusRow}>
         <View 
-          style={[
+          style={StyleSheet.flatten([
             styles.statusDot,
             { 
               width: sizeStyles.dotSize, 
               height: sizeStyles.dotSize,
               backgroundColor: isOnline ? '#34C759' : '#8E8E93'
             }
-          ]} 
+          ])} 
         />
-        <Text style={[styles.statusText, { fontSize: sizeStyles.fontSize }]}>
+        <Text style={StyleSheet.flatten([styles.statusText, { fontSize: sizeStyles.fontSize }])}>
           {isOnline ? '線上' : '離線'}
         </Text>
       </View>
@@ -76,7 +76,7 @@ export function StatusIndicator({
             size={sizeStyles.iconSize} 
             color={DesignSystem.colors.text.tertiary} 
           />
-          <Text style={[styles.lastActiveText, { fontSize: sizeStyles.fontSize }]}>
+          <Text style={StyleSheet.flatten([styles.lastActiveText, { fontSize: sizeStyles.fontSize }])}>
             {formatLastActive(user.lastActiveAt)}
           </Text>
         </View>

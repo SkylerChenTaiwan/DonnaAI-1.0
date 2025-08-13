@@ -353,7 +353,7 @@ export const OrganizationDetailScreen: React.FC = () => {
               <View style={styles.infoRow}>
                 <Text style={styles.label}>訂閱方案</Text>
                 <View style={styles.planContainer}>
-                  <Text style={[styles.value, { textTransform: 'uppercase' }]}>
+                  <Text style={StyleSheet.flatten([styles.value, { textTransform: 'uppercase' }])}>
                     {organization.subscriptionPlan}
                   </Text>
                   {organization.subscriptionPlan === 'trial' && isTrialActive(organization) && (
@@ -378,7 +378,7 @@ export const OrganizationDetailScreen: React.FC = () => {
               </View>
               <View style={styles.infoRow}>
                 <Text style={styles.label}>狀態</Text>
-                <View style={[styles.statusBadge, { backgroundColor: getStatusColor(organization.status) }]}>
+                <View style={StyleSheet.flatten([styles.statusBadge, { backgroundColor: getStatusColor(organization.status) }])}>
                   <Text style={styles.statusText}>{organization.status || 'active'}</Text>
                 </View>
               </View>
@@ -397,11 +397,11 @@ export const OrganizationDetailScreen: React.FC = () => {
           ].map((tab) => (
             <TouchableOpacity
               key={tab.key}
-              style={[styles.tab, selectedTab === tab.key && styles.activeTab]}
+              style={StyleSheet.flatten([styles.tab, selectedTab === tab.key && styles.activeTab])}
               onPress={() => setSelectedTab(tab.key as any)}
             >
               <Text 
-                style={[styles.tabText, selectedTab === tab.key && styles.activeTabText]}
+                style={StyleSheet.flatten([styles.tabText, selectedTab === tab.key && styles.activeTabText])}
                 numberOfLines={1}
                 adjustsFontSizeToFit={true}
                 minimumFontScale={0.8}
@@ -641,7 +641,7 @@ export const OrganizationDetailScreen: React.FC = () => {
 
         {/* 危險區域 */}
         {!isEditing && (
-          <View style={[styles.section, styles.dangerSection]}>
+          <View style={StyleSheet.flatten([styles.section, styles.dangerSection])}>
             <Text style={styles.dangerTitle}>危險區域</Text>
             <TouchableOpacity
               style={styles.dangerButton}

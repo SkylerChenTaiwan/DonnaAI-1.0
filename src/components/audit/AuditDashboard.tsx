@@ -164,7 +164,7 @@ export const AuditDashboard: React.FC<AuditDashboardProps> = ({
    * 渲染統計卡片
    */
   const renderStatCard = (title: string, value: string | number, icon: string, color: string, trend?: string) => (
-    <View style={[styles.statCard, { borderLeftColor: color }]}>
+    <View style={StyleSheet.flatten([styles.statCard, { borderLeftColor: color }])}>
       <View style={styles.statCardHeader}>
         <Icon name={icon} size={24} color={color} />
         <Text style={styles.statCardTitle}>{title}</Text>
@@ -176,7 +176,7 @@ export const AuditDashboard: React.FC<AuditDashboardProps> = ({
             size={16} 
             color={trend === 'up' ? '#F44336' : '#4CAF50'} 
           />
-          <Text style={[styles.statCardTrendText, { color: trend === 'up' ? '#F44336' : '#4CAF50' }]}>
+          <Text style={StyleSheet.flatten([styles.statCardTrendText, { color: trend === 'up' ? '#F44336' : '#4CAF50' }])}>
             {trend === 'up' ? '增加' : '減少'}
           </Text>
         </View>
@@ -334,7 +334,7 @@ export const AuditDashboard: React.FC<AuditDashboardProps> = ({
             style={styles.anomalyItem}
             onPress={() => onAnomalyClick?.(anomaly)}
           >
-            <View style={[styles.anomalyIndicator, { backgroundColor: getRiskColor(anomaly.severity) }]} />
+            <View style={StyleSheet.flatten([styles.anomalyIndicator, { backgroundColor: getRiskColor(anomaly.severity) }])} />
             <View style={styles.anomalyContent}>
               <Text style={styles.anomalyType}>{anomaly.type}</Text>
               <Text style={styles.anomalyDescription}>{anomaly.description}</Text>
@@ -363,7 +363,7 @@ export const AuditDashboard: React.FC<AuditDashboardProps> = ({
       <View style={styles.sectionContainer}>
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>未解決事件</Text>
-          <View style={[styles.alertBadge, { backgroundColor: '#F44336' }]}>
+          <View style={StyleSheet.flatten([styles.alertBadge, { backgroundColor: '#F44336' }])}>
             <Text style={styles.alertBadgeText}>{incidents.length}</Text>
           </View>
         </View>
@@ -375,7 +375,7 @@ export const AuditDashboard: React.FC<AuditDashboardProps> = ({
           >
             <View style={styles.incidentHeader}>
               <Text style={styles.incidentType}>{incident.type}</Text>
-              <View style={[styles.severityBadge, { backgroundColor: getRiskColor(incident.severity) }]}>
+              <View style={StyleSheet.flatten([styles.severityBadge, { backgroundColor: getRiskColor(incident.severity) }])}>
                 <Text style={styles.severityBadgeText}>{incident.severity}</Text>
               </View>
             </View>
@@ -444,17 +444,17 @@ export const AuditDashboard: React.FC<AuditDashboardProps> = ({
             {(['24h', '7d', '30d'] as const).map((period) => (
               <TouchableOpacity
                 key={period}
-                style={[
+                style={StyleSheet.flatten([
                   styles.periodButton,
                   selectedPeriod === period && styles.periodButtonActive,
-                ]}
+                ])}
                 onPress={() => setSelectedPeriod(period)}
               >
                 <Text
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.periodButtonText,
                     selectedPeriod === period && styles.periodButtonTextActive,
-                  ]}
+                  ])}
                 >
                   {period === '24h' ? '24 小時' : period === '7d' ? '7 天' : '30 天'}
                 </Text>
@@ -491,10 +491,10 @@ export const AuditDashboard: React.FC<AuditDashboardProps> = ({
 
       {/* 風險評估摘要 */}
       {riskAssessment && (
-        <View style={[styles.riskSummary, { backgroundColor: getRiskBackgroundColor(riskAssessment.overallRisk) }]}>
+        <View style={StyleSheet.flatten([styles.riskSummary, { backgroundColor: getRiskBackgroundColor(riskAssessment.overallRisk) }])}>
           <View style={styles.riskSummaryHeader}>
             <Text style={styles.riskSummaryTitle}>整體風險評估</Text>
-            <View style={[styles.riskBadge, { backgroundColor: getRiskColor(riskAssessment.overallRisk) }]}>
+            <View style={StyleSheet.flatten([styles.riskBadge, { backgroundColor: getRiskColor(riskAssessment.overallRisk) }])}>
               <Text style={styles.riskBadgeText}>{riskAssessment.overallRisk.toUpperCase()}</Text>
             </View>
           </View>

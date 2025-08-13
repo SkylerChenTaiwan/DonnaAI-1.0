@@ -371,19 +371,19 @@ export const UserManagementScreen: React.FC = () => {
             </Text>
             <View style={styles.actionButtons}>
               <TouchableOpacity 
-                style={[styles.actionButton, styles.enableButton]}
+                style={StyleSheet.flatten([styles.actionButton, styles.enableButton])}
                 onPress={() => handleBatchAction('enable')}
               >
                 <Text style={styles.actionButtonText}>啟用</Text>
               </TouchableOpacity>
               <TouchableOpacity 
-                style={[styles.actionButton, styles.disableButton]}
+                style={StyleSheet.flatten([styles.actionButton, styles.disableButton])}
                 onPress={() => handleBatchAction('disable')}
               >
                 <Text style={styles.actionButtonText}>停用</Text>
               </TouchableOpacity>
               <TouchableOpacity 
-                style={[styles.actionButton, styles.deleteButton]}
+                style={StyleSheet.flatten([styles.actionButton, styles.deleteButton])}
                 onPress={() => handleBatchAction('delete')}
               >
                 <Text style={styles.deleteButtonText}>刪除</Text>

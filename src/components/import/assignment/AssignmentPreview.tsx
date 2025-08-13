@@ -60,28 +60,28 @@ const AssignmentPreview: React.FC<AssignmentPreviewProps> = ({
             <View key={user.userId} style={styles.chartRow}>
               <View style={styles.chartLabel}>
                 <Text 
-                  style={[styles.chartUserName, { color: colors.text }]}
+                  style={StyleSheet.flatten([styles.chartUserName, { color: colors.text }])}
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
                   {user.userName}
                 </Text>
-                <Text style={[styles.chartCount, { color: colors.gray500 }]}>
+                <Text style={StyleSheet.flatten([styles.chartCount, { color: colors.gray500 }])}>
                   {user.assignedCount}
                 </Text>
               </View>
               
-              <View style={[styles.chartBarContainer, { backgroundColor: colors.gray100 }]}>
+              <View style={StyleSheet.flatten([styles.chartBarContainer, { backgroundColor: colors.gray100 }])}>
                 <View
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.chartBar,
                     {
                       width: `${percentage}%`,
                       backgroundColor: getBarColor(index, colors)
                     }
-                  ]}
+                  ])}
                 />
-                <Text style={[styles.chartPercentage, { color: colors.gray600 }]}>
+                <Text style={StyleSheet.flatten([styles.chartPercentage, { color: colors.gray600 }])}>
                   {user.workloadPercentage.toFixed(1)}%
                 </Text>
               </View>
@@ -91,26 +91,26 @@ const AssignmentPreview: React.FC<AssignmentPreviewProps> = ({
         
         {/* 未分配資料 */}
         {unassigned > 0 && (
-          <View style={[styles.unassignedRow, { borderTopColor: colors.gray200 }]}>
+          <View style={StyleSheet.flatten([styles.unassignedRow, { borderTopColor: colors.gray200 }])}>
             <View style={styles.chartLabel}>
-              <Text style={[styles.chartUserName, { color: colors.gray500 }]}>
+              <Text style={StyleSheet.flatten([styles.chartUserName, { color: colors.gray500 }])}>
                 未分配
               </Text>
-              <Text style={[styles.chartCount, { color: colors.error }]}>
+              <Text style={StyleSheet.flatten([styles.chartCount, { color: colors.error }])}>
                 {unassigned}
               </Text>
             </View>
-            <View style={[styles.chartBarContainer, { backgroundColor: colors.gray100 }]}>
+            <View style={StyleSheet.flatten([styles.chartBarContainer, { backgroundColor: colors.gray100 }])}>
               <View
-                style={[
+                style={StyleSheet.flatten([
                   styles.chartBar,
                   {
                     width: `${(unassigned / totalData) * 100}%`,
                     backgroundColor: colors.gray300
                   }
-                ]}
+                ])}
               />
-              <Text style={[styles.chartPercentage, { color: colors.gray600 }]}>
+              <Text style={StyleSheet.flatten([styles.chartPercentage, { color: colors.gray600 }])}>
                 {((unassigned / totalData) * 100).toFixed(1)}%
               </Text>
             </View>
@@ -130,7 +130,7 @@ const AssignmentPreview: React.FC<AssignmentPreviewProps> = ({
           return (
             <View 
               key={user.userId}
-              style={[styles.userCard, { backgroundColor: colors.white, borderColor: colors.gray200 }]}
+              style={StyleSheet.flatten([styles.userCard, { backgroundColor: colors.white, borderColor: colors.gray200 }])}
             >
               {/* 用戶標題 */}
               <TouchableOpacity
@@ -140,32 +140,32 @@ const AssignmentPreview: React.FC<AssignmentPreviewProps> = ({
               >
                 <View style={styles.userHeaderInfo}>
                   <View 
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.userAvatar,
                       { backgroundColor: withAlpha(colors.primary, 0.125) }
-                    ]}
+                    ])}
                   >
-                    <Text style={[styles.userAvatarText, { color: colors.primary }]}>
+                    <Text style={StyleSheet.flatten([styles.userAvatarText, { color: colors.primary }])}>
                       {user.userName[0].toUpperCase()}
                     </Text>
                   </View>
                   
                   <View style={styles.userInfo}>
-                    <Text style={[styles.userName, { color: colors.text }]}>
+                    <Text style={StyleSheet.flatten([styles.userName, { color: colors.text }])}>
                       {user.userName}
                     </Text>
-                    <Text style={[styles.userEmail, { color: colors.gray500 }]}>
+                    <Text style={StyleSheet.flatten([styles.userEmail, { color: colors.gray500 }])}>
                       {user.userEmail}
                     </Text>
                   </View>
                 </View>
                 
                 <View style={styles.userStats}>
-                  <View style={[styles.statBadge, { backgroundColor: withAlpha(colors.primary, 0.063) }]}>
-                    <Text style={[styles.statNumber, { color: colors.primary }]}>
+                  <View style={StyleSheet.flatten([styles.statBadge, { backgroundColor: withAlpha(colors.primary, 0.063) }])}>
+                    <Text style={StyleSheet.flatten([styles.statNumber, { color: colors.primary }])}>
                       {user.assignedCount}
                     </Text>
-                    <Text style={[styles.statLabel, { color: colors.primary }]}>
+                    <Text style={StyleSheet.flatten([styles.statLabel, { color: colors.primary }])}>
                       筆資料
                     </Text>
                   </View>
@@ -180,17 +180,17 @@ const AssignmentPreview: React.FC<AssignmentPreviewProps> = ({
               
               {/* 展開的詳細資料 */}
               {isExpanded && (
-                <View style={[styles.userDetails, { borderTopColor: colors.gray100 }]}>
-                  <Text style={[styles.detailsTitle, { color: colors.gray700 }]}>
+                <View style={StyleSheet.flatten([styles.userDetails, { borderTopColor: colors.gray100 }])}>
+                  <Text style={StyleSheet.flatten([styles.detailsTitle, { color: colors.gray700 }])}>
                     分配預覽（前 5 筆）
                   </Text>
                   
                   {user.assignedItems.slice(0, 5).map((item, index) => (
                     <View 
                       key={index}
-                      style={[styles.assignedItem, { backgroundColor: colors.gray50 }]}
+                      style={StyleSheet.flatten([styles.assignedItem, { backgroundColor: colors.gray50 }])}
                     >
-                      <Text style={[styles.itemIndex, { color: colors.gray500 }]}>
+                      <Text style={StyleSheet.flatten([styles.itemIndex, { color: colors.gray500 }])}>
                         #{item.rowIndex + 1}
                       </Text>
                       
@@ -198,7 +198,7 @@ const AssignmentPreview: React.FC<AssignmentPreviewProps> = ({
                         {Object.entries(item.rowData).slice(0, 3).map(([key, value]) => (
                           <Text 
                             key={key}
-                            style={[styles.itemField, { color: colors.gray600 }]}
+                            style={StyleSheet.flatten([styles.itemField, { color: colors.gray600 }])}
                             numberOfLines={1}
                           >
                             {key}: {value}
@@ -208,18 +208,18 @@ const AssignmentPreview: React.FC<AssignmentPreviewProps> = ({
                       
                       {item.matchConfidence && (
                         <View 
-                          style={[
+                          style={StyleSheet.flatten([
                             styles.confidenceBadge,
                             { 
                               backgroundColor: withAlpha(getConfidenceColor(item.matchConfidence, colors), 0.125)
                             }
-                          ]}
+                          ])}
                         >
                           <Text
-                            style={[
+                            style={StyleSheet.flatten([
                               styles.confidenceText,
                               { color: getConfidenceColor(item.matchConfidence, colors) }
-                            ]}
+                            ])}
                           >
                             {item.matchConfidence}%
                           </Text>
@@ -229,7 +229,7 @@ const AssignmentPreview: React.FC<AssignmentPreviewProps> = ({
                   ))}
                   
                   {user.assignedCount > 5 && (
-                    <Text style={[styles.moreItems, { color: colors.gray500 }]}>
+                    <Text style={StyleSheet.flatten([styles.moreItems, { color: colors.gray500 }])}>
                       還有 {user.assignedCount - 5} 筆資料...
                     </Text>
                   )}
@@ -242,13 +242,13 @@ const AssignmentPreview: React.FC<AssignmentPreviewProps> = ({
         {/* 未分配資料卡片 */}
         {unassigned > 0 && (
           <View 
-            style={[
+            style={StyleSheet.flatten([
               styles.unassignedCard,
               { backgroundColor: withAlpha(colors.error, 0.063), borderColor: withAlpha(colors.error, 0.188) }
-            ]}
+            ])}
           >
             <MaterialIcon name="warning" size={20} color={colors.error} />
-            <Text style={[styles.unassignedText, { color: colors.error }]}>
+            <Text style={StyleSheet.flatten([styles.unassignedText, { color: colors.error }])}>
               有 {unassigned} 筆資料未能分配給任何用戶
             </Text>
           </View>
@@ -260,14 +260,14 @@ const AssignmentPreview: React.FC<AssignmentPreviewProps> = ({
   return (
     <View style={styles.container}>
       {/* 視圖切換 */}
-      <View style={[styles.viewSelector, { backgroundColor: colors.gray100 }]}>
+      <View style={StyleSheet.flatten([styles.viewSelector, { backgroundColor: colors.gray100 }])}>
         <TouchableOpacity
-          style={[
+          style={StyleSheet.flatten([
             styles.viewOption,
             {
               backgroundColor: selectedView === 'chart' ? colors.white : 'transparent'
             }
-          ]}
+          ])}
           onPress={() => setSelectedView('chart')}
           activeOpacity={0.7}
         >
@@ -277,22 +277,22 @@ const AssignmentPreview: React.FC<AssignmentPreviewProps> = ({
             color={selectedView === 'chart' ? colors.primary : colors.gray500}
           />
           <Text
-            style={[
+            style={StyleSheet.flatten([
               styles.viewOptionText,
               { color: selectedView === 'chart' ? colors.primary : colors.gray500 }
-            ]}
+            ])}
           >
             圖表視圖
           </Text>
         </TouchableOpacity>
         
         <TouchableOpacity
-          style={[
+          style={StyleSheet.flatten([
             styles.viewOption,
             {
               backgroundColor: selectedView === 'list' ? colors.white : 'transparent'
             }
-          ]}
+          ])}
           onPress={() => setSelectedView('list')}
           activeOpacity={0.7}
         >
@@ -302,10 +302,10 @@ const AssignmentPreview: React.FC<AssignmentPreviewProps> = ({
             color={selectedView === 'list' ? colors.primary : colors.gray500}
           />
           <Text
-            style={[
+            style={StyleSheet.flatten([
               styles.viewOptionText,
               { color: selectedView === 'list' ? colors.primary : colors.gray500 }
-            ]}
+            ])}
           >
             詳細列表
           </Text>

@@ -84,7 +84,7 @@ export const SalespersonDashboard: React.FC = () => {
         <View style={styles.statsContainer}>
           {stats.map((stat, index) => (
             <View key={index} style={styles.statCard}>
-              <Text style={[styles.statValue, { color: stat.color }]}>
+              <Text style={StyleSheet.flatten([styles.statValue, { color: stat.color }])}>
                 {stat.value}
               </Text>
               <Text style={styles.statLabel}>{stat.label}</Text>
@@ -103,7 +103,7 @@ export const SalespersonDashboard: React.FC = () => {
                 onPress={action.onPress}
                 activeOpacity={0.7}
               >
-                <View style={[styles.actionIcon, { backgroundColor: `${action.color}15` }]}>
+                <View style={StyleSheet.flatten([styles.actionIcon, { backgroundColor: `${action.color}15` }])}>
                   <Icon
                     name={action.icon}
                     size={24}

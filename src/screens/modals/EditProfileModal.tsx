@@ -182,7 +182,7 @@ export const EditProfileModal: React.FC = () => {
           <View style={styles.formGroup}>
             <Text style={styles.label}>姓名 *</Text>
             <TextInput
-              style={[styles.input, errors.name ? styles.inputError : null]}
+              style={StyleSheet.flatten([styles.input, errors.name ? styles.inputError : null])}
               value={formData.name}
               onChangeText={(text) => {
                 setFormData(prev => ({ ...prev, name: text }));
@@ -198,7 +198,7 @@ export const EditProfileModal: React.FC = () => {
           <View style={styles.formGroup}>
             <Text style={styles.label}>電子郵件 *</Text>
             <TextInput
-              style={[styles.input, errors.email ? styles.inputError : null]}
+              style={StyleSheet.flatten([styles.input, errors.email ? styles.inputError : null])}
               value={formData.email}
               onChangeText={(text) => {
                 setFormData(prev => ({ ...prev, email: text }));
@@ -222,7 +222,7 @@ export const EditProfileModal: React.FC = () => {
             <View style={styles.formGroup}>
               <Text style={styles.label}>目前密碼 *</Text>
               <TextInput
-                style={[styles.input, errors.currentPassword ? styles.inputError : null]}
+                style={StyleSheet.flatten([styles.input, errors.currentPassword ? styles.inputError : null])}
                 value={formData.currentPassword}
                 onChangeText={(text) => {
                   setFormData(prev => ({ ...prev, currentPassword: text }));

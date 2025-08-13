@@ -584,18 +584,18 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
                       </div>
                     ) : (
                       <TouchableOpacity
-                        style={[
+                        style={StyleSheet.flatten([
                           styles.keyFieldDropdown,
                           !selectedKeyFields[file.id] && !file.keyField && styles.keyFieldDropdownWarning
-                        ]}
+                        ])}
                         onPress={() => setSelectedFileId(
                           selectedFileId === file.id ? null : file.id
                         )}
                       >
-                        <Text style={[
+                        <Text style={StyleSheet.flatten([
                           styles.keyFieldValue,
                           !selectedKeyFields[file.id] && !file.keyField && styles.keyFieldValueWarning
-                        ]}>
+                        ])}>
                           {selectedKeyFields[file.id] || file.keyField || '請選擇關鍵欄位'}
                         </Text>
                         <Icon name="chevron-down" size={16} />
@@ -664,10 +664,10 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
                             setSelectedFileId(null);
                           }}
                         >
-                          <Text style={[
+                          <Text style={StyleSheet.flatten([
                             styles.keyFieldOptionText,
                             selectedKeyFields[file.id] === header && styles.keyFieldOptionTextSelected
-                          ]}>
+                          ])}>
                             {header}
                           </Text>
                           {keyFieldCandidates[file.id]?.find(c => c.field === header) && (
@@ -800,16 +800,16 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
               {(['left', 'inner', 'outer'] as MergeStrategy[]).map((strategy) => (
                 <TouchableOpacity
                   key={strategy}
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.strategyButton,
                     mergeStrategy === strategy && styles.strategyButtonActive,
-                  ]}
+                  ])}
                   onPress={() => setMergeStrategy(strategy)}
                 >
-                  <Text style={[
+                  <Text style={StyleSheet.flatten([
                     styles.strategyButtonText,
                     mergeStrategy === strategy && styles.strategyButtonTextActive,
-                  ]}>
+                  ])}>
                     {strategy === 'left' ? '左連接' : 
                      strategy === 'inner' ? '內連接' : '外連接'}
                   </Text>
@@ -820,10 +820,10 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
           <TouchableOpacity
             onPress={handleMerge}
             disabled={loading || files.length < 2}
-            style={[
+            style={StyleSheet.flatten([
               styles.mergeButton,
               (loading || files.length < 2) && styles.mergeButtonDisabled
-            ]}
+            ])}
           >
             <Text style={styles.mergeButtonText}>
               {showMergePreview ? "重新合併" : "預覽及合併"}
@@ -879,11 +879,11 @@ const Button: React.FC<any> = ({ title, onPress, disabled, style }) => {
   
   return (
     <TouchableOpacity
-      style={[
+      style={StyleSheet.flatten([
         styles.button,
         disabled && styles.buttonDisabled,
         style,
-      ]}
+      ])}
       onPress={onPress}
       disabled={disabled}
     >

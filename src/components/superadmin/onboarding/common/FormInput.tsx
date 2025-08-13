@@ -85,11 +85,11 @@ export const FormInput: React.FC<FormInputProps> = ({
       </View>
       
       <TextInput
-        style={[
+        style={StyleSheet.flatten([
           styles.input,
           error && styles.inputError,
           style,
-        ]}
+        ])}
         placeholderTextColor={DesignSystem.colors.text.tertiary}
         {...props}
       />

@@ -69,15 +69,15 @@ export const TableRow: React.FC<TableRowProps> = memo(({
       {/* Multi-select checkbox */}
       {multiSelectMode && (
         <TouchableOpacity
-          style={[tableStyles.cell, { width: 40 }]}
+          style={StyleSheet.flatten([tableStyles.cell, { width: 40 }])}
           onPress={handleCheckboxToggle}
           activeOpacity={0.7}
         >
           <View
-            style={[
+            style={StyleSheet.flatten([
               tableStyles.checkbox,
               isSelected && tableStyles.checkboxChecked,
-            ]}
+            ])}
           >
             {isSelected && (
               <Icon name="checkmark" size={12} color="#FFFFFF" />

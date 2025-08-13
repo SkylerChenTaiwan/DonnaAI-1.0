@@ -206,15 +206,15 @@ export const UserDataPreviewTable: React.FC<UserDataPreviewTableProps> = ({
       onEdit={onUserEdit}
       onSelect={onUserSelect}
       showSelection={showSelection}
-      style={[
+      style={StyleSheet.flatten([
         styles.userRow,
         index === filteredUsers.length - 1 && styles.userRowLast
-      ]}
+      ])}
     />
   ), [onUserEdit, onUserSelect, showSelection, filteredUsers.length]);
 
   return (
-    <View style={[styles.container, style]}>
+    <View style={StyleSheet.flatten([styles.container, style])}>
       {/* 統計資訊 */}
       <View style={styles.statsContainer}>
         <Text style={styles.statsTitle}>匯入統計</Text>
@@ -224,19 +224,19 @@ export const UserDataPreviewTable: React.FC<UserDataPreviewTableProps> = ({
             <Text style={styles.statLabel}>總計</Text>
           </View>
           <View style={styles.statItem}>
-            <Text style={[styles.statNumber, styles.statNumberValid]}>{stats.valid}</Text>
+            <Text style={StyleSheet.flatten([styles.statNumber, styles.statNumberValid])}>{stats.valid}</Text>
             <Text style={styles.statLabel}>有效</Text>
           </View>
           <View style={styles.statItem}>
-            <Text style={[styles.statNumber, styles.statNumberInvalid]}>{stats.invalid}</Text>
+            <Text style={StyleSheet.flatten([styles.statNumber, styles.statNumberInvalid])}>{stats.invalid}</Text>
             <Text style={styles.statLabel}>無效</Text>
           </View>
           <View style={styles.statItem}>
-            <Text style={[styles.statNumber, styles.statNumberDuplicate]}>{stats.duplicates}</Text>
+            <Text style={StyleSheet.flatten([styles.statNumber, styles.statNumberDuplicate])}>{stats.duplicates}</Text>
             <Text style={styles.statLabel}>重複</Text>
           </View>
           <View style={styles.statItem}>
-            <Text style={[styles.statNumber, styles.statNumberSelected]}>{stats.selected}</Text>
+            <Text style={StyleSheet.flatten([styles.statNumber, styles.statNumberSelected])}>{stats.selected}</Text>
             <Text style={styles.statLabel}>已選</Text>
           </View>
         </View>
@@ -253,10 +253,10 @@ export const UserDataPreviewTable: React.FC<UserDataPreviewTableProps> = ({
           <TouchableOpacity
             key={option.key}
             onPress={() => setCurrentFilter(option.key)}
-            style={[
+            style={StyleSheet.flatten([
               styles.filterChip,
               currentFilter === option.key && styles.filterChipActive
-            ]}
+            ])}
           >
             <Icon
               name={option.icon}
@@ -267,16 +267,16 @@ export const UserDataPreviewTable: React.FC<UserDataPreviewTableProps> = ({
                   : DesignSystem.colors.text.secondary
               }
             />
-            <Text style={[
+            <Text style={StyleSheet.flatten([
               styles.filterChipText,
               currentFilter === option.key && styles.filterChipTextActive
-            ]}>
+            ])}>
               {option.label}
             </Text>
-            <Text style={[
+            <Text style={StyleSheet.flatten([
               styles.filterChipCount,
               currentFilter === option.key && styles.filterChipCountActive
-            ]}>
+            ])}>
               {option.count}
             </Text>
           </TouchableOpacity>
@@ -370,7 +370,7 @@ export const UserDataPreviewTable: React.FC<UserDataPreviewTableProps> = ({
       )}
 
       {/* 用戶列表 */}
-      <View style={[styles.tableContainer, { maxHeight }]}>
+      <View style={StyleSheet.flatten([styles.tableContainer, { maxHeight }])}>
         {filteredUsers.length > 0 ? (
           <FlashList
             data={filteredUsers}

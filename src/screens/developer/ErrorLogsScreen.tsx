@@ -104,10 +104,10 @@ export const ErrorLogsScreen: React.FC = () => {
         activeOpacity={0.7}
       >
         <View style={styles.errorHeader}>
-          <View style={[
+          <View style={StyleSheet.flatten([
             styles.severityIndicator,
             { backgroundColor: getSeverityColor(item.severity) }
-          ]} />
+          ])} />
           <View style={styles.errorInfo}>
             <Text style={styles.errorMessage} numberOfLines={2}>
               {item.error.message}
@@ -159,10 +159,10 @@ export const ErrorLogsScreen: React.FC = () => {
           <Text style={styles.statLabel}>24小時內</Text>
         </View>
         <View style={styles.statItem}>
-          <Text style={[
+          <Text style={StyleSheet.flatten([
             styles.statValue,
             { color: getSeverityColor('critical') }
-          ]}>
+          ])}>
             {stats.bySeverity.critical}
           </Text>
           <Text style={styles.statLabel}>關鍵錯誤</Text>
@@ -185,10 +185,10 @@ export const ErrorLogsScreen: React.FC = () => {
           onPress={handleClearLogs}
           disabled={logs.length === 0}
         >
-          <Text style={[
+          <Text style={StyleSheet.flatten([
             styles.headerButtonText,
             logs.length === 0 && styles.disabledText
-          ]}>
+          ])}>
             清除
           </Text>
         </TouchableOpacity>

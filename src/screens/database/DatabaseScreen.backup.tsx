@@ -359,7 +359,7 @@ export const DatabaseScreen: React.FC = () => {
         }
       })();
       return (
-        <View style={[{ borderRadius: 4, paddingHorizontal: 8, paddingVertical: 4 }, statusStyle]}>
+        <View style={StyleSheet.flatten([{ borderRadius: 4, paddingHorizontal: 8, paddingVertical: 4 }, statusStyle])}>
           <Text style={{ fontSize: 12, fontWeight: '500', color: '#1C1C1E' }}>
             {getTaskStatusText(value)}
           </Text>
@@ -955,10 +955,10 @@ export const DatabaseScreen: React.FC = () => {
         {tabs.map((tab) => (
           <TouchableOpacity
             key={tab.id}
-            style={[
+            style={StyleSheet.flatten([
               styles.desktopTab,
               activeTab === tab.id && styles.activeDesktopTab,
-            ]}
+            ])}
             onPress={() => {
               setActiveTab(tab.id);
               // 切換 Tab 時清除選擇狀態和編輯模式
@@ -970,10 +970,10 @@ export const DatabaseScreen: React.FC = () => {
             activeOpacity={0.7}
           >
             <Text
-              style={[
+              style={StyleSheet.flatten([
                 styles.desktopTabText,
                 activeTab === tab.id && styles.activeDesktopTabText,
-              ]}
+              ])}
               numberOfLines={1}
             >
               {tab.title}
@@ -1018,10 +1018,10 @@ export const DatabaseScreen: React.FC = () => {
             {tabs.map((tab) => (
               <TouchableOpacity
                 key={tab.id}
-                style={[
+                style={StyleSheet.flatten([
                   styles.tab,
                   activeTab === tab.id && styles.activeTab,
-                ]}
+                ])}
                 onPress={() => {
                   setActiveTab(tab.id);
                   // 切換 Tab 時清除選擇狀態和編輯模式
@@ -1033,10 +1033,10 @@ export const DatabaseScreen: React.FC = () => {
                 activeOpacity={0.7}
               >
                 <Text
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.tabText,
                     activeTab === tab.id && styles.activeTabText,
-                  ]}
+                  ])}
                   numberOfLines={1}
                 >
                   {tab.title}
@@ -1078,10 +1078,10 @@ export const DatabaseScreen: React.FC = () => {
           />
           {/* 行內編輯模式切換按鈕 - 移到最右方 */}
           <TouchableOpacity
-            style={[
+            style={StyleSheet.flatten([
               styles.iconButton,
               isEditMode && styles.iconButtonActive,
-            ]}
+            ])}
             onPress={() => {
               if (!user) {
                 Alert.alert('無權限', '您沒有編輯資料的權限');
@@ -1246,7 +1246,7 @@ export const DatabaseScreen: React.FC = () => {
               <Text style={styles.batchActionButtonText}>匯出</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.batchActionButton, styles.cancelButton]}
+              style={StyleSheet.flatten([styles.batchActionButton, styles.cancelButton])}
               onPress={() => {
                 setSelectedItems([]);
                 setMultiSelectMode(false);

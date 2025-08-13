@@ -37,7 +37,7 @@ export const ManagerDashboard: React.FC = () => {
   const useResponsiveLayout = isWeb && (isDesktop || isTablet);
   
   const headerContent = (
-    <View style={[styles.header, useResponsiveLayout && styles.webHeader]}>
+    <View style={StyleSheet.flatten([styles.header, useResponsiveLayout && styles.webHeader])}>
       <View style={styles.userInfo}>
         <Text style={styles.userName}>{user?.name || authUser?.displayName || '使用者'}</Text>
         <Text style={styles.userEmail}>{user?.email || authUser?.email}</Text>
@@ -55,7 +55,7 @@ export const ManagerDashboard: React.FC = () => {
       {/* 快速操作按鈕 - 使用深灰色 */}
       <View style={styles.quickActions}>
         <TouchableOpacity 
-          style={[styles.quickActionButton, styles.primaryButton]}
+          style={StyleSheet.flatten([styles.quickActionButton, styles.primaryButton])}
           onPress={() => setShowAnnouncementModal(true)}
           activeOpacity={0.7}
         >
@@ -64,7 +64,7 @@ export const ManagerDashboard: React.FC = () => {
         </TouchableOpacity>
         
         <TouchableOpacity 
-          style={[styles.quickActionButton, styles.primaryButton]}
+          style={StyleSheet.flatten([styles.quickActionButton, styles.primaryButton])}
           onPress={() => setShowTaskAssignmentModal(true)}
           activeOpacity={0.7}
         >

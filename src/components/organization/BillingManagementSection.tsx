@@ -182,7 +182,7 @@ export const BillingManagementSection: React.FC<BillingManagementSectionProps> =
             <Text style={styles.billingValue}>{billingSummary.billableUsers}</Text>
           </View>
           
-          <View style={[styles.billingRow, styles.totalRow]}>
+          <View style={StyleSheet.flatten([styles.billingRow, styles.totalRow])}>
             <Text style={styles.totalLabel}>月費總額</Text>
             <Text style={styles.totalValue}>NT$ {billingSummary.monthlyAmount.toLocaleString()}</Text>
           </View>
@@ -263,7 +263,7 @@ export const BillingManagementSection: React.FC<BillingManagementSectionProps> =
               
               <View style={styles.historyAmount}>
                 <Text style={styles.amountText}>NT$ {record.totalAmount.toLocaleString()}</Text>
-                <View style={[styles.statusBadge, { backgroundColor: getStatusColor(record.status) }]}>
+                <View style={StyleSheet.flatten([styles.statusBadge, { backgroundColor: getStatusColor(record.status) }])}>
                   <Text style={styles.statusText}>{getStatusText(record.status)}</Text>
                 </View>
               </View>

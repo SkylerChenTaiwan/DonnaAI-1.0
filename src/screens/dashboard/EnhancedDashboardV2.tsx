@@ -207,8 +207,8 @@ export const EnhancedDashboardV2: React.FC = () => {
       case 'overdue_tasks':
         return (
           <View>
-            <View style={[styles.sectionHeader, styles.overdueHeader]}>
-              <Text style={[styles.sectionTitle, styles.overdueTitle]}>
+            <View style={StyleSheet.flatten([styles.sectionHeader, styles.overdueHeader])}>
+              <Text style={StyleSheet.flatten([styles.sectionTitle, styles.overdueTitle])}>
                 過期任務 ({item.tasks.length})
               </Text>
             </View>
@@ -317,10 +317,10 @@ export const EnhancedDashboardV2: React.FC = () => {
           onPress={() => navigation.navigate('TaskDetail', { taskId: task.id })}
           activeOpacity={0.7}
         >
-          <Text style={[
+          <Text style={StyleSheet.flatten([
             styles.taskTitle,
             task.status === 'completed' && styles.taskCompleted
-          ]}>
+          ])}>
             {task.title}
           </Text>
           <View style={styles.taskMeta}>
@@ -333,7 +333,7 @@ export const EnhancedDashboardV2: React.FC = () => {
               </Text>
             )}
             {task.priority !== 'medium' && (
-              <View style={[styles.priorityBadge, { backgroundColor: priorityColor }]}>
+              <View style={StyleSheet.flatten([styles.priorityBadge, { backgroundColor: priorityColor }])}>
                 <Text style={styles.priorityText}>
                   {task.priority === 'high' ? '高' : '低'}
                 </Text>
@@ -411,7 +411,7 @@ export const EnhancedDashboardV2: React.FC = () => {
   // Web 桌面/平板版使用響應式佈局
   if (useResponsiveLayout) {
     const headerContent = (
-      <View style={[styles.header, styles.webHeader]}>
+      <View style={StyleSheet.flatten([styles.header, styles.webHeader])}>
         <View style={styles.userInfo}>
           <Text style={styles.userName}>{user?.name || authUser?.displayName || '使用者'}</Text>
           <Text style={styles.userEmail}>{user?.email || authUser?.email}</Text>

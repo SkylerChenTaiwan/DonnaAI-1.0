@@ -110,13 +110,13 @@ export const ActionPopover = ({
       <View style={styles.container}>
         <TouchableWithoutFeedback onPress={onClose}>
           <Animated.View 
-            style={[
+            style={StyleSheet.flatten([
               styles.overlay, 
               { 
                 opacity,
                 bottom: panelBottom || (tabBarHeight + insets.bottom)
               }
-            ]} 
+            ])} 
           />
         </TouchableWithoutFeedback>
         

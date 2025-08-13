@@ -211,7 +211,7 @@ export const PermissionsManagementSection: React.FC<PermissionsManagementSection
         ].map((tab) => (
           <TouchableOpacity
             key={tab.key}
-            style={[styles.tab, activeTab === tab.key && styles.activeTab]}
+            style={StyleSheet.flatten([styles.tab, activeTab === tab.key && styles.activeTab])}
             onPress={() => setActiveTab(tab.key as any)}
           >
             <Icon
@@ -219,7 +219,7 @@ export const PermissionsManagementSection: React.FC<PermissionsManagementSection
               size={16}
               color={activeTab === tab.key ? DesignSystem.colors.text.inverse : DesignSystem.colors.text.secondary}
             />
-            <Text style={[styles.tabText, activeTab === tab.key && styles.activeTabText]}>
+            <Text style={StyleSheet.flatten([styles.tabText, activeTab === tab.key && styles.activeTabText])}>
               {tab.label}
             </Text>
           </TouchableOpacity>

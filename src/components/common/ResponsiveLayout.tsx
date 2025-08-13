@@ -49,14 +49,14 @@ export const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({
   if (!isWeb) {
     return scrollable ? (
       <ScrollView 
-        style={[styles.nativeScrollView, style]}
+        style={StyleSheet.flatten([styles.nativeScrollView, style])}
         contentContainerStyle={[styles.nativeContent, contentStyle]}
         showsVerticalScrollIndicator={false}
       >
         {children}
       </ScrollView>
     ) : (
-      <View style={[styles.nativeContainer, style]}>
+      <View style={StyleSheet.flatten([styles.nativeContainer, style])}>
         {children}
       </View>
     );
@@ -64,7 +64,7 @@ export const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({
   
   // Web 平台響應式佈局
   const containerContent = (
-    <View style={[
+    <View style={StyleSheet.flatten([
       styles.contentWrapper,
       { maxWidth },
       padding && responsive({
@@ -73,7 +73,7 @@ export const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({
         desktop: styles.paddingDesktop,
         default: styles.paddingMobile }),
       contentStyle,
-    ]}>
+    ])}>
       {children}
     </View>
   );
@@ -93,7 +93,7 @@ export const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({
   // 桌面版側邊欄佈局
   if (isDesktop && sidebar) {
     return (
-      <View style={[styles.container, webStyles.sidebarLayout, style]}>
+      <View style={StyleSheet.flatten([styles.container, webStyles.sidebarLayout, style])}>
         <View style={webStyles.sidebar}>{sidebar}</View>
         <View style={webStyles.mainContent}>
           {header && <View style={styles.header}>{header}</View>}
@@ -105,7 +105,7 @@ export const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({
   
   // 平板/手機版垂直佈局
   return (
-    <View style={[styles.container, style]}>
+    <View style={StyleSheet.flatten([styles.container, style])}>
       {header && <View style={styles.header}>{header}</View>}
       {mainContent}
     </View>

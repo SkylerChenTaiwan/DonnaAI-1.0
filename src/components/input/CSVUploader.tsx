@@ -330,14 +330,14 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
                 </View>
                 <View style={styles.statRow}>
                   <Text style={styles.statLabel}>有效資料：</Text>
-                  <Text style={[styles.statValue, { color: '#22c55e' }]}>
+                  <Text style={StyleSheet.flatten([styles.statValue, { color: '#22c55e' }])}>
                     {parseResult.validRows}
                   </Text>
                 </View>
                 {parseResult.invalidRows > 0 && (
                   <View style={styles.statRow}>
                     <Text style={styles.statLabel}>無效資料：</Text>
-                    <Text style={[styles.statValue, { color: '#ef4444' }]}>
+                    <Text style={StyleSheet.flatten([styles.statValue, { color: '#ef4444' }])}>
                       {parseResult.invalidRows}
                     </Text>
                   </View>
@@ -374,10 +374,10 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
                 <Text style={styles.progressTitle}>導入進度</Text>
                 <View style={styles.progressBar}>
                   <View 
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.progressFill,
                       { width: `${importProgress.percentage}%` }
-                    ]} 
+                    ])} 
                   />
                 </View>
                 <Text style={styles.progressText}>

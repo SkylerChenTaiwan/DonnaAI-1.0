@@ -291,7 +291,7 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
         </View>
         
         <TouchableOpacity
-          style={[styles.primaryButton, { marginTop: 12 }]}
+          style={StyleSheet.flatten([styles.primaryButton, { marginTop: 12 }])}
           onPress={() => setActiveAssistance('import')}
         >
           <Icon name="cloud-upload" size={20} color={DesignSystem.colors.background.primary} />

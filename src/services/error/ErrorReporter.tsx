@@ -261,7 +261,7 @@ export const ErrorReporter = ({
             
             <View style={styles.previewActions}>
               <TouchableOpacity 
-                style={[styles.actionButton, styles.copyButton]}
+                style={StyleSheet.flatten([styles.actionButton, styles.copyButton])}
                 onPress={() => {
                   handleCopy();
                   setShowPreview(false);
@@ -271,7 +271,7 @@ export const ErrorReporter = ({
               </TouchableOpacity>
               
               <TouchableOpacity 
-                style={[styles.actionButton, styles.shareButton]}
+                style={StyleSheet.flatten([styles.actionButton, styles.shareButton])}
                 onPress={() => {
                   handleShare();
                   setShowPreview(false);

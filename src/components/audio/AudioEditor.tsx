@@ -232,7 +232,7 @@ export const AudioEditor = ({
     return (
       <View style={styles.waveformContainer}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <View style={[styles.waveform, { width: waveformWidth }]}>
+          <View style={StyleSheet.flatten([styles.waveform, { width: waveformWidth }])}>
             {/* 波形條 */}
             {waveformData.map((amplitude, index) => {
               const xPosition = (index / waveformData.length) * 100;
@@ -241,40 +241,40 @@ export const AudioEditor = ({
               return (
                 <View
                   key={index}
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.waveformBar,
                     {
                       height: amplitude,
                       backgroundColor: isInRange ? '#3b82f6' : '#d1d5db',
                       left: (index / waveformData.length) * waveformWidth }
-                  ]}
+                  ])}
                 />
               );
             })}
             
             {/* 修剪範圍指示器 */}
             <View
-              style={[
+              style={StyleSheet.flatten([
                 styles.trimIndicator,
                 styles.trimStart,
                 { left: (startPercent / 100) * waveformWidth }
-              ]}
+              ])}
             />
             <View
-              style={[
+              style={StyleSheet.flatten([
                 styles.trimIndicator,
                 styles.trimEnd,
                 { left: (endPercent / 100) * waveformWidth }
-              ]}
+              ])}
             />
             
             {/* 播放位置指示器 */}
             {isPlaying && (
               <View
-                style={[
+                style={StyleSheet.flatten([
                   styles.playbackIndicator,
                   { left: (positionPercent / 100) * waveformWidth }
-                ]}
+                ])}
               />
             )}
           </View>

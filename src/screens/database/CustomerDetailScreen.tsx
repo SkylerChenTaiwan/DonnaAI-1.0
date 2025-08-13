@@ -182,7 +182,7 @@ export const CustomerDetailScreen: React.FC = () => {
                     {task.description || '無描述'}
                   </Text>
                 </View>
-                <View style={[styles.taskStatusBadge, getTaskStatusStyle(task.status)]}>
+                <View style={StyleSheet.flatten([styles.taskStatusBadge, getTaskStatusStyle(task.status)])}>
                   <Text style={styles.taskStatusText}>
                     {getTaskStatusText(task.status)}
                   </Text>

@@ -344,12 +344,12 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
         {/* 進度條 */}
         <View style={styles.progressBar}>
           <View 
-            style={[
+            style={StyleSheet.flatten([
               styles.progressFill,
               { 
                 width: `${progress}%`,
                 backgroundColor: colors.primary }
-            ]}
+            ])}
           />
         </View>
         
@@ -362,27 +362,27 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
             
             return (
               <View key={step.id} style={styles.stepIndicator}>
-                <View style={[
+                <View style={StyleSheet.flatten([
                   styles.stepCircle,
                   isCompleted && styles.stepCompleted,
                   isCurrent && styles.stepCurrent,
                   isPast && styles.stepPast,
-                ]}>
+                ])}>
                   {isCompleted ? (
                     <Icon name="checkmark" size={16} color={colors.text.inverse}  />
                   ) : (
-                    <Text style={[
+                    <Text style={StyleSheet.flatten([
                       styles.stepNumber,
                       (isCurrent || isPast) && styles.stepNumberActive,
-                    ]}>
+                    ])}>
                       {index + 1}
                     </Text>
                   )}
                 </View>
-                <Text style={[
+                <Text style={StyleSheet.flatten([
                   styles.stepLabel,
                   isCurrent && styles.stepLabelCurrent,
-                ]}>
+                ])}>
                   {step.title}
                 </Text>
               </View>
@@ -447,7 +447,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
         <View style={styles.footerLeft}>
           {state.canGoBack && (
             <TouchableOpacity
-              style={[styles.button, styles.secondaryButton]}
+              style={StyleSheet.flatten([styles.button, styles.secondaryButton])}
               onPress={handleBack}
               disabled={state.isSaving}
             >
@@ -457,7 +457,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
           )}
           
           <TouchableOpacity
-            style={[styles.button, styles.ghostButton]}
+            style={StyleSheet.flatten([styles.button, styles.ghostButton])}
             onPress={handleSaveDraft}
             disabled={state.isSaving}
           >
@@ -469,7 +469,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
         <View style={styles.footerRight}>
           {currentStepDef.canSkip && !isLastStep && (
             <TouchableOpacity
-              style={[styles.button, styles.ghostButton]}
+              style={StyleSheet.flatten([styles.button, styles.ghostButton])}
               onPress={handleSkip}
               disabled={state.isSaving}
             >
@@ -479,7 +479,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
           
           {isLastStep ? (
             <TouchableOpacity
-              style={[styles.button, styles.primaryButton]}
+              style={StyleSheet.flatten([styles.button, styles.primaryButton])}
               onPress={handleComplete}
               disabled={state.isSaving || state.isLoading}
             >
@@ -488,7 +488,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
-              style={[styles.button, styles.primaryButton]}
+              style={StyleSheet.flatten([styles.button, styles.primaryButton])}
               onPress={handleNext}
               disabled={state.isSaving}
             >
@@ -502,7 +502,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={StyleSheet.flatten([styles.container, { backgroundColor: colors.background }])}>
       {/* 頂部標題 */}
       <View style={styles.header}>
         <View style={styles.headerContent}>

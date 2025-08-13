@@ -130,7 +130,7 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({
       <View style={styles.statusCard}>
         <View style={styles.statusRow}>
           <View style={styles.statusItem}>
-            <View style={[styles.statusDot, user.isOnline ? styles.onlineDot : styles.offlineDot]} />
+            <View style={StyleSheet.flatten([styles.statusDot, user.isOnline ? styles.onlineDot : styles.offlineDot])} />
             <Text style={styles.statusLabel}>
               {user.isOnline ? '線上' : '離線'}
             </Text>
@@ -187,7 +187,7 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({
       ) : (
         activityLogs.map(log => (
           <View key={log.id} style={styles.logItem}>
-            <View style={[styles.logIcon, { backgroundColor: `${getActionColor(log.action)}15` }]}>
+            <View style={StyleSheet.flatten([styles.logIcon, { backgroundColor: `${getActionColor(log.action)}15` }])}>
               <Icon
                 name={getActionIcon(log.action)}
                 size={20}
@@ -235,18 +235,18 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({
           {/* 標籤切換 */}
           <View style={styles.tabContainer}>
             <TouchableOpacity
-              style={[styles.tab, selectedTab === 'overview' && styles.tabActive]}
+              style={StyleSheet.flatten([styles.tab, selectedTab === 'overview' && styles.tabActive])}
               onPress={() => setSelectedTab('overview')}
             >
-              <Text style={[styles.tabText, selectedTab === 'overview' && styles.tabTextActive]}>
+              <Text style={StyleSheet.flatten([styles.tabText, selectedTab === 'overview' && styles.tabTextActive])}>
                 總覽
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.tab, selectedTab === 'logs' && styles.tabActive]}
+              style={StyleSheet.flatten([styles.tab, selectedTab === 'logs' && styles.tabActive])}
               onPress={() => setSelectedTab('logs')}
             >
-              <Text style={[styles.tabText, selectedTab === 'logs' && styles.tabTextActive]}>
+              <Text style={StyleSheet.flatten([styles.tabText, selectedTab === 'logs' && styles.tabTextActive])}>
                 活動日誌
               </Text>
             </TouchableOpacity>

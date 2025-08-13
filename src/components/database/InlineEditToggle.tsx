@@ -113,10 +113,10 @@ export const InlineEditToggle: React.FC<InlineEditToggleProps> = ({
       {/* 編輯模式切換按鈕 */}
       <View style={styles.toolbar}>
         <TouchableOpacity
-          style={[
+          style={StyleSheet.flatten([
             styles.editToggleButton,
             isEditMode && styles.editToggleButtonActive,
-          ]}
+          ])}
           onPress={toggleEditMode}
           activeOpacity={0.7}
         >

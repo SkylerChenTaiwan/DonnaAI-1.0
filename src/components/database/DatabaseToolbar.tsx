@@ -88,10 +88,10 @@ export const DatabaseToolbar: React.FC<ToolbarProps> = ({
         {/* 篩選 */}
         <TouchableOpacity 
           ref={filterButtonRef}
-          style={[
+          style={StyleSheet.flatten([
             styles.toolButton,
             hasActiveFilters && styles.activeToolButton
-          ]} 
+          ])} 
           onPress={() => onFilter(filterButtonRef)}
           activeOpacity={0.7}
         >
@@ -100,10 +100,10 @@ export const DatabaseToolbar: React.FC<ToolbarProps> = ({
             size={16} 
             color={hasActiveFilters ? "#37352f" : "#666"} 
           />
-          <Text style={[
+          <Text style={StyleSheet.flatten([
             styles.toolbarText,
             hasActiveFilters && styles.activeToolbarText
-          ]}>
+          ])}>
             篩選
           </Text>
         </TouchableOpacity>
@@ -111,10 +111,10 @@ export const DatabaseToolbar: React.FC<ToolbarProps> = ({
         {/* 排序 */}
         <TouchableOpacity 
           ref={sortButtonRef}
-          style={[
+          style={StyleSheet.flatten([
             styles.toolButton,
             hasActiveSort && styles.activeToolButton
-          ]} 
+          ])} 
           onPress={() => onSort(sortButtonRef)}
           activeOpacity={0.7}
         >
@@ -123,10 +123,10 @@ export const DatabaseToolbar: React.FC<ToolbarProps> = ({
             size={16} 
             color={hasActiveSort ? "#37352f" : "#666"} 
           />
-          <Text style={[
+          <Text style={StyleSheet.flatten([
             styles.toolbarText,
             hasActiveSort && styles.activeToolbarText
-          ]}>
+          ])}>
             排序
           </Text>
         </TouchableOpacity>
@@ -134,10 +134,10 @@ export const DatabaseToolbar: React.FC<ToolbarProps> = ({
         {/* 多選 */}
         {onMultiSelect && (
           <TouchableOpacity 
-            style={[
+            style={StyleSheet.flatten([
               styles.toolButton,
               multiSelectMode && styles.activeToolButton
-            ]} 
+            ])} 
             onPress={onMultiSelect}
             activeOpacity={0.7}
           >
@@ -146,10 +146,10 @@ export const DatabaseToolbar: React.FC<ToolbarProps> = ({
               size={16} 
               color={multiSelectMode ? "#37352f" : "#666"} 
             />
-            <Text style={[
+            <Text style={StyleSheet.flatten([
               styles.toolbarText,
               multiSelectMode && styles.activeToolbarText
-            ]}>
+            ])}>
               多選
             </Text>
           </TouchableOpacity>

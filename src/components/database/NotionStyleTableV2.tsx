@@ -253,11 +253,11 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
               }
             }}
           >
-            <View style={[
+            <View style={StyleSheet.flatten([
               styles.checkbox,
               selectedItems.length === data.length && data.length > 0 && styles.checkboxChecked,
               selectedItems.length > 0 && selectedItems.length < data.length && styles.checkboxIndeterminate,
-            ]}>
+            ])}>
               {selectedItems.length === data.length && data.length > 0 && (
                 <Icon name="checkmark" size={14} color="#fff" />
               )}
@@ -272,10 +272,10 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
         {columns.map((column, index) => (
           <TouchableOpacity
             key={column.key}
-            style={[
+            style={StyleSheet.flatten([
               styles.headerCell,
               column.width ? { width: column.width } : { flex: 1 }
-            ]}
+            ])}
             onPress={() => column.sortable && onSort && onSort(column.key)}
             disabled={!column.sortable || !onSort}
             activeOpacity={0.7}
@@ -310,10 +310,10 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
   const renderEmptyState = () => (
     <View style={styles.emptyStateContainer}>
       <TouchableOpacity 
-        style={[
+        style={StyleSheet.flatten([
           styles.addNewButton,
           hoveredAddNew && styles.addNewButtonHovered
-        ]}
+        ])}
         onPress={handleInlineAdd}
         activeOpacity={0.8}
         onPressIn={() => setHoveredAddNew(true)}
@@ -338,11 +338,11 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
 
       return (
         <Pressable
-          style={[
+          style={StyleSheet.flatten([
             styles.tableRow,
             isHovered && styles.tableRowHovered,
             isSelected && styles.tableRowSelected,
-          ]}
+          ])}
           onPress={() => {
             if (onRowPress && !multiSelectMode) {
               onRowPress(item);
@@ -357,10 +357,10 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
               style={styles.rowCheckbox}
               onPress={() => toggleSelection(item.id)}
             >
-              <View style={[
+              <View style={StyleSheet.flatten([
                 styles.checkbox,
                 isSelected && styles.checkboxChecked,
-              ]}>
+              ])}>
                 {isSelected && (
                   <Icon name="checkmark" size={14} color="#fff" />
                 )}
@@ -378,12 +378,12 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
             return (
               <Pressable
                 key={column.key}
-                style={[
+                style={StyleSheet.flatten([
                   styles.tableCell,
                   column.width ? { width: column.width } : { flex: 1 },
                   isCellSelected && styles.selectedCell,
                   isCellFocused && styles.focusedCell,
-                ]}
+                ])}
                 onPress={(e: any) => {
                   if (!multiSelectMode) {
                     handleCellClick(item.id, column.key, e);
@@ -418,17 +418,17 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
       <View style={styles.tableRow}>
         {/* 核取方塊欄 - 保持空白 */}
         <View style={styles.checkboxColumn}>
-          <View style={[styles.checkbox, styles.checkboxDisabled]} />
+          <View style={StyleSheet.flatten([styles.checkbox, styles.checkboxDisabled])} />
         </View>
         
         {/* 可編輯欄位 */}
         {columns.map((column, index) => (
           <View
             key={column.key}
-            style={[
+            style={StyleSheet.flatten([
               styles.tableCell,
               column.width ? { width: column.width } : { flex: 1 }
-            ]}
+            ])}
           >
             <EditableCell
               value={newRowData[column.key]}

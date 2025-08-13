@@ -23,7 +23,7 @@ export const LoadingSpinner = ({
   color = '#1A1A1A',
   style }: LoadingSpinnerProps) => {
   return (
-    <View style={[styles.container, style]}>
+    <View style={StyleSheet.flatten([styles.container, style])}>
       <ActivityIndicator size={size} color={color} />
       {message && <Text style={styles.message}>{message}</Text>}
     </View>

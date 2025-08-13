@@ -73,7 +73,7 @@ export const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
 
   // 渲染骨架單元格
   const renderSkeletonCell = (width: string | number = '100%') => (
-    <View style={[styles.skeletonCell, { width }]}>
+    <View style={StyleSheet.flatten([styles.skeletonCell, { width }])}>
       <View style={styles.shimmerContainer}>
         <View style={styles.shimmerBase} />
         {renderShimmer()}
@@ -96,11 +96,11 @@ export const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
   const renderSkeletonRow = (rowIndex: number) => (
     <Animated.View
       key={`row-${rowIndex}`}
-      style={[
+      style={StyleSheet.flatten([
         styles.skeletonRow,
         {
           opacity: fadeAnimations[rowIndex] },
-      ]}
+      ])}
     >
       {Array(columns).fill(null).map((_, colIndex) => (
         <View key={`cell-${rowIndex}-${colIndex}`} style={styles.cellContainer}>
@@ -189,28 +189,28 @@ export const AdvancedSkeletonLoader: React.FC<{
   const renderCardSkeleton = () => (
     <View style={advancedStyles.card}>
       <View style={advancedStyles.cardHeader}>
-        <View style={[advancedStyles.skeleton, advancedStyles.avatar]} />
+        <View style={StyleSheet.flatten([advancedStyles.skeleton, advancedStyles.avatar])} />
         <View style={advancedStyles.cardHeaderText}>
-          <View style={[advancedStyles.skeleton, { width: '60%' }]} />
-          <View style={[advancedStyles.skeleton, { width: '40%', marginTop: 4 }]} />
+          <View style={StyleSheet.flatten([advancedStyles.skeleton, { width: '60%' }])} />
+          <View style={StyleSheet.flatten([advancedStyles.skeleton, { width: '40%', marginTop: 4 }])} />
         </View>
       </View>
       <View style={advancedStyles.cardBody}>
-        <View style={[advancedStyles.skeleton, { width: '100%' }]} />
-        <View style={[advancedStyles.skeleton, { width: '80%', marginTop: 8 }]} />
-        <View style={[advancedStyles.skeleton, { width: '90%', marginTop: 8 }]} />
+        <View style={StyleSheet.flatten([advancedStyles.skeleton, { width: '100%' }])} />
+        <View style={StyleSheet.flatten([advancedStyles.skeleton, { width: '80%', marginTop: 8 }])} />
+        <View style={StyleSheet.flatten([advancedStyles.skeleton, { width: '90%', marginTop: 8 }])} />
       </View>
     </View>
   );
 
   const renderListSkeleton = () => (
     <View style={advancedStyles.listItem}>
-      <View style={[advancedStyles.skeleton, advancedStyles.listIcon]} />
+      <View style={StyleSheet.flatten([advancedStyles.skeleton, advancedStyles.listIcon])} />
       <View style={advancedStyles.listContent}>
-        <View style={[advancedStyles.skeleton, { width: '70%' }]} />
-        <View style={[advancedStyles.skeleton, { width: '50%', marginTop: 4, height: 10 }]} />
+        <View style={StyleSheet.flatten([advancedStyles.skeleton, { width: '70%' }])} />
+        <View style={StyleSheet.flatten([advancedStyles.skeleton, { width: '50%', marginTop: 4, height: 10 }])} />
       </View>
-      <View style={[advancedStyles.skeleton, advancedStyles.listAction]} />
+      <View style={StyleSheet.flatten([advancedStyles.skeleton, advancedStyles.listAction])} />
     </View>
   );
 

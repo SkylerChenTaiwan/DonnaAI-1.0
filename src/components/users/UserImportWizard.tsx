@@ -470,11 +470,11 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
             return (
               <View key={stage.key} style={styles.stageItem}>
                 <View
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.stageCircle,
                     isActive && styles.stageCircleActive,
                     isCompleted && styles.stageCircleCompleted,
-                  ]}
+                  ])}
                 >
                   <Icon
                     name={isCompleted ? 'checkmark' : stage.icon}
@@ -487,19 +487,19 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
                   />
                 </View>
                 <Text
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.stageLabel,
                     isActive && styles.stageLabelActive,
-                  ]}
+                  ])}
                 >
                   {stage.label}
                 </Text>
                 {index < STAGES.length - 1 && (
                   <View
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.stageConnector,
                       isCompleted && styles.stageConnectorCompleted,
-                    ]}
+                    ])}
                   />
                 )}
               </View>

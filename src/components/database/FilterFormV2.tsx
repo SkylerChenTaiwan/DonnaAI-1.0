@@ -122,10 +122,10 @@ export const FilterForm: React.FC<FilterFormProps> = ({
                 onPress={() => handleColumnChange(column.key)}
               >
                 <Text 
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.pickerOptionText,
                     condition.key === column.key && styles.pickerOptionTextSelected
-                  ]}
+                  ])}
                 >
                   {column.title}
                 </Text>
@@ -157,10 +157,10 @@ export const FilterForm: React.FC<FilterFormProps> = ({
                 onPress={() => handleOperatorChange(op as FilterOperator)}
               >
                 <Text 
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.pickerOptionText,
                     operator === op && styles.pickerOptionTextSelected
-                  ]}
+                  ])}
                 >
                   {label}
                 </Text>
@@ -197,10 +197,10 @@ export const FilterForm: React.FC<FilterFormProps> = ({
                     }}
                   >
                     <Text 
-                      style={[
+                      style={StyleSheet.flatten([
                         styles.pickerOptionText,
                         condition.value === option.value && styles.pickerOptionTextSelected
-                      ]}
+                      ])}
                     >
                       {option.label}
                     </Text>

@@ -102,7 +102,7 @@ export const TaskForm = forwardRef<any, TaskFormProps>((props, ref) => {
       {!hideInputToggle && (
         <View style={styles.inputModeTabs}>
           <TouchableOpacity
-            style={[styles.tabButton, inputMode === 'text' && styles.tabButtonActive]}
+            style={StyleSheet.flatten([styles.tabButton, inputMode === 'text' && styles.tabButtonActive])}
             onPress={() => setInputMode('text')}
           >
             <Icon 
@@ -110,13 +110,13 @@ export const TaskForm = forwardRef<any, TaskFormProps>((props, ref) => {
               size={20} 
               color={inputMode === 'text' ? '#FFFFFF' : '#7A7A7A'} 
             />
-            <Text style={[styles.tabText, inputMode === 'text' && styles.tabTextActive]}>
+            <Text style={StyleSheet.flatten([styles.tabText, inputMode === 'text' && styles.tabTextActive])}>
               文字輸入
             </Text>
           </TouchableOpacity>
           
           <TouchableOpacity
-            style={[styles.tabButton, inputMode === 'voice' && styles.tabButtonActive]}
+            style={StyleSheet.flatten([styles.tabButton, inputMode === 'voice' && styles.tabButtonActive])}
             onPress={() => setInputMode('voice')}
           >
             <Icon 
@@ -124,7 +124,7 @@ export const TaskForm = forwardRef<any, TaskFormProps>((props, ref) => {
               size={20} 
               color={inputMode === 'voice' ? '#FFFFFF' : '#7A7A7A'} 
             />
-            <Text style={[styles.tabText, inputMode === 'voice' && styles.tabTextActive]}>
+            <Text style={StyleSheet.flatten([styles.tabText, inputMode === 'voice' && styles.tabTextActive])}>
               語音輸入
             </Text>
           </TouchableOpacity>

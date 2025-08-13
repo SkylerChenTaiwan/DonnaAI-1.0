@@ -296,10 +296,10 @@ export const RecordingScreen: React.FC = () => {
       <View style={styles.progressContainer}>
         <View style={styles.progressBar}>
           <View 
-            style={[
+            style={StyleSheet.flatten([
               styles.progressFill, 
               { width: `${uploadProgress}%` }
-            ]} 
+            ])} 
           />
         </View>
         <Text style={styles.progressText}>{uploadProgress}%</Text>

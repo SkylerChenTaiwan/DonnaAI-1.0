@@ -60,12 +60,12 @@ export function SyncStatusIndicator({ syncStatus }: SyncStatusIndicatorProps) {
 
   return (
     <View style={styles.container}>
-      <View style={[styles.statusBadge, { backgroundColor: withAlpha(getStatusColor(), 0.125) }]}>
+      <View style={StyleSheet.flatten([styles.statusBadge, { backgroundColor: withAlpha(getStatusColor(), 0.125) }])}>
         <Icon name={getStatusIcon()} 
           size={16} 
           color={getStatusColor()} 
         />
-        <Text style={[styles.statusText, { color: getStatusColor() }]}>
+        <Text style={StyleSheet.flatten([styles.statusText, { color: getStatusColor() }])}>
           {getStatusText()}
         </Text>
         {syncStatus.isSyncing && (

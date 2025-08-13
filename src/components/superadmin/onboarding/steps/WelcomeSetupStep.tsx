@@ -156,7 +156,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>郵件內容</Text>
               <TextInput
-                style={[styles.input, styles.textArea]}
+                style={StyleSheet.flatten([styles.input, styles.textArea])}
                 value={formData.emailTemplate.body}
                 onChangeText={(text) => updateField('emailTemplate.body', text)}
                 placeholder="請輸入郵件內容..."
@@ -252,11 +252,11 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
             {dashboardOptions.map(option => (
               <TouchableOpacity
                 key={option.value}
-                style={[
+                style={StyleSheet.flatten([
                   styles.dashboardOption,
                   formData.firstLoginExperience.defaultDashboard === option.value && 
                   styles.dashboardOptionActive,
-                ]}
+                ])}
                 onPress={() => updateField('firstLoginExperience.defaultDashboard', option.value)}
               >
                 <Icon name={option.icon}
@@ -265,11 +265,11 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
                     ? colors.primary 
                     : colors.gray600}
                 />
-                <Text style={[
+                <Text style={StyleSheet.flatten([
                   styles.dashboardText,
                   formData.firstLoginExperience.defaultDashboard === option.value && 
                   styles.dashboardTextActive,
-                ]}>
+                ])}>
                   {option.label}
                 </Text>
               </TouchableOpacity>
@@ -399,7 +399,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
                 color={setting.color}
               />
               <Text style={styles.summaryLabel}>{setting.label}</Text>
-              <Text style={[styles.summaryValue, { color: setting.color }]}>
+              <Text style={StyleSheet.flatten([styles.summaryValue, { color: setting.color }])}>
                 {setting.value}
               </Text>
             </View>

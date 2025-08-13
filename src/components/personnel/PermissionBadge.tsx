@@ -46,9 +46,9 @@ export function PermissionBadge({ user, compact = false }: PermissionBadgeProps)
 
   return (
     <View style={styles.container}>
-      <View style={[styles.badge, { backgroundColor: config.bgColor }]}>
+      <View style={StyleSheet.flatten([styles.badge, { backgroundColor: config.bgColor }])}>
         <Icon name={config.icon} size={14} color={config.color} />
-        {!compact && <Text style={[styles.label, { color: config.color }]}>{config.label}</Text>}
+        {!compact && <Text style={StyleSheet.flatten([styles.label, { color: config.color }])}>{config.label}</Text>}
       </View>
       
       {!compact && dataAccess && (

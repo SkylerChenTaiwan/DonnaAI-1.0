@@ -113,7 +113,7 @@ export default function QuickSaveButton({ onSave }: QuickSaveButtonProps) {
 
             <View style={styles.buttonRow}>
               <TouchableOpacity
-                style={[styles.button, styles.cancelButton]}
+                style={StyleSheet.flatten([styles.button, styles.cancelButton])}
                 onPress={handleCancel}
                 disabled={isSaving}
               >
@@ -121,7 +121,7 @@ export default function QuickSaveButton({ onSave }: QuickSaveButtonProps) {
               </TouchableOpacity>
               
               <TouchableOpacity
-                style={[styles.button, styles.saveButton, isSaving && styles.disabledButton]}
+                style={StyleSheet.flatten([styles.button, styles.saveButton, isSaving && styles.disabledButton])}
                 onPress={handleConfirmSave}
                 disabled={isSaving}
               >

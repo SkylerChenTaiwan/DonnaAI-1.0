@@ -91,11 +91,11 @@ export const TableCell: React.FC<TableCellProps> = memo(({
       case 'checkbox':
         return (
           <View
-            style={[
+            style={StyleSheet.flatten([
               tableStyles.checkbox,
               value && tableStyles.checkboxChecked,
               { opacity: 0.6, cursor: 'default' }
-            ]}
+            ])}
           >
             {value && (
               <Icon name="checkmark" size={12} color="#FFFFFF" />
@@ -110,16 +110,16 @@ export const TableCell: React.FC<TableCellProps> = memo(({
         
         return (
           <View
-            style={[
+            style={StyleSheet.flatten([
               tableStyles.selectTag,
               { backgroundColor: getTagColor(option.color || 'gray', 'bg') },
-            ]}
+            ])}
           >
             <Text
-              style={[
+              style={StyleSheet.flatten([
                 tableStyles.selectTagText,
                 { color: getTagColor(option.color || 'gray', 'text') },
-              ]}
+              ])}
             >
               {option.label}
             </Text>
@@ -134,18 +134,18 @@ export const TableCell: React.FC<TableCellProps> = memo(({
             {value.map((tag, index) => (
               <View
                 key={index}
-                style={[
+                style={StyleSheet.flatten([
                   tableStyles.selectTag,
                   { 
                     backgroundColor: getTagColor('blue', 'bg'),
                     marginBottom: 2 },
-                ]}
+                ])}
               >
                 <Text
-                  style={[
+                  style={StyleSheet.flatten([
                     tableStyles.selectTagText,
                     { color: getTagColor('blue', 'text') },
-                  ]}
+                  ])}
                 >
                   {tag}
                 </Text>
@@ -174,7 +174,7 @@ export const TableCell: React.FC<TableCellProps> = memo(({
         if (!value) return null;
         return (
           <Text
-            style={[tableStyles.cellText, { color: NotionColors.ui.link }]}
+            style={StyleSheet.flatten([tableStyles.cellText, { color: NotionColors.ui.link }])}
             numberOfLines={1}
           >
             {value}
@@ -197,10 +197,10 @@ export const TableCell: React.FC<TableCellProps> = memo(({
         onMouseEnter: () => onCellMouseEnter?.(position),
         onMouseLeave: () => onCellMouseLeave?.(position) } : {})}
       activeOpacity={1}
-      style={[
+      style={StyleSheet.flatten([
         ...getCellStyles(state),
         { width: column.width || 180 },
-      ]}
+      ])}
     >
       {renderCellContent()}
     </TouchableOpacity>

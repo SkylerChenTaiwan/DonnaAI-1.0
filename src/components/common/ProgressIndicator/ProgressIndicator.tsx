@@ -24,26 +24,26 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
     <View style={styles.container}>
       {stages.map(stage => (
         <View key={stage} style={styles.item}>
-          <View style={[
+          <View style={StyleSheet.flatten([
             styles.circle,
             {
               backgroundColor: stage <= currentStage ? colors.primary : colors.gray100,
               borderColor: stage === currentStage ? colors.primary : colors.gray600,
               borderWidth: stage === currentStage ? 2 : 1.5
             }
-          ]}>
-            <Text style={[
+          ])}>
+            <Text style={StyleSheet.flatten([
               styles.number,
               { color: stage <= currentStage ? colors.white : colors.gray700 }
-            ]}>
+            ])}>
               {stage}
             </Text>
           </View>
           {labels[stage - 1] && (
-            <Text style={[
+            <Text style={StyleSheet.flatten([
               styles.label,
               { color: stage === currentStage ? colors.text.primary : colors.gray500 }
-            ]}>
+            ])}>
               {labels[stage - 1]}
             </Text>
           )}

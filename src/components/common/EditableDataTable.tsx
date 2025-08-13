@@ -280,18 +280,18 @@ export const EditableDataTable: React.FC<EditableTableProps> = ({
       {columns.map((column) => (
         <TouchableOpacity
           key={column.key}
-          style={[
+          style={StyleSheet.flatten([
             styles.headerCell, 
             column.width ? { width: column.width } : { flex: 1 }
-          ]}
+          ])}
           onPress={() => column.sortable !== false && handleSort(column.key)}
           disabled={column.sortable === false}
           activeOpacity={column.sortable !== false ? 0.7 : 1}
         >
-          <Text style={[
+          <Text style={StyleSheet.flatten([
             styles.headerText,
             column.editable && styles.editableHeaderText
-          ]}>
+          ])}>
             {column.title}
           </Text>
           {column.sortable !== false && (
@@ -332,10 +332,10 @@ export const EditableDataTable: React.FC<EditableTableProps> = ({
     ({ item }: { item: TableData }) => {
       return (
         <View
-          style={[
+          style={StyleSheet.flatten([
             styles.row,
             selectedItems.has(item.id) && styles.selectedRow,
-          ]}
+          ])}
         >
           {selectable && showCheckboxes && (
             <TouchableOpacity
@@ -358,12 +358,12 @@ export const EditableDataTable: React.FC<EditableTableProps> = ({
             return (
               <View
                 key={column.key}
-                style={[
+                style={StyleSheet.flatten([
                   styles.cell, 
                   column.width ? { width: column.width } : { flex: 1 },
                   isChanged && styles.changedCell,
                   cellError && styles.errorCell,
-                ]}
+                ])}
               >
                 {column.editable && !readOnly ? (
                   <EditableCell
@@ -425,14 +425,14 @@ export const EditableDataTable: React.FC<EditableTableProps> = ({
           </Text>
           <View style={styles.saveBarButtons}>
             <TouchableOpacity
-              style={[styles.saveBarButton, styles.discardButton]}
+              style={StyleSheet.flatten([styles.saveBarButton, styles.discardButton])}
               onPress={discardChanges}
               activeOpacity={0.7}
             >
               <Text style={styles.discardButtonText}>放棄</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.saveBarButton, styles.saveButton]}
+              style={StyleSheet.flatten([styles.saveBarButton, styles.saveButton])}
               onPress={handleBatchSave}
               disabled={isSaving}
               activeOpacity={0.7}

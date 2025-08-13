@@ -211,7 +211,7 @@ export const MeetingsScreen: React.FC = () => {
             key={action.id}
             title={`${action.icon} ${action.title}`}
             onPress={action.action}
-            style={[styles.quickActionButton, { backgroundColor: action.color }]}
+            style={StyleSheet.flatten([styles.quickActionButton, { backgroundColor: action.color }])}
             textStyle={styles.quickActionText}
           />
         ))}
@@ -235,10 +235,10 @@ export const MeetingsScreen: React.FC = () => {
             <View key={record.id} style={styles.recordItem}>
               <View style={styles.recordHeader}>
                 <Text style={styles.recordTitle}>{record.title}</Text>
-                <View style={[
+                <View style={StyleSheet.flatten([
                   styles.statusBadge,
                   { backgroundColor: getRecordStatusColor(record) }
-                ]}>
+                ])}>
                   <Text style={styles.statusText}>
                     {getRecordStatusText(record)}
                   </Text>
@@ -259,10 +259,10 @@ export const MeetingsScreen: React.FC = () => {
               <Button
                 title={record.aiConfirmationStatus === 'pending' ? '待確認 AI 建議' : '查看詳情'}
                 onPress={() => handleViewRecord(record)}
-                style={[
+                style={StyleSheet.flatten([
                   styles.recordActionButton,
                   record.aiConfirmationStatus === 'pending' && styles.pendingActionButton
-                ]}
+                ])}
                 textStyle={styles.recordActionText}
               />
             </View>

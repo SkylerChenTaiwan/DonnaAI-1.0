@@ -76,10 +76,10 @@ export const ErrorDisplay = ({
       return (
         <Text 
           key={index} 
-          style={[
+          style={StyleSheet.flatten([
             styles.stackLine,
             isAppCode && styles.appCodeLine
-          ]}
+          ])}
         >
           {line.trim()}
         </Text>
@@ -111,7 +111,7 @@ export const ErrorDisplay = ({
         </View>
         
         <Animated.View 
-          style={[
+          style={StyleSheet.flatten([
             styles.expandedContent,
             {
               maxHeight: animatedHeight.interpolate({
@@ -120,7 +120,7 @@ export const ErrorDisplay = ({
               }),
               opacity: animatedHeight
             }
-          ]}
+          ])}
         >
           <ScrollView showsVerticalScrollIndicator={false}>
             <Text style={styles.stackTrace}>
@@ -220,7 +220,7 @@ export const ErrorDisplay = ({
       <View style={styles.actions}>
         {onReset && (
           <TouchableOpacity 
-            style={[styles.button, styles.primaryButton]}
+            style={StyleSheet.flatten([styles.button, styles.primaryButton])}
             onPress={onReset}
             activeOpacity={0.8}
           >
@@ -231,7 +231,7 @@ export const ErrorDisplay = ({
         <View style={styles.secondaryActions}>
           {onCopy && (
             <TouchableOpacity 
-              style={[styles.button, styles.secondaryButton]}
+              style={StyleSheet.flatten([styles.button, styles.secondaryButton])}
               onPress={onCopy}
               activeOpacity={0.8}
             >
@@ -241,7 +241,7 @@ export const ErrorDisplay = ({
           
           {onShare && (
             <TouchableOpacity 
-              style={[styles.button, styles.secondaryButton]}
+              style={StyleSheet.flatten([styles.button, styles.secondaryButton])}
               onPress={onShare}
               activeOpacity={0.8}
             >

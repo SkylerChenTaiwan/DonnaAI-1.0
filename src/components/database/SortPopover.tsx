@@ -95,10 +95,10 @@ export const SortPopover: React.FC<SortPopoverProps> = ({
               
               {/* 升序選項 */}
               <TouchableOpacity
-                style={[
+                style={StyleSheet.flatten([
                   styles.sortOption,
                   isSelected(column.key, 'asc') && styles.sortOptionSelected
-                ]}
+                ])}
                 onPress={() => handleSelectSort(column.key, 'asc')}
                 activeOpacity={0.7}
               >
@@ -107,10 +107,10 @@ export const SortPopover: React.FC<SortPopoverProps> = ({
                   size={16} 
                   color={isSelected(column.key, 'asc') ? '#2383e2' : '#666'} 
                 />
-                <Text style={[
+                <Text style={StyleSheet.flatten([
                   styles.sortOptionText,
                   isSelected(column.key, 'asc') && styles.sortOptionTextSelected
-                ]}>升序排列</Text>
+                ])}>升序排列</Text>
                 {isSelected(column.key, 'asc') && (
                   <View style={styles.checkIcon}>
                     <Icon name="checkmark" size={14} color="#2383e2" />
@@ -120,10 +120,10 @@ export const SortPopover: React.FC<SortPopoverProps> = ({
               
               {/* 降序選項 */}
               <TouchableOpacity
-                style={[
+                style={StyleSheet.flatten([
                   styles.sortOption,
                   isSelected(column.key, 'desc') && styles.sortOptionSelected
-                ]}
+                ])}
                 onPress={() => handleSelectSort(column.key, 'desc')}
                 activeOpacity={0.7}
               >
@@ -132,10 +132,10 @@ export const SortPopover: React.FC<SortPopoverProps> = ({
                   size={16} 
                   color={isSelected(column.key, 'desc') ? '#2383e2' : '#666'} 
                 />
-                <Text style={[
+                <Text style={StyleSheet.flatten([
                   styles.sortOptionText,
                   isSelected(column.key, 'desc') && styles.sortOptionTextSelected
-                ]}>降序排列</Text>
+                ])}>降序排列</Text>
                 {isSelected(column.key, 'desc') && (
                   <View style={styles.checkIcon}>
                     <Icon name="checkmark" size={14} color="#2383e2" />
@@ -154,10 +154,10 @@ export const SortPopover: React.FC<SortPopoverProps> = ({
             activeOpacity={0.7}
             disabled={!selectedSort}
           >
-            <Text style={[
+            <Text style={StyleSheet.flatten([
               styles.clearButtonText,
               !selectedSort && styles.disabledText
-            ]}>清除</Text>
+            ])}>清除</Text>
           </TouchableOpacity>
           
           <TouchableOpacity

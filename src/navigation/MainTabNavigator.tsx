@@ -82,7 +82,7 @@ export const MainTabNavigator = () => {
                   if (mode === 'manager') {
                     return (
                       <View style={styles.addButtonContainer} ref={addButtonRef}>
-                        <View style={[styles.searchButton]}>
+                        <View style={StyleSheet.flatten([styles.searchButton])}>
                           <Icon name="search" size={20} color={DesignSystem.colors.text.inverse} />
                         </View>
                       </View>

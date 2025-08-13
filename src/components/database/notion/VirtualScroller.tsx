@@ -94,7 +94,7 @@ export const VirtualScroller: React.FC<VirtualScrollerProps> = ({
   return (
     <ScrollView
       ref={scrollViewRef}
-      style={[styles.container, style]}
+      style={StyleSheet.flatten([styles.container, style])}
       onScroll={handleScroll}
       onLayout={handleLayout}
       scrollEventThrottle={16}
@@ -121,13 +121,13 @@ export const VirtualScroller: React.FC<VirtualScrollerProps> = ({
           {visibleItems.map((item, index) => (
             <View
               key={item.id || `${startIndex + index}`}
-              style={[
+              style={StyleSheet.flatten([
                 styles.rowContainer,
                 {
                   height: rowHeight,
                   // Reduce quality during scrolling for performance
                   opacity: isScrolling ? 0.99 : 1 },
-              ]}
+              ])}
             >
               {renderRow(item, startIndex + index)}
             </View>

@@ -170,7 +170,7 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
 
   if (loading && !initializingDefaults) {
     return (
-      <View style={[styles.loadingContainer, fullScreen && styles.fullScreenContainer]}>
+      <View style={StyleSheet.flatten([styles.loadingContainer, fullScreen && styles.fullScreenContainer])}>
         <ActivityIndicator size="large" color={colors.primary} />
         <Text style={styles.loadingText}>載入報表...</Text>
       </View>
@@ -179,7 +179,7 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
 
   if (reports.length === 0 && !initializingDefaults) {
     return (
-      <View style={[styles.emptyContainer, fullScreen && styles.fullScreenEmptyContainer]}>
+      <View style={StyleSheet.flatten([styles.emptyContainer, fullScreen && styles.fullScreenEmptyContainer])}>
         <Icon name="bar-chart-outline" size={48} color={colors.border} />
         <Text style={styles.emptyText}>還沒有保存的報表</Text>
         <TouchableOpacity
@@ -195,7 +195,7 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
   
   if (initializingDefaults) {
     return (
-      <View style={[styles.loadingContainer, fullScreen && styles.fullScreenContainer]}>
+      <View style={StyleSheet.flatten([styles.loadingContainer, fullScreen && styles.fullScreenContainer])}>
         <ActivityIndicator size="large" color={colors.primary} />
         <Text style={styles.loadingText}>正在載入預設報表...</Text>
       </View>
@@ -223,15 +223,15 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
           return (
             <TouchableOpacity
               key={report.id}
-              style={[cardStyle, report.isDefault && styles.defaultReportCard]}
+              style={StyleSheet.flatten([cardStyle, report.isDefault && styles.defaultReportCard])}
               onPress={() => handleReportPress(report)}
               activeOpacity={0.7}
             >
               <View
-                style={[
+                style={StyleSheet.flatten([
                   styles.chartIconContainer,
                   { backgroundColor: `${chartColor}15` },
-                ]}
+                ])}
               >
                 <Icon
                   name={chartIcon}

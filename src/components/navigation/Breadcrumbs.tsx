@@ -23,7 +23,7 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, style }) => {
   if (items.length === 0) return null;
   
   return (
-    <View style={[styles.container, style]}>
+    <View style={StyleSheet.flatten([styles.container, style])}>
       {items.map((item, index) => (
         <View key={item.id} style={styles.item}>
           {index > 0 && (
@@ -49,7 +49,7 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, style }) => {
               </Text>
             </TouchableOpacity>
           ) : (
-            <Text style={[styles.text, styles.current]}>
+            <Text style={StyleSheet.flatten([styles.text, styles.current])}>
               {item.label}
             </Text>
           )}

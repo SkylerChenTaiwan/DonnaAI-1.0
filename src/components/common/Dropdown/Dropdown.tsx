@@ -33,17 +33,17 @@ export const Dropdown: React.FC<DropdownProps> = ({
   const colors = DesignSystem.colors;
 
   return (
-    <View style={[styles.container, style]}>
+    <View style={StyleSheet.flatten([styles.container, style])}>
       <Picker
         selectedValue={value}
         onValueChange={onChange}
         enabled={!disabled}
-        style={[
+        style={StyleSheet.flatten([
           styles.picker,
           {
             backgroundColor: colors.background.input,
             color: disabled ? colors.text.disabled : colors.text.primary },
-        ]}
+        ])}
       >
         {placeholder && (
           <Picker.Item label={placeholder} value="" />

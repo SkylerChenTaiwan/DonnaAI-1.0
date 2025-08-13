@@ -190,7 +190,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
           {/* 操作按鈕 */}
           <View style={styles.actions}>
             <TouchableOpacity 
-              style={[styles.button, styles.primaryButton]}
+              style={StyleSheet.flatten([styles.button, styles.primaryButton])}
               onPress={this.handleReset}
               activeOpacity={0.8}
             >
@@ -200,7 +200,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
             {isDev && (
               <View style={styles.devActions}>
                 <TouchableOpacity 
-                  style={[styles.button, styles.secondaryButton]}
+                  style={StyleSheet.flatten([styles.button, styles.secondaryButton])}
                   onPress={this.handleCopyError}
                   activeOpacity={0.8}
                 >
@@ -208,7 +208,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                 </TouchableOpacity>
                 
                 <TouchableOpacity 
-                  style={[styles.button, styles.secondaryButton]}
+                  style={StyleSheet.flatten([styles.button, styles.secondaryButton])}
                   onPress={this.handleShareError}
                   activeOpacity={0.8}
                 >

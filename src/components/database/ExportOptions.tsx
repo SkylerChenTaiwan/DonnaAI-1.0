@@ -73,10 +73,10 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
             <Text style={styles.sectionTitle}>匯出格式</Text>
             <View style={styles.formatOptions}>
               <TouchableOpacity
-                style={[
+                style={StyleSheet.flatten([
                   styles.formatOption,
                   format === 'csv' && styles.formatOptionActive,
-                ]}
+                ])}
                 onPress={() => setFormat('csv')}
                 activeOpacity={0.7}
               >
@@ -86,10 +86,10 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
                   color={format === 'csv' ? '#1A1A1A' : '#999999'}
                 />
                 <Text
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.formatOptionText,
                     format === 'csv' && styles.formatOptionTextActive,
-                  ]}
+                  ])}
                 >
                   CSV
                 </Text>
@@ -99,10 +99,10 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={[
+                style={StyleSheet.flatten([
                   styles.formatOption,
                   format === 'json' && styles.formatOptionActive,
-                ]}
+                ])}
                 onPress={() => setFormat('json')}
                 activeOpacity={0.7}
               >
@@ -112,10 +112,10 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
                   color={format === 'json' ? '#1A1A1A' : '#999999'}
                 />
                 <Text
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.formatOptionText,
                     format === 'json' && styles.formatOptionTextActive,
-                  ]}
+                  ])}
                 >
                   JSON
                 </Text>
@@ -164,7 +164,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
             </View>
             {sendByEmail && (
               <TextInput
-                style={[styles.input, styles.emailInput]}
+                style={StyleSheet.flatten([styles.input, styles.emailInput])}
                 value={email}
                 onChangeText={setEmail}
                 placeholder="輸入郵件地址"
@@ -192,7 +192,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
       {/* 底部按鈕 */}
       <View style={styles.footer}>
         <TouchableOpacity
-          style={[styles.button, styles.cancelButton]}
+          style={StyleSheet.flatten([styles.button, styles.cancelButton])}
           onPress={onCancel}
           activeOpacity={0.7}
           disabled={loading}
@@ -201,7 +201,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.button, styles.exportButton]}
+          style={StyleSheet.flatten([styles.button, styles.exportButton])}
           onPress={handleExport}
           activeOpacity={0.7}
           disabled={loading}

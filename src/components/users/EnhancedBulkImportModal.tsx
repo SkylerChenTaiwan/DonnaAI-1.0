@@ -562,27 +562,27 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
                 <View style={styles.roleButtons}>
                   <TouchableOpacity
                     onPress={() => setImportConfig(prev => ({ ...prev, defaultRole: 'user' }))}
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.roleButton,
                       importConfig.defaultRole === 'user' && styles.roleButtonActive
-                    ]}
+                    ])}
                   >
-                    <Text style={[
+                    <Text style={StyleSheet.flatten([
                       styles.roleButtonText,
                       importConfig.defaultRole === 'user' && styles.roleButtonTextActive
-                    ]}>一般用戶</Text>
+                    ])}>一般用戶</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => setImportConfig(prev => ({ ...prev, defaultRole: 'admin' }))}
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.roleButton,
                       importConfig.defaultRole === 'admin' && styles.roleButtonActive
-                    ]}
+                    ])}
                   >
-                    <Text style={[
+                    <Text style={StyleSheet.flatten([
                       styles.roleButtonText,
                       importConfig.defaultRole === 'admin' && styles.roleButtonTextActive
-                    ]}>管理員</Text>
+                    ])}>管理員</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -595,10 +595,10 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
                 onPress={() => setImportConfig(prev => ({ ...prev, skipDuplicates: !prev.skipDuplicates }))}
                 style={styles.checkboxRow}
               >
-                <View style={[
+                <View style={StyleSheet.flatten([
                   styles.checkbox,
                   importConfig.skipDuplicates && styles.checkboxChecked
-                ]}>
+                ])}>
                   {importConfig.skipDuplicates && (
                     <Icon name="checkmark" size={14} color={DesignSystem.colors.text.inverse} />
                   )}
@@ -610,10 +610,10 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
                 onPress={() => setImportConfig(prev => ({ ...prev, updateExisting: !prev.updateExisting }))}
                 style={styles.checkboxRow}
               >
-                <View style={[
+                <View style={StyleSheet.flatten([
                   styles.checkbox,
                   importConfig.updateExisting && styles.checkboxChecked
-                ]}>
+                ])}>
                   {importConfig.updateExisting && (
                     <Icon name="checkmark" size={14} color={DesignSystem.colors.text.inverse} />
                   )}
@@ -629,10 +629,10 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
                 onPress={() => setImportConfig(prev => ({ ...prev, sendWelcomeEmail: !prev.sendWelcomeEmail }))}
                 style={styles.checkboxRow}
               >
-                <View style={[
+                <View style={StyleSheet.flatten([
                   styles.checkbox,
                   importConfig.sendWelcomeEmail && styles.checkboxChecked
-                ]}>
+                ])}>
                   {importConfig.sendWelcomeEmail && (
                     <Icon name="checkmark" size={14} color={DesignSystem.colors.text.inverse} />
                   )}
@@ -644,10 +644,10 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
                 onPress={() => setImportConfig(prev => ({ ...prev, generatePasswords: !prev.generatePasswords }))}
                 style={styles.checkboxRow}
               >
-                <View style={[
+                <View style={StyleSheet.flatten([
                   styles.checkbox,
                   importConfig.generatePasswords && styles.checkboxChecked
-                ]}>
+                ])}>
                   {importConfig.generatePasswords && (
                     <Icon name="checkmark" size={14} color={DesignSystem.colors.text.inverse} />
                   )}
@@ -732,13 +732,13 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
                     <Text style={styles.resultStatLabel}>成功匯入</Text>
                   </View>
                   <View style={styles.resultStatItem}>
-                    <Text style={[styles.resultStatNumber, styles.resultStatNumberError]}>
+                    <Text style={StyleSheet.flatten([styles.resultStatNumber, styles.resultStatNumberError])}>
                       {importResult.failed}
                     </Text>
                     <Text style={styles.resultStatLabel}>匯入失敗</Text>
                   </View>
                   <View style={styles.resultStatItem}>
-                    <Text style={[styles.resultStatNumber, styles.resultStatNumberSkipped]}>
+                    <Text style={StyleSheet.flatten([styles.resultStatNumber, styles.resultStatNumberSkipped])}>
                       {importResult.skipped}
                     </Text>
                     <Text style={styles.resultStatLabel}>跳過</Text>

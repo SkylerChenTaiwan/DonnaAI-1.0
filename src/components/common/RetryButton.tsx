@@ -12,7 +12,7 @@ interface RetryButtonProps {
 export function RetryButton({ onRetry, loading = false, message = '重試', style }: RetryButtonProps) {
   return (
     <TouchableOpacity 
-      style={[styles.container, style]}
+      style={StyleSheet.flatten([styles.container, style])}
       onPress={onRetry}
       disabled={loading}
       activeOpacity={0.7}

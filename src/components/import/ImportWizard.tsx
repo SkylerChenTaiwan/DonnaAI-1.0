@@ -547,25 +547,25 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
       <View style={styles.progressContainer}>
         {[1, 2, 3, 4].map(stage => (
           <View key={stage} style={styles.progressItem}>
-            <View style={[
+            <View style={StyleSheet.flatten([
               styles.progressCircle,
               {
                 backgroundColor: stage <= wizardState.stage ? colors.primary : colors.gray100,
                 borderColor: stage === wizardState.stage ? colors.primary : colors.gray600,
                 borderWidth: 1.5
               }
-            ]}>
-              <Text style={[
+            ])}>
+              <Text style={StyleSheet.flatten([
                 styles.progressNumber,
                 { color: stage <= wizardState.stage ? colors.white : colors.gray700 }
-              ]}>
+              ])}>
                 {stage}
               </Text>
             </View>
-            <Text style={[
+            <Text style={StyleSheet.flatten([
               styles.progressLabel,
               { color: stage === wizardState.stage ? colors.text : colors.gray500 }
-            ]}>
+            ])}>
               {stage === 1 && '選擇資料庫'}
               {stage === 2 && '檔案處理'}
               {stage === 3 && '欄位設定'}
@@ -667,26 +667,26 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
       : 0;
 
     return (
-      <View style={[styles.progressOverlay, { backgroundColor: colors.background }]}>
+      <View style={StyleSheet.flatten([styles.progressOverlay, { backgroundColor: colors.background }])}>
         <View style={styles.progressContent}>
           <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={[styles.progressTitle, { color: colors.text }]}>
+          <Text style={StyleSheet.flatten([styles.progressTitle, { color: colors.text }])}>
             正在匯入資料...
           </Text>
           <View style={styles.progressBar}>
-            <View style={[
+            <View style={StyleSheet.flatten([
               styles.progressBarFill,
               { 
                 width: `${progress * 100}%`,
                 backgroundColor: colors.primary
               }
-            ]} />
+            ])} />
           </View>
-          <Text style={[styles.progressText, { color: colors.gray600 }]}>
+          <Text style={StyleSheet.flatten([styles.progressText, { color: colors.gray600 }])}>
             已處理 {wizardState.importProgress.processedRows} / {wizardState.importProgress.totalRows} 筆
           </Text>
           {wizardState.importProgress.errorCount > 0 && (
-            <Text style={[styles.errorText, { color: colors.error }]}>
+            <Text style={StyleSheet.flatten([styles.errorText, { color: colors.error }])}>
               {wizardState.importProgress.errorCount} 筆錯誤
             </Text>
           )}
@@ -696,14 +696,14 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={StyleSheet.flatten([styles.container, { backgroundColor: colors.background }])}>
       {/* 頂部標題欄 */}
-      <View style={[styles.header, { borderBottomColor: colors.gray200 }]}>
+      <View style={StyleSheet.flatten([styles.header, { borderBottomColor: colors.gray200 }])}>
         <View style={styles.headerContent}>
-          <Text style={[styles.title, { color: colors.text }]}>
+          <Text style={StyleSheet.flatten([styles.title, { color: colors.text }])}>
             資料匯入精靈
           </Text>
-          <Text style={[styles.subtitle, { color: colors.gray600 }]}>
+          <Text style={StyleSheet.flatten([styles.subtitle, { color: colors.gray600 }])}>
             {renderStageTitle()}
           </Text>
         </View>
@@ -719,11 +719,11 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
         {/* 資料清理按鈕 */}
         <Button
           variant="outline"
-          style={[styles.cleanupButton, {
+          style={StyleSheet.flatten([styles.cleanupButton, {
             backgroundColor: withAlpha(colors.status.warning, 0.125),
             borderColor: colors.status.warning,
             opacity: cleanupState.isCleaningUp ? 0.6 : 1
-          }]}
+          }])}
           onPress={handleCleanupDuplicates}
           disabled={cleanupState.isCleaningUp || wizardState.importProgress.isImporting}
           icon={<MaterialIcon 
@@ -745,7 +745,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
       </ScrollView>
 
       {/* 底部按鈕 */}
-      <View style={[styles.footer, { borderTopColor: colors.gray200 }]}>
+      <View style={StyleSheet.flatten([styles.footer, { borderTopColor: colors.gray200 }])}>
         <View style={styles.footerButtons}>
           {canGoBack && (
             <Button
@@ -793,25 +793,25 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
       
       {/* 清理進度覆蓋層 */}
       {cleanupState.isCleaningUp && (
-        <View style={[styles.progressOverlay, { backgroundColor: colors.background }]}>
+        <View style={StyleSheet.flatten([styles.progressOverlay, { backgroundColor: colors.background }])}>
           <View style={styles.progressContent}>
             <ActivityIndicator size="large" color={colors.status.warning} />
-            <Text style={[styles.progressTitle, { color: colors.text }]}>
+            <Text style={StyleSheet.flatten([styles.progressTitle, { color: colors.text }])}>
               正在清理重複資料...
             </Text>
-            <Text style={[styles.progressMessage, { color: colors.gray600 }]}>
+            <Text style={StyleSheet.flatten([styles.progressMessage, { color: colors.gray600 }])}>
               {cleanupState.progress.message}
             </Text>
             <View style={styles.progressBar}>
-              <View style={[
+              <View style={StyleSheet.flatten([
                 styles.progressBarFill,
                 { 
                   backgroundColor: colors.status.warning,
                   width: `${cleanupState.progress.percent}%`
                 }
-              ]} />
+              ])} />
             </View>
-            <Text style={[styles.progressText, { color: colors.gray600 }]}>
+            <Text style={StyleSheet.flatten([styles.progressText, { color: colors.gray600 }])}>
               {Math.round(cleanupState.progress.percent)}%
             </Text>
           </View>

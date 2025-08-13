@@ -167,10 +167,10 @@ export const SuperAdminDashboard: React.FC = () => {
       </View>
 
       {/* 快速統計 */}
-      <View style={[styles.statsGrid, shouldUseWebLayout && styles.webStatsGrid]}>
+      <View style={StyleSheet.flatten([styles.statsGrid, shouldUseWebLayout && styles.webStatsGrid])}>
         {quickStats.map((stat) => (
-          <View key={stat.id} style={[styles.statCard, useResponsiveLayout && styles.webStatCard]}>
-            <View style={[styles.statIconContainer, { backgroundColor: `${stat.color}15` }]}>
+          <View key={stat.id} style={StyleSheet.flatten([styles.statCard, useResponsiveLayout && styles.webStatCard])}>
+            <View style={StyleSheet.flatten([styles.statIconContainer, { backgroundColor: `${stat.color}15` }])}>
               <Icon name={stat.icon as any} size={24} color={stat.color} />
             </View>
             <Text style={styles.statValue}>{stat.value}</Text>
@@ -181,13 +181,13 @@ export const SuperAdminDashboard: React.FC = () => {
       </View>
 
       {/* 快速操作 */}
-      <View style={[styles.section, useResponsiveLayout && styles.webSection]}>
+      <View style={StyleSheet.flatten([styles.section, useResponsiveLayout && styles.webSection])}>
         <Text style={styles.sectionTitle}>快速操作</Text>
-        <View style={[styles.actionsGrid, useResponsiveLayout && styles.webActionsGrid]}>
+        <View style={StyleSheet.flatten([styles.actionsGrid, useResponsiveLayout && styles.webActionsGrid])}>
           {quickActions.map((action) => (
             <TouchableOpacity
               key={action.id}
-              style={[styles.actionCard, useResponsiveLayout && styles.webActionCard]}
+              style={StyleSheet.flatten([styles.actionCard, useResponsiveLayout && styles.webActionCard])}
               onPress={action.action}
             >
               <Icon 
@@ -202,7 +202,7 @@ export const SuperAdminDashboard: React.FC = () => {
       </View>
 
       {/* 系統資訊 */}
-      <View style={[styles.section, useResponsiveLayout && styles.webSection]}>
+      <View style={StyleSheet.flatten([styles.section, useResponsiveLayout && styles.webSection])}>
         <Text style={styles.sectionTitle}>系統狀態</Text>
         
         <View style={styles.systemInfoCard}>
@@ -227,7 +227,7 @@ export const SuperAdminDashboard: React.FC = () => {
 
       {/* 收入排行榜 */}
       {topOrganizations.length > 0 && (
-        <View style={[styles.section, useResponsiveLayout && styles.webSection]}>
+        <View style={StyleSheet.flatten([styles.section, useResponsiveLayout && styles.webSection])}>
           <Text style={styles.sectionTitle}>收入排行榜（前10名）</Text>
           {topOrganizations.map((org, index) => (
             <TouchableOpacity 

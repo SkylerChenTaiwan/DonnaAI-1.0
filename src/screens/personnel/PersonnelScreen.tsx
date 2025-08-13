@@ -209,10 +209,10 @@ export const PersonnelScreen: React.FC = () => {
             />
             {/* 編輯模式切換按鈕 */}
             <TouchableOpacity
-              style={[
+              style={StyleSheet.flatten([
                 styles.iconButton,
                 isEditMode && styles.iconButtonActive,
-              ]}
+              ])}
               onPress={() => {
                 if (!user) {
                   Alert.alert('無權限', '您沒有編輯資料的權限');

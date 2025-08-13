@@ -173,14 +173,14 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
       >
         {/* 選中標記 */}
         {isSelected && (
-          <View style={[styles.selectedBadge, { backgroundColor: colors.primary }]}>
+          <View style={StyleSheet.flatten([styles.selectedBadge, { backgroundColor: colors.primary }])}>
             <Icon name="checkmark" size={16} color={colors.white} />
           </View>
         )}
 
         {/* 圖標和標題 */}
         <View style={styles.cardHeader}>
-          <View style={[styles.iconContainer, { backgroundColor: withAlpha(option.color, 0.125) }]}>
+          <View style={StyleSheet.flatten([styles.iconContainer, { backgroundColor: withAlpha(option.color, 0.125) }])}>
             <IconComponent 
               name={option.icon as any} 
               size={32} 
@@ -203,28 +203,28 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
 
         {/* 統計資訊 */}
         {stats && (
-          <View style={[styles.statsContainer, { borderTopColor: colors.gray100 }]}>
+          <View style={StyleSheet.flatten([styles.statsContainer, { borderTopColor: colors.gray100 }])}>
             <View style={styles.statItem}>
-              <Text style={[styles.statValue, { color: colors.text }]}>
+              <Text style={StyleSheet.flatten([styles.statValue, { color: colors.text }])}>
                 {stats.totalCount.toLocaleString()}
               </Text>
-              <Text style={[styles.statLabel, { color: colors.gray500 }]}>
+              <Text style={StyleSheet.flatten([styles.statLabel, { color: colors.gray500 }])}>
                 現有記錄
               </Text>
             </View>
             <View style={styles.statItem}>
-              <Text style={[styles.statValue, { color: colors.text }]}>
+              <Text style={StyleSheet.flatten([styles.statValue, { color: colors.text }])}>
                 {fieldCount}
               </Text>
-              <Text style={[styles.statLabel, { color: colors.gray500 }]}>
+              <Text style={StyleSheet.flatten([styles.statLabel, { color: colors.gray500 }])}>
                 欄位數量
               </Text>
             </View>
             <View style={styles.statItem}>
-              <Text style={[styles.statValue, { color: colors.text }]}>
+              <Text style={StyleSheet.flatten([styles.statValue, { color: colors.text }])}>
                 {stats.customFields || 0}
               </Text>
-              <Text style={[styles.statLabel, { color: colors.gray500 }]}>
+              <Text style={StyleSheet.flatten([styles.statLabel, { color: colors.gray500 }])}>
                 自訂欄位
               </Text>
             </View>
@@ -233,21 +233,21 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
 
         {/* 功能標籤 */}
         <View style={styles.featuresContainer}>
-          <View style={[styles.featureTag, { backgroundColor: colors.gray100 }]}>
+          <View style={StyleSheet.flatten([styles.featureTag, { backgroundColor: colors.gray100 }])}>
             <MaterialIcon name="merge-type" size={12} color={colors.gray600} />
-            <Text style={[styles.featureText, { color: colors.gray600 }]}>
+            <Text style={StyleSheet.flatten([styles.featureText, { color: colors.gray600 }])}>
               支援合併
             </Text>
           </View>
-          <View style={[styles.featureTag, { backgroundColor: colors.gray100 }]}>
+          <View style={StyleSheet.flatten([styles.featureTag, { backgroundColor: colors.gray100 }])}>
             <MaterialIcon name="link" size={12} color={colors.gray600} />
-            <Text style={[styles.featureText, { color: colors.gray600 }]}>
+            <Text style={StyleSheet.flatten([styles.featureText, { color: colors.gray600 }])}>
               跨表關聯
             </Text>
           </View>
-          <View style={[styles.featureTag, { backgroundColor: colors.gray100 }]}>
+          <View style={StyleSheet.flatten([styles.featureTag, { backgroundColor: colors.gray100 }])}>
             <MaterialIcon name="add-circle-outline" size={12} color={colors.gray600} />
-            <Text style={[styles.featureText, { color: colors.gray600 }]}>
+            <Text style={StyleSheet.flatten([styles.featureText, { color: colors.gray600 }])}>
               動態欄位
             </Text>
           </View>
@@ -261,7 +261,7 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
       {/* 說明文字 */}
       <View style={styles.instructionContainer}>
         <MaterialIcon name="info-outline" size={20} color={colors.primary} />
-        <Text style={[styles.instruction, { color: colors.gray600 }]}>
+        <Text style={StyleSheet.flatten([styles.instruction, { color: colors.gray600 }])}>
           請選擇要匯入資料的目標資料庫。系統將根據您的選擇載入對應的欄位結構。
         </Text>
       </View>
@@ -270,7 +270,7 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
       {loading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={[styles.loadingText, { color: colors.gray600 }]}>
+          <Text style={StyleSheet.flatten([styles.loadingText, { color: colors.gray600 }])}>
             正在載入資料庫資訊...
           </Text>
         </View>
@@ -283,9 +283,9 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
 
       {/* 提示訊息 */}
       {selectedDatabase && (
-        <View style={[styles.tipContainer, { backgroundColor: withAlpha(colors.primary, 0.063) }]}>
+        <View style={StyleSheet.flatten([styles.tipContainer, { backgroundColor: withAlpha(colors.primary, 0.063) }])}>
           <MaterialIcon name="lightbulb-outline" size={16} color={colors.primary} />
-          <Text style={[styles.tipText, { color: colors.primary }]}>
+          <Text style={StyleSheet.flatten([styles.tipText, { color: colors.primary }])}>
             已選擇 {databaseOptions.find(o => o.type === selectedDatabase)?.label}
           </Text>
         </View>

@@ -532,7 +532,7 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
       <View style={styles.stepContent}>
         <Text style={styles.stepTitle}>請上傳舊系統匯出的 CSV 檔案</Text>
         
-        <View style={[useGrid && responsiveGrid.twoColumn]}>
+        <View style={StyleSheet.flatten([useGrid && responsiveGrid.twoColumn])}>
           {fileTypes.map((fileType) => (
         <View key={fileType.key} style={styles.fileSection}>
           <View style={styles.fileSectionHeader}>
@@ -585,10 +585,10 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
         </View>
 
         <TouchableOpacity
-        style={[
+        style={StyleSheet.flatten([
           styles.actionButton,
           !files.codeMapping || !files.users ? styles.disabledButton : null,
-        ]}
+        ])}
         onPress={startImport}
         disabled={!files.codeMapping || !files.users}
       >
@@ -626,10 +626,10 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
           
           <View style={styles.progressBar}>
             <View 
-              style={[
+              style={StyleSheet.flatten([
                 styles.progressFill,
                 { width: `${importProgress.percentage}%` },
-              ]} 
+              ])} 
             />
           </View>
           
@@ -685,19 +685,19 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
           </View>
           <View style={styles.summaryRow}>
             <Text style={styles.summaryLabel}>成功:</Text>
-            <Text style={[styles.summaryValue, styles.successText]}>
+            <Text style={StyleSheet.flatten([styles.summaryValue, styles.successText])}>
               {importResult.stats.successCount}
             </Text>
           </View>
           <View style={styles.summaryRow}>
             <Text style={styles.summaryLabel}>失敗:</Text>
-            <Text style={[styles.summaryValue, styles.errorText]}>
+            <Text style={StyleSheet.flatten([styles.summaryValue, styles.errorText])}>
               {importResult.stats.failureCount}
             </Text>
           </View>
           <View style={styles.summaryRow}>
             <Text style={styles.summaryLabel}>警告:</Text>
-            <Text style={[styles.summaryValue, styles.warningText]}>
+            <Text style={StyleSheet.flatten([styles.summaryValue, styles.warningText])}>
               {importResult.stats.warningCount}
             </Text>
           </View>
@@ -706,7 +706,7 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
 
       <View style={styles.completeActions}>
         <TouchableOpacity
-          style={[styles.actionButton, styles.secondaryButton]}
+          style={StyleSheet.flatten([styles.actionButton, styles.secondaryButton])}
           onPress={() => importResult && showImportReport(importResult)}
         >
           <Text style={styles.secondaryButtonText}>查看詳細報告</Text>
@@ -730,7 +730,7 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
         <View style={styles.switchContainer}>
           <Text style={styles.switchLabel}>使用新版匯入精靈</Text>
           <TouchableOpacity
-            style={[styles.switchButton, { backgroundColor: DesignSystem.colors.primary }]}
+            style={StyleSheet.flatten([styles.switchButton, { backgroundColor: DesignSystem.colors.primary }])}
             onPress={() => setUseNewWizard(false)}
           >
             <Text style={styles.switchButtonText}>切換到舊版</Text>
@@ -771,7 +771,7 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
       <View style={styles.switchContainer}>
         <Text style={styles.switchLabel}>使用舊版匯入</Text>
         <TouchableOpacity
-          style={[styles.switchButton, { backgroundColor: DesignSystem.colors.gray500 }]}
+          style={StyleSheet.flatten([styles.switchButton, { backgroundColor: DesignSystem.colors.gray500 }])}
           onPress={() => setUseNewWizard(true)}
         >
           <Text style={styles.switchButtonText}>切換到新版</Text>
@@ -782,27 +782,27 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
       <View style={styles.stepIndicator}>
         {steps.map((step, index) => (
           <View key={index} style={styles.stepItem}>
-            <View style={[
+            <View style={StyleSheet.flatten([
               styles.stepCircle,
               index <= activeStep ? styles.stepCircleActive : null,
-            ]}>
+            ])}>
               <Icon 
                 name={step.icon as any} 
                 size={20} 
                 color={index <= activeStep ? '#fff' : DesignSystem.colors.gray} 
               />
             </View>
-            <Text style={[
+            <Text style={StyleSheet.flatten([
               styles.stepLabel,
               index <= activeStep ? styles.stepLabelActive : null,
-            ]}>
+            ])}>
               {step.title}
             </Text>
             {index < steps.length - 1 && (
-              <View style={[
+              <View style={StyleSheet.flatten([
                 styles.stepLine,
                 index < activeStep ? styles.stepLineActive : null,
-              ]} />
+              ])} />
             )}
           </View>
         ))}

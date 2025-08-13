@@ -41,7 +41,7 @@ export const ToolbarIcons: React.FC<ToolbarIconsProps> = ({
   onModeToggle,
   style }) => {
   return (
-    <View style={[styles.container, style]}>
+    <View style={StyleSheet.flatten([styles.container, style])}>
       {showFilter && (
         <TouchableOpacity
           style={styles.iconButton}
@@ -66,10 +66,10 @@ export const ToolbarIcons: React.FC<ToolbarIconsProps> = ({
       )}
       {showMultiSelect && (
         <TouchableOpacity
-          style={[
+          style={StyleSheet.flatten([
             styles.iconButton,
             multiSelectMode && styles.iconButtonActive,
-          ]}
+          ])}
           onPress={onMultiSelectPress}
           activeOpacity={0.7}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
@@ -95,10 +95,10 @@ export const ToolbarIcons: React.FC<ToolbarIconsProps> = ({
       )}
       {showModeToggle && (
         <TouchableOpacity
-          style={[
+          style={StyleSheet.flatten([
             styles.iconButton,
             currentMode === 'manager' && styles.iconButtonActive,
-          ]}
+          ])}
           onPress={onModeToggle}
           activeOpacity={0.7}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}

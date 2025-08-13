@@ -104,14 +104,14 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
         return (
           <>
             <TouchableOpacity
-              style={[styles.input, styles.dateInput, error && styles.inputError]}
+              style={StyleSheet.flatten([styles.input, styles.dateInput, error && styles.inputError])}
               onPress={() => {
                 setShowDatePicker(true);
                 setTempDate(value || new Date());
               }}
               disabled={disabled}
             >
-              <Text style={[styles.dateText, !value && styles.placeholderText]}>
+              <Text style={StyleSheet.flatten([styles.dateText, !value && styles.placeholderText])}>
                 {value ? formatDate(value) : placeholder || '選擇日期'}
               </Text>
               <Icon name="calendar-outline" size={20} color="#7A7A7A" />
@@ -165,11 +165,11 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
         return (
           <>
             <TouchableOpacity
-              style={[styles.input, styles.selectInput, error && styles.inputError]}
+              style={StyleSheet.flatten([styles.input, styles.selectInput, error && styles.inputError])}
               onPress={() => setShowPicker(true)}
               disabled={disabled}
             >
-              <Text style={[styles.selectText, !value && styles.placeholderText]}>
+              <Text style={StyleSheet.flatten([styles.selectText, !value && styles.placeholderText])}>
                 {selectedOption?.label || placeholder || '請選擇'}
               </Text>
               <Icon name="chevron-down-outline" size={20} color="#7A7A7A" />
@@ -211,7 +211,7 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
               </Modal>
             ) : (
               showPicker && (
-                <View style={[styles.input, styles.pickerContainer, error && styles.inputError]}>
+                <View style={StyleSheet.flatten([styles.input, styles.pickerContainer, error && styles.inputError])}>
                   <Picker
                     selectedValue={value}
                     onValueChange={(newValue) => {
@@ -239,11 +239,11 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
       case 'multiline':
         return (
           <TextInput
-            style={[
+            style={StyleSheet.flatten([
               styles.input,
               minHeight ? { height: minHeight } : styles.textarea,
               error && styles.inputError,
-            ]}
+            ])}
             value={value || ''}
             onChangeText={onChange}
             placeholder={placeholder}
@@ -256,7 +256,7 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
       default:
         return (
           <TextInput
-            style={[styles.input, error && styles.inputError]}
+            style={StyleSheet.flatten([styles.input, error && styles.inputError])}
             value={value || ''}
             onChangeText={onChange}
             placeholder={placeholder}

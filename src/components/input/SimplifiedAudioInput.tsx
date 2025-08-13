@@ -366,13 +366,13 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
 
     return (
       <View style={styles.waveformContainer}>
-        <Animated.View style={[styles.waveformBar, { opacity: waveOpacity, height: 30 }]} />
-        <Animated.View style={[styles.waveformBar, { opacity: waveOpacity, height: 50 }]} />
-        <Animated.View style={[styles.waveformBar, { opacity: waveOpacity, height: 40 }]} />
-        <Animated.View style={[styles.waveformBar, { opacity: waveOpacity, height: 60 }]} />
-        <Animated.View style={[styles.waveformBar, { opacity: waveOpacity, height: 45 }]} />
-        <Animated.View style={[styles.waveformBar, { opacity: waveOpacity, height: 55 }]} />
-        <Animated.View style={[styles.waveformBar, { opacity: waveOpacity, height: 35 }]} />
+        <Animated.View style={StyleSheet.flatten([styles.waveformBar, { opacity: waveOpacity, height: 30 }])} />
+        <Animated.View style={StyleSheet.flatten([styles.waveformBar, { opacity: waveOpacity, height: 50 }])} />
+        <Animated.View style={StyleSheet.flatten([styles.waveformBar, { opacity: waveOpacity, height: 40 }])} />
+        <Animated.View style={StyleSheet.flatten([styles.waveformBar, { opacity: waveOpacity, height: 60 }])} />
+        <Animated.View style={StyleSheet.flatten([styles.waveformBar, { opacity: waveOpacity, height: 45 }])} />
+        <Animated.View style={StyleSheet.flatten([styles.waveformBar, { opacity: waveOpacity, height: 55 }])} />
+        <Animated.View style={StyleSheet.flatten([styles.waveformBar, { opacity: waveOpacity, height: 35 }])} />
       </View>
     );
   };

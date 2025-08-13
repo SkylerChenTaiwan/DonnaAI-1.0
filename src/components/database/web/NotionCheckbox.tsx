@@ -27,10 +27,10 @@ export const NotionCheckbox: React.FC<NotionCheckboxProps> = ({
 
   return (
     <TouchableOpacity
-      style={[
+      style={StyleSheet.flatten([
         styles.container,
         disabled && styles.disabledContainer,
-      ]}
+      ])}
       onPress={handlePress}
       disabled={disabled}
       activeOpacity={0.7}
@@ -44,12 +44,12 @@ export const NotionCheckbox: React.FC<NotionCheckboxProps> = ({
         style={styles.hiddenInput}
         tabIndex={-1}
       />
-      <View style={[
+      <View style={StyleSheet.flatten([
         styles.checkbox,
         checked && styles.checkedCheckbox,
         indeterminate && styles.indeterminateCheckbox,
         disabled && styles.disabledCheckbox,
-      ]}>
+      ])}>
         {checked && !indeterminate && (
           <CheckIcon />
         )}

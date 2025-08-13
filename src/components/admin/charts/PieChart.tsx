@@ -71,10 +71,10 @@ export const PieChart: React.FC<PieChartProps> = ({
         {pieData.map((item, index) => (
           <View key={index} style={styles.legendItem}>
             <View 
-              style={[
+              style={StyleSheet.flatten([
                 styles.legendColor, 
                 { backgroundColor: item.color }
-              ]} 
+              ])} 
             />
             <Text style={styles.legendText}>
               {item.label} {showPercentage && `(${item.percentage})`}

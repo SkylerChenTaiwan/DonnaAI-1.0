@@ -212,7 +212,7 @@ export const IntelligentFieldMapper: React.FC<Props> = ({
     return (
       <TouchableOpacity
         key={index}
-        style={[styles.mappingRow, isSelected && styles.selectedRow]}
+        style={StyleSheet.flatten([styles.mappingRow, isSelected && styles.selectedRow])}
         onPress={() => setSelectedMapping(isSelected ? null : header)}
       >
         <View style={styles.sourceField}>
@@ -267,10 +267,10 @@ export const IntelligentFieldMapper: React.FC<Props> = ({
                   f => f.name === suggestion.bestMatch.targetField
                 )?.label}
               </Text>
-              <View style={[
+              <View style={StyleSheet.flatten([
                 styles.confidenceBadge,
                 { backgroundColor: getConfidenceColor(suggestion.bestMatch.confidence) }
-              ]}>
+              ])}>
                 <Text style={styles.confidenceText}>
                   {Math.round(suggestion.bestMatch.confidence * 100)}%
                 </Text>
@@ -285,10 +285,10 @@ export const IntelligentFieldMapper: React.FC<Props> = ({
                 size={16}
                 color={getConfidenceColor(mapping.confidence)}
               />
-              <Text style={[
+              <Text style={StyleSheet.flatten([
                 styles.confidenceText,
                 { color: getConfidenceColor(mapping.confidence) }
-              ]}>
+              ])}>
                 {Math.round(mapping.confidence * 100)}%
               </Text>
             </View>
@@ -387,17 +387,17 @@ export const IntelligentFieldMapper: React.FC<Props> = ({
             </TouchableOpacity>
             
             <TouchableOpacity
-              style={[styles.actionButton, styles.secondaryButton]}
+              style={StyleSheet.flatten([styles.actionButton, styles.secondaryButton])}
               onPress={resetMappings}
             >
               <MaterialIcon name="refresh" size={20} color="#666" />
-              <Text style={[styles.actionButtonText, styles.secondaryText]}>
+              <Text style={StyleSheet.flatten([styles.actionButtonText, styles.secondaryText])}>
                 重置
               </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.actionButton, styles.secondaryButton]}
+              style={StyleSheet.flatten([styles.actionButton, styles.secondaryButton])}
               onPress={() => setShowAdvanced(!showAdvanced)}
             >
               <MaterialIcon 
@@ -405,7 +405,7 @@ export const IntelligentFieldMapper: React.FC<Props> = ({
                 size={20} 
                 color="#666" 
               />
-              <Text style={[styles.actionButtonText, styles.secondaryText]}>
+              <Text style={StyleSheet.flatten([styles.actionButtonText, styles.secondaryText])}>
                 進階選項
               </Text>
             </TouchableOpacity>

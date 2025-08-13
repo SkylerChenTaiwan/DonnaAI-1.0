@@ -171,7 +171,7 @@ export const OrganizationsScreen: React.FC = () => {
           <Text style={styles.orgName}>{item.name}</Text>
           <Text style={styles.orgPlan}>{(item.subscriptionPlan || 'basic').toUpperCase()}</Text>
         </View>
-        <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
+        <View style={StyleSheet.flatten([styles.statusBadge, { backgroundColor: getStatusColor(item.status) }])}>
           <Text style={styles.statusText}>{item.status || 'active'}</Text>
         </View>
       </View>
@@ -193,10 +193,10 @@ export const OrganizationsScreen: React.FC = () => {
 
       <View style={styles.orgActions}>
         <TouchableOpacity
-          style={[
+          style={StyleSheet.flatten([
             styles.actionButton,
             item.status === 'active' ? styles.suspendButton : styles.activateButton
-          ]}
+          ])}
           onPress={(e) => {
             console.log('🔘 Toggle button clicked for organization:', item.name, 'Current status:', item.status);
             // 在 Web 平台上不需要 stopPropagation
@@ -212,10 +212,10 @@ export const OrganizationsScreen: React.FC = () => {
             size={20}
             color={item.status === 'active' ? DesignSystem.colors.warning : DesignSystem.colors.success}
           />
-          <Text style={[
+          <Text style={StyleSheet.flatten([
             styles.actionLabel,
             item.status === 'active' ? styles.suspendLabel : styles.activateLabel
-          ]}>
+          ])}>
             {item.status === 'active' ? '停用' : '啟用'}
           </Text>
         </TouchableOpacity>

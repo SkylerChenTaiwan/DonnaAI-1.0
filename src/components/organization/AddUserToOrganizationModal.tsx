@@ -224,18 +224,18 @@ export const AddUserToOrganizationModal: React.FC<AddUserToOrganizationModalProp
             <Text style={styles.roleLabel}>角色 <Text style={styles.required}>*</Text></Text>
             <View style={styles.roleOptions}>
               <TouchableOpacity
-                style={[styles.roleOption, formData.role === 'user' && styles.roleOptionActive]}
+                style={StyleSheet.flatten([styles.roleOption, formData.role === 'user' && styles.roleOptionActive])}
                 onPress={() => handleFieldChange('role', 'user')}
               >
-                <Text style={[styles.roleOptionText, formData.role === 'user' && styles.roleOptionTextActive]}>
+                <Text style={StyleSheet.flatten([styles.roleOptionText, formData.role === 'user' && styles.roleOptionTextActive])}>
                   一般用戶
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={[styles.roleOption, formData.role === 'admin' && styles.roleOptionActive]}
+                style={StyleSheet.flatten([styles.roleOption, formData.role === 'admin' && styles.roleOptionActive])}
                 onPress={() => handleFieldChange('role', 'admin')}
               >
-                <Text style={[styles.roleOptionText, formData.role === 'admin' && styles.roleOptionTextActive]}>
+                <Text style={StyleSheet.flatten([styles.roleOptionText, formData.role === 'admin' && styles.roleOptionTextActive])}>
                   管理員
                 </Text>
               </TouchableOpacity>

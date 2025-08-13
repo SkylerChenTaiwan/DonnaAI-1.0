@@ -403,23 +403,23 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
     return (
       <TouchableOpacity
         key={file.id}
-        style={[
+        style={StyleSheet.flatten([
           styles.fileCard,
           {
             backgroundColor: colors.white,
             borderColor: isSelected ? colors.primary : colors.gray200
           }
-        ]}
+        ])}
         onPress={() => setSelectedFileId(isSelected ? null : file.id)}
         activeOpacity={0.7}
       >
         <View style={styles.fileHeader}>
           <MaterialIcon name="insert-drive-file" size={24} color={colors.primary} />
           <View style={styles.fileInfo}>
-            <Text style={[styles.fileName, { color: colors.text }]} numberOfLines={1}>
+            <Text style={StyleSheet.flatten([styles.fileName, { color: colors.text }])} numberOfLines={1}>
               {file.name}
             </Text>
-            <Text style={[styles.fileStats, { color: colors.gray500 }]}>
+            <Text style={StyleSheet.flatten([styles.fileStats, { color: colors.gray500 }])}>
               {file.rowCount} 列 × {file.headers.length} 欄
             </Text>
           </View>
@@ -433,12 +433,12 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
 
         {/* 關鍵欄位選擇 - 即使單一檔案也允許選擇關鍵欄位 */}
         {uploadedFiles.length > 0 && (
-          <View style={[styles.keyFieldSection, { borderTopColor: colors.gray100 }]}>
+          <View style={StyleSheet.flatten([styles.keyFieldSection, { borderTopColor: colors.gray100 }])}>
             <View style={styles.keyFieldHeader}>
-              <Text style={[styles.keyFieldLabel, { color: colors.gray600 }]}>
+              <Text style={StyleSheet.flatten([styles.keyFieldLabel, { color: colors.gray600 }])}>
                 關鍵欄位{uploadedFiles.length > 1 ? '（用於合併）' : '（用於識別唯一記錄）'}
               </Text>
-              <Text style={[styles.keyFieldHint, { color: colors.gray400 }]}>
+              <Text style={StyleSheet.flatten([styles.keyFieldHint, { color: colors.gray400 }])}>
                 可橫向滾動查看所有欄位
               </Text>
             </View>
@@ -450,7 +450,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
                   .map(candidate => (
                     <TouchableOpacity
                       key={candidate.field}
-                      style={[
+                      style={StyleSheet.flatten([
                         styles.keyFieldOption,
                         {
                           backgroundColor: selectedKey === candidate.field 
@@ -458,35 +458,35 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
                             : colors.gray100,
                           borderColor: colors.success
                         }
-                      ]}
+                      ])}
                       onPress={() => handleKeyFieldChange(file.id, candidate.field)}
                     >
-                      <Text style={[
+                      <Text style={StyleSheet.flatten([
                         styles.keyFieldText,
                         { 
                           color: selectedKey === candidate.field 
                             ? colors.white 
                             : colors.gray700 
                         }
-                      ]}>
+                      ])}>
                         {candidate.field}
                       </Text>
-                      <View style={[
+                      <View style={StyleSheet.flatten([
                         styles.confidenceBadge,
                         {
                           backgroundColor: selectedKey === candidate.field
                             ? withAlpha(colors.white, 0.188)
                             : withAlpha(colors.success, 0.125)
                         }
-                      ]}>
-                        <Text style={[
+                      ])}>
+                        <Text style={StyleSheet.flatten([
                           styles.confidenceText,
                           {
                             color: selectedKey === candidate.field
                               ? colors.white
                               : colors.success
                           }
-                        ]}>
+                        ])}>
                           推薦
                         </Text>
                       </View>
@@ -499,7 +499,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
                   .map(candidate => (
                     <TouchableOpacity
                       key={candidate.field}
-                      style={[
+                      style={StyleSheet.flatten([
                         styles.keyFieldOption,
                         {
                           backgroundColor: selectedKey === candidate.field 
@@ -507,35 +507,35 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
                             : colors.gray100,
                           borderColor: colors.warning
                         }
-                      ]}
+                      ])}
                       onPress={() => handleKeyFieldChange(file.id, candidate.field)}
                     >
-                      <Text style={[
+                      <Text style={StyleSheet.flatten([
                         styles.keyFieldText,
                         { 
                           color: selectedKey === candidate.field 
                             ? colors.white 
                             : colors.gray700 
                         }
-                      ]}>
+                      ])}>
                         {candidate.field}
                       </Text>
-                      <View style={[
+                      <View style={StyleSheet.flatten([
                         styles.confidenceBadge,
                         {
                           backgroundColor: selectedKey === candidate.field
                             ? withAlpha(colors.white, 0.188)
                             : withAlpha(colors.warning, 0.125)
                         }
-                      ]}>
-                        <Text style={[
+                      ])}>
+                        <Text style={StyleSheet.flatten([
                           styles.confidenceText,
                           {
                             color: selectedKey === candidate.field
                               ? colors.white
                               : colors.warning
                           }
-                        ]}>
+                        ])}>
                           可用
                         </Text>
                       </View>
@@ -548,7 +548,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
                   .map(candidate => (
                     <TouchableOpacity
                       key={candidate.field}
-                      style={[
+                      style={StyleSheet.flatten([
                         styles.keyFieldOption,
                         {
                           backgroundColor: selectedKey === candidate.field 
@@ -556,17 +556,17 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
                             : colors.gray100,
                           borderColor: colors.gray300
                         }
-                      ]}
+                      ])}
                       onPress={() => handleKeyFieldChange(file.id, candidate.field)}
                     >
-                      <Text style={[
+                      <Text style={StyleSheet.flatten([
                         styles.keyFieldText,
                         { 
                           color: selectedKey === candidate.field 
                             ? colors.white 
                             : colors.gray700 
                         }
-                      ]}>
+                      ])}>
                         {candidate.field}
                       </Text>
                     </TouchableOpacity>
@@ -578,8 +578,8 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
 
         {/* 展開顯示更多資訊 */}
         {isSelected && (
-          <View style={[styles.expandedInfo, { borderTopColor: colors.gray100 }]}>
-            <Text style={[styles.expandedTitle, { color: colors.gray600 }]}>
+          <View style={StyleSheet.flatten([styles.expandedInfo, { borderTopColor: colors.gray100 }])}>
+            <Text style={StyleSheet.flatten([styles.expandedTitle, { color: colors.gray600 }])}>
               欄位預覽
             </Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -587,15 +587,15 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
                 {file.headers.slice(0, 10).map((header, index) => (
                   <View 
                     key={index} 
-                    style={[styles.headerChip, { backgroundColor: colors.gray100 }]}
+                    style={StyleSheet.flatten([styles.headerChip, { backgroundColor: colors.gray100 }])}
                   >
-                    <Text style={[styles.headerChipText, { color: colors.gray700 }]}>
+                    <Text style={StyleSheet.flatten([styles.headerChipText, { color: colors.gray700 }])}>
                       {header}
                     </Text>
                   </View>
                 ))}
                 {file.headers.length > 10 && (
-                  <Text style={[styles.moreText, { color: colors.gray500 }]}>
+                  <Text style={StyleSheet.flatten([styles.moreText, { color: colors.gray500 }])}>
                     +{file.headers.length - 10} 更多
                   </Text>
                 )}
@@ -623,9 +623,9 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
     const preview = previewMergedData(mergedTable, 5);
 
     return (
-      <View style={[styles.previewContainer, { backgroundColor: colors.white }]}>
+      <View style={StyleSheet.flatten([styles.previewContainer, { backgroundColor: colors.white }])}>
         <View style={styles.previewHeader}>
-          <Text style={[styles.previewTitle, { color: colors.text }]}>
+          <Text style={StyleSheet.flatten([styles.previewTitle, { color: colors.text }])}>
             合併結果預覽
           </Text>
           <TouchableOpacity onPress={() => setShowMergePreview(false)}>
@@ -636,10 +636,10 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
         <ScrollView horizontal showsHorizontalScrollIndicator={true}>
           <View>
             {/* 表頭 */}
-            <View style={[styles.tableRow, { backgroundColor: colors.gray50 }]}>
+            <View style={StyleSheet.flatten([styles.tableRow, { backgroundColor: colors.gray50 }])}>
               {preview.headers.map((header, index) => (
                 <View key={index} style={styles.tableCell}>
-                  <Text style={[styles.tableCellText, { color: colors.gray700, fontWeight: '600' }]}>
+                  <Text style={StyleSheet.flatten([styles.tableCellText, { color: colors.gray700, fontWeight: '600' }])}>
                     {header}
                   </Text>
                 </View>
@@ -650,15 +650,15 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
             {preview.data.map((row, rowIndex) => (
               <View 
                 key={rowIndex} 
-                style={[
+                style={StyleSheet.flatten([
                   styles.tableRow,
                   { borderBottomColor: colors.gray100 }
-                ]}
+                ])}
               >
                 {preview.headers.map((header, cellIndex) => (
                   <View key={cellIndex} style={styles.tableCell}>
                     <Text 
-                      style={[styles.tableCellText, { color: colors.text }]}
+                      style={StyleSheet.flatten([styles.tableCellText, { color: colors.text }])}
                       numberOfLines={1}
                     >
                       {row[header] || '-'}
@@ -671,27 +671,27 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
         </ScrollView>
 
         {preview.hasMore && (
-          <Text style={[styles.moreDataText, { color: colors.gray500 }]}>
+          <Text style={StyleSheet.flatten([styles.moreDataText, { color: colors.gray500 }])}>
             還有 {mergedTable.data.length - 5} 筆資料...
           </Text>
         )}
 
-        <View style={[styles.mergeStats, { borderTopColor: colors.gray100 }]}>
+        <View style={StyleSheet.flatten([styles.mergeStats, { borderTopColor: colors.gray100 }])}>
           <View style={styles.statItem}>
-            <Text style={[styles.statLabel, { color: colors.gray500 }]}>總筆數</Text>
-            <Text style={[styles.statValue, { color: colors.text }]}>
+            <Text style={StyleSheet.flatten([styles.statLabel, { color: colors.gray500 }])}>總筆數</Text>
+            <Text style={StyleSheet.flatten([styles.statValue, { color: colors.text }])}>
               {mergedTable.mergeInfo.totalRows}
             </Text>
           </View>
           <View style={styles.statItem}>
-            <Text style={[styles.statLabel, { color: colors.gray500 }]}>匹配</Text>
-            <Text style={[styles.statValue, { color: colors.success }]}>
+            <Text style={StyleSheet.flatten([styles.statLabel, { color: colors.gray500 }])}>匹配</Text>
+            <Text style={StyleSheet.flatten([styles.statValue, { color: colors.success }])}>
               {mergedTable.mergeInfo.matchedRows}
             </Text>
           </View>
           <View style={styles.statItem}>
-            <Text style={[styles.statLabel, { color: colors.gray500 }]}>未匹配</Text>
-            <Text style={[styles.statValue, { color: colors.warning }]}>
+            <Text style={StyleSheet.flatten([styles.statLabel, { color: colors.gray500 }])}>未匹配</Text>
+            <Text style={StyleSheet.flatten([styles.statValue, { color: colors.warning }])}>
               {mergedTable.mergeInfo.unmatchedRows}
             </Text>
           </View>
@@ -704,15 +704,15 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
     <View style={styles.container}>
       {/* 上傳區域 */}
       <TouchableOpacity
-        style={[styles.uploadArea, { borderColor: colors.primary }]}
+        style={StyleSheet.flatten([styles.uploadArea, { borderColor: colors.primary }])}
         onPress={handleFileSelect}
         activeOpacity={0.7}
       >
         <MaterialIcon name="cloud-upload" size={48} color={colors.primary} />
-        <Text style={[styles.uploadText, { color: colors.text }]}>
+        <Text style={StyleSheet.flatten([styles.uploadText, { color: colors.text }])}>
           點擊上傳 CSV 檔案
         </Text>
-        <Text style={[styles.uploadHint, { color: colors.gray500 }]}>
+        <Text style={StyleSheet.flatten([styles.uploadHint, { color: colors.gray500 }])}>
           支援多個檔案，可根據關鍵欄位自動合併
         </Text>
       </TouchableOpacity>
@@ -720,7 +720,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
       {/* 檔案列表 */}
       {uploadedFiles.length > 0 && (
         <View style={styles.filesSection}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          <Text style={StyleSheet.flatten([styles.sectionTitle, { color: colors.text }])}>
             已上傳檔案 ({uploadedFiles.length})
           </Text>
           {uploadedFiles.map(renderFileCard)}
@@ -730,38 +730,38 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
       {/* 合併策略選擇 */}
       {uploadedFiles.length > 1 && (
         <View style={styles.mergeStrategySection}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          <Text style={StyleSheet.flatten([styles.sectionTitle, { color: colors.text }])}>
             合併策略
           </Text>
           <View style={styles.strategyOptions}>
             {(['left', 'inner', 'outer'] as MergeStrategy[]).map(strategy => (
               <TouchableOpacity
                 key={strategy}
-                style={[
+                style={StyleSheet.flatten([
                   styles.strategyOption,
                   {
                     backgroundColor: mergeStrategy === strategy 
                       ? colors.primary 
                       : colors.gray100
                   }
-                ]}
+                ])}
                 onPress={() => setMergeStrategy(strategy)}
               >
-                <Text style={[
+                <Text style={StyleSheet.flatten([
                   styles.strategyText,
                   { 
                     color: mergeStrategy === strategy 
                       ? colors.white 
                       : colors.gray700 
                   }
-                ]}>
+                ])}>
                   {strategy === 'left' ? '左連接' :
                    strategy === 'inner' ? '內連接' : '外連接'}
                 </Text>
               </TouchableOpacity>
             ))}
           </View>
-          <Text style={[styles.strategyHint, { color: colors.gray500 }]}>
+          <Text style={StyleSheet.flatten([styles.strategyHint, { color: colors.gray500 }])}>
             {mergeStrategy === 'left' && '保留第一個檔案的所有資料'}
             {mergeStrategy === 'inner' && '只保留有匹配的資料'}
             {mergeStrategy === 'outer' && '保留所有檔案的所有資料'}
@@ -772,7 +772,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
       {/* 合併按鈕 */}
       {uploadedFiles.length > 0 && !mergedTable && (
         <TouchableOpacity
-          style={[styles.mergeButton, { backgroundColor: colors.primary }]}
+          style={StyleSheet.flatten([styles.mergeButton, { backgroundColor: colors.primary }])}
           onPress={handleMerge}
           disabled={loading}
         >
@@ -781,7 +781,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
           ) : (
             <>
               <MaterialIcon name="merge-type" size={20} color={colors.white} />
-              <Text style={[styles.mergeButtonText, { color: colors.white }]}>
+              <Text style={StyleSheet.flatten([styles.mergeButtonText, { color: colors.white }])}>
                 {uploadedFiles.length === 1 ? '確認檔案' : '合併檔案'}
               </Text>
             </>

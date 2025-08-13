@@ -163,10 +163,10 @@ export const Popover: React.FC<PopoverProps> = ({
         >
           {showArrow && (
             <View
-              style={[
+              style={StyleSheet.flatten([
                 styles.arrow,
                 actualPlacement === 'bottom' ? styles.arrowTop : styles.arrowBottom,
-              ]}
+              ])}
             />
           )}
           <ScrollView
@@ -207,10 +207,10 @@ export const Popover: React.FC<PopoverProps> = ({
             >
               {showArrow && (
                 <View
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.arrow,
                     actualPlacement === 'bottom' ? styles.arrowTop : styles.arrowBottom,
-                  ]}
+                  ])}
                 />
               )}
               <ScrollView

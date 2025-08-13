@@ -92,11 +92,11 @@ const BillingPlanStep: React.FC<StepProps> = ({
     return (
       <TouchableOpacity
         key={plan.id}
-        style={[
+        style={StyleSheet.flatten([
           styles.planCard,
           isSelected && styles.planCardSelected,
           isPopular && styles.planCardPopular,
-        ]}
+        ])}
         onPress={() => selectPlan(plan.id)}
         activeOpacity={0.8}
       >
@@ -107,23 +107,23 @@ const BillingPlanStep: React.FC<StepProps> = ({
         )}
         
         <View style={styles.planHeader}>
-          <Text style={[
+          <Text style={StyleSheet.flatten([
             styles.planName,
             isSelected && styles.planNameSelected,
-          ]}>
+          ])}>
             {plan.name}
           </Text>
-          <Text style={[
+          <Text style={StyleSheet.flatten([
             styles.planPrice,
             isSelected && styles.planPriceSelected,
-          ]}>
+          ])}>
             {calculatePrice(plan)}
           </Text>
           {plan.priceUnit && plan.priceUnit !== 'custom' && (
-            <Text style={[
+            <Text style={StyleSheet.flatten([
               styles.planPriceUnit,
               isSelected && styles.planPriceUnitSelected,
-            ]}>
+            ])}>
               每用戶
             </Text>
           )}
@@ -135,10 +135,10 @@ const BillingPlanStep: React.FC<StepProps> = ({
               <Icon name="checkmark-circle-outline" size={16} 
                 color={isSelected ? colors.primary : colors.success}
                />
-              <Text style={[
+              <Text style={StyleSheet.flatten([
                 styles.featureText,
                 isSelected && styles.featureTextSelected,
-              ]}>
+              ])}>
                 {feature}
               </Text>
             </View>
@@ -163,31 +163,31 @@ const BillingPlanStep: React.FC<StepProps> = ({
     return (
       <View style={styles.billingCycleContainer}>
         <TouchableOpacity
-          style={[
+          style={StyleSheet.flatten([
             styles.cycleOption,
             formData.billingCycle === 'monthly' && styles.cycleOptionActive,
-          ]}
+          ])}
           onPress={() => setFormData(prev => ({ ...prev, billingCycle: 'monthly' }))}
         >
-          <Text style={[
+          <Text style={StyleSheet.flatten([
             styles.cycleText,
             formData.billingCycle === 'monthly' && styles.cycleTextActive,
-          ]}>
+          ])}>
             月付
           </Text>
         </TouchableOpacity>
         
         <TouchableOpacity
-          style={[
+          style={StyleSheet.flatten([
             styles.cycleOption,
             formData.billingCycle === 'yearly' && styles.cycleOptionActive,
-          ]}
+          ])}
           onPress={() => setFormData(prev => ({ ...prev, billingCycle: 'yearly' }))}
         >
-          <Text style={[
+          <Text style={StyleSheet.flatten([
             styles.cycleText,
             formData.billingCycle === 'yearly' && styles.cycleTextActive,
-          ]}>
+          ])}>
             年付
           </Text>
           <View style={styles.discountBadge}>
@@ -265,10 +265,10 @@ const BillingPlanStep: React.FC<StepProps> = ({
           {paymentMethods.map(method => (
             <TouchableOpacity
               key={method.value}
-              style={[
+              style={StyleSheet.flatten([
                 styles.paymentOption,
                 formData.paymentMethod === method.value && styles.paymentOptionActive,
-              ]}
+              ])}
               onPress={() => setFormData(prev => ({ 
                 ...prev, 
                 paymentMethod: method.value as any 
@@ -278,10 +278,10 @@ const BillingPlanStep: React.FC<StepProps> = ({
                 size={24} 
                 color={formData.paymentMethod === method.value ? colors.primary : colors.gray600}
               />
-              <Text style={[
+              <Text style={StyleSheet.flatten([
                 styles.paymentText,
                 formData.paymentMethod === method.value && styles.paymentTextActive,
-              ]}>
+              ])}>
                 {method.label}
               </Text>
             </TouchableOpacity>
@@ -312,7 +312,7 @@ const BillingPlanStep: React.FC<StepProps> = ({
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>備註</Text>
           <TextInput
-            style={[styles.input, styles.textArea]}
+            style={StyleSheet.flatten([styles.input, styles.textArea])}
             value={formData.notes}
             onChangeText={(text) => setFormData(prev => ({ ...prev, notes: text }))}
             placeholder="請輸入任何特殊需求或備註..."
@@ -354,13 +354,13 @@ const BillingPlanStep: React.FC<StepProps> = ({
         {discount > 0 && (
           <View style={styles.summaryRow}>
             <Text style={styles.summaryLabel}>年付優惠 (15%)</Text>
-            <Text style={[styles.summaryValue, styles.discountValue]}>
+            <Text style={StyleSheet.flatten([styles.summaryValue, styles.discountValue])}>
               -${discountAmount.toLocaleString()}
             </Text>
           </View>
         )}
         
-        <View style={[styles.summaryRow, styles.summaryTotal]}>
+        <View style={StyleSheet.flatten([styles.summaryRow, styles.summaryTotal])}>
           <Text style={styles.totalLabel}>
             總計
             {formData.billingCycle === 'yearly' ? '/年' : '/月'}

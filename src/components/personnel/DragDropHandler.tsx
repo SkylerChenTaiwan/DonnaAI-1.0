@@ -132,7 +132,7 @@ export function DragDropHandler({
 
   return (
     <GestureDetector gesture={composedGesture}>
-      <Animated.View style={[styles.container, animatedStyle]}>
+      <Animated.View style={StyleSheet.flatten([styles.container, animatedStyle])}>
         {children}
       </Animated.View>
     </GestureDetector>
@@ -156,7 +156,7 @@ export function DropTarget({
   children: React.ReactNode;
 }) {
   return (
-    <View style={[styles.dropTarget, isActive && styles.dropTargetActive]}>
+    <View style={StyleSheet.flatten([styles.dropTarget, isActive && styles.dropTargetActive])}>
       {children}
     </View>
   );

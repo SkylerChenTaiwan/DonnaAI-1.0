@@ -83,7 +83,7 @@ export const RecordDetailScreen: React.FC = () => {
           <Text style={styles.sectionTitle}>基本資訊</Text>
           <View style={styles.infoRow}>
             <Text style={styles.label}>類型</Text>
-            <View style={[styles.typeBadge, record.type === 'meeting' && styles.typeMeeting]}>
+            <View style={StyleSheet.flatten([styles.typeBadge, record.type === 'meeting' && styles.typeMeeting])}>
               <Icon 
                 name={record.type === 'meeting' ? 'people' : 'call'} 
                 size={16} 
@@ -99,7 +99,7 @@ export const RecordDetailScreen: React.FC = () => {
             <TouchableOpacity 
               onPress={() => customer && navigation.navigate('CustomerDetail', { customerId: customer.id! })}
             >
-              <Text style={[styles.value, styles.linkText]}>
+              <Text style={StyleSheet.flatten([styles.value, styles.linkText])}>
                 {customer?.name || '多位客戶'}
               </Text>
             </TouchableOpacity>

@@ -1,4 +1,5 @@
 // 樣式系統包裝器（必須最先載入）
+import './src/utils/arrayStyleFixer';
 import './src/utils/styleWrapper';
 import './src/utils/componentWrapper';
 import './src/utils/globalCleaner';

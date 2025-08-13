@@ -44,14 +44,14 @@ export const SearchButton: React.FC<SearchButtonProps> = ({
 
   return (
     <TouchableOpacity
-      style={[
+      style={StyleSheet.flatten([
         styles.button,
         {
           width: currentSize.width,
           height: currentSize.height },
         disabled && styles.disabled,
         style,
-      ]}
+      ])}
       onPress={onPress}
       disabled={disabled}
       activeOpacity={0.7}

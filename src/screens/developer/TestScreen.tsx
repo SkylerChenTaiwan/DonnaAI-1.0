@@ -102,7 +102,7 @@ export const TestScreen: React.FC = () => {
         >
           <View style={styles.suiteInfo}>
             {renderResultIcon(suite.passed)}
-            <Text style={[styles.suiteName, !suite.passed && styles.failedText]}>
+            <Text style={StyleSheet.flatten([styles.suiteName, !suite.passed && styles.failedText])}>
               {suite.name}
             </Text>
           </View>
@@ -132,7 +132,7 @@ export const TestScreen: React.FC = () => {
     <View key={result.name} style={styles.testResult}>
       <View style={styles.resultHeader}>
         {renderResultIcon(result.passed)}
-        <Text style={[styles.resultName, !result.passed && styles.failedText]}>
+        <Text style={StyleSheet.flatten([styles.resultName, !result.passed && styles.failedText])}>
           {result.name}
         </Text>
       </View>
@@ -159,19 +159,19 @@ export const TestScreen: React.FC = () => {
         <View style={styles.summaryStats}>
           <View style={styles.summaryRow}>
             <Text style={styles.summaryLabel}>測試套件:</Text>
-            <Text style={[
+            <Text style={StyleSheet.flatten([
               styles.summaryValue,
               overallResult.passed ? styles.passedText : styles.failedText
-            ]}>
+            ])}>
               {overallResult.passedSuites}/{overallResult.totalSuites}
             </Text>
           </View>
           <View style={styles.summaryRow}>
             <Text style={styles.summaryLabel}>測試項目:</Text>
-            <Text style={[
+            <Text style={StyleSheet.flatten([
               styles.summaryValue,
               overallResult.passed ? styles.passedText : styles.failedText
-            ]}>
+            ])}>
               {overallResult.passedTests}/{overallResult.totalTests}
             </Text>
           </View>
@@ -179,10 +179,10 @@ export const TestScreen: React.FC = () => {
             <Text style={styles.summaryLabel}>整體結果:</Text>
             <View style={styles.summaryResultContainer}>
               {renderResultIcon(overallResult.passed)}
-              <Text style={[
+              <Text style={StyleSheet.flatten([
                 styles.summaryResult,
                 overallResult.passed ? styles.passedText : styles.failedText
-              ]}>
+              ])}>
                 {overallResult.passed ? '全部通過' : '部分失敗'}
               </Text>
             </View>
@@ -201,7 +201,7 @@ export const TestScreen: React.FC = () => {
 
       <View style={styles.controls}>
         <TouchableOpacity
-          style={[styles.button, styles.primaryButton]}
+          style={StyleSheet.flatten([styles.button, styles.primaryButton])}
           onPress={runTests}
           disabled={state.isRunning}
           activeOpacity={0.7}
@@ -217,7 +217,7 @@ export const TestScreen: React.FC = () => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.button, styles.secondaryButton]}
+          style={StyleSheet.flatten([styles.button, styles.secondaryButton])}
           onPress={generateTestData}
           activeOpacity={0.7}
         >

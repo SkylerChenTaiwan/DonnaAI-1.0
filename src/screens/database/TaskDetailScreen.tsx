@@ -124,7 +124,7 @@ export const TaskDetailScreen: React.FC = () => {
         <View style={styles.titleSection}>
           <Text style={styles.taskTitle}>{task.title}</Text>
           <TouchableOpacity 
-            style={[styles.statusBadge, getStatusColor(task.status)]}
+            style={StyleSheet.flatten([styles.statusBadge, getStatusColor(task.status)])}
             onPress={handleStatusToggle}
             disabled={isUpdating}
             activeOpacity={0.7}
@@ -154,7 +154,7 @@ export const TaskDetailScreen: React.FC = () => {
                 size={20} 
                 color={getPriorityIcon(task.priority).color} 
               />
-              <Text style={[styles.priorityText, { color: getPriorityIcon(task.priority).color }]}>
+              <Text style={StyleSheet.flatten([styles.priorityText, { color: getPriorityIcon(task.priority).color }])}>
                 {task.priority === 'high' ? '高' : 
                  task.priority === 'medium' ? '中' : 
                  task.priority === 'low' ? '低' : '未設定'}
@@ -175,7 +175,7 @@ export const TaskDetailScreen: React.FC = () => {
               <TouchableOpacity 
                 onPress={() => navigation.navigate('CustomerDetail', { customerId: customer.id! })}
               >
-                <Text style={[styles.value, styles.linkText]}>
+                <Text style={StyleSheet.flatten([styles.value, styles.linkText])}>
                   {customer.name}
                 </Text>
               </TouchableOpacity>

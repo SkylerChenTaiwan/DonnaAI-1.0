@@ -193,7 +193,7 @@ export const CreateCustomerModal: React.FC = () => {
             style={styles.headerButton}
             disabled={loading}
           >
-            <Text style={[styles.headerButtonText, loading && styles.disabledText]}>
+            <Text style={StyleSheet.flatten([styles.headerButtonText, loading && styles.disabledText])}>
               儲存
             </Text>
           </TouchableOpacity>
@@ -269,13 +269,13 @@ export const CreateCustomerModal: React.FC = () => {
             {mode === 'form' && (
               <View style={styles.modalFooter}>
                 <TouchableOpacity
-                  style={[styles.modalButton, styles.cancelButton]}
+                  style={StyleSheet.flatten([styles.modalButton, styles.cancelButton])}
                   onPress={handleCancel}
                 >
                   <Text style={styles.cancelButtonText}>取消</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={[styles.modalButton, styles.saveButton, loading && styles.disabledButton]}
+                  style={StyleSheet.flatten([styles.modalButton, styles.saveButton, loading && styles.disabledButton])}
                   onPress={handleSavePress}
                   disabled={loading}
                 >

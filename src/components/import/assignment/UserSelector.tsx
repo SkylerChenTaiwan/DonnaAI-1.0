@@ -183,7 +183,7 @@ const UserSelector: React.FC<UserSelectorProps> = ({
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="small" color={colors.primary} />
-        <Text style={[styles.loadingText, { color: colors.gray500 }]}>
+        <Text style={StyleSheet.flatten([styles.loadingText, { color: colors.gray500 }])}>
           載入用戶中...
         </Text>
       </View>
@@ -194,10 +194,10 @@ const UserSelector: React.FC<UserSelectorProps> = ({
     <View style={styles.container}>
       {/* 搜尋和篩選 */}
       <View style={styles.filterSection}>
-        <View style={[styles.searchBox, { backgroundColor: colors.gray50, borderColor: colors.gray200 }]}>
+        <View style={StyleSheet.flatten([styles.searchBox, { backgroundColor: colors.gray50, borderColor: colors.gray200 }])}>
           <MaterialIcon name="search" size={20} color={colors.gray400} />
           <TextInput
-            style={[styles.searchInput, { color: colors.text }]}
+            style={StyleSheet.flatten([styles.searchInput, { color: colors.text }])}
             placeholder="搜尋用戶姓名、Email 或部門"
             placeholderTextColor={colors.gray400}
             value={searchQuery}
@@ -217,20 +217,20 @@ const UserSelector: React.FC<UserSelectorProps> = ({
             style={styles.departmentFilter}
           >
             <TouchableOpacity
-              style={[
+              style={StyleSheet.flatten([
                 styles.departmentChip,
                 {
                   backgroundColor: selectedDepartment === 'all' ? colors.primary : colors.gray100,
                   borderColor: selectedDepartment === 'all' ? colors.primary : colors.gray200
                 }
-              ]}
+              ])}
               onPress={() => setSelectedDepartment('all')}
             >
               <Text
-                style={[
+                style={StyleSheet.flatten([
                   styles.departmentText,
                   { color: selectedDepartment === 'all' ? colors.white : colors.text }
-                ]}
+                ])}
               >
                 全部部門
               </Text>
@@ -239,20 +239,20 @@ const UserSelector: React.FC<UserSelectorProps> = ({
             {departments.map(dept => (
               <TouchableOpacity
                 key={dept}
-                style={[
+                style={StyleSheet.flatten([
                   styles.departmentChip,
                   {
                     backgroundColor: selectedDepartment === dept ? colors.primary : colors.gray100,
                     borderColor: selectedDepartment === dept ? colors.primary : colors.gray200
                   }
-                ]}
+                ])}
                 onPress={() => setSelectedDepartment(dept)}
               >
                 <Text
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.departmentText,
                     { color: selectedDepartment === dept ? colors.white : colors.text }
-                  ]}
+                  ])}
                 >
                   {dept}
                 </Text>
@@ -265,12 +265,12 @@ const UserSelector: React.FC<UserSelectorProps> = ({
       {/* 全選按鈕 */}
       {multiple && filteredUsers.length > 0 && (
         <TouchableOpacity
-          style={[styles.selectAllButton, { borderColor: colors.gray200 }]}
+          style={StyleSheet.flatten([styles.selectAllButton, { borderColor: colors.gray200 }])}
           onPress={toggleSelectAll}
         >
           <View style={styles.selectAllContent}>
             <View
-              style={[
+              style={StyleSheet.flatten([
                 styles.checkbox,
                 {
                   backgroundColor: selectedUsers.length === filteredUsers.length 
@@ -280,13 +280,13 @@ const UserSelector: React.FC<UserSelectorProps> = ({
                     ? colors.primary
                     : colors.gray300
                 }
-              ]}
+              ])}
             >
               {selectedUsers.length === filteredUsers.length && (
                 <MaterialIcon name="check" size={16} color={colors.white} />
               )}
             </View>
-            <Text style={[styles.selectAllText, { color: colors.text }]}>
+            <Text style={StyleSheet.flatten([styles.selectAllText, { color: colors.text }])}>
               {selectedUsers.length === filteredUsers.length ? '取消全選' : '全選'}
               {` (${selectedUsers.length}/${filteredUsers.length})`}
             </Text>
@@ -299,7 +299,7 @@ const UserSelector: React.FC<UserSelectorProps> = ({
         {filteredUsers.length === 0 ? (
           <View style={styles.emptyState}>
             <MaterialIcon name="person-off" size={48} color={colors.gray300} />
-            <Text style={[styles.emptyText, { color: colors.gray500 }]}>
+            <Text style={StyleSheet.flatten([styles.emptyText, { color: colors.gray500 }])}>
               沒有找到符合條件的用戶
             </Text>
           </View>
@@ -310,52 +310,52 @@ const UserSelector: React.FC<UserSelectorProps> = ({
             return (
               <TouchableOpacity
                 key={user.id}
-                style={[
+                style={StyleSheet.flatten([
                   styles.userItem,
                   {
                     backgroundColor: isSelected ? withAlpha(colors.primary, 0.063) : colors.white,
                     borderColor: isSelected ? colors.primary : colors.gray200
                   }
-                ]}
+                ])}
                 onPress={() => toggleUserSelection(user)}
                 activeOpacity={0.7}
               >
                 <View style={styles.userInfo}>
                   {/* 用戶頭像 */}
                   <View 
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.avatar,
                       { backgroundColor: withAlpha(getRoleColor(user.role), 0.125) }
-                    ]}
+                    ])}
                   >
-                    <Text style={[styles.avatarText, { color: getRoleColor(user.role) }]}>
+                    <Text style={StyleSheet.flatten([styles.avatarText, { color: getRoleColor(user.role) }])}>
                       {(user.name || user.email || '?')[0].toUpperCase()}
                     </Text>
                   </View>
                   
                   {/* 用戶資訊 */}
                   <View style={styles.userDetails}>
-                    <Text style={[styles.userName, { color: colors.text }]}>
+                    <Text style={StyleSheet.flatten([styles.userName, { color: colors.text }])}>
                       {user.name || user.email}
                     </Text>
                     <View style={styles.userMeta}>
                       <View
-                        style={[
+                        style={StyleSheet.flatten([
                           styles.roleBadge,
                           { backgroundColor: withAlpha(getRoleColor(user.role), 0.125) }
-                        ]}
+                        ])}
                       >
                         <Text
-                          style={[
+                          style={StyleSheet.flatten([
                             styles.roleText,
                             { color: getRoleColor(user.role) }
-                          ]}
+                          ])}
                         >
                           {getRoleLabel(user.role)}
                         </Text>
                       </View>
                       {user.department && (
-                        <Text style={[styles.departmentText, { color: colors.gray500 }]}>
+                        <Text style={StyleSheet.flatten([styles.departmentText, { color: colors.gray500 }])}>
                           {user.department}
                         </Text>
                       )}
@@ -366,13 +366,13 @@ const UserSelector: React.FC<UserSelectorProps> = ({
                 {/* 選擇狀態 */}
                 {multiple ? (
                   <View
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.checkbox,
                       {
                         backgroundColor: isSelected ? colors.primary : colors.white,
                         borderColor: isSelected ? colors.primary : colors.gray300
                       }
-                    ]}
+                    ])}
                   >
                     {isSelected && (
                       <MaterialIcon name="check" size={16} color={colors.white} />
@@ -380,19 +380,19 @@ const UserSelector: React.FC<UserSelectorProps> = ({
                   </View>
                 ) : (
                   <View
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.radio,
                       {
                         borderColor: isSelected ? colors.primary : colors.gray300
                       }
-                    ]}
+                    ])}
                   >
                     {isSelected && (
                       <View
-                        style={[
+                        style={StyleSheet.flatten([
                           styles.radioInner,
                           { backgroundColor: colors.primary }
-                        ]}
+                        ])}
                       />
                     )}
                   </View>

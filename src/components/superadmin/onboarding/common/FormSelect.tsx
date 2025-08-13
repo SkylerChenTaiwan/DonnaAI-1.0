@@ -47,7 +47,7 @@ export const FormSelect: React.FC<FormSelectProps> = ({
         </Text>
       </View>
       
-      <View style={[styles.selectContainer, error && styles.selectError]}>
+      <View style={StyleSheet.flatten([styles.selectContainer, error && styles.selectError])}>
         {Platform.OS === 'web' ? (
           <>
             <select

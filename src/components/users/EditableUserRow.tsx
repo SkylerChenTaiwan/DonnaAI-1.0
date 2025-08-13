@@ -137,14 +137,14 @@ export const EditableUserRow: React.FC<EditableUserRowProps> = ({
     );
     
     return (
-      <View style={[
+      <View style={StyleSheet.flatten([
         styles.fieldContainer,
         compact && styles.fieldContainerCompact
-      ]}>
-        <Text style={[
+      ])}>
+        <Text style={StyleSheet.flatten([
           styles.fieldLabel,
           compact && styles.fieldLabelCompact
-        ]}>
+        ])}>
           {label}
         </Text>
         
@@ -159,11 +159,11 @@ export const EditableUserRow: React.FC<EditableUserRowProps> = ({
             keyboardType={options?.keyboardType || 'default'}
             maxLength={options?.maxLength}
             multiline={options?.multiline}
-            style={[
+            style={StyleSheet.flatten([
               styles.fieldInput,
               hasError && styles.fieldInputError,
               compact && styles.fieldInputCompact
-            ]}
+            ])}
             autoCapitalize="none"
             returnKeyType="done"
             blurOnSubmit
@@ -172,19 +172,19 @@ export const EditableUserRow: React.FC<EditableUserRowProps> = ({
           <TouchableOpacity
             onPress={() => handleStartEdit(field)}
             disabled={disabled || !user.isValid}
-            style={[
+            style={StyleSheet.flatten([
               styles.fieldValue,
               hasError && styles.fieldValueError,
               compact && styles.fieldValueCompact,
               (!user.isValid || disabled) && styles.fieldValueDisabled
-            ]}
+            ])}
           >
-            <Text style={[
+            <Text style={StyleSheet.flatten([
               styles.fieldValueText,
               hasError && styles.fieldValueTextError,
               (!user.isValid || disabled) && styles.fieldValueTextDisabled,
               compact && styles.fieldValueTextCompact
-            ]}>
+            ])}>
               {value || options?.placeholder || '未填寫'}
             </Text>
             {!disabled && user.isValid && (
@@ -202,25 +202,25 @@ export const EditableUserRow: React.FC<EditableUserRowProps> = ({
   };
 
   return (
-    <View style={[
+    <View style={StyleSheet.flatten([
       styles.container,
       !user.isValid && styles.containerInvalid,
       user.isDuplicate && styles.containerDuplicate,
       user.isEdited && styles.containerEdited,
       compact && styles.containerCompact,
       style
-    ]}>
+    ])}>
       {/* 選擇框 */}
       {showSelection && (
         <TouchableOpacity
           onPress={handleToggleSelection}
           style={styles.selectionContainer}
         >
-          <View style={[
+          <View style={StyleSheet.flatten([
             styles.checkbox,
             user.isSelected && styles.checkboxSelected,
             !user.isValid && styles.checkboxDisabled
-          ]}>
+          ])}>
             {user.isSelected && (
               <Icon
                 name="checkmark"
@@ -314,7 +314,7 @@ export const EditableUserRow: React.FC<EditableUserRowProps> = ({
               size={16}
               color={DesignSystem.colors.warning}
             />
-            <Text style={[styles.statusText, styles.statusTextWarning]}>
+            <Text style={StyleSheet.flatten([styles.statusText, styles.statusTextWarning])}>
               重複資料
             </Text>
           </View>
@@ -328,7 +328,7 @@ export const EditableUserRow: React.FC<EditableUserRowProps> = ({
               size={16}
               color={DesignSystem.colors.info}
             />
-            <Text style={[styles.statusText, styles.statusTextInfo]}>
+            <Text style={StyleSheet.flatten([styles.statusText, styles.statusTextInfo])}>
               已編輯
             </Text>
           </View>

@@ -193,7 +193,7 @@ export const PermissionModal: React.FC<PermissionModalProps> = ({
       activeOpacity={0.7}
     >
       <View style={styles.checkboxContainer}>
-        <View style={[styles.checkbox, isChecked && styles.checkboxChecked]}>
+        <View style={StyleSheet.flatten([styles.checkbox, isChecked && styles.checkboxChecked])}>
           {isChecked && (
             <Icon name="checkmark" size={16} color={DesignSystem.colors.text.inverse} />
           )}
@@ -236,17 +236,17 @@ export const PermissionModal: React.FC<PermissionModalProps> = ({
               {Object.entries(ROLE_PERMISSIONS).map(([role, info]) => (
                 <TouchableOpacity
                   key={role}
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.roleButton,
                     selectedRole === role && styles.roleButtonActive,
-                  ]}
+                  ])}
                   onPress={() => handleRoleChange(role as any)}
                 >
                   <Text
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.roleButtonText,
                       selectedRole === role && styles.roleButtonTextActive,
-                    ]}
+                    ])}
                   >
                     {info.name}
                   </Text>
@@ -274,13 +274,13 @@ export const PermissionModal: React.FC<PermissionModalProps> = ({
           {/* 操作按鈕 */}
           <View style={styles.footer}>
             <TouchableOpacity
-              style={[styles.button, styles.cancelButton]}
+              style={StyleSheet.flatten([styles.button, styles.cancelButton])}
               onPress={onClose}
             >
               <Text style={styles.cancelButtonText}>取消</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.button, styles.saveButton]}
+              style={StyleSheet.flatten([styles.button, styles.saveButton])}
               onPress={handleSave}
               disabled={isLoading}
             >

@@ -76,48 +76,48 @@ const UserImportModeToggle: React.FC<UserImportModeToggleProps> = ({
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        style={[
+        style={StyleSheet.flatten([
           styles.toggle,
           disabled && styles.toggleDisabled,
-        ]}
+        ])}
         onPress={handleToggle}
         disabled={disabled}
       >
-        <View style={[
+        <View style={StyleSheet.flatten([
           styles.option,
           mode === 'simple' && styles.optionActive,
-        ]}>
+        ])}>
           <Icon
             name="flash-outline"
             size={16}
             color={mode === 'simple' ? DesignSystem.colors.primary : DesignSystem.colors.text.secondary}
           />
-          <Text style={[
+          <Text style={StyleSheet.flatten([
             styles.optionText,
             mode === 'simple' && styles.optionTextActive,
-          ]}>
+          ])}>
             簡易
           </Text>
         </View>
         
-        <View style={[
+        <View style={StyleSheet.flatten([
           styles.slider,
           mode === 'advanced' && styles.sliderActive,
-        ]} />
+        ])} />
         
-        <View style={[
+        <View style={StyleSheet.flatten([
           styles.option,
           mode === 'advanced' && styles.optionActive,
-        ]}>
+        ])}>
           <Icon
             name="settings-outline"
             size={16}
             color={mode === 'advanced' ? DesignSystem.colors.primary : DesignSystem.colors.text.secondary}
           />
-          <Text style={[
+          <Text style={StyleSheet.flatten([
             styles.optionText,
             mode === 'advanced' && styles.optionTextActive,
-          ]}>
+          ])}>
             進階
           </Text>
         </View>

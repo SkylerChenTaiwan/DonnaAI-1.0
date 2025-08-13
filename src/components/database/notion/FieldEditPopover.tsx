@@ -178,7 +178,7 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
             <View style={styles.field}>
               <Text style={styles.fieldLabel}>欄位名稱</Text>
               <TextInput
-                style={[styles.input, !canEdit && styles.inputDisabled]}
+                style={StyleSheet.flatten([styles.input, !canEdit && styles.inputDisabled])}
                 value={fieldName}
                 onChangeText={setFieldName}
                 placeholder="輸入欄位名稱"
@@ -189,7 +189,7 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
 
             <View style={styles.field}>
               <Text style={styles.fieldLabel}>欄位類型</Text>
-              <View style={[styles.pickerContainer, !canEdit && styles.pickerDisabled]}>
+              <View style={StyleSheet.flatten([styles.pickerContainer, !canEdit && styles.pickerDisabled])}>
                 <Picker
                   selectedValue={fieldType}
                   onValueChange={(itemValue) => setFieldType(itemValue)}
@@ -244,7 +244,7 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
 
             <View style={styles.field}>
               <TextInput
-                style={[styles.input, styles.textArea, !canEdit && styles.inputDisabled]}
+                style={StyleSheet.flatten([styles.input, styles.textArea, !canEdit && styles.inputDisabled])}
                 value={aiDescription}
                 onChangeText={setAiDescription}
                 placeholder="例如：記錄客戶最近一次購買的產品名稱和日期"
@@ -256,7 +256,7 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
               
               {canEdit && aiDescription.trim() && (
                 <TouchableOpacity
-                  style={[styles.aiButton, isProcessingAI && styles.aiButtonDisabled]}
+                  style={StyleSheet.flatten([styles.aiButton, isProcessingAI && styles.aiButtonDisabled])}
                   onPress={handleAIProcess}
                   disabled={isProcessingAI}
                 >
@@ -304,10 +304,10 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
             </TouchableOpacity>
             
             <TouchableOpacity
-              style={[
+              style={StyleSheet.flatten([
                 styles.saveButton,
                 (!hasChanges || isSaving) && styles.saveButtonDisabled
-              ]}
+              ])}
               onPress={handleSave}
               disabled={!hasChanges || isSaving}
             >

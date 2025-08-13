@@ -208,10 +208,10 @@ const UserImportStep: React.FC<StepProps> = ({
         {methods.map(method => (
           <TouchableOpacity
             key={method.value}
-            style={[
+            style={StyleSheet.flatten([
               styles.methodCard,
               formData.importMethod === method.value && styles.methodCardActive,
-            ]}
+            ])}
             onPress={() => setFormData(prev => ({ 
               ...prev, 
               importMethod: method.value as any 
@@ -221,10 +221,10 @@ const UserImportStep: React.FC<StepProps> = ({
               size={32}
               color={formData.importMethod === method.value ? colors.primary : colors.gray600}
             />
-            <Text style={[
+            <Text style={StyleSheet.flatten([
               styles.methodLabel,
               formData.importMethod === method.value && styles.methodLabelActive,
-            ]}>
+            ])}>
               {method.label}
             </Text>
           </TouchableOpacity>
@@ -422,16 +422,16 @@ const UserImportStep: React.FC<StepProps> = ({
             {['user', 'admin', 'manager'].map(role => (
               <TouchableOpacity
                 key={role}
-                style={[
+                style={StyleSheet.flatten([
                   styles.roleOption,
                   manualInput.role === role && styles.roleOptionActive,
-                ]}
+                ])}
                 onPress={() => setManualInput(prev => ({ ...prev, role }))}
               >
-                <Text style={[
+                <Text style={StyleSheet.flatten([
                   styles.roleText,
                   manualInput.role === role && styles.roleTextActive,
-                ]}>
+                ])}>
                   {role === 'user' ? '一般用戶' : role === 'admin' ? '管理員' : '主管'}
                 </Text>
               </TouchableOpacity>
@@ -578,10 +578,10 @@ const UserImportStep: React.FC<StepProps> = ({
           {strategies.map(strategy => (
             <TouchableOpacity
               key={strategy.value}
-              style={[
+              style={StyleSheet.flatten([
                 styles.strategyOption,
                 formData.passwordStrategy.type === strategy.value && styles.strategyOptionActive,
-              ]}
+              ])}
               onPress={() => setFormData(prev => ({
                 ...prev,
                 passwordStrategy: {
@@ -592,10 +592,10 @@ const UserImportStep: React.FC<StepProps> = ({
                 size={20}
                 color={formData.passwordStrategy.type === strategy.value ? colors.primary : colors.gray600}
               />
-              <Text style={[
+              <Text style={StyleSheet.flatten([
                 styles.strategyText,
                 formData.passwordStrategy.type === strategy.value && styles.strategyTextActive,
-              ]}>
+              ])}>
                 {strategy.label}
               </Text>
               {formData.passwordStrategy.type === strategy.value && (

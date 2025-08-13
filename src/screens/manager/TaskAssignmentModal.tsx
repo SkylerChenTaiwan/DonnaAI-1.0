@@ -168,7 +168,7 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
             <View style={styles.formGroup}>
               <Text style={styles.label}>任務描述</Text>
               <TextInput
-                style={[styles.input, styles.textArea]}
+                style={StyleSheet.flatten([styles.input, styles.textArea])}
                 value={description}
                 onChangeText={setDescription}
                 placeholder="輸入任務詳細描述..."
@@ -206,20 +206,20 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
                 {priorityOptions.map((option) => (
                   <TouchableOpacity
                     key={option.value}
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.priorityButton,
                       priority === option.value && {
                         backgroundColor: option.color,
                         borderColor: option.color },
-                    ]}
+                    ])}
                     onPress={() => setPriority(option.value as typeof priority)}
                     activeOpacity={0.7}
                   >
                     <Text
-                      style={[
+                      style={StyleSheet.flatten([
                         styles.priorityText,
                         priority === option.value && styles.priorityTextActive,
-                      ]}
+                      ])}
                     >
                       {option.label}
                     </Text>
@@ -258,7 +258,7 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
           {/* 操作按鈕 */}
           <View style={styles.footer}>
             <TouchableOpacity
-              style={[styles.button, styles.cancelButton]}
+              style={StyleSheet.flatten([styles.button, styles.cancelButton])}
               onPress={handleClose}
               activeOpacity={0.7}
             >
@@ -266,11 +266,11 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
             </TouchableOpacity>
             
             <TouchableOpacity
-              style={[
+              style={StyleSheet.flatten([
                 styles.button,
                 styles.submitButton,
                 isSubmitting && styles.disabledButton,
-              ]}
+              ])}
               onPress={handleSubmit}
               disabled={isSubmitting}
               activeOpacity={0.7}

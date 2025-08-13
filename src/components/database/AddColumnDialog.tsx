@@ -184,10 +184,10 @@ export const AddColumnDialog: React.FC<AddColumnDialogProps> = ({
                 {columnTypes.map(({ type, icon, label, description }) => (
                   <TouchableOpacity
                     key={type}
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.typeButton,
                       columnType === type && styles.typeButtonActive
-                    ]}
+                    ])}
                     onPress={() => setColumnType(type)}
                     activeOpacity={0.7}
                   >
@@ -196,10 +196,10 @@ export const AddColumnDialog: React.FC<AddColumnDialogProps> = ({
                       size={24} 
                       color={columnType === type ? '#FF6B6B' : '#666'} 
                     />
-                    <Text style={[
+                    <Text style={StyleSheet.flatten([
                       styles.typeLabel,
                       columnType === type && styles.typeLabelActive
-                    ]}>
+                    ])}>
                       {label}
                     </Text>
                     <Text style={styles.typeDescription}>{description}</Text>
@@ -213,7 +213,7 @@ export const AddColumnDialog: React.FC<AddColumnDialogProps> = ({
               <View style={styles.inputSection}>
                 <Text style={styles.label}>選項（每行一個）</Text>
                 <TextInput
-                  style={[styles.input, styles.textArea]}
+                  style={StyleSheet.flatten([styles.input, styles.textArea])}
                   placeholder="選項 1&#10;選項 2&#10;選項 3"
                   placeholderTextColor="#999"
                   value={selectOptions}
@@ -279,10 +279,10 @@ export const AddColumnDialog: React.FC<AddColumnDialogProps> = ({
               <Text style={styles.cancelText}>取消</Text>
             </TouchableOpacity>
             <TouchableOpacity 
-              style={[
+              style={StyleSheet.flatten([
                 styles.confirmButton,
                 !columnName.trim() && styles.confirmButtonDisabled
-              ]}
+              ])}
               onPress={handleAdd}
               activeOpacity={0.7}
               disabled={!columnName.trim()}

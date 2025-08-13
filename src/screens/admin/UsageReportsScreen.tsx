@@ -174,16 +174,16 @@ export const UsageReportsScreen: React.FC = () => {
           {periodOptions.map((period) => (
             <TouchableOpacity
               key={period.id}
-              style={[
+              style={StyleSheet.flatten([
                 styles.periodButton,
                 selectedPeriod === period.id && styles.periodButtonActive,
-              ]}
+              ])}
               onPress={() => setSelectedPeriod(period.id as Period)}
             >
-              <Text style={[
+              <Text style={StyleSheet.flatten([
                 styles.periodButtonText,
                 selectedPeriod === period.id && styles.periodButtonTextActive,
-              ]}>
+              ])}>
                 {period.label}
               </Text>
             </TouchableOpacity>
@@ -209,10 +209,10 @@ export const UsageReportsScreen: React.FC = () => {
                   size={16}
                   color={stat.isPositive ? DesignSystem.colors.success : DesignSystem.colors.error}
                 />
-                <Text style={[
+                <Text style={StyleSheet.flatten([
                   styles.statChange,
                   { color: stat.isPositive ? DesignSystem.colors.success : DesignSystem.colors.error }
-                ]}>
+                ])}>
                   {stat.change}
                 </Text>
               </View>
@@ -225,10 +225,10 @@ export const UsageReportsScreen: React.FC = () => {
           {metricOptions.map((metric) => (
             <TouchableOpacity
               key={metric.id}
-              style={[
+              style={StyleSheet.flatten([
                 styles.metricButton,
                 selectedMetric === metric.id && styles.metricButtonActive,
-              ]}
+              ])}
               onPress={() => setSelectedMetric(metric.id as any)}
             >
               <Icon
@@ -236,10 +236,10 @@ export const UsageReportsScreen: React.FC = () => {
                 size={20}
                 color={selectedMetric === metric.id ? DesignSystem.colors.primary : DesignSystem.colors.text.secondary}
               />
-              <Text style={[
+              <Text style={StyleSheet.flatten([
                 styles.metricButtonText,
                 selectedMetric === metric.id && styles.metricButtonTextActive,
-              ]}>
+              ])}>
                 {metric.label}
               </Text>
             </TouchableOpacity>
@@ -290,10 +290,10 @@ export const UsageReportsScreen: React.FC = () => {
             {/* 格式選擇 */}
             <View style={styles.exportOptions}>
               <TouchableOpacity
-                style={[
+                style={StyleSheet.flatten([
                   styles.exportOption,
                   exportFormat === 'csv' && styles.exportOptionActive,
-                ]}
+                ])}
                 onPress={() => setExportFormat('csv')}
               >
                 <Icon 
@@ -301,10 +301,10 @@ export const UsageReportsScreen: React.FC = () => {
                   size={24} 
                   color={exportFormat === 'csv' ? DesignSystem.colors.primary : DesignSystem.colors.text.secondary} 
                 />
-                <Text style={[
+                <Text style={StyleSheet.flatten([
                   styles.exportOptionText,
                   exportFormat === 'csv' && styles.exportOptionTextActive,
-                ]}>
+                ])}>
                   CSV
                 </Text>
                 <Text style={styles.exportOptionDesc}>
@@ -313,10 +313,10 @@ export const UsageReportsScreen: React.FC = () => {
               </TouchableOpacity>
               
               <TouchableOpacity
-                style={[
+                style={StyleSheet.flatten([
                   styles.exportOption,
                   exportFormat === 'excel' && styles.exportOptionActive,
-                ]}
+                ])}
                 onPress={() => setExportFormat('excel')}
               >
                 <Icon 
@@ -324,10 +324,10 @@ export const UsageReportsScreen: React.FC = () => {
                   size={24} 
                   color={exportFormat === 'excel' ? DesignSystem.colors.primary : DesignSystem.colors.text.secondary} 
                 />
-                <Text style={[
+                <Text style={StyleSheet.flatten([
                   styles.exportOptionText,
                   exportFormat === 'excel' && styles.exportOptionTextActive,
-                ]}>
+                ])}>
                   Excel
                 </Text>
                 <Text style={styles.exportOptionDesc}>
@@ -336,11 +336,11 @@ export const UsageReportsScreen: React.FC = () => {
               </TouchableOpacity>
               
               <TouchableOpacity
-                style={[
+                style={StyleSheet.flatten([
                   styles.exportOption,
                   exportFormat === 'pdf' && styles.exportOptionActive,
                   { opacity: 0.5 }, // 暫時停用
-                ]}
+                ])}
                 onPress={() => showToast('info', 'PDF 匯出即將推出')}
                 disabled
               >
@@ -349,10 +349,10 @@ export const UsageReportsScreen: React.FC = () => {
                   size={24} 
                   color={DesignSystem.colors.text.disabled} 
                 />
-                <Text style={[styles.exportOptionText, { color: DesignSystem.colors.text.disabled }]}>
+                <Text style={StyleSheet.flatten([styles.exportOptionText, { color: DesignSystem.colors.text.disabled }])}>
                   PDF
                 </Text>
-                <Text style={[styles.exportOptionDesc, { color: DesignSystem.colors.text.disabled }]}>
+                <Text style={StyleSheet.flatten([styles.exportOptionDesc, { color: DesignSystem.colors.text.disabled }])}>
                   即將推出
                 </Text>
               </TouchableOpacity>
@@ -373,14 +373,14 @@ export const UsageReportsScreen: React.FC = () => {
             {/* 操作按鈕 */}
             <View style={styles.modalActions}>
               <TouchableOpacity
-                style={[styles.modalButton, styles.cancelButton]}
+                style={StyleSheet.flatten([styles.modalButton, styles.cancelButton])}
                 onPress={() => setShowExportModal(false)}
               >
                 <Text style={styles.cancelButtonText}>取消</Text>
               </TouchableOpacity>
               
               <TouchableOpacity
-                style={[styles.modalButton, styles.exportButton]}
+                style={StyleSheet.flatten([styles.modalButton, styles.exportButton])}
                 onPress={performExport}
                 disabled={isExporting}
               >

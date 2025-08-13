@@ -253,10 +253,10 @@ export const ConfirmationInterface = ({
         <View key={field.fieldKey} style={styles.fieldContainer}>
           <View style={styles.fieldHeader}>
             <Text style={styles.fieldName}>{field.fieldKey}</Text>
-            <View style={[
+            <View style={StyleSheet.flatten([
               styles.confidenceBadge,
               { backgroundColor: getConfidenceColor(field.confidence) }
-            ]}>
+            ])}>
               <Text style={styles.confidenceText}>
                 {Math.round(field.confidence * 100)}%
               </Text>
@@ -267,10 +267,10 @@ export const ConfirmationInterface = ({
             value={field.modifiedValue?.toString() || ''}
             onChangeText={(value) => handleFieldModification(field.fieldKey, value)}
             placeholder={`輸入${field.fieldKey}`}
-            style={[
+            style={StyleSheet.flatten([
               styles.fieldInput,
               field.isModified && styles.modifiedInput
-            ]}
+            ])}
           />
           
           {field.isModified && (
@@ -296,17 +296,13 @@ export const ConfirmationInterface = ({
               <Button
                 title={task.isSelected ? "✓" : ""}
                 onPress={() => handleTaskSelection(task.id, !task.isSelected)}
-                style={
-                  task.isSelected 
-                    ? [styles.checkbox, styles.checkedBox]
-                    : styles.checkbox
-                }
+                style={task.isSelected ? StyleSheet.flatten([styles.checkbox, styles.checkedBox]) : styles.checkbox}
                 textStyle={styles.checkboxText}
               />
-              <View style={[
+              <View style={StyleSheet.flatten([
                 styles.confidenceBadge,
                 { backgroundColor: getConfidenceColor(task.confidence) }
-              ]}>
+              ])}>
                 <Text style={styles.confidenceText}>
                   {Math.round(task.confidence * 100)}%
                 </Text>
@@ -336,11 +332,7 @@ export const ConfirmationInterface = ({
                 key={priority}
                 title={priority === 'low' ? '低' : priority === 'medium' ? '中' : '高'}
                 onPress={() => handleTaskModification(task.id, 'priority', priority)}
-                style={
-                  task.priority === priority
-                    ? [styles.priorityButton, styles.selectedPriorityButton]
-                    : styles.priorityButton
-                }
+                style={task.priority === priority ? StyleSheet.flatten([styles.priorityButton, styles.selectedPriorityButton]) : styles.priorityButton}
                 textStyle={
                   task.priority === priority
                     ? [styles.priorityButtonText, styles.selectedPriorityButtonText]

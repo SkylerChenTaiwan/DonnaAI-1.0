@@ -141,13 +141,13 @@ export default function AnalyticsDialog({ visible, onClose }: AnalyticsDialogPro
       >
         <TouchableWithoutFeedback onPress={handleClose}>
           <Animated.View
-            style={[
+            style={StyleSheet.flatten([
               styles.overlay,
               {
                 opacity: fadeAnim.interpolate({
                   inputRange: [0, 1],
                   outputRange: [0, 0.3] }) },
-            ]}
+            ])}
           />
         </TouchableWithoutFeedback>
 

@@ -166,7 +166,7 @@ export const TeamDataSyncTool: React.FC = () => {
           </Text>
 
           {message && (
-            <View style={[styles.alert, message.type === 'success' ? styles.alertsuccess : message.type === 'error' ? styles.alerterror : styles.alertinfo]}>
+            <View style={StyleSheet.flatten([styles.alert, message.type === 'success' ? styles.alertsuccess : message.type === 'error' ? styles.alerterror : styles.alertinfo])}>
               <Text style={styles.alertText}>{message.text}</Text>
               <TouchableOpacity
                 onPress={() => setMessage(null)}
@@ -179,7 +179,7 @@ export const TeamDataSyncTool: React.FC = () => {
 
           <View style={styles.buttonRow}>
             <TouchableOpacity
-              style={[styles.button, styles.outlineButton, (loading || syncing) && styles.buttonDisabled]}
+              style={StyleSheet.flatten([styles.button, styles.outlineButton, (loading || syncing) && styles.buttonDisabled])}
               onPress={handleCheckConsistency}
               disabled={loading || syncing}
             >
@@ -188,7 +188,7 @@ export const TeamDataSyncTool: React.FC = () => {
             </TouchableOpacity>
             
             <TouchableOpacity
-              style={[styles.button, styles.primaryButton, (syncing || loading || inconsistencies.length === 0) && styles.buttonDisabled]}
+              style={StyleSheet.flatten([styles.button, styles.primaryButton, (syncing || loading || inconsistencies.length === 0) && styles.buttonDisabled])}
               onPress={handleFullSync}
               disabled={syncing || loading || inconsistencies.length === 0}
             >
@@ -215,9 +215,9 @@ export const TeamDataSyncTool: React.FC = () => {
                     <View key={index} style={styles.listItem}>
                       <View style={styles.listItemContent}>
                         <View style={styles.chipContainer}>
-                          <View style={[styles.chip, { backgroundColor: withAlpha(info.color, 0.125) }]}>
+                          <View style={StyleSheet.flatten([styles.chip, { backgroundColor: withAlpha(info.color, 0.125) }])}>
                             <Icon name={info.icon} size={16} color={info.color} />
-                            <Text style={[styles.chipText, { color: info.color }]}>
+                            <Text style={StyleSheet.flatten([styles.chipText, { color: info.color }])}>
                               {item.type === 'user_missing_team' ? '使用者缺少團隊' : '團隊缺少使用者'}
                             </Text>
                           </View>
@@ -228,7 +228,7 @@ export const TeamDataSyncTool: React.FC = () => {
                         <Text style={styles.itemDescription}>{info.description}</Text>
                       </View>
                       <TouchableOpacity
-                        style={[styles.syncButton, syncing && styles.buttonDisabled]}
+                        style={StyleSheet.flatten([styles.syncButton, syncing && styles.buttonDisabled])}
                         onPress={() => handleSyncItem(item)}
                         disabled={syncing}
                       >

@@ -34,7 +34,7 @@ export const ToolCard = ({
       onPress={onPress}
       activeOpacity={0.7}
     >
-      <View style={[styles.iconContainer, { backgroundColor: `${color}15` }]}>
+      <View style={StyleSheet.flatten([styles.iconContainer, { backgroundColor: `${color}15` }])}>
         <Icon name={icon} size={40} color={color} />
       </View>
       <Text style={styles.title} numberOfLines={1}>

@@ -335,10 +335,10 @@ export const DataImportScreen: React.FC = () => {
             {importTypes.map((type) => (
               <TouchableOpacity
                 key={type.id}
-                style={[
+                style={StyleSheet.flatten([
                   styles.typeCard,
                   selectedType === type.id && styles.typeCardActive,
-                ]}
+                ])}
                 onPress={() => setSelectedType(type.id as ImportType)}
               >
                 <Icon
@@ -346,10 +346,10 @@ export const DataImportScreen: React.FC = () => {
                   size={32}
                   color={selectedType === type.id ? DesignSystem.colors.primary : DesignSystem.colors.text.secondary}
                 />
-                <Text style={[
+                <Text style={StyleSheet.flatten([
                   styles.typeLabel,
                   selectedType === type.id && styles.typeLabelActive,
-                ]}>
+                ])}>
                   {type.label}
                 </Text>
               </TouchableOpacity>
@@ -419,13 +419,13 @@ export const DataImportScreen: React.FC = () => {
               </View>
               <View style={styles.statusRow}>
                 <Text style={styles.statusLabel}>成功:</Text>
-                <Text style={[styles.statusValue, styles.successText]}>
+                <Text style={StyleSheet.flatten([styles.statusValue, styles.successText])}>
                   {importStatus.success} 筆
                 </Text>
               </View>
               <View style={styles.statusRow}>
                 <Text style={styles.statusLabel}>失敗:</Text>
-                <Text style={[styles.statusValue, styles.errorText]}>
+                <Text style={StyleSheet.flatten([styles.statusValue, styles.errorText])}>
                   {importStatus.failed} 筆
                 </Text>
               </View>
@@ -452,7 +452,7 @@ export const DataImportScreen: React.FC = () => {
               <Text style={styles.progressText}>{importProgress.message}</Text>
               <View style={styles.progressBar}>
                 <View 
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.progressFill, 
                     { 
                       width: `${(importProgress.current / importProgress.total) * 100}%`,
@@ -460,7 +460,7 @@ export const DataImportScreen: React.FC = () => {
                         ? DesignSystem.colors.error 
                         : DesignSystem.colors.primary 
                     }
-                  ]} 
+                  ])} 
                 />
               </View>
               <Text style={styles.progressCount}>
@@ -472,10 +472,10 @@ export const DataImportScreen: React.FC = () => {
         
         {/* 匯入按鈕 */}
         <TouchableOpacity
-          style={[
+          style={StyleSheet.flatten([
             styles.importButton,
             (selectedFiles.length === 0 || importing) && styles.importButtonDisabled,
-          ]}
+          ])}
           onPress={handleImport}
           disabled={selectedFiles.length === 0 || importing}
         >

@@ -26,7 +26,7 @@ export const WebIcon: React.FC<WebIconProps> = ({ name, size = 24, color = '#000
   const webIconName = name.replace(/-outline$/, '').replace(/-sharp$/, '');
   
   return (
-    <View style={[{ width: size, height: size, justifyContent: 'center', alignItems: 'center' }, style]}>
+    <View style={StyleSheet.flatten([{ width: size, height: size, justifyContent: 'center', alignItems: 'center' }, style])}>
       <ion-icon 
         name={webIconName}
         style={{

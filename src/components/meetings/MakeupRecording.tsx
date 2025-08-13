@@ -305,10 +305,10 @@ export const MakeupRecording = ({
         <Button
           title="提交處理"
           onPress={handleTextSummarySubmit}
-          style={[
+          style={StyleSheet.flatten([
             styles.submitButton,
             textSummary.length < 50 && styles.disabledButton
-          ]}
+          ])}
           textStyle={styles.submitButtonText}
           disabled={textSummary.length < 50}
         />

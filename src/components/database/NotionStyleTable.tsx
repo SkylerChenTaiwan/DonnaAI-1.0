@@ -86,7 +86,7 @@ export const NotionStyleTable: React.FC<NotionStyleTableProps> = ({
 
   // 渲染表頭
   const renderHeader = () => (
-    <View style={[styles.tableHeader, { borderBottomColor: colors.border }]}>
+    <View style={StyleSheet.flatten([styles.tableHeader, { borderBottomColor: colors.border }])}>
       {multiSelectMode && (
         <TouchableOpacity
           style={styles.checkboxContainer}
@@ -114,15 +114,15 @@ export const NotionStyleTable: React.FC<NotionStyleTableProps> = ({
       {columns.map((column) => (
         <TouchableOpacity
           key={column.key}
-          style={[
+          style={StyleSheet.flatten([
             styles.headerCell,
             column.width ? { width: column.width } : { flex: 1 }
-          ]}
+          ])}
           onPress={() => column.sortable && onSort && onSort(column.key)}
           disabled={!column.sortable || !onSort}
           activeOpacity={0.7}
         >
-          <Text style={[styles.headerText, { color: colors.textSecondary }]}>
+          <Text style={StyleSheet.flatten([styles.headerText, { color: colors.textSecondary }])}>
             {column.title}
           </Text>
           {column.sortable && sortConfig && (
@@ -148,7 +148,7 @@ export const NotionStyleTable: React.FC<NotionStyleTableProps> = ({
           activeOpacity={0.7}
         >
           <Icon name="add" size={16} color={colors.textSecondary} />
-          <Text style={[styles.addColumnText, { color: colors.textSecondary }]}>
+          <Text style={StyleSheet.flatten([styles.addColumnText, { color: colors.textSecondary }])}>
             新增屬性
           </Text>
         </TouchableOpacity>
@@ -159,12 +159,12 @@ export const NotionStyleTable: React.FC<NotionStyleTableProps> = ({
   // 渲染新增第一筆資料按鈕
   const renderAddFirstRow = () => (
     <TouchableOpacity 
-      style={[styles.addFirstRow, { backgroundColor: colors.background }]} 
+      style={StyleSheet.flatten([styles.addFirstRow, { backgroundColor: colors.background }])} 
       onPress={onAddRow}
       activeOpacity={0.7}
     >
       <Icon name="add" size={20} color={colors.primaryAccent} />
-      <Text style={[styles.addFirstRowText, { color: colors.textSecondary }]}>
+      <Text style={StyleSheet.flatten([styles.addFirstRowText, { color: colors.textSecondary }])}>
         新增第一筆資料
       </Text>
     </TouchableOpacity>
@@ -173,12 +173,12 @@ export const NotionStyleTable: React.FC<NotionStyleTableProps> = ({
   // 渲染新增按鈕（資料存在時）
   const renderAddRow = () => (
     <TouchableOpacity 
-      style={[styles.addRow, { backgroundColor: colors.background }]} 
+      style={StyleSheet.flatten([styles.addRow, { backgroundColor: colors.background }])} 
       onPress={onAddRow}
       activeOpacity={0.7}
     >
       <Icon name="add" size={16} color={colors.textSecondary} />
-      <Text style={[styles.addRowText, { color: colors.textSecondary }]}>
+      <Text style={StyleSheet.flatten([styles.addRowText, { color: colors.textSecondary }])}>
         新增
       </Text>
     </TouchableOpacity>
@@ -221,15 +221,15 @@ export const NotionStyleTable: React.FC<NotionStyleTableProps> = ({
           {columns.map((column) => (
             <View
               key={column.key}
-              style={[
+              style={StyleSheet.flatten([
                 styles.tableCell,
                 column.width ? { width: column.width } : { flex: 1 }
-              ]}
+              ])}
             >
               {column.render ? (
                 column.render(item[column.key], item)
               ) : (
-                <Text style={[styles.cellText, { color: colors.text }]} numberOfLines={1}>
+                <Text style={StyleSheet.flatten([styles.cellText, { color: colors.text }])} numberOfLines={1}>
                   {item[column.key] || '-'}
                 </Text>
               )}
@@ -242,7 +242,7 @@ export const NotionStyleTable: React.FC<NotionStyleTableProps> = ({
   );
 
   return (
-    <View style={[styles.tableContainer, { backgroundColor: colors.background }]}>
+    <View style={StyleSheet.flatten([styles.tableContainer, { backgroundColor: colors.background }])}>
       {renderHeader()}
       {data.length === 0 && !loading ? (
         renderAddFirstRow()

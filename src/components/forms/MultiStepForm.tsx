@@ -165,10 +165,10 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
     <View style={styles.progressContainer}>
       <View style={styles.progressBar}>
         <View 
-          style={[
+          style={StyleSheet.flatten([
             styles.progressFill,
             { width: `${((currentStep + 1) / steps.length) * 100}%` }
-          ]} 
+          ])} 
         />
       </View>
       <Text style={styles.progressText}>
@@ -183,30 +183,30 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
       {steps.map((step, index) => (
         <View key={index} style={styles.stepItem}>
           <View 
-            style={[
+            style={StyleSheet.flatten([
               styles.stepCircle,
               index === currentStep ? styles.currentStepCircle : null,
               index < currentStep ? styles.completedStepCircle : null,
-            ]}
+            ])}
           >
             {index < currentStep ? (
               <Icon name="checkmark" size={16} color="#FFFFFF" />
             ) : (
               <Text 
-                style={[
+                style={StyleSheet.flatten([
                   styles.stepNumber,
                   index === currentStep ? styles.currentStepNumber : null,
-                ]}
+                ])}
               >
                 {index + 1}
               </Text>
             )}
           </View>
           <Text 
-            style={[
+            style={StyleSheet.flatten([
               styles.stepTitle,
               index === currentStep ? styles.currentStepTitle : null,
-            ]}
+            ])}
             numberOfLines={1}
           >
             {step.title}

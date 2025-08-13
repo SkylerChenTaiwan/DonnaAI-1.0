@@ -521,7 +521,7 @@ export const DatabaseScreen: React.FC = () => {
               }
             })();
             return (
-              <View style={[{ borderRadius: 4, paddingHorizontal: 8, paddingVertical: 4 }, statusStyle]}>
+              <View style={StyleSheet.flatten([{ borderRadius: 4, paddingHorizontal: 8, paddingVertical: 4 }, statusStyle])}>
                 <Text style={{ fontSize: 12, fontWeight: '500', color: '#37352f' }}>
                   {value === 'completed' ? '已完成' : value === 'todo' ? '待開始' : value}
                 </Text>
@@ -1117,7 +1117,7 @@ export const DatabaseScreen: React.FC = () => {
             onRequestClose={() => setShowCreateModal(false)}
           >
             <View style={styles.modalOverlay}>
-              <View style={[styles.modalContent, { maxHeight: '90%', overflow: 'hidden' }]}>
+              <View style={StyleSheet.flatten([styles.modalContent, { maxHeight: '90%', overflow: 'hidden' }])}>
                 <View style={styles.modalHeader}>
                   <Text style={styles.modalTitle}>
                     {activeTab === 'customers' ? '新增客戶' : 
@@ -1137,33 +1137,33 @@ export const DatabaseScreen: React.FC = () => {
                 {/* 模式切換 */}
                 <View style={styles.modalModeSwitch}>
                   <TouchableOpacity
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.modeSwitchButton,
                       createModalMode === 'form' && styles.modeSwitchButtonActive
-                    ]}
+                    ])}
                     onPress={() => setCreateModalMode('form')}
                   >
                     <Icon name="create-outline" size={20} color={createModalMode === 'form' ? '#2196F3' : '#666'} />
-                    <Text style={[
+                    <Text style={StyleSheet.flatten([
                       styles.modeSwitchText,
                       createModalMode === 'form' && styles.modeSwitchTextActive
-                    ]}>
+                    ])}>
                       單筆新增
                     </Text>
                   </TouchableOpacity>
                   
                   <TouchableOpacity
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.modeSwitchButton,
                       createModalMode === 'csv' && styles.modeSwitchButtonActive
-                    ]}
+                    ])}
                     onPress={() => setCreateModalMode('csv')}
                   >
                     <Icon name="cloud-upload-outline" size={20} color={createModalMode === 'csv' ? '#2196F3' : '#666'} />
-                    <Text style={[
+                    <Text style={StyleSheet.flatten([
                       styles.modeSwitchText,
                       createModalMode === 'csv' && styles.modeSwitchTextActive
-                    ]}>
+                    ])}>
                       批量匯入
                     </Text>
                   </TouchableOpacity>
@@ -1171,7 +1171,7 @@ export const DatabaseScreen: React.FC = () => {
                 
                 {/* 內容區域 */}
                 <ScrollView 
-                  style={[styles.modalScrollContent, { flex: 1 }]} 
+                  style={StyleSheet.flatten([styles.modalScrollContent, { flex: 1 }])} 
                   contentContainerStyle={{ padding: 20 }}
                   showsVerticalScrollIndicator={false}
                 >

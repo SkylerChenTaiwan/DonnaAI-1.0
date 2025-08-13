@@ -74,11 +74,11 @@ export const UnifiedWebLayout: React.FC<UnifiedWebLayoutProps> = ({
   }
   
   const content = (
-    <View style={[
+    <View style={StyleSheet.flatten([
       styles.contentContainer,
       { maxWidth },
       containerStyle,
-    ]}>
+    ])}>
       {children}
     </View>
   );
@@ -104,10 +104,10 @@ export const UnifiedWebLayout: React.FC<UnifiedWebLayoutProps> = ({
       )}
       
       {/* 主內容區 */}
-      <View style={[
+      <View style={StyleSheet.flatten([
         styles.mainContent,
         shouldShowSidebar && { marginLeft: sidebarWidth },
-      ]}>
+      ])}>
         {/* 頂部導航欄（平板和手機） */}
         {shouldShowTopBar && (
           <TopBar 

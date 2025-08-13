@@ -36,7 +36,7 @@ export function ErrorMessage({ error, onRetry, isNetworkError = false, style }: 
   const friendlyMessage = getFriendlyMessage(error);
 
   return (
-    <View style={[styles.container, style]}>
+    <View style={StyleSheet.flatten([styles.container, style])}>
       <View style={styles.iconContainer}>
         <Icon 
           name={isNetworkError ? "wifi-outline" : "alert-circle-outline"} 

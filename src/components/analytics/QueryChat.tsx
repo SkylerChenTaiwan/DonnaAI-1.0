@@ -104,23 +104,23 @@ export default function QueryChat() {
     return (
       <View
         key={message.id}
-        style={[
+        style={StyleSheet.flatten([
           styles.messageContainer,
           isUser ? styles.userMessageContainer : styles.assistantMessageContainer,
-        ]}
+        ])}
       >
         <View
-          style={[
+          style={StyleSheet.flatten([
             styles.messageBubble,
             isUser ? styles.userBubble : styles.assistantBubble,
             isError && styles.errorBubble,
-          ]}
+          ])}
         >
           <Text
-            style={[
+            style={StyleSheet.flatten([
               styles.messageText,
               isUser ? styles.userText : styles.assistantText,
-            ]}
+            ])}
           >
             {message.text}
           </Text>
@@ -207,7 +207,7 @@ export default function QueryChat() {
           maxLength={200}
         />
         <TouchableOpacity
-          style={[styles.sendButton, (!query.trim() || isProcessing) && styles.sendButtonDisabled]}
+          style={StyleSheet.flatten([styles.sendButton, (!query.trim() || isProcessing) && styles.sendButtonDisabled])}
           onPress={handleSend}
           disabled={!query.trim() || isProcessing}
         >

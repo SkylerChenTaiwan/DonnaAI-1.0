@@ -94,10 +94,10 @@ export const BatchActionsModal: React.FC<BatchActionsModalProps> = ({
                   activeOpacity={0.7}
                 >
                   <View
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.actionIconContainer,
                       action.type === 'delete' && styles.deleteIconContainer,
-                    ]}
+                    ])}
                   >
                     <Icon
                       name={action.icon}
@@ -107,10 +107,10 @@ export const BatchActionsModal: React.FC<BatchActionsModalProps> = ({
                   </View>
                   <View style={styles.actionTextContainer}>
                     <Text
-                      style={[
+                      style={StyleSheet.flatten([
                         styles.actionLabel,
                         action.type === 'delete' && styles.deleteActionLabel,
-                      ]}
+                      ])}
                     >
                       {action.label}
                     </Text>

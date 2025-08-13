@@ -285,7 +285,7 @@ const RelationshipVisualizer: React.FC<RelationshipVisualizerProps> = ({
             size={16} 
             color={colors.primary} 
           />
-          <Text style={[styles.databaseText, { color: colors.primary }]}>
+          <Text style={StyleSheet.flatten([styles.databaseText, { color: colors.primary }])}>
             {databases.source}
           </Text>
         </View>
@@ -302,7 +302,7 @@ const RelationshipVisualizer: React.FC<RelationshipVisualizerProps> = ({
             size={16} 
             color={colors.success} 
           />
-          <Text style={[styles.databaseText, { color: colors.success }]}>
+          <Text style={StyleSheet.flatten([styles.databaseText, { color: colors.success }])}>
             {databases.target}
           </Text>
         </View>
@@ -330,26 +330,26 @@ const RelationshipVisualizer: React.FC<RelationshipVisualizerProps> = ({
       {/* 圖例 */}
       <View style={styles.legend}>
         <View style={styles.legendItem}>
-          <View style={[styles.legendDot, { backgroundColor: colors.primary }]} />
+          <View style={StyleSheet.flatten([styles.legendDot, { backgroundColor: colors.primary }])} />
           <Text style={styles.legendText}>一對一</Text>
         </View>
         <View style={styles.legendItem}>
-          <View style={[styles.legendDot, { backgroundColor: colors.success }]} />
+          <View style={StyleSheet.flatten([styles.legendDot, { backgroundColor: colors.success }])} />
           <Text style={styles.legendText}>一對多</Text>
         </View>
         <View style={styles.legendItem}>
-          <View style={[styles.legendDot, { backgroundColor: colors.warning }]} />
+          <View style={StyleSheet.flatten([styles.legendDot, { backgroundColor: colors.warning }])} />
           <Text style={styles.legendText}>多對多</Text>
         </View>
         <View style={styles.legendItem}>
-          <View style={[styles.legendLine, { borderStyle: 'dashed' }]} />
+          <View style={StyleSheet.flatten([styles.legendLine, { borderStyle: 'dashed' }])} />
           <Text style={styles.legendText}>可選</Text>
         </View>
       </View>
 
       {/* 選中的關聯詳情 */}
       {selectedRelation && (
-        <View style={[styles.detailPanel, { backgroundColor: colors.background }]}>
+        <View style={StyleSheet.flatten([styles.detailPanel, { backgroundColor: colors.background }])}>
           {(() => {
             const edge = edges.find(e => e.id === selectedRelation);
             if (!edge) return null;
@@ -370,11 +370,11 @@ const RelationshipVisualizer: React.FC<RelationshipVisualizerProps> = ({
                 )}
                 {onRelationDelete && (
                   <TouchableOpacity
-                    style={[styles.deleteButton, { backgroundColor: colors.error }]}
+                    style={StyleSheet.flatten([styles.deleteButton, { backgroundColor: colors.error }])}
                     onPress={() => onRelationDelete(edge.relation.id)}
                   >
                     <MaterialIcon name="delete" size={16} color={colors.white} />
-                    <Text style={[styles.deleteButtonText, { color: colors.white }]}>
+                    <Text style={StyleSheet.flatten([styles.deleteButtonText, { color: colors.white }])}>
                       刪除關聯
                     </Text>
                   </TouchableOpacity>

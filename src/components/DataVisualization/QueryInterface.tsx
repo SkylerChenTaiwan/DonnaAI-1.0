@@ -196,17 +196,17 @@ export const QueryInterface: React.FC = () => {
               onSubmitEditing={handleSubmitQuery}
             />
             <TouchableOpacity
-              style={[
+              style={StyleSheet.flatten([
                 styles.submitButton,
                 (!queryText.trim() || isLoading) && styles.submitButtonDisabled
-              ]}
+              ])}
               onPress={handleSubmitQuery}
               disabled={!queryText.trim() || isLoading}
             >
-              <Text style={[
+              <Text style={StyleSheet.flatten([
                 styles.submitButtonText,
                 (!queryText.trim() || isLoading) && styles.submitButtonTextDisabled
-              ]}>
+              ])}>
                 分析
               </Text>
             </TouchableOpacity>

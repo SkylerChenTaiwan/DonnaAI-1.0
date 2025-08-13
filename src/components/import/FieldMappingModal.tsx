@@ -554,7 +554,7 @@ export const FieldMappingModal: React.FC<Props> = ({
                     <Picker
                       selectedValue={relation.sourceFile}
                       onValueChange={(value) => updateRelation(index, 'sourceFile', value)}
-                      style={[styles.picker, styles.halfPicker]}
+                      style={StyleSheet.flatten([styles.picker, styles.halfPicker])}
                     >
                       {fieldMappings.map((m, i) => (
                         <Picker.Item key={i} label={m.fileName} value={i} />
@@ -563,7 +563,7 @@ export const FieldMappingModal: React.FC<Props> = ({
                     <Picker
                       selectedValue={relation.sourceField}
                       onValueChange={(value) => updateRelation(index, 'sourceField', value)}
-                      style={[styles.picker, styles.halfPicker]}
+                      style={StyleSheet.flatten([styles.picker, styles.halfPicker])}
                     >
                       <Picker.Item label="選擇欄位" value="" />
                       {fileHeaders[relation.sourceFile]?.headers.map(h => (
@@ -623,7 +623,7 @@ export const FieldMappingModal: React.FC<Props> = ({
                     <Picker
                       selectedValue={relation.targetFile}
                       onValueChange={(value) => updateRelation(index, 'targetFile', value)}
-                      style={[styles.picker, styles.halfPicker]}
+                      style={StyleSheet.flatten([styles.picker, styles.halfPicker])}
                     >
                       {fieldMappings.map((m, i) => (
                         <Picker.Item key={i} label={m.fileName} value={i} />
@@ -632,7 +632,7 @@ export const FieldMappingModal: React.FC<Props> = ({
                     <Picker
                       selectedValue={relation.targetField}
                       onValueChange={(value) => updateRelation(index, 'targetField', value)}
-                      style={[styles.picker, styles.halfPicker]}
+                      style={StyleSheet.flatten([styles.picker, styles.halfPicker])}
                     >
                       <Picker.Item label="選擇欄位" value="" />
                       {fileHeaders[relation.targetField]?.headers.map(h => (
@@ -686,18 +686,18 @@ export const FieldMappingModal: React.FC<Props> = ({
             {/* Tabs */}
             <View style={styles.tabs}>
               <TouchableOpacity
-                style={[styles.tab, activeTab === 0 && styles.activeTab]}
+                style={StyleSheet.flatten([styles.tab, activeTab === 0 && styles.activeTab])}
                 onPress={() => setActiveTab(0)}
               >
-                <Text style={[styles.tabText, activeTab === 0 && styles.activeTabText]}>
+                <Text style={StyleSheet.flatten([styles.tabText, activeTab === 0 && styles.activeTabText])}>
                   欄位映射
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={[styles.tab, activeTab === 1 && styles.activeTab]}
+                style={StyleSheet.flatten([styles.tab, activeTab === 1 && styles.activeTab])}
                 onPress={() => setActiveTab(1)}
               >
-                <Text style={[styles.tabText, activeTab === 1 && styles.activeTabText]}>
+                <Text style={StyleSheet.flatten([styles.tabText, activeTab === 1 && styles.activeTabText])}>
                   資料關聯
                 </Text>
               </TouchableOpacity>

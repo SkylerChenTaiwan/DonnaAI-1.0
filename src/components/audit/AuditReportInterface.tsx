@@ -254,27 +254,27 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
         <Text style={styles.sectionTitle}>報告類型</Text>
         <View style={styles.reportTypeSelector}>
           <TouchableOpacity
-            style={[styles.reportTypeButton, reportType === 'compliance' && styles.reportTypeButtonActive]}
+            style={StyleSheet.flatten([styles.reportTypeButton, reportType === 'compliance' && styles.reportTypeButtonActive])}
             onPress={() => setReportType('compliance')}
           >
             <Icon name="shield-checkmark" size={24} color={reportType === 'compliance' ? '#FFFFFF' : '#666666'}  />
-            <Text style={[styles.reportTypeText, reportType === 'compliance' && styles.reportTypeTextActive]}>
+            <Text style={StyleSheet.flatten([styles.reportTypeText, reportType === 'compliance' && styles.reportTypeTextActive])}>
               合規報告
             </Text>
-            <Text style={[styles.reportTypeDescription, reportType === 'compliance' && styles.reportTypeDescriptionActive]}>
+            <Text style={StyleSheet.flatten([styles.reportTypeDescription, reportType === 'compliance' && styles.reportTypeDescriptionActive])}>
               符合法規要求的詳細報告
             </Text>
           </TouchableOpacity>
           
           <TouchableOpacity
-            style={[styles.reportTypeButton, reportType === 'security' && styles.reportTypeButtonActive]}
+            style={StyleSheet.flatten([styles.reportTypeButton, reportType === 'security' && styles.reportTypeButtonActive])}
             onPress={() => setReportType('security')}
           >
             <Icon name="lock-closed" size={24} color={reportType === 'security' ? '#FFFFFF' : '#666666'}  />
-            <Text style={[styles.reportTypeText, reportType === 'security' && styles.reportTypeTextActive]}>
+            <Text style={StyleSheet.flatten([styles.reportTypeText, reportType === 'security' && styles.reportTypeTextActive])}>
               安全報告
             </Text>
-            <Text style={[styles.reportTypeDescription, reportType === 'security' && styles.reportTypeDescriptionActive]}>
+            <Text style={StyleSheet.flatten([styles.reportTypeDescription, reportType === 'security' && styles.reportTypeDescriptionActive])}>
               威脅和異常分析報告
             </Text>
           </TouchableOpacity>
@@ -292,10 +292,10 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
               {(['month', 'quarter', 'year'] as const).map((type) => (
                 <TouchableOpacity
                   key={type}
-                  style={[styles.periodTypeButton, periodType === type && styles.periodTypeButtonActive]}
+                  style={StyleSheet.flatten([styles.periodTypeButton, periodType === type && styles.periodTypeButtonActive])}
                   onPress={() => setPeriodType(type)}
                 >
-                  <Text style={[styles.periodTypeText, periodType === type && styles.periodTypeTextActive]}>
+                  <Text style={StyleSheet.flatten([styles.periodTypeText, periodType === type && styles.periodTypeTextActive])}>
                     {type === 'month' ? '月報' : type === 'quarter' ? '季報' : '年報'}
                   </Text>
                 </TouchableOpacity>
@@ -416,7 +416,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
 
       {/* 生成按鈕 */}
       <TouchableOpacity
-        style={[styles.generateButton, generating && styles.generateButtonDisabled]}
+        style={StyleSheet.flatten([styles.generateButton, generating && styles.generateButtonDisabled])}
         onPress={handleGenerateReport}
         disabled={generating}
       >
@@ -468,7 +468,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
           
           <View style={styles.exportButtons}>
             <TouchableOpacity
-              style={[styles.exportButton, exporting && styles.exportButtonDisabled]}
+              style={StyleSheet.flatten([styles.exportButton, exporting && styles.exportButtonDisabled])}
               onPress={() => handleExportReport('pdf')}
               disabled={exporting}
             >
@@ -477,7 +477,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
             </TouchableOpacity>
             
             <TouchableOpacity
-              style={[styles.exportButton, styles.exportButtonExcel, exporting && styles.exportButtonDisabled]}
+              style={StyleSheet.flatten([styles.exportButton, styles.exportButtonExcel, exporting && styles.exportButtonDisabled])}
               onPress={() => handleExportReport('excel')}
               disabled={exporting}
             >
@@ -638,37 +638,37 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
       {/* 標籤頁導航 */}
       <View style={styles.tabBar}>
         <TouchableOpacity
-          style={[styles.tab, activeTab === 'generate' && styles.tabActive]}
+          style={StyleSheet.flatten([styles.tab, activeTab === 'generate' && styles.tabActive])}
           onPress={() => setActiveTab('generate')}
         >
           <Icon name="create" size={20} 
             color={activeTab === 'generate' ? '#0066CC' : '#666666'} 
            />
-          <Text style={[styles.tabText, activeTab === 'generate' && styles.tabTextActive]}>
+          <Text style={StyleSheet.flatten([styles.tabText, activeTab === 'generate' && styles.tabTextActive])}>
             生成報告
           </Text>
         </TouchableOpacity>
         
         <TouchableOpacity
-          style={[styles.tab, activeTab === 'schedule' && styles.tabActive]}
+          style={StyleSheet.flatten([styles.tab, activeTab === 'schedule' && styles.tabActive])}
           onPress={() => setActiveTab('schedule')}
         >
           <Icon name="time" size={20} 
             color={activeTab === 'schedule' ? '#0066CC' : '#666666'} 
            />
-          <Text style={[styles.tabText, activeTab === 'schedule' && styles.tabTextActive]}>
+          <Text style={StyleSheet.flatten([styles.tabText, activeTab === 'schedule' && styles.tabTextActive])}>
             排程設定
           </Text>
         </TouchableOpacity>
         
         <TouchableOpacity
-          style={[styles.tab, activeTab === 'history' && styles.tabActive]}
+          style={StyleSheet.flatten([styles.tab, activeTab === 'history' && styles.tabActive])}
           onPress={() => setActiveTab('history')}
         >
           <Icon name="archive" size={20} 
             color={activeTab === 'history' ? '#0066CC' : '#666666'} 
            />
-          <Text style={[styles.tabText, activeTab === 'history' && styles.tabTextActive]}>
+          <Text style={StyleSheet.flatten([styles.tabText, activeTab === 'history' && styles.tabTextActive])}>
             歷史記錄
           </Text>
         </TouchableOpacity>

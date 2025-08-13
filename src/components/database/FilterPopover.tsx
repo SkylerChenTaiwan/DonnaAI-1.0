@@ -180,10 +180,10 @@ export const FilterPopover: React.FC<FilterPopoverProps> = ({
             activeOpacity={0.7}
             disabled={conditions.length === 0}
           >
-            <Text style={[
+            <Text style={StyleSheet.flatten([
               styles.clearButtonText,
               conditions.length === 0 && styles.disabledText
-            ]}>清除</Text>
+            ])}>清除</Text>
           </TouchableOpacity>
           
           <TouchableOpacity

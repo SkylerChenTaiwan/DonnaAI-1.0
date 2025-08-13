@@ -354,19 +354,19 @@ export const DeveloperMenu = () => {
                 {menuItems.map(item => (
                   <TouchableOpacity
                     key={item.id}
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.menuItem,
                       item.destructive && styles.destructiveItem
-                    ]}
+                    ])}
                     onPress={() => handleItemPress(item)}
                     activeOpacity={0.7}
                   >
                     <Text style={styles.menuIcon}>{item.icon}</Text>
                     <View style={styles.menuContent}>
-                      <Text style={[
+                      <Text style={StyleSheet.flatten([
                         styles.menuTitle,
                         item.destructive && styles.destructiveText
-                      ]}>
+                      ])}>
                         {item.title}
                       </Text>
                       <Text style={styles.menuDescription}>

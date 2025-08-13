@@ -242,7 +242,7 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
           {isUpdating ? (
             <ActivityIndicator size="small" color="#FF6B6B" />
           ) : (
-            <View style={[styles.checkbox, item.status === 'completed' && styles.checkboxChecked]}>
+            <View style={StyleSheet.flatten([styles.checkbox, item.status === 'completed' && styles.checkboxChecked])}>
               {item.status === 'completed' && (
                 <Icon name="checkmark" size={16} color="#FFFFFF" />
               )}
@@ -255,7 +255,7 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
           onPress={() => handleTaskPress(item)}
           activeOpacity={0.7}
         >
-          <Text style={[styles.taskTitle, item.status === 'completed' && styles.taskTitleCompleted]}>
+          <Text style={StyleSheet.flatten([styles.taskTitle, item.status === 'completed' && styles.taskTitleCompleted])}>
             {item.title}
           </Text>
           <View style={styles.taskMeta}>
@@ -265,7 +265,7 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
               </Text>
             )}
             {item.priority !== 'medium' && (
-              <View style={[styles.priorityBadge, { backgroundColor: priorityColor }]}>
+              <View style={StyleSheet.flatten([styles.priorityBadge, { backgroundColor: priorityColor }])}>
                 <Text style={styles.priorityText}>
                   {item.priority === 'high' || item.priority === 'urgent' ? '高' : '低'}
                 </Text>
@@ -279,8 +279,8 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
 
   // 渲染區段標題
   const renderSectionHeader = ({ section }: { section: TaskSection }) => (
-    <View style={[styles.sectionHeader, section.type === 'overdue' && styles.overdueHeader]}>
-      <Text style={[styles.sectionTitle, section.type === 'overdue' && styles.overdueTitle]}>
+    <View style={StyleSheet.flatten([styles.sectionHeader, section.type === 'overdue' && styles.overdueHeader])}>
+      <Text style={StyleSheet.flatten([styles.sectionTitle, section.type === 'overdue' && styles.overdueTitle])}>
         {section.title}
       </Text>
     </View>

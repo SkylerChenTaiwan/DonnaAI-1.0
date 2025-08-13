@@ -42,14 +42,14 @@ export const TableHeader: React.FC<TableHeaderProps> = ({
       {/* Multi-select checkbox column */}
       {multiSelectMode && (
         <TouchableOpacity
-          style={[tableStyles.headerCell, { width: 40 }]}
+          style={StyleSheet.flatten([tableStyles.headerCell, { width: 40 }])}
           onPress={() => onSelectAll?.(!allSelected)}
         >
           <View
-            style={[
+            style={StyleSheet.flatten([
               tableStyles.checkbox,
               allSelected && tableStyles.checkboxChecked,
-            ]}
+            ])}
           >
             {allSelected && (
               <Icon name="checkmark" size={12} color="#FFFFFF" />
@@ -78,7 +78,7 @@ export const TableHeader: React.FC<TableHeaderProps> = ({
       {/* Add column button */}
       {onAddColumn && (
         <TouchableOpacity
-          style={[tableStyles.headerCell, { width: 40, borderRightWidth: 0 }]}
+          style={StyleSheet.flatten([tableStyles.headerCell, { width: 40, borderRightWidth: 0 }])}
           onPress={onAddColumn}
         >
           <Icon name="add" size={16} color={NotionColors.text.gray} />
@@ -185,12 +185,12 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
   return (
     <View
       ref={cellRef}
-      style={[
+      style={StyleSheet.flatten([
         tableStyles.headerCell,
         { 
           width: column.width || 180,
           opacity: isDragging ? 0.5 : 1 },
-      ]}
+      ])}
     >
       <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
         <TouchableOpacity
@@ -242,10 +242,10 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
       {/* Resize handle */}
       {column.resizable !== false && onResize && (
         <TouchableOpacity
-          style={[
+          style={StyleSheet.flatten([
             tableStyles.headerResizeHandle,
             isResizing && { backgroundColor: NotionColors.interactive.focus },
-          ]}
+          ])}
           onPressIn={handleResizeStart}
           activeOpacity={1}
           // Web-specific props

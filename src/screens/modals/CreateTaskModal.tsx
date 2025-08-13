@@ -117,7 +117,7 @@ export const CreateTaskModal: React.FC = () => {
             style={styles.headerButton}
             disabled={loading}
           >
-            <Text style={[styles.headerButtonText, loading && styles.disabledText]}>
+            <Text style={StyleSheet.flatten([styles.headerButtonText, loading && styles.disabledText])}>
               儲存
             </Text>
           </TouchableOpacity>

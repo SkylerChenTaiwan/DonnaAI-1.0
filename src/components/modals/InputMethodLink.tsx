@@ -23,13 +23,13 @@ export const InputMethodLink: React.FC<InputMethodLinkProps> = ({
   disabled = false }) => {
   return (
     <TouchableOpacity 
-      style={[styles.container, disabled && styles.disabled]}
+      style={StyleSheet.flatten([styles.container, disabled && styles.disabled])}
       onPress={onSwitch}
       disabled={disabled}
       activeOpacity={0.7}
     >
       <View style={styles.linkContent}>
-        <Text style={[styles.linkText, disabled && styles.disabledText]}>
+        <Text style={StyleSheet.flatten([styles.linkText, disabled && styles.disabledText])}>
           {targetLabel}
         </Text>
         <Icon 

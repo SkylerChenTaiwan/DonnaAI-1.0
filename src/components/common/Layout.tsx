@@ -40,14 +40,14 @@ export const Layout = ({
       {children}
     </ScrollView>
   ) : (
-    <View style={[styles.content, contentStyle]}>
+    <View style={StyleSheet.flatten([styles.content, contentStyle])}>
       {children}
     </View>
   );
 
   if (keyboardAvoidingEnabled) {
     return (
-      <SafeAreaView style={[styles.container, style]}>
+      <SafeAreaView style={StyleSheet.flatten([styles.container, style])}>
         <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
         <KeyboardAvoidingView
           style={{ flex: 1 }}
@@ -61,7 +61,7 @@ export const Layout = ({
   }
 
   return (
-    <SafeAreaView style={[styles.container, style]}>
+    <SafeAreaView style={StyleSheet.flatten([styles.container, style])}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
       {content}
     </SafeAreaView>

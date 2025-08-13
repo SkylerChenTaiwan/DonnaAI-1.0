@@ -185,7 +185,7 @@ export function FirebaseTestScreen() {
         </TouchableOpacity>
 
         <TouchableOpacity 
-          style={[styles.button, styles.clearButton]} 
+          style={StyleSheet.flatten([styles.button, styles.clearButton])} 
           onPress={() => setTestResults([])}
         >
           <Text style={styles.buttonText}>清除結果</Text>

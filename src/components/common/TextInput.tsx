@@ -25,14 +25,14 @@ export const TextInput = ({
   ...props
 }: TextInputProps) => {
   return (
-    <View style={[styles.container, containerStyle]}>
+    <View style={StyleSheet.flatten([styles.container, containerStyle])}>
       {label && <Text style={styles.label}>{label}</Text>}
       <RNTextInput
-        style={[
+        style={StyleSheet.flatten([
           styles.input,
           error ? styles.inputError : null,
           style,
-        ]}
+        ])}
         placeholderTextColor="#7A7A7A"
         {...props}
       />

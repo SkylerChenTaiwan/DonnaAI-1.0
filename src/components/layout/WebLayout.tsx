@@ -51,12 +51,12 @@ export const WebLayout: React.FC<WebLayoutProps> = ({
   
   // 內容容器
   const content = (
-    <View style={[
+    <View style={StyleSheet.flatten([
       styles.contentContainer,
       { maxWidth },
       contentPadding,
       contentStyle,
-    ]}>
+    ])}>
       {children}
     </View>
   );
@@ -65,7 +65,7 @@ export const WebLayout: React.FC<WebLayoutProps> = ({
   if (scrollable) {
     return (
       <ScrollView
-        style={[styles.scrollView, containerStyle]}
+        style={StyleSheet.flatten([styles.scrollView, containerStyle])}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
@@ -75,7 +75,7 @@ export const WebLayout: React.FC<WebLayoutProps> = ({
   }
   
   return (
-    <View style={[styles.container, containerStyle]}>
+    <View style={StyleSheet.flatten([styles.container, containerStyle])}>
       {content}
     </View>
   );

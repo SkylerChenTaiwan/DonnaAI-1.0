@@ -112,15 +112,15 @@ export const SortModal: React.FC<SortModalProps> = ({
               return (
                 <TouchableOpacity
                   key={column.key}
-                  style={[styles.optionItem, isSelected && styles.selectedOption]}
+                  style={StyleSheet.flatten([styles.optionItem, isSelected && styles.selectedOption])}
                   onPress={() => handleColumnSelect(column.key)}
                   activeOpacity={0.7}
                 >
                   <View style={styles.optionContent}>
-                    <Text style={[
+                    <Text style={StyleSheet.flatten([
                       styles.optionText,
                       isSelected && styles.selectedOptionText
-                    ]}>
+                    ])}>
                       {column.title}
                     </Text>
                     {isSelected && (
@@ -150,10 +150,10 @@ export const SortModal: React.FC<SortModalProps> = ({
               <Text style={styles.sectionTitle}>排序方向</Text>
               <View style={styles.directionButtons}>
                 <TouchableOpacity
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.directionButton,
                     sortDirection === 'asc' && styles.activeDirectionButton,
-                  ]}
+                  ])}
                   onPress={() => setSortDirection('asc')}
                   activeOpacity={0.7}
                 >
@@ -162,19 +162,19 @@ export const SortModal: React.FC<SortModalProps> = ({
                     size={20} 
                     color={sortDirection === 'asc' ? '#FFFFFF' : '#1A1A1A'} 
                   />
-                  <Text style={[
+                  <Text style={StyleSheet.flatten([
                     styles.directionButtonText,
                     sortDirection === 'asc' && styles.activeDirectionButtonText,
-                  ]}>
+                  ])}>
                     升序 (A-Z, 0-9)
                   </Text>
                 </TouchableOpacity>
                 
                 <TouchableOpacity
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.directionButton,
                     sortDirection === 'desc' && styles.activeDirectionButton,
-                  ]}
+                  ])}
                   onPress={() => setSortDirection('desc')}
                   activeOpacity={0.7}
                 >
@@ -183,10 +183,10 @@ export const SortModal: React.FC<SortModalProps> = ({
                     size={20} 
                     color={sortDirection === 'desc' ? '#FFFFFF' : '#1A1A1A'} 
                   />
-                  <Text style={[
+                  <Text style={StyleSheet.flatten([
                     styles.directionButtonText,
                     sortDirection === 'desc' && styles.activeDirectionButtonText,
-                  ]}>
+                  ])}>
                     降序 (Z-A, 9-0)
                   </Text>
                 </TouchableOpacity>

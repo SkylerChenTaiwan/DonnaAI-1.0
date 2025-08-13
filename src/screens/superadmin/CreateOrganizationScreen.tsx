@@ -217,23 +217,23 @@ export const CreateOrganizationScreen: React.FC = () => {
                 {plans.map((plan) => (
                   <TouchableOpacity
                     key={plan.id}
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.planCard,
                       selectedPlan === plan.id && styles.planCardActive
-                    ]}
+                    ])}
                     onPress={() => setSelectedPlan(plan.id as any)}
                   >
                     <View style={styles.planHeader}>
-                      <Text style={[
+                      <Text style={StyleSheet.flatten([
                         styles.planName,
                         selectedPlan === plan.id && styles.planNameActive
-                      ]}>
+                      ])}>
                         {plan.name}
                       </Text>
-                      <Text style={[
+                      <Text style={StyleSheet.flatten([
                         styles.planPrice,
                         selectedPlan === plan.id && styles.planPriceActive
-                      ]}>
+                      ])}>
                         {plan.price}
                       </Text>
                     </View>
@@ -270,32 +270,32 @@ export const CreateOrganizationScreen: React.FC = () => {
                 </Text>
                 <View style={styles.cycleOptions}>
                   <TouchableOpacity
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.cycleOption,
                       billingCycle === 'monthly' && styles.cycleOptionActive
-                    ]}
+                    ])}
                     onPress={() => setBillingCycle('monthly')}
                   >
-                    <Text style={[
+                    <Text style={StyleSheet.flatten([
                       styles.cycleText,
                       billingCycle === 'monthly' && styles.cycleTextActive
-                    ]}>
+                    ])}>
                       月付
                     </Text>
                     <Text style={styles.cyclePrice}>NT$ {BILLING_CONFIG.PRICE_PER_USER}/人/月</Text>
                   </TouchableOpacity>
                   
                   <TouchableOpacity
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.cycleOption,
                       billingCycle === 'yearly' && styles.cycleOptionActive
-                    ]}
+                    ])}
                     onPress={() => setBillingCycle('yearly')}
                   >
-                    <Text style={[
+                    <Text style={StyleSheet.flatten([
                       styles.cycleText,
                       billingCycle === 'yearly' && styles.cycleTextActive
-                    ]}>
+                    ])}>
                       年付
                     </Text>
                     <Text style={styles.cyclePrice}>

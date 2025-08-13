@@ -70,16 +70,16 @@ export const ClarificationForm: React.FC<ClarificationFormProps> = ({
               {field.options?.map(option => (
                 <TouchableOpacity
                   key={option.value}
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.optionButton,
                     value === option.value && styles.optionButtonSelected
-                  ]}
+                  ])}
                   onPress={() => updateField(field.name, option.value)}
                 >
-                  <Text style={[
+                  <Text style={StyleSheet.flatten([
                     styles.optionText,
                     value === option.value && styles.optionTextSelected
-                  ]}>
+                  ])}>
                     {option.label}
                   </Text>
                 </TouchableOpacity>
@@ -100,10 +100,10 @@ export const ClarificationForm: React.FC<ClarificationFormProps> = ({
                 return (
                   <TouchableOpacity
                     key={option.value}
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.optionButton,
                       isSelected && styles.optionButtonSelected
-                    ]}
+                    ])}
                     onPress={() => {
                       const currentValues = Array.isArray(value) ? value : [];
                       const newValues = isSelected
@@ -112,10 +112,10 @@ export const ClarificationForm: React.FC<ClarificationFormProps> = ({
                       updateField(field.name, newValues);
                     }}
                   >
-                    <Text style={[
+                    <Text style={StyleSheet.flatten([
                       styles.optionText,
                       isSelected && styles.optionTextSelected
-                    ]}>
+                    ])}>
                       {option.label}
                     </Text>
                   </TouchableOpacity>
@@ -139,16 +139,16 @@ export const ClarificationForm: React.FC<ClarificationFormProps> = ({
               ].map(option => (
                 <TouchableOpacity
                   key={option.value}
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.optionButton,
                     value === option.value && styles.optionButtonSelected
-                  ]}
+                  ])}
                   onPress={() => updateField(field.name, option.value)}
                 >
-                  <Text style={[
+                  <Text style={StyleSheet.flatten([
                     styles.optionText,
                     value === option.value && styles.optionTextSelected
-                  ]}>
+                  ])}>
                     {option.label}
                   </Text>
                 </TouchableOpacity>
@@ -178,7 +178,7 @@ export const ClarificationForm: React.FC<ClarificationFormProps> = ({
       <View style={styles.buttonContainer}>
         {onCancel && (
           <TouchableOpacity
-            style={[styles.button, styles.cancelButton]}
+            style={StyleSheet.flatten([styles.button, styles.cancelButton])}
             onPress={onCancel}
           >
             <Text style={styles.cancelButtonText}>取消</Text>
@@ -186,18 +186,18 @@ export const ClarificationForm: React.FC<ClarificationFormProps> = ({
         )}
         
         <TouchableOpacity
-          style={[
+          style={StyleSheet.flatten([
             styles.button,
             styles.submitButton,
             !isFormValid() && styles.submitButtonDisabled
-          ]}
+          ])}
           onPress={() => onSubmit(formData)}
           disabled={!isFormValid()}
         >
-          <Text style={[
+          <Text style={StyleSheet.flatten([
             styles.submitButtonText,
             !isFormValid() && styles.submitButtonTextDisabled
-          ]}>
+          ])}>
             生成圖表
           </Text>
         </TouchableOpacity>

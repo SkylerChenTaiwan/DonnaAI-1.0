@@ -119,9 +119,9 @@ const WebDraggableHeader: React.FC<DraggableTableHeaderProps> = ({
               transition: 'border-left 0.2s ease' }}
           >
             <TouchableOpacity
-              style={[
+              style={StyleSheet.flatten([
                 styles.headerCell,
-              ]}
+              ])}
               onPress={() => column.sortable && onSort && onSort(column.key)}
               disabled={!column.sortable || !onSort}
               activeOpacity={0.7}
@@ -183,10 +183,10 @@ const NativeDraggableHeader: React.FC<DraggableTableHeaderProps> = ({
       {columns.map((column, index) => (
         <TouchableOpacity
           key={column.key}
-          style={[
+          style={StyleSheet.flatten([
             styles.headerCell,
             column.width ? { width: column.width } : { flex: 1 }
-          ]}
+          ])}
           onPress={() => column.sortable && onSort && onSort(column.key)}
           disabled={!column.sortable || !onSort}
           activeOpacity={0.7}

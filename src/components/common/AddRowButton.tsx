@@ -34,16 +34,16 @@ export const AddRowButton: React.FC<AddRowButtonProps> = ({
   if (!isVisible) return null;
 
   return (
-    <View style={[
+    <View style={StyleSheet.flatten([
       styles.container, 
       alignment === 'left' && styles.leftAligned,
       style
-    ]}>
+    ])}>
       <TouchableOpacity
-        style={[
+        style={StyleSheet.flatten([
           styles.addButton,
           disabled && styles.addButtonDisabled,
-        ]}
+        ])}
         onPress={onPress}
         disabled={disabled}
         activeOpacity={0.7}
@@ -62,10 +62,10 @@ export const AddRowButton: React.FC<AddRowButtonProps> = ({
             size={20} 
             color={disabled ? colors.textTertiary : colors.textSecondary} 
           />
-          <Text style={[
+          <Text style={StyleSheet.flatten([
             styles.addButtonText,
             disabled && styles.addButtonTextDisabled,
-          ]}>
+          ])}>
             {buttonText}
           </Text>
         </View>

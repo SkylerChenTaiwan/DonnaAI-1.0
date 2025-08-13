@@ -81,10 +81,10 @@ export const DataTable = ({
       {columns.map((column) => (
         <TouchableOpacity
           key={column.key}
-          style={[
+          style={StyleSheet.flatten([
             styles.headerCell, 
             column.width ? { width: column.width } : { flex: 1 }
-          ]}
+          ])}
           onPress={() => column.sortable !== false && handleSort(column.key)}
           disabled={column.sortable === false}
           activeOpacity={column.sortable !== false ? 0.7 : 1}
@@ -115,10 +115,10 @@ export const DataTable = ({
       if (selectable && showCheckboxes) {
         return (
           <TouchableOpacity
-            style={[
+            style={StyleSheet.flatten([
               styles.row,
               selectedItems.has(item.id) && styles.selectedRow,
-            ]}
+            ])}
             onPress={() => toggleSelection(item.id)}
             activeOpacity={0.7}
           >
@@ -132,7 +132,7 @@ export const DataTable = ({
             {columns.map((column) => (
               <View
                 key={column.key}
-                style={[styles.cell, column.width ? { width: column.width } : { flex: 1 }]}
+                style={StyleSheet.flatten([styles.cell, column.width ? { width: column.width } : { flex: 1 }])}
               >
                 {column.render ? (
                   column.render(item[column.key], item)
@@ -150,17 +150,17 @@ export const DataTable = ({
       // 非多選模式下，點擊行會觸發 onRowPress
       return (
         <TouchableOpacity
-          style={[
+          style={StyleSheet.flatten([
             styles.row,
             selectedItems.has(item.id) && styles.selectedRow,
-          ]}
+          ])}
           onPress={() => onRowPress && onRowPress(item)}
           activeOpacity={0.7}
         >
           {columns.map((column) => (
             <View
               key={column.key}
-              style={[styles.cell, column.width ? { width: column.width } : { flex: 1 }]}
+              style={StyleSheet.flatten([styles.cell, column.width ? { width: column.width } : { flex: 1 }])}
             >
               {column.render ? (
                 column.render(item[column.key], item)

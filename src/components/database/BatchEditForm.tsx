@@ -210,7 +210,7 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
       <View style={styles.footer}>
         {!showPreview ? (
           <TouchableOpacity
-            style={[styles.button, styles.cancelButton]}
+            style={StyleSheet.flatten([styles.button, styles.cancelButton])}
             onPress={onCancel}
             activeOpacity={0.7}
           >
@@ -219,7 +219,7 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
         ) : (
           <>
             <TouchableOpacity
-              style={[styles.button, styles.cancelButton]}
+              style={StyleSheet.flatten([styles.button, styles.cancelButton])}
               onPress={() => setShowPreview(false)}
               activeOpacity={0.7}
             >
@@ -227,7 +227,7 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
             </TouchableOpacity>
             
             <TouchableOpacity
-              style={[styles.button, styles.submitButton]}
+              style={StyleSheet.flatten([styles.button, styles.submitButton])}
               onPress={handleConfirmSubmit}
               activeOpacity={0.7}
             >

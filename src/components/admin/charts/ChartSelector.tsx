@@ -43,10 +43,10 @@ export const ChartSelector: React.FC<ChartSelectorProps> = ({
       {filteredOptions.map((option) => (
         <TouchableOpacity
           key={option.id}
-          style={[
+          style={StyleSheet.flatten([
             styles.option,
             selectedType === option.id && styles.optionActive,
-          ]}
+          ])}
           onPress={() => onSelectType(option.id)}
         >
           <Icon
@@ -58,10 +58,10 @@ export const ChartSelector: React.FC<ChartSelectorProps> = ({
                 : DesignSystem.colors.text.secondary
             }
           />
-          <Text style={[
+          <Text style={StyleSheet.flatten([
             styles.optionText,
             selectedType === option.id && styles.optionTextActive,
-          ]}>
+          ])}>
             {option.label}
           </Text>
         </TouchableOpacity>

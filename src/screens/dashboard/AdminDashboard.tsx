@@ -78,7 +78,7 @@ export const AdminDashboard: React.FC = () => {
         <View style={styles.statsContainer}>
           {organizationStats.map((stat, index) => (
             <View key={index} style={styles.statCard}>
-              <Text style={[styles.statValue, { color: stat.color }]}>
+              <Text style={StyleSheet.flatten([styles.statValue, { color: stat.color }])}>
                 {stat.value}
               </Text>
               <Text style={styles.statLabel}>{stat.label}</Text>
@@ -97,7 +97,7 @@ export const AdminDashboard: React.FC = () => {
                 onPress={action.onPress}
                 activeOpacity={0.7}
               >
-                <View style={[styles.actionIcon, { backgroundColor: `${action.color}15` }]}>
+                <View style={StyleSheet.flatten([styles.actionIcon, { backgroundColor: `${action.color}15` }])}>
                   <Icon
                     name={action.icon}
                     size={24}
@@ -117,7 +117,7 @@ export const AdminDashboard: React.FC = () => {
           <View style={styles.statusCard}>
             <View style={styles.statusItem}>
               <View style={styles.statusIndicator}>
-                <View style={[styles.statusDot, { backgroundColor: '#34C759' }]} />
+                <View style={StyleSheet.flatten([styles.statusDot, { backgroundColor: '#34C759' }])} />
                 <Text style={styles.statusTitle}>Firebase 連線</Text>
               </View>
               <Text style={styles.statusValue}>正常</Text>
@@ -125,7 +125,7 @@ export const AdminDashboard: React.FC = () => {
             
             <View style={styles.statusItem}>
               <View style={styles.statusIndicator}>
-                <View style={[styles.statusDot, { backgroundColor: '#34C759' }]} />
+                <View style={StyleSheet.flatten([styles.statusDot, { backgroundColor: '#34C759' }])} />
                 <Text style={styles.statusTitle}>AI 服務</Text>
               </View>
               <Text style={styles.statusValue}>運行中</Text>
@@ -133,7 +133,7 @@ export const AdminDashboard: React.FC = () => {
             
             <View style={styles.statusItem}>
               <View style={styles.statusIndicator}>
-                <View style={[styles.statusDot, { backgroundColor: '#FF9500' }]} />
+                <View style={StyleSheet.flatten([styles.statusDot, { backgroundColor: '#FF9500' }])} />
                 <Text style={styles.statusTitle}>儲存空間</Text>
               </View>
               <Text style={styles.statusValue}>68% 使用</Text>

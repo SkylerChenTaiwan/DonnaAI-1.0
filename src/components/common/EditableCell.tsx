@@ -151,11 +151,11 @@ export const EditableCell: React.FC<EditableCellProps> = ({
       <View style={styles.editContainer}>
         <TextInput
           ref={inputRef}
-          style={[
+          style={StyleSheet.flatten([
             styles.editInput,
             inputType === 'multiline' && styles.multilineInput,
             error && styles.inputError,
-          ]}
+          ])}
           value={editValue}
           onChangeText={setEditValue}
           onSubmitEditing={handleSubmitEdit}
@@ -179,10 +179,10 @@ export const EditableCell: React.FC<EditableCellProps> = ({
 
   return (
     <TouchableOpacity
-      style={[
+      style={StyleSheet.flatten([
         styles.cellContainer,
         error && styles.cellError,
-      ]}
+      ])}
       onPress={disabled ? onPress : onStartEdit}
       disabled={disabled}
       activeOpacity={disabled ? 1 : 0.7}
@@ -193,10 +193,10 @@ export const EditableCell: React.FC<EditableCellProps> = ({
           render(value, item)
         ) : (
           <Text 
-            style={[
+            style={StyleSheet.flatten([
               styles.cellText,
               error && styles.cellTextError,
-            ]} 
+            ])} 
             numberOfLines={inputType === 'multiline' ? 3 : 1}
           >
             {formatDisplayValue(value)}

@@ -159,15 +159,15 @@ export const AdminDashboard: React.FC = () => {
           return (
             <TouchableOpacity
               key={action.id}
-              style={[
+              style={StyleSheet.flatten([
                 styles.quickActionCard,
                 !hasPermission && styles.disabledCard
-              ]}
+              ])}
               onPress={() => handleQuickAction(action)}
               disabled={!hasPermission}
               activeOpacity={0.7}
             >
-              <View style={[styles.iconContainer, { backgroundColor: action.color }]}>
+              <View style={StyleSheet.flatten([styles.iconContainer, { backgroundColor: action.color }])}>
                 <Icon
                   name={action.icon}
                   size={24}

@@ -87,27 +87,27 @@ const AssignmentStrategySelector: React.FC<AssignmentStrategySelectorProps> = ({
     return (
       <TouchableOpacity
         key={strategyOption.value}
-        style={[
+        style={StyleSheet.flatten([
           styles.strategyCard,
           {
             backgroundColor: isSelected ? withAlpha(colors.primary, 0.063) : colors.white,
             borderColor: isSelected ? colors.primary : colors.gray200,
             borderWidth: isSelected ? 2 : 1
           }
-        ]}
+        ])}
         onPress={() => onStrategyChange(strategyOption.value)}
         activeOpacity={0.7}
       >
         {/* 推薦標籤 */}
         {strategyOption.recommended && (
           <View 
-            style={[
+            style={StyleSheet.flatten([
               styles.recommendedBadge,
               { backgroundColor: colors.success }
-            ]}
+            ])}
           >
             <MaterialIcon name="star" size={12} color={colors.white} />
-            <Text style={[styles.recommendedText, { color: colors.white }]}>
+            <Text style={StyleSheet.flatten([styles.recommendedText, { color: colors.white }])}>
               推薦
             </Text>
           </View>
@@ -116,14 +116,14 @@ const AssignmentStrategySelector: React.FC<AssignmentStrategySelectorProps> = ({
         {/* 策略圖標和標題 */}
         <View style={styles.strategyHeader}>
           <View 
-            style={[
+            style={StyleSheet.flatten([
               styles.iconContainer,
               {
                 backgroundColor: isSelected 
                   ? withAlpha(colors.primary, 0.125) 
                   : colors.gray100
               }
-            ]}
+            ])}
           >
             <MaterialIcon 
               name={strategyOption.icon} 
@@ -134,14 +134,14 @@ const AssignmentStrategySelector: React.FC<AssignmentStrategySelectorProps> = ({
           
           <View style={styles.strategyInfo}>
             <Text 
-              style={[
+              style={StyleSheet.flatten([
                 styles.strategyTitle,
                 { color: isSelected ? colors.primary : colors.text }
-              ]}
+              ])}
             >
               {strategyOption.title}
             </Text>
-            <Text style={[styles.strategyDescription, { color: colors.gray600 }]}>
+            <Text style={StyleSheet.flatten([styles.strategyDescription, { color: colors.gray600 }])}>
               {strategyOption.description}
             </Text>
           </View>
@@ -149,10 +149,10 @@ const AssignmentStrategySelector: React.FC<AssignmentStrategySelectorProps> = ({
           {/* 選中標記 */}
           {isSelected && (
             <View 
-              style={[
+              style={StyleSheet.flatten([
                 styles.checkmark,
                 { backgroundColor: colors.primary }
-              ]}
+              ])}
             >
               <MaterialIcon name="check" size={16} color={colors.white} />
             </View>
@@ -162,7 +162,7 @@ const AssignmentStrategySelector: React.FC<AssignmentStrategySelectorProps> = ({
         {/* 使用範例 */}
         {strategyOption.example && (
           <View 
-            style={[
+            style={StyleSheet.flatten([
               styles.exampleContainer,
               { 
                 backgroundColor: isSelected 
@@ -172,14 +172,14 @@ const AssignmentStrategySelector: React.FC<AssignmentStrategySelectorProps> = ({
                   ? withAlpha(colors.primary, 0.125) 
                   : colors.gray100
               }
-            ]}
+            ])}
           >
             <MaterialIcon 
               name="lightbulb-outline" 
               size={14} 
               color={colors.gray500}
             />
-            <Text style={[styles.exampleText, { color: colors.gray600 }]}>
+            <Text style={StyleSheet.flatten([styles.exampleText, { color: colors.gray600 }])}>
               {strategyOption.example}
             </Text>
           </View>
@@ -192,9 +192,9 @@ const AssignmentStrategySelector: React.FC<AssignmentStrategySelectorProps> = ({
     <View style={styles.container}>
       {/* 資料數量提示 */}
       {dataCount > 0 && (
-        <View style={[styles.dataInfo, { backgroundColor: withAlpha(colors.info, 0.063) }]}>
+        <View style={StyleSheet.flatten([styles.dataInfo, { backgroundColor: withAlpha(colors.info, 0.063) }])}>
           <MaterialIcon name="info-outline" size={16} color={colors.info} />
-          <Text style={[styles.dataInfoText, { color: colors.info }]}>
+          <Text style={StyleSheet.flatten([styles.dataInfoText, { color: colors.info }])}>
             將分配 {dataCount} 筆資料
           </Text>
         </View>
@@ -209,9 +209,9 @@ const AssignmentStrategySelector: React.FC<AssignmentStrategySelectorProps> = ({
       </ScrollView>
 
       {/* 策略說明 */}
-      <View style={[styles.helpSection, { backgroundColor: colors.gray50 }]}>
+      <View style={StyleSheet.flatten([styles.helpSection, { backgroundColor: colors.gray50 }])}>
         <MaterialIcon name="help-outline" size={16} color={colors.gray500} />
-        <Text style={[styles.helpText, { color: colors.gray600 }]}>
+        <Text style={StyleSheet.flatten([styles.helpText, { color: colors.gray600 }])}>
           選擇最適合您組織結構和資料特性的分配策略。
           {dataCount > 100 && ' 建議使用輪流分配或 CSV 欄位指定以提高效率。'}
         </Text>

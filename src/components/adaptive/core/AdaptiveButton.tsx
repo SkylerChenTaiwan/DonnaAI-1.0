@@ -386,7 +386,7 @@ const NativeButton = forwardRef<any, AdaptiveButtonProps>(
         <AdaptiveView style={{ flexDirection: 'row', alignItems: 'center' }}>
           {leftIcon}
           {(title || children) && (
-            <AdaptiveText style={[textStyleFinal, leftIcon && { marginLeft: 8 }, rightIcon && { marginRight: 8 }]}>
+            <AdaptiveText style={StyleSheet.flatten([textStyleFinal, leftIcon && { marginLeft: 8 }, rightIcon && { marginRight: 8 }])}>
               {title || children}
             </AdaptiveText>
           )}

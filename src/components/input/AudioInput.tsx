@@ -301,10 +301,10 @@ export const AudioInput: React.FC<AudioInputProps> = ({
           <Text style={styles.progressMessage}>{processingProgress.message}</Text>
           <View style={styles.progressBar}>
             <View 
-              style={[
+              style={StyleSheet.flatten([
                 styles.progressFill,
                 { width: `${processingProgress.percentage}%` }
-              ]} 
+              ])} 
             />
           </View>
           <Text style={styles.progressText}>
@@ -333,10 +333,10 @@ export const AudioInput: React.FC<AudioInputProps> = ({
         <View style={styles.qualitySection}>
           <Text style={styles.sectionTitle}>轉錄品質</Text>
           <View style={styles.qualityIndicator}>
-            <View style={[
+            <View style={StyleSheet.flatten([
               styles.qualityBadge,
               { backgroundColor: getQualityColor(qualityAnalysis.quality) }
-            ]}>
+            ])}>
               <Text style={styles.qualityText}>
                 {getQualityText(qualityAnalysis.quality)}
               </Text>
@@ -534,11 +534,11 @@ export const AudioInput: React.FC<AudioInputProps> = ({
           return (
             <View
               key={stepStage}
-              style={[
+              style={StyleSheet.flatten([
                 styles.progressStep,
                 isActive && styles.progressStepActive,
                 isCompleted && styles.progressStepCompleted,
-              ]}
+              ])}
             />
           );
         })}

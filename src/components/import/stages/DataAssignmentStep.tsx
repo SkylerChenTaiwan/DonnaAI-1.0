@@ -201,40 +201,40 @@ const DataAssignmentStep: React.FC<DataAssignmentStepProps> = ({
     const assignmentRate = (statistics.assignableRows / statistics.totalRows) * 100;
 
     return (
-      <View style={[styles.statsCard, { backgroundColor: colors.gray50 }]}>
-        <Text style={[styles.statsTitle, { color: colors.text }]}>
+      <View style={StyleSheet.flatten([styles.statsCard, { backgroundColor: colors.gray50 }])}>
+        <Text style={StyleSheet.flatten([styles.statsTitle, { color: colors.text }])}>
           分配統計
         </Text>
         <View style={styles.statsGrid}>
           <View style={styles.statItem}>
-            <Text style={[styles.statLabel, { color: colors.gray500 }]}>
+            <Text style={StyleSheet.flatten([styles.statLabel, { color: colors.gray500 }])}>
               總資料數
             </Text>
-            <Text style={[styles.statValue, { color: colors.text }]}>
+            <Text style={StyleSheet.flatten([styles.statValue, { color: colors.text }])}>
               {statistics.totalRows}
             </Text>
           </View>
           <View style={styles.statItem}>
-            <Text style={[styles.statLabel, { color: colors.gray500 }]}>
+            <Text style={StyleSheet.flatten([styles.statLabel, { color: colors.gray500 }])}>
               可分配
             </Text>
-            <Text style={[styles.statValue, { color: colors.success }]}>
+            <Text style={StyleSheet.flatten([styles.statValue, { color: colors.success }])}>
               {statistics.assignableRows}
             </Text>
           </View>
           <View style={styles.statItem}>
-            <Text style={[styles.statLabel, { color: colors.gray500 }]}>
+            <Text style={StyleSheet.flatten([styles.statLabel, { color: colors.gray500 }])}>
               未分配
             </Text>
-            <Text style={[styles.statValue, { color: colors.error }]}>
+            <Text style={StyleSheet.flatten([styles.statValue, { color: colors.error }])}>
               {statistics.unassignedRows}
             </Text>
           </View>
           <View style={styles.statItem}>
-            <Text style={[styles.statLabel, { color: colors.gray500 }]}>
+            <Text style={StyleSheet.flatten([styles.statLabel, { color: colors.gray500 }])}>
               分配率
             </Text>
-            <Text style={[styles.statValue, { color: colors.primary }]}>
+            <Text style={StyleSheet.flatten([styles.statValue, { color: colors.primary }])}>
               {assignmentRate.toFixed(1)}%
             </Text>
           </View>
@@ -248,17 +248,17 @@ const DataAssignmentStep: React.FC<DataAssignmentStepProps> = ({
     if (!validation || validation.warnings.length === 0) return null;
 
     return (
-      <View style={[styles.warningsCard, { backgroundColor: withAlpha(colors.warning, 0.063) }]}>
+      <View style={StyleSheet.flatten([styles.warningsCard, { backgroundColor: withAlpha(colors.warning, 0.063) }])}>
         <View style={styles.warningHeader}>
           <MaterialIcon name="warning" size={20} color={colors.warning} />
-          <Text style={[styles.warningTitle, { color: colors.warning }]}>
+          <Text style={StyleSheet.flatten([styles.warningTitle, { color: colors.warning }])}>
             注意事項
           </Text>
         </View>
         {validation.warnings.map((warning, index) => (
           <Text 
             key={index} 
-            style={[styles.warningText, { color: colors.gray700 }]}
+            style={StyleSheet.flatten([styles.warningText, { color: colors.gray700 }])}
           >
             • {warning.message}
           </Text>
@@ -271,7 +271,7 @@ const DataAssignmentStep: React.FC<DataAssignmentStepProps> = ({
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={colors.primary} />
-        <Text style={[styles.loadingText, { color: colors.gray500 }]}>
+        <Text style={StyleSheet.flatten([styles.loadingText, { color: colors.gray500 }])}>
           載入用戶資料中...
         </Text>
       </View>
@@ -281,12 +281,12 @@ const DataAssignmentStep: React.FC<DataAssignmentStepProps> = ({
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* 跳過分配選項 */}
-      <View style={[styles.skipSection, { backgroundColor: colors.gray50 }]}>
+      <View style={StyleSheet.flatten([styles.skipSection, { backgroundColor: colors.gray50 }])}>
         <View style={styles.skipContent}>
-          <Text style={[styles.skipLabel, { color: colors.text }]}>
+          <Text style={StyleSheet.flatten([styles.skipLabel, { color: colors.text }])}>
             跳過資料分配
           </Text>
-          <Text style={[styles.skipDescription, { color: colors.gray500 }]}>
+          <Text style={StyleSheet.flatten([styles.skipDescription, { color: colors.gray500 }])}>
             資料將分配給匯入者（您）
           </Text>
         </View>
@@ -302,7 +302,7 @@ const DataAssignmentStep: React.FC<DataAssignmentStepProps> = ({
         <>
           {/* 分配策略選擇 */}
           <View style={styles.section}>
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            <Text style={StyleSheet.flatten([styles.sectionTitle, { color: colors.text }])}>
               選擇分配策略
             </Text>
             <AssignmentStrategySelector
@@ -314,7 +314,7 @@ const DataAssignmentStep: React.FC<DataAssignmentStepProps> = ({
 
           {/* 策略配置 */}
           <View style={styles.section}>
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            <Text style={StyleSheet.flatten([styles.sectionTitle, { color: colors.text }])}>
               策略配置
             </Text>
             
@@ -331,15 +331,15 @@ const DataAssignmentStep: React.FC<DataAssignmentStepProps> = ({
 
             {strategy === 'csv_column' && (
               <View style={styles.csvConfig}>
-                <Text style={[styles.fieldLabel, { color: colors.gray700 }]}>
+                <Text style={StyleSheet.flatten([styles.fieldLabel, { color: colors.gray700 }])}>
                   選擇負責人欄位
                 </Text>
-                <View style={[styles.selectBox, { borderColor: colors.gray200 }]}>
+                <View style={StyleSheet.flatten([styles.selectBox, { borderColor: colors.gray200 }])}>
                   <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     {Object.keys(data[0] || {}).map(column => (
                       <TouchableOpacity
                         key={column}
-                        style={[
+                        style={StyleSheet.flatten([
                           styles.columnOption,
                           { 
                             backgroundColor: csvColumn === column 
@@ -349,18 +349,18 @@ const DataAssignmentStep: React.FC<DataAssignmentStepProps> = ({
                               ? colors.primary 
                               : colors.gray200
                           }
-                        ]}
+                        ])}
                         onPress={() => setCsvColumn(column)}
                       >
                         <Text
-                          style={[
+                          style={StyleSheet.flatten([
                             styles.columnText,
                             { 
                               color: csvColumn === column 
                                 ? colors.white 
                                 : colors.text 
                             }
-                          ]}
+                          ])}
                         >
                           {column}
                         </Text>
@@ -369,7 +369,7 @@ const DataAssignmentStep: React.FC<DataAssignmentStepProps> = ({
                   </ScrollView>
                 </View>
 
-                <Text style={[styles.fieldLabel, { color: colors.gray700, marginTop: 16 }]}>
+                <Text style={StyleSheet.flatten([styles.fieldLabel, { color: colors.gray700, marginTop: 16 }])}>
                   預設負責人（找不到匹配時）
                 </Text>
                 <UserSelector
@@ -387,7 +387,7 @@ const DataAssignmentStep: React.FC<DataAssignmentStepProps> = ({
           {/* 額外選項 */}
           <View style={styles.section}>
             <View style={styles.optionRow}>
-              <Text style={[styles.optionLabel, { color: colors.text }]}>
+              <Text style={StyleSheet.flatten([styles.optionLabel, { color: colors.text }])}>
                 跳過無法分配的資料
               </Text>
               <Switch
@@ -418,7 +418,7 @@ const DataAssignmentStep: React.FC<DataAssignmentStepProps> = ({
               {renderWarnings()}
               
               <View style={styles.section}>
-                <Text style={[styles.sectionTitle, { color: colors.text }]}>
+                <Text style={StyleSheet.flatten([styles.sectionTitle, { color: colors.text }])}>
                   分配預覽
                 </Text>
                 <AssignmentPreviewComponent

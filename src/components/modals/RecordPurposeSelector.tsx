@@ -92,7 +92,7 @@ export const RecordPurposeSelector: React.FC<RecordPurposeSelectorProps> = ({
       <View style={styles.container}>
         {/* 背景遮罩 */}
         <TouchableWithoutFeedback onPress={onCancel}>
-          <Animated.View style={[styles.overlay, { opacity }]} />
+          <Animated.View style={StyleSheet.flatten([styles.overlay, { opacity }])} />
         </TouchableWithoutFeedback>
 
         {/* 底部彈出面板 */}

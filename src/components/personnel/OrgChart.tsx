@@ -195,14 +195,14 @@ export function OrgChart({
     nodes.push(
       <View
         key={node.id}
-        style={[
+        style={StyleSheet.flatten([
           styles.nodeContainer,
           {
             position: 'absolute',
             left: node.position!.x,
             top: node.position!.y,
             opacity: matchesSearch ? 1 : 0.3 },
-        ]}
+        ])}
       >
         <OrgNodeComponent
           node={node}

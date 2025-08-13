@@ -242,21 +242,21 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
     return (
       <View
         key={user.id}
-        style={[
+        style={StyleSheet.flatten([
           styles.dataRow,
           !user.isValid && styles.dataRowInvalid,
           user.isDuplicate && styles.dataRowDuplicate,
-        ]}
+        ])}
       >
         {/* 選擇框 */}
         <TouchableOpacity
           style={styles.checkbox}
           onPress={() => toggleUserSelection(user.id)}
         >
-          <View style={[
+          <View style={StyleSheet.flatten([
             styles.checkboxInner,
             selectedUsers.has(user.id) && styles.checkboxChecked,
-          ]}>
+          ])}>
             {selectedUsers.has(user.id) && (
               <Icon name="checkmark" size={12} color={DesignSystem.colors.text.inverse} />
             )}
@@ -295,10 +295,10 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
                   autoFocus
                 />
               ) : (
-                <Text style={[
+                <Text style={StyleSheet.flatten([
                   styles.dataCellText,
                   !value && styles.dataCellEmpty,
-                ]}>
+                ])}>
                   {value || '-'}
                 </Text>
               )}
@@ -335,7 +335,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
         </View>
 
         <TouchableOpacity
-          style={[styles.filterButton, !showInvalid && styles.filterButtonActive]}
+          style={StyleSheet.flatten([styles.filterButton, !showInvalid && styles.filterButtonActive])}
           onPress={() => setShowInvalid(!showInvalid)}
         >
           <Icon name="filter-outline" size={16} />
@@ -383,23 +383,23 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
               style={styles.checkbox}
               onPress={toggleSelectAll}
             >
-              <View style={[
+              <View style={StyleSheet.flatten([
                 styles.checkboxInner,
                 selectedUsers.size === filteredData.length && filteredData.length > 0 && styles.checkboxChecked,
-              ]}>
+              ])}>
                 {selectedUsers.size === filteredData.length && filteredData.length > 0 && (
                   <Icon name="checkmark" size={12} color={DesignSystem.colors.text.inverse} />
                 )}
               </View>
             </TouchableOpacity>
-            <Text style={[styles.headerCell, styles.statusHeader]}>狀態</Text>
+            <Text style={StyleSheet.flatten([styles.headerCell, styles.statusHeader])}>狀態</Text>
             <Text style={styles.headerCell}>電子郵件</Text>
             <Text style={styles.headerCell}>姓名</Text>
             <Text style={styles.headerCell}>角色</Text>
             <Text style={styles.headerCell}>部門</Text>
             <Text style={styles.headerCell}>職位</Text>
             <Text style={styles.headerCell}>電話</Text>
-            <Text style={[styles.headerCell, styles.actionHeader]}>操作</Text>
+            <Text style={StyleSheet.flatten([styles.headerCell, styles.actionHeader])}>操作</Text>
           </View>
 
           {/* 資料列 */}
@@ -437,10 +437,10 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
             style={styles.settingItem}
             onPress={() => onConfigUpdate({ skipDuplicates: !config.skipDuplicates })}
           >
-            <View style={[
+            <View style={StyleSheet.flatten([
               styles.settingCheckbox,
               config.skipDuplicates && styles.settingCheckboxChecked,
-            ]}>
+            ])}>
               {config.skipDuplicates && (
                 <Icon name="checkmark" size={12} color={DesignSystem.colors.text.inverse} />
               )}
@@ -452,10 +452,10 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
             style={styles.settingItem}
             onPress={() => onConfigUpdate({ sendWelcomeEmail: !config.sendWelcomeEmail })}
           >
-            <View style={[
+            <View style={StyleSheet.flatten([
               styles.settingCheckbox,
               config.sendWelcomeEmail && styles.settingCheckboxChecked,
-            ]}>
+            ])}>
               {config.sendWelcomeEmail && (
                 <Icon name="checkmark" size={12} color={DesignSystem.colors.text.inverse} />
               )}
@@ -467,10 +467,10 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
             style={styles.settingItem}
             onPress={() => onConfigUpdate({ generatePasswords: !config.generatePasswords })}
           >
-            <View style={[
+            <View style={StyleSheet.flatten([
               styles.settingCheckbox,
               config.generatePasswords && styles.settingCheckboxChecked,
-            ]}>
+            ])}>
               {config.generatePasswords && (
                 <Icon name="checkmark" size={12} color={DesignSystem.colors.text.inverse} />
               )}

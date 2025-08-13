@@ -136,12 +136,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
   
   return (
     <>
-      <View style={[styles.sidebar, collapsed && styles.sidebarCollapsed]}>
+      <View style={StyleSheet.flatten([styles.sidebar, collapsed && styles.sidebarCollapsed])}>
         {/* Logo 區域 */}
         <View style={styles.logoArea}>
           <Image 
             source={require('@/assets/images/donna-logo.png')} 
-            style={[styles.logo, collapsed && styles.logoCollapsed]}
+            style={StyleSheet.flatten([styles.logo, collapsed && styles.logoCollapsed])}
             resizeMode="contain"
           />
           {!collapsed && (
@@ -198,10 +198,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
                   />
                   {!collapsed && (
                     <>
-                      <Text style={[
+                      <Text style={StyleSheet.flatten([
                         styles.menuLabel,
                         isActive && styles.menuLabelActive
-                      ]}>
+                      ])}>
                         {item.label}
                       </Text>
                       {item.hasChildren && isHovered && (
@@ -348,10 +348,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle })
         {/* 收合按鈕（桌面和平板都顯示） */}
         {onToggle && (
           <TouchableOpacity 
-            style={[
+            style={StyleSheet.flatten([
               styles.collapseButton,
               collapsed && styles.collapseButtonCollapsed
-            ]}
+            ])}
             onPress={onToggle}
           >
             <Icon 

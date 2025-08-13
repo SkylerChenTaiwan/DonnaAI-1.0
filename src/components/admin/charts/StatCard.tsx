@@ -71,17 +71,17 @@ export const StatCard: React.FC<StatCardProps> = ({
   const sizeStyles = getSizeStyles();
 
   return (
-    <View style={[styles.container, sizeStyles.container]}>
+    <View style={StyleSheet.flatten([styles.container, sizeStyles.container])}>
       {icon && (
-        <View style={[styles.iconContainer, { backgroundColor: withAlpha(color, 0.125) }]}>
+        <View style={StyleSheet.flatten([styles.iconContainer, { backgroundColor: withAlpha(color, 0.125) }])}>
           <Icon name={icon} size={24} color={color} />
         </View>
       )}
       
-      <Text style={[styles.label, sizeStyles.label]}>{label}</Text>
+      <Text style={StyleSheet.flatten([styles.label, sizeStyles.label])}>{label}</Text>
       
       <View style={styles.valueContainer}>
-        <Text style={[styles.value, sizeStyles.value]}>{value}</Text>
+        <Text style={StyleSheet.flatten([styles.value, sizeStyles.value])}>{value}</Text>
         {unit && <Text style={styles.unit}>{unit}</Text>}
       </View>
       
@@ -92,7 +92,7 @@ export const StatCard: React.FC<StatCardProps> = ({
             size={16}
             color={getChangeColor()}
           />
-          <Text style={[styles.change, { color: getChangeColor() }]}>
+          <Text style={StyleSheet.flatten([styles.change, { color: getChangeColor() }])}>
             {change}
           </Text>
         </View>

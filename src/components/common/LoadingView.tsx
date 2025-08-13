@@ -15,7 +15,7 @@ export function LoadingView({
   style 
 }: LoadingViewProps) {
   return (
-    <View style={[styles.container, style]}>
+    <View style={StyleSheet.flatten([styles.container, style])}>
       <ActivityIndicator size={size} color={color} />
       <Text style={styles.message}>{message}</Text>
     </View>

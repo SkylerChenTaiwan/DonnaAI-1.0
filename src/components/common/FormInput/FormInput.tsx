@@ -47,14 +47,14 @@ export const FormInput: React.FC<FormInputProps> = ({
       editable={editable}
       keyboardType={keyboardType}
       secureTextEntry={type === 'password'}
-      style={[
+      style={StyleSheet.flatten([
         styles.input,
         {
           backgroundColor: editable ? colors.background.input : colors.background.primary,
           borderColor: colors.border.default,
           color: editable ? colors.text.primary : colors.text.disabled },
         style,
-      ]}
+      ])}
       placeholderTextColor={colors.text.tertiary}
     />
   );

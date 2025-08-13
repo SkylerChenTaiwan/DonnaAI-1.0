@@ -35,10 +35,10 @@ export function PersonnelTabs({ activeView, onViewChange }: PersonnelTabsProps) 
       {tabs.map((tab) => (
         <TouchableOpacity
           key={tab.id}
-          style={[
+          style={StyleSheet.flatten([
             styles.tab,
             activeView === tab.id && styles.activeTab,
-          ]}
+          ])}
           onPress={() => onViewChange(tab.id)}
           activeOpacity={0.7}
         >
@@ -48,10 +48,10 @@ export function PersonnelTabs({ activeView, onViewChange }: PersonnelTabsProps) 
             color={activeView === tab.id ? DesignSystem.colors.text.primary : DesignSystem.colors.text.secondary}
           />
           <Text
-            style={[
+            style={StyleSheet.flatten([
               styles.tabText,
               activeView === tab.id && styles.activeTabText,
-            ]}
+            ])}
             numberOfLines={1}
           >
             {tab.title}

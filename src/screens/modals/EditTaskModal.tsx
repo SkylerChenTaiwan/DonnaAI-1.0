@@ -141,17 +141,17 @@ export const EditTaskModal: React.FC = () => {
               ].map((status) => (
                 <TouchableOpacity
                   key={status.value}
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.optionButton,
                     formData.status === status.value && styles.optionButtonActive,
-                  ]}
+                  ])}
                   onPress={() => setFormData(prev => ({ ...prev, status: status.value as any }))}
                 >
                   <Text
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.optionButtonText,
                       formData.status === status.value && styles.optionButtonTextActive,
-                    ]}
+                    ])}
                   >
                     {status.label}
                   </Text>
@@ -172,17 +172,17 @@ export const EditTaskModal: React.FC = () => {
               ].map((priority) => (
                 <TouchableOpacity
                   key={priority.value}
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.optionButton,
                     formData.priority === priority.value && styles.optionButtonActive,
-                  ]}
+                  ])}
                   onPress={() => setFormData(prev => ({ ...prev, priority: priority.value as any }))}
                 >
                   <Text
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.optionButtonText,
                       formData.priority === priority.value && styles.optionButtonTextActive,
-                    ]}
+                    ])}
                   >
                     {priority.label}
                   </Text>
@@ -202,17 +202,17 @@ export const EditTaskModal: React.FC = () => {
               ].map((type) => (
                 <TouchableOpacity
                   key={type.value}
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.optionButton,
                     formData.type === type.value && styles.optionButtonActive,
-                  ]}
+                  ])}
                   onPress={() => setFormData(prev => ({ ...prev, type: type.value as any }))}
                 >
                   <Text
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.optionButtonText,
                       formData.type === type.value && styles.optionButtonTextActive,
-                    ]}
+                    ])}
                   >
                     {type.label}
                   </Text>
@@ -225,7 +225,7 @@ export const EditTaskModal: React.FC = () => {
           <View style={styles.formGroup}>
             <Text style={styles.label}>描述</Text>
             <TextInput
-              style={[styles.input, styles.textArea]}
+              style={StyleSheet.flatten([styles.input, styles.textArea])}
               value={formData.description}
               onChangeText={(text) => setFormData(prev => ({ ...prev, description: text }))}
               placeholder="請輸入任務描述"

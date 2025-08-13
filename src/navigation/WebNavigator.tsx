@@ -103,11 +103,11 @@ export const WebNavigator = () => {
       
       {/* 側邊欄 */}
       {showSidebar && (
-        <View style={[
+        <View style={StyleSheet.flatten([
           styles.sidebarContainer,
           isMobile && styles.mobileSidebar,
           isMobile && !sidebarCollapsed && styles.mobileSidebarVisible
-        ]}>
+        ])}>
           <Sidebar 
             collapsed={sidebarCollapsed}  // 所有模式都使用統一的收合狀態
             onToggle={handleSidebarToggle}

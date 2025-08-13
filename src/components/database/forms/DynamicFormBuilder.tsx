@@ -224,7 +224,7 @@ export const DynamicFormBuilder = forwardRef<DynamicFormBuilderRef, DynamicFormB
               {field.required && <Text style={styles.required}> *</Text>}
             </Text>
             <TextInput
-              style={[styles.input, error && styles.inputError]}
+              style={StyleSheet.flatten([styles.input, error && styles.inputError])}
               value={String(value || '')}
               onChangeText={(text) => {
                 const val = field.type === 'number' ? Number(text) || 0 : text;
@@ -254,7 +254,7 @@ export const DynamicFormBuilder = forwardRef<DynamicFormBuilderRef, DynamicFormB
               {field.required && <Text style={styles.required}> *</Text>}
             </Text>
             <TextInput
-              style={[styles.textarea, error && styles.inputError]}
+              style={StyleSheet.flatten([styles.textarea, error && styles.inputError])}
               value={String(value || '')}
               onChangeText={onChange}
               placeholder={field.placeholder}
@@ -289,7 +289,7 @@ export const DynamicFormBuilder = forwardRef<DynamicFormBuilderRef, DynamicFormB
                 ))}
               </select>
             ) : (
-              <View style={[styles.pickerContainer, error && styles.inputError]}>
+              <View style={StyleSheet.flatten([styles.pickerContainer, error && styles.inputError])}>
                 <Picker
                   selectedValue={value}
                   onValueChange={onChange}
@@ -342,7 +342,7 @@ export const DynamicFormBuilder = forwardRef<DynamicFormBuilderRef, DynamicFormB
               {field.required && <Text style={styles.required}> *</Text>}
             </Text>
             <TextInput
-              style={[styles.input, error && styles.inputError]}
+              style={StyleSheet.flatten([styles.input, error && styles.inputError])}
               value={value || ''}
               onChangeText={onChange}
               placeholder={field.placeholder || 'YYYY-MM-DD'}
@@ -441,7 +441,7 @@ const TagsField: React.FC<{
       {!disabled && (
         <View style={styles.tagInputRow}>
           <TextInput
-            style={[styles.tagInput, error && styles.inputError]}
+            style={StyleSheet.flatten([styles.tagInput, error && styles.inputError])}
             value={inputValue}
             onChangeText={setInputValue}
             placeholder="輸入標籤後按新增"

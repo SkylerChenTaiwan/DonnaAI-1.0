@@ -153,7 +153,7 @@ const SimpleBillingStep: React.FC<StepProps> = ({
         
         <View style={styles.summaryRow}>
           <Text style={styles.summaryLabel}>免費名額</Text>
-          <Text style={[styles.summaryValue, styles.freeText]}>
+          <Text style={StyleSheet.flatten([styles.summaryValue, styles.freeText])}>
             {formData.freeSeats} 人
           </Text>
         </View>

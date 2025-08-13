@@ -111,12 +111,12 @@ export const UserImportStageIndicator: React.FC<UserImportStageIndicatorProps> =
     return (
       <View key={config.key} style={styles.stageItem}>
         {/* 階段圓圈 */}
-        <View style={[
+        <View style={StyleSheet.flatten([
           styles.stageCircle,
           isActive && styles.stageCircleActive,
           isCompleted && styles.stageCircleCompleted,
           !isReachable && styles.stageCircleDisabled
-        ]}>
+        ])}>
           {isCompleted ? (
             <Icon 
               name="checkmark" 
@@ -130,13 +130,13 @@ export const UserImportStageIndicator: React.FC<UserImportStageIndicatorProps> =
               color={DesignSystem.colors.text.inverse} 
             />
           ) : (
-            <Text style={[
+            <Text style={StyleSheet.flatten([
               styles.stageNumber,
               isActive && styles.stageNumberActive,
               isCompleted && styles.stageNumberActive,
               !isReachable && styles.stageNumberDisabled,
               compact && styles.stageNumberCompact
-            ]}>
+            ])}>
               {index + 1}
             </Text>
           )}
@@ -145,19 +145,19 @@ export const UserImportStageIndicator: React.FC<UserImportStageIndicatorProps> =
         {/* 階段標題和描述 */}
         {!compact && (
           <View style={styles.stageTextContainer}>
-            <Text style={[
+            <Text style={StyleSheet.flatten([
               styles.stageTitle,
               isActive && styles.stageTitleActive,
               isCompleted && styles.stageTitleCompleted,
               !isReachable && styles.stageTitleDisabled
-            ]}>
+            ])}>
               {config.title}
             </Text>
-            <Text style={[
+            <Text style={StyleSheet.flatten([
               styles.stageDescription,
               isActive && styles.stageDescriptionActive,
               !isReachable && styles.stageDescriptionDisabled
-            ]}>
+            ])}>
               {config.description}
             </Text>
           </View>
@@ -165,21 +165,21 @@ export const UserImportStageIndicator: React.FC<UserImportStageIndicatorProps> =
         
         {/* 連接線（除了最後一個階段） */}
         {index < STAGE_CONFIGS.length - 1 && (
-          <View style={[
+          <View style={StyleSheet.flatten([
             styles.stageLine,
             isCompleted && styles.stageLineCompleted,
             compact && styles.stageLineCompact
-          ]} />
+          ])} />
         )}
       </View>
     );
   };
 
   return (
-    <View style={[
+    <View style={StyleSheet.flatten([
       compact ? styles.containerCompact : styles.container,
       style
-    ]}>
+    ])}>
       {STAGE_CONFIGS.map((config, index) => renderStageItem(config, index))}
     </View>
   );

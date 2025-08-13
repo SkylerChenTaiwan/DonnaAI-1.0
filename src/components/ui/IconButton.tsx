@@ -77,7 +77,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
 
   return (
     <TouchableOpacity
-      style={[
+      style={StyleSheet.flatten([
         styles.button,
         {
           width: currentSize.button,
@@ -86,7 +86,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
         variant === 'secondary' && styles.secondaryBorder,
         disabled && styles.disabled,
         style,
-      ]}
+      ])}
       onPress={onPress}
       disabled={disabled || loading}
       activeOpacity={0.7}

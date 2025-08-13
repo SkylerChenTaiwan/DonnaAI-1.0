@@ -131,7 +131,7 @@ export const StateInspector = () => {
     
     if (typeof value === 'boolean') {
       return (
-        <Text style={[styles.booleanValue, value && styles.trueValue]}>
+        <Text style={StyleSheet.flatten([styles.booleanValue, value && styles.trueValue])}>
           {indent}{value.toString()}
         </Text>
       );
@@ -239,7 +239,7 @@ export const StateInspector = () => {
           onPress={() => setAutoRefresh(!autoRefresh)}
           activeOpacity={0.7}
         >
-          <Text style={[styles.refreshIcon, autoRefresh && styles.activeRefresh]}>
+          <Text style={StyleSheet.flatten([styles.refreshIcon, autoRefresh && styles.activeRefresh])}>
             🔄
           </Text>
         </TouchableOpacity>

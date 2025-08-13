@@ -310,13 +310,13 @@ export const AudioRecorder = ({
           {waveformData.map((amplitude, index) => (
             <View
               key={index}
-              style={[
+              style={StyleSheet.flatten([
                 styles.waveformBar,
                 {
                   height: Math.max(2, amplitude / 2),
                   backgroundColor: recordingStatus === 'recording' ? '#22c55e' : '#6b7280'
                 }
-              ]}
+              ])}
             />
           ))}
         </View>
@@ -328,10 +328,10 @@ export const AudioRecorder = ({
     <View style={styles.container}>
       {/* 錄音狀態顯示 */}
       <View style={styles.statusContainer}>
-        <View style={[
+        <View style={StyleSheet.flatten([
           styles.statusIndicator,
           { backgroundColor: getStatusColor(recordingStatus) }
-        ]} />
+        ])} />
         <Text style={styles.statusText}>
           {getStatusText(recordingStatus)}
         </Text>

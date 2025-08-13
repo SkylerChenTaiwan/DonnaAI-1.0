@@ -143,17 +143,17 @@ export const EditRecordModal: React.FC = () => {
               ].map((type) => (
                 <TouchableOpacity
                   key={type.value}
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.typeButton,
                     formData.type === type.value && styles.typeButtonActive,
-                  ]}
+                  ])}
                   onPress={() => setFormData(prev => ({ ...prev, type: type.value as any }))}
                 >
                   <Text
-                    style={[
+                    style={StyleSheet.flatten([
                       styles.typeButtonText,
                       formData.type === type.value && styles.typeButtonTextActive,
-                    ]}
+                    ])}
                   >
                     {type.label}
                   </Text>
@@ -178,7 +178,7 @@ export const EditRecordModal: React.FC = () => {
           <View style={styles.formGroup}>
             <Text style={styles.label}>內容</Text>
             <TextInput
-              style={[styles.input, styles.textArea]}
+              style={StyleSheet.flatten([styles.input, styles.textArea])}
               value={formData.content}
               onChangeText={(text) => setFormData(prev => ({ ...prev, content: text }))}
               placeholder="請輸入紀錄內容"
@@ -193,7 +193,7 @@ export const EditRecordModal: React.FC = () => {
           <View style={styles.formGroup}>
             <Text style={styles.label}>AI 摘要</Text>
             <TextInput
-              style={[styles.input, styles.textArea]}
+              style={StyleSheet.flatten([styles.input, styles.textArea])}
               value={formData.aiSummary}
               onChangeText={(text) => setFormData(prev => ({ ...prev, aiSummary: text }))}
               placeholder="AI 生成的摘要"

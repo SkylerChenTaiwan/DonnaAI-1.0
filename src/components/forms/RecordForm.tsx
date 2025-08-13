@@ -198,10 +198,10 @@ export const RecordForm: React.FC<RecordFormProps> = ({
       <Text style={styles.inputModeLabel}>輸入方式：</Text>
       <View style={styles.inputModeToggle}>
         <TouchableOpacity
-          style={[
+          style={StyleSheet.flatten([
             styles.modeButton,
             inputMode === 'text' && styles.modeButtonActive,
-          ]}
+          ])}
           onPress={() => setInputMode('text')}
         >
           <Icon 
@@ -209,19 +209,19 @@ export const RecordForm: React.FC<RecordFormProps> = ({
             size={18} 
             color={inputMode === 'text' ? '#FFFFFF' : '#7A7A7A'} 
           />
-          <Text style={[
+          <Text style={StyleSheet.flatten([
             styles.modeButtonText,
             inputMode === 'text' && styles.modeButtonTextActive,
-          ]}>
+          ])}>
             文字輸入
           </Text>
         </TouchableOpacity>
         
         <TouchableOpacity
-          style={[
+          style={StyleSheet.flatten([
             styles.modeButton,
             inputMode === 'voice' && styles.modeButtonActive,
-          ]}
+          ])}
           onPress={() => setInputMode('voice')}
         >
           <Icon 
@@ -229,10 +229,10 @@ export const RecordForm: React.FC<RecordFormProps> = ({
             size={18} 
             color={inputMode === 'voice' ? '#FFFFFF' : '#7A7A7A'} 
           />
-          <Text style={[
+          <Text style={StyleSheet.flatten([
             styles.modeButtonText,
             inputMode === 'voice' && styles.modeButtonTextActive,
-          ]}>
+          ])}>
             語音輸入
           </Text>
         </TouchableOpacity>
@@ -377,7 +377,7 @@ export const RecordForm: React.FC<RecordFormProps> = ({
         {/* 記錄內容 */}
         <View style={styles.fieldContainer}>
           <View style={styles.contentLabelRow}>
-            <Text style={[styles.fieldLabel, styles.required]}>記錄內容</Text>
+            <Text style={StyleSheet.flatten([styles.fieldLabel, styles.required])}>記錄內容</Text>
             {inputMode === 'voice' && (
               <TouchableOpacity
                 style={styles.voiceInputButton}

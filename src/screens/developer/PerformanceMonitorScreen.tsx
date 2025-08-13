@@ -138,7 +138,7 @@ export const PerformanceMonitorScreen: React.FC = () => {
             return (
               <View
                 key={index}
-                style={[
+                style={StyleSheet.flatten([
                   styles.chartBar,
                   {
                     height,
@@ -146,7 +146,7 @@ export const PerformanceMonitorScreen: React.FC = () => {
                     backgroundColor: getFPSColor(fps),
                     left: index * barWidth
                   }
-                ]}
+                ])}
               />
             );
           })}
@@ -169,13 +169,13 @@ export const PerformanceMonitorScreen: React.FC = () => {
     return (
       <View style={styles.progressBar}>
         <View
-          style={[
+          style={StyleSheet.flatten([
             styles.progressFill,
             {
               width: `${percentage}%`,
               backgroundColor: color
             }
-          ]}
+          ])}
         />
       </View>
     );
@@ -213,10 +213,10 @@ export const PerformanceMonitorScreen: React.FC = () => {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>畫面更新率</Text>
-            <Text style={[
+            <Text style={StyleSheet.flatten([
               styles.fpsValue,
               { color: getFPSColor(metrics.fps) }
-            ]}>
+            ])}>
               {metrics.fps} FPS
             </Text>
           </View>

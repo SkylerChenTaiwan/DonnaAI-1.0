@@ -381,11 +381,11 @@ const UserFieldMapper: React.FC<UserFieldMapperProps> = ({
           </div>
         ) : (
           <TouchableOpacity
-            style={[
+            style={StyleSheet.flatten([
               styles.sourceField,
               !mapping.sourceField && styles.sourceFieldEmpty,
               hoveredTarget === mapping.targetField && styles.sourceFieldHovered,
-            ]}
+            ])}
             onPress={() => {
               setOpenDropdown(openDropdown === mapping.targetField ? null : mapping.targetField);
             }}
@@ -394,11 +394,11 @@ const UserFieldMapper: React.FC<UserFieldMapperProps> = ({
             <>
               <Text style={styles.sourceFieldText}>{mapping.sourceField}</Text>
               {mapping.confidence > 0 && (
-                <View style={[
+                <View style={StyleSheet.flatten([
                   styles.confidenceBadge,
                   mapping.confidence > 0.8 && styles.confidenceBadgeHigh,
                   mapping.confidence > 0.5 && mapping.confidence <= 0.8 && styles.confidenceBadgeMedium,
-                ]}>
+                ])}>
                   <Text style={styles.confidenceText}>
                     {Math.round(mapping.confidence * 100)}%
                   </Text>
@@ -468,7 +468,7 @@ const UserFieldMapper: React.FC<UserFieldMapperProps> = ({
       <View style={styles.toolbar}>
         {useIntelligentMapping && (
           <TouchableOpacity
-            style={[styles.toolButton, isProcessing && styles.toolButtonDisabled]}
+            style={StyleSheet.flatten([styles.toolButton, isProcessing && styles.toolButtonDisabled])}
             onPress={handleAISuggestion}
             disabled={isProcessing}
           >
