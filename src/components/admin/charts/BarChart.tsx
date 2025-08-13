@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions , Platform } from 'react-native';
 import { CartesianChart, Bar } from 'victory-native';
 import { DesignSystem } from '@/theme/designSystem';
 import { ChartDataPoint, ChartSeries, isMultiSeries, flattenSeries } from '@/types/charts';
@@ -93,6 +93,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 16,
     top: '50%',
-    transform: [{ rotate: '-90deg' }],
+    transform: Platform.OS === 'web' ? `rotate(-90deg)` : [{ rotate: '-90deg' }],
   },
 });

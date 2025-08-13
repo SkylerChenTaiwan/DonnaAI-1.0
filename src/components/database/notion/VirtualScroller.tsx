@@ -119,7 +119,7 @@ export const VirtualScroller: React.FC<VirtualScrollerProps> = ({
           style={[
             styles.itemsContainer,
             {
-              transform: [{ translateY: offsetY }],
+              transform: Platform.OS === 'web' ? `translateY(${offsetY}px)` : [{ translateY: offsetY }],
             },
           ]}
         >

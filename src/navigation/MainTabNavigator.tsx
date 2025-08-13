@@ -6,7 +6,7 @@ import React, { useState, useRef, useEffect } from 'react';
 // Icon import removed - using platform-specific Icon component;
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from '@/components/common/Icon';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet , Platform } from 'react-native';
 import { useAuthStore } from '@/stores/authStore';
 import { useAnalyticsStore } from '@/stores/analyticsStore';
 import { useNavigation } from '@react-navigation/native';
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
     height: 3,
     backgroundColor: '#FFFFFF',
     borderRadius: 1.5,
-    transform: [{ translateY: -1.5 }],
+    transform: Platform.OS === 'web' ? `translateY(${-1.5}px)` : [{ translateY: -1.5 }],
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#FFFFFF',
     borderRadius: 1.5,
-    transform: [{ translateX: -1.5 }],
+    transform: Platform.OS === 'web' ? `translateX(${-1.5}px)` : [{ translateX: -1.5 }],
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,

@@ -12,6 +12,7 @@ import {
   Alert,
   Animated,
   Dimensions,
+  Platform
 } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { Audio } from 'expo-av';
@@ -308,7 +309,7 @@ export const SimplifiedVoiceTaskInput: React.FC<SimplifiedVoiceTaskInputProps> =
             style={[
               styles.recordButton,
               recordingStatus === 'recording' && {
-                transform: [{ scale: pulseAnim }],
+                transform: Platform.OS === 'web' ? `scale(${pulseAnim})` : [{ scale: pulseAnim }],
               },
             ]}
           >

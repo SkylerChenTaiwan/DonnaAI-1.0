@@ -467,10 +467,10 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.gray700,
   },
   actionButtonHover: {
-    transform: [{ scale: 1.05 }],
+    transform: Platform.OS === 'web' ? `scale(${1.05})` : [{ scale: 1.05 }],
   },
   actionButtonPressed: {
-    transform: [{ scale: 0.95 }],
+    transform: Platform.OS === 'web' ? `scale(${0.95})` : [{ scale: 0.95 }],
   },
   actionLabel: {
     marginTop: 8,
@@ -490,7 +490,7 @@ const styles = StyleSheet.create({
     height: 2,
     backgroundColor: '#FFFFFF',
     borderRadius: 1,
-    transform: [{ translateY: -1 }],
+    transform: Platform.OS === 'web' ? `translateY(${-1}px)` : [{ translateY: -1 }],
   },
   plusVertical: {
     position: 'absolute',
@@ -500,7 +500,7 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#FFFFFF',
     borderRadius: 1,
-    transform: [{ translateX: -1 }],
+    transform: Platform.OS === 'web' ? `translateX(${-1}px)` : [{ translateX: -1 }],
   },
   userInfo: {
     flexDirection: 'row',
@@ -531,7 +531,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: -12,
     top: '50%',
-    transform: [{ translateY: -12 }],
+    transform: Platform.OS === 'web' ? `translateY(${-12}px)` : [{ translateY: -12 }],
     width: 24,
     height: 24,
     borderRadius: 12,

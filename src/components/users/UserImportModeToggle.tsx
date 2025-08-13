@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     transition: Platform.OS === 'web' ? 'transform 0.2s ease' : undefined,
   } as any,
   sliderActive: {
-    transform: [{ translateX: Platform.OS === 'web' ? 'calc(100% - 4px)' : 80 }] as any,
+    transform: Platform.OS === 'web' ? `translateX(${Platform.OS === 'web' ? 'calc(100% - 4px)' : 80}px)` : [{ translateX: Platform.OS === 'web' ? 'calc(100% - 4px)' : 80 }] as any,
   },
   tooltip: {
     flexDirection: 'row',

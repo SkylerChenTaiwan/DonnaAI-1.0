@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
+import { View, Text, StyleSheet, Animated , Platform } from 'react-native';
 import * as Network from 'expo-network';
 import { Icon } from '@/components/common/Icon';
 import { getAnimationConfig } from '@/utils/animationConfig';
@@ -67,7 +67,7 @@ export function NetworkStatusBar() {
       style={[
         styles.container,
         isOnline ? styles.online : styles.offline,
-        { transform: [{ translateY: slideAnim }] }
+        { transform: Platform.OS === 'web' ? `translateY(${slideAnim}px)` : [{ translateY: slideAnim }] }
       ]}
     >
       <View style={styles.content}>

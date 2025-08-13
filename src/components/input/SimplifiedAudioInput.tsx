@@ -424,7 +424,7 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
               recordingStatus === 'recording' && styles.recordingButton,
               recordingStatus === 'paused' && styles.pausedButton,
               {
-                transform: [{ scale: pulseAnim }],
+                transform: Platform.OS === 'web' ? `scale(${pulseAnim})` : [{ scale: pulseAnim }],
               },
             ]}
           >

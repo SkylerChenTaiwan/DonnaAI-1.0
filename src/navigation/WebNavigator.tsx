@@ -209,6 +209,6 @@ const styles = StyleSheet.create({
     transition: 'transform 0.3s ease-in-out',
   },
   mobileSidebarVisible: {
-    transform: [{ translateX: 280 }],
+    transform: Platform.OS === 'web' ? `translateX(${280}px)` : [{ translateX: 280 }],
   },
 });

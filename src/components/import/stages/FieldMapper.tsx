@@ -470,7 +470,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                     borderRadius: 11,
                     backgroundColor: '#FFFFFF',
                     position: 'absolute',
-                    transform: [{ translateX: isEnabled ? 22 : 2 }],
+                    transform: Platform.OS === 'web' ? `translateX(${isEnabled ? 22 : 2}px)` : [{ translateX: isEnabled ? 22 : 2 }],
                     top: 2,
                     elevation: 2,
                     shadowColor: '#000000',

@@ -12,6 +12,7 @@ import {
   Modal,
   TouchableWithoutFeedback,
   Animated,
+  Platform
 } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
@@ -104,7 +105,7 @@ export const RecordPurposeSelector: React.FC<RecordPurposeSelectorProps> = ({
           style={[
             styles.panel,
             {
-              transform: [{ translateY }],
+              transform: Platform.OS === 'web' ? `translateY(${0}px)` : [{ translateY: 0 }],
               paddingBottom: insets.bottom + 20,
             },
           ]}

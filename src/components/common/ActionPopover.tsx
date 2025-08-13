@@ -12,6 +12,7 @@ import {
   Modal,
   TouchableWithoutFeedback,
   Animated,
+  Platform
 } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
@@ -132,7 +133,7 @@ export const ActionPopover = ({
             styles.actionPanel,
             {
               bottom: panelBottom || (tabBarHeight + insets.bottom),
-              transform: [{ translateY }],
+              transform: Platform.OS === 'web' ? `translateY(${0}px)` : [{ translateY: 0 }],
             },
           ]}
         >

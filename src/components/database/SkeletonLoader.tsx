@@ -70,7 +70,7 @@ export const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
       style={[
         styles.shimmerGradient,
         {
-          transform: [{ translateX }],
+          transform: Platform.OS === 'web' ? `translateX(${0}px)` : [{ translateX: 0 }],
         },
       ]}
     />

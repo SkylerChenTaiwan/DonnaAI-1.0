@@ -169,7 +169,7 @@ export default function AnalyticsDialog({ visible, onClose }: AnalyticsDialogPro
             {
               height: DIALOG_HEIGHT,
               paddingBottom: insets.bottom,
-              transform: [{ translateY }],
+              transform: Platform.OS === 'web' ? `translateY(${0}px)` : [{ translateY: 0 }],
             },
           ]}
         >

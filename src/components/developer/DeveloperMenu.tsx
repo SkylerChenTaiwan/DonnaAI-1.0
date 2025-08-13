@@ -322,7 +322,7 @@ export const DeveloperMenu = () => {
           <Animated.View 
             style={[
               styles.menuContainer,
-              { transform: [{ translateX: slideAnim }] }
+              { transform: Platform.OS === 'web' ? `translateX(${slideAnim}px)` : [{ translateX: slideAnim }] }
             ]}
           >
             <TouchableOpacity activeOpacity={1}>
