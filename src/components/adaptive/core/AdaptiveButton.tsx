@@ -191,10 +191,7 @@ const WebButton = forwardRef<HTMLButtonElement, AdaptiveButtonProps>(
         outline: 'none',
         cursor: disabled || loading ? 'not-allowed' : 'pointer',
         transition: 'all 150ms ease',
-        userSelect: 'none',
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center' };
+        userSelect: 'none' };
       
       return finalStyle;
     }, [variant, size, currentState, platformAdapter, styleAdapter, style, webStyle, disabled, loading]);

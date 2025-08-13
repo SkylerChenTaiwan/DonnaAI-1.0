@@ -22,11 +22,11 @@ export const DesignSystem = {
     
     // 按鈕專用色彩系統
     button: {
-      // 主要按鈕 - 使用藍色系統
+      // 主要按鈕
       primary: {
-        default: '#007AFF',
-        hover: '#0051D5',
-        pressed: '#003D99' },
+        default: '#2C2C2C',
+        hover: '#3C3C3C',
+        pressed: '#1C1C1C' },
       // 次要按鈕
       secondary: {
         default: '#F7F7F7',
