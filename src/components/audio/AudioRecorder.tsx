@@ -8,7 +8,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { View, Text, StyleSheet, Alert, Platform } from 'react-native';
 import { Audio, InterruptionModeIOS, InterruptionModeAndroid } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
-import { Button } from '@/components/common/Button';
+import { Button } from '@/components/adaptive';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { OfflineRecordingService, NetworkMonitor } from '@/services/offline-recording';
 
@@ -350,7 +350,7 @@ export const AudioRecorder = ({
       {/* 控制按鈕 */}
       <View style={styles.controlsContainer}>
         {recordingStatus === 'idle' && (
-          <Button
+          <AdaptiveButton
             title="開始錄音"
             onPress={startRecording}
             style={styles.startButton}
@@ -360,13 +360,13 @@ export const AudioRecorder = ({
 
         {recordingStatus === 'recording' && (
           <>
-            <Button
+            <AdaptiveButton
               title="暫停"
               onPress={pauseRecording}
               style={styles.pauseButton}
               textStyle={styles.pauseButtonText}
             />
-            <Button
+            <AdaptiveButton
               title="停止"
               onPress={stopRecording}
               style={styles.stopButton}
@@ -377,13 +377,13 @@ export const AudioRecorder = ({
 
         {recordingStatus === 'paused' && (
           <>
-            <Button
+            <AdaptiveButton
               title="繼續"
               onPress={resumeRecording}
               style={styles.resumeButton}
               textStyle={styles.resumeButtonText}
             />
-            <Button
+            <AdaptiveButton
               title="停止"
               onPress={stopRecording}
               style={styles.stopButton}
@@ -393,7 +393,7 @@ export const AudioRecorder = ({
         )}
 
         {recordingStatus === 'stopped' && (
-          <Button
+          <AdaptiveButton
             title="重新錄音"
             onPress={resetRecording}
             style={styles.resetButton}

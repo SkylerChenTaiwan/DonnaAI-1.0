@@ -13,7 +13,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert } from 'react-native';
-import { Button } from '@/components/common/Button';
+import { Button } from '@/components/adaptive';
 import { Layout } from '@/components/common/Layout';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { FormField } from '@/components/forms/FormField';
@@ -238,7 +238,7 @@ export const AddUserModal: React.FC = () => {
           </TouchableOpacity>
           <Text style={styles.headerTitle}>新增下屬</Text>
         </View>
-        <Button
+        <AdaptiveButton
           title="建立"
           onPress={handleSubmit}
           loading={loading}

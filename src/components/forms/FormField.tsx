@@ -3,7 +3,12 @@
  */
 
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Platform, Modal, Button } from 'react-native';
+import {
+  AdaptiveModal,
+  AdaptiveButton,
+  AdaptiveInput
+} from '@/components/adaptive';
+import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import { Icon } from '@/components/common/Icon';
@@ -128,7 +133,7 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
             )}
             
             {showDatePicker && Platform.OS === 'ios' && (
-              <Modal
+              <AdaptiveModal
                 transparent={true}
                 animationType="slide"
                 visible={showDatePicker}
@@ -153,7 +158,7 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
                     />
                   </View>
                 </View>
-              </Modal>
+              </AdaptiveModal>
             )}
           </>
         );
@@ -176,7 +181,7 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
             </TouchableOpacity>
             
             {Platform.OS === 'ios' ? (
-              <Modal
+              <AdaptiveModal
                 transparent={true}
                 animationType="slide"
                 visible={showPicker}
@@ -208,7 +213,7 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
                     </Picker>
                   </View>
                 </View>
-              </Modal>
+              </AdaptiveModal>
             ) : (
               showPicker && (
                 <View style={StyleSheet.flatten([styles.input, styles.pickerContainer, error && styles.inputError])}>
@@ -238,7 +243,7 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
       case 'textarea':
       case 'multiline':
         return (
-          <TextInput
+          <AdaptiveInput
             style={StyleSheet.flatten([
               styles.input,
               minHeight ? { height: minHeight } : styles.textarea,
@@ -255,7 +260,7 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
         
       default:
         return (
-          <TextInput
+          <AdaptiveInput
             style={StyleSheet.flatten([styles.input, error && styles.inputError])}
             value={value || ''}
             onChangeText={onChange}

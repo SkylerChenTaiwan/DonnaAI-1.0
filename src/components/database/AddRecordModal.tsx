@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform } from 'react-native';
-import { Button } from '@/components/common/Button';
+import { Button } from '@/components/adaptive';
 import { Layout } from '@/components/common/Layout';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { FormField } from '@/components/forms/FormField';
@@ -127,7 +127,7 @@ export const AddRecordModal: React.FC = () => {
           </TouchableOpacity>
           <Text style={styles.headerTitle}>新增{getTableTypeName()}</Text>
         </View>
-        <Button
+        <AdaptiveButton
           title="儲存"
           onPress={handleSubmit}
           loading={loading}

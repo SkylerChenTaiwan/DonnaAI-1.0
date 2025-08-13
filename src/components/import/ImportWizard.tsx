@@ -13,7 +13,7 @@ import {
   Alert,
   Platform
 } from 'react-native';
-import { Button } from '@/components/common/Button';
+import { Button } from '@/components/adaptive';
 import { MaterialIcon } from '@/components/common/MaterialIcon';
 import { ProgressIndicator } from '@/components/common/ProgressIndicator';
 import { DesignSystem } from '@/theme/designSystem';
@@ -708,7 +708,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
           </Text>
         </View>
         {onCancel && (
-          <Button
+          <AdaptiveButton
             variant="ghost"
             onPress={onCancel}
             icon={<MaterialIcon name="close" size={24} color={colors.gray600} />}
@@ -717,7 +717,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
         )}
         
         {/* 資料清理按鈕 */}
-        <Button
+        <AdaptiveButton
           variant="outline"
           style={StyleSheet.flatten([styles.cleanupButton, {
             backgroundColor: withAlpha(colors.status.warning, 0.125),
@@ -748,7 +748,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
       <View style={StyleSheet.flatten([styles.footer, { borderTopColor: colors.gray200 }])}>
         <View style={styles.footerButtons}>
           {canGoBack && (
-            <Button
+            <AdaptiveButton
               variant="secondary"
               onPress={goToPreviousStage}
               icon={<MaterialIcon name="arrow-back" size={20} color={colors.gray600} />}
@@ -758,7 +758,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
           )}
 
           {onCancel && wizardState.stage === 1 && (
-            <Button
+            <AdaptiveButton
               variant="secondary"
               onPress={onCancel}
               title="取消"
@@ -766,7 +766,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
           )}
 
           {wizardState.stage < 4 ? (
-            <Button
+            <AdaptiveButton
               variant="primary"
               onPress={goToNextStage}
               disabled={!canGoNext()}
@@ -775,7 +775,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
               iconPosition="right"
             />
           ) : (
-            <Button
+            <AdaptiveButton
               variant="primary"
               onPress={executeImport}
               disabled={!canGoNext() || wizardState.importProgress.isImporting}

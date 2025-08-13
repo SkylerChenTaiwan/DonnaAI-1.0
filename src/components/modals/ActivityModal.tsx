@@ -3,14 +3,13 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import {
-  Modal,
-  View,
+import { View,
   Text,
   ScrollView,
   TouchableOpacity,
   StyleSheet,
-  ActivityIndicator, Platform } from 'react-native';
+  ActivityIndicator, Platform  } from 'react-native';
+import { AdaptiveModal } from '@/components/adaptive';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '../../theme/DesignSystem';
@@ -210,7 +209,7 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({
   );
 
   return (
-    <Modal
+    <AdaptiveModal
       visible={visible}
       animationType="slide"
       transparent={true}
@@ -261,7 +260,7 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({
           </ScrollView>
         </View>
       </View>
-    </Modal>
+    </AdaptiveModal>
   );
 };
 

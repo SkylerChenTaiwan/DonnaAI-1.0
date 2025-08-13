@@ -5,16 +5,17 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import {
-  View,
+  AdaptiveSwitch,
+  Button
+} from '@/components/adaptive';
+import { View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator,
-  Switch } from 'react-native';
-import { Button } from '@/components/common/Button';
+  ActivityIndicator } from 'react-native';
 import { Layout } from '@/components/common/Layout';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { FormField } from '@/components/forms/FormField';
@@ -148,7 +149,7 @@ export const EditUserModal: React.FC = () => {
           <Icon name="arrow-back" size={24} color={DesignSystem.colors.text.primary} />
         </TouchableOpacity>
         <Text style={styles.title}>編輯用戶</Text>
-        <Button
+        <AdaptiveButton
           title="儲存"
           onPress={handleSubmit}
           loading={loading}
@@ -237,7 +238,7 @@ export const EditUserModal: React.FC = () => {
             
             <View style={styles.switchRow}>
               <Text style={styles.switchLabel}>啟用帳號</Text>
-              <Switch
+              <AdaptiveSwitch
                 value={formData.isActive}
                 onValueChange={(value) => handleFieldChange('isActive', value)}
                 trackColor={{ 

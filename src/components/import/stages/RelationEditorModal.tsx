@@ -5,15 +5,15 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-  View,
+  AdaptiveInput,
+  AdaptiveSwitch
+} from '@/components/adaptive';
+import { View,
   Text,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
-  TextInput
-} from 'react-native';
+  TouchableOpacity } from 'react-native';
 import { MaterialIcon } from '@/components/common/MaterialIcon';
-import { AdaptiveSwitch } from '@/components/adaptive';
 import { DesignSystem } from '@/theme/designSystem';
 import { FieldMapping, FieldRelation, RelationType, DatabaseType } from '@/types/import';
 import { FieldConfig } from '@/types/fieldDefinitions';
@@ -179,7 +179,7 @@ export const RelationEditorModalContent: React.FC<RelationEditorModalContentProp
       <Text style={[styles.sectionTitle, { color: colors.text.primary }]}>
         目標欄位
       </Text>
-      <TextInput
+      <AdaptiveInput
         style={[
           styles.input,
           {

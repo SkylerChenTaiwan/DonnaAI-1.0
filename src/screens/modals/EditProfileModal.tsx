@@ -3,15 +3,14 @@
  */
 
 import React, { useState, useEffect, useLayoutEffect } from 'react';
-import {
-  View,
+import { View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  TextInput,
   ActivityIndicator,
-  Alert } from 'react-native';
+  Alert  } from 'react-native';
+import { AdaptiveInput } from '@/components/adaptive';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { WebModal } from '@/components/web/WebModal';
@@ -181,7 +180,7 @@ export const EditProfileModal: React.FC = () => {
           {/* 姓名 */}
           <View style={styles.formGroup}>
             <Text style={styles.label}>姓名 *</Text>
-            <TextInput
+            <AdaptiveInput
               style={StyleSheet.flatten([styles.input, errors.name ? styles.inputError : null])}
               value={formData.name}
               onChangeText={(text) => {
@@ -197,7 +196,7 @@ export const EditProfileModal: React.FC = () => {
           {/* 電子郵件 */}
           <View style={styles.formGroup}>
             <Text style={styles.label}>電子郵件 *</Text>
-            <TextInput
+            <AdaptiveInput
               style={StyleSheet.flatten([styles.input, errors.email ? styles.inputError : null])}
               value={formData.email}
               onChangeText={(text) => {
@@ -221,7 +220,7 @@ export const EditProfileModal: React.FC = () => {
           {isEmailChanged && (
             <View style={styles.formGroup}>
               <Text style={styles.label}>目前密碼 *</Text>
-              <TextInput
+              <AdaptiveInput
                 style={StyleSheet.flatten([styles.input, errors.currentPassword ? styles.inputError : null])}
                 value={formData.currentPassword}
                 onChangeText={(text) => {

@@ -25,7 +25,7 @@ export interface ButtonProps {
   'data-testid'?: string;
 }
 
-export const Button: React.FC<ButtonProps> = ({
+export const Button: React.FC<AdaptiveButtonProps> = ({
   title,
   children,
   onPress,

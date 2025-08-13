@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput , Platform } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Platform  } from 'react-native';
+import { AdaptiveInput } from '@/components/adaptive';
 import { useAuthStore } from '../../stores/authStore';
 import { createCustomer, getCustomer } from '../../services/firebase/customers';
 import { getFirebaseDb } from '../../services/firebase/config';
@@ -160,7 +161,7 @@ export function FirebaseTestScreen() {
         
         <View style={styles.inputContainer}>
           <Text style={styles.label}>客戶名稱：</Text>
-          <TextInput
+          <AdaptiveInput
             style={styles.input}
             value={customerName}
             onChangeText={setCustomerName}

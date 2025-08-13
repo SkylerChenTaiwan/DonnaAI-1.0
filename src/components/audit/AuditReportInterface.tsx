@@ -5,15 +5,14 @@ import { Icon } from '../../components/common/Icon';
  */
 
 import React, { useState, useCallback } from 'react';
-import {
-  View,
+import { View,
   Text,
   ScrollView,
   TouchableOpacity,
-  TextInput,
   ActivityIndicator,
   Platform,
-  Alert } from 'react-native';
+  Alert  } from 'react-native';
+import { AdaptiveInput } from '@/components/adaptive';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {
@@ -563,7 +562,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
         {/* 收件人 */}
         <View style={styles.scheduleField}>
           <Text style={styles.scheduleFieldLabel}>收件人電子郵件</Text>
-          <TextInput
+          <AdaptiveInput
             style={styles.emailInput}
             placeholder="輸入電子郵件，多個請用逗號分隔"
             value={scheduleEmails}

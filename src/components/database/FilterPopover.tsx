@@ -4,14 +4,13 @@
  */
 
 import React, { useState, useRef, useEffect } from 'react';
-import {
-  View,
+import { View,
   Text,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  TextInput,
-  Platform } from 'react-native';
+  Platform  } from 'react-native';
+import { AdaptiveInput } from '@/components/adaptive';
 import { Icon } from '@/components/common/Icon';
 import { Popover } from '@/components/common/Popover';
 import { TableColumn } from '@/types/table';
@@ -61,7 +60,7 @@ const FilterConditionRow: React.FC<FilterConditionRowProps> = ({
       </TouchableOpacity>
 
       {/* 條件輸入 */}
-      <TextInput
+      <AdaptiveInput
         style={styles.conditionInput}
         value={condition.value}
         onChangeText={(text) => onChange({ ...condition, value: text })}

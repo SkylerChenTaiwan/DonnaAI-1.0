@@ -3,15 +3,14 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import {
-  View,
+import { View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  TextInput,
   ActivityIndicator,
-  Alert } from 'react-native';
+  Alert  } from 'react-native';
+import { AdaptiveInput } from '@/components/adaptive';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { WebModal } from '@/components/web/WebModal';
@@ -122,7 +121,7 @@ export const EditTaskModal: React.FC = () => {
           {/* 標題 */}
           <View style={styles.formGroup}>
             <Text style={styles.label}>標題 *</Text>
-            <TextInput
+            <AdaptiveInput
               style={styles.input}
               value={formData.title}
               onChangeText={(text) => setFormData(prev => ({ ...prev, title: text }))}
@@ -224,7 +223,7 @@ export const EditTaskModal: React.FC = () => {
           {/* 描述 */}
           <View style={styles.formGroup}>
             <Text style={styles.label}>描述</Text>
-            <TextInput
+            <AdaptiveInput
               style={StyleSheet.flatten([styles.input, styles.textArea])}
               value={formData.description}
               onChangeText={(text) => setFormData(prev => ({ ...prev, description: text }))}

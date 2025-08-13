@@ -5,14 +5,16 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-  View,
+  AdaptiveModal,
+  AdaptiveInput
+} from '@/components/adaptive';
+import { View,
   Text,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
   Alert,
-  Modal,
-  TextInput as RNTextInput } from 'react-native';
+   as RNTextInput   } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import DocumentPicker from 'expo-document-picker';
 import ImportWizard from '@/components/import/ImportWizard';
@@ -196,7 +198,7 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
 
 
   const renderImportWizard = () => (
-    <Modal
+    <AdaptiveModal
       visible={activeAssistance === 'import'}
       animationType="slide"
       presentationStyle="fullScreen"
@@ -212,11 +214,11 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
         }}
         onCancel={() => setActiveAssistance(null)}
       />
-    </Modal>
+    </AdaptiveModal>
   );
 
   const renderCustomFieldWizard = () => (
-    <Modal
+    <AdaptiveModal
       visible={activeAssistance === 'fields'}
       animationType="slide"
       presentationStyle="pageSheet"
@@ -274,7 +276,7 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
           </View>
         </ScrollView>
       </View>
-    </Modal>
+    </AdaptiveModal>
   );
 
 

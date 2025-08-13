@@ -4,16 +4,15 @@
  */
 
 import React, { useState, useEffect, useMemo } from 'react';
-import {
-  View,
+import { View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  TextInput,
   ActivityIndicator,
   Platform
-} from 'react-native';
+ } from 'react-native';
+import { AdaptiveInput } from '@/components/adaptive';
 import { MaterialIcon } from '@/components/common/MaterialIcon';
 import { DesignSystem } from '@/theme/designSystem';
 import { User, UserRole } from '@/types/user';
@@ -196,7 +195,7 @@ const UserSelector: React.FC<UserSelectorProps> = ({
       <View style={styles.filterSection}>
         <View style={StyleSheet.flatten([styles.searchBox, { backgroundColor: colors.gray50, borderColor: colors.gray200 }])}>
           <MaterialIcon name="search" size={20} color={colors.gray400} />
-          <TextInput
+          <AdaptiveInput
             style={StyleSheet.flatten([styles.searchInput, { color: colors.text }])}
             placeholder="搜尋用戶姓名、Email 或部門"
             placeholderTextColor={colors.gray400}

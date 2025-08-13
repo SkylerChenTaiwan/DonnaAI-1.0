@@ -7,15 +7,14 @@ import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 if (__DEV__) {
   import('@/utils/create-test-task').catch(console.error);
 }
-import {
-  View,
+import { View,
   Text,
   TouchableOpacity,
   StyleSheet,
-  Modal,
   Alert,
   Platform,
-  ScrollView } from 'react-native';
+  ScrollView  } from 'react-native';
+import { AdaptiveModal } from '@/components/adaptive';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { ResponsiveLayout } from '@/components/common/ResponsiveLayout';
@@ -1028,7 +1027,7 @@ export const DatabaseScreen: React.FC = () => {
         
         {/* CSV 匯入 Modal */}
         {showImportModal && (
-          <Modal
+          <AdaptiveModal
             visible={showImportModal}
             transparent
             animationType="fade"
@@ -1071,12 +1070,12 @@ export const DatabaseScreen: React.FC = () => {
                 />
               </View>
             </View>
-          </Modal>
+          </AdaptiveModal>
         )}
         
         {/* 匯出選項 Modal */}
         {showExportOptions && (
-          <Modal
+          <AdaptiveModal
             visible={showExportOptions}
             transparent
             animationType="fade"
@@ -1105,12 +1104,12 @@ export const DatabaseScreen: React.FC = () => {
                 />
               </View>
             </View>
-          </Modal>
+          </AdaptiveModal>
         )}
         
         {/* 新增資料 Modal */}
         {showCreateModal && Platform.OS === 'web' && (
-          <Modal
+          <AdaptiveModal
             visible={showCreateModal}
             transparent
             animationType="fade"
@@ -1251,7 +1250,7 @@ export const DatabaseScreen: React.FC = () => {
                 </ScrollView>
               </View>
             </View>
-          </Modal>
+          </AdaptiveModal>
         )}
       </View>
     );

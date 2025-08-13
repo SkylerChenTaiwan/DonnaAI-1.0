@@ -17,7 +17,7 @@ import { Icon } from '@/components/common/Icon';
 import { pickDocument } from '@/utils/web-file-picker';
 import * as FileSystem from 'expo-file-system';
 
-import { Button } from '@/components/common/Button';
+import { Button } from '@/components/adaptive';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { parseCSVFile, CSVParseResult, getCSVTemplate, validateFileSize } from '@/services/csv/parser';
 import { validateCustomerBatch, ValidationSummary } from '@/services/csv/validator';
@@ -275,7 +275,7 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
                 最大檔案大小：10MB
               </Text>
               
-              <Button
+              <AdaptiveButton
                 title="選擇檔案"
                 onPress={handleFileSelect}
                 style={styles.uploadButton}
@@ -422,7 +422,7 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
       {/* 底部按鈕 */}
       <View style={styles.footer}>
         {stage === 'select' && (
-          <Button
+          <AdaptiveButton
             title="取消"
             variant="secondary"
             onPress={() => setStage('select')}
@@ -432,7 +432,7 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
         
         {stage === 'import' && !loading && (
           <>
-            <Button
+            <AdaptiveButton
               title="重新選擇"
               variant="secondary"
               onPress={() => {
@@ -443,7 +443,7 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
               }}
               style={styles.button}
             />
-            <Button
+            <AdaptiveButton
               title="開始導入"
               onPress={handleStartImport}
               style={styles.button}
@@ -452,7 +452,7 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
         )}
         
         {stage === 'complete' && (
-          <Button
+          <AdaptiveButton
             title="完成"
             onPress={() => setStage('select')}
             style={styles.button}

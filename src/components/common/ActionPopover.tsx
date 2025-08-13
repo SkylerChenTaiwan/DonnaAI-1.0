@@ -3,17 +3,16 @@
  */
 
 import React from 'react';
-import {
-  View,
+import { View,
   Text,
   TouchableOpacity,
   StyleSheet,
   Dimensions,
-  Modal,
   TouchableWithoutFeedback,
   Animated,
   Platform
-} from 'react-native';
+ } from 'react-native';
+import { AdaptiveModal } from '@/components/adaptive';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -101,7 +100,7 @@ export const ActionPopover = ({
     outputRange: [0, 0.3] });
 
   return (
-    <Modal
+    <AdaptiveModal
       visible={visible}
       transparent
       animationType="none"
@@ -148,7 +147,7 @@ export const ActionPopover = ({
           </View>
         </Animated.View>
       </View>
-    </Modal>
+    </AdaptiveModal>
   );
 };
 

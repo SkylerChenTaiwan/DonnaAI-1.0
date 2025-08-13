@@ -3,15 +3,14 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import {
-  View,
-  TextInput,
+import { View,
   TouchableOpacity,
   StyleSheet,
-  TextInputProps } from 'react-native';
+  TextInputProps  } from 'react-native';
+import { AdaptiveInput } from '@/components/adaptive';
 import { Icon } from '@/components/common/Icon';
 
-interface SearchBarProps extends Omit<TextInputProps, 'value' | 'onChangeText'> {
+interface SearchBarProps extends Omit<AdaptiveInputProps, 'value' | 'onChangeText'> {
   value: string;
   onChangeText: (text: string) => void;
   placeholder?: string;
@@ -78,7 +77,7 @@ export const SearchBar = ({
       }}
     >
       <Icon name="search" size={16} color="#7A7A7A" style={styles.icon} />
-      <TextInput
+      <AdaptiveInput
         style={styles.input}
         value={localValue}
         onChangeText={handleChangeText}

@@ -7,7 +7,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
-import { Button } from '@/components/common/Button';
+import { Button } from '@/components/adaptive';
 import { useAuthStore } from '@/stores/authStore';
 
 export const ProfileScreen: React.FC = () => {
@@ -116,7 +116,7 @@ export const ProfileScreen: React.FC = () => {
 
         {/* 登出按鈕 */}
         <View style={styles.logoutSection}>
-          <Button
+          <AdaptiveButton
             title="登出"
             onPress={handleSignOut}
             variant="outline"

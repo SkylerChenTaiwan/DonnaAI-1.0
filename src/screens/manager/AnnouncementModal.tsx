@@ -4,16 +4,17 @@
 
 import React, { useState } from 'react';
 import {
-  View,
+  AdaptiveModal,
+  AdaptiveInput
+} from '@/components/adaptive';
+import { View,
   Text,
-  Modal,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator } from 'react-native';
+  ActivityIndicator   } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { TeamMemberSelector } from '@/components/manager/TeamMemberSelector';
 import { createAnnouncement } from '@/services/firebase/managerActions';
@@ -120,7 +121,7 @@ export const AnnouncementModal: React.FC<AnnouncementModalProps> = ({
   ];
 
   return (
-    <Modal
+    <AdaptiveModal
       visible={visible}
       animationType="slide"
       transparent={true}
@@ -147,7 +148,7 @@ export const AnnouncementModal: React.FC<AnnouncementModalProps> = ({
             {/* 公告標題 */}
             <View style={styles.formGroup}>
               <Text style={styles.label}>標題 *</Text>
-              <TextInput
+              <AdaptiveInput
                 style={styles.input}
                 value={title}
                 onChangeText={setTitle}
@@ -160,7 +161,7 @@ export const AnnouncementModal: React.FC<AnnouncementModalProps> = ({
             {/* 公告內容 */}
             <View style={styles.formGroup}>
               <Text style={styles.label}>內容 *</Text>
-              <TextInput
+              <AdaptiveInput
                 style={StyleSheet.flatten([styles.input, styles.textArea])}
                 value={content}
                 onChangeText={setContent}
@@ -204,7 +205,7 @@ export const AnnouncementModal: React.FC<AnnouncementModalProps> = ({
             {/* 過期天數 */}
             <View style={styles.formGroup}>
               <Text style={styles.label}>過期天數（選填）</Text>
-              <TextInput
+              <AdaptiveInput
                 style={styles.input}
                 value={expiresInDays}
                 onChangeText={setExpiresInDays}
@@ -258,7 +259,7 @@ export const AnnouncementModal: React.FC<AnnouncementModalProps> = ({
           </View>
         </View>
       </KeyboardAvoidingView>
-    </Modal>
+    </AdaptiveModal>
   );
 };
 

@@ -4,14 +4,13 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import {
-  View,
+import { View,
   Text,
   StyleSheet,
-  Switch,
   TouchableOpacity,
   ScrollView,
-  Alert } from 'react-native';
+  Alert  } from 'react-native';
+import { AdaptiveSwitch } from '@/components/adaptive';
 import { Icon } from '@/components/common/Icon';
 import { updateOrganization } from '@/services/firebase/admin/organizationService';
 import { TOOL_TYPES } from '@/services/firebase/admin/toolUsageService';
@@ -239,7 +238,7 @@ export const PermissionsManagementSection: React.FC<PermissionsManagementSection
               <Text style={styles.permissionName}>資料匯入</Text>
               <Text style={styles.permissionDesc}>允許匯入 CSV/Excel 檔案</Text>
             </View>
-            <Switch
+            <AdaptiveSwitch
               value={permissions.allowDataImport}
               onValueChange={(value) => setPermissions({ ...permissions, allowDataImport: value })}
               disabled={!isEditing}
@@ -251,7 +250,7 @@ export const PermissionsManagementSection: React.FC<PermissionsManagementSection
               <Text style={styles.permissionName}>資料匯出</Text>
               <Text style={styles.permissionDesc}>允許匯出資料為各種格式</Text>
             </View>
-            <Switch
+            <AdaptiveSwitch
               value={permissions.allowDataExport}
               onValueChange={(value) => setPermissions({ ...permissions, allowDataExport: value })}
               disabled={!isEditing}
@@ -266,7 +265,7 @@ export const PermissionsManagementSection: React.FC<PermissionsManagementSection
                 <Text style={styles.proLabel}>Pro 功能</Text>
               )}
             </View>
-            <Switch
+            <AdaptiveSwitch
               value={permissions.allowCustomFields}
               onValueChange={(value) => setPermissions({ ...permissions, allowCustomFields: value })}
               disabled={!isEditing || isProFeature('allowCustomFields')}
@@ -281,7 +280,7 @@ export const PermissionsManagementSection: React.FC<PermissionsManagementSection
                 <Text style={styles.proLabel}>Pro 功能</Text>
               )}
             </View>
-            <Switch
+            <AdaptiveSwitch
               value={permissions.allowAPIAccess}
               onValueChange={(value) => setPermissions({ ...permissions, allowAPIAccess: value })}
               disabled={!isEditing || isProFeature('allowAPIAccess')}
@@ -296,7 +295,7 @@ export const PermissionsManagementSection: React.FC<PermissionsManagementSection
                 <Text style={styles.proLabel}>Pro 功能</Text>
               )}
             </View>
-            <Switch
+            <AdaptiveSwitch
               value={permissions.allowAdvancedAnalytics}
               onValueChange={(value) => setPermissions({ ...permissions, allowAdvancedAnalytics: value })}
               disabled={!isEditing || isProFeature('allowAdvancedAnalytics')}
@@ -311,7 +310,7 @@ export const PermissionsManagementSection: React.FC<PermissionsManagementSection
                 <Text style={styles.proLabel}>Pro 功能</Text>
               )}
             </View>
-            <Switch
+            <AdaptiveSwitch
               value={permissions.allowBulkOperations}
               onValueChange={(value) => setPermissions({ ...permissions, allowBulkOperations: value })}
               disabled={!isEditing || isProFeature('allowBulkOperations')}
@@ -339,7 +338,7 @@ export const PermissionsManagementSection: React.FC<PermissionsManagementSection
                     <Text style={styles.proLabel}>Pro 功能</Text>
                   )}
                 </View>
-                <Switch
+                <AdaptiveSwitch
                   value={toolAccess[toolId] || false}
                   onValueChange={(value) => setToolAccess({ ...toolAccess, [toolId]: value })}
                   disabled={!isEditing || isProTool}
@@ -393,7 +392,7 @@ export const PermissionsManagementSection: React.FC<PermissionsManagementSection
               <Text style={styles.permissionName}>用戶自註冊</Text>
               <Text style={styles.permissionDesc}>允許用戶自行註冊加入組織</Text>
             </View>
-            <Switch
+            <AdaptiveSwitch
               value={roleSettings.allowUserSelfRegistration}
               onValueChange={(value) => setRoleSettings({ ...roleSettings, allowUserSelfRegistration: value })}
               disabled={!isEditing}
@@ -405,7 +404,7 @@ export const PermissionsManagementSection: React.FC<PermissionsManagementSection
               <Text style={styles.permissionName}>需要管理員審核</Text>
               <Text style={styles.permissionDesc}>新用戶需要管理員審核才能啟用</Text>
             </View>
-            <Switch
+            <AdaptiveSwitch
               value={roleSettings.requireAdminApproval}
               onValueChange={(value) => setRoleSettings({ ...roleSettings, requireAdminApproval: value })}
               disabled={!isEditing}
@@ -417,7 +416,7 @@ export const PermissionsManagementSection: React.FC<PermissionsManagementSection
               <Text style={styles.permissionName}>訪客存取</Text>
               <Text style={styles.permissionDesc}>允許訪客以唯讀方式存取系統</Text>
             </View>
-            <Switch
+            <AdaptiveSwitch
               value={roleSettings.allowGuestAccess}
               onValueChange={(value) => setRoleSettings({ ...roleSettings, allowGuestAccess: value })}
               disabled={!isEditing}

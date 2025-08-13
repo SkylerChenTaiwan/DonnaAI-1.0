@@ -4,13 +4,12 @@
  */
 
 import React, { useState, useRef, useCallback } from 'react';
-import {
-  View,
+import { View,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
-  Alert } from 'react-native';
+  Alert  } from 'react-native';
+import { AdaptiveInput } from '@/components/adaptive';
 import { ImportUserData, UserEditEvent } from '@/types/userImport';
 import { DesignSystem } from '@/theme/designSystem';
 import { Icon } from '@/components/common/Icon';
@@ -43,12 +42,12 @@ export const EditableUserRow: React.FC<EditableUserRowProps> = ({
   const [editingValue, setEditingValue] = useState<string>('');
   
   // 輸入框引用
-  const emailRef = useRef<TextInput>(null);
-  const nameRef = useRef<TextInput>(null);
-  const roleRef = useRef<TextInput>(null);
-  const departmentRef = useRef<TextInput>(null);
-  const positionRef = useRef<TextInput>(null);
-  const phoneNumberRef = useRef<TextInput>(null);
+  const emailRef = useRef<AdaptiveInput>(null);
+  const nameRef = useRef<AdaptiveInput>(null);
+  const roleRef = useRef<AdaptiveInput>(null);
+  const departmentRef = useRef<AdaptiveInput>(null);
+  const positionRef = useRef<AdaptiveInput>(null);
+  const phoneNumberRef = useRef<AdaptiveInput>(null);
   
   const inputRefs = {
     email: emailRef,
@@ -149,7 +148,7 @@ export const EditableUserRow: React.FC<EditableUserRowProps> = ({
         </Text>
         
         {isEditing ? (
-          <TextInput
+          <AdaptiveInput
             ref={inputRefs[field as keyof typeof inputRefs]}
             value={editingValue}
             onChangeText={setEditingValue}

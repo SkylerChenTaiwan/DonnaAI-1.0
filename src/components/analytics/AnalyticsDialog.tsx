@@ -1,14 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
-import {
-  Modal,
-  View,
+import { View,
   Animated,
   TouchableWithoutFeedback,
   StyleSheet,
   Dimensions,
   KeyboardAvoidingView,
   Platform,
-  PanResponder } from 'react-native';
+  PanResponder  } from 'react-native';
+import { AdaptiveModal } from '@/components/adaptive';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import QueryChat from './QueryChat';
 import QuickSaveButton from './QuickSaveButton';
@@ -129,7 +128,7 @@ export default function AnalyticsDialog({ visible, onClose }: AnalyticsDialogPro
     outputRange: [DIALOG_HEIGHT, 0] });
 
   return (
-    <Modal
+    <AdaptiveModal
       visible={isVisible}
       transparent
       animationType="none"
@@ -185,7 +184,7 @@ export default function AnalyticsDialog({ visible, onClose }: AnalyticsDialogPro
           </View>
         </Animated.View>
       </KeyboardAvoidingView>
-    </Modal>
+    </AdaptiveModal>
   );
 }
 

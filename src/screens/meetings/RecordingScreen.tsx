@@ -8,7 +8,7 @@ import { View, Text, StyleSheet, Alert, ScrollView , Platform } from 'react-nati
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Layout } from '@/components/common/Layout';
-import { Button } from '@/components/common/Button';
+import { Button } from '@/components/adaptive';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { AudioRecorder } from '@/components/audio/AudioRecorder';
 import { AudioEditor } from '@/components/audio/AudioEditor';
@@ -206,7 +206,7 @@ export const RecordingScreen: React.FC = () => {
       />
       
       <View style={styles.actionButtons}>
-        <Button
+        <AdaptiveButton
           title="取消"
           onPress={handleCancel}
           style={styles.cancelButton}
@@ -230,7 +230,7 @@ export const RecordingScreen: React.FC = () => {
           <Text style={styles.choiceDescription}>
             直接上傳並開始 AI 分析，快速獲得會議摘要和任務建議
           </Text>
-          <Button
+          <AdaptiveButton
             title="開始 AI 處理"
             onPress={handleImmediateProcessing}
             style={styles.primaryButton}
@@ -243,7 +243,7 @@ export const RecordingScreen: React.FC = () => {
           <Text style={styles.choiceDescription}>
             先編輯音訊（移除不需要的部分），再進行 AI 分析
           </Text>
-          <Button
+          <AdaptiveButton
             title="編輯音訊"
             onPress={handleEditFirst}
             style={styles.secondaryButton}
@@ -253,13 +253,13 @@ export const RecordingScreen: React.FC = () => {
       </View>
       
       <View style={styles.actionButtons}>
-        <Button
+        <AdaptiveButton
           title="重新錄音"
           onPress={handleReRecord}
           style={styles.tertiaryButton}
           textStyle={styles.tertiaryButtonText}
         />
-        <Button
+        <AdaptiveButton
           title="取消"
           onPress={handleCancel}
           style={styles.cancelButton}

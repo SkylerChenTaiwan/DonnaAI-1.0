@@ -4,13 +4,14 @@
 
 import React, { useState } from 'react';
 import {
-  View,
+  AdaptiveInput,
+  AdaptiveSwitch
+} from '@/components/adaptive';
+import { View,
   Text,
   TouchableOpacity,
   StyleSheet,
-  TextInput,
-  Switch,
-  ActivityIndicator } from 'react-native';
+  ActivityIndicator   } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { ExportFormat, getExportSizeEstimate } from '@/utils/tableExport';
 import { TableData, TableColumn } from '@/types/table';
@@ -131,7 +132,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
             <View style={styles.section}>
               <View style={styles.optionRow}>
                 <Text style={styles.optionLabel}>包含標題列</Text>
-                <Switch
+                <AdaptiveSwitch
                   value={includeHeaders}
                   onValueChange={setIncludeHeaders}
                   trackColor={{ false: '#E3E1DC', true: '#1A1A1A' }}
@@ -143,7 +144,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
           {/* 檔名設定 */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>檔案名稱（選填）</Text>
-            <TextInput
+            <AdaptiveInput
               style={styles.input}
               value={filename}
               onChangeText={setFilename}
@@ -156,14 +157,14 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
           <View style={styles.section}>
             <View style={styles.optionRow}>
               <Text style={styles.optionLabel}>透過郵件發送</Text>
-              <Switch
+              <AdaptiveSwitch
                 value={sendByEmail}
                 onValueChange={setSendByEmail}
                 trackColor={{ false: '#E5E5EA', true: '#2C2C2C' }}
               />
             </View>
             {sendByEmail && (
-              <TextInput
+              <AdaptiveInput
                 style={StyleSheet.flatten([styles.input, styles.emailInput])}
                 value={email}
                 onChangeText={setEmail}

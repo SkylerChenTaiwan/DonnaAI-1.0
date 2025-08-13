@@ -4,19 +4,18 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import {
-  View,
+import { View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  Modal,
   ScrollView,
   Alert,
   Platform,
   Animated,
   Vibration,
   DevSettings
-} from 'react-native';
+ } from 'react-native';
+import { AdaptiveModal } from '@/components/adaptive';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Accelerometer } from 'expo-sensors';
@@ -308,7 +307,7 @@ export const DeveloperMenu = () => {
       )}
       
       {/* 選單模態框 */}
-      <Modal
+      <AdaptiveModal
         visible={visible}
         transparent
         animationType="none"
@@ -390,7 +389,7 @@ export const DeveloperMenu = () => {
             </TouchableOpacity>
           </Animated.View>
         </TouchableOpacity>
-      </Modal>
+      </AdaptiveModal>
     </>
   );
 };

@@ -3,15 +3,14 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import {
-  View,
+import { View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  TextInput,
   ActivityIndicator,
-  Alert } from 'react-native';
+  Alert  } from 'react-native';
+import { AdaptiveInput } from '@/components/adaptive';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { WebModal } from '@/components/web/WebModal';
@@ -122,7 +121,7 @@ export const EditRecordModal: React.FC = () => {
           {/* 標題 */}
           <View style={styles.formGroup}>
             <Text style={styles.label}>標題 *</Text>
-            <TextInput
+            <AdaptiveInput
               style={styles.input}
               value={formData.title}
               onChangeText={(text) => setFormData(prev => ({ ...prev, title: text }))}
@@ -165,7 +164,7 @@ export const EditRecordModal: React.FC = () => {
           {/* 地點 */}
           <View style={styles.formGroup}>
             <Text style={styles.label}>地點</Text>
-            <TextInput
+            <AdaptiveInput
               style={styles.input}
               value={formData.location}
               onChangeText={(text) => setFormData(prev => ({ ...prev, location: text }))}
@@ -177,7 +176,7 @@ export const EditRecordModal: React.FC = () => {
           {/* 內容 */}
           <View style={styles.formGroup}>
             <Text style={styles.label}>內容</Text>
-            <TextInput
+            <AdaptiveInput
               style={StyleSheet.flatten([styles.input, styles.textArea])}
               value={formData.content}
               onChangeText={(text) => setFormData(prev => ({ ...prev, content: text }))}
@@ -192,7 +191,7 @@ export const EditRecordModal: React.FC = () => {
           {/* AI 摘要 */}
           <View style={styles.formGroup}>
             <Text style={styles.label}>AI 摘要</Text>
-            <TextInput
+            <AdaptiveInput
               style={StyleSheet.flatten([styles.input, styles.textArea])}
               value={formData.aiSummary}
               onChangeText={(text) => setFormData(prev => ({ ...prev, aiSummary: text }))}

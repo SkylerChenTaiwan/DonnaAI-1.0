@@ -15,7 +15,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { FormField } from './FormField';
-import { Button } from '@/components/common/Button';
+import { Button } from '@/components/adaptive';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { 
   CustomerFormSchema, 

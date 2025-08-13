@@ -4,16 +4,15 @@
  */
 
 import React, { useState } from 'react';
-import {
-  View,
+import { View,
   Text,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Modal,
   Platform,
   Animated
-} from 'react-native';
+ } from 'react-native';
+import { AdaptiveModal } from '@/components/adaptive';
 import { ErrorReport } from '../../types/error';
 import { UI_CONSTANTS, ERROR_CONSTANTS } from '../../config/constants';
 import { formatDistanceToNow } from '../../utils/dateHelpers';

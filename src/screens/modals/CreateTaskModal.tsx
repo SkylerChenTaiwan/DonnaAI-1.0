@@ -4,7 +4,7 @@
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { Button } from '@/components/common/Button';
+import { Button } from '@/components/adaptive';
 import { Layout } from '@/components/common/Layout';
 import { WebModal } from '@/components/web/WebModal';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';

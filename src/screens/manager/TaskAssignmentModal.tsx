@@ -4,16 +4,17 @@
 
 import React, { useState } from 'react';
 import {
-  View,
+  AdaptiveModal,
+  AdaptiveInput
+} from '@/components/adaptive';
+import { View,
   Text,
-  Modal,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator } from 'react-native';
+  ActivityIndicator   } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import DateTimePicker from '@react-native-community/datetimepicker';
 // @ts-ignore - Picker type issues
@@ -127,7 +128,7 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
   };
 
   return (
-    <Modal
+    <AdaptiveModal
       visible={visible}
       animationType="slide"
       transparent={true}
@@ -154,7 +155,7 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
             {/* 任務標題 */}
             <View style={styles.formGroup}>
               <Text style={styles.label}>任務標題 *</Text>
-              <TextInput
+              <AdaptiveInput
                 style={styles.input}
                 value={title}
                 onChangeText={setTitle}
@@ -167,7 +168,7 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
             {/* 任務描述 */}
             <View style={styles.formGroup}>
               <Text style={styles.label}>任務描述</Text>
-              <TextInput
+              <AdaptiveInput
                 style={StyleSheet.flatten([styles.input, styles.textArea])}
                 value={description}
                 onChangeText={setDescription}
@@ -303,7 +304,7 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
           />
         )}
       </KeyboardAvoidingView>
-    </Modal>
+    </AdaptiveModal>
   );
 };
 

@@ -4,15 +4,14 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import {
-  View,
+import { View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
-  Dimensions,
-  Modal, Platform } from 'react-native';
+  Dimensions, Platform  } from 'react-native';
+import { AdaptiveModal } from '@/components/adaptive';
 import { Layout } from '@/components/common/Layout';
 import { Icon } from '@/components/common/Icon';
 import { useNavigation } from '@react-navigation/native';
@@ -273,7 +272,7 @@ export const UsageReportsScreen: React.FC = () => {
       </ScrollView>
       
       {/* 匯出選項 Modal */}
-      <Modal
+      <AdaptiveModal
         visible={showExportModal}
         transparent
         animationType="slide"
@@ -396,7 +395,7 @@ export const UsageReportsScreen: React.FC = () => {
             </View>
           </View>
         </TouchableOpacity>
-      </Modal>
+      </AdaptiveModal>
     </Layout>
   );
 };

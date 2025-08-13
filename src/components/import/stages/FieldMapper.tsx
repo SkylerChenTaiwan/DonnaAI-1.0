@@ -5,17 +5,18 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  View,
+  AdaptiveInput,
+  AdaptiveSwitch
+} from '@/components/adaptive';
+import { View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  TextInput,
-  Switch,
   ActivityIndicator,
   Platform,
   Pressable
-} from 'react-native';
+  } from 'react-native';
 import { AdaptiveModal } from '@/components/adaptive/core/AdaptiveModal';
 import { FieldSelectorModalContent } from './FieldSelectorModal';
 import { RelationEditorModalContent } from './RelationEditorModal';
@@ -526,7 +527,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
               {mapping.isNew ? (
                 // 新建欄位
                 <View>
-                  <TextInput
+                  <AdaptiveInput
                     style={StyleSheet.flatten([styles.fieldInput, { 
                       color: colors.text,
                       borderColor: colors.gray200

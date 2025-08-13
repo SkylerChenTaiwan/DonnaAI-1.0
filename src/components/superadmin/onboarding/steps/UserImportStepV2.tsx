@@ -5,13 +5,12 @@ import { Icon } from '../../../../components/common/Icon';
  */
 
 import React, { useState, useEffect } from 'react';
-import {
-  View,
+import { View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
-  Switch } from 'react-native';
+  ScrollView } from 'react-native';
+import { AdaptiveSwitch } from '@/components/adaptive';
 // Icon import removed - using platform-specific Icon component;
 import { DesignSystem } from '@/theme/designSystem';
 import { StepProps, UserImportData } from '@/types/onboarding';
@@ -102,7 +101,7 @@ const UserImportStepV2: React.FC<StepProps> = ({
             <Text style={styles.switchLabel}>啟用 Google 登入</Text>
             <Text style={styles.switchHint}>允許用戶使用 Google 帳號登入</Text>
           </View>
-          <Switch
+          <AdaptiveSwitch
             value={formData.googleAuthConfig?.enabled}
             onValueChange={(value) => setFormData(prev => ({
               ...prev,
@@ -130,7 +129,7 @@ const UserImportStepV2: React.FC<StepProps> = ({
             <Text style={styles.switchLabel}>自動生成密碼</Text>
             <Text style={styles.switchHint}>系統自動為用戶生成安全密碼</Text>
           </View>
-          <Switch
+          <AdaptiveSwitch
             value={formData.passwordStrategy.type === 'auto-generate'}
             onValueChange={(value) => setFormData(prev => ({
               ...prev,
@@ -146,7 +145,7 @@ const UserImportStepV2: React.FC<StepProps> = ({
             <Text style={styles.switchLabel}>首次登入強制變更密碼</Text>
             <Text style={styles.switchHint}>用戶首次登入時必須設定新密碼</Text>
           </View>
-          <Switch
+          <AdaptiveSwitch
             value={formData.passwordStrategy.requireChange}
             onValueChange={(value) => setFormData(prev => ({
               ...prev,
@@ -174,7 +173,7 @@ const UserImportStepV2: React.FC<StepProps> = ({
             <Text style={styles.switchLabel}>發送歡迎郵件</Text>
             <Text style={styles.switchHint}>向新用戶發送帳號資訊和登入指引</Text>
           </View>
-          <Switch
+          <AdaptiveSwitch
             value={formData.sendWelcomeEmail}
             onValueChange={(value) => setFormData(prev => ({
               ...prev,

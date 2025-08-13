@@ -5,18 +5,19 @@
 
 import React, { useState, useCallback, useRef } from 'react';
 import {
-  View,
+  AdaptiveModal,
+  Button
+} from '@/components/adaptive';
+import { View,
   Text,
   StyleSheet,
   Alert,
   ScrollView,
-  TouchableOpacity,
-  Modal } from 'react-native';
+  TouchableOpacity } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 
 import { AudioRecorder } from '@/components/audio/AudioRecorder';
-import { Button } from '@/components/common/Button';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { 
   transcribeAudio, 
@@ -445,7 +446,7 @@ export const AudioInput: React.FC<AudioInputProps> = ({
     switch (stage) {
       case 'purpose':
         return (
-          <Button
+          <AdaptiveButton
             title="取消"
             variant="secondary"
             onPress={onCancel}
@@ -456,13 +457,13 @@ export const AudioInput: React.FC<AudioInputProps> = ({
       case 'recording':
         return (
           <>
-            <Button
+            <AdaptiveButton
               title="重新選擇用途"
               variant="secondary"
               onPress={() => setStage('purpose')}
               style={styles.footerButton}
             />
-            <Button
+            <AdaptiveButton
               title="取消"
               variant="secondary"
               onPress={onCancel}
@@ -473,7 +474,7 @@ export const AudioInput: React.FC<AudioInputProps> = ({
         
       case 'processing':
         return (
-          <Button
+          <AdaptiveButton
             title="取消處理"
             variant="secondary"
             onPress={handleRetry}
@@ -484,13 +485,13 @@ export const AudioInput: React.FC<AudioInputProps> = ({
       case 'review':
         return (
           <>
-            <Button
+            <AdaptiveButton
               title="重新錄音"
               variant="secondary"
               onPress={handleRetry}
               style={styles.footerButton}
             />
-            <Button
+            <AdaptiveButton
               title="確認使用"
               onPress={() => handleComplete()}
               style={styles.footerButton}
@@ -500,7 +501,7 @@ export const AudioInput: React.FC<AudioInputProps> = ({
         
       case 'complete':
         return (
-          <Button
+          <AdaptiveButton
             title="完成"
             onPress={onCancel}
             style={styles.footerButton}

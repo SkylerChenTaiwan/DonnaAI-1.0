@@ -5,17 +5,18 @@
 
 import React, { useState, useCallback, useMemo } from 'react';
 import {
-  View,
+  AdaptiveInput,
+  Button
+} from '@/components/adaptive';
+import { View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  TextInput,
   Platform,
-  Alert } from 'react-native';
+  Alert  } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
-import { Button } from '@/components/common/Button';
 import {
   ImportUserData,
   UserImportConfigExtended,
@@ -286,7 +287,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
               onPress={() => !isEditing && startEdit(user.id, field, String(value))}
             >
               {isEditingThis ? (
-                <TextInput
+                <AdaptiveInput
                   style={styles.editInput}
                   value={editValue}
                   onChangeText={setEditValue}
@@ -326,7 +327,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
       <View style={styles.toolbar}>
         <View style={styles.searchBox}>
           <Icon name="search-outline" size={16} color={DesignSystem.colors.text.tertiary} />
-          <TextInput
+          <AdaptiveInput
             style={styles.searchInput}
             placeholder="搜尋用戶..."
             value={searchText}
@@ -483,14 +484,14 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
       {/* 操作按鈕 */}
       <View style={styles.actions}>
         {stats.invalid > 0 && (
-          <Button
+          <AdaptiveButton
             title={`移除無效資料 (${stats.invalid})`}
             onPress={removeInvalidData}
             variant="outline"
             style={styles.actionButton}
           />
         )}
-        <Button
+        <AdaptiveButton
           title={`匯入 ${stats.selected} 個用戶`}
           onPress={onImport}
           disabled={stats.selected === 0 || stats.valid === 0}

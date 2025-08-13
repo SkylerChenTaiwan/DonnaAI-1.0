@@ -5,14 +5,15 @@
 
 import React, { useState } from 'react';
 import {
-  Modal,
-  View,
+  AdaptiveModal,
+  AdaptiveInput
+} from '@/components/adaptive';
+import { View,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Platform } from 'react-native';
+  Platform   } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { responsive } from '@/styles/web';
 
@@ -138,7 +139,7 @@ export const AddColumnDialog: React.FC<AddColumnDialogProps> = ({
   };
 
   return (
-    <Modal 
+    <AdaptiveModal 
       visible={isVisible} 
       transparent 
       animationType="slide"
@@ -167,7 +168,7 @@ export const AddColumnDialog: React.FC<AddColumnDialogProps> = ({
             {/* 屬性名稱輸入 */}
             <View style={styles.inputSection}>
               <Text style={styles.label}>屬性名稱</Text>
-              <TextInput
+              <AdaptiveInput
                 style={styles.input}
                 placeholder="輸入屬性名稱"
                 placeholderTextColor="#999"
@@ -212,7 +213,7 @@ export const AddColumnDialog: React.FC<AddColumnDialogProps> = ({
             {(columnType === 'select' || columnType === 'multiSelect') && (
               <View style={styles.inputSection}>
                 <Text style={styles.label}>選項（每行一個）</Text>
-                <TextInput
+                <AdaptiveInput
                   style={StyleSheet.flatten([styles.input, styles.textArea])}
                   placeholder="選項 1&#10;選項 2&#10;選項 3"
                   placeholderTextColor="#999"
@@ -257,7 +258,7 @@ export const AddColumnDialog: React.FC<AddColumnDialogProps> = ({
                 {/* 預設值 */}
                 <View style={styles.inputSection}>
                   <Text style={styles.label}>預設值</Text>
-                  <TextInput
+                  <AdaptiveInput
                     style={styles.input}
                     placeholder="輸入預設值"
                     placeholderTextColor="#999"
@@ -292,7 +293,7 @@ export const AddColumnDialog: React.FC<AddColumnDialogProps> = ({
           </View>
         </View>
       </View>
-    </Modal>
+    </AdaptiveModal>
   );
 };
 

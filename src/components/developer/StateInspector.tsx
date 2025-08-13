@@ -4,17 +4,16 @@
  */
 
 import React, { useState, useEffect, useMemo } from 'react';
-import {
-  View,
+import { View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  TextInput,
   SafeAreaView,
   Platform,
   Alert
-} from 'react-native';
+ } from 'react-native';
+import { AdaptiveInput } from '@/components/adaptive';
 import * as Clipboard from 'expo-clipboard';
 import { useAuthStore } from '@/stores/authStore';
 import { useTaskStore } from '@/stores/taskStore';
@@ -248,7 +247,7 @@ export const StateInspector = () => {
       {/* 搜尋列 */}
       <View style={styles.searchBar}>
         <Text style={styles.searchIcon}>🔍</Text>
-        <TextInput
+        <AdaptiveInput
           style={styles.searchInput}
           placeholder="搜尋狀態..."
           value={searchQuery}

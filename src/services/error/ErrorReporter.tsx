@@ -4,16 +4,15 @@
  */
 
 import React, { useState, useCallback } from 'react';
-import {
-  View,
+import { View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  Modal,
   Alert,
   ScrollView,
   Platform
-} from 'react-native';
+ } from 'react-native';
+import { AdaptiveModal } from '@/components/adaptive';
 import * as Clipboard from 'expo-clipboard';
 import { Share } from 'react-native';
 import { errorLogger } from './ErrorLogger';
@@ -142,7 +141,7 @@ export const ErrorReporter = ({
   };
   
   return (
-    <Modal
+    <AdaptiveModal
       visible={visible}
       transparent
       animationType="slide"
@@ -234,7 +233,7 @@ export const ErrorReporter = ({
       </View>
       
       {/* 預覽模態框 */}
-      <Modal
+      <AdaptiveModal
         visible={showPreview}
         transparent
         animationType="fade"
@@ -282,8 +281,8 @@ export const ErrorReporter = ({
             </View>
           </View>
         </View>
-      </Modal>
-    </Modal>
+      </AdaptiveModal>
+    </AdaptiveModal>
   );
 };
 

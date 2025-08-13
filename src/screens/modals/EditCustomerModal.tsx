@@ -4,18 +4,19 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
-  View,
+  AdaptiveInput,
+  Button
+} from '@/components/adaptive';
+import { View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  TextInput,
   ActivityIndicator,
-  Alert } from 'react-native';
+  Alert  } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { WebModal } from '@/components/web/WebModal';
-import { Button } from '@/components/common/Button';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useCustomerStore } from '@/stores/customerStore';

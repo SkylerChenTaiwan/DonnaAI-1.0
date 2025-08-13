@@ -3,13 +3,12 @@
  */
 
 import React, { useState } from 'react';
-import {
-  View,
+import { View,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
-  Platform } from 'react-native';
+  Platform  } from 'react-native';
+import { AdaptiveInput } from '@/components/adaptive';
 import { Icon } from '@/components/common/Icon';
 import { TableColumn } from '@/types/table';
 import { FilterCondition } from '@/components/common/FilterBadge';
@@ -210,7 +209,7 @@ export const FilterForm: React.FC<FilterFormProps> = ({
             )}
           </>
         ) : (
-          <TextInput
+          <AdaptiveInput
             style={styles.input}
             value={condition.value || ''}
             onChangeText={handleValueChange}

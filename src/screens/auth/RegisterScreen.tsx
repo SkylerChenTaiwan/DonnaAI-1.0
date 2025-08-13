@@ -4,6 +4,10 @@
 
 import React, { useState } from 'react';
 import {
+  TextInput,
+  Button
+} from '@/components/adaptive';
+import {
   View,
   Text,
   StyleSheet,
@@ -11,8 +15,6 @@ import {
   Image,
   Platform } from 'react-native';
 import { Layout } from '@/components/common/Layout';
-import { TextInput } from '@/components/common/TextInput';
-import { Button } from '@/components/common/Button';
 import { signUp } from '@/services/firebase/auth';
 
 interface RegisterScreenProps {
@@ -118,7 +120,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
         </View>
 
         <View style={styles.form}>
-          <TextInput
+          <AdaptiveInput
             label="姓名"
             value={formData.name}
             onChangeText={(value) => updateFormData('name', value)}
@@ -127,7 +129,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
             error={errors.name}
           />
 
-          <TextInput
+          <AdaptiveInput
             label="電子郵件"
             value={formData.email}
             onChangeText={(value) => updateFormData('email', value)}
@@ -138,7 +140,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
             error={errors.email}
           />
 
-          <TextInput
+          <AdaptiveInput
             label="公司名稱"
             value={formData.organizationName}
             onChangeText={(value) => updateFormData('organizationName', value)}
@@ -146,7 +148,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
             error={errors.organizationName}
           />
 
-          <TextInput
+          <AdaptiveInput
             label="密碼"
             value={formData.password}
             onChangeText={(value) => updateFormData('password', value)}
@@ -156,7 +158,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
             error={errors.password}
           />
 
-          <TextInput
+          <AdaptiveInput
             label="確認密碼"
             value={formData.confirmPassword}
             onChangeText={(value) => updateFormData('confirmPassword', value)}
@@ -170,7 +172,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
             <Text style={styles.errorText}>{errors.general}</Text>
           )}
 
-          <Button
+          <AdaptiveButton
             title="註冊"
             onPress={handleRegister}
             loading={loading}
@@ -181,7 +183,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
             <Text style={styles.footerText}>
               已有帳號？{' '}
             </Text>
-            <Button
+            <AdaptiveButton
               title="立即登入"
               onPress={onNavigateToLogin}
               variant="outline"

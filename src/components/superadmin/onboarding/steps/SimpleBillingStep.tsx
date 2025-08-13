@@ -5,12 +5,11 @@ import { Icon } from '../../../../components/common/Icon';
  */
 
 import React, { useState, useEffect } from 'react';
-import {
-  View,
+import { View,
   Text,
-  TextInput,
   StyleSheet,
-  TouchableOpacity } from 'react-native';
+  TouchableOpacity  } from 'react-native';
+import { AdaptiveInput } from '@/components/adaptive';
 // Icon import removed - using platform-specific Icon component;
 import { DesignSystem } from '@/theme/designSystem';
 import { StepProps, BillingPlanData } from '@/types/onboarding';
@@ -81,7 +80,7 @@ const SimpleBillingStep: React.FC<StepProps> = ({
             <Icon name="remove" size={20} color={colors.gray600}  />
           </TouchableOpacity>
           
-          <TextInput
+          <AdaptiveInput
             style={styles.numberInput}
             value={formData.freeSeats.toString()}
             onChangeText={(text) => {
@@ -124,7 +123,7 @@ const SimpleBillingStep: React.FC<StepProps> = ({
           
           <View style={styles.priceInputWrapper}>
             <Text style={styles.currencySymbol}>$</Text>
-            <TextInput
+            <AdaptiveInput
               style={styles.priceInput}
               value={formData.pricePerSeat.toString()}
               onChangeText={(text) => {

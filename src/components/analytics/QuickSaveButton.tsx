@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import {
-  TouchableOpacity,
+  AdaptiveModal,
+  AdaptiveInput,
+  AdaptiveSwitch
+} from '@/components/adaptive';
+import { TouchableOpacity,
   Text,
   View,
-  Modal,
-  TextInput,
   StyleSheet,
   Alert,
-  ActivityIndicator,
-  Switch } from 'react-native';
+  ActivityIndicator   } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { colors } from '../../theme/colors';
 import { DesignSystem } from '../../theme/designSystem';
@@ -69,7 +70,7 @@ export default function QuickSaveButton({ onSave }: QuickSaveButtonProps) {
       </TouchableOpacity>
 
       {/* 命名對話框 */}
-      <Modal
+      <AdaptiveModal
         visible={showDialog}
         transparent
         animationType="fade"
@@ -85,7 +86,7 @@ export default function QuickSaveButton({ onSave }: QuickSaveButtonProps) {
             
             <View style={styles.inputContainer}>
               <Text style={styles.label}>報表名稱</Text>
-              <TextInput
+              <AdaptiveInput
                 style={styles.input}
                 value={reportName}
                 onChangeText={setReportName}
@@ -98,7 +99,7 @@ export default function QuickSaveButton({ onSave }: QuickSaveButtonProps) {
 
             <View style={styles.publicContainer}>
               <Text style={styles.label}>公開報表</Text>
-              <Switch
+              <AdaptiveSwitch
                 value={isPublic}
                 onValueChange={setIsPublic}
                 disabled={isSaving}
@@ -134,7 +135,7 @@ export default function QuickSaveButton({ onSave }: QuickSaveButtonProps) {
             </View>
           </View>
         </TouchableOpacity>
-      </Modal>
+      </AdaptiveModal>
     </>
   );
 }

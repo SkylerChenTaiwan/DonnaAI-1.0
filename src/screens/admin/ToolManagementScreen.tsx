@@ -4,15 +4,14 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import {
-  View,
+import { View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Switch,
   ActivityIndicator,
-  Alert } from 'react-native';
+  Alert  } from 'react-native';
+import { AdaptiveSwitch } from '@/components/adaptive';
 import { Layout } from '@/components/common/Layout';
 import { Icon } from '@/components/common/Icon';
 import { useNavigation } from '@react-navigation/native';
@@ -218,7 +217,7 @@ export const ToolManagementScreen: React.FC = () => {
                           </TouchableOpacity>
                         )}
                       </View>
-                      <Switch
+                      <AdaptiveSwitch
                         value={tool.enabled}
                         onValueChange={() => handleToggleTool(tool.id, tool.enabled)}
                         trackColor={{ 
@@ -257,7 +256,7 @@ export const ToolManagementScreen: React.FC = () => {
               <View style={styles.customContent}>
                 <View style={styles.settingItem}>
                   <Text style={styles.settingLabel}>允許外部 API 整合</Text>
-                  <Switch
+                  <AdaptiveSwitch
                     value={enterpriseConfig.customSettings.allowExternalAPI}
                     onValueChange={(value) => {
                       // TODO: 實作更新自訂設定
@@ -273,7 +272,7 @@ export const ToolManagementScreen: React.FC = () => {
                 
                 <View style={styles.settingItem}>
                   <Text style={styles.settingLabel}>啟用自訂品牌</Text>
-                  <Switch
+                  <AdaptiveSwitch
                     value={enterpriseConfig.customSettings.customBranding}
                     onValueChange={(value) => {
                       // TODO: 實作更新自訂設定
@@ -289,7 +288,7 @@ export const ToolManagementScreen: React.FC = () => {
                 
                 <View style={styles.settingItem}>
                   <Text style={styles.settingLabel}>使用進階報表</Text>
-                  <Switch
+                  <AdaptiveSwitch
                     value={enterpriseConfig.customSettings.advancedReporting}
                     onValueChange={(value) => {
                       // TODO: 實作更新自訂設定

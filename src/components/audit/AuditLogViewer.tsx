@@ -5,15 +5,14 @@ import { Icon } from '../../components/common/Icon';
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import {
-  View,
+import { View,
   Text,
   ScrollView,
   TouchableOpacity,
-  TextInput,
   ActivityIndicator,
   Platform,
-  RefreshControl } from 'react-native';
+  RefreshControl  } from 'react-native';
+import { AdaptiveInput } from '@/components/adaptive';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {
@@ -188,7 +187,7 @@ export const AuditLogViewer: React.FC<AuditLogViewerProps> = ({
         {/* 搜尋輸入 */}
         <View style={styles.searchContainer}>
           <Icon name="search" size={20} color="#666" style={styles.searchIcon}  />
-          <TextInput
+          <AdaptiveInput
             style={styles.searchInput}
             placeholder="搜尋審計日誌..."
             value={searchText}

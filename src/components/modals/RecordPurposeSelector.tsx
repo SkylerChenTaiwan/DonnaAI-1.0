@@ -5,19 +5,20 @@
 
 import React, { useCallback } from 'react';
 import {
-  View,
+  AdaptiveModal,
+  Button
+} from '@/components/adaptive';
+import { View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  Modal,
   TouchableWithoutFeedback,
   Animated,
   Platform
-} from 'react-native';
+ } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Button } from '@/components/common/Button';
 import type { AudioPurpose } from '@/components/input/AudioInput';
 
 interface RecordPurposeSelectorProps {
@@ -83,7 +84,7 @@ export const RecordPurposeSelector: React.FC<RecordPurposeSelectorProps> = ({
   }, [onSelect]);
 
   return (
-    <Modal
+    <AdaptiveModal
       visible={visible}
       transparent
       animationType="none"
@@ -133,7 +134,7 @@ export const RecordPurposeSelector: React.FC<RecordPurposeSelectorProps> = ({
 
           {/* 取消按鈕 */}
           <View style={styles.buttonContainer}>
-            <Button
+            <AdaptiveButton
               title="取消"
               variant="secondary"
               onPress={onCancel}
@@ -142,7 +143,7 @@ export const RecordPurposeSelector: React.FC<RecordPurposeSelectorProps> = ({
           </View>
         </Animated.View>
       </View>
-    </Modal>
+    </AdaptiveModal>
   );
 };
 

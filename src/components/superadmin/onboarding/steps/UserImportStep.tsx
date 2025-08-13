@@ -1,20 +1,21 @@
 import { Icon } from '../../../../components/common/Icon';
+import {
+  AdaptiveInput,
+  AdaptiveSwitch
+} from '@/components/adaptive';
 /**
  * 步驟 3: 用戶匯入（含 Google 整合）
  * Step 3: User Import with Google Integration
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import {
-  View,
+import { View,
   Text,
-  TextInput,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Switch,
   ActivityIndicator,
-  Platform } from 'react-native';
+  Platform   } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { DesignSystem } from '@/theme/designSystem';
 import {
@@ -282,7 +283,7 @@ const UserImportStep: React.FC<StepProps> = ({
     
     return (
       <View style={styles.jsonContainer}>
-        <TextInput
+        <AdaptiveInput
           style={styles.jsonInput}
           value={jsonInput}
           onChangeText={setJsonInput}
@@ -336,7 +337,7 @@ const UserImportStep: React.FC<StepProps> = ({
         <View style={styles.googleSettings}>
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>網域限制</Text>
-            <TextInput
+            <AdaptiveInput
               style={styles.input}
               value={formData.googleAuthConfig?.domain}
               onChangeText={(text) => setFormData(prev => ({
@@ -350,7 +351,7 @@ const UserImportStep: React.FC<StepProps> = ({
           
           <View style={styles.switchRow}>
             <Text style={styles.switchLabel}>首次登入自動建立用戶</Text>
-            <Switch
+            <AdaptiveSwitch
               value={formData.googleAuthConfig?.autoCreateUsers}
               onValueChange={(value) => setFormData(prev => ({
                 ...prev,
@@ -363,7 +364,7 @@ const UserImportStep: React.FC<StepProps> = ({
           
           <View style={styles.switchRow}>
             <Text style={styles.switchLabel}>同步 Google Groups</Text>
-            <Switch
+            <AdaptiveSwitch
               value={formData.googleAuthConfig?.syncGroups}
               onValueChange={(value) => setFormData(prev => ({
                 ...prev,
@@ -386,7 +387,7 @@ const UserImportStep: React.FC<StepProps> = ({
       <View style={styles.manualContainer}>
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>Email *</Text>
-          <TextInput
+          <AdaptiveInput
             style={styles.input}
             value={manualInput.email}
             onChangeText={(text) => setManualInput(prev => ({ ...prev, email: text }))}
@@ -398,7 +399,7 @@ const UserImportStep: React.FC<StepProps> = ({
         
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>姓名 *</Text>
-          <TextInput
+          <AdaptiveInput
             style={styles.input}
             value={manualInput.name}
             onChangeText={(text) => setManualInput(prev => ({ ...prev, name: text }))}
@@ -408,7 +409,7 @@ const UserImportStep: React.FC<StepProps> = ({
         
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>部門</Text>
-          <TextInput
+          <AdaptiveInput
             style={styles.input}
             value={manualInput.department}
             onChangeText={(text) => setManualInput(prev => ({ ...prev, department: text }))}
@@ -523,7 +524,7 @@ const UserImportStep: React.FC<StepProps> = ({
             <Text style={styles.switchLabel}>啟用 Google 登入</Text>
             <Text style={styles.switchHint}>允許用戶使用 Google 帳號登入</Text>
           </View>
-          <Switch
+          <AdaptiveSwitch
             value={formData.googleAuthConfig?.enabled}
             onValueChange={(value) => setFormData(prev => ({
               ...prev,
@@ -538,7 +539,7 @@ const UserImportStep: React.FC<StepProps> = ({
           <View style={styles.googleOptions}>
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>網域限制（選填）</Text>
-              <TextInput
+              <AdaptiveInput
                 style={styles.input}
                 value={formData.googleAuthConfig?.domain}
                 onChangeText={(text) => setFormData(prev => ({
@@ -608,7 +609,7 @@ const UserImportStep: React.FC<StepProps> = ({
         {formData.passwordStrategy.type === 'same-for-all' && (
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>統一密碼</Text>
-            <TextInput
+            <AdaptiveInput
               style={styles.input}
               value={formData.passwordStrategy.value}
               onChangeText={(text) => setFormData(prev => ({
@@ -625,7 +626,7 @@ const UserImportStep: React.FC<StepProps> = ({
         {formData.passwordStrategy.type !== 'google-only' && (
           <View style={styles.switchRow}>
             <Text style={styles.switchLabel}>要求首次登入時變更密碼</Text>
-            <Switch
+            <AdaptiveSwitch
               value={formData.passwordStrategy.requireChange}
               onValueChange={(value) => setFormData(prev => ({
                 ...prev,
@@ -649,7 +650,7 @@ const UserImportStep: React.FC<StepProps> = ({
             <Text style={styles.switchLabel}>發送歡迎郵件</Text>
             <Text style={styles.switchHint}>向新用戶發送帳號資訊和登入指引</Text>
           </View>
-          <Switch
+          <AdaptiveSwitch
             value={formData.sendWelcomeEmail}
             onValueChange={(value) => setFormData(prev => ({
               ...prev,

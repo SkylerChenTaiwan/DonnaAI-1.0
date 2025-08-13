@@ -4,14 +4,15 @@
 
 import React, { useState } from 'react';
 import {
-  View,
+  AdaptiveInput,
+  AdaptiveSwitch
+} from '@/components/adaptive';
+import { View,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Switch,
-  Alert } from 'react-native';
+  Alert   } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { Picker } from '@react-native-picker/picker';
 
@@ -76,7 +77,7 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
     switch (field.type) {
       case 'text':
         return (
-          <TextInput
+          <AdaptiveInput
             style={styles.textInput}
             value={value || ''}
             onChangeText={(text) => updateValue(field.key, text)}
@@ -107,7 +108,7 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
 
       case 'switch':
         return (
-          <Switch
+          <AdaptiveSwitch
             value={value || false}
             onValueChange={(val) => updateValue(field.key, val)}
             trackColor={{ false: '#E3E1DC', true: '#1A1A1A' }}
@@ -116,7 +117,7 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
 
       case 'tags':
         return (
-          <TextInput
+          <AdaptiveInput
             style={styles.textInput}
             value={value || ''}
             onChangeText={(text) => updateValue(field.key, text)}

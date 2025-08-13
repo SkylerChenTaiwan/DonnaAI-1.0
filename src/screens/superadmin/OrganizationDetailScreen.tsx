@@ -6,6 +6,12 @@
 
 import React, { useState, useEffect } from 'react';
 import {
+  TextInput,
+  Button,
+  AdaptiveSwitch,
+  AdaptiveModal
+} from '@/components/adaptive';
+import {
   View,
   Text,
   StyleSheet,
@@ -17,11 +23,8 @@ import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
-import { TextInput } from '@/components/common/TextInput';
-import { Button } from '@/components/common/Button';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
-import { AdaptiveSwitch } from '@/components/adaptive';
 import { 
   getOrganization, 
   updateOrganization,
@@ -41,7 +44,7 @@ import { withAlpha } from '@/utils/colorUtils';
 import { AddUserToOrganizationModal } from '@/components/organization/AddUserToOrganizationModal';
 import { EnhancedBulkImportModal } from '@/components/users/EnhancedBulkImportModal';
 import ImportWizard from '@/components/import/ImportWizard';
-import { Modal, Platform } from 'react-native';
+import { Platform  } from 'react-native';
 import { updateOrganizationStats } from '@/services/firebase/updateOrgStats';
 
 type RouteParams = RouteProp<RootStackParamList, 'OrganizationDetailScreen'>;
@@ -314,20 +317,20 @@ export const OrganizationDetailScreen: React.FC = () => {
 
           {isEditing ? (
             <>
-              <TextInput
+              <AdaptiveInput
                 label="組織名稱"
                 value={formData.name}
                 onChangeText={(text) => setFormData({ ...formData, name: text })}
                 placeholder="組織名稱"
               />
-              <TextInput
+              <AdaptiveInput
                 label="聯絡信箱"
                 value={formData.email}
                 onChangeText={(text) => setFormData({ ...formData, email: text })}
                 placeholder="contact@company.com"
                 keyboardType="email-address"
               />
-              <TextInput
+              <AdaptiveInput
                 label="贈送人數"
                 value={formData.giftedSeats}
                 onChangeText={(text) => setFormData({ ...formData, giftedSeats: text })}
@@ -624,7 +627,7 @@ export const OrganizationDetailScreen: React.FC = () => {
         {/* 操作按鈕 */}
         {isEditing && (
           <View style={styles.actions}>
-            <Button
+            <AdaptiveButton
               title="儲存變更"
               onPress={handleSaveChanges}
               disabled={isSaving}
@@ -681,7 +684,7 @@ export const OrganizationDetailScreen: React.FC = () => {
       
       
       {/* 新的三階段匯入精靈 */}
-      <Modal
+      <AdaptiveModal
         visible={showImportWizard}
         animationType="slide"
         presentationStyle="fullScreen"
@@ -701,7 +704,7 @@ export const OrganizationDetailScreen: React.FC = () => {
             setImportTargetType('customers'); // 重置為預設值
           }}
         />
-      </Modal>
+      </AdaptiveModal>
     </>
   );
 

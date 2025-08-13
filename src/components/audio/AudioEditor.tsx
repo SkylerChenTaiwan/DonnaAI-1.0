@@ -8,7 +8,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { PanGestureHandler, GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Audio } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
-import { Button } from '@/components/common/Button';
+import { Button } from '@/components/adaptive';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { AudioEditingSession } from '../../types/record';
 
@@ -340,13 +340,13 @@ export const AudioEditor = ({
 
       {/* 快速修剪按鈕 */}
       <View style={styles.quickTrimButtons}>
-        <Button
+        <AdaptiveButton
           title="移除前 5 秒"
           onPress={() => updateTrimSettings(Math.min(5, trimSettings.startTime + 5), trimSettings.endTime)}
           style={styles.quickTrimButton}
           textStyle={styles.quickTrimButtonText}
         />
-        <Button
+        <AdaptiveButton
           title="移除後 5 秒"
           onPress={() => updateTrimSettings(trimSettings.startTime, Math.max(trimSettings.endTime - 5, trimSettings.startTime + 1))}
           style={styles.quickTrimButton}
@@ -356,19 +356,19 @@ export const AudioEditor = ({
 
       {/* 播放控制 */}
       <View style={styles.playbackControls}>
-        <Button
+        <AdaptiveButton
           title={isPlaying ? "暫停" : "預覽"}
           onPress={isPlaying ? pauseAudio : playAudio}
           style={styles.playButton}
           textStyle={styles.playButtonText}
         />
-        <Button
+        <AdaptiveButton
           title="停止"
           onPress={stopAudio}
           style={styles.stopButton}
           textStyle={styles.stopButtonText}
         />
-        <Button
+        <AdaptiveButton
           title="重置"
           onPress={resetEdit}
           style={styles.resetButton}
@@ -378,13 +378,13 @@ export const AudioEditor = ({
 
       {/* 操作按鈕 */}
       <View style={styles.actionButtons}>
-        <Button
+        <AdaptiveButton
           title="取消"
           onPress={onCancel}
           style={styles.cancelButton}
           textStyle={styles.cancelButtonText}
         />
-        <Button
+        <AdaptiveButton
           title="儲存編輯"
           onPress={saveEdit}
           style={styles.saveButton}

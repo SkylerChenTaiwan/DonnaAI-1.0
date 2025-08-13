@@ -5,19 +5,20 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-  View,
+  AdaptiveInput,
+  AdaptiveSwitch
+} from '@/components/adaptive';
+import { View,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
   ActivityIndicator,
   Platform
-} from 'react-native';
+ } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Popover } from '@/components/common/Popover';
 import { Icon } from '@/components/common/Icon';
-import { AdaptiveSwitch } from '@/components/adaptive';
 import { processFieldDescription } from '@/services/api/ai-integration';
 import { DesignSystem } from '@/theme/designSystem';
 import { ColumnConfig } from './types';
@@ -177,7 +178,7 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
 
             <View style={styles.field}>
               <Text style={styles.fieldLabel}>欄位名稱</Text>
-              <TextInput
+              <AdaptiveInput
                 style={StyleSheet.flatten([styles.input, !canEdit && styles.inputDisabled])}
                 value={fieldName}
                 onChangeText={setFieldName}
@@ -243,7 +244,7 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
             </Text>
 
             <View style={styles.field}>
-              <TextInput
+              <AdaptiveInput
                 style={StyleSheet.flatten([styles.input, styles.textArea, !canEdit && styles.inputDisabled])}
                 value={aiDescription}
                 onChangeText={setAiDescription}

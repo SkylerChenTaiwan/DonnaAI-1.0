@@ -4,17 +4,16 @@
  */
 
 import React, { useState } from 'react';
-import {
-  View,
+import { View,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   ActivityIndicator
-} from 'react-native';
+ } from 'react-native';
+import { AdaptiveInput } from '@/components/adaptive';
 import { useQueryStore, useCurrentChart } from '../../stores/queryStore';
 import { ClarificationForm } from './ClarificationForm';
 import { ChartDisplay } from '../charts/ChartDisplay';
@@ -184,7 +183,7 @@ export const QueryInterface: React.FC = () => {
       {(!currentSession || currentSession.status === 'error') && (
         <View style={styles.inputContainer}>
           <View style={styles.inputWrapper}>
-            <TextInput
+            <AdaptiveInput
               style={styles.textInput}
               value={queryText}
               onChangeText={setQueryText}

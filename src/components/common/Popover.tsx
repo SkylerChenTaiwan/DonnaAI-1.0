@@ -4,15 +4,14 @@
  */
 
 import React, { useRef, useState, useEffect } from 'react';
-import { 
-  View, 
-  Modal, 
+import { View, 
   TouchableWithoutFeedback,
   Animated,
   Platform,
   Dimensions,
   StyleSheet,
-  ScrollView } from 'react-native';
+  ScrollView  } from 'react-native';
+import { AdaptiveModal } from '@/components/adaptive';
 
 interface PopoverProps {
   visible: boolean;
@@ -183,7 +182,7 @@ export const Popover: React.FC<PopoverProps> = ({
 
   // Native 實作使用 Modal
   return (
-    <Modal
+    <AdaptiveModal
       visible={visible}
       transparent
       animationType="none"
@@ -224,7 +223,7 @@ export const Popover: React.FC<PopoverProps> = ({
           </TouchableWithoutFeedback>
         </View>
       </TouchableWithoutFeedback>
-    </Modal>
+    </AdaptiveModal>
   );
 };
 

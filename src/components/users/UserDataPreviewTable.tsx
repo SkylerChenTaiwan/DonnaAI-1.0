@@ -15,7 +15,7 @@ import { FlashList } from '@shopify/flash-list';
 import { ImportUserData, UserEditEvent, BatchOperationOptions, UserImportStats } from '@/types/userImport';
 import { DesignSystem } from '@/theme/designSystem';
 import { Icon } from '@/components/common/Icon';
-import { Button } from '@/components/common/Button';
+import { Button } from '@/components/adaptive';
 import EditableUserRow from './EditableUserRow';
 
 export interface UserDataPreviewTableProps {
@@ -337,28 +337,28 @@ export const UserDataPreviewTable: React.FC<UserDataPreviewTableProps> = ({
       {showBatchActions && selectedUsersInFilter > 0 && (
         <View style={styles.batchActionsPanel}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <Button
+            <AdaptiveButton
               title="設為一般用戶"
               onPress={() => handleBatchSetRole('user')}
               variant="outline"
               size="small"
               style={styles.batchActionButton}
             />
-            <Button
+            <AdaptiveButton
               title="設為管理員"
               onPress={() => handleBatchSetRole('admin')}
               variant="outline"
               size="small"
               style={styles.batchActionButton}
             />
-            <Button
+            <AdaptiveButton
               title="設定部門"
               onPress={handleBatchSetDepartment}
               variant="outline"
               size="small"
               style={styles.batchActionButton}
             />
-            <Button
+            <AdaptiveButton
               title="清除錯誤"
               onPress={handleClearErrors}
               variant="outline"

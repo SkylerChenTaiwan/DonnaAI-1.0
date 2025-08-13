@@ -3,12 +3,11 @@
  */
 
 import React from 'react';
-import {
-  View,
+import { View,
   Text,
-  Switch,
   StyleSheet,
-  Platform } from 'react-native';
+  Platform  } from 'react-native';
+import { AdaptiveSwitch } from '@/components/adaptive';
 import { DesignSystem } from '@/theme/designSystem';
 
 interface ModeToggleProps {
@@ -30,7 +29,7 @@ export const ModeToggle = ({
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
-      <Switch
+      <AdaptiveSwitch
         value={isManagerMode}
         onValueChange={handleToggle}
         trackColor={{

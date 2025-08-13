@@ -6,18 +6,19 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import {
-  View,
+  AdaptiveModal,
+  Button
+} from '@/components/adaptive';
+import { View,
   Text,
   StyleSheet,
-  Modal,
   ScrollView,
   TouchableOpacity,
   Platform,
-  Alert } from 'react-native';
+  Alert  } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
-import { Button } from '@/components/common/Button';
 import { toast } from '@/utils/toast';
 
 // 階段元件
@@ -440,7 +441,7 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
   };
 
   return (
-    <Modal
+    <AdaptiveModal
       visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
@@ -538,7 +539,7 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
         <View style={styles.footer}>
           <View style={styles.footerButtons}>
             {getCurrentStageIndex() > 0 && (
-              <Button
+              <AdaptiveButton
                 title="上一步"
                 onPress={goToPreviousStage}
                 variant="outline"
@@ -548,14 +549,14 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
             )}
             
             {wizardState.stage === 'preview' ? (
-              <Button
+              <AdaptiveButton
                 title="開始匯入"
                 onPress={executeImport}
                 style={styles.footerButton}
                 disabled={!canProceed() || isProcessing || wizardState.importProgress.isImporting}
               />
             ) : (
-              <Button
+              <AdaptiveButton
                 title="下一步"
                 onPress={goToNextStage}
                 style={styles.footerButton}
@@ -565,7 +566,7 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
           </View>
         </View>
       </View>
-    </Modal>
+    </AdaptiveModal>
   );
 };
 

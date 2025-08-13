@@ -17,7 +17,7 @@ import {
 import { Icon } from '@/components/common/Icon';
 import { Audio } from 'expo-av';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
-import { Button } from '@/components/common/Button';
+import { Button } from '@/components/adaptive';
 import { recordingManager } from '@/services/audio/recordingManager';
 import { 
   convertVoiceToTask,
@@ -393,13 +393,13 @@ export const SimplifiedVoiceTaskInput: React.FC<SimplifiedVoiceTaskInputProps> =
         </View>
 
         <View style={styles.reviewActions}>
-          <Button
+          <AdaptiveButton
             title="重新錄音"
             variant="secondary"
             onPress={resetRecording}
             style={styles.reviewButton}
           />
-          <Button
+          <AdaptiveButton
             title="確認建立"
             onPress={confirmCreateTask}
             style={styles.reviewButton}
@@ -417,7 +417,7 @@ export const SimplifiedVoiceTaskInput: React.FC<SimplifiedVoiceTaskInputProps> =
       <Text style={styles.errorMessage}>
         {extractionResult?.error || '語音轉任務處理失敗'}
       </Text>
-      <Button
+      <AdaptiveButton
         title="重新錄音"
         onPress={resetRecording}
         style={styles.retryButton}

@@ -4,12 +4,13 @@
 
 import React from 'react';
 import {
-  TextInput as RNTextInput,
   View,
   Text,
   StyleSheet,
+  TextInput as RNTextInput,
   TextInputProps as RNTextInputProps,
-  ViewStyle } from 'react-native';
+  ViewStyle
+} from 'react-native';
 
 interface TextInputProps extends RNTextInputProps {
   label?: string;

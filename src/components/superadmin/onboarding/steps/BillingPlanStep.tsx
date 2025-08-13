@@ -5,14 +5,13 @@ import { Icon } from '../../../../components/common/Icon';
  */
 
 import React, { useState, useEffect } from 'react';
-import {
-  View,
+import { View,
   Text,
-  TextInput,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Platform } from 'react-native';
+  Platform  } from 'react-native';
+import { AdaptiveInput } from '@/components/adaptive';
 // Icon import removed - using platform-specific Icon component;
 import { DesignSystem } from '@/theme/designSystem';
 import {
@@ -218,7 +217,7 @@ const BillingPlanStep: React.FC<StepProps> = ({
             <Icon name="remove" size={20} color={colors.gray600}  />
           </TouchableOpacity>
           
-          <TextInput
+          <AdaptiveInput
             style={styles.seatsInput}
             value={formData.seats.toString()}
             onChangeText={(text) => {
@@ -299,7 +298,7 @@ const BillingPlanStep: React.FC<StepProps> = ({
         
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>計費 Email</Text>
-          <TextInput
+          <AdaptiveInput
             style={styles.input}
             value={formData.billingEmail}
             onChangeText={(text) => setFormData(prev => ({ ...prev, billingEmail: text }))}
@@ -311,7 +310,7 @@ const BillingPlanStep: React.FC<StepProps> = ({
         
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>備註</Text>
-          <TextInput
+          <AdaptiveInput
             style={StyleSheet.flatten([styles.input, styles.textArea])}
             value={formData.notes}
             onChangeText={(text) => setFormData(prev => ({ ...prev, notes: text }))}

@@ -18,7 +18,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 import { FormField } from './FormField';
-import { Button } from '@/components/common/Button';
+import { Button } from '@/components/adaptive';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { FormFieldConfig } from '@/services/validation/form-schemas';
 
@@ -282,7 +282,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
         <View style={styles.buttonContainer}>
           {/* 上一步按鈕 */}
           {currentStep > 0 && (
-            <Button
+            <AdaptiveButton
               title="上一步"
               variant="secondary"
               onPress={handlePrevious}
@@ -291,7 +291,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
           )}
 
           {/* 取消按鈕 */}
-          <Button
+          <AdaptiveButton
             title="取消"
             variant="secondary"
             onPress={handleCancel}
@@ -300,13 +300,13 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
           {/* 下一步/提交按鈕 */}
           {currentStep < steps.length - 1 ? (
-            <Button
+            <AdaptiveButton
               title="下一步"
               onPress={handleNext}
               style={styles.button}
             />
           ) : (
-            <Button
+            <AdaptiveButton
               title="提交"
               onPress={handleSubmit(handleFormSubmit)}
               style={styles.button}

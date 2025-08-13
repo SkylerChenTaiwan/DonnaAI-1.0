@@ -5,16 +5,17 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  View,
+  AdaptiveSwitch,
+  Button
+} from '@/components/adaptive';
+import { View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
-  Switch,
   Platform
-} from 'react-native';
-import { Button } from '@/components/common/Button';
+ } from 'react-native';
 import { MaterialIcon } from '@/components/common/MaterialIcon';
 import { DesignSystem } from '@/theme/designSystem';
 import {
@@ -290,7 +291,7 @@ const DataAssignmentStep: React.FC<DataAssignmentStepProps> = ({
             資料將分配給匯入者（您）
           </Text>
         </View>
-        <Switch
+        <AdaptiveSwitch
           value={skipAssignment}
           onValueChange={handleToggleSkip}
           trackColor={{ false: colors.gray200, true: colors.primary }}
@@ -390,7 +391,7 @@ const DataAssignmentStep: React.FC<DataAssignmentStepProps> = ({
               <Text style={StyleSheet.flatten([styles.optionLabel, { color: colors.text }])}>
                 跳過無法分配的資料
               </Text>
-              <Switch
+              <AdaptiveSwitch
                 value={skipUnassigned}
                 onValueChange={setSkipUnassigned}
                 trackColor={{ false: colors.gray200, true: colors.primary }}
@@ -400,7 +401,7 @@ const DataAssignmentStep: React.FC<DataAssignmentStepProps> = ({
           </View>
 
           {/* 生成預覽按鈕 */}
-          <Button
+          <AdaptiveButton
             variant="primary"
             style={styles.previewButton}
             onPress={generatePreview}

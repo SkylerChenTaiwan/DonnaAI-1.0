@@ -3,15 +3,14 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import {
-  Modal,
-  View,
+import { View,
   Text,
   ScrollView,
   TouchableOpacity,
   StyleSheet,
   Alert,
-  ActivityIndicator, Platform } from 'react-native';
+  ActivityIndicator, Platform  } from 'react-native';
+import { AdaptiveModal } from '@/components/adaptive';
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '../../theme/DesignSystem';
 import { User } from '../../types/user';
@@ -207,7 +206,7 @@ export const PermissionModal: React.FC<PermissionModalProps> = ({
   );
 
   return (
-    <Modal
+    <AdaptiveModal
       visible={visible}
       animationType="slide"
       transparent={true}
@@ -293,7 +292,7 @@ export const PermissionModal: React.FC<PermissionModalProps> = ({
           </View>
         </View>
       </View>
-    </Modal>
+    </AdaptiveModal>
   );
 };
 

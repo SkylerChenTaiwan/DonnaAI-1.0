@@ -3,13 +3,12 @@
  */
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import {
-  View,
+import { View,
   Text,
   TouchableOpacity,
   StyleSheet,
-  Modal,
-  Alert, Platform } from 'react-native';
+  Alert, Platform  } from 'react-native';
+import { AdaptiveModal } from '@/components/adaptive';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { ResponsiveLayout, responsiveGrid } from '@/components/common/ResponsiveLayout';
@@ -1196,7 +1195,7 @@ export const DatabaseScreen: React.FC = () => {
 
       {/* 匯出選項 Modal */}
       {showExportOptions && (
-        <Modal
+        <AdaptiveModal
           visible={showExportOptions}
           animationType="slide"
           presentationStyle="fullScreen"
@@ -1208,7 +1207,7 @@ export const DatabaseScreen: React.FC = () => {
             onExport={handleExport}
             onCancel={() => setShowExportOptions(false)}
           />
-        </Modal>
+        </AdaptiveModal>
       )}
       </ResponsiveLayout>
       

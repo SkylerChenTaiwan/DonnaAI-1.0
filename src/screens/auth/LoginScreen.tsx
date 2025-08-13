@@ -4,14 +4,16 @@
 
 import React, { useState } from 'react';
 import {
+  TextInput,
+  Button
+} from '@/components/adaptive';
+import {
   View,
   Text,
   StyleSheet,
   Alert,
   Image } from 'react-native';
 import { Layout } from '@/components/common/Layout';
-import { TextInput } from '@/components/common/TextInput';
-import { Button } from '@/components/common/Button';
 import { signIn } from '@/services/firebase/auth';
 import { DesignSystem } from '@/theme/designSystem';
 
@@ -81,7 +83,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
         </View>
 
         <View style={styles.form}>
-          <TextInput
+          <AdaptiveInput
             label="電子郵件"
             value={email}
             onChangeText={setEmail}
@@ -92,7 +94,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
             error={errors.email}
           />
 
-          <TextInput
+          <AdaptiveInput
             label="密碼"
             value={password}
             onChangeText={setPassword}
@@ -106,7 +108,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
             <Text style={styles.errorText}>{errors.general}</Text>
           )}
 
-          <Button
+          <AdaptiveButton
             title="登入"
             onPress={handleLogin}
             loading={loading}
@@ -117,7 +119,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
             <Text style={styles.footerText}>
               還沒有帳號？{' '}
             </Text>
-            <Button
+            <AdaptiveButton
               title="立即註冊"
               onPress={onNavigateToRegister}
               variant="outline"

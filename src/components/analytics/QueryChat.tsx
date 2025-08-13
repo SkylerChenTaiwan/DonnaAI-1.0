@@ -1,12 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import {
-  View,
-  TextInput,
+import { View,
   TouchableOpacity,
   ScrollView,
   Text,
   ActivityIndicator,
-  StyleSheet } from 'react-native';
+  StyleSheet  } from 'react-native';
+import { AdaptiveInput } from '@/components/adaptive';
 import { Icon } from '@/components/common/Icon';
 import { useQueryStore } from '../../stores/queryStore';
 import { useAuthStore } from '../../stores/authStore';
@@ -194,7 +193,7 @@ export default function QueryChat() {
       
       {/* 輸入區域 */}
       <View style={styles.inputContainer}>
-        <TextInput
+        <AdaptiveInput
           style={styles.input}
           value={query}
           onChangeText={setQuery}

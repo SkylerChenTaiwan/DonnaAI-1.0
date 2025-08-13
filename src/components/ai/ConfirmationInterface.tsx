@@ -4,9 +4,11 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import {
+  Button,
+  TextInput
+} from '@/components/adaptive';
 import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
-import { Button } from '@/components/common/Button';
-import { TextInput } from '@/components/common/TextInput';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { useAIConfirmationStore } from '@/stores/aiConfirmationStore';
 // import { useRecordStore } from '@/stores/recordStore';
@@ -263,7 +265,7 @@ export const ConfirmationInterface = ({
             </View>
           </View>
           
-          <TextInput
+          <AdaptiveInput
             value={field.modifiedValue?.toString() || ''}
             onChangeText={(value) => handleFieldModification(field.fieldKey, value)}
             placeholder={`輸入${field.fieldKey}`}
@@ -293,7 +295,7 @@ export const ConfirmationInterface = ({
         <View key={task.id} style={styles.taskContainer}>
           <View style={styles.taskHeader}>
             <View style={styles.taskCheckbox}>
-              <Button
+              <AdaptiveButton
                 title={task.isSelected ? "✓" : ""}
                 onPress={() => handleTaskSelection(task.id, !task.isSelected)}
                 style={task.isSelected ? StyleSheet.flatten([styles.checkbox, styles.checkedBox]) : styles.checkbox}
@@ -310,14 +312,14 @@ export const ConfirmationInterface = ({
             </View>
           </View>
           
-          <TextInput
+          <AdaptiveInput
             value={task.title}
             onChangeText={(value) => handleTaskModification(task.id, 'title', value)}
             placeholder="任務標題"
             style={styles.taskTitleInput}
           />
           
-          <TextInput
+          <AdaptiveInput
             value={task.description}
             onChangeText={(value) => handleTaskModification(task.id, 'description', value)}
             placeholder="任務描述"
@@ -328,7 +330,7 @@ export const ConfirmationInterface = ({
           <View style={styles.taskPriority}>
             <Text style={styles.taskPriorityLabel}>優先級:</Text>
             {['low', 'medium', 'high'].map((priority) => (
-              <Button
+              <AdaptiveButton
                 key={priority}
                 title={priority === 'low' ? '低' : priority === 'medium' ? '中' : '高'}
                 onPress={() => handleTaskModification(task.id, 'priority', priority)}
@@ -351,19 +353,19 @@ export const ConfirmationInterface = ({
     <View style={styles.buttonContainer}>
       {processingMode === 'review' && (
         <>
-          <Button
+          <AdaptiveButton
             title="全部確認"
             onPress={handleBatchConfirm}
             style={styles.confirmButton}
             textStyle={styles.confirmButtonText}
           />
-          <Button
+          <AdaptiveButton
             title="選擇性確認"
             onPress={handleSelectiveConfirm}
             style={styles.selectiveButton}
             textStyle={styles.selectiveButtonText}
           />
-          <Button
+          <AdaptiveButton
             title="取消"
             onPress={onCancel}
             style={styles.cancelButton}

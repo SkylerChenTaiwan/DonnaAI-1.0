@@ -4,9 +4,11 @@
  */
 
 import React, { useState } from 'react';
+import {
+  Button,
+  TextInput
+} from '@/components/adaptive';
 import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
-import { Button } from '@/components/common/Button';
-import { TextInput } from '@/components/common/TextInput';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { AudioRecorder } from '@/components/audio/AudioRecorder';
 import { useRecordStore } from '@/stores/recordStore';
@@ -174,7 +176,7 @@ export const MakeupRecording = ({
             <Text style={styles.featureItem}>• 自動語音轉文字</Text>
             <Text style={styles.featureItem}>• AI 內容分析</Text>
           </View>
-          <Button
+          <AdaptiveButton
             title="開始語音摘要"
             onPress={handleVoiceSummaryMode}
             style={styles.primaryButton}
@@ -192,7 +194,7 @@ export const MakeupRecording = ({
             <Text style={styles.featureItem}>• 支援複製貼上</Text>
             <Text style={styles.featureItem}>• AI 內容分析</Text>
           </View>
-          <Button
+          <AdaptiveButton
             title="開始文字摘要"
             onPress={handleTextSummaryMode}
             style={styles.secondaryButton}
@@ -202,7 +204,7 @@ export const MakeupRecording = ({
       </View>
 
       <View style={styles.actionButtons}>
-        <Button
+        <AdaptiveButton
           title="取消"
           onPress={onCancel}
           style={styles.cancelButton}
@@ -237,7 +239,7 @@ export const MakeupRecording = ({
       />
 
       <View style={styles.actionButtons}>
-        <Button
+        <AdaptiveButton
           title="返回選擇"
           onPress={() => setCurrentMode('selection')}
           style={styles.cancelButton}
@@ -259,7 +261,7 @@ export const MakeupRecording = ({
 
       <View style={styles.textInputContainer}>
         <Text style={styles.inputLabel}>會議摘要內容</Text>
-        <TextInput
+        <AdaptiveInput
           value={textSummary}
           onChangeText={setTextSummary}
           placeholder="請輸入會議的主要內容、討論要點、決議事項、後續行動等..."
@@ -296,13 +298,13 @@ export const MakeupRecording = ({
       </View>
 
       <View style={styles.actionButtons}>
-        <Button
+        <AdaptiveButton
           title="返回選擇"
           onPress={() => setCurrentMode('selection')}
           style={styles.cancelButton}
           textStyle={styles.cancelButtonText}
         />
-        <Button
+        <AdaptiveButton
           title="提交處理"
           onPress={handleTextSummarySubmit}
           style={StyleSheet.flatten([

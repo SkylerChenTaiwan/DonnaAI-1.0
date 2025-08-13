@@ -6,6 +6,10 @@
 
 import React, { useState } from 'react';
 import {
+  TextInput,
+  Button
+} from '@/components/adaptive';
+import {
   View,
   Text,
   StyleSheet,
@@ -16,8 +20,6 @@ import {
   Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Layout } from '@/components/common/Layout';
-import { TextInput } from '@/components/common/TextInput';
-import { Button } from '@/components/common/Button';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { createOrganization, CreateOrganizationData } from '@/services/firebase/admin/organizationService';
 import { BILLING_CONFIG } from '@/config/billing';
@@ -192,14 +194,14 @@ export const CreateOrganizationScreen: React.FC = () => {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>組織資訊</Text>
             
-            <TextInput
+            <AdaptiveInput
               label="組織名稱"
               value={orgName}
               onChangeText={setOrgName}
               placeholder="例：XX 企業"
             />
 
-            <TextInput
+            <AdaptiveInput
               label="組織電子郵件"
               value={orgEmail}
               onChangeText={setOrgEmail}
@@ -307,7 +309,7 @@ export const CreateOrganizationScreen: React.FC = () => {
               </View>
             )}
 
-            <TextInput
+            <AdaptiveInput
               label="贈送人數"
               value={giftedSeats}
               onChangeText={setGiftedSeats}
@@ -321,14 +323,14 @@ export const CreateOrganizationScreen: React.FC = () => {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>管理員資訊</Text>
             
-            <TextInput
+            <AdaptiveInput
               label="管理員姓名"
               value={adminName}
               onChangeText={setAdminName}
               placeholder="王小明"
             />
 
-            <TextInput
+            <AdaptiveInput
               label="管理員電子郵件"
               value={adminEmail}
               onChangeText={setAdminEmail}
@@ -341,7 +343,7 @@ export const CreateOrganizationScreen: React.FC = () => {
 
           {/* 操作按鈕 */}
           <View style={styles.actions}>
-            <Button
+            <AdaptiveButton
               title="建立組織"
               onPress={handleCreateOrganization}
               disabled={isLoading}

@@ -5,15 +5,15 @@
 
 import React, { useCallback, forwardRef, useImperativeHandle } from 'react';
 import {
-  View,
+  AdaptiveInput,
+  AdaptiveSwitch
+} from '@/components/adaptive';
+import { View,
   Text,
-  TextInput,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Platform,
-  Switch
-} from 'react-native';
+  Platform  } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Controller, useForm, UseFormReturn } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -223,7 +223,7 @@ export const DynamicFormBuilder = forwardRef<DynamicFormBuilderRef, DynamicFormB
               {field.label}
               {field.required && <Text style={styles.required}> *</Text>}
             </Text>
-            <TextInput
+            <AdaptiveInput
               style={StyleSheet.flatten([styles.input, error && styles.inputError])}
               value={String(value || '')}
               onChangeText={(text) => {
@@ -253,7 +253,7 @@ export const DynamicFormBuilder = forwardRef<DynamicFormBuilderRef, DynamicFormB
               {field.label}
               {field.required && <Text style={styles.required}> *</Text>}
             </Text>
-            <TextInput
+            <AdaptiveInput
               style={StyleSheet.flatten([styles.textarea, error && styles.inputError])}
               value={String(value || '')}
               onChangeText={onChange}
@@ -319,7 +319,7 @@ export const DynamicFormBuilder = forwardRef<DynamicFormBuilderRef, DynamicFormB
                 {field.label}
                 {field.required && <Text style={styles.required}> *</Text>}
               </Text>
-              <Switch
+              <AdaptiveSwitch
                 value={Boolean(value)}
                 onValueChange={onChange}
                 disabled={disabled}
@@ -341,7 +341,7 @@ export const DynamicFormBuilder = forwardRef<DynamicFormBuilderRef, DynamicFormB
               {field.label}
               {field.required && <Text style={styles.required}> *</Text>}
             </Text>
-            <TextInput
+            <AdaptiveInput
               style={StyleSheet.flatten([styles.input, error && styles.inputError])}
               value={value || ''}
               onChangeText={onChange}
@@ -440,7 +440,7 @@ const TagsField: React.FC<{
       
       {!disabled && (
         <View style={styles.tagInputRow}>
-          <TextInput
+          <AdaptiveInput
             style={StyleSheet.flatten([styles.tagInput, error && styles.inputError])}
             value={inputValue}
             onChangeText={setInputValue}

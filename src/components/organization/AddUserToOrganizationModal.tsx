@@ -5,19 +5,20 @@
 
 import React, { useState } from 'react';
 import {
-  View,
+  AdaptiveModal,
+  TextInput,
+  Button
+} from '@/components/adaptive';
+import { View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Modal,
-  Alert } from 'react-native';
+  Alert  } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, setDoc, Timestamp } from 'firebase/firestore';
 import { getFirebaseAuth, getFirebaseDb } from '@/services/firebase/config';
-import { TextInput } from '@/components/common/TextInput';
-import { Button } from '@/components/common/Button';
 import { Organization, User } from '@/types/entities';
 import { DesignSystem } from '@/theme/designSystem';
 import { toast } from '@/utils/toast';
@@ -162,7 +163,7 @@ export const AddUserToOrganizationModal: React.FC<AddUserToOrganizationModalProp
   };
 
   return (
-    <Modal
+    <AdaptiveModal
       visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
@@ -181,7 +182,7 @@ export const AddUserToOrganizationModal: React.FC<AddUserToOrganizationModalProp
             </TouchableOpacity>
             <Text style={styles.headerTitle}>新增用戶到 {organization.name}</Text>
           </View>
-          <Button
+          <AdaptiveButton
             title="新增"
             onPress={handleSubmit}
             disabled={isLoading}
@@ -192,7 +193,7 @@ export const AddUserToOrganizationModal: React.FC<AddUserToOrganizationModalProp
 
         {/* Content */}
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-          <TextInput
+          <AdaptiveInput
             label="電子郵件"
             value={formData.email}
             onChangeText={(text) => handleFieldChange('email', text)}
@@ -202,7 +203,7 @@ export const AddUserToOrganizationModal: React.FC<AddUserToOrganizationModalProp
             required
           />
 
-          <TextInput
+          <AdaptiveInput
             label="密碼"
             value={formData.password}
             onChangeText={(text) => handleFieldChange('password', text)}
@@ -211,7 +212,7 @@ export const AddUserToOrganizationModal: React.FC<AddUserToOrganizationModalProp
             required
           />
 
-          <TextInput
+          <AdaptiveInput
             label="姓名"
             value={formData.name}
             onChangeText={(text) => handleFieldChange('name', text)}
@@ -242,14 +243,14 @@ export const AddUserToOrganizationModal: React.FC<AddUserToOrganizationModalProp
             </View>
           </View>
 
-          <TextInput
+          <AdaptiveInput
             label="部門"
             value={formData.department}
             onChangeText={(text) => handleFieldChange('department', text)}
             placeholder="選填"
           />
 
-          <TextInput
+          <AdaptiveInput
             label="職位"
             value={formData.position}
             onChangeText={(text) => handleFieldChange('position', text)}
@@ -265,7 +266,7 @@ export const AddUserToOrganizationModal: React.FC<AddUserToOrganizationModalProp
           </View>
         </ScrollView>
       </View>
-    </Modal>
+    </AdaptiveModal>
   );
 };
 

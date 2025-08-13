@@ -3,7 +3,8 @@
  */
 
 import React, { memo, useCallback, useState, useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, Platform  } from 'react-native';
+import { AdaptiveInput } from '@/components/adaptive';
 import { ColumnConfig, CellPosition, CellState } from './types';
 import { tableStyles, getCellStyles } from './styles/tableStyles';
 import { NotionColors, NotionTypography } from './constants';
@@ -33,7 +34,7 @@ export const TableCell: React.FC<TableCellProps> = memo(({
   onCellEdit }) => {
   const [editValue, setEditValue] = useState('');
   const [isEditing, setIsEditing] = useState(false);
-  const inputRef = useRef<TextInput>(null);
+  const inputRef = useRef<AdaptiveInput>(null);
   const clickTimeoutRef = useRef<NodeJS.Timeout>();
   const lastClickTime = useRef(0);
   

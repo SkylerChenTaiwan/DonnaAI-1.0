@@ -3,12 +3,11 @@
  */
 
 import React from 'react';
-import {
-  View,
+import { View,
   Text,
   TouchableOpacity,
-  Switch,
-  StyleSheet } from 'react-native';
+  StyleSheet  } from 'react-native';
+import { AdaptiveSwitch } from '@/components/adaptive';
 import { Icon } from '@/components/common/Icon';
 import { SettingItem as SettingItemType } from '@/types/settings';
 
@@ -28,7 +27,7 @@ export const SettingItem = ({
     switch (type) {
       case 'switch':
         return (
-          <Switch
+          <AdaptiveSwitch
             value={value}
             onValueChange={onValueChange}
             trackColor={{

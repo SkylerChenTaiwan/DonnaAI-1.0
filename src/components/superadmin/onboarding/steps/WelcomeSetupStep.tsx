@@ -1,19 +1,20 @@
 import { Icon } from '../../../../components/common/Icon';
+import {
+  AdaptiveInput,
+  AdaptiveSwitch
+} from '@/components/adaptive';
 /**
  * 步驟 4: 歡迎設定
  * Step 4: Welcome Setup
  */
 
 import React, { useState, useEffect } from 'react';
-import {
-  View,
+import { View,
   Text,
-  TextInput,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Switch,
-  Platform } from 'react-native';
+  Platform   } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { DesignSystem } from '@/theme/designSystem';
 import {
@@ -145,7 +146,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
           <>
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>郵件主旨</Text>
-              <TextInput
+              <AdaptiveInput
                 style={styles.input}
                 value={formData.emailTemplate.subject}
                 onChangeText={(text) => updateField('emailTemplate.subject', text)}
@@ -155,7 +156,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
             
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>郵件內容</Text>
-              <TextInput
+              <AdaptiveInput
                 style={StyleSheet.flatten([styles.input, styles.textArea])}
                 value={formData.emailTemplate.body}
                 onChangeText={(text) => updateField('emailTemplate.body', text)}
@@ -186,7 +187,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
         <View style={styles.templateOptions}>
           <View style={styles.switchRow}>
             <Text style={styles.switchLabel}>包含登入指引</Text>
-            <Switch
+            <AdaptiveSwitch
               value={formData.emailTemplate.includeLoginGuide}
               onValueChange={(value) => updateField('emailTemplate.includeLoginGuide', value)}
               trackColor={{ false: colors.gray300, true: colors.primary }}
@@ -195,7 +196,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
           
           <View style={styles.switchRow}>
             <Text style={styles.switchLabel}>包含公司 Logo</Text>
-            <Switch
+            <AdaptiveSwitch
               value={formData.emailTemplate.includeCompanyLogo}
               onValueChange={(value) => updateField('emailTemplate.includeCompanyLogo', value)}
               trackColor={{ false: colors.gray300, true: colors.primary }}
@@ -227,7 +228,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
             <Text style={styles.switchLabel}>顯示導覽教學</Text>
             <Text style={styles.switchHint}>協助新用戶熟悉系統介面</Text>
           </View>
-          <Switch
+          <AdaptiveSwitch
             value={formData.firstLoginExperience.showTour}
             onValueChange={(value) => updateField('firstLoginExperience.showTour', value)}
             trackColor={{ false: colors.gray300, true: colors.primary }}
@@ -239,7 +240,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
             <Text style={styles.switchLabel}>顯示快速開始指南</Text>
             <Text style={styles.switchHint}>提供系統使用的基本步驟</Text>
           </View>
-          <Switch
+          <AdaptiveSwitch
             value={formData.firstLoginExperience.showGettingStarted}
             onValueChange={(value) => updateField('firstLoginExperience.showGettingStarted', value)}
             trackColor={{ false: colors.gray300, true: colors.primary }}
@@ -294,7 +295,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
             <Text style={styles.switchLabel}>排程發送</Text>
             <Text style={styles.switchHint}>在指定時間發送歡迎郵件</Text>
           </View>
-          <Switch
+          <AdaptiveSwitch
             value={formData.scheduledSend?.enabled}
             onValueChange={(value) => updateField('scheduledSend.enabled', value)}
             trackColor={{ false: colors.gray300, true: colors.primary }}

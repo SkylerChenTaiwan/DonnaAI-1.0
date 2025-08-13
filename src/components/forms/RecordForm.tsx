@@ -5,20 +5,21 @@
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import {
-  View,
+  AdaptiveModal,
+  Button
+} from '@/components/adaptive';
+import { View,
   Text,
   StyleSheet,
   ScrollView,
   Alert,
-  TouchableOpacity,
-  Modal } from 'react-native';
+  TouchableOpacity } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@/components/common/Icon';
 
 import { RecordFormSchema, RecordFormData } from '@/services/validation/form-schemas';
 import { FormField } from './FormField';
-import { Button } from '@/components/common/Button';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { AudioInput } from '@/components/input/AudioInput';
 
@@ -242,7 +243,7 @@ export const RecordForm: React.FC<RecordFormProps> = ({
 
   // 客戶選擇器
   const renderCustomerSelector = () => (
-    <Modal
+    <AdaptiveModal
       visible={showCustomerSelector}
       animationType="slide"
       presentationStyle="pageSheet"
@@ -300,7 +301,7 @@ export const RecordForm: React.FC<RecordFormProps> = ({
           )}
         </ScrollView>
       </View>
-    </Modal>
+    </AdaptiveModal>
   );
 
   return (
@@ -478,14 +479,14 @@ export const RecordForm: React.FC<RecordFormProps> = ({
       {/* 底部按鈕 */}
       <View style={styles.footer}>
         {onCancel && (
-          <Button
+          <AdaptiveButton
             title="取消"
             variant="secondary"
             onPress={onCancel}
             style={styles.footerButton}
           />
         )}
-        <Button
+        <AdaptiveButton
           title={isSubmitting ? "創建中..." : "創建記錄"}
           onPress={handleSubmit(onFormSubmit)}
           disabled={!isValid || isSubmitting}
@@ -495,7 +496,7 @@ export const RecordForm: React.FC<RecordFormProps> = ({
       </View>
 
       {/* 語音輸入 Modal */}
-      <Modal
+      <AdaptiveModal
         visible={showAudioInput}
         animationType="slide"
         presentationStyle="fullScreen"
@@ -507,7 +508,7 @@ export const RecordForm: React.FC<RecordFormProps> = ({
           language="zh-TW"
           enableQualityCheck={true}
         />
-      </Modal>
+      </AdaptiveModal>
 
       {/* 客戶選擇器 Modal */}
       {renderCustomerSelector()}

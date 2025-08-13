@@ -18,7 +18,7 @@ import { SimplifiedAudioInput } from '@/components/input/SimplifiedAudioInput';
 
 import { TaskFormSchema, TaskFormData } from '@/services/validation/form-schemas';
 import { FormField } from './FormField';
-import { Button } from '@/components/common/Button';
+import { Button } from '@/components/adaptive';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 
 export interface TaskFormProps {
@@ -282,7 +282,7 @@ export const TaskForm = forwardRef<any, TaskFormProps>((props, ref) => {
 
       {/* 底部按鈕 */}
       <View style={styles.footer}>
-        <Button
+        <AdaptiveButton
           title="重置"
           variant="secondary"
           onPress={() => reset()}
@@ -291,7 +291,7 @@ export const TaskForm = forwardRef<any, TaskFormProps>((props, ref) => {
         />
         
         {onCancel && (
-          <Button
+          <AdaptiveButton
             title="取消"
             variant="secondary"
             onPress={onCancel}
@@ -299,7 +299,7 @@ export const TaskForm = forwardRef<any, TaskFormProps>((props, ref) => {
           />
         )}
         
-        <Button
+        <AdaptiveButton
           title={isSubmitting ? "創建中..." : "創建任務"}
           onPress={handleSubmit(onFormSubmit)}
           disabled={!isValid || isSubmitting}

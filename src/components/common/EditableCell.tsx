@@ -4,13 +4,12 @@
  */
 
 import React, { useState, useRef, useEffect } from 'react';
-import {
-  View,
+import { View,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
-  Alert } from 'react-native';
+  Alert  } from 'react-native';
+import { AdaptiveInput } from '@/components/adaptive';
 import { Icon } from '@/components/common/Icon';
 
 export interface EditableCellProps {
@@ -48,7 +47,7 @@ export const EditableCell: React.FC<EditableCellProps> = ({
   onTab,
   autoFocus = false }) => {
   const [editValue, setEditValue] = useState(String(value || ''));
-  const inputRef = useRef<TextInput>(null);
+  const inputRef = useRef<AdaptiveInput>(null);
 
   // 當開始編輯時聚焦輸入框
   useEffect(() => {
@@ -149,7 +148,7 @@ export const EditableCell: React.FC<EditableCellProps> = ({
   if (isEditing) {
     return (
       <View style={styles.editContainer}>
-        <TextInput
+        <AdaptiveInput
           ref={inputRef}
           style={StyleSheet.flatten([
             styles.editInput,

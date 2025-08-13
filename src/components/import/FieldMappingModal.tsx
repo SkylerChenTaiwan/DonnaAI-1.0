@@ -5,14 +5,16 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-  View,
+  AdaptiveModal,
+  AdaptiveInput
+} from '@/components/adaptive';
+import { View,
   Text,
-  Modal,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
-  Platform } from 'react-native';
+  Platform  } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
@@ -645,7 +647,7 @@ export const FieldMappingModal: React.FC<Props> = ({
             </View>
             
             {/* 描述 */}
-            <TextInput
+            <AdaptiveInput
               style={styles.descriptionInput}
               placeholder="關聯描述（選填）"
               value={relation.description}
@@ -658,7 +660,7 @@ export const FieldMappingModal: React.FC<Props> = ({
   };
 
   return (
-    <Modal
+    <AdaptiveModal
       visible={visible}
       animationType="slide"
       transparent={false}
@@ -714,12 +716,11 @@ export const FieldMappingModal: React.FC<Props> = ({
           </>
         )}
       </View>
-    </Modal>
+    </AdaptiveModal>
   );
 };
 
 // 補充 TextInput import
-import { TextInput } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {

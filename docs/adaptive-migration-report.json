@@ -1,0 +1,109 @@
+{
+  "timestamp": "2025-08-13T13:54:08.456Z",
+  "summary": {
+    "react-native-textinput": {
+      "description": "直接使用 react-native TextInput",
+      "files": 5,
+      "totalImports": 5,
+      "totalElements": 0
+    }
+  },
+  "files": [
+    {
+      "file": "src/components/superadmin/onboarding/common/FormInput.tsx",
+      "issues": [
+        {
+          "type": "react-native-textinput",
+          "description": "直接使用 react-native TextInput",
+          "importMatches": 1,
+          "elementMatches": 0,
+          "config": {
+            "pattern": {},
+            "replacement": "import { AdaptiveInput } from '@/components/adaptive'",
+            "elementPattern": {},
+            "elementReplacement": "<AdaptiveInput",
+            "description": "直接使用 react-native TextInput"
+          }
+        }
+      ]
+    },
+    {
+      "file": "src/components/organization/UserAssistanceSection.tsx",
+      "issues": [
+        {
+          "type": "react-native-textinput",
+          "description": "直接使用 react-native TextInput",
+          "importMatches": 1,
+          "elementMatches": 0,
+          "config": {
+            "pattern": {},
+            "replacement": "import { AdaptiveInput } from '@/components/adaptive'",
+            "elementPattern": {},
+            "elementReplacement": "<AdaptiveInput",
+            "description": "直接使用 react-native TextInput"
+          }
+        }
+      ]
+    },
+    {
+      "file": "src/components/common/TextInput.tsx",
+      "issues": [
+        {
+          "type": "react-native-textinput",
+          "description": "直接使用 react-native TextInput",
+          "importMatches": 1,
+          "elementMatches": 0,
+          "config": {
+            "pattern": {},
+            "replacement": "import { AdaptiveInput } from '@/components/adaptive'",
+            "elementPattern": {},
+            "elementReplacement": "<AdaptiveInput",
+            "description": "直接使用 react-native TextInput"
+          }
+        }
+      ]
+    },
+    {
+      "file": "src/components/common/SearchBar.tsx",
+      "issues": [
+        {
+          "type": "react-native-textinput",
+          "description": "直接使用 react-native TextInput",
+          "importMatches": 1,
+          "elementMatches": 0,
+          "config": {
+            "pattern": {},
+            "replacement": "import { AdaptiveInput } from '@/components/adaptive'",
+            "elementPattern": {},
+            "elementReplacement": "<AdaptiveInput",
+            "description": "直接使用 react-native TextInput"
+          }
+        }
+      ]
+    },
+    {
+      "file": "src/components/common/FormInput/FormInput.tsx",
+      "issues": [
+        {
+          "type": "react-native-textinput",
+          "description": "直接使用 react-native TextInput",
+          "importMatches": 1,
+          "elementMatches": 0,
+          "config": {
+            "pattern": {},
+            "replacement": "import { AdaptiveInput } from '@/components/adaptive'",
+            "elementPattern": {},
+            "elementReplacement": "<AdaptiveInput",
+            "description": "直接使用 react-native TextInput"
+          }
+        }
+      ]
+    }
+  ],
+  "statistics": {
+    "totalFiles": 667,
+    "problemFiles": 5,
+    "problemRate": "0.7",
+    "totalIssues": 5
+  }
+}

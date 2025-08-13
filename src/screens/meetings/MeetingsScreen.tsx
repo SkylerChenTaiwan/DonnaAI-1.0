@@ -4,11 +4,14 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Alert, Modal , Platform } from 'react-native';
+import {
+  AdaptiveModal,
+  Button
+} from '@/components/adaptive';
+import { View, Text, StyleSheet, ScrollView, Alert, Platform  } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Layout } from '@/components/common/Layout';
-import { Button } from '@/components/common/Button';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { MakeupRecording } from '@/components/meetings/MakeupRecording';
 import { ConfirmationInterface } from '@/components/ai/ConfirmationInterface';
@@ -207,7 +210,7 @@ export const MeetingsScreen: React.FC = () => {
       <Text style={styles.sectionTitle}>快速操作</Text>
       <View style={styles.quickActionsGrid}>
         {quickActions.map((action) => (
-          <Button
+          <AdaptiveButton
             key={action.id}
             title={`${action.icon} ${action.title}`}
             onPress={action.action}
@@ -256,7 +259,7 @@ export const MeetingsScreen: React.FC = () => {
                 </Text>
               )}
               
-              <Button
+              <AdaptiveButton
                 title={record.aiConfirmationStatus === 'pending' ? '待確認 AI 建議' : '查看詳情'}
                 onPress={() => handleViewRecord(record)}
                 style={StyleSheet.flatten([
@@ -301,7 +304,7 @@ export const MeetingsScreen: React.FC = () => {
       </ScrollView>
 
       {/* 補救錄音模態框 */}
-      <Modal
+      <AdaptiveModal
         visible={showMakeupRecording}
         animationType="slide"
         presentationStyle="pageSheet"
@@ -311,10 +314,10 @@ export const MeetingsScreen: React.FC = () => {
           onComplete={handleMakeupRecordingComplete}
           onCancel={() => setShowMakeupRecording(false)}
         />
-      </Modal>
+      </AdaptiveModal>
 
       {/* AI 確認模態框 */}
-      <Modal
+      <AdaptiveModal
         visible={showAIConfirmation}
         animationType="slide"
         presentationStyle="pageSheet"
@@ -326,7 +329,7 @@ export const MeetingsScreen: React.FC = () => {
             onCancel={() => setShowAIConfirmation(false)}
           />
         )}
-      </Modal>
+      </AdaptiveModal>
     </Layout>
   );
 };

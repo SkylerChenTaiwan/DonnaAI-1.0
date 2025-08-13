@@ -13,7 +13,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator } from 'react-native';
-import { Button } from '@/components/common/Button';
+import { Button } from '@/components/adaptive';
 import { Layout } from '@/components/common/Layout';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { FormField } from '@/components/forms/FormField';
@@ -173,7 +173,7 @@ export const CreateUserModal: React.FC = () => {
           <Icon name="arrow-back" size={24} color={DesignSystem.colors.text.primary} />
         </TouchableOpacity>
         <Text style={styles.title}>建立新用戶</Text>
-        <Button
+        <AdaptiveButton
           title="建立"
           onPress={handleSubmit}
           loading={loading}

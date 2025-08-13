@@ -4,13 +4,12 @@
  */
 
 import React from 'react';
-import {
-  View,
+import { View,
   Text,
-  TextInput,
   StyleSheet,
   TextInputProps,
-  Platform } from 'react-native';
+  Platform  } from 'react-native';
+import { AdaptiveInput } from '@/components/adaptive';
 import { DesignSystem } from '@/theme/designSystem';
 
 interface FormInputProps extends TextInputProps {
@@ -84,7 +83,7 @@ export const FormInput: React.FC<FormInputProps> = ({
         </Text>
       </View>
       
-      <TextInput
+      <AdaptiveInput
         style={StyleSheet.flatten([
           styles.input,
           error && styles.inputError,

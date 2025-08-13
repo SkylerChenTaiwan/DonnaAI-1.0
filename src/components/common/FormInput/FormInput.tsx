@@ -4,7 +4,8 @@
  */
 
 import React from 'react';
-import { TextInput, StyleSheet, TextInputProps } from 'react-native';
+import { StyleSheet, TextInputProps  } from 'react-native';
+import { AdaptiveInput } from '@/components/adaptive';
 import { DesignSystem } from '@/theme/designSystem';
 
 export interface FormInputProps extends TextInputProps {
@@ -42,7 +43,7 @@ export const FormInput: React.FC<FormInputProps> = ({
   }
 
   return (
-    <TextInput
+    <AdaptiveInput
       {...props}
       editable={editable}
       keyboardType={keyboardType}

@@ -5,14 +5,16 @@
 
 import React, { useState, useCallback, useRef } from 'react';
 import {
-  View,
+  AdaptiveModal,
+  Button
+} from '@/components/adaptive';
+import { View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Modal,
   Alert,
-  Platform } from 'react-native';
+  Platform  } from 'react-native';
 import { 
   ImportUserData,
   UserImportStage,
@@ -27,7 +29,6 @@ import {
 import { Organization } from '@/types/entities';
 import { DesignSystem } from '@/theme/designSystem';
 import { Icon } from '@/components/common/Icon';
-import { Button } from '@/components/common/Button';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { toast } from '@/utils/toast';
 
@@ -492,7 +493,7 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
                 </View>
               )}
               
-              <Button
+              <AdaptiveButton
                 title="選擇檔案"
                 onPress={handleSelectFile}
                 disabled={isProcessing}
@@ -528,7 +529,7 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
             />
 
             <View style={styles.stageActions}>
-              <Button
+              <AdaptiveButton
                 title="重新選擇檔案"
                 onPress={() => {
                   setCurrentStage('upload');
@@ -539,7 +540,7 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
                 variant="outline"
                 style={styles.actionButton}
               />
-              <Button
+              <AdaptiveButton
                 title="繼續"
                 onPress={handleEnterConfigStage}
                 disabled={users.filter(u => u.isSelected).length === 0 || isProcessing}
@@ -657,7 +658,7 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
             </View>
 
             <View style={styles.stageActions}>
-              <Button
+              <AdaptiveButton
                 title="返回"
                 onPress={() => {
                   setCurrentStage('preview');
@@ -666,7 +667,7 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
                 variant="outline"
                 style={styles.actionButton}
               />
-              <Button
+              <AdaptiveButton
                 title="開始匯入"
                 onPress={handleStartImport}
                 style={styles.actionButton}
@@ -770,7 +771,7 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
                 </View>
               )}
               
-              <Button
+              <AdaptiveButton
                 title="完成"
                 onPress={handleClose}
                 style={styles.completeButton}
@@ -785,7 +786,7 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
   };
 
   return (
-    <Modal
+    <AdaptiveModal
       visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
@@ -818,7 +819,7 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
           {renderStageContent()}
         </ScrollView>
       </View>
-    </Modal>
+    </AdaptiveModal>
   );
 };
 

@@ -4,7 +4,8 @@
  */
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Alert, ScrollView, TouchableOpacity, Modal, Platform } from 'react-native';
+import { View, Text, StyleSheet, Alert, ScrollView, TouchableOpacity, Platform  } from 'react-native';
+import { AdaptiveModal } from '@/components/adaptive';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { Icon } from '@/components/common/Icon';
 
@@ -207,7 +208,7 @@ export const CreateCustomerModal: React.FC = () => {
   // Web 平台使用 Modal 元件包裝
   if (Platform.OS === 'web') {
     return (
-      <Modal
+      <AdaptiveModal
         visible={true}
         transparent={true}
         animationType="slide"
@@ -287,7 +288,7 @@ export const CreateCustomerModal: React.FC = () => {
             )}
           </View>
         </View>
-      </Modal>
+      </AdaptiveModal>
     );
   }
 
