@@ -118,7 +118,7 @@
 | 112v | adaptive-components-enforcement.md | ✅ 已完成 | Adaptive 元件使用強制規範 - ESLint 規則、Pre-commit、VS Code 工具、文件更新 | 2025-08-13 |
 | 113v | complete-adaptive-components.md | ✅ 已完成 | 完成剩餘 Adaptive 元件 - 12 個核心元件、達到 20+ 目標、覆蓋 80% 場景 | 2025-08-13 |
 | 114v | complete-adaptive-component-migration.md | ✅ 已完成 | 全面 Adaptive 元件遷移 - 批量替換 88 個檔案、解決 Web UI 問題 | 2025-08-13 |
-| 115  | fix-adaptive-button-and-css-conflicts.md | 📋 待執行 | 修復 AdaptiveButton 崩潰和 CSS 破版問題 - getButtonStyle 錯誤、NotionDatabaseV4.css 衝突 | - |
+| 115v | fix-adaptive-button-and-css-conflicts.md | ✅ 已完成 | 修復 AdaptiveButton 崩潰和 CSS 破版問題 - getButtonStyle 錯誤、NotionDatabaseV4.css 衝突 | 2025-08-14 |
 
 ## 命名規則
 
