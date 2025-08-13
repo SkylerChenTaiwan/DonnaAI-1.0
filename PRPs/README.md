@@ -115,7 +115,7 @@
 | 109v | migrate-other-modals.md | ✅ 已完成 | 遷移其他 Modal 至 UnifiedModal - 統一所有 Modal 使用、建立使用標準 | 2025-08-13 |
 | 110v | modal-system-testing.md | ✅ 已完成 | Modal 系統整體測試與驗證 - 完整測試套件、E2E 測試、效能基準測試、監控機制 | 2025-08-13 |
 | 111v | adaptive-switch-component.md | ✅ 已完成 | AdaptiveSwitch 跨平台開關元件 - 解決 Web 樣式問題、統一 API、無障礙支援 | 2025-08-13 |
-| 112  | adaptive-components-enforcement.md | 📋 待執行 | Adaptive 元件使用強制規範 - ESLint 規則、Pre-commit、VS Code 工具、文件更新 | - |
+| 112v | adaptive-components-enforcement.md | ✅ 已完成 | Adaptive 元件使用強制規範 - ESLint 規則、Pre-commit、VS Code 工具、文件更新 | 2025-08-13 |
 | 113  | complete-adaptive-components.md | 📋 待執行 | 完成剩餘 Adaptive 元件 - 12 個核心元件、達到 20+ 目標、覆蓋 80% 場景 | - |
 
 ## 命名規則

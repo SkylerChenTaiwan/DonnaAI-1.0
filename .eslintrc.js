@@ -27,6 +27,25 @@ module.exports = {
     // Adaptive Architecture 相關警告
     'no-console': ['warn', { allow: ['warn', 'error'] }],
     
+    // 強制使用 Adaptive 元件
+    'no-restricted-imports': [
+      'error',
+      {
+        paths: [
+          {
+            name: 'react-native',
+            importNames: ['Switch', 'Picker'],
+            message: '❌ 禁止使用 React Native ${importName}！\n✅ 請使用: import { Adaptive${importName} } from "@/components/adaptive"'
+          },
+          {
+            name: '@react-native-picker/picker',
+            message: '❌ 禁止使用 @react-native-picker/picker！\n✅ 請使用: import { AdaptiveSelect } from "@/components/adaptive"'
+          }
+        ]
+      }
+    ],
+    
+    
     // 防止顏色字串連接錯誤（React Native Web 兼容性）
     'no-restricted-syntax': [
       'error',

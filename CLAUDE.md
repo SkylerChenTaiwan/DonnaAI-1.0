@@ -129,6 +129,98 @@
   npm run web:build
   ```
 
+### 🎯 Adaptive 元件使用規範（強制執行）
+#### ⚠️ 重要：ESLint 和 Pre-commit 會自動檢查並阻擋違規程式碼
+
+#### 📊 元件使用決策流程
+```
+需要 UI 元件？
+    ↓
+檢查 Adaptive 元件庫 (@/components/adaptive)
+    ↓
+┌─ 存在 → 使用 Adaptive 元件 ✅
+│
+└─ 不存在 → 使用頻率？
+            ├─ 高頻(3+處) → 建立新 Adaptive 元件 → 加入元件庫
+            └─ 低頻(1-2處) → Platform.OS？
+                           ├─ Web → 原生 HTML + 內聯樣式
+                           └─ Native → React Native 元件
+```
+
+#### 🚫 禁用元件黑名單（自動檢查）
+| ❌ 絕對不要用 | ✅ 必須使用 | 原因 | VS Code 快捷鍵 |
+|--------------|------------|------|---------------|
+| Switch (react-native) | AdaptiveSwitch | 樣式被覆蓋 | `ias` |
+| Picker | AdaptiveSelect | 背景透明問題 | `iase` |
+| TextInput (直接) | AdaptiveInput | 樣式不一致 | `iai` |
+| Modal (直接) | AdaptiveModal | 顯示問題 | `iam` |
+| Button (直接) | AdaptiveButton | 顏色問題 | `iab` |
+
+#### ✅ 可用 Adaptive 元件清單（持續更新）
+```typescript
+// 從 @/components/adaptive 匯入
+import {
+  AdaptiveButton,    // ✅ PRP-102 已完成
+  AdaptiveModal,     // ✅ PRP-107 已完成
+  AdaptiveSwitch,    // ✅ PRP-111 已完成
+  AdaptiveSelect,    // ✅ PRP-94 已完成
+  AdaptiveInput,     // ✅ PRP-94 已完成
+  AdaptiveText,      // ✅ PRP-94 已完成
+  AdaptiveView,      // ✅ PRP-94 已完成
+  AdaptiveImage,     // ✅ PRP-94 已完成
+} from '@/components/adaptive';
+```
+
+#### 🔍 開發前必須檢查清單
+- [ ] 檢查 `/src/components/adaptive/core/` 是否有對應元件
+- [ ] 會在 Web 平台使用嗎？
+- [ ] 有樣式被覆蓋的風險嗎？
+- [ ] 需要建立新的 Adaptive 元件嗎？
+
+#### 🛠️ 建立新 Adaptive 元件 SOP
+1. **建立目錄結構**
+   ```
+   src/components/adaptive/core/AdaptiveXXX/
+   ├── index.tsx           # Platform.select 入口
+   ├── AdaptiveXXX.web.tsx # Web 版本（內聯樣式）
+   ├── AdaptiveXXX.native.tsx # Native 版本
+   ├── AdaptiveXXX.types.ts # 類型定義
+   └── __tests__/
+       └── AdaptiveXXX.test.tsx
+   ```
+
+2. **實作 Web 版本重點**
+   - 必須使用原生 HTML 元素
+   - 必須使用內聯樣式（style 屬性）
+   - 避免使用 className 或外部 CSS
+
+3. **更新匯出**
+   - 加入 `/src/components/adaptive/core/index.ts`
+   - 更新此文件的元件清單
+
+#### ⚠️ 常見錯誤和解決方案
+| 症狀 | 原因 | 解決方案 | ESLint 提示 |
+|------|------|----------|------------|
+| 按鈕黑字黑底 | 全域 CSS 覆蓋 | 使用 AdaptiveButton | ❌ no-restricted-imports |
+| Switch 軌道透明 | CSS 優先級問題 | 使用 AdaptiveSwitch | ❌ adaptive/use-adaptive-components |
+| 下拉選單無背景 | Picker 不相容 | 使用 AdaptiveSelect | ❌ no-restricted-imports |
+| Input 無內邊距 | 樣式被覆蓋 | 使用 AdaptiveInput | ⚠️ adaptive/check-adaptive-availability |
+
+#### 🚀 VS Code 快捷鍵（已配置）
+- `ias` - Import AdaptiveSwitch
+- `iase` - Import AdaptiveSelect  
+- `iam` - Import AdaptiveModal
+- `iab` - Import AdaptiveButton
+- `iai` - Import AdaptiveInput
+- `iaall` - Import 所有 Adaptive 元件
+- `platform` - Platform.OS 條件判斷模板
+
+#### 📈 監控和報告
+執行 `npm run adaptive:stats` 查看：
+- Adaptive 元件使用覆蓋率
+- 需要修正的檔案清單
+- 建議新增的 Adaptive 元件
+
 ### 🔐 Firebase 安全規則管理
 - **新增集合時必須同步更新 Firestore 規則** - 任何新的集合都需要在 `firestore.rules` 中定義相應的權限
 - **開發時先在 Firebase 模擬器測試** - 使用 `firebase emulators:start` 在本地測試規則，避免部署後才發現權限問題

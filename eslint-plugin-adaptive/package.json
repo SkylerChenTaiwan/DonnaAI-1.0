@@ -1,0 +1,16 @@
+{
+  "name": "eslint-plugin-adaptive",
+  "version": "1.0.0",
+  "description": "ESLint plugin to enforce Adaptive component usage",
+  "main": "index.js",
+  "keywords": [
+    "eslint",
+    "eslintplugin",
+    "eslint-plugin",
+    "adaptive",
+    "react-native"
+  ],
+  "peerDependencies": {
+    "eslint": ">=7.0.0"
+  }
+}

@@ -31,7 +31,19 @@
     "test:visual:analyze": "node scripts/aiVisualAnalyzer.js",
     "test:visual:report": "open tests/reports/visual-report.html",
     "test:visual:clean": "rm -rf tests/screenshots/*.png tests/reports/*.html",
-    "audit:contrast": "node scripts/auditContrast.js"
+    "audit:contrast": "node scripts/auditContrast.js",
+    "adaptive:stats": "node scripts/adaptive-stats.js",
+    "adaptive:stats:json": "node scripts/adaptive-stats.js --json",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "bash scripts/check-adaptive-components.sh"
+    ],
+    "*.{js,jsx,ts,tsx,json,md}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@babel/runtime": "^7.27.6",
@@ -119,7 +131,9 @@
     "eslint-plugin-react-native": "^4.1.0",
     "firebase-admin": "^13.4.0",
     "glob": "^11.0.3",
+    "husky": "^9.1.7",
     "jsdom": "^24.0.0",
+    "lint-staged": "^16.1.5",
     "metro-cache": "^0.82.5",
     "patch-package": "^8.0.0",
     "prettier": "^3.2.5",
