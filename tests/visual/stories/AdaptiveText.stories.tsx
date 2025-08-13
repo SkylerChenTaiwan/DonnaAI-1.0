@@ -20,6 +20,7 @@ import {
   InfoText,
 } from '../../../src/components/adaptive/core';
 import { DesignSystem } from '../../../src/theme/designSystem';
+import { withAlpha } from '../../../src/utils/colorUtils';
 
 const meta: Meta<typeof AdaptiveText> = {
   title: 'Adaptive/Core/AdaptiveText',
@@ -377,7 +378,7 @@ export const InteractiveText: Story = {
         }}
         webStyle={{
           ':hover': {
-            backgroundColor: DesignSystem.colors.primary + '10',
+            backgroundColor: withAlpha(DesignSystem.colors.primary, 0.1),
             color: DesignSystem.colors.primary,
           },
         }}
@@ -396,7 +397,7 @@ export const InteractiveText: Story = {
         }}
         webStyle={{
           ':active': {
-            backgroundColor: DesignSystem.colors.primary + 'CC',
+            backgroundColor: withAlpha(DesignSystem.colors.primary, 0.8),
           },
         }}
       >

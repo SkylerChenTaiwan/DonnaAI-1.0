@@ -14,6 +14,7 @@ import {
   ResponsiveView,
 } from '../../../src/components/adaptive/core';
 import { DesignSystem } from '../../../src/theme/designSystem';
+import { withAlpha } from '../../../src/utils/colorUtils';
 
 // 輔助元件
 const ContentBox: React.FC<{ children: React.ReactNode; color?: string }> = ({ 
@@ -22,7 +23,7 @@ const ContentBox: React.FC<{ children: React.ReactNode; color?: string }> = ({
 }) => (
   <div style={{
     padding: '16px',
-    backgroundColor: color + '20',
+    backgroundColor: withAlpha(color, 0.2),
     border: `2px solid ${color}`,
     borderRadius: '8px',
     textAlign: 'center' as const,
@@ -322,7 +323,7 @@ export const InteractiveStates: Story = {
         }}
         webStyle={{
           ':hover': {
-            backgroundColor: DesignSystem.colors.primary + '10',
+            backgroundColor: withAlpha(DesignSystem.colors.primary, 0.1),
             borderColor: DesignSystem.colors.primary,
           },
         }}

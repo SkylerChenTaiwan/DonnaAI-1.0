@@ -30,7 +30,13 @@ export const responsive = <T extends Record<string, any>>(styles: {
   if (Platform.OS !== 'web') return styles.default;
   
   const breakpoint = getCurrentBreakpoint();
-  return styles[breakpoint] || styles.default;
+  // 使用安全的屬性存取方式
+  return breakpoint === 'mobile' ? (styles.mobile || styles.default) :
+         breakpoint === 'tablet' ? (styles.tablet || styles.default) :
+         breakpoint === 'desktop' ? (styles.desktop || styles.default) :
+         breakpoint === 'largeDesktop' ? (styles.largeDesktop || styles.default) :
+         breakpoint === 'wideScreen' ? (styles.wideScreen || styles.default) :
+         styles.default;
 };
 
 // Web 專用基礎樣式

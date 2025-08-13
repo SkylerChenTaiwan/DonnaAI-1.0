@@ -100,8 +100,16 @@ export function selectResponsiveStyle<T>(
   
   for (let i = currentIndex; i < breakpointOrder.length; i++) {
     const bp = breakpointOrder[i];
-    if (styles[bp] !== undefined) {
-      return styles[bp];
+    // 使用安全的屬性存取方式
+    const styleValue = bp === 'wideScreen' ? styles.wideScreen :
+                      bp === 'largeDesktop' ? styles.largeDesktop :
+                      bp === 'desktop' ? styles.desktop :
+                      bp === 'tablet' ? styles.tablet :
+                      bp === 'mobile' ? styles.mobile :
+                      undefined;
+    
+    if (styleValue !== undefined) {
+      return styleValue;
     }
   }
   

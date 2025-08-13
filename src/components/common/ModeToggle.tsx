@@ -59,6 +59,13 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.secondary,
   },
   iosSwitch: {
-    transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }],
+    ...Platform.select({
+      web: {
+        transform: 'scale(0.8)',
+      },
+      default: {
+        transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }],
+      },
+    }),
   },
 });
