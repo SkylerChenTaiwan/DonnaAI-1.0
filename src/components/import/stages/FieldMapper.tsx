@@ -14,9 +14,11 @@ import {
   Switch,
   ActivityIndicator,
   Platform,
-  Modal,
   Pressable
 } from 'react-native';
+import { AdaptiveModal } from '@/components/adaptive/core/AdaptiveModal';
+import { FieldSelectorModalContent } from './FieldSelectorModal';
+import { RelationEditorModalContent } from './RelationEditorModal';
 import { MaterialIcon } from '@/components/common/MaterialIcon';
 import { DesignSystem } from '@/theme/designSystem';
 import {
@@ -82,27 +84,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
     }
   }, [existingFields, mergedTable]);
 
-  // 偵錯用：監聽狀態變化
-  useEffect(() => {
-    console.log('🔄 showFieldSelector 狀態變更:', showFieldSelector);
-    console.log('🔄 currentMappingIndex:', currentMappingIndex);
-    if (Platform.OS === 'web' && showFieldSelector) {
-      console.log('📱 Web Modal 應該顯示');
-      // 檢查 DOM 中是否存在 modal
-      setTimeout(() => {
-        const modalElements = document.querySelectorAll('[style*="position: fixed"]');
-        console.log('📊 找到 fixed 元素數量:', modalElements.length);
-      }, 100);
-    }
-  }, [showFieldSelector, currentMappingIndex]);
 
-  useEffect(() => {
-    console.log('🔄 showRelationEditor 狀態變更:', showRelationEditor);
-    console.log('🔄 selectedMapping:', selectedMapping);
-    if (showRelationEditor && selectedMapping) {
-      console.log('✅ Modal 應該顯示了');
-    }
-  }, [showRelationEditor, selectedMapping]);
 
   // Escape 鍵關閉功能 - 欄位選擇器
   useEffect(() => {
@@ -969,471 +951,65 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
       )}
     </ScrollView>
     
-    {/* 欄位選擇器 Modal */}
-    {Platform.OS === 'web' ? (
-      // Web 平台使用絕對定位的 div 代替 Modal
-      showFieldSelector && (
-        <View 
-          style={styles.modalOverlay}
-          onTouchEnd={(e: any) => {
-            // 點擊遮罩關閉
-            if (e.target === e.currentTarget) {
-              setShowFieldSelector(false);
-              setCurrentMappingIndex(-1);
-            }
-          }}
-        >
-          <View style={StyleSheet.flatten([styles.modalContent, { backgroundColor: colors.white }])}>
-            <View style={styles.modalHeader}>
-              <Text style={StyleSheet.flatten([styles.modalTitle, { color: colors.text }])}>
-                選擇系統欄位
-              </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  console.log('關閉欄位選擇器');
-                  setShowFieldSelector(false);
-                }}
-                style={styles.modalCloseButton}
-                activeOpacity={0.7}
-              >
-                <MaterialIcon name="close" size={24} color={colors.gray500} />
-              </TouchableOpacity>
-            </View>
-            
-            <ScrollView style={styles.modalBody}>
-              {/* 現有欄位 */}
-              <Text style={StyleSheet.flatten([styles.modalSectionTitle, { color: colors.text }])}>
-                現有欄位
-              </Text>
-              {existingFields.map((field) => (
-                <TouchableOpacity
-                  key={field.key}
-                  style={StyleSheet.flatten([
-                    styles.fieldOption,
-                    { 
-                      backgroundColor: colors.gray50,
-                      borderColor: colors.gray200 }
-                  ])}
-                  onPress={() => {
-                    console.log('選擇欄位:', field.key);
-                    selectField(field.key);
-                  }}
-                  activeOpacity={0.7}
-                >
-                  <View style={styles.fieldOptionContent}>
-                    <Text style={StyleSheet.flatten([styles.fieldOptionLabel, { color: colors.text }])}>
-                      {field.label}
-                    </Text>
-                    <Text style={StyleSheet.flatten([styles.fieldOptionKey, { color: colors.gray500 }])}>
-                      {field.key}
-                    </Text>
-                    <Text style={StyleSheet.flatten([styles.fieldOptionType, { color: colors.gray400 }])}>
-                      {field.type}
-                    </Text>
-                  </View>
-                  <MaterialIcon name="chevron-right" size={20} color={colors.gray400} />
-                </TouchableOpacity>
-              ))}
-              
-              {/* 建立新欄位 */}
-              <Text style={StyleSheet.flatten([styles.modalSectionTitle, { color: colors.text, marginTop: 24 }])}>
-                其他選項
-              </Text>
-              <TouchableOpacity
-                style={StyleSheet.flatten([
-                  styles.fieldOption,
-                  { 
-                    backgroundColor: withAlpha(colors.success, 0.063),
-                    borderColor: withAlpha(colors.success, 0.25) }
-                ])}
-                onPress={() => {
-                  console.log('建立新欄位');
-                  selectField('new_field');
-                }}
-                activeOpacity={0.7}
-              >
-                <View style={styles.fieldOptionContent}>
-                  <Text style={StyleSheet.flatten([styles.fieldOptionLabel, { color: colors.success }])}>
-                    建立新欄位
-                  </Text>
-                  <Text style={StyleSheet.flatten([styles.fieldOptionKey, { color: withAlpha(colors.success, 0.8) }])}>
-                    使用原 CSV 欄位名稱
-                  </Text>
-                </View>
-                <MaterialIcon name="add-circle" size={20} color={colors.success} />
-              </TouchableOpacity>
-            </ScrollView>
-          </View>
-        </View>
-      )
-    ) : (
-      // Native 平台使用 Modal
-      <Modal
-        visible={showFieldSelector}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => setShowFieldSelector(false)}
-      >
-      <View style={styles.modalOverlay}>
-        <View style={StyleSheet.flatten([styles.modalContent, { backgroundColor: colors.white }])}>
-          <View style={styles.modalHeader}>
-            <Text style={StyleSheet.flatten([styles.modalTitle, { color: colors.text }])}>
-              選擇系統欄位
-            </Text>
-            <TouchableOpacity
-              onPress={() => setShowFieldSelector(false)}
-              style={styles.modalCloseButton}
-            >
-              <MaterialIcon name="close" size={24} color={colors.gray500} />
-            </TouchableOpacity>
-          </View>
-          
-          <ScrollView style={styles.modalBody}>
-            {/* 現有欄位 */}
-            <Text style={StyleSheet.flatten([styles.modalSectionTitle, { color: colors.text }])}>
-              現有欄位
-            </Text>
-            {existingFields.map((field) => (
-              <TouchableOpacity
-                key={field.key}
-                style={StyleSheet.flatten([
-                  styles.fieldOption,
-                  { 
-                    backgroundColor: colors.gray50,
-                    borderColor: colors.gray200 }
-                ])}
-                onPress={() => selectField(field.key)}
-              >
-                <View style={styles.fieldOptionContent}>
-                  <Text style={StyleSheet.flatten([styles.fieldOptionLabel, { color: colors.text }])}>
-                    {field.label}
-                  </Text>
-                  <Text style={StyleSheet.flatten([styles.fieldOptionKey, { color: colors.gray500 }])}>
-                    {field.key}
-                  </Text>
-                  <Text style={StyleSheet.flatten([styles.fieldOptionType, { color: colors.gray400 }])}>
-                    {field.type}
-                  </Text>
-                </View>
-                <MaterialIcon name="chevron-right" size={20} color={colors.gray400} />
-              </TouchableOpacity>
-            ))}
-            
-            {/* 建立新欄位 */}
-            <Text style={StyleSheet.flatten([styles.modalSectionTitle, { color: colors.text, marginTop: 24 }])}>
-              其他選項
-            </Text>
-            <TouchableOpacity
-              style={StyleSheet.flatten([
-                styles.fieldOption,
-                { 
-                  backgroundColor: withAlpha(colors.success, 0.063),
-                  borderColor: withAlpha(colors.success, 0.25) }
-              ])}
-              onPress={() => selectField('new_field')}
-            >
-              <View style={styles.fieldOptionContent}>
-                <Text style={StyleSheet.flatten([styles.fieldOptionLabel, { color: colors.success }])}>
-                  建立新欄位
-                </Text>
-                <Text style={StyleSheet.flatten([styles.fieldOptionKey, { color: withAlpha(colors.success, 0.8) }])}>
-                  使用原 CSV 欄位名稱
-                </Text>
-              </View>
-              <MaterialIcon name="add-circle" size={20} color={colors.success} />
-            </TouchableOpacity>
-          </ScrollView>
-        </View>
-      </View>
-    </Modal>
-    )}
+    {/* 欄位選擇器 Modal - 使用 AdaptiveModal */}
+    <AdaptiveModal
+      visible={showFieldSelector}
+      onClose={() => {
+        console.log('關閉欄位選擇器');
+        setShowFieldSelector(false);
+        setCurrentMappingIndex(-1);
+      }}
+      title="選擇系統欄位"
+      size="large"
+      animationType="slide"
+      closeOnOverlayClick={true}
+      closeOnEscape={true}
+      showCloseButton={true}
+    >
+      <FieldSelectorModalContent
+        existingFields={existingFields}
+        onSelectField={selectField}
+      />
+    </AdaptiveModal>
     
-    {/* 關聯編輯器 Modal */}
-    {Platform.OS === 'web' ? (
-      // Web 平台使用絕對定位的 div
-      showRelationEditor && selectedMapping && (
-        <View 
-          style={styles.modalOverlay}
-          onTouchEnd={(e: any) => {
-            // 點擊遮罩關閉
-            if (e.target === e.currentTarget) {
-              setShowRelationEditor(false);
-              setSelectedMapping(null);
-            }
+    {/* 關聯編輯器 Modal - 使用 AdaptiveModal */}
+    <AdaptiveModal
+      visible={showRelationEditor && !!selectedMapping}
+      onClose={() => {
+        console.log('關閉關聯編輯器');
+        setShowRelationEditor(false);
+        setSelectedMapping(null);
+      }}
+      title="設定欄位關聯"
+      size="large"
+      animationType="slide"
+      closeOnOverlayClick={true}
+      closeOnEscape={true}
+      showCloseButton={true}
+    >
+      {selectedMapping && (
+        <RelationEditorModalContent
+          selectedMapping={selectedMapping}
+          existingRelations={relations}
+          onSaveRelation={(newRelation) => {
+            const newRelations = [...relations, newRelation];
+            setRelations(newRelations);
+            onRelationsChanged(newRelations);
+            setShowRelationEditor(false);
+            setSelectedMapping(null);
+            showSuccessToast('關聯已建立');
           }}
-        >
-          <View style={StyleSheet.flatten([styles.modalContent, { backgroundColor: colors.white }])}>
-            <View style={styles.modalHeader}>
-              <Text style={StyleSheet.flatten([styles.modalTitle, { color: colors.text }])}>
-                設定欄位關聯
-              </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  console.log('關閉關聯編輯器');
-                  setShowRelationEditor(false);
-                  setSelectedMapping(null);
-                }}
-                style={styles.modalCloseButton}
-                activeOpacity={0.7}
-              >
-                <MaterialIcon name="close" size={24} color={colors.gray500} />
-              </TouchableOpacity>
-            </View>
-            
-            <ScrollView style={styles.modalBody}>
-              {/* 當前欄位資訊 */}
-              <View style={StyleSheet.flatten([styles.relationFieldInfo, { backgroundColor: colors.gray50, borderRadius: 8, padding: 12, marginBottom: 16 }])}>
-                <Text style={StyleSheet.flatten([styles.modalSectionTitle, { color: colors.text, marginBottom: 8 }])}>
-                  來源欄位
-                </Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                  <Text style={StyleSheet.flatten([{ fontSize: 14, fontWeight: '600', color: colors.primary }])}>
-                    {targetDatabase}
-                  </Text>
-                  <MaterialIcon name="arrow-forward" size={16} color={colors.gray400} />
-                  <Text style={StyleSheet.flatten([{ fontSize: 14, color: colors.text }])}>
-                    {selectedMapping.targetField || selectedMapping.sourceColumn}
-                  </Text>
-                </View>
-              </View>
-
-              {/* 選擇目標資料庫 */}
-              <Text style={StyleSheet.flatten([styles.modalSectionTitle, { color: colors.text }])}>
-                選擇目標資料庫
-              </Text>
-              {(['customers', 'records', 'tasks', 'users'] as DatabaseType[])
-                .filter(db => db !== targetDatabase)
-                .map((database) => (
-                <TouchableOpacity
-                  key={database}
-                  style={StyleSheet.flatten([
-                    styles.fieldOption,
-                    { 
-                      backgroundColor: colors.gray50,
-                      borderColor: colors.gray200 }
-                  ])}
-                  onPress={() => {
-                    console.log('選擇目標資料庫:', database);
-                    // 建立關聯
-                    const newRelation: FieldRelation = {
-                      id: `temp-${Date.now()}`,
-                      sourceDatabase: targetDatabase,
-                      sourceField: selectedMapping.targetField || selectedMapping.sourceColumn,
-                      targetDatabase: database,
-                      targetField: '', // 需要進一步選擇
-                      relationType: 'one-to-many',
-                      bidirectional: true,
-                      createdAt: new Date() as any,
-                      organizationId,
-                      createdBy: ''
-                    };
-                    
-                    // 暫時顯示成功訊息
-                    showSuccessToast(`已建立與 ${database} 的關聯`);
-                    
-                    // 關閉對話框
-                    setShowRelationEditor(false);
-                    setSelectedMapping(null);
-                    
-                    // 更新關聯列表
-                    const newRelations = [...relations, newRelation];
-                    setRelations(newRelations);
-                    onRelationsChanged(newRelations);
-                  }}
-                  activeOpacity={0.7}
-                >
-                  <View style={styles.fieldOptionContent}>
-                    <Text style={StyleSheet.flatten([styles.fieldOptionLabel, { color: colors.text }])}>
-                      {database === 'customers' ? '客戶' : 
-                       database === 'records' ? '記錄' : 
-                       database === 'tasks' ? '任務' : '用戶'}
-                    </Text>
-                    <Text style={StyleSheet.flatten([styles.fieldOptionKey, { color: colors.gray500 }])}>
-                      {database}
-                    </Text>
-                  </View>
-                  <MaterialIcon name="chevron-right" size={20} color={colors.gray400} />
-                </TouchableOpacity>
-              ))}
-
-              {/* 關聯類型選擇 */}
-              <Text style={StyleSheet.flatten([styles.modalSectionTitle, { color: colors.text, marginTop: 24 }])}>
-                關聯類型
-              </Text>
-              <View style={{ gap: 8 }}>
-                {[
-                  { value: 'one-to-one', label: '一對一', icon: 'linear-scale' },
-                  { value: 'one-to-many', label: '一對多', icon: 'call-split' },
-                  { value: 'many-to-many', label: '多對多', icon: 'shuffle' }
-                ].map((type) => (
-                  <TouchableOpacity
-                    key={type.value}
-                    style={StyleSheet.flatten([
-                      styles.fieldOption,
-                      { 
-                        backgroundColor: colors.gray50,
-                        borderColor: colors.gray200 }
-                    ])}
-                    onPress={() => {
-                      console.log('選擇關聯類型:', type.value);
-                    }}
-                    activeOpacity={0.7}
-                  >
-                    <View style={StyleSheet.flatten([styles.fieldOptionContent, { flexDirection: 'row', alignItems: 'center', gap: 12 }])}>
-                      <MaterialIcon name={type.icon} size={20} color={colors.primary} />
-                      <View>
-                        <Text style={StyleSheet.flatten([styles.fieldOptionLabel, { color: colors.text }])}>
-                          {type.label}
-                        </Text>
-                      </View>
-                    </View>
-                    <MaterialIcon name="chevron-right" size={20} color={colors.gray400} />
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </ScrollView>
-          </View>
-        </View>
-      )
-    ) : (
-      // Native 平台使用 Modal
-      <Modal
-        visible={showRelationEditor && !!selectedMapping}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => {
-          setShowRelationEditor(false);
-          setSelectedMapping(null);
-        }}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={StyleSheet.flatten([styles.modalContent, { backgroundColor: colors.white }])}>
-            <View style={styles.modalHeader}>
-              <Text style={StyleSheet.flatten([styles.modalTitle, { color: colors.text }])}>
-                設定欄位關聯
-              </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  setShowRelationEditor(false);
-                  setSelectedMapping(null);
-                }}
-                style={styles.modalCloseButton}
-              >
-                <MaterialIcon name="close" size={24} color={colors.gray500} />
-              </TouchableOpacity>
-            </View>
-            
-            <ScrollView style={styles.modalBody}>
-              {/* 當前欄位資訊 */}
-              <View style={StyleSheet.flatten([styles.relationFieldInfo, { backgroundColor: colors.gray50, borderRadius: 8, padding: 12, marginBottom: 16 }])}>
-                <Text style={StyleSheet.flatten([styles.modalSectionTitle, { color: colors.text, marginBottom: 8 }])}>
-                  來源欄位
-                </Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                  <Text style={StyleSheet.flatten([{ fontSize: 14, fontWeight: '600', color: colors.primary }])}>
-                    {targetDatabase}
-                  </Text>
-                  <MaterialIcon name="arrow-forward" size={16} color={colors.gray400} />
-                  <Text style={StyleSheet.flatten([{ fontSize: 14, color: colors.text }])}>
-                    {selectedMapping?.targetField || selectedMapping?.sourceColumn}
-                  </Text>
-                </View>
-              </View>
-
-              {/* 選擇目標資料庫 */}
-              <Text style={StyleSheet.flatten([styles.modalSectionTitle, { color: colors.text }])}>
-                選擇目標資料庫
-              </Text>
-              {(['customers', 'records', 'tasks', 'users'] as DatabaseType[])
-                .filter(db => db !== targetDatabase)
-                .map((database) => (
-                <TouchableOpacity
-                  key={database}
-                  style={StyleSheet.flatten([
-                    styles.fieldOption,
-                    { 
-                      backgroundColor: colors.gray50,
-                      borderColor: colors.gray200 }
-                  ])}
-                  onPress={() => {
-                    if (selectedMapping) {
-                      // 建立關聯
-                      const newRelation: FieldRelation = {
-                        id: `temp-${Date.now()}`,
-                        sourceDatabase: targetDatabase,
-                        sourceField: selectedMapping.targetField || selectedMapping.sourceColumn,
-                        targetDatabase: database,
-                        targetField: '',
-                        relationType: 'one-to-many',
-                        bidirectional: true,
-                        createdAt: new Date() as any,
-                        organizationId,
-                        createdBy: ''
-                      };
-                      
-                      showSuccessToast(`已建立與 ${database} 的關聯`);
-                      setShowRelationEditor(false);
-                      setSelectedMapping(null);
-                      
-                      const newRelations = [...relations, newRelation];
-                      setRelations(newRelations);
-                      onRelationsChanged(newRelations);
-                    }
-                  }}
-                >
-                  <View style={styles.fieldOptionContent}>
-                    <Text style={StyleSheet.flatten([styles.fieldOptionLabel, { color: colors.text }])}>
-                      {database === 'customers' ? '客戶' : 
-                       database === 'records' ? '記錄' : 
-                       database === 'tasks' ? '任務' : '用戶'}
-                    </Text>
-                    <Text style={StyleSheet.flatten([styles.fieldOptionKey, { color: colors.gray500 }])}>
-                      {database}
-                    </Text>
-                  </View>
-                  <MaterialIcon name="chevron-right" size={20} color={colors.gray400} />
-                </TouchableOpacity>
-              ))}
-
-              {/* 關聯類型選擇 */}
-              <Text style={StyleSheet.flatten([styles.modalSectionTitle, { color: colors.text, marginTop: 24 }])}>
-                關聯類型
-              </Text>
-              <View style={{ gap: 8 }}>
-                {[
-                  { value: 'one-to-one', label: '一對一', icon: 'linear-scale' },
-                  { value: 'one-to-many', label: '一對多', icon: 'call-split' },
-                  { value: 'many-to-many', label: '多對多', icon: 'shuffle' }
-                ].map((type) => (
-                  <TouchableOpacity
-                    key={type.value}
-                    style={StyleSheet.flatten([
-                      styles.fieldOption,
-                      { 
-                        backgroundColor: colors.gray50,
-                        borderColor: colors.gray200 }
-                    ])}
-                    onPress={() => {
-                      console.log('選擇關聯類型:', type.value);
-                    }}
-                  >
-                    <View style={StyleSheet.flatten([styles.fieldOptionContent, { flexDirection: 'row', alignItems: 'center', gap: 12 }])}>
-                      <MaterialIcon name={type.icon} size={20} color={colors.primary} />
-                      <View>
-                        <Text style={StyleSheet.flatten([styles.fieldOptionLabel, { color: colors.text }])}>
-                          {type.label}
-                        </Text>
-                      </View>
-                    </View>
-                    <MaterialIcon name="chevron-right" size={20} color={colors.gray400} />
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </ScrollView>
-          </View>
-        </View>
-      </Modal>
-    )}
+          onRemoveRelation={(relationToRemove) => {
+            const newRelations = relations.filter(r => r.id !== relationToRemove.id);
+            setRelations(newRelations);
+            onRelationsChanged(newRelations);
+            setShowRelationEditor(false);
+            setSelectedMapping(null);
+            showSuccessToast('關聯已移除');
+          }}
+        />
+      )}
+    </AdaptiveModal>
     </>
   );
 };
