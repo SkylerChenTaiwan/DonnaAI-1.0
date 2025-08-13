@@ -1,21 +1,19 @@
 /**
  * CSS 隔離檔案 - 保護全域佈局不被 NotionDatabaseV4.css 破壞
  * 此檔案必須在 NotionDatabaseV4.css 之後載入以覆蓋其規則
+ * 
+ * 重要：只針對 NotionDatabaseV4.css 的具體問題，避免影響其他元件
  */
 
-/* 保護主要應用容器 - 防止被 notion-database-wrapper 影響 */
-#root > div:first-child {
-  padding: 0 !important;  /* 覆蓋 notion-database-wrapper 的 96px padding */
-  display: flex !important;
-  flex-direction: row !important;  /* 確保橫向佈局（側邊欄 + 內容） */
-  width: 100% !important;
-  height: 100% !important;
+/* 只在非 Notion 頁面時，覆蓋 notion-database-wrapper 的破壞性規則 */
+body:not(.notion-view-active) .notion-database-wrapper {
+  padding: 0 !important;
 }
 
-/* 保護導航側邊欄 - 確保它不被推出視窗 */
-.sidebar-navigation,
-.navigation-sidebar,
-[data-testid="sidebar-navigation"] {
+/* 保護 Web Layout 的側邊欄結構 - 更精確的選擇器 */
+.layout-web-container > .sidebar-navigation,
+.layout-web-container > .navigation-sidebar,
+[data-layout="web"] > [data-testid="sidebar-navigation"] {
   position: relative !important;
   left: 0 !important;
   top: 0 !important;
@@ -26,13 +24,13 @@
   overflow-y: auto !important;
 }
 
-/* 保護主內容區域 */
-.main-content,
-[data-testid="main-content"] {
+/* 保護 Web Layout 的主內容區域 */
+.layout-web-container > .main-content,
+.layout-web-container > [data-testid="main-content"],
+[data-layout="web"] > .content-area {
   flex: 1 !important;
   overflow: auto !important;
-  padding: 0 !important;
-  width: calc(100% - 240px) !important;
+  /* 移除強制 padding，讓元件自己決定 */
 }
 
 /* 限制 Notion 樣式只在資料庫表格容器內生效 */
@@ -41,32 +39,20 @@
   padding: 0 96px !important;
 }
 
-/* 確保非資料庫頁面的容器不受影響 */
-body > #root > div:not(.notion-database-wrapper) {
+/* 針對性修復：覆蓋 NotionDatabaseV4.css 的全域 padding */
+.notion-database-wrapper:not(.in-table-container) {
   padding: 0 !important;
 }
 
-/* 保護按鈕不被 Notion 樣式影響 */
+/* 保護按鈕樣式 - 但不破壞背景色 */
 button:not(.notion-button):not(.notion-text-button):not(.notion-icon-button) {
-  /* 保護非 Notion 按鈕的原有樣式 */
-  color: inherit !important;
-  background-color: inherit !important;
+  /* 只保護字體，不動背景色 */
   font-family: inherit !important;
 }
 
-/* 修復被破壞的 flex 佈局 */
-.flex-row {
-  display: flex !important;
-  flex-direction: row !important;
-}
-
-.flex-column {
-  display: flex !important;
-  flex-direction: column !important;
-}
-
 /* 確保 Web 平台的 Layout 元件正常運作 */
-.layout-container {
+.layout-container,
+.layout-web-container {
   display: flex !important;
   flex-direction: row !important;
   height: 100vh !important;
@@ -74,20 +60,29 @@ button:not(.notion-button):not(.notion-text-button):not(.notion-icon-button) {
   overflow: hidden !important;
 }
 
-/* 防止全域字體被覆蓋 */
-body:not(.notion-body) {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-}
-
-/* 保護 Modal 覆蓋層不被影響 */
-.modal-overlay,
-[data-testid="modal-overlay"] {
+/* 保護 Modal 內容不被影響 - 確保背景不透明 */
+.modal-overlay {
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
   right: 0 !important;
   bottom: 0 !important;
   z-index: 1000 !important;
+  background-color: rgba(0, 0, 0, 0.5) !important; /* 確保有背景色 */
+}
+
+/* 保護 Modal 內容區域 */
+.modal-content,
+[data-testid="modal-content"] {
+  background-color: white !important; /* 確保模態框內容有白色背景 */
+  opacity: 1 !important; /* 確保不透明 */
+}
+
+/* 特別保護 ImportWizard 不被影響 */
+.import-wizard-container,
+[data-testid="import-wizard"] {
+  background-color: white !important;
+  opacity: 1 !important;
 }
 
 /* 確保 Adaptive 元件不被影響 */
@@ -103,6 +98,29 @@ body:not(.notion-body) {
   align-items: center !important;
   justify-content: center !important;
   box-sizing: border-box !important;
+}
+
+/* 覆蓋 NotionDatabaseV4.css 對 body 的影響 */
+body {
+  /* 移除 notion 可能設定的 padding */
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* 確保根容器不被 Notion 影響 */
+#root {
+  /* 保持彈性，不強制佈局方向 */
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* 針對組織管理頁面的特別修復 */
+.organization-management-layout,
+[data-page="organization-management"] {
+  display: flex !important;
+  flex-direction: row !important;
 }
 
 /* 防止 !important 規則污染全域 */
