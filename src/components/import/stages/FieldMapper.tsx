@@ -86,6 +86,14 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
   useEffect(() => {
     console.log('🔄 showFieldSelector 狀態變更:', showFieldSelector);
     console.log('🔄 currentMappingIndex:', currentMappingIndex);
+    if (Platform.OS === 'web' && showFieldSelector) {
+      console.log('📱 Web Modal 應該顯示');
+      // 檢查 DOM 中是否存在 modal
+      setTimeout(() => {
+        const modalElements = document.querySelectorAll('[style*="position: fixed"]');
+        console.log('📊 找到 fixed 元素數量:', modalElements.length);
+      }, 100);
+    }
   }, [showFieldSelector, currentMappingIndex]);
 
   useEffect(() => {
@@ -481,9 +489,9 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                   width: 48,
                   height: 28,
                   borderRadius: 14,
-                  backgroundColor: isEnabled ? '#4F46E5' : '#E5E7EB',
+                  backgroundColor: isEnabled ? '#2C2C2C' : '#E5E7EB',
                   borderWidth: 1,
-                  borderColor: isEnabled ? '#4F46E5' : '#D1D5DB',
+                  borderColor: isEnabled ? '#2C2C2C' : '#D1D5DB',
                   justifyContent: 'center',
                   padding: 2,
                   position: 'relative'
@@ -1693,27 +1701,26 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   },
   modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
     ...Platform.select({
       web: {
         position: 'fixed' as any,
         top: 0,
         left: 0,
-        right: 0,
-        bottom: 0,
-        width: '100vw',      // 新增：明確設定寬度
-        height: '100vh',     // 新增：明確設定高度
-        zIndex: 9999,
-        display: 'flex',     // 新增：確保 flexbox 在 web 上生效
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        zIndex: 999999,  // 提高 z-index
+        padding: 20
       },
       default: {
-        flex: 1
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20
       }
     })
   },
