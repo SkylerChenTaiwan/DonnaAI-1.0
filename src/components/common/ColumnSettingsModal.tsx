@@ -4,16 +4,15 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-  Modal,
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  StatusBar,
   Switch,
   Alert } from 'react-native';
 import { Icon } from '@/components/common/Icon';
+import { AdaptiveModal } from '@/components/adaptive/core/AdaptiveModal';
 import { TableColumn } from '@/types/table';
 
 interface ColumnSettingsModalProps {
@@ -101,25 +100,23 @@ export const ColumnSettingsModal: React.FC<ColumnSettingsModalProps> = ({
   // };
 
   return (
-    <Modal
+    <AdaptiveModal
       visible={visible}
+      onClose={onClose}
+      title="欄位設定"
+      size="large"
       animationType="slide"
       presentationStyle="pageSheet"
-      onRequestClose={onClose}
-      statusBarTranslucent
+      primaryButton={{
+        title: '套用',
+        onPress: handleApply
+      }}
+      secondaryButton={{
+        title: '取消',
+        onPress: onClose
+      }}
     >
-      <View style={styles.container}>
-        {/* 標頭 */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Text style={styles.closeButtonText}>取消</Text>
-          </TouchableOpacity>
-          <Text style={styles.title}>欄位設定</Text>
-          <TouchableOpacity onPress={handleApply} style={styles.applyButton}>
-            <Text style={styles.applyButtonText}>套用</Text>
-          </TouchableOpacity>
-        </View>
-
+      <View style={styles.modalContent}>
         <ScrollView style={styles.content}>
           {/* 快速操作 */}
           <View style={styles.quickActions}>
@@ -183,39 +180,14 @@ export const ColumnSettingsModal: React.FC<ColumnSettingsModalProps> = ({
           </View>
         </ScrollView>
       </View>
-    </Modal>
+    </AdaptiveModal>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  modalContent: {
     flex: 1,
-    backgroundColor: '#F0F0F0',
-    paddingTop: StatusBar.currentHeight || 0 },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC' },
-  title: {
-    fontSize: 17,
-    fontWeight: '600',
-    color: '#1A1A1A' },
-  closeButton: {
-    padding: 8 },
-  closeButtonText: {
-    fontSize: 17,
-    color: '#1A1A1A' },
-  applyButton: {
-    padding: 8 },
-  applyButtonText: {
-    fontSize: 17,
-    fontWeight: '600',
-    color: '#1A1A1A' },
+    backgroundColor: '#F0F0F0' },
   content: {
     flex: 1 },
   quickActions: {

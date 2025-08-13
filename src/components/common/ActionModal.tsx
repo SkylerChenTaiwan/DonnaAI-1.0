@@ -4,17 +4,16 @@
 
 import React from 'react';
 import {
-  Modal,
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   Pressable,
-  Animated,
-  Platform
+  Animated
 } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
+import { AdaptiveModal } from '@/components/adaptive/core/AdaptiveModal';
 
 interface Action {
   id: string;
@@ -73,20 +72,23 @@ export const ActionModal = ({
   }, [visible, scaleAnim]);
 
   return (
-    <Modal
-      transparent
+    <AdaptiveModal
       visible={visible}
+      onClose={onClose}
       animationType="fade"
-      onRequestClose={onClose}
+      transparent={true}
+      showCloseButton={false}
+      closeOnOverlayClick={true}
+      overlayStyle={styles.overlay}
+      contentStyle={styles.modalContent}
     >
-      <Pressable style={styles.overlay} onPress={onClose}>
-        <Animated.View
-          style={[
-            styles.bubble,
-            {
-              transform: Platform.OS === 'web' ? `scale(${scaleAnim})` : [{ scale: scaleAnim }] },
-          ]}
-        >
+      <Animated.View
+        style={[
+          styles.bubble,
+          {
+            transform: [{ scale: scaleAnim }] },
+        ]}
+      >
           {actions.map((action) => (
             <TouchableOpacity
               key={action.id}
@@ -104,9 +106,8 @@ export const ActionModal = ({
               <Icon name="chevron-forward" size={16} color="#BEBEBE" />
             </TouchableOpacity>
           ))}
-        </Animated.View>
-      </Pressable>
-    </Modal>
+      </Animated.View>
+    </AdaptiveModal>
   );
 };
 
@@ -116,16 +117,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
     justifyContent: 'flex-end',
     paddingBottom: 120 },
+  modalContent: {
+    backgroundColor: 'transparent',
+    justifyContent: 'flex-end' },
   bubble: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 16,
     marginHorizontal: 20,
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 8 } }) }),
+    shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.2,
     shadowRadius: 16,
-    ...(Platform.OS === 'web' ? {} : { elevation: 8 }) },
+    elevation: 8 },
   actionItem: {
     flexDirection: 'row',
     alignItems: 'center',

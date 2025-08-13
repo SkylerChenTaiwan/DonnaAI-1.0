@@ -4,17 +4,16 @@
 
 import React from 'react';
 import {
-  Modal,
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Pressable,
   Alert,
   ActivityIndicator } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
+import { AdaptiveModal } from '@/components/adaptive/core/AdaptiveModal';
 
 export interface BatchAction {
   id: string;
@@ -64,20 +63,20 @@ export const BatchActionsModal: React.FC<BatchActionsModalProps> = ({
   };
 
   return (
-    <Modal
-      transparent
+    <AdaptiveModal
       visible={visible}
+      onClose={onClose}
       animationType="slide"
-      onRequestClose={onClose}
+      position="bottom"
+      size="large"
+      showCloseButton={false}
+      title="批量操作"
+      subtitle={`已選擇 ${selectedCount} 個項目`}
+      secondaryButton={{
+        title: '取消',
+        onPress: onClose
+      }}
     >
-      <Pressable style={styles.overlay} onPress={onClose}>
-        <View style={styles.container}>
-          {/* 標頭 */}
-          <View style={styles.header}>
-            <View style={styles.handle} />
-            <Text style={styles.title}>批量操作</Text>
-            <Text style={styles.subtitle}>已選擇 {selectedCount} 個項目</Text>
-          </View>
 
           {loading ? (
             <View style={styles.loadingContainer}>
@@ -121,51 +120,11 @@ export const BatchActionsModal: React.FC<BatchActionsModalProps> = ({
             </ScrollView>
           )}
 
-          {/* 取消按鈕 */}
-          <TouchableOpacity
-            style={styles.cancelButton}
-            onPress={onClose}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.cancelButtonText}>取消</Text>
-          </TouchableOpacity>
-        </View>
-      </Pressable>
-    </Modal>
+    </AdaptiveModal>
   );
 };
 
 const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    justifyContent: 'flex-end' },
-  container: {
-    backgroundColor: '#FFFFFF',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    paddingBottom: 34, // Safe area bottom
-    maxHeight: '80%' },
-  header: {
-    alignItems: 'center',
-    paddingTop: 12,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC' },
-  handle: {
-    width: 36,
-    height: 5,
-    backgroundColor: '#BEBEBE',
-    borderRadius: 3,
-    marginBottom: 12 },
-  title: {
-    fontSize: 17,
-    fontWeight: '600',
-    color: '#1A1A1A',
-    marginBottom: 4 },
-  subtitle: {
-    fontSize: 14,
-    color: '#7A7A7A' },
   content: {
     paddingVertical: 8 },
   loadingContainer: {
@@ -198,15 +157,4 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#1A1A1A' },
   deleteActionLabel: {
-    color: '#A94438' },
-  cancelButton: {
-    backgroundColor: '#F0F0F0',
-    borderRadius: 12,
-    paddingVertical: 16,
-    marginHorizontal: 20,
-    marginTop: 16,
-    alignItems: 'center' },
-  cancelButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1A1A1A' } });
+    color: '#A94438' } });
