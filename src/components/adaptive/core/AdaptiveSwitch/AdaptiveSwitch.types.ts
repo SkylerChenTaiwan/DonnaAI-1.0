@@ -81,7 +81,7 @@ export interface AdaptiveSwitchProps {
 export const DEFAULT_COLORS = {
   trackColor: {
     false: '#E3E1DC',
-    true: '#FE7821', // 橘色主題色
+    true: '#007AFF', // 改為 iOS 標準藍色，更明顯
   },
   thumbColor: '#FFFFFF',
   disabledThumbColor: '#F4F4F4',
