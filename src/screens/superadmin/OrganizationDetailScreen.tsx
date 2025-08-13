@@ -720,7 +720,8 @@ export const OrganizationDetailScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   scrollContent: {
-    padding: DesignSystem.spacing.lg },
+    padding: DesignSystem.spacing.lg,
+    backgroundColor: '#FFFFFF' },
   section: {
     marginBottom: DesignSystem.spacing.xl,
     padding: DesignSystem.spacing.lg,
