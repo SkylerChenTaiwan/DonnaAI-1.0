@@ -108,7 +108,7 @@
 | 102v | button-web-component.md | ✅ 已完成 | 系統性解決 Web 平台按鈕樣式問題 - Button.web.tsx 實作、TouchableOpacity 包裝器、Text 元件修復 | 2025-08-12 |
 | 103v | web-color-system-migration.md | ✅ 已完成 | Web 平台顏色系統完整遷移 - 修復 69 處顏色字串連接問題、withAlpha 函數、ESLint 規則 | 2025-08-12 |
 | 104v | comprehensive-color-concatenation-fix.md | ✅ 已完成 | 全面修復顏色字串拼接問題 - 改進正則表達式、強化 ESLint、完整測試計劃 | 2025-08-13 |
-| 105  | fix-web-modal-field-selector.md | 📋 待執行 | 修復 Web 平台 Modal 欄位選擇器顯示問題 - modalOverlay 樣式修正、z-index 層級、無障礙支援 | - |
+| 105v | fix-web-modal-field-selector.md | ✅ 已完成 | 修復 Web 平台 Modal 欄位選擇器顯示問題 - modalOverlay 樣式修正、z-index 層級、無障礙支援 | 2025-08-13 |
 
 ## 命名規則
 
