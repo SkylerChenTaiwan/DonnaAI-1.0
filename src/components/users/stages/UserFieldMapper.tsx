@@ -11,7 +11,8 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
-  Platform } from 'react-native';
+  Platform
+} from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 import { UserFieldMapping } from '@/types/userImport';

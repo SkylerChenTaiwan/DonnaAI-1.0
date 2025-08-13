@@ -1440,7 +1440,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 12,
-    elevation: 8,
+    ...(Platform.OS === 'web' ? {} : { elevation: 8 }),
     shadowColor: '#000',
     ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: -2 } }),
     shadowOpacity: 0.1,
@@ -1531,7 +1531,7 @@ const styles = StyleSheet.create({
       web: {
         boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)' },
       default: {
-        elevation: 8 } }) },
+        ...(Platform.OS === 'web' ? {} : { elevation: 8 }) } }) },
   modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',

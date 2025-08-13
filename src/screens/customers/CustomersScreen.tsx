@@ -174,10 +174,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }) }),
     shadowOpacity: 0.1,
     shadowRadius: 3,
-    elevation: 3 },
+    ...(Platform.OS === 'web' ? {} : { elevation: 3 }) },
   customerHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',

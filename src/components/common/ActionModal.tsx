@@ -122,10 +122,10 @@ const styles = StyleSheet.create({
     padding: 16,
     marginHorizontal: 20,
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 8 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 8 } }) }),
     shadowOpacity: 0.2,
     shadowRadius: 16,
-    elevation: 8 },
+    ...(Platform.OS === 'web' ? {} : { elevation: 8 }) },
   actionItem: {
     flexDirection: 'row',
     alignItems: 'center',

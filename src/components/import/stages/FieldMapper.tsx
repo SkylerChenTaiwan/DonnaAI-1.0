@@ -472,9 +472,9 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                     position: 'absolute',
                     transform: Platform.OS === 'web' ? `translateX(${isEnabled ? 22 : 2}px)` : [{ translateX: isEnabled ? 22 : 2 }],
                     top: 2,
-                    elevation: 2,
+                    ...(Platform.OS === 'web' ? {} : { elevation: 2 }),
                     shadowColor: '#000000',
-                    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
+                    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }) }),
                     shadowOpacity: 0.15,
                     shadowRadius: 2
                   }
@@ -1494,9 +1494,9 @@ const styles = StyleSheet.create({
     borderRadius: 11,
     position: 'absolute',
     left: 3,
-    elevation: 2,
+    ...(Platform.OS === 'web' ? {} : { elevation: 2 }),
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }) }),
     shadowOpacity: 0.15,
     shadowRadius: 2
   },
@@ -1668,9 +1668,9 @@ const styles = StyleSheet.create({
     maxWidth: 400,
     maxHeight: '80%',
     borderRadius: 12,
-    elevation: 10,
+    ...(Platform.OS === 'web' ? {} : { elevation: 10 }),
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }) }),
     shadowOpacity: 0.25,
     shadowRadius: 8
   },

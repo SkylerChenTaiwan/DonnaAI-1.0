@@ -59,4 +59,4 @@ const styles = StyleSheet.create({
       web: {
         transform: 'scale(0.8)' },
       default: {
-        transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] } }) } });
+        ...(Platform.OS === 'web' ? {} : { transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }) } }) } });

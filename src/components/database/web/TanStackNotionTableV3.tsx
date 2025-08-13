@@ -227,7 +227,7 @@ export const TanStackNotionTableV3: React.FC<TanStackTableProps> = ({
             position: 'absolute', 
             top: '50%', 
             left: '50%', 
-            transform: 'translate(-50%, -50%)',
+            
             color: 'var(--notion-gray-50)',
             fontSize: 'var(--notion-font-size-body)'
           }}>

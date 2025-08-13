@@ -309,10 +309,10 @@ const styles = StyleSheet.create({
     width: '90%',
     maxWidth: 600,
     maxHeight: '90%',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }) }),
     shadowOpacity: 0.15,
     shadowRadius: 12,
-    elevation: 8 },
+    ...(Platform.OS === 'web' ? {} : { elevation: 8 }) },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',

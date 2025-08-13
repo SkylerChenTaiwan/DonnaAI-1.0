@@ -181,11 +181,11 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
+        ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }) }),
         shadowOpacity: 0.1,
         shadowRadius: 2 },
       android: {
-        elevation: 2 },
+        ...(Platform.OS === 'web' ? {} : { elevation: 2 }) },
       web: {
         boxShadow: '0 1px 3px rgba(0,0,0,0.1)' } as any }),
     transition: Platform.OS === 'web' ? 'transform 0.2s ease' : undefined } as any,

@@ -113,11 +113,11 @@ export function DragDropHandler({
   // 動畫樣式
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      transform: [
+      ...(Platform.OS === 'web' ? {} : { transform: [
         { translateX: translateX.value },
         { translateY: translateY.value },
         { scale: scale.value },
-      ],
+      ] }),
       opacity: opacity.value,
       zIndex: zIndex.value,
       // 添加陰影效果
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     flex: 1 },
   container: {
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }) },
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }) }) },
   dropTarget: {
     position: 'relative' },
   dropTargetActive: {

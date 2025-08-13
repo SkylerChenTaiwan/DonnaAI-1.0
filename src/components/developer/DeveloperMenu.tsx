@@ -407,10 +407,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }) }),
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    ...(Platform.OS === 'web' ? {} : { elevation: 5 }),
     zIndex: 999
   },
   floatingButtonText: {
@@ -432,7 +432,7 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: -2, height: 0 } }),
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5
+    ...(Platform.OS === 'web' ? {} : { elevation: 5 })
   },
   header: {
     flexDirection: 'row',

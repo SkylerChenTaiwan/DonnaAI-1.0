@@ -371,7 +371,7 @@ const styles = StyleSheet.create({
       web: {
         boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)' },
       default: {
-        elevation: 8 } }) },
+        ...(Platform.OS === 'web' ? {} : { elevation: 8 }) } }) },
   modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',

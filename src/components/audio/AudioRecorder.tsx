@@ -432,10 +432,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderRadius: 12,
     shadowColor: '#000000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }) }),
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    elevation: 4 },
+    ...(Platform.OS === 'web' ? {} : { elevation: 4 }) },
   statusContainer: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -317,10 +317,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }) }),
     shadowOpacity: 0.08,
     shadowRadius: 4,
-    elevation: 2,
+    ...(Platform.OS === 'web' ? {} : { elevation: 2 }),
     position: 'relative'
   },
   selectedBadge: {

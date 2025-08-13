@@ -699,10 +699,10 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 20,
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }) }),
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
+    ...(Platform.OS === 'web' ? {} : { elevation: 3 }),
     gap: 8 },
   savingText: {
     fontSize: 12,

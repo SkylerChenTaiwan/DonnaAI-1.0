@@ -351,10 +351,10 @@ const styles = StyleSheet.create({
     padding: 24,
     marginBottom: 16,
     shadowColor: '#000000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }) }),
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    elevation: 4,
+    ...(Platform.OS === 'web' ? {} : { elevation: 4 }),
     alignItems: 'center' },
   title: {
     fontSize: 28,
@@ -381,10 +381,10 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 16,
     shadowColor: '#000000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }) }),
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    elevation: 4 },
+    ...(Platform.OS === 'web' ? {} : { elevation: 4 }) },
   quickActionsGrid: {
     gap: 12 },
   quickActionButton: {
@@ -401,10 +401,10 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     shadowColor: '#000000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }) }),
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    elevation: 4 },
+    ...(Platform.OS === 'web' ? {} : { elevation: 4 }) },
   emptyState: {
     alignItems: 'center',
     paddingVertical: 40 },

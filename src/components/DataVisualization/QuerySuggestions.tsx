@@ -194,10 +194,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#e0e0e0',
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }) }),
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 2
+    ...(Platform.OS === 'web' ? {} : { elevation: 2 })
   },
   templateHeader: {
     flexDirection: 'row',

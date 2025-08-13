@@ -479,9 +479,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#FF6B6B',
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 8,
+    ...(Platform.OS === 'web' ? {} : { elevation: 8 }),
     shadowColor: '#FF6B6B',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }) }),
     shadowOpacity: 0.3,
     shadowRadius: 8 },
   micIcon: {

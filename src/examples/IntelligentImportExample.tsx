@@ -217,10 +217,10 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 20,
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }) }),
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3 },
+    ...(Platform.OS === 'web' ? {} : { elevation: 3 }) },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',

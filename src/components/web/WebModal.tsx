@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
         boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)' },
       default: {
         shadowColor: '#000',
-        ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
+        ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }) }),
         shadowOpacity: 0.15,
         shadowRadius: 4,
-        elevation: 4 } }) } });
+        ...(Platform.OS === 'web' ? {} : { elevation: 4 }) } }) } });

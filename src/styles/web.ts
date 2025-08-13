@@ -259,27 +259,27 @@ export const shadows = {
       boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' as any },
     default: {
       shadowColor: '#000',
-      ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
+      ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }) }),
       shadowOpacity: 0.1,
       shadowRadius: 4,
-      elevation: 2 } }),
+      ...(Platform.OS === 'web' ? {} : { elevation: 2 }) } }),
   
   medium: Platform.select({
     web: {
       boxShadow: '0 4px 8px rgba(0, 0, 0, 0.15)' as any },
     default: {
       shadowColor: '#000',
-      ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),
+      ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }) }),
       shadowOpacity: 0.15,
       shadowRadius: 8,
-      elevation: 4 } }),
+      ...(Platform.OS === 'web' ? {} : { elevation: 4 }) } }),
   
   large: Platform.select({
     web: {
       boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)' as any },
     default: {
       shadowColor: '#000',
-      ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 8 } }),
+      ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 8 } }) }),
       shadowOpacity: 0.2,
       shadowRadius: 16,
-      elevation: 8 } }) };
+      ...(Platform.OS === 'web' ? {} : { elevation: 8 }) } }) };

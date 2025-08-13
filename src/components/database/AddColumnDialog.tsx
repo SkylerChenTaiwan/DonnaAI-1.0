@@ -314,9 +314,9 @@ const styles = StyleSheet.create({
     maxHeight: '80%',
     backgroundColor: '#fff',
     borderRadius: responsive({ mobile: 12, tablet: 14, desktop: 16 }),
-    elevation: 10,
+    ...(Platform.OS === 'web' ? {} : { elevation: 10 }),
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }) }),
     shadowOpacity: 0.3,
     shadowRadius: 12 },
   modalHeader: {

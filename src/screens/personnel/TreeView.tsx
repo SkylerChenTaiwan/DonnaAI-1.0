@@ -198,10 +198,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }) }),
     shadowOpacity: 0.05,
     shadowRadius: 2,
-    elevation: 1,
+    ...(Platform.OS === 'web' ? {} : { elevation: 1 }),
     gap: 4 },
   statValue: {
     fontSize: 20,
@@ -218,10 +218,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     overflow: 'hidden',
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }) }),
     shadowOpacity: 0.05,
     shadowRadius: 4,
-    elevation: 2 },
+    ...(Platform.OS === 'web' ? {} : { elevation: 2 }) },
   loadMoreContainer: {
     position: 'absolute',
     bottom: 16,
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     overflow: 'hidden',
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }) }),
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 1 } });
+    ...(Platform.OS === 'web' ? {} : { elevation: 1 }) } });

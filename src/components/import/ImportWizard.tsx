@@ -935,10 +935,10 @@ const styles = StyleSheet.create({
     padding: 24,
     alignItems: 'center',
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }) }),
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    elevation: 5,
+    ...(Platform.OS === 'web' ? {} : { elevation: 5 }),
     minWidth: 280
   },
   progressTitle: {

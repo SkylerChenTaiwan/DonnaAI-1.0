@@ -126,7 +126,7 @@ export const MainTabNavigator = () => {
               borderTopColor: '#E5E7EB',
               position: 'absolute',
               bottom: 0,
-              elevation: 0,
+              ...(Platform.OS === 'web' ? {} : { elevation: 0 }),
               shadowOpacity: 0 },
             tabBarLabelStyle: {
               fontSize: 12,
@@ -231,9 +231,9 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 6,
+    ...(Platform.OS === 'web' ? {} : { elevation: 6 }),
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 3 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 3 } }) }),
     shadowOpacity: 0.25,
     shadowRadius: 5 },
   searchButton: {
@@ -244,9 +244,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     // 較輕的陰影以配合灰色調
-    elevation: 3,
+    ...(Platform.OS === 'web' ? {} : { elevation: 3 }),
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }) }),
     shadowOpacity: 0.08,
     shadowRadius: 4 },
   plusIcon: {
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
     borderRadius: 1.5,
     transform: Platform.OS === 'web' ? `translateY(${-1.5}px)` : [{ translateY: -1.5 }],
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }) }),
     shadowOpacity: 0.2,
     shadowRadius: 1 },
   plusVertical: {
@@ -276,6 +276,6 @@ const styles = StyleSheet.create({
     borderRadius: 1.5,
     transform: Platform.OS === 'web' ? `translateX(${-1.5}px)` : [{ translateX: -1.5 }],
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }) }),
     shadowOpacity: 0.2,
     shadowRadius: 1 } });

@@ -89,10 +89,10 @@ const styles = StyleSheet.create({
   optionActive: {
     backgroundColor: DesignSystem.colors.background.surface,
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }) }),
     shadowOpacity: 0.05,
     shadowRadius: 2,
-    elevation: 1 },
+    ...(Platform.OS === 'web' ? {} : { elevation: 1 }) },
   optionText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary },

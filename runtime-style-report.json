@@ -1,0 +1,351 @@
+{
+  "timestamp": "2025-08-13T04:55:46.734Z",
+  "criticalCount": 6,
+  "suspiciousCount": 697,
+  "criticalIssues": [
+    {
+      "file": "src/components/users/stages/UserFieldMapper.tsx",
+      "line": 352,
+      "type": "CRITICAL: Inline style with shadowOffset/transform",
+      "content": "style={{",
+      "context": "                    style={{ \n                      color: isUsed ? DesignSystem.colors.text.tertiary : DesignSystem.colors.text.primary \n                    }}\n                  >\n                   "
+    },
+    {
+      "file": "src/components/users/stages/UserFieldMapper.tsx",
+      "line": 362,
+      "type": "CRITICAL: Inline style with shadowOffset/transform",
+      "content": "<span style={{",
+      "context": "              <span style={{\n                position: 'absolute',\n                right: '40px',\n                top: '50%',\n                transform: 'translateY(-50%)',\n                padding: '2"
+    },
+    {
+      "file": "src/components/database/web/TanStackNotionTableV3.tsx",
+      "line": 226,
+      "type": "CRITICAL: Inline style with shadowOffset/transform",
+      "content": "<div style={{",
+      "context": "          <div style={{ \n            position: 'absolute', \n            top: '50%', \n            left: '50%', \n            transform: 'translate(-50%, -50%)',\n            color: 'var(--notion-gray-50)"
+    },
+    {
+      "file": "src/components/adaptive/core/AdaptiveSelect.tsx",
+      "line": 480,
+      "type": "CRITICAL: Inline style with shadowOffset/transform",
+      "content": "<div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>",
+      "context": "          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>\n            {clearable && internalValue && !disabled && (\n              <span\n                onClick={handleClear}\n          "
+    },
+    {
+      "file": "src/components/adaptive/core/AdaptiveSelect.tsx",
+      "line": 484,
+      "type": "CRITICAL: Inline style with shadowOffset/transform",
+      "content": "style={{",
+      "context": "                style={{\n                  cursor: 'pointer',\n                  color: DesignSystem.colors.text.secondary,\n                  fontSize: '14px' }}\n              >\n                ×\n     "
+    },
+    {
+      "file": "src/components/adaptive/core/AdaptiveSelect.tsx",
+      "line": 495,
+      "type": "CRITICAL: Inline style with shadowOffset/transform",
+      "content": "style={{",
+      "context": "                style={{\n                  color: DesignSystem.colors.text.secondary,\n                  transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',\n                  transition: 'transform "
+    }
+  ],
+  "suspiciousPatterns": [
+    {
+      "file": "src/utils/webSafeStyles.ts",
+      "line": 20,
+      "type": "Spread operator in style without Platform check",
+      "content": "const safeStyle = { ...style };"
+    },
+    {
+      "file": "src/theme/webStyles.ts",
+      "line": 140,
+      "type": "Spread operator in style without Platform check",
+      "content": "const responsiveStyle: CSSProperties = { ...style };"
+    },
+    {
+      "file": "src/services/error/ErrorReporter.tsx",
+      "line": 264,
+      "type": "Array style",
+      "content": "style={[styles.actionButton, styles.copyButton]}"
+    },
+    {
+      "file": "src/services/error/ErrorReporter.tsx",
+      "line": 274,
+      "type": "Array style",
+      "content": "style={[styles.actionButton, styles.shareButton]}"
+    },
+    {
+      "file": "src/services/error/ErrorBoundary.tsx",
+      "line": 193,
+      "type": "Array style",
+      "content": "style={[styles.button, styles.primaryButton]}"
+    },
+    {
+      "file": "src/services/error/ErrorBoundary.tsx",
+      "line": 203,
+      "type": "Array style",
+      "content": "style={[styles.button, styles.secondaryButton]}"
+    },
+    {
+      "file": "src/services/error/ErrorBoundary.tsx",
+      "line": 211,
+      "type": "Array style",
+      "content": "style={[styles.button, styles.secondaryButton]}"
+    },
+    {
+      "file": "src/screens/test/NotionTableTest.tsx",
+      "line": 123,
+      "type": "StyleSheet.create with elevation:",
+      "content": "} : { shadowOffset: { width: 0, height: 2 } }),\n    shadowOpacity: 0.1,\n    shadowRadius: 3.84,\n    elevation: 5 } });"
+    },
+    {
+      "file": "src/screens/test/FirebaseTestScreen.tsx",
+      "line": 188,
+      "type": "Array style",
+      "content": "style={[styles.button, styles.clearButton]}"
+    },
+    {
+      "file": "src/screens/test/FirebaseTestScreen.tsx",
+      "line": 210,
+      "type": "StyleSheet.create with elevation:",
+      "content": "? {} : { shadowOffset: { width: 0, height: 2 } }),\n    shadowOpacity: 0.1,\n    shadowRadius: 3,\n    elevation: 3 },\n  sectionTitle: {\n    fontSize: 18,\n    fontWeight: '600',\n    marginBottom: 15 },"
+    },
+    {
+      "file": "src/screens/superadmin/SuperAdminDashboard.tsx",
+      "line": 143,
+      "type": "Spread operator in style without Platform check",
+      "content": "<Text style={styles.loadingText}>載入中...</Text>"
+    },
+    {
+      "file": "src/screens/superadmin/SuperAdminDashboard.tsx",
+      "line": 170,
+      "type": "Array style",
+      "content": "<View style={[styles.statsGrid, shouldUseWebLayout && styles.webStatsGrid]}>"
+    },
+    {
+      "file": "src/screens/superadmin/SuperAdminDashboard.tsx",
+      "line": 172,
+      "type": "Array style",
+      "content": "<View key={stat.id} style={[styles.statCard, useResponsiveLayout && styles.webStatCard]}>"
+    },
+    {
+      "file": "src/screens/superadmin/SuperAdminDashboard.tsx",
+      "line": 173,
+      "type": "Array style",
+      "content": "<View style={[styles.statIconContainer, { backgroundColor: `${stat.color}15` }]}>"
+    },
+    {
+      "file": "src/screens/superadmin/SuperAdminDashboard.tsx",
+      "line": 184,
+      "type": "Array style",
+      "content": "<View style={[styles.section, useResponsiveLayout && styles.webSection]}>"
+    },
+    {
+      "file": "src/screens/superadmin/SuperAdminDashboard.tsx",
+      "line": 186,
+      "type": "Array style",
+      "content": "<View style={[styles.actionsGrid, useResponsiveLayout && styles.webActionsGrid]}>"
+    },
+    {
+      "file": "src/screens/superadmin/SuperAdminDashboard.tsx",
+      "line": 190,
+      "type": "Array style",
+      "content": "style={[styles.actionCard, useResponsiveLayout && styles.webActionCard]}"
+    },
+    {
+      "file": "src/screens/superadmin/SuperAdminDashboard.tsx",
+      "line": 205,
+      "type": "Array style",
+      "content": "<View style={[styles.section, useResponsiveLayout && styles.webSection]}>"
+    },
+    {
+      "file": "src/screens/superadmin/SuperAdminDashboard.tsx",
+      "line": 230,
+      "type": "Array style",
+      "content": "<View style={[styles.section, useResponsiveLayout && styles.webSection]}>"
+    },
+    {
+      "file": "src/screens/superadmin/OrganizationsScreen.tsx",
+      "line": 174,
+      "type": "Array style",
+      "content": "<View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>"
+    },
+    {
+      "file": "src/screens/superadmin/OrganizationDetailScreen.tsx",
+      "line": 356,
+      "type": "Array style",
+      "content": "<Text style={[styles.value, { textTransform: 'uppercase' }]}>"
+    },
+    {
+      "file": "src/screens/superadmin/OrganizationDetailScreen.tsx",
+      "line": 381,
+      "type": "Array style",
+      "content": "<View style={[styles.statusBadge, { backgroundColor: getStatusColor(organization.status) }]}>"
+    },
+    {
+      "file": "src/screens/superadmin/OrganizationDetailScreen.tsx",
+      "line": 400,
+      "type": "Array style",
+      "content": "style={[styles.tab, selectedTab === tab.key && styles.activeTab]}"
+    },
+    {
+      "file": "src/screens/superadmin/OrganizationDetailScreen.tsx",
+      "line": 404,
+      "type": "Array style",
+      "content": "style={[styles.tabText, selectedTab === tab.key && styles.activeTabText]}"
+    },
+    {
+      "file": "src/screens/superadmin/OrganizationDetailScreen.tsx",
+      "line": 644,
+      "type": "Array style",
+      "content": "<View style={[styles.section, styles.dangerSection]}>"
+    },
+    {
+      "file": "src/screens/settings/HelpSupportScreen.tsx",
+      "line": 220,
+      "type": "StyleSheet.create with elevation:",
+      "content": "{} : { shadowOffset: { width: 0, height: 1 } }),\n    shadowOpacity: 0.05,\n    shadowRadius: 3,\n    elevation: 2 },\n  helpIconContainer: {\n    width: 40,\n    height: 40,\n    borderRadius: 20,\n    back"
+    },
+    {
+      "file": "src/screens/personnel/TreeView.tsx",
+      "line": 171,
+      "type": "StyleSheet.create with elevation:",
+      "content": "{} : { shadowOffset: { width: 0, height: 1 } }),\n    shadowOpacity: 0.05,\n    shadowRadius: 2,\n    elevation: 1,\n    gap: 4 },\n  statValue: {\n    fontSize: 20,\n    fontWeight: '700',\n    color: Desig"
+    },
+    {
+      "file": "src/screens/personnel/PersonnelScreen.tsx",
+      "line": 168,
+      "type": "Spread operator in style without Platform check",
+      "content": "<Text style={styles.loadingText}>載入團隊成員...</Text>"
+    },
+    {
+      "file": "src/screens/modals/EditTaskModal.tsx",
+      "line": 91,
+      "type": "Spread operator in style without Platform check",
+      "content": "<Text style={styles.loadingText}>載入中...</Text>"
+    },
+    {
+      "file": "src/screens/modals/EditTaskModal.tsx",
+      "line": 228,
+      "type": "Array style",
+      "content": "style={[styles.input, styles.textArea]}"
+    },
+    {
+      "file": "src/screens/modals/EditRecordModal.tsx",
+      "line": 91,
+      "type": "Spread operator in style without Platform check",
+      "content": "<Text style={styles.loadingText}>載入中...</Text>"
+    },
+    {
+      "file": "src/screens/modals/EditRecordModal.tsx",
+      "line": 181,
+      "type": "Array style",
+      "content": "style={[styles.input, styles.textArea]}"
+    },
+    {
+      "file": "src/screens/modals/EditRecordModal.tsx",
+      "line": 196,
+      "type": "Array style",
+      "content": "style={[styles.input, styles.textArea]}"
+    },
+    {
+      "file": "src/screens/modals/EditProfileModal.tsx",
+      "line": 150,
+      "type": "Spread operator in style without Platform check",
+      "content": "<Text style={styles.loadingText}>載入中...</Text>"
+    },
+    {
+      "file": "src/screens/modals/EditProfileModal.tsx",
+      "line": 185,
+      "type": "Array style",
+      "content": "style={[styles.input, errors.name ? styles.inputError : null]}"
+    },
+    {
+      "file": "src/screens/modals/EditProfileModal.tsx",
+      "line": 201,
+      "type": "Array style",
+      "content": "style={[styles.input, errors.email ? styles.inputError : null]}"
+    },
+    {
+      "file": "src/screens/modals/EditProfileModal.tsx",
+      "line": 225,
+      "type": "Array style",
+      "content": "style={[styles.input, errors.currentPassword ? styles.inputError : null]}"
+    },
+    {
+      "file": "src/screens/modals/EditCustomerModal.tsx",
+      "line": 119,
+      "type": "Spread operator in style without Platform check",
+      "content": "<Text style={styles.loadingText}>載入中...</Text>"
+    },
+    {
+      "file": "src/screens/modals/EditCustomerModal.tsx",
+      "line": 161,
+      "type": "Spread operator in style without Platform check",
+      "content": "<Text style={styles.loadingText}>載入欄位定義中...</Text>"
+    },
+    {
+      "file": "src/screens/modals/CreateTaskModal.tsx",
+      "line": 120,
+      "type": "Array style",
+      "content": "<Text style={[styles.headerButtonText, loading && styles.disabledText]}>"
+    },
+    {
+      "file": "src/screens/modals/CreateCustomerModal.tsx",
+      "line": 196,
+      "type": "Array style",
+      "content": "<Text style={[styles.headerButtonText, loading && styles.disabledText]}>"
+    },
+    {
+      "file": "src/screens/modals/CreateCustomerModal.tsx",
+      "line": 254,
+      "type": "Spread operator in style without Platform check",
+      "content": "<Text style={styles.loadingText}>載入欄位定義中...</Text>"
+    },
+    {
+      "file": "src/screens/modals/CreateCustomerModal.tsx",
+      "line": 272,
+      "type": "Array style",
+      "content": "style={[styles.modalButton, styles.cancelButton]}"
+    },
+    {
+      "file": "src/screens/modals/CreateCustomerModal.tsx",
+      "line": 278,
+      "type": "Array style",
+      "content": "style={[styles.modalButton, styles.saveButton, loading && styles.disabledButton]}"
+    },
+    {
+      "file": "src/screens/modals/CreateCustomerModal.tsx",
+      "line": 318,
+      "type": "Spread operator in style without Platform check",
+      "content": "<Text style={styles.loadingText}>載入欄位定義中...</Text>"
+    },
+    {
+      "file": "src/screens/modals/CreateCustomerModal.tsx",
+      "line": 342,
+      "type": "StyleSheet.create with elevation:",
+      "content": "lect({\n      web: {\n        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)' },\n      default: {\n        elevation: 8 } }) },\n  modalHeader: {\n    flexDirection: 'row',\n    justifyContent: 'space-between',"
+    },
+    {
+      "file": "src/screens/meetings/RecordingScreen.tsx",
+      "line": 294,
+      "type": "Spread operator in style without Platform check",
+      "content": "<Text style={styles.stepSubtitle}>正在上傳到雲端並準備 AI 分析...</Text>"
+    },
+    {
+      "file": "src/screens/meetings/RecordingScreen.tsx",
+      "line": 315,
+      "type": "Spread operator in style without Platform check",
+      "content": "<Text style={styles.stepSubtitle}>正在轉錄音訊並分析會議內容...</Text>"
+    },
+    {
+      "file": "src/screens/meetings/RecordingScreen.tsx",
+      "line": 319,
+      "type": "Spread operator in style without Platform check",
+      "content": "<Text style={styles.processingStep}>⏳ 語音轉文字中...</Text>"
+    },
+    {
+      "file": "src/screens/meetings/RecordingScreen.tsx",
+      "line": 320,
+      "type": "Spread operator in style without Platform check",
+      "content": "<Text style={styles.processingStep}>⏳ AI 內容分析中...</Text>"
+    }
+  ]
+}

@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: -2 } }),
     shadowOpacity: 0.08,
     shadowRadius: 4,
-    elevation: 5 },
+    ...(Platform.OS === 'web' ? {} : { elevation: 5 }) },
   actionContainer: {
     flexDirection: 'row',
     paddingVertical: 16, // 減小垂直內距

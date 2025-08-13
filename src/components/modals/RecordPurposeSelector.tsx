@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: -2 } }),
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    elevation: 5 },
+    ...(Platform.OS === 'web' ? {} : { elevation: 5 }) },
   header: {
     alignItems: 'center',
     paddingTop: 12,

@@ -366,10 +366,10 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 24,
     shadowColor: '#000000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }) }),
     shadowOpacity: 0.1,
     shadowRadius: 12,
-    elevation: 4 },
+    ...(Platform.OS === 'web' ? {} : { elevation: 4 }) },
   stepTitle: {
     fontSize: 24,
     fontWeight: '700',

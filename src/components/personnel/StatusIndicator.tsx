@@ -96,10 +96,10 @@ const styles = StyleSheet.create({
   statusDot: {
     borderRadius: 10,
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }) }),
     shadowOpacity: 0.1,
     shadowRadius: 1,
-    elevation: 1 },
+    ...(Platform.OS === 'web' ? {} : { elevation: 1 }) },
   statusText: {
     fontWeight: '500',
     color: DesignSystem.colors.text.secondary },

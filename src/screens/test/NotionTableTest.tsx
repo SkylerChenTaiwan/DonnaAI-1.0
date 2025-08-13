@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     overflow: 'hidden',
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }) }),
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
-    elevation: 5 } });
+    ...(Platform.OS === 'web' ? {} : { elevation: 5 }) } });

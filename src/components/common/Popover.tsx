@@ -236,10 +236,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 8,
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }) }),
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    elevation: 5,
+    ...(Platform.OS === 'web' ? {} : { elevation: 5 }),
     overflow: 'hidden' },
   content: {
     flex: 1 },
@@ -261,6 +261,6 @@ const styles = StyleSheet.create({
     bottom: -6,
     left: 20,
     shadowColor: '#000',
-    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 1, height: 1 } }),
+    ...(Platform.OS === 'web' ? {} : { ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 1, height: 1 } }) }),
     shadowOpacity: 0.1,
     shadowRadius: 2 } });

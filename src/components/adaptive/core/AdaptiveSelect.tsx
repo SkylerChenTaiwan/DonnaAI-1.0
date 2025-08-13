@@ -4,7 +4,7 @@
  */
 
 import React, { forwardRef, useMemo, useState, useCallback, useEffect, useRef } from 'react';
-import type { ViewStyle, TextStyle } from 'react-native';
+import { ViewStyle, TextStyle, Platform } from 'react-native';
 import type { CSSProperties } from 'react';
 import { PlatformAdapter } from '../platform/PlatformAdapter';
 import { DesignSystem } from '../../../theme/designSystem';
@@ -493,9 +493,18 @@ const WebSelect = forwardRef<HTMLDivElement, AdaptiveSelectProps>(
             {rightIcon || (
               <span
                 style={{
+            ...(Platform.OS === 'web' ? {
+              
                   color: DesignSystem.colors.text.secondary,
-                  transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                  transition: 'transform 150ms ease' }}
+                  // transform: `rotate(${isOpen ? 180 : 0}deg)`,
+                  transition: 'transform 150ms ease' 
+            } : {
+              
+                  color: DesignSystem.colors.text.secondary,
+                  transform: `rotate(${isOpen ? 180 : 0}deg)`,
+                  transition: 'transform 150ms ease' 
+            })
+          }}
               >
                 ▼
               </span>
