@@ -90,9 +90,7 @@ const createButtonStyles = (
   switch (state) {
     case 'hover':
       if (variant === 'primary') {
-        stateStyle = { 
-          backgroundColor: platformAdapter.isWeb ? '#0051D5' : DesignSystem.colors.button.primary.hover 
-        };
+        stateStyle = { backgroundColor: DesignSystem.colors.button.primary.hover };
       } else if (variant === 'secondary') {
         stateStyle = { backgroundColor: DesignSystem.colors.button.secondary.hover };
       } else if (variant === 'outline') {
@@ -106,9 +104,7 @@ const createButtonStyles = (
       
     case 'pressed':
       if (variant === 'primary') {
-        stateStyle = { 
-          backgroundColor: platformAdapter.isWeb ? '#003D99' : DesignSystem.colors.button.primary.pressed 
-        };
+        stateStyle = { backgroundColor: DesignSystem.colors.button.primary.pressed };
       } else if (variant === 'secondary') {
         stateStyle = { backgroundColor: DesignSystem.colors.button.secondary.pressed };
       }
@@ -186,19 +182,19 @@ const WebButton = forwardRef<HTMLButtonElement, AdaptiveButtonProps>(
         finalStyle = { ...finalStyle, ...webStyle };
       }
       
-      // 添加 Web 特有的樣式和顏色修正
+      // 添加 Web 特有的樣式
       finalStyle = {
         ...finalStyle,
-        // 修正主按鈕顏色問題 - Web 平台使用藍色
-        backgroundColor: variant === 'primary' && !disabled && !loading ? 
-          '#007AFF' : finalStyle.backgroundColor,
         border: finalStyle.borderWidth ? 
           `${finalStyle.borderWidth}px ${finalStyle.borderStyle || 'solid'} ${finalStyle.borderColor}` : 
           'none',
         outline: 'none',
         cursor: disabled || loading ? 'not-allowed' : 'pointer',
         transition: 'all 150ms ease',
-        userSelect: 'none' };
+        userSelect: 'none',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center' };
       
       return finalStyle;
     }, [variant, size, currentState, platformAdapter, styleAdapter, style, webStyle, disabled, loading]);
