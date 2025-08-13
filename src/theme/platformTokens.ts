@@ -131,7 +131,7 @@ export interface ShadowTokens {
 export interface ShadowToken {
   // React Native 格式
   shadowColor: string;
-  shadowOffset: { width: number; height: number };
+  shadowOffset?: { width: number; height: number }; // Optional for web compatibility
   shadowOpacity: number;
   shadowRadius: number;
   elevation: number;

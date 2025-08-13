@@ -152,6 +152,7 @@ export class WebStyleAdapter implements StyleAdapter {
         // 需要與其他陰影屬性組合
         return null; // 在 boxShadow 中處理
       case 'shadowOffset':
+        // Web 不支援 shadowOffset，完全忽略
         return null; // 在 boxShadow 中處理
       case 'shadowOpacity':
         return null; // 在 boxShadow 中處理
@@ -252,6 +253,15 @@ export class WebStyleAdapter implements StyleAdapter {
     
     if (!style) return shadowStyle;
     
+    // 先過濾掉不相容的屬性
+    const webSafeStyle = { ...style };
+    delete webSafeStyle.shadowOffset;
+    delete webSafeStyle.shadowColor;
+    delete webSafeStyle.shadowOpacity;
+    delete webSafeStyle.shadowRadius;
+    delete webSafeStyle.elevation;
+    
+    // 從原始 style 提取陰影屬性（但不要直接使用）
     const {
       shadowColor,
       shadowOffset,
@@ -259,17 +269,16 @@ export class WebStyleAdapter implements StyleAdapter {
       shadowRadius,
       elevation } = style as any;
 
-    // 處理 iOS 樣式陰影
-    if (shadowColor || shadowOffset || shadowOpacity || shadowRadius) {
+    // 處理 iOS 樣式陰影 - 但只在確實有陰影時才轉換
+    if (shadowOpacity && shadowOpacity > 0) {
       const color = shadowColor || '#000';
-      const offset = shadowOffset || { width: 0, height: 0 };
-      const opacity = shadowOpacity || 0;
+      // 安全地處理 shadowOffset - 不直接訪問物件屬性
+      const offsetX = shadowOffset?.width || 0;
+      const offsetY = shadowOffset?.height || 0;
       const radius = shadowRadius || 0;
       
-      if (opacity > 0) {
-        const shadowColorWithOpacity = this.addOpacityToColor(color, opacity);
-        shadowStyle.boxShadow = `${offset.width}px ${offset.height}px ${radius}px ${shadowColorWithOpacity}`;
-      }
+      const shadowColorWithOpacity = this.addOpacityToColor(color, shadowOpacity);
+      shadowStyle.boxShadow = `${offsetX}px ${offsetY}px ${radius}px ${shadowColorWithOpacity}`;
     }
     
     // 處理 Android elevation（優先級較低）

@@ -1,0 +1,773 @@
+{
+  "timestamp": "2025-08-13T04:42:39.630Z",
+  "totalFiles": 671,
+  "totalIssues": 143,
+  "issues": {
+    "shadowOffset": [
+      {
+        "file": "src/theme/platformTokens.ts",
+        "line": 134,
+        "content": "shadowOffset: { width: number; height: number };",
+        "context": "export interface ShadowToken {\n  // React Native 格式\n  shadowColor: string;\n>>>   shadowOffset: { width: number; height: number }; <<<\n  shadowOpacity: number;\n  shadowRadius: number;\n  elevation: number;"
+      },
+      {
+        "file": "src/components/adaptive/platform/WebStyleAdapter.ts",
+        "line": 154,
+        "content": "case 'shadowOffset':",
+        "context": "      case 'shadowColor':\n        // 需要與其他陰影屬性組合\n        return null; // 在 boxShadow 中處理\n>>>       case 'shadowOffset': <<<\n        return null; // 在 boxShadow 中處理\n      case 'shadowOpacity':\n        return null; // 在 boxShadow 中處理"
+      },
+      {
+        "file": "src/components/adaptive/platform/WebStyleAdapter.ts",
+        "line": 257,
+        "content": "shadowOffset,",
+        "context": "    \n    const {\n      shadowColor,\n>>>       shadowOffset, <<<\n      shadowOpacity,\n      shadowRadius,\n      elevation } = style as any;"
+      },
+      {
+        "file": "src/components/adaptive/platform/WebStyleAdapter.ts",
+        "line": 263,
+        "content": "if (shadowColor || shadowOffset || shadowOpacity || shadowRadius) {",
+        "context": "      elevation } = style as any;\n\n    // 處理 iOS 樣式陰影\n>>>     if (shadowColor || shadowOffset || shadowOpacity || shadowRadius) { <<<\n      const color = shadowColor || '#000';\n      const offset = shadowOffset || { width: 0, height: 0 };\n      const opacity = shadowOpacity || 0;"
+      },
+      {
+        "file": "src/components/adaptive/platform/WebStyleAdapter.ts",
+        "line": 265,
+        "content": "const offset = shadowOffset || { width: 0, height: 0 };",
+        "context": "    // 處理 iOS 樣式陰影\n    if (shadowColor || shadowOffset || shadowOpacity || shadowRadius) {\n      const color = shadowColor || '#000';\n>>>       const offset = shadowOffset || { width: 0, height: 0 }; <<<\n      const opacity = shadowOpacity || 0;\n      const radius = shadowRadius || 0;\n      "
+      }
+    ],
+    "transform": [
+      {
+        "file": "src/components/common/ModeToggle.tsx",
+        "line": 62,
+        "content": "transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] } }) } });"
+      }
+    ],
+    "spreadOperator": [
+      {
+        "file": "src/theme/designSystem.ts",
+        "line": 111,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 0 } }),"
+      },
+      {
+        "file": "src/theme/designSystem.ts",
+        "line": 117,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/theme/designSystem.ts",
+        "line": 123,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/theme/designSystem.ts",
+        "line": 129,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),"
+      },
+      {
+        "file": "src/theme/designSystem.ts",
+        "line": 202,
+        "content": "...DesignSystem.shadows.none };"
+      },
+      {
+        "file": "src/theme/designSystem.ts",
+        "line": 252,
+        "content": "...(elevated ? DesignSystem.shadows.md : DesignSystem.shadows.sm) });"
+      },
+      {
+        "file": "src/styles/web.ts",
+        "line": 262,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/styles/web.ts",
+        "line": 272,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),"
+      },
+      {
+        "file": "src/styles/web.ts",
+        "line": 282,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 8 } }),"
+      },
+      {
+        "file": "src/services/firebase/admin/userAssistService.ts",
+        "line": 141,
+        "content": "...transformedData,"
+      },
+      {
+        "file": "src/screens/test/NotionTableTest.tsx",
+        "line": 138,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/screens/test/FirebaseTestScreen.tsx",
+        "line": 232,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/screens/superadmin/OrganizationsScreen.tsx",
+        "line": 369,
+        "content": "...DesignSystem.shadows.sm },"
+      },
+      {
+        "file": "src/screens/superadmin/OrganizationDetailScreen.tsx",
+        "line": 729,
+        "content": "...DesignSystem.shadows.sm },"
+      },
+      {
+        "file": "src/screens/settings/HelpSupportScreen.tsx",
+        "line": 240,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/screens/settings/HelpSupportScreen.tsx",
+        "line": 268,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/screens/settings/HelpSupportScreen.tsx",
+        "line": 290,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/screens/personnel/TreeView.tsx",
+        "line": 201,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/screens/personnel/TreeView.tsx",
+        "line": 221,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/screens/personnel/TreeView.tsx",
+        "line": 240,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/screens/meetings/RecordingScreen.tsx",
+        "line": 369,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/screens/meetings/MeetingsScreen.tsx",
+        "line": 354,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/screens/meetings/MeetingsScreen.tsx",
+        "line": 384,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/screens/meetings/MeetingsScreen.tsx",
+        "line": 404,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/screens/developer/TestScreen.tsx",
+        "line": 301,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/screens/developer/TestScreen.tsx",
+        "line": 335,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/screens/developer/PerformanceMonitorScreen.tsx",
+        "line": 328,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.tsx",
+        "line": 1445,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: -2 } }),"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.backup.tsx",
+        "line": 153,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: -2 } }),"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.backup.tsx",
+        "line": 209,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),"
+      },
+      {
+        "file": "src/screens/dashboard/SalespersonDashboard.tsx",
+        "line": 200,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/screens/dashboard/SalespersonDashboard.tsx",
+        "line": 230,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/screens/dashboard/SalespersonDashboard.tsx",
+        "line": 256,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/screens/dashboard/SalespersonDashboard.tsx",
+        "line": 289,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/screens/dashboard/ManagerDashboard.tsx",
+        "line": 181,
+        "content": "...DesignSystem.shadows.none },"
+      },
+      {
+        "file": "src/screens/dashboard/AdminDashboard.tsx",
+        "line": 232,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/screens/dashboard/AdminDashboard.tsx",
+        "line": 262,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/screens/dashboard/AdminDashboard.tsx",
+        "line": 288,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/screens/dashboard/AdminDashboard.tsx",
+        "line": 319,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/screens/dashboard/AdminDashboard.tsx",
+        "line": 352,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/screens/customers/CustomersScreen.tsx",
+        "line": 177,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/screens/admin/UsageReportsScreen.tsx",
+        "line": 460,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/screens/admin/UsageReportsScreen.tsx",
+        "line": 517,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/screens/admin/AdminDashboard.tsx",
+        "line": 310,
+        "content": "...DesignSystem.shadows.sm },"
+      },
+      {
+        "file": "src/screens/admin/AdminDashboard.tsx",
+        "line": 329,
+        "content": "...DesignSystem.shadows.sm },"
+      },
+      {
+        "file": "src/screens/admin/AdminDashboard.tsx",
+        "line": 347,
+        "content": "...DesignSystem.shadows.sm },"
+      },
+      {
+        "file": "src/navigation/MainTabNavigator.tsx",
+        "line": 236,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 3 } }),"
+      },
+      {
+        "file": "src/navigation/MainTabNavigator.tsx",
+        "line": 249,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/navigation/MainTabNavigator.tsx",
+        "line": 266,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/navigation/MainTabNavigator.tsx",
+        "line": 279,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/hooks/useResponsiveStyles.ts",
+        "line": 74,
+        "content": "...DesignSystem.shadows.sm },"
+      },
+      {
+        "file": "src/examples/IntelligentImportExample.tsx",
+        "line": 220,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/components/web/WebModal.tsx",
+        "line": 92,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/components/users/UserImportModeToggle.tsx",
+        "line": 184,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/components/ui/IconButton.tsx",
+        "line": 118,
+        "content": "...DesignSystem.shadows.none },"
+      },
+      {
+        "file": "src/components/superadmin/onboarding/OnboardingWizard.tsx",
+        "line": 702,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/components/superadmin/onboarding/steps/BillingPlanStep.tsx",
+        "line": 424,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/components/personnel/StatusIndicator.tsx",
+        "line": 99,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/components/personnel/OrgNode.tsx",
+        "line": 139,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/components/personnel/DragDropHandler.tsx",
+        "line": 170,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }) },"
+      },
+      {
+        "file": "src/components/organization/UserAssistanceSection.tsx",
+        "line": 373,
+        "content": "...DesignSystem.shadows.sm },"
+      },
+      {
+        "file": "src/components/organization/UserAssistanceSection.tsx",
+        "line": 407,
+        "content": "...DesignSystem.shadows.sm },"
+      },
+      {
+        "file": "src/components/organization/PermissionsManagementSection.tsx",
+        "line": 507,
+        "content": "...DesignSystem.shadows.sm },"
+      },
+      {
+        "file": "src/components/organization/BillingManagementSection.tsx",
+        "line": 324,
+        "content": "...DesignSystem.shadows.sm },"
+      },
+      {
+        "file": "src/components/organization/BillingManagementSection.tsx",
+        "line": 414,
+        "content": "...DesignSystem.shadows.sm },"
+      },
+      {
+        "file": "src/components/organization/BillingManagementSection.tsx",
+        "line": 441,
+        "content": "...DesignSystem.shadows.sm },"
+      },
+      {
+        "file": "src/components/organization/BillingManagementSection.tsx",
+        "line": 494,
+        "content": "...DesignSystem.shadows.sm },"
+      },
+      {
+        "file": "src/components/navigation/TopBar.tsx",
+        "line": 121,
+        "content": "...shadows.small },"
+      },
+      {
+        "file": "src/components/navigation/Sidebar.tsx",
+        "line": 516,
+        "content": "...shadows.small },"
+      },
+      {
+        "file": "src/components/modals/RecordPurposeSelector.tsx",
+        "line": 168,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: -2 } }),"
+      },
+      {
+        "file": "src/components/modals/PermissionModal.tsx",
+        "line": 312,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),"
+      },
+      {
+        "file": "src/components/modals/ActivityModal.tsx",
+        "line": 280,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),"
+      },
+      {
+        "file": "src/components/manager/SavedReportsGrid.tsx",
+        "line": 346,
+        "content": "...DesignSystem.shadows.sm },"
+      },
+      {
+        "file": "src/components/manager/SavedReportsGrid.tsx",
+        "line": 352,
+        "content": "...DesignSystem.shadows.sm },"
+      },
+      {
+        "file": "src/components/input/SimplifiedVoiceTaskInput.tsx",
+        "line": 484,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),"
+      },
+      {
+        "file": "src/components/input/SimplifiedAudioInput.tsx",
+        "line": 517,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),"
+      },
+      {
+        "file": "src/components/import/ImportWizard.tsx",
+        "line": 938,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/components/import/styles/IntelligentFieldMapperStyles.ts",
+        "line": 153,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/components/import/stages/FieldMapper.tsx",
+        "line": 477,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/components/import/stages/FieldMapper.tsx",
+        "line": 1499,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/components/import/stages/FieldMapper.tsx",
+        "line": 1673,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),"
+      },
+      {
+        "file": "src/components/import/stages/DatabaseSelector.tsx",
+        "line": 320,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/components/developer/ErrorDisplay.tsx",
+        "line": 264,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),"
+      },
+      {
+        "file": "src/components/developer/DeveloperMenu.tsx",
+        "line": 410,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/components/developer/DeveloperMenu.tsx",
+        "line": 432,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: -2, height: 0 } }),"
+      },
+      {
+        "file": "src/components/database/AddColumnDialog.tsx",
+        "line": 319,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),"
+      },
+      {
+        "file": "src/components/common/ToolCard.tsx",
+        "line": 57,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/components/common/SearchButton.tsx",
+        "line": 77,
+        "content": "...DesignSystem.shadows.none },"
+      },
+      {
+        "file": "src/components/common/Popover.tsx",
+        "line": 239,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/components/common/Popover.tsx",
+        "line": 257,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: -1, height: -1 } }),"
+      },
+      {
+        "file": "src/components/common/Popover.tsx",
+        "line": 264,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 1, height: 1 } }),"
+      },
+      {
+        "file": "src/components/common/ButtonStyles.ts",
+        "line": 16,
+        "content": "...DesignSystem.shadows.none };"
+      },
+      {
+        "file": "src/components/common/ActionPopover.tsx",
+        "line": 174,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: -2 } }),"
+      },
+      {
+        "file": "src/components/common/ActionModal.tsx",
+        "line": 125,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 8 } }),"
+      },
+      {
+        "file": "src/components/common/Button/Button.native.tsx",
+        "line": 81,
+        "content": "...DesignSystem.shadows.none },"
+      },
+      {
+        "file": "src/components/audit/AuditReportInterface.tsx",
+        "line": 743,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/components/audit/AuditLogViewer.tsx",
+        "line": 820,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: -2, height: 0 } }),"
+      },
+      {
+        "file": "src/components/audit/AuditDashboard.tsx",
+        "line": 754,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/components/audit/AuditDashboard.tsx",
+        "line": 786,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/components/audit/AuditDashboard.tsx",
+        "line": 809,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/components/audio/AudioRecorder.tsx",
+        "line": 435,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/components/analytics/QuickSaveButton.tsx",
+        "line": 153,
+        "content": "...DesignSystem.shadows.none },"
+      },
+      {
+        "file": "src/components/analytics/AnalyticsDialog.tsx",
+        "line": 207,
+        "content": "...DesignSystem.shadows.lg },"
+      },
+      {
+        "file": "src/components/admin/TeamDataSyncTool.tsx",
+        "line": 264,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/components/admin/charts/StatCard.tsx",
+        "line": 119,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/components/admin/charts/PieChart.tsx",
+        "line": 95,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/components/admin/charts/LineChart.tsx",
+        "line": 77,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/components/admin/charts/ChartSelector.tsx",
+        "line": 92,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/components/admin/charts/BarChart.tsx",
+        "line": 73,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),"
+      },
+      {
+        "file": "src/components/DataVisualization/QuerySuggestions.tsx",
+        "line": 197,
+        "content": "...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),"
+      },
+      {
+        "file": "src/components/DataVisualization/QueryInterface.tsx",
+        "line": 244,
+        "content": "...DesignSystem.shadows.sm"
+      }
+    ],
+    "arrayStyles": [],
+    "dynamicStyles": [
+      {
+        "file": "src/components/adaptive/platform/NativeStyleAdapter.ts",
+        "line": 260,
+        "content": "return StyleSheet.flatten(styles);"
+      }
+    ],
+    "platformSelect": [
+      {
+        "file": "src/styles/web.ts",
+        "line": 116,
+        "content": "...Platform.select({\n      web: {\n        cursor: 'pointer' as any,\n        userSelect: 'none' as any,\n        transition: 'all 0.2s ease' as any,\n        ':hover': {\n          opacity: 0.8 },\n        ':active': {\n          transform: 'scale(0.98)' } },\n      default: {} }) },\n\n  // 文字選擇\n  selectableText: {"
+      },
+      {
+        "file": "src/styles/web.ts",
+        "line": 257,
+        "content": "small: Platform.select({\n    web: {\n      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' as any },\n    default: {\n      shadowColor: '#000',\n      ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),\n      shadowOpacity: 0.1,\n      shadowRadius: 4,\n      elevation: 2 } }),"
+      },
+      {
+        "file": "src/styles/web.ts",
+        "line": 267,
+        "content": "medium: Platform.select({\n    web: {\n      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.15)' as any },\n    default: {\n      shadowColor: '#000',\n      ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),\n      shadowOpacity: 0.15,\n      shadowRadius: 8,\n      elevation: 4 } }),"
+      },
+      {
+        "file": "src/styles/web.ts",
+        "line": 277,
+        "content": "large: Platform.select({\n    web: {\n      boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)' as any },\n    default: {\n      shadowColor: '#000',\n      ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 8 } }),\n      shadowOpacity: 0.2,\n      shadowRadius: 16,\n      elevation: 8 } }) };"
+      },
+      {
+        "file": "src/components/web/WebModal.tsx",
+        "line": 87,
+        "content": "...Platform.select({\n      web: {\n        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)' },\n      default: {\n        shadowColor: '#000',\n        ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),\n        shadowOpacity: 0.15,\n        shadowRadius: 4,\n        elevation: 4 } }) } });"
+      },
+      {
+        "file": "src/components/users/UserImportModeToggle.tsx",
+        "line": 181,
+        "content": "...Platform.select({\n      ios: {\n        shadowColor: '#000',\n        ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),\n        shadowOpacity: 0.1,\n        shadowRadius: 2 },\n      android: {\n        elevation: 2 },\n      web: {\n        boxShadow: '0 1px 3px rgba(0,0,0,0.1)' } as any }),"
+      },
+      {
+        "file": "src/components/common/ModeToggle.tsx",
+        "line": 58,
+        "content": "...Platform.select({\n      web: {\n        transform: 'scale(0.8)' },\n      default: {\n        transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] } }) } });"
+      },
+      {
+        "file": "src/components/audit/AuditReportInterface.tsx",
+        "line": 740,
+        "content": "...Platform.select({\n      ios: {\n        shadowColor: '#000',\n        ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),\n        shadowOpacity: 0.1,\n        shadowRadius: 4 },\n      android: {\n        elevation: 2 } }) },\n  sectionTitle: {"
+      },
+      {
+        "file": "src/components/audit/AuditLogViewer.tsx",
+        "line": 817,
+        "content": "...Platform.select({\n      ios: {\n        shadowColor: '#000',\n        ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: -2, height: 0 } }),\n        shadowOpacity: 0.1,\n        shadowRadius: 4 },\n      android: {\n        elevation: 4 } }) },\n  detailsHeader: {"
+      },
+      {
+        "file": "src/components/audit/AuditDashboard.tsx",
+        "line": 751,
+        "content": "...Platform.select({\n      ios: {\n        shadowColor: '#000',\n        ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),\n        shadowOpacity: 0.1,\n        shadowRadius: 4 },\n      android: {\n        elevation: 2 } }) },\n  statCardHeader: {"
+      },
+      {
+        "file": "src/components/audit/AuditDashboard.tsx",
+        "line": 783,
+        "content": "...Platform.select({\n      ios: {\n        shadowColor: '#000',\n        ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),\n        shadowOpacity: 0.1,\n        shadowRadius: 4 },\n      android: {\n        elevation: 2 } }) },\n  chartTitle: {"
+      },
+      {
+        "file": "src/components/audit/AuditDashboard.tsx",
+        "line": 806,
+        "content": "...Platform.select({\n      ios: {\n        shadowColor: '#000',\n        ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),\n        shadowOpacity: 0.1,\n        shadowRadius: 4 },\n      android: {\n        elevation: 2 } }) },\n  sectionHeader: {"
+      }
+    ],
+    "responsiveCalls": [
+      {
+        "file": "src/components/database/AddColumnDialog.tsx",
+        "line": 313,
+        "content": "maxWidth: responsive({ mobile: 400, tablet: 500, desktop: 600 }),\n    maxHeight: '80%',\n    backgroundColor: '#fff',\n    borderRadius: responsive({ mobile: 12, tablet: 14, desktop: 16 }),\n    elevation: 10,\n    shadowColor: '#000',\n    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),\n    shadowOpacity: 0.3,\n    shadowRadius: 12 },\n  modalHeader: {\n    flexDirection: 'row',\n    justifyContent: 'space-between',\n    alignItems: 'center',\n    paddingHorizontal: responsive({ mobile: 20, tablet: 24, desktop: 28 }),\n    paddingVertical: responsive({ mobile: 16, tablet: 18, desktop: 20 }),\n    borderBottomWidth: 1,\n    borderBottomColor: '#eeeeec' },\n  modalTitle: {\n    fontSize: responsive({ mobile: 18, tablet: 20, desktop: 22 }),\n    fontWeight: '600',"
+      },
+      {
+        "file": "src/components/database/AddColumnDialog.tsx",
+        "line": 316,
+        "content": "borderRadius: responsive({ mobile: 12, tablet: 14, desktop: 16 }),\n    elevation: 10,\n    shadowColor: '#000',\n    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),\n    shadowOpacity: 0.3,\n    shadowRadius: 12 },\n  modalHeader: {\n    flexDirection: 'row',\n    justifyContent: 'space-between',\n    alignItems: 'center',\n    paddingHorizontal: responsive({ mobile: 20, tablet: 24, desktop: 28 }),\n    paddingVertical: responsive({ mobile: 16, tablet: 18, desktop: 20 }),\n    borderBottomWidth: 1,\n    borderBottomColor: '#eeeeec' },\n  modalTitle: {\n    fontSize: responsive({ mobile: 18, tablet: 20, desktop: 22 }),\n    fontWeight: '600',\n    color: '#37352f' },\n  closeButton: {\n    padding: responsive({ mobile: 4, tablet: 6, desktop: 8 }) },"
+      }
+    ],
+    "unknownPatterns": [
+      {
+        "file": "src/utils/toast.ts",
+        "line": 60,
+        "content": "[{ text: '確定', style: 'default' }],",
+        "pattern": "array-with-object"
+      },
+      {
+        "file": "src/services/error/ErrorReporter.tsx",
+        "line": 73,
+        "content": "[{ text: '確定', style: 'default' }]",
+        "pattern": "array-with-object"
+      },
+      {
+        "file": "src/services/error/ErrorReporter.tsx",
+        "line": 79,
+        "content": "[{ text: '確定', style: 'default' }]",
+        "pattern": "array-with-object"
+      },
+      {
+        "file": "src/services/error/ErrorReporter.tsx",
+        "line": 103,
+        "content": "[{ text: '確定', style: 'default' }]",
+        "pattern": "array-with-object"
+      },
+      {
+        "file": "src/components/users/EnhancedBulkImportModal.tsx",
+        "line": 463,
+        "content": "[{ text: '知道了', style: 'default' }]",
+        "pattern": "array-with-object"
+      },
+      {
+        "file": "src/components/import/ImportWizard.tsx",
+        "line": 459,
+        "content": "[{ text: '確定', style: 'default' }]",
+        "pattern": "array-with-object"
+      },
+      {
+        "file": "src/components/import/ImportWizard.tsx",
+        "line": 477,
+        "content": "[{ text: '確定', style: 'default' }]",
+        "pattern": "array-with-object"
+      },
+      {
+        "file": "src/components/import/stages/FieldMapper.tsx",
+        "line": 1138,
+        "content": "<Text style={[{ fontSize: 14, fontWeight: '600', color: colors.primary }]}>",
+        "pattern": "array-with-object"
+      },
+      {
+        "file": "src/components/import/stages/FieldMapper.tsx",
+        "line": 1142,
+        "content": "<Text style={[{ fontSize: 14, color: colors.text }]}>",
+        "pattern": "array-with-object"
+      },
+      {
+        "file": "src/components/import/stages/FieldMapper.tsx",
+        "line": 1281,
+        "content": "<Text style={[{ fontSize: 14, fontWeight: '600', color: colors.primary }]}>",
+        "pattern": "array-with-object"
+      },
+      {
+        "file": "src/components/import/stages/FieldMapper.tsx",
+        "line": 1285,
+        "content": "<Text style={[{ fontSize: 14, color: colors.text }]}>",
+        "pattern": "array-with-object"
+      }
+    ]
+  },
+  "criticalIssues": [
+    {
+      "file": "src/theme/platformTokens.ts",
+      "line": 134,
+      "content": "shadowOffset: { width: number; height: number };",
+      "context": "export interface ShadowToken {\n  // React Native 格式\n  shadowColor: string;\n>>>   shadowOffset: { width: number; height: number }; <<<\n  shadowOpacity: number;\n  shadowRadius: number;\n  elevation: number;"
+    },
+    {
+      "file": "src/components/adaptive/platform/WebStyleAdapter.ts",
+      "line": 154,
+      "content": "case 'shadowOffset':",
+      "context": "      case 'shadowColor':\n        // 需要與其他陰影屬性組合\n        return null; // 在 boxShadow 中處理\n>>>       case 'shadowOffset': <<<\n        return null; // 在 boxShadow 中處理\n      case 'shadowOpacity':\n        return null; // 在 boxShadow 中處理"
+    },
+    {
+      "file": "src/components/adaptive/platform/WebStyleAdapter.ts",
+      "line": 257,
+      "content": "shadowOffset,",
+      "context": "    \n    const {\n      shadowColor,\n>>>       shadowOffset, <<<\n      shadowOpacity,\n      shadowRadius,\n      elevation } = style as any;"
+    }
+  ]
+}
