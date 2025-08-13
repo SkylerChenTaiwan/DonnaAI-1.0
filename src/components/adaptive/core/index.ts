@@ -155,17 +155,8 @@ export { AdaptiveAvatar } from './AdaptiveAvatar';
 // 標籤頁元件
 export { AdaptiveTabs } from './AdaptiveTabs';
 
-// 預設匯出 - 最常用的元件
-export {
-  AdaptiveView as View,
-  AdaptiveText as Text,
-  AdaptiveButton as Button,
-  AdaptiveInput as Input,
-  AdaptiveSelect as Select,
-  AdaptiveImage as Image,
-  AdaptiveModal as Modal } from './AdaptiveView';
-
-// 重新匯出其他元件
+// 預設匯出 - 最常用的元件（使用別名）
+export { AdaptiveView as View } from './AdaptiveView';
 export { AdaptiveText as Text } from './AdaptiveText';
 export { AdaptiveButton as Button } from './AdaptiveButton';
 export { AdaptiveInput as Input } from './AdaptiveInput';
