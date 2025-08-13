@@ -114,6 +114,9 @@
 | 108v | migrate-fieldmapper-modal.md | ✅ 已完成 | 遷移 FieldMapper.tsx 使用 AdaptiveModal - 移除 Platform.OS 判斷、修復 Web 顯示問題 | 2025-08-13 |
 | 109v | migrate-other-modals.md | ✅ 已完成 | 遷移其他 Modal 至 UnifiedModal - 統一所有 Modal 使用、建立使用標準 | 2025-08-13 |
 | 110v | modal-system-testing.md | ✅ 已完成 | Modal 系統整體測試與驗證 - 完整測試套件、E2E 測試、效能基準測試、監控機制 | 2025-08-13 |
+| 111  | adaptive-switch-component.md | 📋 待執行 | AdaptiveSwitch 跨平台開關元件 - 解決 Web 樣式問題、統一 API、無障礙支援 | - |
+| 112  | adaptive-components-enforcement.md | 📋 待執行 | Adaptive 元件使用強制規範 - ESLint 規則、Pre-commit、VS Code 工具、文件更新 | - |
+| 113  | complete-adaptive-components.md | 📋 待執行 | 完成剩餘 Adaptive 元件 - 12 個核心元件、達到 20+ 目標、覆蓋 80% 場景 | - |
 
 ## 命名規則
 
@@ -129,7 +132,7 @@
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：111**
+**下一個新建的 PRP 應使用編號：114**
 
 ## PRP 類型說明
 
