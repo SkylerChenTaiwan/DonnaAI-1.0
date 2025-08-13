@@ -13,7 +13,7 @@ import {
   Alert,
   Platform
 } from 'react-native';
-import { Button } from '@/components/adaptive';
+import { AdaptiveButton } from '@/components/adaptive';
 import { MaterialIcon } from '@/components/common/MaterialIcon';
 import { ProgressIndicator } from '@/components/common/ProgressIndicator';
 import { DesignSystem } from '@/theme/designSystem';
