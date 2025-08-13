@@ -1,3 +1,8 @@
+// 樣式系統包裝器（必須最先載入）
+import './src/utils/styleWrapper';
+import './src/utils/componentWrapper';
+import './src/utils/globalCleaner';
+
 /**
  * DonnaAI - AI 業務助理應用程式
  * 主要應用程式入口點

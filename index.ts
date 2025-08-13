@@ -1,3 +1,6 @@
+// 必須最先載入的樣式包裝器
+import './src/utils/styleWrapper';
+
 // 導入 Metro runtime 以支援 Web 版的 HMR（必須是第一個導入）
 import '@expo/metro-runtime';
 

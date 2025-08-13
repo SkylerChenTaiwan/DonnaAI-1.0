@@ -3,6 +3,8 @@ module.exports = function(api) {
   return {
     presets: ['babel-preset-expo'],
     plugins: [
+        // 清理樣式的插件
+        './babel-plugin-clean-styles',
       [
         'module-resolver',
         {
