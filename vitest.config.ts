@@ -14,7 +14,10 @@ export default defineConfig({
           'react-native',
           '@testing-library/react-native',
           '@react-native',
-          'react-native-*'
+          'react-native-*',
+          '@testing-library/react-native/build',
+          '@testing-library/react-native/src',
+          '@testing-library/jest-native'
         ]
       }
     },

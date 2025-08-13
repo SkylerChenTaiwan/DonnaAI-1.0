@@ -156,18 +156,35 @@
 | Modal (直接) | AdaptiveModal | 顯示問題 | `iam` |
 | Button (直接) | AdaptiveButton | 顏色問題 | `iab` |
 
-#### ✅ 可用 Adaptive 元件清單（持續更新）
+#### ✅ 可用 Adaptive 元件清單（20+ 元件已完成！）
 ```typescript
 // 從 @/components/adaptive 匯入
 import {
-  AdaptiveButton,    // ✅ PRP-102 已完成
-  AdaptiveModal,     // ✅ PRP-107 已完成
-  AdaptiveSwitch,    // ✅ PRP-111 已完成
-  AdaptiveSelect,    // ✅ PRP-94 已完成
-  AdaptiveInput,     // ✅ PRP-94 已完成
-  AdaptiveText,      // ✅ PRP-94 已完成
-  AdaptiveView,      // ✅ PRP-94 已完成
-  AdaptiveImage,     // ✅ PRP-94 已完成
+  // 基礎元件 (PRP-94)
+  AdaptiveButton,    // ✅ 按鈕元件
+  AdaptiveModal,     // ✅ 模態框 (PRP-107)
+  AdaptiveSelect,    // ✅ 下拉選單
+  AdaptiveInput,     // ✅ 輸入框
+  AdaptiveText,      // ✅ 文字元件
+  AdaptiveView,      // ✅ 容器元件
+  AdaptiveImage,     // ✅ 圖片元件
+  
+  // 表單元件 (PRP-111, PRP-113)
+  AdaptiveSwitch,    // ✅ 開關 (PRP-111)
+  AdaptiveCheckbox,  // ✅ 複選框 (PRP-113)
+  AdaptiveRadio,     // ✅ 單選按鈕 (PRP-113)
+  AdaptiveRadioGroup,// ✅ 單選群組 (PRP-113)
+  AdaptiveSearchBar, // ✅ 搜尋欄 (PRP-113)
+  AdaptiveDatePicker,// ✅ 日期選擇器 (PRP-113)
+  AdaptiveSlider,    // ✅ 滑動條 (PRP-113)
+  
+  // UI 容器元件 (PRP-113)
+  AdaptiveCard,      // ✅ 卡片容器
+  AdaptiveDivider,   // ✅ 分隔線
+  AdaptiveAvatar,    // ✅ 頭像
+  
+  // 互動元件 (PRP-113)
+  AdaptiveTabs,      // ✅ 標籤頁
 } from '@/components/adaptive';
 ```
 

@@ -116,6 +116,45 @@ export {
   type AdaptiveSwitchProps,
   DEFAULT_COLORS as SWITCH_DEFAULT_COLORS } from './AdaptiveSwitch';
 
+// 複選框元件
+export {
+  AdaptiveCheckbox,
+  type AdaptiveCheckboxProps } from './AdaptiveCheckbox';
+
+// 單選按鈕元件
+export {
+  AdaptiveRadio,
+  AdaptiveRadioGroup,
+  type AdaptiveRadioProps,
+  type AdaptiveRadioGroupProps } from './AdaptiveRadio';
+
+// 搜尋欄元件
+export {
+  AdaptiveSearchBar,
+  type AdaptiveSearchBarProps } from './AdaptiveSearchBar';
+
+// 日期選擇器元件
+export {
+  AdaptiveDatePicker,
+  type AdaptiveDatePickerProps } from './AdaptiveDatePicker';
+
+// 滑動條元件
+export {
+  AdaptiveSlider,
+  type AdaptiveSliderProps } from './AdaptiveSlider';
+
+// 卡片元件
+export { AdaptiveCard } from './AdaptiveCard';
+
+// 分隔線元件
+export { AdaptiveDivider } from './AdaptiveDivider';
+
+// 頭像元件
+export { AdaptiveAvatar } from './AdaptiveAvatar';
+
+// 標籤頁元件
+export { AdaptiveTabs } from './AdaptiveTabs';
+
 // 預設匯出 - 最常用的元件
 export {
   AdaptiveView as View,
