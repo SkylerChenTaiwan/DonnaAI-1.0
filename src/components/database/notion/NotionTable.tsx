@@ -4,6 +4,7 @@
 
 import React, { useCallback, useMemo, useState, useRef, useEffect } from 'react';
 import '../web/styles/NotionDatabaseV4.css';
+import '@/styles/cssIsolation.css';  // 保護全域佈局不被 Notion CSS 破壞
 import { View, Text, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 import { 
   NotionTableProps, 

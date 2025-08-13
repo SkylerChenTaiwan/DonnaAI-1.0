@@ -7,7 +7,7 @@ import React, { forwardRef, useMemo, useState } from 'react';
 import type { ViewStyle, TextStyle } from 'react-native';
 import type { CSSProperties } from 'react';
 import { PlatformAdapter } from '../platform/PlatformAdapter';
-import { DesignSystem } from '../../../theme/designSystem';
+import { DesignSystem, getButtonStyle } from '../../../theme/designSystem';
 import AdaptiveView from './AdaptiveView';
 import AdaptiveText from './AdaptiveText';
 
@@ -82,7 +82,7 @@ const createButtonStyles = (
   platformAdapter: PlatformAdapter
 ) => {
   // 基礎樣式
-  const baseStyle = DesignSystem.getButtonStyle(variant, size);
+  const baseStyle = getButtonStyle(variant, size);
   
   // 狀態樣式
   let stateStyle = {};

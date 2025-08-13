@@ -9,7 +9,7 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  ScrollView
+  ScrollView,
   Platform
 } from 'react-native';
 import { QUERY_TEMPLATES, QueryTemplate } from '../../types/data-visualization';

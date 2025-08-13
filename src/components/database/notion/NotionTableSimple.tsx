@@ -7,6 +7,7 @@ import React, { useState, useMemo } from 'react';
 import { Platform, View, Text } from 'react-native';
 import { NotionIcons } from './NotionIcons';
 import '../web/styles/NotionDatabaseV4.css';
+import '@/styles/cssIsolation.css';  // 保護全域佈局不被 Notion CSS 破壞
 
 interface NotionTableSimpleProps {
   data: any[];

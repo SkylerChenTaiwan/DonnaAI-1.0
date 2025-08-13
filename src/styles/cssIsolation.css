@@ -1,0 +1,115 @@
+/**
+ * CSS 隔離檔案 - 保護全域佈局不被 NotionDatabaseV4.css 破壞
+ * 此檔案必須在 NotionDatabaseV4.css 之後載入以覆蓋其規則
+ */
+
+/* 保護主要應用容器 - 防止被 notion-database-wrapper 影響 */
+#root > div:first-child {
+  padding: 0 !important;  /* 覆蓋 notion-database-wrapper 的 96px padding */
+  display: flex !important;
+  flex-direction: row !important;  /* 確保橫向佈局（側邊欄 + 內容） */
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* 保護導航側邊欄 - 確保它不被推出視窗 */
+.sidebar-navigation,
+.navigation-sidebar,
+[data-testid="sidebar-navigation"] {
+  position: relative !important;
+  left: 0 !important;
+  top: 0 !important;
+  width: 240px !important;
+  min-width: 240px !important;
+  flex-shrink: 0 !important;
+  height: 100% !important;
+  overflow-y: auto !important;
+}
+
+/* 保護主內容區域 */
+.main-content,
+[data-testid="main-content"] {
+  flex: 1 !important;
+  overflow: auto !important;
+  padding: 0 !important;
+  width: calc(100% - 240px) !important;
+}
+
+/* 限制 Notion 樣式只在資料庫表格容器內生效 */
+.notion-table-container .notion-database-wrapper {
+  /* 允許 Notion 樣式在這裡生效 */
+  padding: 0 96px !important;
+}
+
+/* 確保非資料庫頁面的容器不受影響 */
+body > #root > div:not(.notion-database-wrapper) {
+  padding: 0 !important;
+}
+
+/* 保護按鈕不被 Notion 樣式影響 */
+button:not(.notion-button):not(.notion-text-button):not(.notion-icon-button) {
+  /* 保護非 Notion 按鈕的原有樣式 */
+  color: inherit !important;
+  background-color: inherit !important;
+  font-family: inherit !important;
+}
+
+/* 修復被破壞的 flex 佈局 */
+.flex-row {
+  display: flex !important;
+  flex-direction: row !important;
+}
+
+.flex-column {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* 確保 Web 平台的 Layout 元件正常運作 */
+.layout-container {
+  display: flex !important;
+  flex-direction: row !important;
+  height: 100vh !important;
+  width: 100vw !important;
+  overflow: hidden !important;
+}
+
+/* 防止全域字體被覆蓋 */
+body:not(.notion-body) {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+}
+
+/* 保護 Modal 覆蓋層不被影響 */
+.modal-overlay,
+[data-testid="modal-overlay"] {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 1000 !important;
+}
+
+/* 確保 Adaptive 元件不被影響 */
+[class*="adaptive-"] {
+  /* 保護所有 Adaptive 元件類別 */
+  box-sizing: border-box !important;
+}
+
+/* 特別保護 AdaptiveButton */
+.adaptive-button,
+[data-adaptive-button] {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
+
+/* 防止 !important 規則污染全域 */
+:root {
+  /* 重置可能被覆蓋的 CSS 變數 */
+  --adaptive-primary: #007AFF;
+  --adaptive-secondary: #5856D6;
+  --adaptive-background: #FFFFFF;
+  --adaptive-surface: #F2F2F7;
+}

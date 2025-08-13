@@ -11,6 +11,7 @@ import { GroupPanel } from './components/GroupPanel';
 import { ColumnManager } from './components/ColumnManager';
 import { SearchBar } from './components/SearchBar';
 import '../web/styles/NotionDatabaseV4.css';
+import '@/styles/cssIsolation.css';  // 保護全域佈局不被 Notion CSS 破壞
 
 interface NotionTableV6Props {
   data: any[];

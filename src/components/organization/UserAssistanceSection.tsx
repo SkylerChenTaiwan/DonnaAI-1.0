@@ -14,7 +14,7 @@ import { View,
   TouchableOpacity,
   ScrollView,
   Alert,
-   as RNTextInput   } from 'react-native';
+  TextInput as RNTextInput } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import DocumentPicker from 'expo-document-picker';
 import ImportWizard from '@/components/import/ImportWizard';
