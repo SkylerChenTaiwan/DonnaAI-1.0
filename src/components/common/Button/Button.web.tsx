@@ -83,26 +83,38 @@ export const Button: React.FC<ButtonProps> = ({
         gap: '8px'
       } };
 
-    // 變體樣式 - 使用 !important 確保顏色生效
+    // 變體樣式 - 使用最強的內聯樣式
     const variantStyles = {
       primary: {
-        backgroundColor: webColorOverrides.button.primary.default,
-        color: `${webColorOverrides.button.primary.text} !important` },
+        backgroundColor: '#007AFF',
+        color: '#FFFFFF',
+        // 強制覆蓋所有子元素的顏色
+        '& *': { color: '#FFFFFF !important' }
+      },
       secondary: {
-        backgroundColor: webColorOverrides.button.secondary.default,
-        color: `${webColorOverrides.button.secondary.text} !important` },
+        backgroundColor: '#F2F2F7',
+        color: '#000000',
+        '& *': { color: '#000000 !important' }
+      },
       outline: {
         backgroundColor: 'transparent',
-        color: `${webColorOverrides.button.outline.text} !important`,
-        border: `1px solid ${webColorOverrides.button.outline.border}` },
+        color: '#007AFF',
+        border: '1px solid #007AFF',
+        '& *': { color: '#007AFF !important' }
+      },
       ghost: {
         backgroundColor: 'transparent',
-        color: `${webColorOverrides.text.primary} !important` },
+        color: '#007AFF',
+        '& *': { color: '#007AFF !important' }
+      },
       text: {
         backgroundColor: 'transparent',
-        color: `${webColorOverrides.text.primary} !important`,
+        color: '#007AFF',
         padding: '0',
-        textDecoration: 'underline' } };
+        textDecoration: 'underline',
+        '& *': { color: '#007AFF !important' }
+      }
+    };
 
     return {
       ...baseStyle,
@@ -199,13 +211,21 @@ export const Button: React.FC<ButtonProps> = ({
       `}</style>
       <button
         type={type}
-        style={getButtonStyle()}
+        disabled={disabled || loading}
+        style={{
+          ...getButtonStyle(),
+          // 確保文字顏色正確顯示
+          color: variant === 'primary' ? '#FFFFFF' : 
+                 variant === 'secondary' ? '#000000' :
+                 variant === 'outline' ? '#007AFF' :
+                 variant === 'ghost' ? '#007AFF' :
+                 variant === 'text' ? '#007AFF' : '#000000'
+        }}
         className={className}
         onClick={handleClick}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        disabled={disabled || loading}
-        aria-label={ariaLabel || title}
+        aria-label={ariaLabel}
         data-testid={dataTestId}
       >
         {renderContent()}

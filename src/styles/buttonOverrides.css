@@ -1,0 +1,59 @@
+/**
+ * 全域按鈕樣式覆蓋
+ * 確保按鈕顏色正確顯示
+ */
+
+/* 主要按鈕 */
+button[style*="backgroundColor: #007AFF"],
+button[style*="background-color: #007AFF"] {
+  color: #FFFFFF !important;
+}
+
+button[style*="backgroundColor: #007AFF"] *,
+button[style*="background-color: #007AFF"] * {
+  color: #FFFFFF !important;
+}
+
+/* 次要按鈕 */
+button[style*="backgroundColor: #F2F2F7"],
+button[style*="background-color: #F2F2F7"] {
+  color: #000000 !important;
+}
+
+button[style*="backgroundColor: #F2F2F7"] *,
+button[style*="background-color: #F2F2F7"] * {
+  color: #000000 !important;
+}
+
+/* 輪廓按鈕 */
+button[style*="border"][style*="#007AFF"] {
+  color: #007AFF !important;
+}
+
+button[style*="border"][style*="#007AFF"] * {
+  color: #007AFF !important;
+}
+
+/* 確保所有按鈕文字可見 */
+button {
+  color: inherit;
+}
+
+button span,
+button div {
+  color: inherit !important;
+}
+
+/* 特別處理 React Native Web 生成的按鈕 */
+.css-text-901oao {
+  color: inherit !important;
+}
+
+.css-view-1dbjc4n button {
+  color: inherit !important;
+}
+
+/* 強制覆蓋 Notion 樣式 */
+.notion-button {
+  color: inherit !important;
+}
