@@ -9,7 +9,9 @@ import { View,
   TouchableOpacity,
   StyleSheet,
   Alert  } from 'react-native';
-import { AdaptiveInput } from '@/components/adaptive';
+import {
+  AdaptiveInput
+} from '@/components/adaptive';
 import { Icon } from '@/components/common/Icon';
 
 export interface EditableCellProps {

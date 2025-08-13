@@ -10,7 +10,7 @@ import {
   StyleSheet,
   ScrollView } from 'react-native';
 import { Icon } from '@/components/common/Icon';
-import { AdaptiveModal } from '@/components/adaptive/core/AdaptiveModal';
+import { AdaptiveModal } from '@/components/adaptive';
 import { TableColumn } from '@/types/table';
 import { FilterCondition } from './FilterBadge';
 import { FilterForm } from '../database/FilterFormV2';

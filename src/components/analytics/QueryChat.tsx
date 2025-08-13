@@ -5,7 +5,9 @@ import { View,
   Text,
   ActivityIndicator,
   StyleSheet  } from 'react-native';
-import { AdaptiveInput } from '@/components/adaptive';
+import {
+  AdaptiveInput
+} from '@/components/adaptive';
 import { Icon } from '@/components/common/Icon';
 import { useQueryStore } from '../../stores/queryStore';
 import { useAuthStore } from '../../stores/authStore';

@@ -8,7 +8,9 @@ import { View,
   TouchableOpacity,
   StyleSheet,
   Alert, Platform  } from 'react-native';
-import { AdaptiveModal } from '@/components/adaptive';
+import {
+  AdaptiveModal
+} from '@/components/adaptive';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { ResponsiveLayout, responsiveGrid } from '@/components/common/ResponsiveLayout';

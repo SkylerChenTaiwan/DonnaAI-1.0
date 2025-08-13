@@ -12,7 +12,9 @@ import { View,
   Animated,
   Platform
  } from 'react-native';
-import { AdaptiveModal } from '@/components/adaptive';
+import {
+  AdaptiveModal
+} from '@/components/adaptive';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';

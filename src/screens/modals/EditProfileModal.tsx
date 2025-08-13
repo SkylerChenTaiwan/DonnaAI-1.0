@@ -10,7 +10,9 @@ import { View,
   TouchableOpacity,
   ActivityIndicator,
   Alert  } from 'react-native';
-import { AdaptiveInput } from '@/components/adaptive';
+import {
+  AdaptiveInput
+} from '@/components/adaptive';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { WebModal } from '@/components/web/WebModal';

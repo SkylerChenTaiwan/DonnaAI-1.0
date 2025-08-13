@@ -6,7 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   AdaptiveModal,
-  Button
+  AdaptiveButton
 } from '@/components/adaptive';
 import { View, Text, StyleSheet, ScrollView, Alert, Platform  } from 'react-native';
 import { useNavigation } from '@react-navigation/native';

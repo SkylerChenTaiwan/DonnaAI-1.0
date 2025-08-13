@@ -14,7 +14,9 @@ import { View,
   Alert,
   Platform,
   ScrollView  } from 'react-native';
-import { AdaptiveModal } from '@/components/adaptive';
+import {
+  AdaptiveModal
+} from '@/components/adaptive';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { ResponsiveLayout } from '@/components/common/ResponsiveLayout';

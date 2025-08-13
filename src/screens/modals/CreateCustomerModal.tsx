@@ -5,7 +5,9 @@
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Alert, ScrollView, TouchableOpacity, Platform  } from 'react-native';
-import { AdaptiveModal } from '@/components/adaptive';
+import {
+  AdaptiveModal
+} from '@/components/adaptive';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { Icon } from '@/components/common/Icon';
 

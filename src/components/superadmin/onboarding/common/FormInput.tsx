@@ -9,7 +9,9 @@ import { View,
   StyleSheet,
   TextInputProps,
   Platform  } from 'react-native';
-import { AdaptiveInput } from '@/components/adaptive';
+import {
+  AdaptiveInput
+} from '@/components/adaptive';
 import { DesignSystem } from '@/theme/designSystem';
 
 interface FormInputProps extends TextInputProps {

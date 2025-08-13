@@ -12,7 +12,9 @@ import { View,
   ScrollView,
   Platform
  } from 'react-native';
-import { AdaptiveModal } from '@/components/adaptive';
+import {
+  AdaptiveModal
+} from '@/components/adaptive';
 import * as Clipboard from 'expo-clipboard';
 import { Share } from 'react-native';
 import { errorLogger } from './ErrorLogger';

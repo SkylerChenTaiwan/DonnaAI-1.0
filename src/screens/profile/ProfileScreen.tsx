@@ -7,7 +7,9 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
-import { Button } from '@/components/adaptive';
+import {
+  AdaptiveButton
+} from '@/components/adaptive';
 import { useAuthStore } from '@/stores/authStore';
 
 export const ProfileScreen: React.FC = () => {

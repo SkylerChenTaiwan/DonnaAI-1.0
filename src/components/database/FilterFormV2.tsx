@@ -8,7 +8,9 @@ import { View,
   TouchableOpacity,
   StyleSheet,
   Platform  } from 'react-native';
-import { AdaptiveInput } from '@/components/adaptive';
+import {
+  AdaptiveInput
+} from '@/components/adaptive';
 import { Icon } from '@/components/common/Icon';
 import { TableColumn } from '@/types/table';
 import { FilterCondition } from '@/components/common/FilterBadge';

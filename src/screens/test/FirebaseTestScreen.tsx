@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Platform  } from 'react-native';
-import { AdaptiveInput } from '@/components/adaptive';
+import {
+  AdaptiveInput
+} from '@/components/adaptive';
 import { useAuthStore } from '../../stores/authStore';
 import { createCustomer, getCustomer } from '../../services/firebase/customers';
 import { getFirebaseDb } from '../../services/firebase/config';

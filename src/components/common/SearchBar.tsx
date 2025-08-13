@@ -7,7 +7,9 @@ import { View,
   TouchableOpacity,
   StyleSheet,
   TextInputProps  } from 'react-native';
-import { AdaptiveInput } from '@/components/adaptive';
+import {
+  AdaptiveInput
+} from '@/components/adaptive';
 import { Icon } from '@/components/common/Icon';
 
 interface SearchBarProps extends Omit<AdaptiveInputProps, 'value' | 'onChangeText'> {

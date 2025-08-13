@@ -6,7 +6,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import {
   AdaptiveInput,
-  Button
+  AdaptiveButton
 } from '@/components/adaptive';
 import { View,
   Text,

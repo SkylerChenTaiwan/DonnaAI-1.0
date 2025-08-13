@@ -8,7 +8,9 @@ import { View, Text, StyleSheet, Alert, ScrollView , Platform } from 'react-nati
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Layout } from '@/components/common/Layout';
-import { Button } from '@/components/adaptive';
+import {
+  AdaptiveButton
+} from '@/components/adaptive';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { AudioRecorder } from '@/components/audio/AudioRecorder';
 import { AudioEditor } from '@/components/audio/AudioEditor';

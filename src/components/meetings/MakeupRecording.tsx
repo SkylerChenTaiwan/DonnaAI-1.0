@@ -5,8 +5,8 @@
 
 import React, { useState } from 'react';
 import {
-  Button,
-  TextInput
+  AdaptiveButton,
+  AdaptiveInput
 } from '@/components/adaptive';
 import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';

@@ -13,7 +13,9 @@ import { View,
   ScrollView,
   ActivityIndicator
  } from 'react-native';
-import { AdaptiveInput } from '@/components/adaptive';
+import {
+  AdaptiveInput
+} from '@/components/adaptive';
 import { useQueryStore, useCurrentChart } from '../../stores/queryStore';
 import { ClarificationForm } from './ClarificationForm';
 import { ChartDisplay } from '../charts/ChartDisplay';

@@ -6,7 +6,7 @@
 import React, { useCallback } from 'react';
 import {
   AdaptiveModal,
-  Button
+  AdaptiveButton
 } from '@/components/adaptive';
 import { View,
   Text,

@@ -17,7 +17,9 @@ import { Icon } from '@/components/common/Icon';
 import { pickDocument } from '@/utils/web-file-picker';
 import * as FileSystem from 'expo-file-system';
 
-import { Button } from '@/components/adaptive';
+import {
+  AdaptiveButton
+} from '@/components/adaptive';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { parseCSVFile, CSVParseResult, getCSVTemplate, validateFileSize } from '@/services/csv/parser';
 import { validateCustomerBatch, ValidationSummary } from '@/services/csv/validator';

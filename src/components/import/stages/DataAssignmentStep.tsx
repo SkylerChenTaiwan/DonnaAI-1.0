@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   AdaptiveSwitch,
-  Button
+  AdaptiveButton
 } from '@/components/adaptive';
 import { View,
   Text,

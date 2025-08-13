@@ -6,8 +6,8 @@
 
 import React, { useState } from 'react';
 import {
-  TextInput,
-  Button
+  AdaptiveButton,
+  AdaptiveInput
 } from '@/components/adaptive';
 import {
   View,

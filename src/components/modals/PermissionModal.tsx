@@ -10,7 +10,9 @@ import { View,
   StyleSheet,
   Alert,
   ActivityIndicator, Platform  } from 'react-native';
-import { AdaptiveModal } from '@/components/adaptive';
+import {
+  AdaptiveModal
+} from '@/components/adaptive';
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '../../theme/DesignSystem';
 import { User } from '../../types/user';

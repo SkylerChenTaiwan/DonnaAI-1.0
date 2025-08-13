@@ -10,7 +10,9 @@ import { View,
   StyleSheet,
   ScrollView,
   Platform  } from 'react-native';
-import { AdaptiveInput } from '@/components/adaptive';
+import {
+  AdaptiveInput
+} from '@/components/adaptive';
 import { Icon } from '@/components/common/Icon';
 import { Popover } from '@/components/common/Popover';
 import { TableColumn } from '@/types/table';

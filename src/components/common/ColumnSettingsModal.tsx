@@ -11,8 +11,10 @@ import {
   ScrollView,
   Alert } from 'react-native';
 import { Icon } from '@/components/common/Icon';
-import { AdaptiveModal } from '@/components/adaptive/core/AdaptiveModal';
-import { AdaptiveSwitch } from '@/components/adaptive';
+import {
+  AdaptiveSwitch,
+  AdaptiveModal
+} from '@/components/adaptive';
 import { TableColumn } from '@/types/table';
 
 interface ColumnSettingsModalProps {

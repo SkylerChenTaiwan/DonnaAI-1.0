@@ -13,7 +13,9 @@ import { View,
   Platform,
   Alert
  } from 'react-native';
-import { AdaptiveInput } from '@/components/adaptive';
+import {
+  AdaptiveInput
+} from '@/components/adaptive';
 import * as Clipboard from 'expo-clipboard';
 import { useAuthStore } from '@/stores/authStore';
 import { useTaskStore } from '@/stores/taskStore';

@@ -9,7 +9,9 @@ import { View,
   Text,
   StyleSheet,
   TouchableOpacity  } from 'react-native';
-import { AdaptiveInput } from '@/components/adaptive';
+import {
+  AdaptiveInput
+} from '@/components/adaptive';
 // Icon import removed - using platform-specific Icon component;
 import { DesignSystem } from '@/theme/designSystem';
 import { StepProps, BillingPlanData } from '@/types/onboarding';

@@ -8,7 +8,9 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { View, Text, StyleSheet, Alert, Platform } from 'react-native';
 import { Audio, InterruptionModeIOS, InterruptionModeAndroid } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
-import { Button } from '@/components/adaptive';
+import {
+  AdaptiveButton
+} from '@/components/adaptive';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { OfflineRecordingService, NetworkMonitor } from '@/services/offline-recording';
 

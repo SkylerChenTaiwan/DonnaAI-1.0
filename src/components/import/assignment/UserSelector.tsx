@@ -12,7 +12,9 @@ import { View,
   ActivityIndicator,
   Platform
  } from 'react-native';
-import { AdaptiveInput } from '@/components/adaptive';
+import {
+  AdaptiveInput
+} from '@/components/adaptive';
 import { MaterialIcon } from '@/components/common/MaterialIcon';
 import { DesignSystem } from '@/theme/designSystem';
 import { User, UserRole } from '@/types/user';

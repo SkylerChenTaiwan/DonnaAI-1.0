@@ -11,7 +11,9 @@ import { View,
   Dimensions,
   StyleSheet,
   ScrollView  } from 'react-native';
-import { AdaptiveModal } from '@/components/adaptive';
+import {
+  AdaptiveModal
+} from '@/components/adaptive';
 
 interface PopoverProps {
   visible: boolean;

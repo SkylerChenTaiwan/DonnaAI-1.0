@@ -5,6 +5,7 @@
 
 import React from 'react';
 import { webColorOverrides } from '@/theme/webOverrides';
+import { AdaptiveButton } from '@/components/adaptive';
 
 export interface ButtonProps {
   title?: string;

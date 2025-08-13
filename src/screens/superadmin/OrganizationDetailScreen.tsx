@@ -6,10 +6,10 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-  TextInput,
-  Button,
   AdaptiveSwitch,
-  AdaptiveModal
+  AdaptiveModal,
+  AdaptiveButton,
+  AdaptiveInput
 } from '@/components/adaptive';
 import {
   View,

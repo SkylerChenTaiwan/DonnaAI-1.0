@@ -15,7 +15,9 @@ import { FlashList } from '@shopify/flash-list';
 import { ImportUserData, UserEditEvent, BatchOperationOptions, UserImportStats } from '@/types/userImport';
 import { DesignSystem } from '@/theme/designSystem';
 import { Icon } from '@/components/common/Icon';
-import { Button } from '@/components/adaptive';
+import {
+  AdaptiveButton
+} from '@/components/adaptive';
 import EditableUserRow from './EditableUserRow';
 
 export interface UserDataPreviewTableProps {

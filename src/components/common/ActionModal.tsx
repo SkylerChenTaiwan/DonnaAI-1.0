@@ -13,7 +13,8 @@ import {
 } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
-import { AdaptiveModal } from '@/components/adaptive/core/AdaptiveModal';
+import { AdaptiveModal } from '@/components/adaptive';
+import { AdaptiveModal } from '@/components/adaptive';
 
 interface Action {
   id: string;

@@ -11,7 +11,9 @@ import { View,
   TouchableOpacity,
   ActivityIndicator,
   Dimensions, Platform  } from 'react-native';
-import { AdaptiveModal } from '@/components/adaptive';
+import {
+  AdaptiveModal
+} from '@/components/adaptive';
 import { Layout } from '@/components/common/Layout';
 import { Icon } from '@/components/common/Icon';
 import { useNavigation } from '@react-navigation/native';

@@ -17,7 +17,9 @@ import {
 import { Icon } from '@/components/common/Icon';
 import { Audio } from 'expo-av';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
-import { Button } from '@/components/adaptive';
+import {
+  AdaptiveButton
+} from '@/components/adaptive';
 import { recordingManager } from '@/services/audio/recordingManager';
 import { 
   convertVoiceToTask,

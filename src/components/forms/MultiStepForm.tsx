@@ -18,7 +18,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 import { FormField } from './FormField';
-import { Button } from '@/components/adaptive';
+import {
+  AdaptiveButton
+} from '@/components/adaptive';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { FormFieldConfig } from '@/services/validation/form-schemas';
 

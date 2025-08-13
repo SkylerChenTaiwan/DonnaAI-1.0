@@ -6,7 +6,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   AdaptiveInput,
-  AdaptiveSwitch
+  AdaptiveSwitch,
+  AdaptiveModal
 } from '@/components/adaptive';
 import { View,
   Text,
@@ -17,7 +18,6 @@ import { View,
   Platform,
   Pressable
   } from 'react-native';
-import { AdaptiveModal } from '@/components/adaptive/core/AdaptiveModal';
 import { FieldSelectorModalContent } from './FieldSelectorModal';
 import { RelationEditorModalContent } from './RelationEditorModal';
 import { MaterialIcon } from '@/components/common/MaterialIcon';

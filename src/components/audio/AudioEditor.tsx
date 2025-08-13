@@ -8,7 +8,9 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { PanGestureHandler, GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Audio } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
-import { Button } from '@/components/adaptive';
+import {
+  AdaptiveButton
+} from '@/components/adaptive';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { AudioEditingSession } from '../../types/record';
 

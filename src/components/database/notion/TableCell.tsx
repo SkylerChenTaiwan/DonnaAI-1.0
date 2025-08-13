@@ -4,7 +4,9 @@
 
 import React, { memo, useCallback, useState, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Platform  } from 'react-native';
-import { AdaptiveInput } from '@/components/adaptive';
+import {
+  AdaptiveInput
+} from '@/components/adaptive';
 import { ColumnConfig, CellPosition, CellState } from './types';
 import { tableStyles, getCellStyles } from './styles/tableStyles';
 import { NotionColors, NotionTypography } from './constants';

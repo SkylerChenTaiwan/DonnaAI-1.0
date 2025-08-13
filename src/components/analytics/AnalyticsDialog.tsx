@@ -7,7 +7,9 @@ import { View,
   KeyboardAvoidingView,
   Platform,
   PanResponder  } from 'react-native';
-import { AdaptiveModal } from '@/components/adaptive';
+import {
+  AdaptiveModal
+} from '@/components/adaptive';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import QueryChat from './QueryChat';
 import QuickSaveButton from './QuickSaveButton';

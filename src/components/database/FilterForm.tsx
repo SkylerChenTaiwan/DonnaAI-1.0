@@ -7,7 +7,9 @@ import { View,
   Text,
   TouchableOpacity,
   StyleSheet  } from 'react-native';
-import { AdaptiveInput } from '@/components/adaptive';
+import {
+  AdaptiveInput
+} from '@/components/adaptive';
 import { Icon } from '@/components/common/Icon';
 import { Picker } from '@react-native-picker/picker';
 import { TableColumn } from '@/types/table';

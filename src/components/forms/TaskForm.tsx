@@ -18,7 +18,9 @@ import { SimplifiedAudioInput } from '@/components/input/SimplifiedAudioInput';
 
 import { TaskFormSchema, TaskFormData } from '@/services/validation/form-schemas';
 import { FormField } from './FormField';
-import { Button } from '@/components/adaptive';
+import {
+  AdaptiveButton
+} from '@/components/adaptive';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 
 export interface TaskFormProps {

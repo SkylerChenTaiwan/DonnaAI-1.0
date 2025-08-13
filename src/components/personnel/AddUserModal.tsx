@@ -13,7 +13,9 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert } from 'react-native';
-import { Button } from '@/components/adaptive';
+import {
+  AdaptiveButton
+} from '@/components/adaptive';
 import { Layout } from '@/components/common/Layout';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { FormField } from '@/components/forms/FormField';

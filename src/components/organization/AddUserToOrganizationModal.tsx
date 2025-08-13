@@ -6,8 +6,8 @@
 import React, { useState } from 'react';
 import {
   AdaptiveModal,
-  TextInput,
-  Button
+  AdaptiveInput,
+  AdaptiveButton
 } from '@/components/adaptive';
 import { View,
   Text,
