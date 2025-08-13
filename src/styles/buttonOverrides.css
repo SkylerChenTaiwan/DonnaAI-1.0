@@ -1,37 +1,57 @@
 /**
- * 全域按鈕樣式覆蓋
- * 確保按鈕顏色正確顯示
+ * 全域按鈕樣式覆蓋 - 黑白灰設計系統
+ * 確保按鈕顏色符合整體設計風格
  */
 
-/* 主要按鈕 */
-button[style*="backgroundColor: #007AFF"],
-button[style*="background-color: #007AFF"] {
+/* 主要按鈕 - 深灰底白字 */
+button[style*="backgroundColor: #2C2C2C"],
+button[style*="background-color: #2C2C2C"] {
   color: #FFFFFF !important;
 }
 
-button[style*="backgroundColor: #007AFF"] *,
-button[style*="background-color: #007AFF"] * {
+button[style*="backgroundColor: #2C2C2C"] *,
+button[style*="background-color: #2C2C2C"] * {
   color: #FFFFFF !important;
 }
 
-/* 次要按鈕 */
+/* Hover 狀態 */
+button[style*="backgroundColor: #3C3C3C"],
+button[style*="background-color: #3C3C3C"] {
+  color: #FFFFFF !important;
+}
+
+/* 次要按鈕 - 淺灰底深字 */
+button[style*="backgroundColor: #F7F7F7"],
+button[style*="background-color: #F7F7F7"],
 button[style*="backgroundColor: #F2F2F7"],
 button[style*="background-color: #F2F2F7"] {
-  color: #000000 !important;
+  color: #1A1A1A !important;
 }
 
+button[style*="backgroundColor: #F7F7F7"] *,
+button[style*="background-color: #F7F7F7"] *,
 button[style*="backgroundColor: #F2F2F7"] *,
 button[style*="background-color: #F2F2F7"] * {
-  color: #000000 !important;
+  color: #1A1A1A !important;
 }
 
-/* 輪廓按鈕 */
-button[style*="border"][style*="#007AFF"] {
-  color: #007AFF !important;
+/* 輪廓按鈕 - 透明底深灰字 */
+button[style*="border"][style*="#D0D0D0"] {
+  color: #2C2C2C !important;
 }
 
-button[style*="border"][style*="#007AFF"] * {
-  color: #007AFF !important;
+button[style*="border"][style*="#D0D0D0"] * {
+  color: #2C2C2C !important;
+}
+
+/* Ghost 按鈕 - 透明底深灰字 */
+button[style*="transparent"] {
+  color: #2C2C2C !important;
+}
+
+/* 文字按鈕 - 次要文字色 */
+button[style*="text-decoration: underline"] {
+  color: #666666 !important;
 }
 
 /* 確保所有按鈕文字可見 */
@@ -44,16 +64,19 @@ button div {
   color: inherit !important;
 }
 
-/* 特別處理 React Native Web 生成的按鈕 */
-.css-text-901oao {
-  color: inherit !important;
+/* 禁用狀態 */
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-.css-view-1dbjc4n button {
-  color: inherit !important;
+/* 移除所有藍色殘留 */
+button[style*="#2C2C2C"] {
+  background-color: #2C2C2C !important;
 }
 
-/* 強制覆蓋 Notion 樣式 */
+/* 確保 Notion 風格一致 */
 .notion-button {
   color: inherit !important;
+  background: inherit !important;
 }

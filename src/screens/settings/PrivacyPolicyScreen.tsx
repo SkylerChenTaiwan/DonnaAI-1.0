@@ -139,7 +139,7 @@ export const PrivacyPolicyScreen: React.FC = () => {
               style={styles.contactButton}
               onPress={() => openExternalLink('mailto:privacy@donnaai.com')}
             >
-              <Icon name="mail-outline" size={20} color="#007AFF" />
+              <Icon name="mail-outline" size={20} color="#2C2C2C" />
               <Text style={styles.contactText}>privacy@donnaai.com</Text>
             </TouchableOpacity>
           </View>
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     marginTop: 8 },
   contactText: {
     fontSize: 14,
-    color: '#007AFF',
+    color: '#2C2C2C',
     fontWeight: '500',
     marginLeft: 8 },
   footer: {

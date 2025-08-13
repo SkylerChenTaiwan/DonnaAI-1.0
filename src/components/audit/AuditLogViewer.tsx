@@ -527,7 +527,7 @@ export const AuditLogViewer: React.FC<AuditLogViewerProps> = ({
         
         {loading && (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="small" color="#0066CC" />
+            <ActivityIndicator size="small" color="#2C2C2C" />
             <Text style={styles.loadingText}>載入中...</Text>
           </View>
         )}
@@ -701,7 +701,7 @@ const styles: any = {
     flexDirection: 'row',
     justifyContent: 'flex-end' },
   filterButton: {
-    backgroundColor: '#0066CC',
+    backgroundColor: '#2C2C2C',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 4,
@@ -729,7 +729,7 @@ const styles: any = {
     borderWidth: 1,
     borderColor: '#E0E0E0' },
   selectedLogItem: {
-    borderColor: '#0066CC',
+    borderColor: '#2C2C2C',
     borderWidth: 2 },
   logHeader: {
     flexDirection: 'row',

@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
   saveButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#007AFF' },
+    color: '#2C2C2C' },
   scrollView: {
     flex: 1 },
   form: {
@@ -276,8 +276,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E5E5EA' },
   typeButtonActive: {
-    backgroundColor: '#007AFF',
-    borderColor: '#007AFF' },
+    backgroundColor: '#2C2C2C',
+    borderColor: '#2C2C2C' },
   typeButtonText: {
     fontSize: 14,
     fontWeight: '500',

@@ -21,7 +21,7 @@ export const AdminDashboard: React.FC = () => {
       title: '組織管理',
       subtitle: '管理組織設定',
       icon: 'business' as string,
-      color: '#007AFF',
+      color: '#2C2C2C',
       onPress: () => {
         console.log('組織管理');
       } },
@@ -55,7 +55,7 @@ export const AdminDashboard: React.FC = () => {
   ];
 
   const organizationStats = [
-    { label: '總使用者', value: '24', color: '#007AFF' },
+    { label: '總使用者', value: '24', color: '#2C2C2C' },
     { label: 'AI 配額', value: '1440min', color: '#34C759' },
     { label: '已使用', value: '856min', color: '#FF9500' },
     { label: '剩餘配額', value: '584min', color: '#FF3B30' },
@@ -370,4 +370,4 @@ const styles = StyleSheet.create({
   summaryValue: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#007AFF' } });
+    color: '#2C2C2C' } });

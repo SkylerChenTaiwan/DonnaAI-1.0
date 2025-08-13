@@ -44,7 +44,7 @@ export const styles = StyleSheet.create({
     gap: 6,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    backgroundColor: '#007AFF',
+    backgroundColor: '#2C2C2C',
     borderRadius: 8 },
   secondaryButton: {
     backgroundColor: '#F7F6F3' },

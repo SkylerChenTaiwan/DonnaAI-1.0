@@ -118,7 +118,7 @@ export function TreeView({
       {/* 統計資訊卡片 */}
       <View style={styles.statsContainer}>
         <View style={styles.statCard}>
-          <Icon name="business" size={20} color="#007AFF" />
+          <Icon name="business" size={20} color="#2C2C2C" />
           <Text style={styles.statValue}>
             {filteredMembers.filter(m => m.role === 'admin').length}
           </Text>

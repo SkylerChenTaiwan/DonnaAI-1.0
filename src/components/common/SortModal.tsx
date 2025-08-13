@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 8 },
   activeDirectionButton: {
-    backgroundColor: '#007AFF' },
+    backgroundColor: '#2C2C2C' },
   directionButtonText: {
     fontSize: 16,
     fontWeight: '500',

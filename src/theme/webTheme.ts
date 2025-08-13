@@ -51,13 +51,13 @@ export const darkTheme: WebTheme = {
     ...DesignSystem.colors,
     // 反轉背景色
     background: {
-      primary: '#1A1A1A',
+      primary: '#2C2C2C',
       surface: '#2A2A2A',
       elevated: '#3A3A3A',
       input: '#333333' },
     // 反轉文字色
     text: {
-      primary: '#FFFFFF',
+      primary: '#2C2C2C',
       secondary: '#CCCCCC',
       tertiary: '#999999',
       disabled: '#666666',

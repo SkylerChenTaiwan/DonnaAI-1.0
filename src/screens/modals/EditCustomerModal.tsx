@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
   saveButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#007AFF' },
+    color: '#2C2C2C' },
   scrollView: {
     flex: 1 },
   form: {

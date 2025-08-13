@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#1C1C1E' },
   assignedBadge: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#2C2C2C',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 4 },
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     textAlign: 'center' },
   retryButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#2C2C2C',
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 8 },

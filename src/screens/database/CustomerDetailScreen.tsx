@@ -337,5 +337,5 @@ const styles = StyleSheet.create({
     alignItems: 'center' },
   viewMoreText: {
     fontSize: 16,
-    color: '#007AFF',
+    color: '#2C2C2C',
     fontWeight: '500' } });

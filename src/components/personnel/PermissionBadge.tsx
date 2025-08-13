@@ -29,8 +29,8 @@ export function PermissionBadge({ user, compact = false }: PermissionBadgeProps)
         return {
           icon: 'people' as string,
           label: '主管',
-          color: '#007AFF',
-          bgColor: '#007AFF1A' };
+          color: '#2C2C2C',
+          bgColor: '#2C2C2C1A' };
       case 'salesperson':
       default:
         return {

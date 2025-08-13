@@ -214,7 +214,7 @@ export default function QueryChat() {
           <Icon
             name="send"
             size={20}
-            color={!query.trim() || isProcessing ? '#CCC' : '#007AFF'}
+            color={!query.trim() || isProcessing ? '#CCC' : '#2C2C2C'}
           />
         </TouchableOpacity>
       </View>
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 16 },
   userBubble: {
-    backgroundColor: '#007AFF' },
+    backgroundColor: '#2C2C2C' },
   assistantBubble: {
     backgroundColor: '#F0F0F0' },
   errorBubble: {

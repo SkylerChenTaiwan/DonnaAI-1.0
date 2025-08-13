@@ -226,7 +226,7 @@ export const AuditDashboard: React.FC<AuditDashboardProps> = ({
             propsForDots: {
               r: '4',
               strokeWidth: '2',
-              stroke: '#0066CC' } }}
+              stroke: '#2C2C2C' } }}
           bezier
           style={{
             marginVertical: 8,
@@ -422,7 +422,7 @@ export const AuditDashboard: React.FC<AuditDashboardProps> = ({
   if (loading && !refreshing) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0066CC" />
+        <ActivityIndicator size="large" color="#2C2C2C" />
         <Text style={styles.loadingText}>載入儀表板...</Text>
       </View>
     );
@@ -469,7 +469,7 @@ export const AuditDashboard: React.FC<AuditDashboardProps> = ({
           >
             <Icon name={autoRefresh ? 'sync' : 'sync-outline'} 
               size={20} 
-              color={autoRefresh ? '#0066CC' : '#666666'} 
+              color={autoRefresh ? '#2C2C2C' : '#666666'} 
             />
           </TouchableOpacity>
           
@@ -530,7 +530,7 @@ export const AuditDashboard: React.FC<AuditDashboardProps> = ({
             '總事件數',
             statistics.totalEvents.toLocaleString(),
             'analytics',
-            '#0066CC'
+            '#2C2C2C'
           )}
           {renderStatCard(
             '活躍用戶',
@@ -673,7 +673,7 @@ const styles: any = {
     paddingVertical: 6,
     borderRadius: 6 },
   periodButtonActive: {
-    backgroundColor: '#0066CC' },
+    backgroundColor: '#2C2C2C' },
   periodButtonText: {
     fontSize: 12,
     color: '#666666' },
@@ -687,7 +687,7 @@ const styles: any = {
     marginLeft: 12,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    backgroundColor: '#0066CC',
+    backgroundColor: '#2C2C2C',
     borderRadius: 4 },
   viewDetailsButtonText: {
     color: '#FFFFFF',

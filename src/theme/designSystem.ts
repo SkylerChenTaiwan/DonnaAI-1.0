@@ -14,7 +14,7 @@ export const DesignSystem = {
     
     // 背景色
     background: {
-      primary: '#FFFFFF',  // 主背景 - 純白
+      primary: '#2C2C2C',  // 主背景 - 純白
       surface: '#FFFFFF',  // 卡片背景 - 純白
       elevated: '#FFFFFF', // 提升的背景 - 純白
       input: '#FAFAFA',    // 輸入欄位背景 - 極淺灰
@@ -49,7 +49,7 @@ export const DesignSystem = {
     
     // 文字色
     text: {
-      primary: '#1A1A1A',   // 主要文字
+      primary: '#2C2C2C',   // 主要文字
       secondary: '#666666', // 次要文字
       tertiary: '#999999',  // 第三級文字
       disabled: '#CCCCCC',  // 禁用文字

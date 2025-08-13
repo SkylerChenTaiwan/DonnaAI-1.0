@@ -9,7 +9,7 @@ import { Platform } from 'react-native';
 export const webColorOverrides = {
   // 文字色 - 加深以提高對比度
   text: {
-    primary: '#000000',      // 純黑，從 #1A1A1A 加深
+    primary: '#2C2C2C',      // 純黑，從 #1A1A1A 加深
     secondary: '#4A4A4A',    // 深灰，從 #666666 加深
     tertiary: '#666666',     // 中灰，從 #999999 加深
     disabled: '#999999',     // 淺灰，從 #CCCCCC 加深
@@ -18,7 +18,7 @@ export const webColorOverrides = {
   
   // 背景色 - 提高對比
   background: {
-    primary: '#FFFFFF',      // 純白背景
+    primary: '#2C2C2C',      // 純白背景
     surface: '#FFFFFF',      // 純白卡片
     elevated: '#FFFFFF',     // 純白提升背景
     input: '#F8F8F8',        // 更淺的輸入框背景，從 #FAFAFA 調整
@@ -34,8 +34,7 @@ export const webColorOverrides = {
   
   // 按鈕專用色彩 - 確保足夠對比
   button: {
-    primary: {
-      default: '#1A1A1A',    // 加深主按鈕，從 #2C2C2C
+    primary: { default: '#2C2C2C',    // 加深主按鈕，從 #2C2C2C
       hover: '#000000',      // 懸停時純黑
       pressed: '#333333',    // 按下時深灰
       text: '#FFFFFF',       // 按鈕文字純白

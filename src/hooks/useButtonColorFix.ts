@@ -17,7 +17,7 @@ export const useButtonColorFix = () => {
         const bgColor = window.getComputedStyle(button).backgroundColor;
         
         // 根據背景色設定文字顏色
-        if (bgColor === 'rgb(0, 122, 255)' || bgColor === '#007AFF') {
+        if (bgColor === '#2C2C2C' || bgColor === '#2C2C2C') {
           button.style.color = '#FFFFFF';
           // 修復所有子元素
           button.querySelectorAll('*').forEach(child => {

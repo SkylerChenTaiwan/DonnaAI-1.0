@@ -612,7 +612,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
           reportHistory.map((item) => (
             <View key={item.id} style={styles.historyItem}>
               <View style={styles.historyItemIcon}>
-                <Icon name="document-text" size={24} color="#0066CC"  />
+                <Icon name="document-text" size={24} color="#2C2C2C"  />
               </View>
               <View style={styles.historyItemContent}>
                 <Text style={styles.historyItemType}>{item.type}</Text>
@@ -623,7 +623,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
               </View>
               {item.downloadUrl && (
                 <TouchableOpacity style={styles.historyItemDownload}>
-                  <Icon name="download" size={20} color="#0066CC"  />
+                  <Icon name="download" size={20} color="#2C2C2C"  />
                 </TouchableOpacity>
               )}
             </View>
@@ -642,7 +642,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
           onPress={() => setActiveTab('generate')}
         >
           <Icon name="create" size={20} 
-            color={activeTab === 'generate' ? '#0066CC' : '#666666'} 
+            color={activeTab === 'generate' ? '#2C2C2C' : '#666666'} 
            />
           <Text style={StyleSheet.flatten([styles.tabText, activeTab === 'generate' && styles.tabTextActive])}>
             生成報告
@@ -654,7 +654,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
           onPress={() => setActiveTab('schedule')}
         >
           <Icon name="time" size={20} 
-            color={activeTab === 'schedule' ? '#0066CC' : '#666666'} 
+            color={activeTab === 'schedule' ? '#2C2C2C' : '#666666'} 
            />
           <Text style={StyleSheet.flatten([styles.tabText, activeTab === 'schedule' && styles.tabTextActive])}>
             排程設定
@@ -666,7 +666,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
           onPress={() => setActiveTab('history')}
         >
           <Icon name="archive" size={20} 
-            color={activeTab === 'history' ? '#0066CC' : '#666666'} 
+            color={activeTab === 'history' ? '#2C2C2C' : '#666666'} 
            />
           <Text style={StyleSheet.flatten([styles.tabText, activeTab === 'history' && styles.tabTextActive])}>
             歷史記錄
@@ -722,13 +722,13 @@ const styles: any = {
     paddingVertical: 12 },
   tabActive: {
     borderBottomWidth: 2,
-    borderBottomColor: '#0066CC' },
+    borderBottomColor: '#2C2C2C' },
   tabText: {
     marginLeft: 8,
     fontSize: 14,
     color: '#666666' },
   tabTextActive: {
-    color: '#0066CC',
+    color: '#2C2C2C',
     fontWeight: '600' },
   tabContent: {
     flex: 1 },
@@ -761,8 +761,8 @@ const styles: any = {
     borderColor: '#E0E0E0',
     alignItems: 'center' },
   reportTypeButtonActive: {
-    backgroundColor: '#0066CC',
-    borderColor: '#0066CC' },
+    backgroundColor: '#2C2C2C',
+    borderColor: '#2C2C2C' },
   reportTypeText: {
     marginTop: 8,
     fontSize: 14,
@@ -789,8 +789,8 @@ const styles: any = {
     borderColor: '#E0E0E0',
     alignItems: 'center' },
   periodTypeButtonActive: {
-    backgroundColor: '#0066CC',
-    borderColor: '#0066CC' },
+    backgroundColor: '#2C2C2C',
+    borderColor: '#2C2C2C' },
   periodTypeText: {
     fontSize: 14,
     color: '#666666' },
@@ -836,7 +836,7 @@ const styles: any = {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#0066CC',
+    backgroundColor: '#2C2C2C',
     margin: 8,
     padding: 16,
     borderRadius: 8 },
@@ -907,7 +907,7 @@ const styles: any = {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#0066CC',
+    backgroundColor: '#2C2C2C',
     padding: 12,
     borderRadius: 4 },
   scheduleButtonText: {

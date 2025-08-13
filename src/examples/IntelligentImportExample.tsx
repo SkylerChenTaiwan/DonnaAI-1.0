@@ -281,12 +281,12 @@ const styles = StyleSheet.create({
   formatExt: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#007AFF' },
+    color: '#2C2C2C' },
   formatDesc: {
     fontSize: 12,
     color: '#666' },
   startButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#2C2C2C',
     borderRadius: 12,
     padding: 16,
     flexDirection: 'row',

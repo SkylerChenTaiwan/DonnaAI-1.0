@@ -83,36 +83,35 @@ export const Button: React.FC<ButtonProps> = ({
         gap: '8px'
       } };
 
-    // 變體樣式 - 使用最強的內聯樣式
+        // 變體樣式 - 遵循黑白灰設計系統
     const variantStyles = {
       primary: {
-        backgroundColor: '#007AFF',
-        color: '#FFFFFF',
-        // 強制覆蓋所有子元素的顏色
-        '& *': { color: '#FFFFFF !important' }
+        backgroundColor: '#2C2C2C',  // 深灰按鈕
+        color: '#FFFFFF',            // 白色文字
+        border: 'none'
       },
       secondary: {
-        backgroundColor: '#F2F2F7',
-        color: '#000000',
-        '& *': { color: '#000000 !important' }
+        backgroundColor: '#F7F7F7',  // 淺灰背景
+        color: '#1A1A1A',            // 深色文字
+        border: 'none'
       },
       outline: {
         backgroundColor: 'transparent',
-        color: '#007AFF',
-        border: '1px solid #007AFF',
-        '& *': { color: '#007AFF !important' }
+        color: '#2C2C2C',            // 深灰文字
+        border: '1px solid #D0D0D0' // 灰色邊框
       },
       ghost: {
         backgroundColor: 'transparent',
-        color: '#007AFF',
-        '& *': { color: '#007AFF !important' }
+        color: '#2C2C2C',            // 深灰文字
+        border: 'none'
       },
       text: {
         backgroundColor: 'transparent',
-        color: '#007AFF',
+        color: '#666666',            // 次要文字色
         padding: '0',
         textDecoration: 'underline',
-        '& *': { color: '#007AFF !important' }
+        textUnderlineOffset: '3px',
+        border: 'none'
       }
     };
 
@@ -137,7 +136,7 @@ export const Button: React.FC<ButtonProps> = ({
     
     const target = e.currentTarget;
     if (variant === 'primary') {
-      target.style.backgroundColor = webColorOverrides.button.primary.hover;
+      target.style.backgroundColor = '#3C3C3C'; // 深灰 hover
     } else if (variant === 'secondary') {
       target.style.backgroundColor = webColorOverrides.button.secondary.hover;
     } else if (variant === 'outline') {
@@ -150,7 +149,7 @@ export const Button: React.FC<ButtonProps> = ({
     
     const target = e.currentTarget;
     if (variant === 'primary') {
-      target.style.backgroundColor = webColorOverrides.button.primary.default;
+      target.style.backgroundColor = '#2C2C2C'; // 深灰預設
     } else if (variant === 'secondary') {
       target.style.backgroundColor = webColorOverrides.button.secondary.default;
     } else if (variant === 'outline') {
@@ -216,10 +215,10 @@ export const Button: React.FC<ButtonProps> = ({
           ...getButtonStyle(),
           // 確保文字顏色正確顯示
           color: variant === 'primary' ? '#FFFFFF' : 
-                 variant === 'secondary' ? '#000000' :
-                 variant === 'outline' ? '#007AFF' :
-                 variant === 'ghost' ? '#007AFF' :
-                 variant === 'text' ? '#007AFF' : '#000000'
+                 variant === 'secondary' ? '#1A1A1A' :
+                 variant === 'outline' ? '#2C2C2C' :
+                 variant === 'ghost' ? '#2C2C2C' :
+                 variant === 'text' ? '#666666' : '#1A1A1A'
         }}
         className={className}
         onClick={handleClick}

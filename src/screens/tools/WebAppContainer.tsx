@@ -206,7 +206,7 @@ export const WebAppContainer: React.FC = () => {
         id: persona.id,
         name: persona.name,
         icon: persona.icon || '👤',
-        color: persona.industry === 'tech' ? '#007AFF' : 
+        color: persona.industry === 'tech' ? '#2C2C2C' : 
                persona.industry === 'retail' ? '#FF3B30' : 
                persona.industry === 'manufacturing' ? '#34C759' : '#FF9500',
         description: persona.background,
@@ -480,7 +480,7 @@ export const WebAppContainer: React.FC = () => {
         
         {loading && (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#007AFF" />
+            <ActivityIndicator size="large" color="#2C2C2C" />
           </View>
         )}
       </SafeAreaView>

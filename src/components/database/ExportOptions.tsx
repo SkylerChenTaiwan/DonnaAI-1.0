@@ -159,7 +159,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
               <Switch
                 value={sendByEmail}
                 onValueChange={setSendByEmail}
-                trackColor={{ false: '#E5E5EA', true: '#007AFF' }}
+                trackColor={{ false: '#E5E5EA', true: '#2C2C2C' }}
               />
             </View>
             {sendByEmail && (

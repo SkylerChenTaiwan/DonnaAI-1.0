@@ -153,7 +153,7 @@ export const HelpSupportScreen: React.FC = () => {
               onPress={item.action}
             >
               <View style={styles.helpIconContainer}>
-                <Icon name={item.icon} size={24} color="#007AFF" />
+                <Icon name={item.icon} size={24} color="#2C2C2C" />
               </View>
               <View style={styles.helpContent}>
                 <Text style={styles.helpTitle}>{item.title}</Text>
@@ -188,7 +188,7 @@ export const HelpSupportScreen: React.FC = () => {
             }}
           >
             <Text style={styles.resourceText}>服務條款</Text>
-            <Icon name="open-outline" size={18} color="#007AFF" />
+            <Icon name="open-outline" size={18} color="#2C2C2C" />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.resourceItem}
@@ -200,7 +200,7 @@ export const HelpSupportScreen: React.FC = () => {
             }}
           >
             <Text style={styles.resourceText}>隱私權政策</Text>
-            <Icon name="open-outline" size={18} color="#007AFF" />
+            <Icon name="open-outline" size={18} color="#2C2C2C" />
           </TouchableOpacity>
         </View>
 
@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? {} : { elevation: 2 }) },
   resourceText: {
     fontSize: 16,
-    color: '#007AFF',
+    color: '#2C2C2C',
     fontWeight: '500' },
   contactInfo: {
     marginTop: 32,

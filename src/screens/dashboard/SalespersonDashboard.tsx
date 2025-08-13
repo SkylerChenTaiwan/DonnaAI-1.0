@@ -23,7 +23,7 @@ export const SalespersonDashboard: React.FC = () => {
       title: '新增會議',
       subtitle: '記錄客戶會議',
       icon: 'add-circle' as string,
-      color: '#007AFF',
+      color: '#2C2C2C',
       onPress: () => {
         // TODO: 導航到新增會議畫面
         console.log('導航到新增會議');
@@ -61,7 +61,7 @@ export const SalespersonDashboard: React.FC = () => {
   ];
 
   const stats = [
-    { label: '本月會議', value: '12', color: '#007AFF' },
+    { label: '本月會議', value: '12', color: '#2C2C2C' },
     { label: '活躍客戶', value: '8', color: '#34C759' },
     { label: 'AI 分析', value: '5', color: '#FF9500' },
     { label: '待跟進', value: '3', color: '#FF3B30' },

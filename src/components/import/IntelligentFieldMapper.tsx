@@ -372,7 +372,7 @@ export const IntelligentFieldMapper: React.FC<Props> = ({
 
       {isAnalyzing ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#007AFF" />
+          <ActivityIndicator size="large" color="#2C2C2C" />
           <Text style={styles.loadingText}>正在分析欄位...</Text>
         </View>
       ) : (

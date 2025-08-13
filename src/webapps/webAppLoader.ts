@@ -68,13 +68,13 @@ const calculatorHTML = `<!DOCTYPE html>
         
         input:focus {
             outline: none;
-            border-color: #007AFF;
+            border-color: #2C2C2C;
         }
         
         .button {
             width: 100%;
             padding: 14px;
-            background: #007AFF;
+            background: #2C2C2C;
             color: #FFFFFF;
             border: none;
             border-radius: 8px;

@@ -263,7 +263,7 @@ export const SettingsScreen: React.FC = () => {
             style={styles.editButton}
             onPress={() => navigation.navigate('EditProfileModal' as any)}
           >
-            <Icon name="pencil" size={20} color="#007AFF" />
+            <Icon name="pencil" size={20} color="#2C2C2C" />
           </TouchableOpacity>
         </View>
 
@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
   userRole: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#007AFF',
+    color: '#2C2C2C',
     backgroundColor: '#E3F2FD',
     paddingHorizontal: 8,
     paddingVertical: 2,

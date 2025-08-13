@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#1C1C1E' },
   linkText: {
-    color: '#007AFF',
+    color: '#2C2C2C',
     textDecorationLine: 'underline' },
   typeBadge: {
     flexDirection: 'row',
