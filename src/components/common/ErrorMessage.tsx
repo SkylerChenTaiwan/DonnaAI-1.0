@@ -75,24 +75,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#F9FAFB',
-  },
+    backgroundColor: '#F9FAFB' },
   iconContainer: {
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   title: {
     fontSize: 20,
     fontWeight: '600',
     color: '#1F2937',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   message: {
     fontSize: 16,
     color: '#6B7280',
     textAlign: 'center',
     marginBottom: 16,
-    lineHeight: 24,
-  },
+    lineHeight: 24 },
   suggestion: {
     fontSize: 14,
     color: '#9CA3AF',
@@ -102,9 +98,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: '#FEF3C7',
     paddingVertical: 12,
-    borderRadius: 8,
-  },
+    borderRadius: 8 },
   retryContainer: {
-    marginTop: 8,
-  },
-});
+    marginTop: 8 } });

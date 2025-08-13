@@ -13,8 +13,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
-  Switch,
-} from 'react-native';
+  Switch } from 'react-native';
 import { Button } from '@/components/common/Button';
 import { Layout } from '@/components/common/Layout';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -57,8 +56,7 @@ export const EditUserModal: React.FC = () => {
     role: userData?.role || 'salesperson',
     department: userData?.department || '',
     phone: userData?.phone || '',
-    isActive: userData?.isActive !== false,
-  });
+    isActive: userData?.isActive !== false });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
 
@@ -113,8 +111,7 @@ export const EditUserModal: React.FC = () => {
         department: formData.department || null,
         phone: formData.phone || null,
         isActive: formData.isActive,
-        updatedAt: new Date(),
-      });
+        updatedAt: new Date() });
 
       showToast('success', '用戶資料已更新');
       
@@ -283,92 +280,71 @@ const styles = StyleSheet.create({
     padding: DesignSystem.spacing.lg,
     backgroundColor: DesignSystem.colors.background.surface,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   backButton: {
-    marginRight: DesignSystem.spacing.md,
-  },
+    marginRight: DesignSystem.spacing.md },
   title: {
     ...DesignSystem.typography.h1,
     color: DesignSystem.colors.text.primary,
-    flex: 1,
-  },
+    flex: 1 },
   container: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background,
-  },
+    backgroundColor: DesignSystem.colors.background },
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   contentContainer: {
     paddingVertical: 24,
-    paddingHorizontal: 20,
-  },
+    paddingHorizontal: 20 },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   userInfo: {
     alignItems: 'center',
     paddingVertical: 24,
     borderBottomWidth: 1,
     borderBottomColor: DesignSystem.colors.border.light,
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   userEmail: {
     ...DesignSystem.typography.h3,
     color: DesignSystem.colors.text.primary,
-    marginTop: 12,
-  },
+    marginTop: 12 },
   userId: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginTop: 4,
-  },
+    marginTop: 4 },
   section: {
-    marginBottom: 32,
-  },
+    marginBottom: 32 },
   sectionTitle: {
     ...DesignSystem.typography.h3,
     color: DesignSystem.colors.text.primary,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   fieldContainer: {
-    marginTop: 20,
-  },
+    marginTop: 20 },
   switchRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 12,
-  },
+    paddingVertical: 12 },
   switchLabel: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   switchHint: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginTop: 8,
-  },
+    marginTop: 8 },
   infoSection: {
     backgroundColor: DesignSystem.colors.background.elevated,
     padding: 16,
     borderRadius: 8,
-    marginTop: 16,
-  },
+    marginTop: 16 },
   infoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 8,
-  },
+    paddingVertical: 8 },
   infoLabel: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   infoValue: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.text.primary,
-  },
-});
+    color: DesignSystem.colors.text.primary } });

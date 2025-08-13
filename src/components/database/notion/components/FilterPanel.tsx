@@ -535,8 +535,7 @@ function getOperatorLabel(operator: FilterOperator): string {
     'select_is': '是',
     'select_is_not': '不是',
     'multi_select_contains': '包含',
-    'multi_select_not_contains': '不包含',
-  };
+    'multi_select_not_contains': '不包含' };
   return labels[operator] || operator;
 }
 
@@ -575,6 +574,5 @@ function getPositionStyle(anchorEl: HTMLElement): React.CSSProperties {
     position: 'fixed',
     top,
     left,
-    zIndex: 1000,
-  };
+    zIndex: 1000 };
 }

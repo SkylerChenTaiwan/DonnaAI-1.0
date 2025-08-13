@@ -11,8 +11,7 @@ import {
   FlatList,
   TouchableOpacity,
   RefreshControl,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Icon } from '@/components/common/Icon';
@@ -319,18 +318,15 @@ export const OrganizationsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   searchRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   searchBarWrapper: {
     flex: 1,
-    maxWidth: 400,
-  },
+    maxWidth: 400 },
   addButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -340,90 +336,72 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     gap: 8,
     minWidth: 120,
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   addButtonText: {
     color: DesignSystem.colors.text.inverse,
     fontSize: 14,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   searchContainer: {
     padding: DesignSystem.spacing.md,
-    backgroundColor: DesignSystem.colors.background.surface,
-  },
+    backgroundColor: DesignSystem.colors.background.surface },
   statsContainer: {
     flexDirection: 'row',
     padding: DesignSystem.spacing.md,
     backgroundColor: DesignSystem.colors.background.surface,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   statItem: {
     flex: 1,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   statValue: {
     ...DesignSystem.typography.h2,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   statLabel: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginTop: DesignSystem.spacing.xs,
-  },
+    marginTop: DesignSystem.spacing.xs },
   listContent: {
-    padding: DesignSystem.spacing.md,
-  },
+    padding: DesignSystem.spacing.md },
   orgCard: {
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: DesignSystem.borderRadius.md,
     padding: DesignSystem.spacing.md,
-    ...DesignSystem.shadows.sm,
-  },
+    ...DesignSystem.shadows.sm },
   orgHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   orgInfo: {
-    flex: 1,
-  },
+    flex: 1 },
   orgName: {
     ...DesignSystem.typography.h3,
     color: DesignSystem.colors.text.primary,
-    marginBottom: DesignSystem.spacing.xs,
-  },
+    marginBottom: DesignSystem.spacing.xs },
   orgPlan: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   statusBadge: {
     paddingHorizontal: DesignSystem.spacing.sm,
     paddingVertical: DesignSystem.spacing.xs,
-    borderRadius: DesignSystem.borderRadius.sm,
-  },
+    borderRadius: DesignSystem.borderRadius.sm },
   statusText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.inverse,
     fontWeight: '600',
-    textTransform: 'uppercase',
-  },
+    textTransform: 'uppercase' },
   orgDetails: {
     flexDirection: 'row',
     gap: DesignSystem.spacing.lg,
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   detailRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: DesignSystem.spacing.xs,
-  },
+    gap: DesignSystem.spacing.xs },
   detailText: {
     ...DesignSystem.typography.bodySmall,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   orgActions: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
@@ -431,8 +409,7 @@ const styles = StyleSheet.create({
     marginTop: DesignSystem.spacing.sm,
     paddingTop: DesignSystem.spacing.sm,
     borderTopWidth: 1,
-    borderTopColor: DesignSystem.colors.border.light,
-  },
+    borderTopColor: DesignSystem.colors.border.light },
   actionButton: {
     padding: DesignSystem.spacing.sm,
     flexDirection: 'row',
@@ -440,37 +417,27 @@ const styles = StyleSheet.create({
     gap: DesignSystem.spacing.xs,
     borderRadius: DesignSystem.borderRadius.sm,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.border.light,
-  },
+    borderColor: DesignSystem.colors.border.light },
   suspendButton: {
     backgroundColor: withAlpha(DesignSystem.colors.warning, 0.063),
-    borderColor: withAlpha(DesignSystem.colors.warning, 0.188),
-  },
+    borderColor: withAlpha(DesignSystem.colors.warning, 0.188) },
   activateButton: {
     backgroundColor: withAlpha(DesignSystem.colors.success, 0.063),
-    borderColor: withAlpha(DesignSystem.colors.success, 0.188),
-  },
+    borderColor: withAlpha(DesignSystem.colors.success, 0.188) },
   actionLabel: {
     ...DesignSystem.typography.caption,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   suspendLabel: {
-    color: DesignSystem.colors.warning,
-  },
+    color: DesignSystem.colors.warning },
   activateLabel: {
-    color: DesignSystem.colors.success,
-  },
+    color: DesignSystem.colors.success },
   separator: {
-    height: DesignSystem.spacing.md,
-  },
+    height: DesignSystem.spacing.md },
   emptyContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: DesignSystem.spacing.xxl,
-  },
+    paddingVertical: DesignSystem.spacing.xxl },
   emptyText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.secondary,
-    marginTop: DesignSystem.spacing.md,
-  },
-});
+    marginTop: DesignSystem.spacing.md } });

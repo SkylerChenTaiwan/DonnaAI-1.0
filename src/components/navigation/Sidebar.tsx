@@ -384,35 +384,28 @@ const styles = StyleSheet.create({
     borderRightColor: '#e9e9e7',
     paddingVertical: 24,
     flexDirection: 'column',
-    flex: 1,
-  },
+    flex: 1 },
   sidebarCollapsed: {
-    width: 80,
-  },
+    width: 80 },
   logoArea: {
     alignItems: 'center',
     paddingHorizontal: 24,
     paddingBottom: 32,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   logo: {
     width: 48,
     height: 48,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   logoCollapsed: {
-    marginBottom: 0,
-  },
+    marginBottom: 0 },
   logoText: {
     fontSize: 20,
     fontWeight: '600',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   menuItems: {
     flex: 1,
-    paddingTop: 24,
-  },
+    paddingTop: 24 },
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -421,12 +414,10 @@ const styles = StyleSheet.create({
     gap: 12,
     marginHorizontal: 12,
     borderRadius: DesignSystem.borderRadius.sm,
-    ...transitions.default,
-  },
+    ...transitions.default },
   menuItemCollapsed: {
     paddingHorizontal: 0,
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   menuItemActive: {
     backgroundColor: DesignSystem.colors.button.secondary.default,
     borderLeftWidth: 3,
@@ -434,26 +425,21 @@ const styles = StyleSheet.create({
     marginLeft: 9, // 補償 border 的寬度
   },
   menuItemHover: {
-    backgroundColor: DesignSystem.colors.button.secondary.hover,
-  },
+    backgroundColor: DesignSystem.colors.button.secondary.hover },
   menuItemPressed: {
-    backgroundColor: DesignSystem.colors.button.secondary.pressed,
-  },
+    backgroundColor: DesignSystem.colors.button.secondary.pressed },
   menuLabel: {
     fontSize: 14,
     fontWeight: '500',
     color: '#787774',
-    flex: 1,
-  },
+    flex: 1 },
   menuLabelActive: {
     color: '#37352f',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   actionButtonContainer: {
     alignItems: 'center',
     paddingVertical: 24,
-    paddingHorizontal: 24,
-  },
+    paddingHorizontal: 24 },
   actionButton: {
     width: 32,
     height: 32,
@@ -461,27 +447,21 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
-    ...transitions.default,
-  },
+    ...transitions.default },
   actionButtonManager: {
-    backgroundColor: DesignSystem.colors.gray700,
-  },
+    backgroundColor: DesignSystem.colors.gray700 },
   actionButtonHover: {
-    transform: Platform.OS === 'web' ? `scale(${1.05})` : [{ scale: 1.05 }],
-  },
+    transform: Platform.OS === 'web' ? `scale(${1.05})` : [{ scale: 1.05 }] },
   actionButtonPressed: {
-    transform: Platform.OS === 'web' ? `scale(${0.95})` : [{ scale: 0.95 }],
-  },
+    transform: Platform.OS === 'web' ? `scale(${0.95})` : [{ scale: 0.95 }] },
   actionLabel: {
     marginTop: 8,
     fontSize: 12,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   plusIcon: {
     width: 16,
     height: 16,
-    position: 'relative',
-  },
+    position: 'relative' },
   plusHorizontal: {
     position: 'absolute',
     left: 0,
@@ -490,8 +470,7 @@ const styles = StyleSheet.create({
     height: 2,
     backgroundColor: '#FFFFFF',
     borderRadius: 1,
-    transform: Platform.OS === 'web' ? `translateY(${-1}px)` : [{ translateY: -1 }],
-  },
+    transform: Platform.OS === 'web' ? `translateY(${-1}px)` : [{ translateY: -1 }] },
   plusVertical: {
     position: 'absolute',
     left: '50%',
@@ -500,8 +479,7 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#FFFFFF',
     borderRadius: 1,
-    transform: Platform.OS === 'web' ? `translateX(${-1}px)` : [{ translateX: -1 }],
-  },
+    transform: Platform.OS === 'web' ? `translateX(${-1}px)` : [{ translateX: -1 }] },
   userInfo: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -509,24 +487,19 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     marginTop: 16,
     borderTopWidth: 1,
-    borderTopColor: DesignSystem.colors.border.light,
-  },
+    borderTopColor: DesignSystem.colors.border.light },
   userAvatar: {
-    marginRight: 8,
-  },
+    marginRight: 8 },
   userDetails: {
-    flex: 1,
-  },
+    flex: 1 },
   userName: {
     fontSize: 14,
     fontWeight: '500',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   userRole: {
     fontSize: 12,
     color: DesignSystem.colors.text.tertiary,
-    marginTop: 2,
-  },
+    marginTop: 2 },
   collapseButton: {
     position: 'absolute',
     right: -12,
@@ -540,12 +513,10 @@ const styles = StyleSheet.create({
     borderColor: DesignSystem.colors.border.light,
     alignItems: 'center',
     justifyContent: 'center',
-    ...shadows.small,
-  },
+    ...shadows.small },
   collapseButtonCollapsed: {
     // 側邊欄收合時，按鈕位置需要調整
-    right: -12,
-  },
+    right: -12 },
   shortcutsHint: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -556,21 +527,17 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     borderRadius: DesignSystem.borderRadius.sm,
     backgroundColor: DesignSystem.colors.background.secondary,
-    ...transitions.default,
-  },
+    ...transitions.default },
   shortcutsText: {
     fontSize: 12,
-    color: DesignSystem.colors.text.tertiary,
-  },
+    color: DesignSystem.colors.text.tertiary },
   expandButton: {
     position: 'absolute',
     right: 8,
-    padding: 4,
-  },
+    padding: 4 },
   subMenuContainer: {
     paddingLeft: 32,
-    marginTop: 4,
-  },
+    marginTop: 4 },
   subMenuItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -579,14 +546,10 @@ const styles = StyleSheet.create({
     gap: 8,
     borderRadius: DesignSystem.borderRadius.sm,
     marginHorizontal: 8,
-    ...transitions.default,
-  },
+    ...transitions.default },
   subMenuLabel: {
     fontSize: 13,
-    color: '#91918e',
-  },
+    color: '#91918e' },
   bottomSection: {
     marginTop: 'auto',
-    paddingTop: 16,
-  },
-});
+    paddingTop: 16 } });

@@ -11,8 +11,7 @@ import {
   StyleSheet,
   ScrollView,
   TextInput,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { Popover } from '@/components/common/Popover';
 import { TableColumn } from '@/types/table';
@@ -38,8 +37,7 @@ const FilterConditionRow: React.FC<FilterConditionRowProps> = ({
   condition,
   columns,
   onChange,
-  onDelete,
-}) => {
+  onDelete }) => {
   const filterableColumns = columns.filter(col => col.filterable !== false);
 
   return (
@@ -55,8 +53,7 @@ const FilterConditionRow: React.FC<FilterConditionRowProps> = ({
           onChange({
             ...condition,
             key: nextColumn.key,
-            label: nextColumn.title,
-          });
+            label: nextColumn.title });
         }}
       >
         <Text style={styles.fieldText}>{condition.label}</Text>
@@ -93,8 +90,7 @@ const createEmptyCondition = (columns: TableColumn[]): FilterCondition => {
   return {
     key: filterableColumns[0].key,
     label: filterableColumns[0].title,
-    value: '',
-  };
+    value: '' };
 };
 
 export const FilterPopover: React.FC<FilterPopoverProps> = ({
@@ -103,8 +99,7 @@ export const FilterPopover: React.FC<FilterPopoverProps> = ({
   anchor,
   columns,
   filters,
-  onApply,
-}) => {
+  onApply }) => {
   const [conditions, setConditions] = useState<FilterCondition[]>(filters);
 
   useEffect(() => {
@@ -209,30 +204,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 8,
     width: 320,
-    maxHeight: 400,
-  },
+    maxHeight: 400 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#e9e9e7',
-  },
+    borderBottomColor: '#e9e9e7' },
   title: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#37352f',
-  },
+    color: '#37352f' },
   content: {
-    padding: 16,
-  },
+    padding: 16 },
   conditionRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 12,
-    gap: 8,
-  },
+    gap: 8 },
   fieldSelector: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -241,13 +231,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     minWidth: 100,
-    gap: 4,
-  },
+    gap: 4 },
   fieldText: {
     fontSize: 14,
     color: '#37352f',
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   conditionInput: {
     flex: 1,
     backgroundColor: '#f7f6f3',
@@ -258,18 +246,14 @@ const styles = StyleSheet.create({
     color: '#37352f',
     ...Platform.select({
       web: {
-        outlineWidth: 0,
-      },
-    }),
-  },
+        outlineWidth: 0 } }) },
   deleteButton: {
     width: 28,
     height: 28,
     borderRadius: 14,
     backgroundColor: '#f7f6f3',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   addButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -278,41 +262,32 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 6,
     marginTop: 4,
-    alignSelf: 'flex-start',
-  },
+    alignSelf: 'flex-start' },
   addButtonText: {
     fontSize: 14,
-    color: '#666',
-  },
+    color: '#666' },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
     borderTopWidth: 1,
-    borderTopColor: '#e9e9e7',
-  },
+    borderTopColor: '#e9e9e7' },
   clearButton: {
     paddingHorizontal: 16,
-    paddingVertical: 8,
-  },
+    paddingVertical: 8 },
   clearButtonText: {
     fontSize: 14,
     color: '#666',
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   applyButton: {
     backgroundColor: '#2383e2',
     borderRadius: 6,
     paddingHorizontal: 20,
-    paddingVertical: 8,
-  },
+    paddingVertical: 8 },
   applyButtonText: {
     fontSize: 14,
     color: '#fff',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   disabledText: {
-    opacity: 0.4,
-  },
-});
+    opacity: 0.4 } });

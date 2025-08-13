@@ -35,8 +35,7 @@ export const testFormInputs = async (): Promise<TestSuite> => {
     details: {
       requiredFields: ['name', 'email', 'phone'],
       optionalFields: ['company', 'address', 'notes'],
-      validationRules: ['email格式', '電話格式', '必填欄位檢查'],
-    }
+      validationRules: ['email格式', '電話格式', '必填欄位檢查'] }
   });
 
   // 測試任務表單驗證
@@ -46,8 +45,7 @@ export const testFormInputs = async (): Promise<TestSuite> => {
     message: '任務表單支援多種輸入方式',
     details: {
       inputMethods: ['表單輸入', '語音轉任務'],
-      fields: ['title', 'description', 'priority', 'dueDate', 'assignee'],
-    }
+      fields: ['title', 'description', 'priority', 'dueDate', 'assignee'] }
   });
 
   // 測試記錄表單驗證
@@ -57,8 +55,7 @@ export const testFormInputs = async (): Promise<TestSuite> => {
     message: '記錄支援文字和音頻輸入',
     details: {
       inputMethods: ['文字輸入', '音頻錄製'],
-      supportedTypes: ['meeting', 'call', 'note', 'todo', 'idea', 'other'],
-    }
+      supportedTypes: ['meeting', 'call', 'note', 'todo', 'idea', 'other'] }
   });
 
   const passedTests = results.filter(r => r.passed).length;
@@ -68,8 +65,7 @@ export const testFormInputs = async (): Promise<TestSuite> => {
     results,
     passed: passedTests === results.length,
     totalTests: results.length,
-    passedTests,
-  };
+    passedTests };
 };
 
 // CSV 輸入測試
@@ -89,8 +85,7 @@ export const testCSVInputs = async (): Promise<TestSuite> => {
         rowCount: parseResult.data.length,
         validRows: parseResult.validRows,
         invalidRows: parseResult.invalidRows,
-        totalRows: parseResult.totalRows,
-      }
+        totalRows: parseResult.totalRows }
     });
 
     // 測試資料驗證
@@ -98,8 +93,7 @@ export const testCSVInputs = async (): Promise<TestSuite> => {
       const validationResult = await validateCustomerData(parseResult.data, {
         requireEmail: false,
         requirePhone: false,
-        validateFormat: true,
-      });
+        validateFormat: true });
 
       results.push({
         name: 'CSV 資料驗證',
@@ -108,8 +102,7 @@ export const testCSVInputs = async (): Promise<TestSuite> => {
         details: {
           validCount: validationResult.valid.length,
           invalidCount: validationResult.invalid.length,
-          errors: validationResult.invalid.map(item => item.errors),
-        }
+          errors: validationResult.invalid.map(item => item.errors) }
       });
     }
 
@@ -123,8 +116,7 @@ export const testCSVInputs = async (): Promise<TestSuite> => {
           name: ['姓名', 'name', '客戶姓名', 'customer_name'],
           email: ['電子郵件', 'email', '信箱', 'mail'],
           phone: ['電話', 'phone', '聯絡電話', 'tel'],
-          company: ['公司', 'company', '公司名稱', 'company_name'],
-        }
+          company: ['公司', 'company', '公司名稱', 'company_name'] }
       }
     });
 
@@ -132,8 +124,7 @@ export const testCSVInputs = async (): Promise<TestSuite> => {
     results.push({
       name: 'CSV 處理錯誤',
       passed: false,
-      message: `CSV 處理失敗: ${error}`,
-    });
+      message: `CSV 處理失敗: ${error}` });
   }
 
   const passedTests = results.filter(r => r.passed).length;
@@ -143,8 +134,7 @@ export const testCSVInputs = async (): Promise<TestSuite> => {
     results,
     passed: passedTests === results.length,
     totalTests: results.length,
-    passedTests,
-  };
+    passedTests };
 };
 
 // 音頻輸入測試
@@ -164,8 +154,7 @@ export const testAudioInputs = async (): Promise<TestSuite> => {
         duration: `${Math.floor(audio.duration / 60)}:${(audio.duration % 60).toString().padStart(2, '0')}`,
         size: `${(audio.size / 1024 / 1024).toFixed(1)} MB`,
         hasTranscription: audio.transcription.length > 0,
-        extractedTasks: audio.extractedTasks.length,
-      }))
+        extractedTasks: audio.extractedTasks.length }))
     }
   });
 
@@ -179,8 +168,7 @@ export const testAudioInputs = async (): Promise<TestSuite> => {
       transcriptionLengths: audioData.map(audio => audio.transcription.length),
       averageLength: Math.round(
         audioData.reduce((sum, audio) => sum + audio.transcription.length, 0) / audioData.length
-      ),
-    }
+      ) }
   });
 
   // 測試任務提取功能
@@ -196,8 +184,7 @@ export const testAudioInputs = async (): Promise<TestSuite> => {
         tasks: audio.extractedTasks.map(task => ({
           title: task.title,
           priority: task.priority,
-          hasDueDate: !!task.dueDate,
-        }))
+          hasDueDate: !!task.dueDate }))
       }))
     }
   });
@@ -211,8 +198,7 @@ export const testAudioInputs = async (): Promise<TestSuite> => {
     details: {
       extractedCustomers: audioData
         .filter(audio => audio.extractedCustomerInfo)
-        .map(audio => audio.extractedCustomerInfo),
-    }
+        .map(audio => audio.extractedCustomerInfo) }
   });
 
   const passedTests = results.filter(r => r.passed).length;
@@ -222,8 +208,7 @@ export const testAudioInputs = async (): Promise<TestSuite> => {
     results,
     passed: passedTests === results.length,
     totalTests: results.length,
-    passedTests,
-  };
+    passedTests };
 };
 
 // Excel 式編輯測試
@@ -239,8 +224,7 @@ export const testInlineEditing = async (): Promise<TestSuite> => {
       supportedInputTypes: ['text', 'number', 'email', 'phone', 'multiline'],
       validationFeatures: ['格式驗證', '必填檢查', '自訂驗證器'],
       editingModes: ['批次儲存', '即時儲存'],
-      permissions: ['權限檢查', '編輯限制'],
-    }
+      permissions: ['權限檢查', '編輯限制'] }
   });
 
   // 測試欄位驗證
@@ -252,8 +236,7 @@ export const testInlineEditing = async (): Promise<TestSuite> => {
       emailValidation: '電子郵件格式檢查',
       phoneValidation: '電話號碼格式檢查',
       customValidation: '支援自訂驗證邏輯',
-      errorHandling: '錯誤訊息顯示和處理',
-    }
+      errorHandling: '錯誤訊息顯示和處理' }
   });
 
   // 測試儲存機制
@@ -265,8 +248,7 @@ export const testInlineEditing = async (): Promise<TestSuite> => {
       batchSave: '批次收集變更並一次儲存',
       realtimeSave: '編輯完成後立即儲存',
       changeTracking: '追蹤和標示未儲存變更',
-      rollback: '支援放棄變更功能',
-    }
+      rollback: '支援放棄變更功能' }
   });
 
   const passedTests = results.filter(r => r.passed).length;
@@ -276,8 +258,7 @@ export const testInlineEditing = async (): Promise<TestSuite> => {
     results,
     passed: passedTests === results.length,
     totalTests: results.length,
-    passedTests,
-  };
+    passedTests };
 };
 
 // 資料完整性測試
@@ -292,8 +273,7 @@ export const testDataIntegrity = async (): Promise<TestSuite> => {
       name: '測試資料生成',
       passed: Object.values(testData.summary).every(count => count > 0),
       message: `生成了完整的測試資料集`,
-      details: testData.summary,
-    });
+      details: testData.summary });
 
     // 測試資料驗證
     const allValidationsPassed = Object.values(testData.validation).every(Boolean);
@@ -301,8 +281,7 @@ export const testDataIntegrity = async (): Promise<TestSuite> => {
       name: '資料完整性驗證',
       passed: allValidationsPassed,
       message: allValidationsPassed ? '所有資料驗證通過' : '部分資料驗證失敗',
-      details: testData.validation,
-    });
+      details: testData.validation });
 
     // 測試關聯性
     const hasRelationships = testData.data.tasks.some(task => 
@@ -314,16 +293,14 @@ export const testDataIntegrity = async (): Promise<TestSuite> => {
       message: hasRelationships ? '資料間存在正確關聯' : '缺少資料關聯',
       details: {
         tasksWithCustomers: testData.data.tasks.filter(t => t.customerIds && t.customerIds.length > 0).length,
-        tasksWithRecords: testData.data.tasks.filter(t => t.recordId).length,
-      }
+        tasksWithRecords: testData.data.tasks.filter(t => t.recordId).length }
     });
 
   } catch (error) {
     results.push({
       name: '資料完整性錯誤',
       passed: false,
-      message: `資料驗證失敗: ${error}`,
-    });
+      message: `資料驗證失敗: ${error}` });
   }
 
   const passedTests = results.filter(r => r.passed).length;
@@ -333,8 +310,7 @@ export const testDataIntegrity = async (): Promise<TestSuite> => {
     results,
     passed: passedTests === results.length,
     totalTests: results.length,
-    passedTests,
-  };
+    passedTests };
 };
 
 // 執行完整測試套件
@@ -368,13 +344,11 @@ export const runCompleteTestSuite = async (): Promise<{
     passedSuites,
     totalTests,
     passedTests,
-    passed: passedSuites === totalSuites,
-  };
+    passed: passedSuites === totalSuites };
 
   console.log(`✅ 測試完成: ${passedTests}/${totalTests} 個測試通過，${passedSuites}/${totalSuites} 個測試套件通過`);
 
   return {
     suites,
-    overallResult,
-  };
+    overallResult };
 };

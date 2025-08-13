@@ -26,8 +26,7 @@ export const BulkImportUsersModal: React.FC<BulkImportUsersModalProps> = ({
   onClose,
   onImportComplete,
   useIntelligentMapping = true,
-  openAIKey,
-}) => {
+  openAIKey }) => {
   // 直接使用 UserImportWizard，它包含了所有功能
   return (
     <UserImportWizard

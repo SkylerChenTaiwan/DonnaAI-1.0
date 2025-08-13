@@ -38,8 +38,7 @@ export const AndroidImportance = {
   LOW: 2,
   DEFAULT: 3,
   HIGH: 4,
-  MAX: 5,
-};
+  MAX: 5 };
 
 class WebNotificationService {
   private static scheduledNotifications = new Map<string, any>();
@@ -90,8 +89,7 @@ class WebNotificationService {
     try {
       const permission = await Notification.requestPermission();
       return {
-        status: permission as 'granted' | 'denied' | 'undetermined',
-      };
+        status: permission as 'granted' | 'denied' | 'undetermined' };
     } catch (error) {
       console.error('請求通知權限失敗:', error);
       return { status: 'denied' };
@@ -119,8 +117,7 @@ class WebNotificationService {
       name: channel.name,
       importance: channel.importance || AndroidImportance.DEFAULT,
       vibrationPattern: channel.vibrationPattern,
-      lightColor: channel.lightColor,
-    });
+      lightColor: channel.lightColor });
   }
 
   // 排程本地通知
@@ -175,8 +172,7 @@ class WebNotificationService {
     // 儲存到排程列表
     this.scheduledNotifications.set(id, {
       timeoutId,
-      request,
-    });
+      request });
 
     return id;
   }
@@ -229,8 +225,7 @@ class WebNotificationService {
     const notification = new Notification(content.title, {
       body: content.body,
       data: content.data,
-      icon: '/assets/icon.png',
-    });
+      icon: '/assets/icon.png' });
 
     notification.onclick = () => {
       window.focus();
@@ -261,8 +256,7 @@ class WebNotificationService {
     return {
       remove: () => {
         console.log('移除通知回應監聽器');
-      },
-    };
+      } };
   }
 
   // 添加通知接收監聽器
@@ -274,8 +268,7 @@ class WebNotificationService {
     return {
       remove: () => {
         console.log('移除通知接收監聽器');
-      },
-    };
+      } };
   }
 }
 

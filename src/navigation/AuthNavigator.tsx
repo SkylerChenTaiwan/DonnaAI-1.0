@@ -20,8 +20,7 @@ export const AuthNavigator: React.FC = () => {
       initialRouteName="Login"
       screenOptions={{
         headerShown: false,
-        cardStyle: { backgroundColor: '#FFFFFF' },
-      }}
+        cardStyle: { backgroundColor: '#FFFFFF' } }}
     >
       <Stack.Screen name="Login">
         {({ navigation }) => (

@@ -44,8 +44,7 @@ export class UserFieldMappingEngine extends FieldMappingEngine {
       /^(role|角色|權限|權限等級|用戶類型|使用者類型)$/i,
       /^(permission|access_?level|user_?type|member_?type)$/i,
       /^(身份|權限角色|系統角色)$/i,
-    ],
-  };
+    ] };
 
   // 欄位類型映射
   private readonly FIELD_TYPE_MAP: Record<string, DataType> = {
@@ -54,8 +53,7 @@ export class UserFieldMappingEngine extends FieldMappingEngine {
     department: 'text',
     position: 'text',
     phoneNumber: 'phone',
-    role: 'text',
-  };
+    role: 'text' };
 
   constructor(openaiApiKey?: string) {
     super(openaiApiKey);
@@ -93,8 +91,7 @@ export class UserFieldMappingEngine extends FieldMappingEngine {
       mappings.push({
         ...mapping,
         isRequired: target.required,
-        dataType: this.getFieldDataType(target.field),
-      });
+        dataType: this.getFieldDataType(target.field) });
     }
 
     return mappings;
@@ -123,8 +120,7 @@ export class UserFieldMappingEngine extends FieldMappingEngine {
         bestMatch = {
           sourceField: header,
           confidence: 1.0,
-          method: 'exact',
-        };
+          method: 'exact' };
         break;
       }
     }
@@ -143,8 +139,7 @@ export class UserFieldMappingEngine extends FieldMappingEngine {
                 bestMatch = {
                   sourceField: header,
                   confidence,
-                  method: 'pattern',
-                };
+                  method: 'pattern' };
               }
             }
           }
@@ -163,8 +158,7 @@ export class UserFieldMappingEngine extends FieldMappingEngine {
             bestMatch = {
               sourceField: header,
               confidence: similarity,
-              method: 'fuzzy',
-            };
+              method: 'fuzzy' };
           }
         }
       }
@@ -178,8 +172,7 @@ export class UserFieldMappingEngine extends FieldMappingEngine {
           bestMatch = {
             sourceField: aiSuggestion.field,
             confidence: aiSuggestion.confidence,
-            method: 'ai',
-          };
+            method: 'ai' };
         }
       } catch (error) {
         console.error('AI 建議失敗:', error);
@@ -192,8 +185,7 @@ export class UserFieldMappingEngine extends FieldMappingEngine {
       confidence: bestMatch?.confidence || 0,
       isRequired: false,
       dataType: this.getFieldDataType(targetField),
-      method: bestMatch?.method,
-    };
+      method: bestMatch?.method };
   }
 
   /**
@@ -282,16 +274,13 @@ export class UserFieldMappingEngine extends FieldMappingEngine {
         messages: [
           {
             role: 'system',
-            content: '你是一個資料映射專家，幫助識別 CSV 欄位對應關係。請分析欄位名稱和樣本資料，找出最可能對應的欄位。',
-          },
+            content: '你是一個資料映射專家，幫助識別 CSV 欄位對應關係。請分析欄位名稱和樣本資料，找出最可能對應的欄位。' },
           {
             role: 'user',
-            content: prompt,
-          },
+            content: prompt },
         ],
         temperature: 0.3,
-        max_tokens: 100,
-      });
+        max_tokens: 100 });
 
       const result = response.choices[0]?.message?.content;
       if (result) {
@@ -351,8 +340,7 @@ export class UserFieldMappingEngine extends FieldMappingEngine {
       department: 'text',
       position: 'text',
       phoneNumber: 'phone',
-      role: 'select',
-    };
+      role: 'select' };
 
     return typeMap[field] || 'text';
   }
@@ -392,7 +380,6 @@ export class UserFieldMappingEngine extends FieldMappingEngine {
 
     return {
       isValid: errors.length === 0,
-      errors,
-    };
+      errors };
   }
 }

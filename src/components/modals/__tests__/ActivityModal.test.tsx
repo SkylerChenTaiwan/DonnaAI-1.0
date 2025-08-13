@@ -16,22 +16,18 @@ vi.mock('firebase/firestore', () => ({
   where: vi.fn(),
   orderBy: vi.fn(),
   limit: vi.fn(),
-  getDocs: vi.fn(),
-}));
+  getDocs: vi.fn() }));
 
 vi.mock('../../../services/firebase', () => ({
-  db: {},
-}));
+  db: {} }));
 
 // Mock date-fns
 vi.mock('date-fns', () => ({
   format: jest.fn((date, format) => '2024/01/01 12:00'),
-  formatDistanceToNow: jest.fn(() => '5 分鐘前'),
-}));
+  formatDistanceToNow: jest.fn(() => '5 分鐘前') }));
 
 vi.mock('date-fns/locale', () => ({
-  zhTW: {},
-}));
+  zhTW: {} }));
 
 // Mock ActivityChart
 vi.mock('../../personnel/ActivityChart', () => ({
@@ -42,8 +38,7 @@ vi.mock('../../personnel/ActivityChart', () => ({
         <Text>{`Chart with ${data.length} data points`}</Text>
       </View>
     );
-  },
-}));
+  } }));
 
 describe('ActivityModal', () => {
   const mockUser: User & {
@@ -64,17 +59,14 @@ describe('ActivityModal', () => {
     activityStats: {
       dailyLogins: [1, 2, 0, 3, 1, 2, 0, 1, 2, 3],
       totalActions: 150,
-      lastActions: ['login', 'view', 'create'],
-    },
-  };
+      lastActions: ['login', 'view', 'create'] } };
 
   const mockOnClose = vi.fn();
 
   const defaultProps = {
     visible: true,
     user: mockUser,
-    onClose: mockOnClose,
-  };
+    onClose: mockOnClose };
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -88,21 +80,16 @@ describe('ActivityModal', () => {
               action: 'login',
               timestamp: { toDate: () => new Date() },
               details: '使用者登入',
-              module: 'auth',
-            }),
-          },
+              module: 'auth' }) },
           {
             id: 'log-2',
             data: () => ({
               action: 'create',
               timestamp: { toDate: () => new Date() },
               details: '建立新客戶',
-              module: 'customers',
-            }),
-          },
+              module: 'customers' }) },
         ].forEach(callback);
-      }),
-    });
+      }) });
   });
 
   it('應該正確顯示使用者資訊', () => {
@@ -152,8 +139,7 @@ describe('ActivityModal', () => {
   it('離線使用者應該顯示正確狀態', () => {
     const offlineUser = {
       ...mockUser,
-      isOnline: false,
-    };
+      isOnline: false };
     
     const { getByText } = render(
       <ActivityModal {...defaultProps} user={offlineUser} />
@@ -164,8 +150,7 @@ describe('ActivityModal', () => {
 
   it('沒有活動記錄時應該顯示空狀態', async () => {
     (getDocs as jest.Mock).mockResolvedValueOnce({
-      forEach: vi.fn(),
-    });
+      forEach: vi.fn() });
     
     const { getByText } = render(<ActivityModal {...defaultProps} />);
     
@@ -206,8 +191,7 @@ describe('ActivityModal', () => {
   it('沒有統計資料時應該顯示預設值', () => {
     const userWithoutStats = {
       ...mockUser,
-      activityStats: undefined,
-    };
+      activityStats: undefined };
     
     const { getByText } = render(
       <ActivityModal {...defaultProps} user={userWithoutStats} />

@@ -11,8 +11,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Modal,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, setDoc, Timestamp } from 'firebase/firestore';
@@ -44,16 +43,14 @@ export const AddUserToOrganizationModal: React.FC<AddUserToOrganizationModalProp
   visible,
   organization,
   onClose,
-  onUserAdded,
-}) => {
+  onUserAdded }) => {
   const [formData, setFormData] = useState<UserFormData>({
     email: '',
     password: '',
     name: '',
     role: 'user',
     department: '',
-    position: '',
-  });
+    position: '' });
   const [isLoading, setIsLoading] = useState(false);
 
   const handleFieldChange = (field: keyof UserFormData, value: string) => {
@@ -111,8 +108,7 @@ export const AddUserToOrganizationModal: React.FC<AddUserToOrganizationModalProp
         status: 'active',
         createdAt: new Date(),
         updatedAt: new Date(),
-        lastActiveAt: new Date(),
-      };
+        lastActiveAt: new Date() };
 
       // 4. 儲存到 Firestore
       const userRef = doc(getFirebaseDb(), 'users', newUser.uid);
@@ -120,8 +116,7 @@ export const AddUserToOrganizationModal: React.FC<AddUserToOrganizationModalProp
         ...userData,
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),
-        lastActiveAt: Timestamp.now(),
-      });
+        lastActiveAt: Timestamp.now() });
 
       toast.success('用戶新增成功');
       
@@ -132,8 +127,7 @@ export const AddUserToOrganizationModal: React.FC<AddUserToOrganizationModalProp
         name: '',
         role: 'user',
         department: '',
-        position: '',
-      });
+        position: '' });
       
       onUserAdded?.();
       onClose();
@@ -162,8 +156,7 @@ export const AddUserToOrganizationModal: React.FC<AddUserToOrganizationModalProp
         name: '',
         role: 'user',
         department: '',
-        position: '',
-      });
+        position: '' });
       onClose();
     }
   };
@@ -279,8 +272,7 @@ export const AddUserToOrganizationModal: React.FC<AddUserToOrganizationModalProp
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -288,42 +280,33 @@ const styles = StyleSheet.create({
     paddingHorizontal: DesignSystem.spacing.lg,
     paddingVertical: DesignSystem.spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
-  },
+    flex: 1 },
   closeButton: {
     padding: DesignSystem.spacing.sm,
-    marginRight: DesignSystem.spacing.sm,
-  },
+    marginRight: DesignSystem.spacing.sm },
   headerTitle: {
     ...DesignSystem.typography.h4,
     color: DesignSystem.colors.text.primary,
-    flex: 1,
-  },
+    flex: 1 },
   content: {
     flex: 1,
     paddingHorizontal: DesignSystem.spacing.lg,
-    paddingTop: DesignSystem.spacing.lg,
-  },
+    paddingTop: DesignSystem.spacing.lg },
   roleSection: {
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   roleLabel: {
     ...DesignSystem.typography.bodySmall,
     color: DesignSystem.colors.text.secondary,
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   required: {
-    color: DesignSystem.colors.error,
-  },
+    color: DesignSystem.colors.error },
   roleOptions: {
     flexDirection: 'row',
-    gap: DesignSystem.spacing.sm,
-  },
+    gap: DesignSystem.spacing.sm },
   roleOption: {
     flex: 1,
     paddingVertical: DesignSystem.spacing.md,
@@ -332,20 +315,16 @@ const styles = StyleSheet.create({
     borderColor: DesignSystem.colors.border.default,
     borderRadius: DesignSystem.borderRadius.sm,
     alignItems: 'center',
-    backgroundColor: DesignSystem.colors.background.surface,
-  },
+    backgroundColor: DesignSystem.colors.background.surface },
   roleOptionActive: {
     borderColor: DesignSystem.colors.primary,
-    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
-  },
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063) },
   roleOptionText: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   roleOptionTextActive: {
     color: DesignSystem.colors.primary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   infoBox: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -353,13 +332,10 @@ const styles = StyleSheet.create({
     padding: DesignSystem.spacing.md,
     borderRadius: DesignSystem.borderRadius.sm,
     marginTop: DesignSystem.spacing.lg,
-    marginBottom: DesignSystem.spacing.xl,
-  },
+    marginBottom: DesignSystem.spacing.xl },
   infoText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
     marginLeft: DesignSystem.spacing.sm,
     flex: 1,
-    lineHeight: 18,
-  },
-});
+    lineHeight: 18 } });

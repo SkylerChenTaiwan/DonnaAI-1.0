@@ -12,12 +12,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 // Mock Firebase services
 vi.mock('../../../services/firebase/userService', () => ({
   updateUserRole: jest.fn(() => Promise.resolve()),
-  updateUserPermissions: jest.fn(() => Promise.resolve()),
-}));
+  updateUserPermissions: jest.fn(() => Promise.resolve()) }));
 
 vi.mock('../../../services/firebase/permissions-v2', () => ({
-  clearUserPermissionCache: vi.fn(),
-}));
+  clearUserPermissionCache: vi.fn() }));
 
 // Mock Alert
 vi.spyOn(Alert, 'alert');
@@ -31,8 +29,7 @@ describe('PermissionModal', () => {
     organizationId: 'org-1',
     isActive: true,
     createdAt: new Date(),
-    updatedAt: new Date(),
-  };
+    updatedAt: new Date() };
 
   const mockOnClose = vi.fn();
   const mockOnUpdate = vi.fn();
@@ -41,8 +38,7 @@ describe('PermissionModal', () => {
     visible: true,
     user: mockUser,
     onClose: mockOnClose,
-    onUpdate: mockOnUpdate,
-  };
+    onUpdate: mockOnUpdate };
 
   beforeEach(() => {
     vi.clearAllMocks();

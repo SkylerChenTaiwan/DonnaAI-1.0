@@ -7,8 +7,7 @@ import React from 'react';
 import {
   View,
   Text,
-  StyleSheet,
-} from 'react-native';
+  StyleSheet } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 
@@ -19,8 +18,7 @@ interface SectionHeaderProps {
 
 export const SectionHeader: React.FC<SectionHeaderProps> = ({
   icon,
-  title,
-}) => {
+  title }) => {
   return (
     <View style={styles.container}>
       <Icon
@@ -38,11 +36,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
-    gap: 8,
-  },
+    gap: 8 },
   title: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text.primary,
-  },
-});
+    color: DesignSystem.colors.text.primary } });

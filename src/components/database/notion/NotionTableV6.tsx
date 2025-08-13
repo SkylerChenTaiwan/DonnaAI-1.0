@@ -43,8 +43,7 @@ export const NotionTableV6: React.FC<NotionTableV6Props> = ({
   loading = false,
   error = null,
   emptyMessage = '沒有資料',
-  activeTab,
-}) => {
+  activeTab }) => {
   // 狀態管理
   const [visibleColumns, setVisibleColumns] = useState<string[]>(
     inputColumns.map(col => col.id)
@@ -108,8 +107,7 @@ export const NotionTableV6: React.FC<NotionTableV6Props> = ({
       if (onColumnReorder) {
         const updatedColumns = inputColumns.map(col => ({
           ...col,
-          width: columnSizing[col.id] || col.width || 180,
-        }));
+          width: columnSizing[col.id] || col.width || 180 }));
         onColumnReorder(updatedColumns);
       }
     };

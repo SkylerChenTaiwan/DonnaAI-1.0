@@ -7,8 +7,7 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
-  ViewStyle,
-} from 'react-native';
+  ViewStyle } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 
 interface ToolbarIconsProps {
@@ -40,8 +39,7 @@ export const ToolbarIcons: React.FC<ToolbarIconsProps> = ({
   onMultiSelectPress,
   onColumnsPress,
   onModeToggle,
-  style,
-}) => {
+  style }) => {
   return (
     <View style={[styles.container, style]}>
       {showFilter && (
@@ -121,13 +119,9 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-  },
+    gap: 4 },
   iconButton: {
     padding: 8,
-    borderRadius: 6,
-  },
+    borderRadius: 6 },
   iconButtonActive: {
-    backgroundColor: 'rgba(255, 92, 0, 0.1)',
-  },
-});
+    backgroundColor: 'rgba(255, 92, 0, 0.1)' } });

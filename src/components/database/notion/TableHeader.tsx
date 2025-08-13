@@ -32,8 +32,7 @@ export const TableHeader: React.FC<TableHeaderProps> = ({
   allSelected,
   onSelectAll,
   canEditFields,
-  onFieldInfo,
-}) => {
+  onFieldInfo }) => {
   const [resizingColumn, setResizingColumn] = useState<string | null>(null);
   const [dragStartX, setDragStartX] = useState(0);
   const [columnStartWidth, setColumnStartWidth] = useState(0);
@@ -112,8 +111,7 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
   onResizeStart,
   onResizeEnd,
   canEditFields,
-  onFieldInfo,
-}) => {
+  onFieldInfo }) => {
   const cellRef = useRef<View>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartX, setDragStartX] = useState(0);
@@ -191,8 +189,7 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
         tableStyles.headerCell,
         { 
           width: column.width || 180,
-          opacity: isDragging ? 0.5 : 1,
-        },
+          opacity: isDragging ? 0.5 : 1 },
       ]}
     >
       <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
@@ -206,8 +203,7 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
             onDragStart: handleDragStart,
             onDragEnd: handleDragEnd,
             onDragOver: handleDragOver,
-            onDrop: handleDrop,
-          } as any : {})}
+            onDrop: handleDrop } as any : {})}
         >
           <Text style={tableStyles.headerText}>
             {column.title}
@@ -232,8 +228,7 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
               marginLeft: 6,
               padding: 4,
               borderRadius: 4,
-              backgroundColor: 'transparent',
-            }}
+              backgroundColor: 'transparent' }}
           >
             <Icon 
               name="information-circle-outline" 
@@ -258,9 +253,7 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
             onMouseDown: handleResizeStart,
             style: {
               ...tableStyles.headerResizeHandle,
-              cursor: 'col-resize',
-            },
-          } as any : {})}
+              cursor: 'col-resize' } } as any : {})}
         />
       )}
     </View>

@@ -132,8 +132,7 @@ export const FieldEditPopover: React.FC<FieldEditPopoverProps> = ({
         label: fieldName, // This will be mapped to title in DatabaseScreen
         type: fieldType as any,
         required: isRequired,
-        visible: isVisible,
-      };
+        visible: isVisible };
       
       // 如果有 AI 結果，加入更新
       if (aiResult) {
@@ -365,8 +364,7 @@ function getFieldTypes() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-  },
+    backgroundColor: '#fff' },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -374,52 +372,41 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5E5',
-  },
+    borderBottomColor: '#E5E5E5' },
   title: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   closeButton: {
-    padding: 4,
-  },
+    padding: 4 },
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   section: {
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
-  },
+    borderBottomColor: '#F0F0F0' },
   sectionTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   sectionHint: {
     fontSize: 12,
     color: DesignSystem.colors.text.secondary,
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   field: {
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   fieldLabel: {
     fontSize: 13,
     color: DesignSystem.colors.text.secondary,
-    marginBottom: 6,
-  },
+    marginBottom: 6 },
   fieldValue: {
     fontSize: 14,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   fieldHint: {
     fontSize: 12,
     color: DesignSystem.colors.text.secondary,
-    marginTop: 2,
-  },
+    marginTop: 2 },
   input: {
     borderWidth: 1,
     borderColor: '#E5E5E5',
@@ -428,22 +415,18 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     fontSize: 14,
     color: DesignSystem.colors.text.primary,
-    backgroundColor: '#FAFAFA',
-  },
+    backgroundColor: '#FAFAFA' },
   inputDisabled: {
     backgroundColor: '#F5F5F5',
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   textArea: {
     minHeight: 60,
-    textAlignVertical: 'top',
-  },
+    textAlignVertical: 'top' },
   switchField: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   aiButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -452,74 +435,60 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 4,
     marginTop: 8,
-    alignSelf: 'flex-start',
-  },
+    alignSelf: 'flex-start' },
   aiButtonDisabled: {
-    opacity: 0.6,
-  },
+    opacity: 0.6 },
   aiButtonText: {
     color: '#fff',
     fontSize: 13,
-    marginLeft: 4,
-  },
+    marginLeft: 4 },
   aiResult: {
     marginTop: 12,
     padding: 12,
     backgroundColor: '#F8F8F8',
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: '#E5E5E5',
-  },
+    borderColor: '#E5E5E5' },
   aiResultLabel: {
     fontSize: 12,
     fontWeight: '600',
     color: DesignSystem.colors.text.secondary,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   aiResultText: {
     fontSize: 13,
     color: DesignSystem.colors.text.primary,
-    lineHeight: 18,
-  },
+    lineHeight: 18 },
   aiExamples: {
-    marginTop: 8,
-  },
+    marginTop: 8 },
   aiExample: {
     fontSize: 12,
     color: DesignSystem.colors.text.secondary,
-    marginTop: 2,
-  },
+    marginTop: 2 },
   fieldTypeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-  },
+    gap: 8 },
   fieldTypeValue: {
     fontSize: 14,
     color: DesignSystem.colors.text.primary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   fieldTypeHint: {
     fontSize: 12,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   pickerContainer: {
     borderWidth: 1,
     borderColor: '#E5E5E5',
     borderRadius: 4,
     backgroundColor: '#FAFAFA',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   pickerDisabled: {
     backgroundColor: '#F5F5F5',
-    opacity: 0.6,
-  },
+    opacity: 0.6 },
   picker: {
     height: Platform.OS === 'ios' ? 180 : 44,
     width: '100%',
     fontSize: 14,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   footer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -527,33 +496,26 @@ const styles = StyleSheet.create({
     padding: 16,
     borderTopWidth: 1,
     borderTopColor: '#E5E5E5',
-    gap: 8,
-  },
+    gap: 8 },
   cancelButton: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: '#E5E5E5',
-  },
+    borderColor: '#E5E5E5' },
   cancelButtonText: {
     fontSize: 14,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   saveButton: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 4,
     backgroundColor: DesignSystem.colors.primary,
     minWidth: 60,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   saveButtonDisabled: {
-    opacity: 0.6,
-  },
+    opacity: 0.6 },
   saveButtonText: {
     fontSize: 14,
     color: '#fff',
-    fontWeight: '500',
-  },
-});
+    fontWeight: '500' } });

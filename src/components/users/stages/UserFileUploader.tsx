@@ -12,8 +12,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Alert,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import Papa from 'papaparse';
 import { DesignSystem } from '@/theme/designSystem';
@@ -21,16 +20,14 @@ import {
   UploadedFile,
   MergeConfig,
   MergedTable,
-  MergeStrategy,
-} from '@/types/import';
+  MergeStrategy } from '@/types/import';
 import { ParsedUserFile } from '@/types/userImport';
 import {
   mergeFiles,
   detectKeyFields,
   validateMerge,
   previewMergedData,
-  getFieldStatistics,
-} from '@/components/import/utils/fileMerger';
+  getFieldStatistics } from '@/components/import/utils/fileMerger';
 import { showErrorToast, showSuccessToast } from '@/utils/toast';
 import { pickDocument } from '@/utils/web-file-picker';
 import { withAlpha } from '@/utils/colorUtils';
@@ -50,8 +47,7 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
   mergedTable,
   mode,
   onFilesUploaded,
-  onMergeCompleted,
-}) => {
+  onMergeCompleted }) => {
   const [loading, setLoading] = useState(false);
   const [selectedFileId, setSelectedFileId] = useState<string | null>(null);
   const [keyFieldCandidates, setKeyFieldCandidates] = useState<Record<string, any[]>>({});
@@ -242,13 +238,11 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
               uploadedAt: new Date(),
               rowCount: data.length,
               hasEmailField: hasEmailLike,
-              hasNameField: hasNameLike,
-            };
+              hasNameField: hasNameLike };
 
             setKeyFieldCandidates(prev => ({
               ...prev,
-              [uploadedFile.id]: keyFieldResults,
-            }));
+              [uploadedFile.id]: keyFieldResults }));
 
             resolve(uploadedFile);
           },
@@ -256,8 +250,7 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
             console.error('CSV 解析錯誤:', error);
             showErrorToast(`解析檔案失敗: ${error.message || '未知錯誤'}`);
             resolve(null);
-          },
-        });
+          } });
       };
       
       // 檢查是否為 data URL
@@ -325,12 +318,10 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
       const config: MergeConfig = {
         files: filesToMerge.map(f => ({
           id: f.id,
-          keyField: keyField,
-        })),
+          keyField: keyField })),
         mergeStrategy: 'left',
         handleDuplicates: 'rename',
-        caseSensitive: false,
-      };
+        caseSensitive: false };
 
       const merged = mergeFiles(filesToMerge, config);
       onMergeCompleted(config, merged);
@@ -371,12 +362,10 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
       const config: MergeConfig = {
         files: files.map(f => ({
           id: f.id,
-          keyField: selectedKeyFields[f.id] || f.keyField || '',
-        })),
+          keyField: selectedKeyFields[f.id] || f.keyField || '' })),
         mergeStrategy,
         handleDuplicates: 'rename',
-        caseSensitive: false,
-      };
+        caseSensitive: false };
 
       // 先檢查關鍵欄位是否存在
       for (const fileConfig of config.files) {
@@ -536,8 +525,7 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
                                   borderRadius: 4,
                                   backgroundColor: DesignSystem.colors.background.surface,
                                   fontSize: 12,
-                                  minWidth: 100,
-                                }}
+                                  minWidth: 100 }}
                               >
                                 <option value="text">文字</option>
                                 <option value="number">數字</option>
@@ -581,8 +569,7 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
                           paddingBottom: '8px',
                           borderRadius: '8px',
                           border: `1px solid ${!selectedKeyFields[file.id] && !file.keyField ? DesignSystem.colors.warning : DesignSystem.colors.border.light}`,
-                          cursor: 'pointer',
-                        }}
+                          cursor: 'pointer' }}
                         onClick={() => setSelectedFileId(
                           selectedFileId === file.id ? null : file.id
                         )}
@@ -590,8 +577,7 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
                         <span style={{
                           fontSize: '12px',
                           color: !selectedKeyFields[file.id] && !file.keyField ? DesignSystem.colors.warning : DesignSystem.colors.text.primary,
-                          marginRight: '8px',
-                        }}>
+                          marginRight: '8px' }}>
                           {selectedKeyFields[file.id] || file.keyField || '請選擇關鍵欄位'}
                         </span>
                         <Icon name="chevron-down" size={16} />
@@ -635,8 +621,7 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
                             paddingRight: '16px',
                             borderBottom: `1px solid ${DesignSystem.colors.border.light}`,
                             cursor: 'pointer',
-                            backgroundColor: 'transparent',
-                          }}
+                            backgroundColor: 'transparent' }}
                           onClick={() => {
                             setSelectedKeyFields(prev => ({
                               ...prev,
@@ -655,16 +640,14 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
                             fontSize: '14px',
                             color: selectedKeyFields[file.id] === header ? DesignSystem.colors.primary : DesignSystem.colors.text.primary,
                             fontWeight: selectedKeyFields[file.id] === header ? '600' : 'normal',
-                            flex: 1,
-                          }}>
+                            flex: 1 }}>
                             {header}
                           </span>
                           {keyFieldCandidates[file.id]?.find(c => c.field === header) && (
                             <span style={{
                               fontSize: '12px',
                               color: DesignSystem.colors.text.secondary,
-                              marginLeft: '8px',
-                            }}>
+                              marginLeft: '8px' }}>
                               {Math.round((keyFieldCandidates[file.id].find(c => c.field === header)?.uniquenessRatio || 0) * 100)}%
                             </span>
                           )}
@@ -885,8 +868,7 @@ const Button: React.FC<any> = ({ title, onPress, disabled, style }) => {
           cursor: disabled ? 'not-allowed' : 'pointer',
           opacity: disabled ? 0.5 : 1,
           marginTop: '16px',
-          width: '100%',
-        }}
+          width: '100%' }}
         onClick={disabled ? undefined : onPress}
         disabled={disabled}
       >
@@ -912,8 +894,7 @@ const Button: React.FC<any> = ({ title, onPress, disabled, style }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   uploadArea: {
     borderWidth: 2,
     borderColor: DesignSystem.colors.border.light,
@@ -923,58 +904,47 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 150,
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   uploadTitle: {
     ...DesignSystem.typography.h4,
     color: DesignSystem.colors.text.primary,
-    marginTop: DesignSystem.spacing.md,
-  },
+    marginTop: DesignSystem.spacing.md },
   uploadHint: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginTop: DesignSystem.spacing.xs,
-  },
+    marginTop: DesignSystem.spacing.xs },
   fileList: {
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   fileItem: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: DesignSystem.borderRadius.md,
     padding: DesignSystem.spacing.md,
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   fileInfo: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   fileDetails: {
     flex: 1,
-    marginLeft: DesignSystem.spacing.md,
-  },
+    marginLeft: DesignSystem.spacing.md },
   fileName: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   fileMeta: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginTop: DesignSystem.spacing.xxs,
-  },
+    marginTop: DesignSystem.spacing.xxs },
   keyFieldSelector: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: DesignSystem.spacing.xs,
-  },
+    marginTop: DesignSystem.spacing.xs },
   keyFieldLabel: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginRight: DesignSystem.spacing.xs,
-  },
+    marginRight: DesignSystem.spacing.xs },
   keyFieldDropdown: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -983,54 +953,43 @@ const styles = StyleSheet.create({
     paddingVertical: DesignSystem.spacing.xs,
     borderRadius: DesignSystem.borderRadius.sm,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.border.light,
-  },
+    borderColor: DesignSystem.colors.border.light },
   keyFieldValue: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.primary,
-    marginRight: DesignSystem.spacing.xs,
-  },
+    marginRight: DesignSystem.spacing.xs },
   removeButton: {
-    padding: DesignSystem.spacing.xs,
-  },
+    padding: DesignSystem.spacing.xs },
   emptyState: {
     alignItems: 'center',
-    paddingVertical: DesignSystem.spacing.xl,
-  },
+    paddingVertical: DesignSystem.spacing.xl },
   emptyStateText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.secondary,
-    marginTop: DesignSystem.spacing.md,
-  },
+    marginTop: DesignSystem.spacing.md },
   emptyStateHint: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.tertiary,
     marginTop: DesignSystem.spacing.xs,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   mergeSection: {
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: DesignSystem.borderRadius.md,
     padding: DesignSystem.spacing.lg,
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   mergeSectionTitle: {
     ...DesignSystem.typography.h5,
     color: DesignSystem.colors.text.primary,
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   mergeOptions: {
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   mergeOptionLabel: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.secondary,
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   mergeStrategyButtons: {
     flexDirection: 'row',
-    gap: DesignSystem.spacing.sm,
-  },
+    gap: DesignSystem.spacing.sm },
   strategyButton: {
     flex: 1,
     paddingVertical: DesignSystem.spacing.sm,
@@ -1038,22 +997,17 @@ const styles = StyleSheet.create({
     borderRadius: DesignSystem.borderRadius.sm,
     borderWidth: 1,
     borderColor: DesignSystem.colors.border.medium,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   strategyButtonActive: {
     backgroundColor: DesignSystem.colors.primary,
-    borderColor: DesignSystem.colors.primary,
-  },
+    borderColor: DesignSystem.colors.primary },
   strategyButtonText: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   strategyButtonTextActive: {
-    color: DesignSystem.colors.text.inverse,
-  },
+    color: DesignSystem.colors.text.inverse },
   mergeButton: {
-    marginTop: DesignSystem.spacing.md,
-  },
+    marginTop: DesignSystem.spacing.md },
   mergeWarning: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1061,60 +1015,48 @@ const styles = StyleSheet.create({
     padding: DesignSystem.spacing.sm,
     borderRadius: DesignSystem.borderRadius.sm,
     marginTop: DesignSystem.spacing.sm,
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   mergeWarningText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.warning,
     marginLeft: DesignSystem.spacing.xs,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   button: {
     backgroundColor: DesignSystem.colors.primary,
     paddingVertical: DesignSystem.spacing.sm,
     paddingHorizontal: DesignSystem.spacing.lg,
     borderRadius: DesignSystem.borderRadius.sm,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   buttonDisabled: {
-    opacity: 0.5,
-  },
+    opacity: 0.5 },
   buttonText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.inverse,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   mergePreview: {
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: DesignSystem.borderRadius.md,
     padding: DesignSystem.spacing.lg,
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   mergePreviewHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   mergePreviewTitle: {
     ...DesignSystem.typography.h5,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   mergeStats: {
     flexDirection: 'row',
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   mergeStat: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginRight: DesignSystem.spacing.lg,
-  },
+    marginRight: DesignSystem.spacing.lg },
   previewTable: {
-    maxHeight: 200,
-  },
+    maxHeight: 200 },
   previewRow: {
-    flexDirection: 'row',
-  },
+    flexDirection: 'row' },
   previewHeader: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.primary,
@@ -1123,8 +1065,7 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.background.primary,
     minWidth: 100,
     borderRightWidth: 1,
-    borderRightColor: DesignSystem.colors.border.light,
-  },
+    borderRightColor: DesignSystem.colors.border.light },
   previewCell: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
@@ -1133,29 +1074,25 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     borderRightColor: DesignSystem.colors.border.light,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   tips: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: `${DesignSystem.colors.primary}10`,
     padding: DesignSystem.spacing.sm,
-    borderRadius: DesignSystem.borderRadius.sm,
-  },
+    borderRadius: DesignSystem.borderRadius.sm },
   tipsText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
     marginLeft: DesignSystem.spacing.xs,
-    flex: 1,
-  },
+    flex: 1 },
   keyFieldOptions: {
     backgroundColor: DesignSystem.colors.background.primary,
     borderWidth: 1,
     borderColor: DesignSystem.colors.border.medium,
     borderRadius: DesignSystem.borderRadius.sm,
     marginTop: DesignSystem.spacing.xs,
-    maxHeight: 200,
-  },
+    maxHeight: 200 },
   keyFieldOption: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -1163,48 +1100,38 @@ const styles = StyleSheet.create({
     paddingVertical: DesignSystem.spacing.sm,
     paddingHorizontal: DesignSystem.spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   keyFieldOptionText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
-    flex: 1,
-  },
+    flex: 1 },
   keyFieldOptionTextSelected: {
     color: DesignSystem.colors.primary,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   keyFieldConfidence: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginLeft: DesignSystem.spacing.xs,
-  },
+    marginLeft: DesignSystem.spacing.xs },
   mergeHint: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   keyFieldDropdownWarning: {
-    borderColor: DesignSystem.colors.warning,
-  },
+    borderColor: DesignSystem.colors.warning },
   keyFieldValueWarning: {
-    color: DesignSystem.colors.warning,
-  },
+    color: DesignSystem.colors.warning },
   mergeButton: {
     backgroundColor: DesignSystem.colors.primary,
     paddingVertical: DesignSystem.spacing.md,
     borderRadius: DesignSystem.borderRadius.md,
     alignItems: 'center',
-    marginTop: DesignSystem.spacing.md,
-  },
+    marginTop: DesignSystem.spacing.md },
   mergeButtonDisabled: {
-    backgroundColor: DesignSystem.colors.gray300,
-  },
+    backgroundColor: DesignSystem.colors.gray300 },
   mergeButtonText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.white,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   // 檔案層級的欄位編輯器樣式
   fieldTypeButton: {
     flexDirection: 'row',
@@ -1215,41 +1142,34 @@ const styles = StyleSheet.create({
     backgroundColor: `${DesignSystem.colors.primary}10`,
     borderRadius: DesignSystem.borderRadius.xs,
     alignSelf: 'flex-start',
-    gap: 4,
-  },
+    gap: 4 },
   fieldTypeButtonText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.primary,
-    fontSize: 12,
-  },
+    fontSize: 12 },
   fileFieldEditor: {
     backgroundColor: DesignSystem.colors.background.secondary,
     borderRadius: DesignSystem.borderRadius.sm,
     padding: DesignSystem.spacing.sm,
-    marginTop: DesignSystem.spacing.sm,
-  },
+    marginTop: DesignSystem.spacing.sm },
   fileFieldEditorTitle: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.primary,
     fontWeight: '600',
-    marginBottom: DesignSystem.spacing.xs,
-  },
+    marginBottom: DesignSystem.spacing.xs },
   fileFieldList: {
-    maxHeight: 150,
-  },
+    maxHeight: 150 },
   fileFieldRow: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 4,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   fileFieldName: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.primary,
     flex: 1,
-    fontSize: 12,
-  },
+    fontSize: 12 },
   fileFieldTypeSelector: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1259,26 +1179,22 @@ const styles = StyleSheet.create({
     borderRadius: DesignSystem.borderRadius.xs,
     borderWidth: 1,
     borderColor: DesignSystem.colors.border.light,
-    minWidth: 80,
-  },
+    minWidth: 80 },
   fileFieldTypeText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.primary,
     fontSize: 11,
-    flex: 1,
-  },
+    flex: 1 },
   fileFieldTypeHint: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.tertiary,
     fontSize: 10,
-    marginLeft: DesignSystem.spacing.xs,
-  },
+    marginLeft: DesignSystem.spacing.xs },
   // 欄位編輯器樣式（已移除，改為在檔案項目中顯示）
   previewActions: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: DesignSystem.spacing.sm,
-  },
+    gap: DesignSystem.spacing.sm },
   fieldEditorButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1286,40 +1202,33 @@ const styles = StyleSheet.create({
     paddingVertical: DesignSystem.spacing.xs,
     backgroundColor: `${DesignSystem.colors.primary}10`,
     borderRadius: DesignSystem.borderRadius.sm,
-    gap: DesignSystem.spacing.xs,
-  },
+    gap: DesignSystem.spacing.xs },
   fieldEditorButtonText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.primary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   fieldEditor: {
     backgroundColor: DesignSystem.colors.background.secondary,
     borderRadius: DesignSystem.borderRadius.md,
     padding: DesignSystem.spacing.md,
-    marginVertical: DesignSystem.spacing.sm,
-  },
+    marginVertical: DesignSystem.spacing.sm },
   fieldEditorTitle: {
     ...DesignSystem.typography.subtitle,
     color: DesignSystem.colors.text.primary,
     fontWeight: '600',
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   fieldEditorContent: {
-    maxHeight: 200,
-  },
+    maxHeight: 200 },
   fieldTypeRow: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: DesignSystem.spacing.xs,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   fieldName: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
-    flex: 1,
-  },
+    flex: 1 },
   fieldTypeSelector: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1329,47 +1238,38 @@ const styles = StyleSheet.create({
     borderRadius: DesignSystem.borderRadius.sm,
     borderWidth: 1,
     borderColor: DesignSystem.colors.border.light,
-    minWidth: 120,
-  },
+    minWidth: 120 },
   fieldTypeText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.primary,
-    flex: 1,
-  },
+    flex: 1 },
   fieldTypeBadge: {
     marginLeft: DesignSystem.spacing.sm,
     paddingHorizontal: DesignSystem.spacing.xs,
     paddingVertical: 2,
     backgroundColor: `${DesignSystem.colors.info}20`,
-    borderRadius: DesignSystem.borderRadius.xs,
-  },
+    borderRadius: DesignSystem.borderRadius.xs },
   fieldTypeBadgeText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.info,
-    fontSize: 10,
-  },
+    fontSize: 10 },
   applyButton: {
     backgroundColor: DesignSystem.colors.primary,
     paddingVertical: DesignSystem.spacing.sm,
     borderRadius: DesignSystem.borderRadius.sm,
     alignItems: 'center',
-    marginTop: DesignSystem.spacing.md,
-  },
+    marginTop: DesignSystem.spacing.md },
   applyButtonText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.white,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   previewHeaderCell: {
     paddingHorizontal: DesignSystem.spacing.sm,
-    paddingVertical: DesignSystem.spacing.xs,
-  },
+    paddingVertical: DesignSystem.spacing.xs },
   previewHeaderType: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.tertiary,
     fontSize: 10,
-    marginTop: 2,
-  },
-});
+    marginTop: 2 } });
 
 export default UserFileUploader;

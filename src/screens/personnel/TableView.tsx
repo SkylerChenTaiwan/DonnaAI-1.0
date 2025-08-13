@@ -7,8 +7,7 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+  TouchableOpacity } from 'react-native';
 import { DataTable } from '@/components/common/DataTable';
 import { StatusIndicator } from '@/components/personnel/StatusIndicator';
 import { PermissionBadge } from '@/components/personnel/PermissionBadge';
@@ -61,10 +60,8 @@ export function TableView({
         modules: [],
         actions: [],
         dataAccess: member.role === 'admin' ? 'organization' : 
-                   member.role === 'manager' ? 'team' : 'own',
-      },
-      subordinates: member.role === 'manager' ? [] : undefined,
-    }));
+                   member.role === 'manager' ? 'team' : 'own' },
+      subordinates: member.role === 'manager' ? [] : undefined }));
   }, [teamMembers]);
 
   // 定義表格欄位
@@ -78,30 +75,26 @@ export function TableView({
           <Text style={styles.nameText}>{value}</Text>
           <Text style={styles.emailText}>{item.email}</Text>
         </View>
-      ),
-    },
+      ) },
     {
       key: 'status',
       title: '狀態',
       width: 100,
       render: (value, item) => (
         <StatusIndicator user={item} size="small" />
-      ),
-    },
+      ) },
     {
       key: 'role',
       title: '角色權限',
       width: 150,
       render: (value, item) => (
         <PermissionBadge user={item} />
-      ),
-    },
+      ) },
     {
       key: 'department',
       title: '部門',
       sortable: true,
-      render: (value) => value || '未設定',
-    },
+      render: (value) => value || '未設定' },
     {
       key: 'performance',
       title: '績效指標',
@@ -121,14 +114,12 @@ export function TableView({
             <Text style={styles.performanceLabel}>成交</Text>
           </View>
         </View>
-      ),
-    },
+      ) },
     {
       key: 'joinDate',
       title: '入職日期',
       sortable: true,
-      render: (value) => value ? new Date(value).toLocaleDateString('zh-TW') : '-',
-    },
+      render: (value) => value ? new Date(value).toLocaleDateString('zh-TW') : '-' },
   ], []);
 
   // 處理行點擊
@@ -159,8 +150,7 @@ export function TableView({
             <TouchableOpacity style={styles.addButton} onPress={() => {
               navigation.navigate('AddUserModal' as any, {
                 teamId: currentTeam?.id,
-                onUserCreated: onRefresh,
-              });
+                onUserCreated: onRefresh });
             }}>
               <Text style={styles.addButtonText}>新增下屬</Text>
             </TouchableOpacity>
@@ -214,43 +204,34 @@ export function TableView({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background,
-  },
+    backgroundColor: DesignSystem.colors.background },
   tableContainer: {
     flex: 1,
-    paddingHorizontal: 16,
-  },
+    paddingHorizontal: 16 },
   // 表格內容樣式
   nameCell: {
-    paddingVertical: 4,
-  },
+    paddingVertical: 4 },
   nameText: {
     fontSize: 14,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   emailText: {
     fontSize: 12,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   performanceCell: {
     flexDirection: 'row',
-    gap: 16,
-  },
+    gap: 16 },
   performanceItem: {
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   performanceValue: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   performanceLabel: {
     fontSize: 10,
     color: DesignSystem.colors.text.tertiary,
-    marginTop: 2,
-  },
+    marginTop: 2 },
   // 批次操作工具列
   batchActions: {
     flexDirection: 'row',
@@ -260,74 +241,60 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderTopWidth: 1,
-    borderTopColor: DesignSystem.colors.border.light,
-  },
+    borderTopColor: DesignSystem.colors.border.light },
   selectedCount: {
     fontSize: 14,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   actionButtons: {
     flexDirection: 'row',
-    gap: 12,
-  },
+    gap: 12 },
   actionButton: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     backgroundColor: DesignSystem.colors.primary,
-    borderRadius: 8,
-  },
+    borderRadius: 8 },
   actionButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFFFFF',
-  },
+    color: '#FFFFFF' },
   // 空狀態樣式
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 40,
-  },
+    paddingHorizontal: 40 },
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   emptySubtitle: {
     fontSize: 14,
     color: DesignSystem.colors.text.secondary,
     textAlign: 'center',
     lineHeight: 20,
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   emptyButtonContainer: {
     flexDirection: 'row',
     gap: 12,
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   refreshButton: {
     paddingHorizontal: 24,
     paddingVertical: 12,
     backgroundColor: DesignSystem.colors.accent,
-    borderRadius: 8,
-  },
+    borderRadius: 8 },
   refreshButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: DesignSystem.colors.white,
-  },
+    color: DesignSystem.colors.white },
   addButton: {
     paddingHorizontal: 20,
     paddingVertical: 10,
     backgroundColor: DesignSystem.colors.background.elevated,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.border.default,
-  },
+    borderColor: DesignSystem.colors.border.default },
   addButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: DesignSystem.colors.text.secondary,
-  },
-});
+    color: DesignSystem.colors.text.secondary } });

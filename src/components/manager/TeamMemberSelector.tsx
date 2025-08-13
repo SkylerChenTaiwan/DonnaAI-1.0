@@ -9,8 +9,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  ActivityIndicator,
-} from 'react-native';
+  ActivityIndicator } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
@@ -41,8 +40,7 @@ export const TeamMemberSelector: React.FC<TeamMemberSelectorProps> = ({
   onChange,
   allowSelectAll = true,
   allowTeamSelection = true,
-  placeholder = '選擇團隊成員',
-}) => {
+  placeholder = '選擇團隊成員' }) => {
   const [loading, setLoading] = useState(true);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [selectedMembers, setSelectedMembers] = useState<string[]>(value);
@@ -94,16 +92,14 @@ export const TeamMemberSelector: React.FC<TeamMemberSelectorProps> = ({
             email: data.email,
             role: data.role || 'salesperson',
             teamId: teamId,
-            teamName: data.teamName || `團隊 ${teamId}`,
-          });
+            teamName: data.teamName || `團隊 ${teamId}` });
           teamMemberCount++;
         });
         
         // 記錄團隊信息
         teamsMap.set(teamId, {
           name: `團隊 ${teamId}`,
-          memberCount: teamMemberCount,
-        });
+          memberCount: teamMemberCount });
       }
       
       // 去重（一個成員可能在多個團隊）
@@ -116,8 +112,7 @@ export const TeamMemberSelector: React.FC<TeamMemberSelectorProps> = ({
         Array.from(teamsMap.entries()).map(([id, info]) => ({
           id,
           name: info.name,
-          memberCount: info.memberCount,
-        }))
+          memberCount: info.memberCount }))
       );
     } catch (error) {
       console.error('獲取團隊成員失敗:', error);
@@ -294,62 +289,50 @@ export const TeamMemberSelector: React.FC<TeamMemberSelectorProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   loadingContainer: {
     padding: 24,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   loadingText: {
     marginTop: 8,
     fontSize: 14,
-    color: '#6B7280',
-  },
+    color: '#6B7280' },
   emptyContainer: {
     padding: 24,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   emptyText: {
     fontSize: 14,
-    color: '#6B7280',
-  },
+    color: '#6B7280' },
   label: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1A1A1A',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   scrollView: {
     flex: 1,
-    maxHeight: 400,
-  },
+    maxHeight: 400 },
   selectAllItem: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 12,
     backgroundColor: '#F8F9FA',
     borderRadius: 8,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   selectAllText: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1A1A1A',
-    marginLeft: 12,
-  },
+    marginLeft: 12 },
   teamSection: {
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   memberSection: {
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   sectionTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: '#6B7280',
     marginBottom: 8,
-    paddingHorizontal: 4,
-  },
+    paddingHorizontal: 4 },
   teamItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -358,22 +341,18 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
-  },
+    borderColor: '#E5E7EB' },
   teamInfo: {
     flex: 1,
-    marginLeft: 12,
-  },
+    marginLeft: 12 },
   teamName: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   teamMemberCount: {
     fontSize: 12,
     color: '#6B7280',
-    marginTop: 2,
-  },
+    marginTop: 2 },
   memberItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -382,34 +361,26 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
-  },
+    borderColor: '#E5E7EB' },
   checkbox: {
     width: 24,
-    height: 24,
-  },
+    height: 24 },
   memberInfo: {
     flex: 1,
-    marginLeft: 12,
-  },
+    marginLeft: 12 },
   memberName: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   memberEmail: {
     fontSize: 14,
     color: '#6B7280',
-    marginTop: 2,
-  },
+    marginTop: 2 },
   summary: {
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
-  },
+    borderTopColor: '#E5E7EB' },
   summaryText: {
     fontSize: 14,
     color: '#6B7280',
-    textAlign: 'center',
-  },
-});
+    textAlign: 'center' } });

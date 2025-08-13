@@ -104,9 +104,7 @@ export const CreateRecordModal: React.FC = () => {
         organizationId: currentOrganization.id,
         teamId: currentTeam.id,
         metadata: {
-          audioPurpose: purpose,
-        },
-      };
+          audioPurpose: purpose } };
       
       await createRecord(recordData);
       showToast('success', '音頻紀錄已儲存');
@@ -132,8 +130,7 @@ export const CreateRecordModal: React.FC = () => {
       note: '補充記錄',
       task: '任務說明',
       customer: '客戶通話',
-      other: '其他用途',
-    };
+      other: '其他用途' };
     return labels[purpose] || '錄音';
   };
 
@@ -193,15 +190,12 @@ export const CreateRecordModal: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
-  },
+    backgroundColor: '#F8F9FA' },
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   audioContent: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
+    backgroundColor: '#FFFFFF' },
   textInputLink: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -209,11 +203,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     marginTop: 20,
-    gap: 6,
-  },
+    gap: 6 },
   linkText: {
     fontSize: 14,
     color: '#7A7A7A',
-    fontWeight: '500',
-  },
-});
+    fontWeight: '500' } });

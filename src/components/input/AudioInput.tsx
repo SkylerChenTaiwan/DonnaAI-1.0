@@ -11,8 +11,7 @@ import {
   Alert,
   ScrollView,
   TouchableOpacity,
-  Modal,
-} from 'react-native';
+  Modal } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 
@@ -69,9 +68,7 @@ const AUDIO_PURPOSES: PurposeOption[] = [
     settings: {
       enableAutomaticPunctuation: true,
       maxAlternatives: 2,
-      profanityFilter: false,
-    },
-  },
+      profanityFilter: false } },
   {
     key: 'note',
     title: '補充記錄',
@@ -80,9 +77,7 @@ const AUDIO_PURPOSES: PurposeOption[] = [
     settings: {
       enableAutomaticPunctuation: true,
       maxAlternatives: 1,
-      profanityFilter: false,
-    },
-  },
+      profanityFilter: false } },
   {
     key: 'task',
     title: '任務說明',
@@ -91,9 +86,7 @@ const AUDIO_PURPOSES: PurposeOption[] = [
     settings: {
       enableAutomaticPunctuation: true,
       maxAlternatives: 3,
-      profanityFilter: false,
-    },
-  },
+      profanityFilter: false } },
   {
     key: 'customer',
     title: '客戶通話',
@@ -102,9 +95,7 @@ const AUDIO_PURPOSES: PurposeOption[] = [
     settings: {
       enableAutomaticPunctuation: true,
       maxAlternatives: 2,
-      profanityFilter: true,
-    },
-  },
+      profanityFilter: true } },
   {
     key: 'other',
     title: '其他用途',
@@ -113,9 +104,7 @@ const AUDIO_PURPOSES: PurposeOption[] = [
     settings: {
       enableAutomaticPunctuation: false,
       maxAlternatives: 1,
-      profanityFilter: false,
-    },
-  },
+      profanityFilter: false } },
 ];
 
 type ProcessingStage = 'purpose' | 'recording' | 'processing' | 'review' | 'complete';
@@ -126,8 +115,7 @@ export const AudioInput: React.FC<AudioInputProps> = ({
   userId,
   maxDuration = 3600,
   language = 'zh-TW',
-  enableQualityCheck = true,
-}) => {
+  enableQualityCheck = true }) => {
   const [stage, setStage] = useState<ProcessingStage>('purpose');
   const [selectedPurpose, setSelectedPurpose] = useState<AudioPurpose | null>(null);
   const [audioUri, setAudioUri] = useState<string | null>(null);
@@ -183,8 +171,7 @@ export const AudioInput: React.FC<AudioInputProps> = ({
       // 合併設定
       const options: SpeechToTextOptions = {
         language,
-        ...customSettings,
-      };
+        ...customSettings };
 
       const result = await transcribeAudio(
         uri,
@@ -198,8 +185,7 @@ export const AudioInput: React.FC<AudioInputProps> = ({
       const cleanedText = cleanTranscriptionText(result.transcription);
       const finalResult = {
         ...result,
-        transcription: cleanedText,
-      };
+        transcription: cleanedText };
 
       setTranscriptionResult(finalResult);
       setStage(enableQualityCheck ? 'review' : 'complete');
@@ -234,9 +220,7 @@ export const AudioInput: React.FC<AudioInputProps> = ({
         language: finalResult.languageCode,
         alternatives: finalResult.alternatives,
         processingTime: Date.now(),
-        userId,
-      },
-    });
+        userId } });
 
     setStage('complete');
   }, [transcriptionResult, audioUri, audioDuration, selectedPurpose, userId, onTranscriptionComplete]);
@@ -412,8 +396,7 @@ export const AudioInput: React.FC<AudioInputProps> = ({
                   const updatedResult = {
                     ...transcriptionResult,
                     transcription: alt.transcript,
-                    confidence: alt.confidence,
-                  };
+                    confidence: alt.confidence };
                   setTranscriptionResult(updatedResult);
                 }}
               >
@@ -600,8 +583,7 @@ const getQualityText = (quality: string): string => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F0F0F0',
-  },
+    backgroundColor: '#F0F0F0' },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -610,21 +592,18 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
-  },
+    borderBottomColor: '#E3E1DC' },
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   closeButton: {
     width: 32,
     height: 32,
     borderRadius: 16,
     backgroundColor: '#F0F0F0',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   progressIndicator: {
     flexDirection: 'row',
     paddingHorizontal: 20,
@@ -632,23 +611,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
     borderBottomColor: '#E3E1DC',
-    gap: 8,
-  },
+    gap: 8 },
   progressStep: {
     flex: 1,
     height: 4,
     backgroundColor: '#E3E1DC',
-    borderRadius: 2,
-  },
+    borderRadius: 2 },
   progressStepActive: {
-    backgroundColor: '#1A1A1A',
-  },
+    backgroundColor: '#1A1A1A' },
   progressStepCompleted: {
-    backgroundColor: '#22c55e',
-  },
+    backgroundColor: '#22c55e' },
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   footer: {
     flexDirection: 'row',
     gap: 12,
@@ -656,32 +630,26 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
-    borderTopColor: '#E3E1DC',
-  },
+    borderTopColor: '#E3E1DC' },
   footerButton: {
-    flex: 1,
-  },
+    flex: 1 },
   
   // 用途選擇樣式
   purposeContainer: {
     flex: 1,
-    padding: 20,
-  },
+    padding: 20 },
   stageTitle: {
     fontSize: 24,
     fontWeight: '700',
     color: '#1A1A1A',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   stageDescription: {
     fontSize: 16,
     color: '#7A7A7A',
     lineHeight: 22,
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   purposeOptions: {
-    gap: 12,
-  },
+    gap: 12 },
   purposeOption: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -689,8 +657,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#E3E1DC',
-  },
+    borderColor: '#E3E1DC' },
   purposeIcon: {
     width: 48,
     height: 48,
@@ -698,27 +665,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0F0F0',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 16,
-  },
+    marginRight: 16 },
   purposeInfo: {
-    flex: 1,
-  },
+    flex: 1 },
   purposeTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1A1A1A',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   purposeDescription: {
     fontSize: 14,
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   
   // 錄音階段樣式
   recordingContainer: {
     flex: 1,
-    padding: 20,
-  },
+    padding: 20 },
   purposeBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -728,194 +690,159 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     marginBottom: 20,
-    gap: 6,
-  },
+    gap: 6 },
   purposeBadgeText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   
   // 處理階段樣式
   processingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 40,
-  },
+    padding: 40 },
   progressInfo: {
     width: '100%',
-    marginTop: 32,
-  },
+    marginTop: 32 },
   progressMessage: {
     fontSize: 16,
     color: '#1A1A1A',
     textAlign: 'center',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   progressBar: {
     height: 8,
     backgroundColor: '#E3E1DC',
     borderRadius: 4,
     marginBottom: 8,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   progressFill: {
     height: '100%',
     backgroundColor: '#1A1A1A',
-    borderRadius: 4,
-  },
+    borderRadius: 4 },
   progressText: {
     fontSize: 14,
     color: '#7A7A7A',
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   processingHint: {
     fontSize: 14,
     color: '#7A7A7A',
     textAlign: 'center',
     marginTop: 24,
-    fontStyle: 'italic',
-  },
+    fontStyle: 'italic' },
   
   // 檢查階段樣式
   reviewContainer: {
     flex: 1,
-    padding: 20,
-  },
+    padding: 20 },
   qualitySection: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: '#1A1A1A',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   qualityIndicator: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   qualityBadge: {
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 16,
-  },
+    borderRadius: 16 },
   qualityText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
-  },
+    color: '#FFFFFF' },
   confidenceText: {
     fontSize: 14,
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   issuesSection: {
     marginTop: 12,
     padding: 12,
     backgroundColor: '#fef3c7',
-    borderRadius: 8,
-  },
+    borderRadius: 8 },
   issuesTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: '#92400e',
-    marginBottom: 6,
-  },
+    marginBottom: 6 },
   issueText: {
     fontSize: 14,
     color: '#92400e',
-    lineHeight: 18,
-  },
+    lineHeight: 18 },
   suggestionsSection: {
     marginTop: 8,
     padding: 12,
     backgroundColor: '#dbeafe',
-    borderRadius: 8,
-  },
+    borderRadius: 8 },
   suggestionsTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: '#1e40af',
-    marginBottom: 6,
-  },
+    marginBottom: 6 },
   suggestionText: {
     fontSize: 14,
     color: '#1e40af',
-    lineHeight: 18,
-  },
+    lineHeight: 18 },
   transcriptionSection: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   transcriptionBox: {
     backgroundColor: '#F9FAFB',
     borderRadius: 8,
     padding: 16,
     marginBottom: 12,
-    minHeight: 120,
-  },
+    minHeight: 120 },
   transcriptionText: {
     fontSize: 16,
     color: '#1A1A1A',
-    lineHeight: 24,
-  },
+    lineHeight: 24 },
   transcriptionMeta: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   metaText: {
     fontSize: 12,
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   alternativesSection: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
-    padding: 16,
-  },
+    padding: 16 },
   alternativeOption: {
     padding: 12,
     backgroundColor: '#F9FAFB',
     borderRadius: 8,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: '#E3E1DC',
-  },
+    borderColor: '#E3E1DC' },
   alternativeText: {
     fontSize: 14,
     color: '#1A1A1A',
     lineHeight: 20,
-    marginBottom: 6,
-  },
+    marginBottom: 6 },
   alternativeConfidence: {
     fontSize: 12,
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   
   // 完成階段樣式
   completeContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 40,
-  },
+    padding: 40 },
   completeTitle: {
     fontSize: 20,
     fontWeight: '600',
     color: '#1A1A1A',
     marginTop: 16,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   completeDescription: {
     fontSize: 16,
     color: '#7A7A7A',
-    textAlign: 'center',
-  },
-});
+    textAlign: 'center' } });

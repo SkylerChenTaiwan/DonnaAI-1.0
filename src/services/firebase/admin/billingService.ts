@@ -15,8 +15,7 @@ import {
   limit,
   Timestamp,
   runTransaction,
-  serverTimestamp,
-} from 'firebase/firestore';
+  serverTimestamp } from 'firebase/firestore';
 import { getFirebaseDb } from '@/services/firebase/config';
 import { 
   BillingRecord, 
@@ -41,8 +40,7 @@ function getMonthDateRange(yearMonth?: string) {
   return {
     start: Timestamp.fromDate(start),
     end: Timestamp.fromDate(end),
-    period: `${year}-${String(month).padStart(2, '0')}`,
-  };
+    period: `${year}-${String(month).padStart(2, '0')}` };
 }
 
 /**
@@ -114,8 +112,7 @@ export async function calculateMonthlyUsage(
         period: dateRange.period,
         activeUsers: activeUserIds.size,
         toolUsage,
-        calculatedAt: serverTimestamp() as Timestamp,
-      };
+        calculatedAt: serverTimestamp() as Timestamp };
     });
   } catch (error) {
     console.error('計算月度使用統計失敗:', error);
@@ -162,8 +159,7 @@ export async function generateBillingRecord(
       .map(([toolId, activeUsers]) => ({
         toolId,
         toolName: getToolName(toolId), // 需要實作工具名稱映射
-        activeUsers,
-      }));
+        activeUsers }));
     
     // 計算金額
     const unitPrice = BILLING_CONFIG.PRICE_PER_USER;
@@ -184,8 +180,7 @@ export async function generateBillingRecord(
       createdAt: serverTimestamp() as Timestamp,
       dueDate: Timestamp.fromDate(
         new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 天後到期
-      ),
-    };
+      ) };
     
     // 儲存計費記錄
     const billingRef = doc(collection(db, 'billing_records'));
@@ -193,8 +188,7 @@ export async function generateBillingRecord(
     
     return {
       id: billingRef.id,
-      ...billingRecord,
-    };
+      ...billingRecord };
   } catch (error) {
     console.error('生成計費記錄失敗:', error);
     throw error;
@@ -224,8 +218,7 @@ export async function getUsageHistory(
     snapshot.forEach(doc => {
       records.push({
         id: doc.id,
-        ...doc.data(),
-      } as BillingRecord);
+        ...doc.data() } as BillingRecord);
     });
     
     return records;
@@ -299,8 +292,7 @@ export async function generateUsageReport(
         activeUsers: monthlyUsage.activeUsers,
         billableUsers,
         totalAmount,
-        currency: BILLING_CONFIG.CURRENCY,
-      },
+        currency: BILLING_CONFIG.CURRENCY },
       userDetails: [], // 需要實作用戶詳情統計
       toolUsageDetails: [], // 需要實作工具使用詳情
     };
@@ -321,8 +313,7 @@ function getToolName(toolId: string): string {
     'voice-recorder': '語音記錄',
     'data-import': '資料匯入',
     'analytics': '數據分析',
-    'task-manager': '任務管理',
-  };
+    'task-manager': '任務管理' };
   
   return toolNames[toolId] || toolId;
 }

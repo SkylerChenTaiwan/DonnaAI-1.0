@@ -19,8 +19,7 @@ describe('useOrgStructure', () => {
       id: 'user-1',
       displayName: '主管',
       role: 'manager',
-      level: 0,
-    },
+      level: 0 },
     children: [
       {
         id: 'user-2',
@@ -29,12 +28,10 @@ describe('useOrgStructure', () => {
           displayName: '業務一',
           role: 'salesperson',
           reportingTo: 'user-1',
-          level: 1,
-        },
+          level: 1 },
         children: [],
         expanded: true,
-        position: { x: 0, y: 150 },
-      },
+        position: { x: 0, y: 150 } },
       {
         id: 'user-3',
         user: {
@@ -42,16 +39,13 @@ describe('useOrgStructure', () => {
           displayName: '業務二',
           role: 'salesperson',
           reportingTo: 'user-1',
-          level: 1,
-        },
+          level: 1 },
         children: [],
         expanded: true,
-        position: { x: 100, y: 150 },
-      },
+        position: { x: 100, y: 150 } },
     ],
     expanded: true,
-    position: { x: 0, y: 0 },
-  };
+    position: { x: 0, y: 0 } };
 
   const mockUsers = [
     mockOrgStructure.user,
@@ -63,8 +57,7 @@ describe('useOrgStructure', () => {
     vi.clearAllMocks();
     
     (useAuth as jest.Mock).mockReturnValue({
-      user: { id: 'current-user', role: 'admin' },
-    });
+      user: { id: 'current-user', role: 'admin' } });
     
     (usePersonnelStore as unknown as jest.Mock).mockReturnValue({
       orgStructure: mockOrgStructure,
@@ -75,8 +68,7 @@ describe('useOrgStructure', () => {
       collapseNode: vi.fn(),
       updateUserOrganization: vi.fn(),
       subscribeToUsers: vi.fn(),
-      unsubscribeFromUsers: vi.fn(),
-    });
+      unsubscribeFromUsers: vi.fn() });
   });
 
   describe('基本功能', () => {
@@ -107,8 +99,7 @@ describe('useOrgStructure', () => {
         ...usePersonnelStore(),
         expandNode: mockExpandNode,
         collapseNode: mockCollapseNode,
-        orgStructure: { ...mockOrgStructure, expanded: true },
-      });
+        orgStructure: { ...mockOrgStructure, expanded: true } });
       
       const { result } = renderHook(() => useOrgStructure());
       
@@ -124,8 +115,7 @@ describe('useOrgStructure', () => {
       
       (usePersonnelStore as unknown as jest.Mock).mockReturnValue({
         ...usePersonnelStore(),
-        expandNode: mockExpandNode,
-      });
+        expandNode: mockExpandNode });
       
       const { result } = renderHook(() => useOrgStructure());
       
@@ -141,8 +131,7 @@ describe('useOrgStructure', () => {
       
       (usePersonnelStore as unknown as jest.Mock).mockReturnValue({
         ...usePersonnelStore(),
-        collapseNode: mockCollapseNode,
-      });
+        collapseNode: mockCollapseNode });
       
       const { result } = renderHook(() => useOrgStructure());
       
@@ -176,8 +165,7 @@ describe('useOrgStructure', () => {
       
       (usePersonnelStore as unknown as jest.Mock).mockReturnValue({
         ...usePersonnelStore(),
-        updateUserOrganization: mockUpdateUserOrganization,
-      });
+        updateUserOrganization: mockUpdateUserOrganization });
       
       const { result } = renderHook(() => useOrgStructure());
       
@@ -265,17 +253,13 @@ describe('useOrgStructure', () => {
                   displayName: '實習生',
                   role: 'salesperson',
                   reportingTo: 'user-2',
-                  level: 2,
-                },
+                  level: 2 },
                 children: [],
                 expanded: true,
-                position: { x: 0, y: 300 },
-              },
-            ],
-          },
+                position: { x: 0, y: 300 } },
+            ] },
           mockOrgStructure.children[1],
-        ],
-      };
+        ] };
       
       const nestedUsers = [
         ...mockUsers,
@@ -285,8 +269,7 @@ describe('useOrgStructure', () => {
       (usePersonnelStore as unknown as jest.Mock).mockReturnValue({
         ...usePersonnelStore(),
         orgStructure: nestedStructure,
-        users: nestedUsers,
-      });
+        users: nestedUsers });
       
       const { result } = renderHook(() => useOrgStructure());
       
@@ -302,8 +285,7 @@ describe('useOrgStructure', () => {
       
       (usePersonnelStore as unknown as jest.Mock).mockReturnValue({
         ...usePersonnelStore(),
-        subscribeToUsers: mockSubscribe,
-      });
+        subscribeToUsers: mockSubscribe });
       
       renderHook(() => useOrgStructure());
       
@@ -315,8 +297,7 @@ describe('useOrgStructure', () => {
       
       (usePersonnelStore as unknown as jest.Mock).mockReturnValue({
         ...usePersonnelStore(),
-        unsubscribeFromUsers: mockUnsubscribe,
-      });
+        unsubscribeFromUsers: mockUnsubscribe });
       
       const { unmount } = renderHook(() => useOrgStructure());
       

@@ -31,8 +31,7 @@ export const NotionTableSimple: React.FC<NotionTableSimpleProps> = ({
   onColumnReorder,
   loading = false,
   error = null,
-  emptyMessage = '沒有資料',
-}) => {
+  emptyMessage = '沒有資料' }) => {
   // 欄位寬度狀態
   const [columnSizing, setColumnSizing] = useState<Record<string, number>>(() => {
     const initial: Record<string, number> = {};
@@ -73,8 +72,7 @@ export const NotionTableSimple: React.FC<NotionTableSimpleProps> = ({
       if (onColumnReorder) {
         const updatedColumns = inputColumns.map(col => ({
           ...col,
-          width: columnSizing[col.id] || col.width || 180,
-        }));
+          width: columnSizing[col.id] || col.width || 180 }));
         onColumnReorder(updatedColumns);
       }
     };

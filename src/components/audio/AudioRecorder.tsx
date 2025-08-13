@@ -94,8 +94,7 @@ export const AudioRecorder = ({
         playsInSilentModeIOS: true,
         staysActiveInBackground: true,
         interruptionModeIOS: InterruptionModeIOS.DoNotMix,
-        interruptionModeAndroid: InterruptionModeAndroid.DoNotMix,
-      });
+        interruptionModeAndroid: InterruptionModeAndroid.DoNotMix });
     } catch (error) {
       console.error('音訊模式初始化失敗:', error);
       throw error;
@@ -433,40 +432,34 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderRadius: 12,
     shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    elevation: 4,
-  },
+    elevation: 4 },
   statusContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   statusIndicator: {
     width: 12,
     height: 12,
     borderRadius: 6,
-    marginRight: 8,
-  },
+    marginRight: 8 },
   statusText: {
     fontSize: 16,
     fontWeight: '600',
     color: '#374151',
-    marginRight: 8,
-  },
+    marginRight: 8 },
   durationText: {
     fontSize: 32,
     fontWeight: '700',
     color: '#1f2937',
     textAlign: 'center',
     marginBottom: 24,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-  },
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace' },
   waveformContainer: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   waveform: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -474,66 +467,52 @@ const styles = StyleSheet.create({
     height: 60,
     backgroundColor: '#f3f4f6',
     borderRadius: 8,
-    paddingHorizontal: 8,
-  },
+    paddingHorizontal: 8 },
   waveformBar: {
     width: 3,
     marginHorizontal: 1,
-    borderRadius: 1.5,
-  },
+    borderRadius: 1.5 },
   controlsContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 12,
-  },
+    gap: 12 },
   startButton: {
     backgroundColor: '#22c55e',
     paddingHorizontal: 32,
-    paddingVertical: 16,
-  },
+    paddingVertical: 16 },
   startButtonText: {
     color: '#ffffff',
     fontSize: 16,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   pauseButton: {
     backgroundColor: '#f59e0b',
     paddingHorizontal: 24,
-    paddingVertical: 16,
-  },
+    paddingVertical: 16 },
   pauseButtonText: {
     color: '#ffffff',
     fontSize: 16,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   resumeButton: {
     backgroundColor: '#22c55e',
     paddingHorizontal: 24,
-    paddingVertical: 16,
-  },
+    paddingVertical: 16 },
   resumeButtonText: {
     color: '#ffffff',
     fontSize: 16,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   stopButton: {
     backgroundColor: '#ef4444',
     paddingHorizontal: 24,
-    paddingVertical: 16,
-  },
+    paddingVertical: 16 },
   stopButtonText: {
     color: '#ffffff',
     fontSize: 16,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   resetButton: {
     backgroundColor: '#6b7280',
     paddingHorizontal: 32,
-    paddingVertical: 16,
-  },
+    paddingVertical: 16 },
   resetButtonText: {
     color: '#ffffff',
     fontSize: 16,
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600' } });

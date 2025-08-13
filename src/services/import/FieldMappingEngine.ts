@@ -10,8 +10,7 @@ import {
   MappingCorrection,
   DataType,
   FIELD_PATTERNS,
-  DATA_FORMATS,
-} from '@/types/intelligentImport';
+  DATA_FORMATS } from '@/types/intelligentImport';
 import { FieldDefinition } from '@/types/organization';
 import OpenAI from 'openai';
 
@@ -74,8 +73,7 @@ export class FieldMappingEngine implements IFieldMappingEngine {
       confidence: this.calculateTypeConfidence(samples, detectedType),
       possibleTargets,
       samples: samples.slice(0, 5),
-      statistics,
-    };
+      statistics };
   }
 
   /**
@@ -97,8 +95,7 @@ export class FieldMappingEngine implements IFieldMappingEngine {
           'id': 'text',
           'age': 'number',
           'gender': 'text',
-          'status': 'text',
-        };
+          'status': 'text' };
         return typeMap[type] as DataType || 'text';
       }
     }
@@ -220,8 +217,7 @@ export class FieldMappingEngine implements IFieldMappingEngine {
 
     const stats: any = {
       uniqueCount: uniqueValues.size,
-      nullCount: samples.length - validSamples.length,
-    };
+      nullCount: samples.length - validSamples.length };
 
     // 字串長度統計
     const stringSamples = validSamples.filter(s => typeof s === 'string');
@@ -253,8 +249,7 @@ export class FieldMappingEngine implements IFieldMappingEngine {
       'address': ['地址', '住址', '位置'],
       'date': ['日期', '建立日期', '更新日期'],
       'status': ['狀態', '情況', '進度'],
-      'amount': ['金額', '價格', '總計'],
-    };
+      'amount': ['金額', '價格', '總計'] };
 
     const headerLower = header.toLowerCase();
     
@@ -281,8 +276,7 @@ export class FieldMappingEngine implements IFieldMappingEngine {
       'boolean': ['狀態', '啟用', '有效'],
       'url': ['網址', '連結', 'URL'],
       'percentage': ['百分比', '比率', '完成度'],
-      'address': ['地址', '住址', '位置'],
-    };
+      'address': ['地址', '住址', '位置'] };
 
     const typeRecs = typeRecommendations[detectedType];
     if (typeRecs) {
@@ -400,8 +394,7 @@ export class FieldMappingEngine implements IFieldMappingEngine {
       '郵件': ['郵箱', '電子郵件', 'email'],
       '地址': ['住址', '位置', '地點'],
       '日期': ['時間', '日子'],
-      '狀態': ['情況', '進度', '階段'],
-    };
+      '狀態': ['情況', '進度', '階段'] };
 
     for (const [key, values] of Object.entries(synonyms)) {
       if (source.includes(key) || values.some(v => source.includes(v))) {
@@ -516,8 +509,7 @@ export class FieldMappingEngine implements IFieldMappingEngine {
     try {
       const response = await this.openai.embeddings.create({
         model: 'text-embedding-ada-002',
-        input: text,
-      });
+        input: text });
 
       const embedding = response.data[0].embedding;
       

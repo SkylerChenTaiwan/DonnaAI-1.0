@@ -12,8 +12,7 @@ import {
   Platform,
   Dimensions,
   StyleSheet,
-  ScrollView,
-} from 'react-native';
+  ScrollView } from 'react-native';
 
 interface PopoverProps {
   visible: boolean;
@@ -36,8 +35,7 @@ export const Popover: React.FC<PopoverProps> = ({
   offset = { x: 0, y: 8 },
   showArrow = true,
   maxHeight = 400,
-  minWidth = 320,
-}) => {
+  minWidth = 320 }) => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [actualPlacement, setActualPlacement] = useState(placement);
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -144,8 +142,7 @@ export const Popover: React.FC<PopoverProps> = ({
             style={{
               position: 'fixed' as any,
               inset: 0,
-              zIndex: 999,
-            }}
+              zIndex: 999 }}
           />
         </TouchableWithoutFeedback>
 
@@ -161,8 +158,7 @@ export const Popover: React.FC<PopoverProps> = ({
               opacity: fadeAnim,
               transform: Platform.OS === 'web' ? `scale(${scaleAnim})` : [{ scale: scaleAnim }],
               maxHeight,
-              minWidth,
-            },
+              minWidth },
           ]}
         >
           {showArrow && (
@@ -206,8 +202,7 @@ export const Popover: React.FC<PopoverProps> = ({
                   opacity: fadeAnim,
                   transform: Platform.OS === 'web' ? `scale(${scaleAnim})` : [{ scale: scaleAnim }],
                   maxHeight,
-                  minWidth,
-                },
+                  minWidth },
               ]}
             >
               {showArrow && (
@@ -236,43 +231,36 @@ export const Popover: React.FC<PopoverProps> = ({
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'transparent',
-  },
+    backgroundColor: 'transparent' },
   popoverContainer: {
     backgroundColor: '#fff',
     borderRadius: 8,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 5,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   arrow: {
     position: 'absolute',
     width: 12,
     height: 12,
     backgroundColor: '#fff',
     transform: Platform.OS === 'web' ? `rotate(45deg)` : [{ rotate: '45deg' }],
-    zIndex: -1,
-  },
+    zIndex: -1 },
   arrowTop: {
     top: -6,
     left: 20,
     shadowColor: '#000',
-    shadowOffset: { width: -1, height: -1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: -1, height: -1 } }),
     shadowOpacity: 0.1,
-    shadowRadius: 2,
-  },
+    shadowRadius: 2 },
   arrowBottom: {
     bottom: -6,
     left: 20,
     shadowColor: '#000',
-    shadowOffset: { width: 1, height: 1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 1, height: 1 } }),
     shadowOpacity: 0.1,
-    shadowRadius: 2,
-  },
-});
+    shadowRadius: 2 } });

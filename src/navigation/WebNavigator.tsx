@@ -129,8 +129,7 @@ export const WebNavigator = () => {
         <Stack.Navigator
           screenOptions={{
             headerShown: false,
-            animationEnabled: Platform.OS === 'web' ? false : true,
-          }}
+            animationEnabled: Platform.OS === 'web' ? false : true }}
         >
           {/* 主要頁面 */}
           <Stack.Screen name="Home" component={HomeScreen} />
@@ -179,11 +178,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: DesignSystem.colors.background.primary,
     position: 'relative' as any,
-    height: '100vh',
-  },
+    height: '100vh' },
   sidebarContainer: {
-    height: '100%',
-  },
+    height: '100%' },
   mainContent: {
     flex: 1,
     flexDirection: 'column',
@@ -196,8 +193,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    zIndex: 998,
-  },
+    zIndex: 998 },
   mobileSidebar: {
     position: 'absolute' as any,
     top: 0,
@@ -206,9 +202,6 @@ const styles = StyleSheet.create({
     width: 280,
     zIndex: 999,
     backgroundColor: DesignSystem.colors.background.surface,
-    transition: 'transform 0.3s ease-in-out',
-  },
+    transition: 'transform 0.3s ease-in-out' },
   mobileSidebarVisible: {
-    transform: Platform.OS === 'web' ? `translateX(${280}px)` : [{ translateX: 280 }],
-  },
-});
+    transform: Platform.OS === 'web' ? `translateX(${280}px)` : [{ translateX: 280 }] } });

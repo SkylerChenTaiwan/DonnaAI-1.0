@@ -47,8 +47,7 @@ export const showToast = (
       success: '✅',
       error: '❌',
       warning: '⚠️',
-      info: 'ℹ️',
-    };
+      info: 'ℹ️' };
     console.log(`${emoji[type]} ${getTitle()}: ${message}`);
   }
 
@@ -97,8 +96,7 @@ export const toast = {
   success: showSuccess,
   error: showError,
   warning: showWarning,
-  info: showInfo,
-};
+  info: showInfo };
 
 // 為了兼容性，提供別名
 export const showSuccessToast = showSuccess;

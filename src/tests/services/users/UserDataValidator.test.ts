@@ -37,8 +37,7 @@ describe('UserDataValidator', () => {
       // Arrange
       const userData = {
         email: '',
-        name: '',
-      };
+        name: '' };
 
       // Act
       const result = validator.validateUser(userData);
@@ -53,8 +52,7 @@ describe('UserDataValidator', () => {
       // Arrange
       const userData = {
         email: 'invalid-email',
-        name: '測試用戶',
-      };
+        name: '測試用戶' };
 
       // Act
       const result = validator.validateUser(userData);

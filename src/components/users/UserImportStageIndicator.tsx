@@ -191,20 +191,17 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     paddingHorizontal: DesignSystem.spacing.md,
     paddingVertical: DesignSystem.spacing.lg,
-    backgroundColor: DesignSystem.colors.background.surface,
-  },
+    backgroundColor: DesignSystem.colors.background.surface },
   containerCompact: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: DesignSystem.spacing.sm,
     paddingVertical: DesignSystem.spacing.md,
-    backgroundColor: DesignSystem.colors.background.surface,
-  },
+    backgroundColor: DesignSystem.colors.background.surface },
   stageItem: {
     flex: 1,
     alignItems: 'center',
-    position: 'relative',
-  },
+    position: 'relative' },
   stageCircle: {
     width: 36,
     height: 36,
@@ -214,70 +211,54 @@ const styles = StyleSheet.create({
     borderColor: DesignSystem.colors.border.light,
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 2,
-  },
+    zIndex: 2 },
   stageCircleActive: {
     borderColor: DesignSystem.colors.primary,
-    backgroundColor: DesignSystem.colors.primary,
-  },
+    backgroundColor: DesignSystem.colors.primary },
   stageCircleCompleted: {
     borderColor: DesignSystem.colors.success,
-    backgroundColor: DesignSystem.colors.success,
-  },
+    backgroundColor: DesignSystem.colors.success },
   stageCircleDisabled: {
     borderColor: DesignSystem.colors.border.light,
-    backgroundColor: DesignSystem.colors.background.secondary,
-  },
+    backgroundColor: DesignSystem.colors.background.secondary },
   stageNumber: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
     fontWeight: '600',
-    fontSize: 14,
-  },
+    fontSize: 14 },
   stageNumberActive: {
-    color: DesignSystem.colors.text.inverse,
-  },
+    color: DesignSystem.colors.text.inverse },
   stageNumberDisabled: {
-    color: DesignSystem.colors.text.disabled,
-  },
+    color: DesignSystem.colors.text.disabled },
   stageNumberCompact: {
-    fontSize: 12,
-  },
+    fontSize: 12 },
   stageTextContainer: {
     marginTop: DesignSystem.spacing.xs,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   stageTitle: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
     fontWeight: '500',
     textAlign: 'center',
-    fontSize: 12,
-  },
+    fontSize: 12 },
   stageTitleActive: {
     color: DesignSystem.colors.primary,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   stageTitleCompleted: {
-    color: DesignSystem.colors.success,
-  },
+    color: DesignSystem.colors.success },
   stageTitleDisabled: {
-    color: DesignSystem.colors.text.disabled,
-  },
+    color: DesignSystem.colors.text.disabled },
   stageDescription: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.tertiary,
     textAlign: 'center',
     marginTop: 2,
     fontSize: 10,
-    lineHeight: 12,
-  },
+    lineHeight: 12 },
   stageDescriptionActive: {
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   stageDescriptionDisabled: {
-    color: DesignSystem.colors.text.disabled,
-  },
+    color: DesignSystem.colors.text.disabled },
   stageLine: {
     position: 'absolute',
     top: 17, // 半個圓圈的高度
@@ -285,14 +266,11 @@ const styles = StyleSheet.create({
     right: '-50%',
     height: 2,
     backgroundColor: DesignSystem.colors.border.light,
-    zIndex: 1,
-  },
+    zIndex: 1 },
   stageLineCompleted: {
-    backgroundColor: DesignSystem.colors.success,
-  },
+    backgroundColor: DesignSystem.colors.success },
   stageLineCompact: {
     top: 17, // 調整緊湊模式下的位置
-  },
-});
+  } });
 
 export default UserImportStageIndicator;

@@ -10,8 +10,7 @@ import {
   Text,
   TextInput,
   StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+  TouchableOpacity } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { DesignSystem } from '@/theme/designSystem';
 import { StepProps, BillingPlanData } from '@/types/onboarding';
@@ -21,16 +20,14 @@ const SimpleBillingStep: React.FC<StepProps> = ({
   data,
   onChange,
   onValidate,
-  isActive,
-}) => {
+  isActive }) => {
   const colors = DesignSystem.colors;
   
   // 簡化的資料結構
   const [formData, setFormData] = useState({
     freeSeats: 5,    // 免費人數（精確數量）
     pricePerSeat: 10, // 超過免費人數後，每個付費席位的價格（美元）
-    ...data,
-  });
+    ...data });
 
   // 注意：實際付費人數會根據組織實際使用人數動態計算
   // 這裡只是顯示計費邏輯說明
@@ -46,8 +43,7 @@ const SimpleBillingStep: React.FC<StepProps> = ({
         addons: [],
         paymentMethod: 'invoice',
         billingEmail: '',
-        notes: `免費人數: ${formData.freeSeats}, 超額每人月費: $${formData.pricePerSeat}`,
-      };
+        notes: `免費人數: ${formData.freeSeats}, 超額每人月費: $${formData.pricePerSeat}` };
       onChange(billingData);
     }
   }, [formData, isActive]);
@@ -202,55 +198,46 @@ const SimpleBillingStep: React.FC<StepProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   header: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   title: {
     fontSize: 20,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   subtitle: {
     fontSize: 14,
     color: DesignSystem.colors.gray600,
-    lineHeight: 20,
-  },
+    lineHeight: 20 },
   settingCard: {
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray200,
-  },
+    borderColor: DesignSystem.colors.gray200 },
   settingHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   settingTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   numberSelector: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 16,
-  },
+    gap: 16 },
   adjustButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: DesignSystem.colors.gray100,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   numberInput: {
     width: 80,
     height: 48,
@@ -260,8 +247,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    backgroundColor: DesignSystem.colors.background.surface,
-  },
+    backgroundColor: DesignSystem.colors.background.surface },
   priceInputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -269,118 +255,97 @@ const styles = StyleSheet.create({
     borderColor: DesignSystem.colors.primary,
     borderRadius: 8,
     paddingHorizontal: 8,
-    backgroundColor: DesignSystem.colors.background.surface,
-  },
+    backgroundColor: DesignSystem.colors.background.surface },
   currencySymbol: {
     fontSize: 20,
     fontWeight: '600',
     color: DesignSystem.colors.gray600,
-    marginRight: 4,
-  },
+    marginRight: 4 },
   priceInput: {
     width: 60,
     height: 48,
     fontSize: 24,
     fontWeight: '600',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   hint: {
     fontSize: 13,
     color: DesignSystem.colors.gray600,
     marginTop: 8,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   summaryCard: {
     backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
     borderRadius: 12,
     padding: 20,
     marginTop: 8,
     borderWidth: 1,
-    borderColor: withAlpha(DesignSystem.colors.primary, 0.188),
-  },
+    borderColor: withAlpha(DesignSystem.colors.primary, 0.188) },
   summaryTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   summaryRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   summaryLabel: {
     fontSize: 14,
-    color: DesignSystem.colors.gray700,
-  },
+    color: DesignSystem.colors.gray700 },
   summaryValue: {
     fontSize: 14,
     fontWeight: '500',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   freeText: {
-    color: DesignSystem.colors.success,
-  },
+    color: DesignSystem.colors.success },
   divider: {
     height: 1,
     backgroundColor: DesignSystem.colors.gray300,
-    marginVertical: 12,
-  },
+    marginVertical: 12 },
   totalLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   totalValue: {
     fontSize: 24,
     fontWeight: '700',
-    color: DesignSystem.colors.primary,
-  },
+    color: DesignSystem.colors.primary },
   calculation: {
     fontSize: 12,
     color: DesignSystem.colors.gray600,
     textAlign: 'right',
-    marginTop: 4,
-  },
+    marginTop: 4 },
   billingNote: {
     fontSize: 14,
     fontWeight: '600',
     color: DesignSystem.colors.primary,
     marginBottom: 12,
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   billingDescription: {
     fontSize: 13,
     color: DesignSystem.colors.gray700,
     marginBottom: 6,
-    lineHeight: 20,
-  },
+    lineHeight: 20 },
   exampleBox: {
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: 8,
     padding: 12,
     marginTop: 12,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray200,
-  },
+    borderColor: DesignSystem.colors.gray200 },
   exampleTitle: {
     fontSize: 13,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 6,
-  },
+    marginBottom: 6 },
   exampleText: {
     fontSize: 12,
     color: DesignSystem.colors.gray600,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   exampleCalculation: {
     fontSize: 12,
     color: DesignSystem.colors.primary,
-    fontWeight: '500',
-  },
-});
+    fontWeight: '500' } });
 
 export default SimpleBillingStep;

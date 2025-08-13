@@ -11,8 +11,7 @@ import {
   ActionCategory,
   HttpMethod,
   OperationStatus,
-  DataSource,
-} from '@/types/audit';
+  DataSource } from '@/types/audit';
 import { Timestamp } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { v4 as uuidv4 } from 'uuid';
@@ -49,8 +48,7 @@ export class AuditCollector {
     this.currentContext = {
       correlationId: correlationId || uuidv4(),
       startTime: Date.now(),
-      metadata: {},
-    };
+      metadata: {} };
     return this.currentContext;
   }
 
@@ -136,16 +134,14 @@ export class AuditCollector {
         userRole: userInfo?.role || 'unknown',
         ipAddress: deviceInfo.ipAddress,
         userAgent: deviceInfo.userAgent,
-        sessionId: deviceInfo.sessionId,
-      },
+        sessionId: deviceInfo.sessionId },
       
       // 組織上下文
       context: {
         organizationId: orgInfo?.id || 'unknown',
         organizationName: orgInfo?.name || 'Unknown Org',
         teamId: userInfo?.teamId,
-        environment: this.getEnvironment(),
-      },
+        environment: this.getEnvironment() },
       
       // 動作資訊
       action: {
@@ -153,8 +149,7 @@ export class AuditCollector {
         category: options.category,
         resource: options.resource || 'unknown',
         resourceId: this.extractResourceId(options, changes),
-        method: this.determineMethod(options.action),
-      },
+        method: this.determineMethod(options.action) },
       
       // 變更詳情
       changes: changes ? this.processChanges(changes, options.sensitiveFields) : undefined,
@@ -164,17 +159,14 @@ export class AuditCollector {
         status,
         errorCode: error?.name,
         errorMessage: error?.message,
-        duration: duration || (context ? Date.now() - context.startTime : undefined),
-      },
+        duration: duration || (context ? Date.now() - context.startTime : undefined) },
       
       // 額外資訊
       metadata: {
         source: this.getDataSource(),
         correlationId: context?.correlationId,
         tags: this.generateTags(options),
-        risk: options.risk || this.assessRisk(options.action, status),
-      },
-    };
+        risk: options.risk || this.assessRisk(options.action, status) } };
   }
 
   /**
@@ -218,22 +210,19 @@ export class AuditCollector {
         return {
           ipAddress: await this.getIPAddress(),
           userAgent: navigator.userAgent,
-          sessionId,
-        };
+          sessionId };
       }
       
       // 在 React Native 環境
       return {
         ipAddress: 'mobile',
         userAgent: 'DonnaAI Mobile App',
-        sessionId: await AsyncStorage.getItem('sessionId') || uuidv4(),
-      };
+        sessionId: await AsyncStorage.getItem('sessionId') || uuidv4() };
     } catch {
       return {
         ipAddress: 'unknown',
         userAgent: 'unknown',
-        sessionId: 'unknown',
-      };
+        sessionId: 'unknown' };
     }
   }
 
@@ -350,8 +339,7 @@ export class AuditCollector {
         diff.push({
           field: key,
           oldValue: before[key],
-          newValue: after[key],
-        });
+          newValue: after[key] });
       }
     }
     
@@ -497,8 +485,7 @@ export function Audited(options: AuditOptions) {
         if (beforeData || (options.includeResponseData && result)) {
           changes = {
             before: beforeData,
-            after: options.includeResponseData ? result : undefined,
-          };
+            after: options.includeResponseData ? result : undefined };
         }
         
         // 收集審計日誌
@@ -551,8 +538,7 @@ export async function logAuditEvent(
     {
       action,
       category,
-      resource,
-    },
+      resource },
     result,
     error,
     changes

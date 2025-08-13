@@ -10,8 +10,7 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { ImportUserData, UserEditEvent } from '@/types/userImport';
 import { DesignSystem } from '@/theme/designSystem';
 import { Icon } from '@/components/common/Icon';
@@ -57,8 +56,7 @@ export const EditableUserRow: React.FC<EditableUserRowProps> = ({
     role: roleRef,
     department: departmentRef,
     position: positionRef,
-    phoneNumber: phoneNumberRef,
-  };
+    phoneNumber: phoneNumberRef };
 
   /**
    * 開始編輯欄位
@@ -349,26 +347,20 @@ const styles = StyleSheet.create({
     padding: DesignSystem.spacing.md,
     marginBottom: DesignSystem.spacing.sm,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.border.light,
-  },
+    borderColor: DesignSystem.colors.border.light },
   containerCompact: {
-    padding: DesignSystem.spacing.sm,
-  },
+    padding: DesignSystem.spacing.sm },
   containerInvalid: {
     borderColor: DesignSystem.colors.error,
-    backgroundColor: `${DesignSystem.colors.error}10`,
-  },
+    backgroundColor: `${DesignSystem.colors.error}10` },
   containerDuplicate: {
     borderColor: DesignSystem.colors.warning,
-    backgroundColor: `${DesignSystem.colors.warning}08`,
-  },
+    backgroundColor: `${DesignSystem.colors.warning}08` },
   containerEdited: {
-    borderColor: DesignSystem.colors.info,
-  },
+    borderColor: DesignSystem.colors.info },
   selectionContainer: {
     paddingRight: DesignSystem.spacing.sm,
-    paddingTop: DesignSystem.spacing.xs,
-  },
+    paddingTop: DesignSystem.spacing.xs },
   checkbox: {
     width: 20,
     height: 20,
@@ -377,42 +369,32 @@ const styles = StyleSheet.create({
     borderColor: DesignSystem.colors.border.medium,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   checkboxSelected: {
     backgroundColor: DesignSystem.colors.primary,
-    borderColor: DesignSystem.colors.primary,
-  },
+    borderColor: DesignSystem.colors.primary },
   checkboxDisabled: {
     borderColor: DesignSystem.colors.border.light,
-    backgroundColor: DesignSystem.colors.background.secondary,
-  },
+    backgroundColor: DesignSystem.colors.background.secondary },
   fieldsContainer: {
-    flex: 1,
-  },
+    flex: 1 },
   fieldsRow: {
     flexDirection: 'row',
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   fieldWrapper: {
     flex: 1,
-    marginRight: DesignSystem.spacing.sm,
-  },
+    marginRight: DesignSystem.spacing.sm },
   fieldContainer: {
-    marginBottom: DesignSystem.spacing.xs,
-  },
+    marginBottom: DesignSystem.spacing.xs },
   fieldContainerCompact: {
-    marginBottom: DesignSystem.spacing.xxs,
-  },
+    marginBottom: DesignSystem.spacing.xxs },
   fieldLabel: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
     marginBottom: 2,
-    fontSize: 11,
-  },
+    fontSize: 11 },
   fieldLabelCompact: {
-    fontSize: 10,
-  },
+    fontSize: 10 },
   fieldInput: {
     ...DesignSystem.typography.body,
     borderWidth: 1,
@@ -420,15 +402,12 @@ const styles = StyleSheet.create({
     borderRadius: DesignSystem.borderRadius.sm,
     padding: DesignSystem.spacing.xs,
     minHeight: 32,
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   fieldInputCompact: {
     minHeight: 28,
-    fontSize: 12,
-  },
+    fontSize: 12 },
   fieldInputError: {
-    borderColor: DesignSystem.colors.error,
-  },
+    borderColor: DesignSystem.colors.error },
   fieldValue: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -438,55 +417,40 @@ const styles = StyleSheet.create({
     borderRadius: DesignSystem.borderRadius.sm,
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: 'transparent',
-  },
+    borderColor: 'transparent' },
   fieldValueCompact: {
-    minHeight: 28,
-  },
+    minHeight: 28 },
   fieldValueError: {
-    backgroundColor: `${DesignSystem.colors.error}08`,
-  },
+    backgroundColor: `${DesignSystem.colors.error}08` },
   fieldValueDisabled: {
-    opacity: 0.6,
-  },
+    opacity: 0.6 },
   fieldValueText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
-    flex: 1,
-  },
+    flex: 1 },
   fieldValueTextCompact: {
-    fontSize: 12,
-  },
+    fontSize: 12 },
   fieldValueTextError: {
-    color: DesignSystem.colors.error,
-  },
+    color: DesignSystem.colors.error },
   fieldValueTextDisabled: {
-    color: DesignSystem.colors.text.disabled,
-  },
+    color: DesignSystem.colors.text.disabled },
   editIcon: {
-    marginLeft: DesignSystem.spacing.xs,
-  },
+    marginLeft: DesignSystem.spacing.xs },
   statusContainer: {
     paddingLeft: DesignSystem.spacing.sm,
-    paddingTop: DesignSystem.spacing.xs,
-  },
+    paddingTop: DesignSystem.spacing.xs },
   statusItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: DesignSystem.spacing.xxs,
-  },
+    marginBottom: DesignSystem.spacing.xxs },
   statusText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.error,
     marginLeft: DesignSystem.spacing.xxs,
-    fontSize: 10,
-  },
+    fontSize: 10 },
   statusTextWarning: {
-    color: DesignSystem.colors.warning,
-  },
+    color: DesignSystem.colors.warning },
   statusTextInfo: {
-    color: DesignSystem.colors.info,
-  },
-});
+    color: DesignSystem.colors.info } });
 
 export default EditableUserRow;

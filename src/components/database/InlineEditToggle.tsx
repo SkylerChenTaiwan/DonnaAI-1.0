@@ -8,8 +8,7 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { DataTable } from '@/components/common/DataTable';
 import { EditableDataTable } from '@/components/common/EditableDataTable';
@@ -85,7 +84,7 @@ export const InlineEditToggle: React.FC<InlineEditToggleProps> = ({
         return emailRegex.test(value) ? null : '請輸入有效的電子郵件格式';
       }
       if (col.key === 'phone' && value) {
-        const phoneRegex = /^[\d\s\-+()]{8,}$/;
+        const phoneRegex = /^[\d\s\-+()]{8 }$/;
         return phoneRegex.test(value) ? null : '請輸入有效的電話號碼';
       }
       return null;
@@ -107,8 +106,7 @@ export const InlineEditToggle: React.FC<InlineEditToggleProps> = ({
       if (col.key.includes('number') || col.key.includes('count')) return 'number';
       if (col.key.includes('description') || col.key.includes('note')) return 'multiline';
       return 'text';
-    })() as 'text' | 'number' | 'email' | 'phone' | 'multiline',
-  }));
+    })() as 'text' | 'number' | 'email' | 'phone' | 'multiline' }));
 
   return (
     <View style={styles.container}>
@@ -153,8 +151,7 @@ export const InlineEditToggle: React.FC<InlineEditToggleProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   toolbar: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
@@ -163,8 +160,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
-  },
+    borderBottomColor: '#E3E1DC' },
   editToggleButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -172,9 +168,6 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 8,
     backgroundColor: '#F0F0F0',
-    gap: 4,
-  },
+    gap: 4 },
   editToggleButtonActive: {
-    backgroundColor: colors.orangeBackground,
-  },
-});
+    backgroundColor: colors.orangeBackground } });

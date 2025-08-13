@@ -10,8 +10,7 @@ import {
   StyleSheet,
   TextInput,
   Switch,
-  ActivityIndicator,
-} from 'react-native';
+  ActivityIndicator } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { ExportFormat, getExportSizeEstimate } from '@/utils/tableExport';
 import { TableData, TableColumn } from '@/types/table';
@@ -34,8 +33,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
   columns,
   onExport,
   onCancel,
-  loading = false,
-}) => {
+  loading = false }) => {
   const [format, setFormat] = useState<ExportFormat>('csv');
   const [includeHeaders, setIncludeHeaders] = useState(true);
   const [filename, setFilename] = useState('');
@@ -47,8 +45,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
       format,
       includeHeaders,
       filename: filename.trim() || undefined,
-      email: sendByEmail && email.trim() ? email.trim() : undefined,
-    });
+      email: sendByEmail && email.trim() ? email.trim() : undefined });
   };
 
   // 計算檔案大小預估
@@ -220,53 +217,43 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F0F0F0',
-  },
+    backgroundColor: '#F0F0F0' },
   header: {
     backgroundColor: '#FFFFFF',
     paddingVertical: 16,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
-  },
+    borderBottomColor: '#E3E1DC' },
   title: {
     fontSize: 20,
     fontWeight: '700',
     color: '#1A1A1A',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   subtitle: {
     fontSize: 14,
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   loadingContainer: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   loadingText: {
     fontSize: 16,
     color: '#7A7A7A',
-    marginTop: 12,
-  },
+    marginTop: 12 },
   content: {
     flex: 1,
-    padding: 16,
-  },
+    padding: 16 },
   section: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   sectionTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: '#7A7A7A',
     marginBottom: 12,
-    textTransform: 'uppercase',
-  },
+    textTransform: 'uppercase' },
   formatOptions: {
     flexDirection: 'row',
-    gap: 12,
-  },
+    gap: 12 },
   formatOption: {
     flex: 1,
     backgroundColor: '#FFFFFF',
@@ -274,73 +261,60 @@ const styles = StyleSheet.create({
     padding: 16,
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#E3E1DC',
-  },
+    borderColor: '#E3E1DC' },
   formatOptionActive: {
     borderColor: '#1A1A1A',
-    backgroundColor: '#FFF5F0',
-  },
+    backgroundColor: '#FFF5F0' },
   formatOptionText: {
     fontSize: 16,
     fontWeight: '600',
     color: '#7A7A7A',
     marginTop: 8,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   formatOptionTextActive: {
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   formatDescription: {
     fontSize: 12,
     color: '#7A7A7A',
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   optionRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
-    padding: 16,
-  },
+    padding: 16 },
   optionLabel: {
     fontSize: 16,
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   input: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 16,
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   emailInput: {
-    marginTop: 12,
-  },
+    marginTop: 12 },
   columnsPreview: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
-  },
+    gap: 8 },
   columnChip: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
+    paddingVertical: 6 },
   columnChipText: {
     fontSize: 14,
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   footer: {
     flexDirection: 'row',
     padding: 16,
     backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
     borderTopColor: '#E3E1DC',
-    gap: 12,
-  },
+    gap: 12 },
   button: {
     flex: 1,
     paddingVertical: 16,
@@ -348,22 +322,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 8,
-  },
+    gap: 8 },
   cancelButton: {
-    backgroundColor: '#F0F0F0',
-  },
+    backgroundColor: '#F0F0F0' },
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   exportButton: {
-    backgroundColor: '#1A1A1A',
-  },
+    backgroundColor: '#1A1A1A' },
   exportButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#F7F6F3',
-  },
-});
+    color: '#F7F6F3' } });

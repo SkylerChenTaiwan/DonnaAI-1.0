@@ -19,8 +19,7 @@ const DEFAULT_ENTERPRISE_ADMIN_PERMISSIONS: EnterpriseAdminPermissions = {
   canExportData: true,
   canViewReports: true,
   canManageBilling: false,
-  canCustomizeBranding: false,
-};
+  canCustomizeBranding: false };
 
 export function useAdminAuth() {
   const { user } = useAuthStore();
@@ -226,8 +225,7 @@ export function useAdminAuth() {
     
     // 功能和路由
     getAvailableFeatures,
-    getAdminRoutes,
-  };
+    getAdminRoutes };
 }
 
 // 輔助函數：檢查企業管理員權限

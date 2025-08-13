@@ -16,8 +16,7 @@ import {
   limit,
   serverTimestamp,
   Timestamp,
-  increment,
-} from 'firebase/firestore';
+  increment } from 'firebase/firestore';
 import { getFirebaseDb } from './config';
 import { UsageMetrics, PlatformStatistics, ToolUsageStats } from '@/types/admin';
 
@@ -72,10 +71,8 @@ async function recordMetricsForPeriod(
           toolUsage: mergeToolUsage(existingData.metrics.toolUsage, metrics.toolUsage),
           dataVolume: metrics.dataVolume,
           apiCalls: increment(metrics.apiCalls || 0),
-          storageUsed: metrics.storageUsed,
-        },
-        calculatedAt: serverTimestamp(),
-      });
+          storageUsed: metrics.storageUsed },
+        calculatedAt: serverTimestamp() });
     } else {
       // 建立新統計
       await setDoc(metricsRef, {
@@ -84,10 +81,8 @@ async function recordMetricsForPeriod(
         date: dateStr,
         metrics: {
           ...metrics,
-          calculatedAt: serverTimestamp(),
-        },
-        calculatedAt: serverTimestamp(),
-      });
+          calculatedAt: serverTimestamp() },
+        calculatedAt: serverTimestamp() });
     }
   } catch (error) {
     console.error('recordMetricsForPeriod 錯誤:', error);
@@ -115,8 +110,7 @@ export async function getOrganizationMetrics(
     
     return snapshot.docs.map(doc => ({
       id: doc.id,
-      ...doc.data(),
-    })) as UsageMetrics[];
+      ...doc.data() })) as UsageMetrics[];
   } catch (error) {
     console.error('getOrganizationMetrics 錯誤:', error);
     throw error;
@@ -153,8 +147,7 @@ export async function trackToolUsage(
         'metrics.uniqueUsers': increment(1),
         'metrics.totalSessions': increment(1),
         'metrics.totalActions': increment(1),
-        'metrics.averageSessionDuration': sessionDuration || 0,
-      });
+        'metrics.averageSessionDuration': sessionDuration || 0 });
     } else {
       // 建立新統計
       const toolStats: ToolUsageStats = {
@@ -168,9 +161,7 @@ export async function trackToolUsage(
           totalSessions: 1,
           averageSessionDuration: sessionDuration || 0,
           totalActions: 1,
-          errorRate: 0,
-        },
-      };
+          errorRate: 0 } };
       await setDoc(toolStatsRef, toolStats);
     }
 
@@ -183,9 +174,7 @@ export async function trackToolUsage(
       dataVolume: {
         customers: 0,
         records: 0,
-        tasks: 0,
-      },
-    });
+        tasks: 0 } });
   } catch (error) {
     console.error('trackToolUsage 錯誤:', error);
     throw error;
@@ -227,8 +216,7 @@ export async function getPlatformStatistics(): Promise<PlatformStatistics> {
         trial: 0,
         basic: 299,
         professional: 599,
-        enterprise: 1999,
-      };
+        enterprise: 1999 };
       totalRevenue += planPrices[plan] || 0;
     });
     
@@ -248,10 +236,8 @@ export async function getPlatformStatistics(): Promise<PlatformStatistics> {
       growthRate: {
         organizations: 0,
         users: 0,
-        revenue: 0,
-      },
-      calculatedAt: new Date(),
-    };
+        revenue: 0 },
+      calculatedAt: new Date() };
     
     return statistics;
   } catch (error) {
@@ -287,8 +273,7 @@ export async function getTopTools(limit: number = 10): Promise<Array<{
       return {
         toolId: data.toolId,
         toolName: data.toolName,
-        usage: data.metrics.totalSessions,
-      };
+        usage: data.metrics.totalSessions };
     });
   } catch (error) {
     console.error('getTopTools 錯誤:', error);

@@ -186,8 +186,7 @@ export const startScreenTrace = async (screenName: string) => {
   if (__DEV__ || Platform.OS === 'web' || !performance) {
     return {
       stop: () => Promise.resolve(),
-      putAttribute: () => Promise.resolve(),
-    };
+      putAttribute: () => Promise.resolve() };
   }
 
   const trace = await performance().newTrace(`screen_load_${screenName}`);
@@ -195,8 +194,7 @@ export const startScreenTrace = async (screenName: string) => {
 
   return {
     stop: () => trace.stop(),
-    putAttribute: (key: string, value: string) => trace.putAttribute(key, value),
-  };
+    putAttribute: (key: string, value: string) => trace.putAttribute(key, value) };
 };
 
 /**

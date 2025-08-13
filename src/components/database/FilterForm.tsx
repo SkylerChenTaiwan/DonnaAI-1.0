@@ -8,8 +8,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
+  StyleSheet } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { Picker } from '@react-native-picker/picker';
 import { TableColumn } from '@/types/table';
@@ -29,16 +28,14 @@ const operatorLabels: Record<FilterOperator, string> = {
   equals: '等於',
   contains: '包含',
   startsWith: '開頭是',
-  endsWith: '結尾是',
-};
+  endsWith: '結尾是' };
 
 export const FilterForm: React.FC<FilterFormProps> = ({
   condition,
   columns,
   tabType,
   onChange,
-  onRemove,
-}) => {
+  onRemove }) => {
   const [operator, setOperator] = useState<FilterOperator>('contains');
 
   // 只顯示可篩選的欄位
@@ -57,8 +54,7 @@ export const FilterForm: React.FC<FilterFormProps> = ({
       onChange({
         ...condition,
         key: columnKey,
-        label: column.title,
-      });
+        label: column.title });
     }
   };
 
@@ -70,8 +66,7 @@ export const FilterForm: React.FC<FilterFormProps> = ({
     });
     onChange({
       ...condition,
-      value,
-    });
+      value });
   };
 
   // 根據不同的 tabType 和欄位提供預設選項
@@ -152,8 +147,7 @@ export const FilterForm: React.FC<FilterFormProps> = ({
                 if (tabType === 'tasks' && condition.key === 'status') {
                   label = {
                     todo: '待開始',
-                    completed: '已完成',
-                  }[option] || option;
+                    completed: '已完成' }[option] || option;
                 } else if (tabType === 'records' && condition.key === 'type') {
                   label = option === 'meeting' ? '會議' : '通話';
                 }
@@ -184,42 +178,33 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   headerText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   removeButton: {
-    padding: 4,
-  },
+    padding: 4 },
   pickerContainer: {
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   inputContainer: {
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   label: {
     fontSize: 14,
     fontWeight: '500',
     color: '#7A7A7A',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   pickerWrapper: {
     backgroundColor: '#F0F0F0',
     borderRadius: 8,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   picker: {
-    height: 44,
-  },
+    height: 44 },
   input: {
     backgroundColor: '#F0F0F0',
     borderRadius: 8,
@@ -227,6 +212,4 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     fontSize: 16,
     color: '#1A1A1A',
-    minHeight: 44,
-  },
-});
+    minHeight: 44 } });

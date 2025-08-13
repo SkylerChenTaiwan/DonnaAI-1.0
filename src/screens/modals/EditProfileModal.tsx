@@ -11,8 +11,7 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { WebModal } from '@/components/web/WebModal';
@@ -32,8 +31,7 @@ export const EditProfileModal: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    currentPassword: '',
-  });
+    currentPassword: '' });
   
   const [isEmailChanged, setIsEmailChanged] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -49,8 +47,7 @@ export const EditProfileModal: React.FC = () => {
       setFormData({
         name: user.name || '',
         email: user.email || '',
-        currentPassword: '',
-      });
+        currentPassword: '' });
     }
   }, [user]);
 
@@ -172,8 +169,7 @@ export const EditProfileModal: React.FC = () => {
             <Text style={{ fontSize: 16, fontWeight: '600', color: DesignSystem.colors.primary }}>儲存</Text>
           )}
         </TouchableOpacity>
-      ),
-    });
+      ) });
   }, [navigation, isSaving, handleSave]);
 
   return (
@@ -263,33 +259,26 @@ export const EditProfileModal: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   loadingText: {
     marginTop: 12,
     fontSize: 16,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   scrollView: {
-    flex: 1,
-  },
+    flex: 1 },
   form: {
-    padding: 16,
-  },
+    padding: 16 },
   formGroup: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   label: {
     fontSize: 14,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   input: {
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: 8,
@@ -298,21 +287,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: DesignSystem.colors.text.primary,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.border.light,
-  },
+    borderColor: DesignSystem.colors.border.light },
   inputError: {
-    borderColor: DesignSystem.colors.error,
-  },
+    borderColor: DesignSystem.colors.error },
   errorText: {
     fontSize: 12,
     color: DesignSystem.colors.error,
-    marginTop: 4,
-  },
+    marginTop: 4 },
   helperText: {
     fontSize: 12,
     color: DesignSystem.colors.text.secondary,
-    marginTop: 4,
-  },
+    marginTop: 4 },
   noticeContainer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -320,12 +305,9 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     marginTop: 16,
-    gap: 8,
-  },
+    gap: 8 },
   noticeText: {
     flex: 1,
     fontSize: 14,
     color: DesignSystem.colors.text.secondary,
-    lineHeight: 20,
-  },
-});
+    lineHeight: 20 } });

@@ -9,8 +9,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Modal,
-  Alert,
-} from 'react-native';
+  Alert, Platform } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { ResponsiveLayout, responsiveGrid } from '@/components/common/ResponsiveLayout';
@@ -58,18 +57,14 @@ interface Tab {
 const createStyles = () => StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
-  },
+    backgroundColor: '#F5F5F5' },
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
-  },
+    backgroundColor: '#F5F5F5' },
   contentWrapper: {
-    flex: 1,
-  },
+    flex: 1 },
   tableContainer: {
-    flex: 1,
-  },
+    flex: 1 },
   toolbar: {
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
@@ -78,35 +73,28 @@ const createStyles = () => StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#E3E1DC',
     alignItems: 'center',
-    gap: 12,
-  },
+    gap: 12 },
   searchContainer: {
     flex: 1,
-    minWidth: 200,
-  },
+    minWidth: 200 },
   searchBar: {
-    width: '100%',
-  },
+    width: '100%' },
   toolbarButtons: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-  },
+    gap: 4 },
   iconButton: {
     padding: 8,
-    borderRadius: 6,
-  },
+    borderRadius: 6 },
   iconButtonActive: {
     backgroundColor: '#FFF5E6', // 橘色背景，與多選模式保持一致
     borderColor: '#FFE4B5',
-    borderWidth: 1,
-  },
+    borderWidth: 1 },
   tabContainer: {
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
-  },
+    borderBottomColor: '#E3E1DC' },
   tab: {
     flex: 1,
     flexDirection: 'row',
@@ -114,52 +102,40 @@ const createStyles = () => StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 16,
     paddingVertical: 14,
-    gap: 8,
-  },
+    gap: 8 },
   activeTab: {
     borderBottomWidth: 2,
-    borderBottomColor: '#1A1A1A',
-  },
+    borderBottomColor: '#1A1A1A' },
   tabText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   activeTabText: {
     color: '#1A1A1A',
-    fontWeight: '700',
-  },
+    fontWeight: '700' },
   statusBadge: {
     backgroundColor: '#E3E1DC',
     borderRadius: 4,
     paddingHorizontal: 8,
     paddingVertical: 4,
-    alignSelf: 'flex-start',
-  },
+    alignSelf: 'flex-start' },
   statusActive: {
-    backgroundColor: '#E3F2E6',
-  },
+    backgroundColor: '#E3F2E6' },
   statusCompleted: {
-    backgroundColor: '#E3F2E6',
-  },
+    backgroundColor: '#E3F2E6' },
   statusTodo: {
-    backgroundColor: '#FEF3E2',
-  },
+    backgroundColor: '#FEF3E2' },
   statusInProgress: {
-    backgroundColor: '#E8F0FF',
-  },
+    backgroundColor: '#E8F0FF' },
   statusCancelled: {
-    backgroundColor: '#FFE5E5',
-  },
+    backgroundColor: '#FFE5E5' },
   statusText: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   typeText: {
     fontSize: 14,
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   // 批量操作工具列樣式
   batchActionsBar: {
     position: 'absolute',
@@ -174,45 +150,37 @@ const createStyles = () => StyleSheet.create({
     paddingVertical: 12,
     elevation: 8,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: -2 } }),
     shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
+    shadowRadius: 4 },
   batchActionsLeft: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   batchActionsText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#F7F6F3',
-  },
+    color: '#F7F6F3' },
   batchActionsRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-  },
+    gap: 12 },
   batchActionButton: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
-    gap: 6,
-  },
+    gap: 6 },
   batchActionButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#F7F6F3',
-  },
+    color: '#F7F6F3' },
   cancelButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-  },
+    backgroundColor: 'rgba(255, 255, 255, 0.2)' },
   cancelButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#F7F6F3',
-  },
+    color: '#F7F6F3' },
   // 批量編輯容器樣式
   batchEditContainer: {
     position: 'absolute',
@@ -220,16 +188,14 @@ const createStyles = () => StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    zIndex: 1000,
-  },
+    zIndex: 1000 },
   batchEditOverlay: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
+    backgroundColor: 'rgba(0, 0, 0, 0.5)' },
   batchEditContent: {
     position: 'absolute',
     top: 60,
@@ -240,21 +206,18 @@ const createStyles = () => StyleSheet.create({
     borderRadius: 16,
     elevation: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),
     shadowOpacity: 0.3,
     shadowRadius: 12,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   
   // 桌面版樣式
   desktopSidebar: {
     flex: 1,
     paddingVertical: 24,
-    paddingHorizontal: 16,
-  },
+    paddingHorizontal: 16 },
   desktopTabContainer: {
-    gap: 8,
-  },
+    gap: 8 },
   desktopTab: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -263,30 +226,24 @@ const createStyles = () => StyleSheet.create({
     borderRadius: 8,
     ...webOnly({
       transition: 'all 0.2s ease',
-      cursor: 'pointer',
-    }),
-  },
+      cursor: 'pointer' }) },
   activeDesktopTab: {
     backgroundColor: '#F7F7F7',
     borderLeftWidth: 3,
-    borderLeftColor: '#FF5C00',
-  },
+    borderLeftColor: '#FF5C00' },
   desktopTabText: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   activeDesktopTabText: {
     color: '#1A1A1A',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   desktopActions: {
     marginTop: 32,
     paddingTop: 24,
     borderTopWidth: 1,
     borderTopColor: '#E3E1DC',
-    gap: 12,
-  },
+    gap: 12 },
   desktopActionButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -298,15 +255,10 @@ const createStyles = () => StyleSheet.create({
       transition: 'all 0.2s ease',
       cursor: 'pointer',
       ':hover': {
-        backgroundColor: '#F7F7F7',
-      },
-    }),
-  },
+        backgroundColor: '#F7F7F7' } }) },
   desktopActionText: {
     fontSize: 14,
-    color: '#6B6B6B',
-  },
-});
+    color: '#6B6B6B' } });
 
 // 輔助函數 - 不依賴 styles 的版本
 const getTaskStatusText = (status: string) => {
@@ -426,11 +378,9 @@ export const DatabaseScreen: React.FC = () => {
             name: c.name,
             company: c.company || '-',
             phone: c.phone || '-',
-            tags: c.tags?.join(', ') || '-',
-          })),
+            tags: c.tags?.join(', ') || '-' })),
           columns: customerColumns,
-          loading: customerLoading,
-        };
+          loading: customerLoading };
       case 'records':
         return {
           data: (records || []).map(r => ({
@@ -438,11 +388,9 @@ export const DatabaseScreen: React.FC = () => {
             type: r.type || '',
             customerName: r.customerIds?.length > 0 ? '多位客戶' : '-',
             date: r.createdAt?.seconds ? new Date(r.createdAt.seconds * 1000).toLocaleDateString('zh-TW') : '-',
-            summary: r.aiSummary || '-',
-          })),
+            summary: r.aiSummary || '-' })),
           columns: recordColumns,
-          loading: recordLoading,
-        };
+          loading: recordLoading };
       case 'tasks':
         return {
           data: (tasks || []).map(t => ({
@@ -450,11 +398,9 @@ export const DatabaseScreen: React.FC = () => {
             title: t.title || '',
             assignee: t.assigneeId || '-',
             dueDate: t.dueDate?.seconds ? new Date(t.dueDate.seconds * 1000).toLocaleDateString('zh-TW') : '-',
-            status: t.status || 'todo',
-          })),
+            status: t.status || 'todo' })),
           columns: taskColumns,
-          loading: taskLoading,
-        };
+          loading: taskLoading };
       default:
         return { data: [], columns: [], loading: false };
     }
@@ -538,8 +484,7 @@ export const DatabaseScreen: React.FC = () => {
             await createCustomer({
               ...data,
               organizationId: user?.organizationId || '',
-              createdBy: user?.uid || '',
-            });
+              createdBy: user?.uid || '' });
             await handleRefresh();
           } catch (error) {
             console.error('Error creating customer:', error);
@@ -555,8 +500,7 @@ export const DatabaseScreen: React.FC = () => {
             await createRecord({
               ...data,
               organizationId: user?.organizationId || '',
-              createdBy: user?.uid || '',
-            });
+              createdBy: user?.uid || '' });
             await handleRefresh();
           } catch (error) {
             console.error('Error creating record:', error);
@@ -576,8 +520,7 @@ export const DatabaseScreen: React.FC = () => {
               organizationId: user?.organizationId || '',
               teamId: user?.teamId || '',
               assigneeId: user?.uid || '',
-              source: 'manual',
-            }, user?.uid || '');
+              source: 'manual' }, user?.uid || '');
             await handleRefresh();
           } catch (error) {
             console.error('Error creating task:', error);
@@ -591,8 +534,7 @@ export const DatabaseScreen: React.FC = () => {
     navigation.navigate('AddRecordModal' as any, {
       tableType: activeTab,
       columns,
-      onSubmit,
-    });
+      onSubmit });
   }, [activeTab, navigation, user, customerColumns, recordColumns, taskColumns, handleRefresh]);
 
   const handleSelect = useCallback((selectedIds: string[]) => {
@@ -1188,10 +1130,9 @@ export const DatabaseScreen: React.FC = () => {
                     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                     return value && !emailRegex.test(value) ? '請輸入有效的電子郵件格式' : null;
                   }) : col.key === 'phone' ? ((value: any) => {
-                    const phoneRegex = /^[\d\s\-+()]{8,}$/;
+                    const phoneRegex = /^[\d\s\-+()]{8 }$/;
                     return value && !phoneRegex.test(value) ? '請輸入有效的電話號碼' : null;
-                  }) : undefined,
-                }))}
+                  }) : undefined }))}
                 searchable={false}
                 selectable={false}
                 showCheckboxes={false}
@@ -1248,8 +1189,7 @@ export const DatabaseScreen: React.FC = () => {
         onApply={async (visibleColumns) => {
           await saveSettings({
             visibleColumns,
-            columnOrder: visibleColumns,
-          });
+            columnOrder: visibleColumns });
           setShowColumnSettings(false);
         }}
       />

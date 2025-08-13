@@ -12,16 +12,14 @@ import {
   TouchableOpacity,
   TextInput,
   Platform,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 import { Button } from '@/components/common/Button';
 import {
   ImportUserData,
   UserImportConfigExtended,
-  UserImportStats,
-} from '@/types/userImport';
+  UserImportStats } from '@/types/userImport';
 import { showSuccessToast, showErrorToast } from '@/utils/toast';
 
 interface UserDataPreviewProps {
@@ -37,8 +35,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
   config,
   onDataEdit,
   onConfigUpdate,
-  onImport,
-}) => {
+  onImport }) => {
   const [editingCell, setEditingCell] = useState<{ userId: string; field: string } | null>(null);
   const [editValue, setEditValue] = useState('');
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(
@@ -55,8 +52,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
       invalid: data.filter(u => !u.isValid).length,
       duplicates: data.filter(u => u.isDuplicate).length,
       selected: selectedUsers.size,
-      errors: data.reduce((sum, u) => sum + u.validationErrors.length, 0),
-    };
+      errors: data.reduce((sum, u) => sum + u.validationErrors.length, 0) };
   }, [data, selectedUsers]);
 
   // 過濾顯示的資料
@@ -101,8 +97,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
         const updated = {
           ...user,
           [editingCell.field]: editValue,
-          isEdited: true,
-        };
+          isEdited: true };
         
         // 重新驗證
         if (editingCell.field === 'email') {
@@ -151,8 +146,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
     // 更新資料
     const updatedData = data.map(user => ({
       ...user,
-      isSelected: newSelected.has(user.id),
-    }));
+      isSelected: newSelected.has(user.id) }));
     onDataEdit(updatedData);
   };
 
@@ -171,8 +165,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
       setSelectedUsers(newSelected);
       const updatedData = data.map(user => ({
         ...user,
-        isSelected: newSelected.has(user.id),
-      }));
+        isSelected: newSelected.has(user.id) }));
       onDataEdit(updatedData);
     }
   };
@@ -213,8 +206,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
               onDataEdit(updatedData);
               showSuccessToast(`已設定 ${selectedUsers.size} 個用戶的部門`);
             }
-          },
-        },
+          } },
       ],
       'plain-text'
     );
@@ -236,8 +228,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
             onDataEdit(validData);
             showSuccessToast(`已移除 ${stats.invalid} 筆無效資料`);
           },
-          style: 'destructive',
-        },
+          style: 'destructive' },
       ]
     );
   };
@@ -512,13 +503,11 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   toolbar: {
     flexDirection: 'row',
     marginBottom: DesignSystem.spacing.md,
-    gap: DesignSystem.spacing.sm,
-  },
+    gap: DesignSystem.spacing.sm },
   searchBox: {
     flex: 1,
     flexDirection: 'row',
@@ -527,14 +516,12 @@ const styles = StyleSheet.create({
     borderRadius: DesignSystem.borderRadius.sm,
     paddingHorizontal: DesignSystem.spacing.sm,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.border.light,
-  },
+    borderColor: DesignSystem.colors.border.light },
   searchInput: {
     flex: 1,
     ...DesignSystem.typography.body,
     marginLeft: DesignSystem.spacing.xs,
-    paddingVertical: DesignSystem.spacing.xs,
-  },
+    paddingVertical: DesignSystem.spacing.xs },
   filterButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -543,82 +530,65 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: DesignSystem.borderRadius.sm,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.border.light,
-  },
+    borderColor: DesignSystem.colors.border.light },
   filterButtonActive: {
     backgroundColor: DesignSystem.colors.primary,
-    borderColor: DesignSystem.colors.primary,
-  },
+    borderColor: DesignSystem.colors.primary },
   filterButtonText: {
     ...DesignSystem.typography.caption,
-    marginLeft: DesignSystem.spacing.xs,
-  },
+    marginLeft: DesignSystem.spacing.xs },
   batchActions: {
     backgroundColor: DesignSystem.colors.background.surface,
     padding: DesignSystem.spacing.sm,
     borderRadius: DesignSystem.borderRadius.sm,
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   batchActionsText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginBottom: DesignSystem.spacing.xs,
-  },
+    marginBottom: DesignSystem.spacing.xs },
   batchButton: {
     paddingHorizontal: DesignSystem.spacing.md,
     paddingVertical: DesignSystem.spacing.xs,
     backgroundColor: DesignSystem.colors.primary,
     borderRadius: DesignSystem.borderRadius.xs,
-    marginRight: DesignSystem.spacing.sm,
-  },
+    marginRight: DesignSystem.spacing.sm },
   batchButtonText: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.text.inverse,
-  },
+    color: DesignSystem.colors.text.inverse },
   table: {
-    minWidth: 900,
-  },
+    minWidth: 900 },
   headerRow: {
     flexDirection: 'row',
     backgroundColor: DesignSystem.colors.background.surface,
     borderBottomWidth: 2,
     borderBottomColor: DesignSystem.colors.border.medium,
-    paddingVertical: DesignSystem.spacing.sm,
-  },
+    paddingVertical: DesignSystem.spacing.sm },
   headerCell: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.primary,
     fontWeight: '600',
     width: 120,
-    paddingHorizontal: DesignSystem.spacing.sm,
-  },
+    paddingHorizontal: DesignSystem.spacing.sm },
   statusHeader: {
-    width: 40,
-  },
+    width: 40 },
   actionHeader: {
-    width: 60,
-  },
+    width: 60 },
   tableBody: {
-    maxHeight: 400,
-  },
+    maxHeight: 400 },
   dataRow: {
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderBottomColor: DesignSystem.colors.border.light,
     paddingVertical: DesignSystem.spacing.xs,
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   dataRowInvalid: {
-    backgroundColor: `${DesignSystem.colors.error}10`,
-  },
+    backgroundColor: `${DesignSystem.colors.error}10` },
   dataRowDuplicate: {
-    backgroundColor: `${DesignSystem.colors.warning}10`,
-  },
+    backgroundColor: `${DesignSystem.colors.warning}10` },
   checkbox: {
     width: 40,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   checkboxInner: {
     width: 18,
     height: 18,
@@ -626,30 +596,24 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: DesignSystem.colors.border.medium,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   checkboxChecked: {
     backgroundColor: DesignSystem.colors.primary,
-    borderColor: DesignSystem.colors.primary,
-  },
+    borderColor: DesignSystem.colors.primary },
   statusIndicator: {
     width: 40,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   dataCell: {
     width: 120,
     paddingHorizontal: DesignSystem.spacing.sm,
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   dataCellText: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   dataCellEmpty: {
     color: DesignSystem.colors.text.tertiary,
-    fontStyle: 'italic',
-  },
+    fontStyle: 'italic' },
   editInput: {
     ...DesignSystem.typography.caption,
     borderWidth: 1,
@@ -657,47 +621,38 @@ const styles = StyleSheet.create({
     borderRadius: DesignSystem.borderRadius.xs,
     paddingHorizontal: DesignSystem.spacing.xs,
     paddingVertical: 2,
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   removeButton: {
     width: 60,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   stats: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingVertical: DesignSystem.spacing.md,
     marginVertical: DesignSystem.spacing.md,
     backgroundColor: DesignSystem.colors.background.surface,
-    borderRadius: DesignSystem.borderRadius.sm,
-  },
+    borderRadius: DesignSystem.borderRadius.sm },
   statItem: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   statText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginLeft: DesignSystem.spacing.xs,
-  },
+    marginLeft: DesignSystem.spacing.xs },
   importSettings: {
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   settingsTitle: {
     ...DesignSystem.typography.h5,
     color: DesignSystem.colors.text.primary,
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   settingsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: DesignSystem.spacing.md,
-  },
+    gap: DesignSystem.spacing.md },
   settingItem: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   settingCheckbox: {
     width: 20,
     height: 20,
@@ -706,24 +661,18 @@ const styles = StyleSheet.create({
     borderColor: DesignSystem.colors.border.medium,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: DesignSystem.spacing.sm,
-  },
+    marginRight: DesignSystem.spacing.sm },
   settingCheckboxChecked: {
     backgroundColor: DesignSystem.colors.primary,
-    borderColor: DesignSystem.colors.primary,
-  },
+    borderColor: DesignSystem.colors.primary },
   settingLabel: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   actions: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    gap: DesignSystem.spacing.md,
-  },
+    gap: DesignSystem.spacing.md },
   actionButton: {
-    minWidth: 120,
-  },
-});
+    minWidth: 120 } });
 
 export default UserDataPreview;

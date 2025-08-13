@@ -28,8 +28,7 @@ class SoundManager {
     // Web 平台暫時不載入音效檔案
     success: null,
     error: null,
-    notification: null,
-  };
+    notification: null };
 
   /**
    * 初始化音效管理器

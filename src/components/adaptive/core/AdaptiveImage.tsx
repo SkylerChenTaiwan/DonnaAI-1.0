@@ -85,13 +85,11 @@ const DefaultPlaceholder: React.FC<{ width?: number | string; height?: number | 
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      borderRadius: DesignSystem.borderRadius.md,
-    }}
+      borderRadius: DesignSystem.borderRadius.md }}
   >
     <div style={{
       color: DesignSystem.colors.text.tertiary,
-      fontSize: DesignSystem.typography.caption.fontSize,
-    }}>
+      fontSize: DesignSystem.typography.caption.fontSize }}>
       📷
     </div>
   </AdaptiveView>
@@ -113,14 +111,12 @@ const DefaultErrorComponent: React.FC<{ width?: number | string; height?: number
       borderRadius: DesignSystem.borderRadius.md,
       borderWidth: 1,
       borderColor: DesignSystem.colors.border.light,
-      borderStyle: 'dashed',
-    }}
+      borderStyle: 'dashed' }}
   >
     <div style={{
       color: DesignSystem.colors.text.secondary,
       fontSize: DesignSystem.typography.caption.fontSize,
-      textAlign: 'center' as const,
-    }}>
+      textAlign: 'center' as const }}>
       <div style={{ fontSize: '20px', marginBottom: '4px' }}>⚠️</div>
       圖片載入失敗
     </div>
@@ -140,14 +136,12 @@ const DefaultLoadingComponent: React.FC<{ width?: number | string; height?: numb
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      borderRadius: DesignSystem.borderRadius.md,
-    }}
+      borderRadius: DesignSystem.borderRadius.md }}
   >
     <div style={{
       color: DesignSystem.colors.text.tertiary,
       fontSize: DesignSystem.typography.caption.fontSize,
-      animation: 'pulse 1.5s infinite',
-    }}>
+      animation: 'pulse 1.5s infinite' }}>
       載入中...
     </div>
   </AdaptiveView>
@@ -207,8 +201,7 @@ const WebImage = forwardRef<HTMLImageElement, AdaptiveImageProps>(
         position: 'relative',
         display: 'inline-block',
         width,
-        height,
-      };
+        height };
       
       if (containerStyle) {
         const convertedStyle = styleAdapter.adaptStyle(containerStyle as any);
@@ -224,8 +217,7 @@ const WebImage = forwardRef<HTMLImageElement, AdaptiveImageProps>(
         width: '100%',
         height: '100%',
         objectFit: resizeMode as any,
-        display: 'block',
-      };
+        display: 'block' };
       
       if (style) {
         const convertedStyle = styleAdapter.adaptStyle(style as any, webStyle);
@@ -372,8 +364,7 @@ const NativeImage = forwardRef<any, AdaptiveImageProps>(
       let finalStyle = {
         width,
         height,
-        position: 'relative' as const,
-      };
+        position: 'relative' as const };
       
       if (containerStyle) {
         const convertedStyle = styleAdapter.adaptStyle(containerStyle as any);
@@ -388,8 +379,7 @@ const NativeImage = forwardRef<any, AdaptiveImageProps>(
       let finalStyle = {
         width: '100%',
         height: '100%',
-        ...style,
-      };
+        ...style };
       
       if (nativeStyle) {
         finalStyle = { ...finalStyle, ...nativeStyle };
@@ -506,8 +496,7 @@ export const Avatar = forwardRef<any, AdaptiveImageProps & { size?: number }>((p
       height={size}
       style={{
         borderRadius: size / 2,
-        ...props.style,
-      }}
+        ...props.style }}
       resizeMode="cover"
     />
   );
@@ -521,8 +510,7 @@ export const Logo = forwardRef<any, AdaptiveImageProps>((props, ref) => (
     style={{
       maxWidth: '100%',
       height: 'auto',
-      ...props.style,
-    }}
+      ...props.style }}
   />
 ));
 
@@ -537,8 +525,7 @@ export const Thumbnail = forwardRef<any, AdaptiveImageProps & { size?: number }>
       height={size}
       style={{
         borderRadius: DesignSystem.borderRadius.sm,
-        ...props.style,
-      }}
+        ...props.style }}
       resizeMode="cover"
     />
   );
@@ -555,8 +542,7 @@ export const BackgroundImage = forwardRef<any, AdaptiveImageProps>((props, ref) 
       width: '100%',
       height: '100%',
       zIndex: -1,
-      ...props.style,
-    }}
+      ...props.style }}
     resizeMode="cover"
   />
 ));

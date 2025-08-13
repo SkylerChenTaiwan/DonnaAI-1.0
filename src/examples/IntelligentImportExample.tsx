@@ -5,7 +5,7 @@ import { MaterialIcon } from '../components/common/MaterialIcon';
  */
 
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet , Platform } from 'react-native';
 import { ImportWizard } from '@/components/import/ImportWizard';
 // MaterialIcon import removed - using platform-specific MaterialIcon component;
 
@@ -200,92 +200,76 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-    padding: 20,
-  },
+    padding: 20 },
   header: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   subtitle: {
     fontSize: 16,
-    color: '#666',
-  },
+    color: '#666' },
   features: {
     backgroundColor: '#fff',
     borderRadius: 12,
     padding: 20,
     marginBottom: 20,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
-  },
+    elevation: 3 },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: '#333',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   featureItem: {
     flexDirection: 'row',
     marginBottom: 16,
-    alignItems: 'flex-start',
-  },
+    alignItems: 'flex-start' },
   featureContent: {
     marginLeft: 12,
-    flex: 1,
-  },
+    flex: 1 },
   featureTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: '#333',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   featureDesc: {
     fontSize: 12,
     color: '#666',
-    lineHeight: 18,
-  },
+    lineHeight: 18 },
   usage: {
     backgroundColor: '#fff',
     borderRadius: 12,
     padding: 20,
-    marginBottom: 20,
-  },
+    marginBottom: 20 },
   codeBlock: {
     backgroundColor: '#f8f8f8',
     borderRadius: 8,
     padding: 12,
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   codeTitle: {
     fontSize: 12,
     color: '#888',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   code: {
     fontSize: 12,
     fontFamily: 'monospace',
     color: '#333',
-    lineHeight: 20,
-  },
+    lineHeight: 20 },
   formats: {
     backgroundColor: '#fff',
     borderRadius: 12,
     padding: 20,
-    marginBottom: 20,
-  },
+    marginBottom: 20 },
   formatList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
-  },
+    gap: 12 },
   formatItem: {
     backgroundColor: '#f0f0f0',
     borderRadius: 8,
@@ -293,17 +277,14 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-  },
+    gap: 8 },
   formatExt: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#007AFF',
-  },
+    color: '#007AFF' },
   formatDesc: {
     fontSize: 12,
-    color: '#666',
-  },
+    color: '#666' },
   startButton: {
     backgroundColor: '#007AFF',
     borderRadius: 12,
@@ -311,30 +292,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
-  },
+    gap: 8 },
   startButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
-  },
+    color: '#fff' },
   result: {
     backgroundColor: '#E8F5E9',
     borderRadius: 12,
     padding: 16,
-    marginTop: 20,
-  },
+    marginTop: 20 },
   resultTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#2E7D32',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   resultText: {
     fontSize: 14,
     color: '#388E3C',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   modal: {
     position: 'absolute',
     top: 0,
@@ -343,16 +319,13 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   modalContent: {
     width: '90%',
     maxWidth: 800,
     height: '90%',
     backgroundColor: '#fff',
     borderRadius: 16,
-    overflow: 'hidden',
-  },
-});
+    overflow: 'hidden' } });
 
 export default IntelligentImportExample;

@@ -20,16 +20,14 @@ export const TanStackNotionTableV3: React.FC<TanStackTableProps> = ({
   loading = false,
   sortConfig,
   onSort,
-  enableColumnDrag = false,
-}) => {
+  enableColumnDrag = false }) => {
   const [isAddingRow, setIsAddingRow] = useState(false);
   const [newRowData, setNewRowData] = useState<Record<string, any>>({});
 
   const table = useReactTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
+    getCoreRowModel: getCoreRowModel() });
 
   const handleAddRow = useCallback(() => {
     setIsAddingRow(true);
@@ -56,8 +54,7 @@ export const TanStackNotionTableV3: React.FC<TanStackTableProps> = ({
   const handleNewRowChange = useCallback((columnId: string, value: any) => {
     setNewRowData(prev => ({
       ...prev,
-      [columnId]: value,
-    }));
+      [columnId]: value }));
   }, []);
 
   const handleViewSettings = useCallback(() => {

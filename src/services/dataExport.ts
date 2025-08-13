@@ -85,8 +85,7 @@ const transformCustomersToTableData = (customers: CustomerDoc[]): TableData[] =>
       new Date(customer.nextFollowUpDate).toLocaleDateString('zh-TW') : '',
     notes: customer.notes || '',
     createdAt: customer.createdAt ? 
-      new Date(customer.createdAt).toLocaleDateString('zh-TW') : '',
-  }));
+      new Date(customer.createdAt).toLocaleDateString('zh-TW') : '' }));
 };
 
 /**
@@ -112,8 +111,7 @@ const transformTasksToTableData = (
       new Date(task.completedAt).toLocaleDateString('zh-TW') : '',
     tags: task.tags?.join(', ') || '',
     createdAt: task.createdAt ? 
-      new Date(task.createdAt).toLocaleDateString('zh-TW') : '',
-  }));
+      new Date(task.createdAt).toLocaleDateString('zh-TW') : '' }));
 };
 
 /**
@@ -138,8 +136,7 @@ const transformMeetingsToTableData = (
       content: meeting.content || '',
       aiSummary: meeting.aiSummary?.summary || '',
       createdAt: meeting.createdAt ? 
-        new Date(meeting.createdAt).toLocaleDateString('zh-TW') : '',
-    }));
+        new Date(meeting.createdAt).toLocaleDateString('zh-TW') : '' }));
 };
 
 /**
@@ -151,8 +148,7 @@ const translateTaskType = (type: string): string => {
     'followup': '跟進',
     'appointment': '預約',
     'document': '文件',
-    'other': '其他',
-  };
+    'other': '其他' };
   return typeMap[type] || type;
 };
 
@@ -161,8 +157,7 @@ const translatePriority = (priority: string): string => {
     'urgent': '緊急',
     'high': '高',
     'medium': '中',
-    'low': '低',
-  };
+    'low': '低' };
   return priorityMap[priority] || priority;
 };
 
@@ -171,8 +166,7 @@ const translateTaskStatus = (status: string): string => {
     'pending': '待處理',
     'in_progress': '進行中',
     'completed': '已完成',
-    'cancelled': '已取消',
-  };
+    'cancelled': '已取消' };
   return statusMap[status] || status;
 };
 
@@ -181,8 +175,7 @@ const translateRecordType = (type: string): string => {
     'meeting': '會議',
     'call': '電話',
     'note': '筆記',
-    'other': '其他',
-  };
+    'other': '其他' };
   return typeMap[type] || type;
 };
 
@@ -191,8 +184,7 @@ const translateRecordStatus = (status: string): string => {
     'pending': '待處理',
     'processing': '處理中',
     'completed': '已完成',
-    'failed': '失敗',
-  };
+    'failed': '失敗' };
   return statusMap[status] || status;
 };
 
@@ -224,8 +216,7 @@ export const exportUserData = async (options: DataExportOptions): Promise<void> 
       exportData.push({
         type: '客戶資料',
         data: transformCustomersToTableData(customers),
-        columns: customerColumns,
-      });
+        columns: customerColumns });
     }
 
     if (options.dataTypes.includes('all') || options.dataTypes.includes('tasks')) {
@@ -239,8 +230,7 @@ export const exportUserData = async (options: DataExportOptions): Promise<void> 
       exportData.push({
         type: '任務資料',
         data: transformTasksToTableData(tasks, customersMap),
-        columns: taskColumns,
-      });
+        columns: taskColumns });
     }
 
     if (options.dataTypes.includes('all') || options.dataTypes.includes('meetings')) {
@@ -254,8 +244,7 @@ export const exportUserData = async (options: DataExportOptions): Promise<void> 
       exportData.push({
         type: '會議記錄',
         data: transformMeetingsToTableData(records, customersMap),
-        columns: meetingColumns,
-      });
+        columns: meetingColumns });
     }
 
     // 檢查是否有資料
@@ -270,8 +259,7 @@ export const exportUserData = async (options: DataExportOptions): Promise<void> 
       const combinedData: Record<string, any> = {
         exportDate: new Date().toISOString(),
         organization: permissionContext.organizationId,
-        user: permissionContext.userId,
-      };
+        user: permissionContext.userId };
 
       exportData.forEach(({ type, data }) => {
         combinedData[type] = data;
@@ -284,8 +272,7 @@ export const exportUserData = async (options: DataExportOptions): Promise<void> 
         {
           format: 'json',
           filename: `donna_ai_export_${new Date().toISOString().split('T')[0]}`,
-          email: options.email,
-        }
+          email: options.email }
       );
     } else {
       // CSV 格式：分別匯出每種資料類型
@@ -298,8 +285,7 @@ export const exportUserData = async (options: DataExportOptions): Promise<void> 
               format: 'csv',
               includeHeaders: true,
               filename: `${type}_${new Date().toISOString().split('T')[0]}`,
-              email: options.email,
-            }
+              email: options.email }
           );
         }
       }

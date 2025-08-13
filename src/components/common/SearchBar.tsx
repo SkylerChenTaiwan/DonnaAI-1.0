@@ -8,8 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  TextInputProps,
-} from 'react-native';
+  TextInputProps } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 
 interface SearchBarProps extends Omit<TextInputProps, 'value' | 'onChangeText'> {
@@ -106,17 +105,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0F0F0',
     borderRadius: 6,
     paddingHorizontal: 10,
-    height: 32,
-  },
+    height: 32 },
   icon: {
-    marginRight: 8,
-  },
+    marginRight: 8 },
   input: {
     flex: 1,
     fontSize: 14,
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   clearButton: {
-    padding: 4,
-  },
-});
+    padding: 4 } });

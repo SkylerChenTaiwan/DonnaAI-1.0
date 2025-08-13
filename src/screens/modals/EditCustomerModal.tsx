@@ -11,8 +11,7 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { WebModal } from '@/components/web/WebModal';
@@ -79,8 +78,7 @@ export const EditCustomerModal: React.FC = () => {
     try {
       const updates: Partial<CustomerDoc> = {
         name: String(formData.name).trim(),
-        company: formData.company ? String(formData.company).trim() : '',
-      };
+        company: formData.company ? String(formData.company).trim() : '' };
       
       // 處理動態欄位
       fields.forEach(field => {
@@ -172,18 +170,15 @@ export const EditCustomerModal: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
-  },
+    backgroundColor: '#F8F9FA' },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   loadingText: {
     marginTop: 12,
     fontSize: 16,
-    color: '#8E8E93',
-  },
+    color: '#8E8E93' },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -192,36 +187,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
-  },
+    borderBottomColor: '#E5E5EA' },
   headerButton: {
-    padding: 4,
-  },
+    padding: 4 },
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1C1C1E',
-  },
+    color: '#1C1C1E' },
   saveButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#007AFF',
-  },
+    color: '#007AFF' },
   scrollView: {
-    flex: 1,
-  },
+    flex: 1 },
   form: {
-    padding: 16,
-  },
+    padding: 16 },
   formGroup: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   label: {
     fontSize: 14,
     fontWeight: '600',
     color: '#1C1C1E',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   input: {
     backgroundColor: '#FFFFFF',
     borderRadius: 8,
@@ -230,17 +217,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#1C1C1E',
     borderWidth: 1,
-    borderColor: '#E5E5EA',
-  },
+    borderColor: '#E5E5EA' },
   textArea: {
     minHeight: 100,
-    paddingTop: 12,
-  },
+    paddingTop: 12 },
   tagInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-  },
+    gap: 8 },
   tagInput: {
     flex: 1,
     backgroundColor: '#FFFFFF',
@@ -250,17 +234,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#1C1C1E',
     borderWidth: 1,
-    borderColor: '#E5E5EA',
-  },
+    borderColor: '#E5E5EA' },
   addTagButton: {
-    padding: 4,
-  },
+    padding: 4 },
   tagList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
-    marginTop: 12,
-  },
+    marginTop: 12 },
   tag: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -268,10 +249,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    gap: 4,
-  },
+    gap: 4 },
   tagText: {
     fontSize: 14,
-    color: '#1C1C1E',
-  },
-});
+    color: '#1C1C1E' } });

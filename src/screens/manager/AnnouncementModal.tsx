@@ -13,8 +13,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator,
-} from 'react-native';
+  ActivityIndicator } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { TeamMemberSelector } from '@/components/manager/TeamMemberSelector';
 import { createAnnouncement } from '@/services/firebase/managerActions';
@@ -31,8 +30,7 @@ interface AnnouncementModalProps {
 
 export const AnnouncementModal: React.FC<AnnouncementModalProps> = ({
   visible,
-  onClose,
-}) => {
+  onClose }) => {
   const { user } = useAuth();
   const { currentOrganization, currentTeam } = useOrganization();
   
@@ -101,8 +99,7 @@ export const AnnouncementModal: React.FC<AnnouncementModalProps> = ({
           targetTeams: currentTeam ? [currentTeam.id] : undefined,
           organizationId: currentOrganization.id,
           teamId: currentTeam?.id,
-          expiresAt: expiresAt ? expiresAt : undefined,
-        },
+          expiresAt: expiresAt ? expiresAt : undefined },
         user.uid,
         user.displayName || user.email || '管理員'
       );
@@ -186,8 +183,7 @@ export const AnnouncementModal: React.FC<AnnouncementModalProps> = ({
                       styles.priorityButton,
                       priority === option.value && {
                         backgroundColor: option.color,
-                        borderColor: option.color,
-                      },
+                        borderColor: option.color },
                     ]}
                     onPress={() => setPriority(option.value as typeof priority)}
                     activeOpacity={0.7}
@@ -270,15 +266,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'flex-end',
-  },
+    justifyContent: 'flex-end' },
   modalContent: {
     backgroundColor: DesignSystem.colors.background.surface,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '90%',
-    paddingBottom: Platform.OS === 'ios' ? 34 : 20,
-  },
+    paddingBottom: Platform.OS === 'ios' ? 34 : 20 },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -286,29 +280,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   closeButton: {
-    padding: 4,
-  },
+    padding: 4 },
   scrollView: {
     flex: 1,
-    paddingHorizontal: 20,
-  },
+    paddingHorizontal: 20 },
   formGroup: {
-    marginVertical: 12,
-  },
+    marginVertical: 12 },
   label: {
     fontSize: 16,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   input: {
     backgroundColor: DesignSystem.colors.gray50,
     borderRadius: 12,
@@ -317,40 +305,33 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: DesignSystem.colors.text.primary,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.border.light,
-  },
+    borderColor: DesignSystem.colors.border.light },
   textArea: {
     minHeight: 100,
-    paddingTop: 12,
-  },
+    paddingTop: 12 },
   priorityContainer: {
     flexDirection: 'row',
-    gap: 12,
-  },
+    gap: 12 },
   priorityButton: {
     flex: 1,
     paddingVertical: 10,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: DesignSystem.colors.border.light,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   priorityText: {
     fontSize: 14,
     fontWeight: '500',
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   priorityTextActive: {
-    color: DesignSystem.colors.text.inverse,
-  },
+    color: DesignSystem.colors.text.inverse },
   footer: {
     flexDirection: 'row',
     paddingHorizontal: 20,
     paddingTop: 16,
     gap: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
-  },
+    borderTopColor: '#E5E7EB' },
   button: {
     flex: 1,
     paddingVertical: 14,
@@ -358,25 +339,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    gap: 8,
-  },
+    gap: 8 },
   cancelButton: {
-    backgroundColor: DesignSystem.colors.gray100,
-  },
+    backgroundColor: DesignSystem.colors.gray100 },
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   submitButton: {
-    backgroundColor: colors.primary,
-  },
+    backgroundColor: colors.primary },
   submitButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text.inverse,
-  },
+    color: DesignSystem.colors.text.inverse },
   disabledButton: {
-    opacity: 0.6,
-  },
-});
+    opacity: 0.6 } });

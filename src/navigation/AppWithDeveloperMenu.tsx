@@ -27,9 +27,7 @@ const linking: LinkingOptions<RootStackParamList> = {
           Database: 'database',
           Tools: 'tools',
           Personnel: 'personnel',
-          Settings: 'settings',
-        },
-      },
+          Settings: 'settings' } },
       
       // Detail screens
       CustomerDetail: 'customer/:customerId',
@@ -46,10 +44,7 @@ const linking: LinkingOptions<RootStackParamList> = {
       // Other screens
       ProfileScreen: 'profile',
       HelpSupport: 'help',
-      PrivacyPolicy: 'privacy',
-    },
-  },
-};
+      PrivacyPolicy: 'privacy' } } };
 
 export const AppWithDeveloperMenu = () => {
   return (

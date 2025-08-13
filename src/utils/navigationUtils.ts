@@ -36,8 +36,7 @@ export const getBreadcrumbsForRoute = (
     {
       id: 'home',
       label: '首頁',
-      onPress: () => navigation.navigate('Home' as any),
-    },
+      onPress: () => navigation.navigate('Home' as any) },
   ];
   
   // 根據路由添加對應的麵包屑
@@ -45,85 +44,72 @@ export const getBreadcrumbsForRoute = (
     case 'OrganizationsScreen':
       breadcrumbs.push({
         id: 'organizations',
-        label: '組織管理',
-      });
+        label: '組織管理' });
       break;
       
     case 'OrganizationDetailScreen':
       breadcrumbs.push({
         id: 'organizations',
         label: '組織管理',
-        onPress: () => navigation.navigate('OrganizationsScreen' as any),
-      });
+        onPress: () => navigation.navigate('OrganizationsScreen' as any) });
       breadcrumbs.push({
         id: 'detail',
-        label: '組織詳情',
-      });
+        label: '組織詳情' });
       break;
       
     case 'SuperAdminDashboard':
       breadcrumbs.push({
         id: 'superadmin',
-        label: 'Super Admin 控制台',
-      });
+        label: 'Super Admin 控制台' });
       break;
       
     case 'PlatformDashboard':
       breadcrumbs.push({
         id: 'platform',
-        label: '平台統計',
-      });
+        label: '平台統計' });
       break;
       
     case 'AdminDashboard':
       breadcrumbs.push({
         id: 'admin',
-        label: '管理中心',
-      });
+        label: '管理中心' });
       break;
       
     case 'UserManagementScreen':
       breadcrumbs.push({
         id: 'admin',
         label: '管理中心',
-        onPress: () => navigation.navigate('AdminDashboard' as any),
-      });
+        onPress: () => navigation.navigate('AdminDashboard' as any) });
       breadcrumbs.push({
         id: 'users',
-        label: '用戶管理',
-      });
+        label: '用戶管理' });
       break;
       
     case 'DataImportScreen':
       breadcrumbs.push({
         id: 'admin',
         label: '管理中心',
-        onPress: () => navigation.navigate('AdminDashboard' as any),
-      });
+        onPress: () => navigation.navigate('AdminDashboard' as any) });
       breadcrumbs.push({
         id: 'import',
-        label: '資料匯入',
-      });
+        label: '資料匯入' });
       break;
       
     case 'UsageReportsScreen':
       breadcrumbs.push({
         id: 'admin',
         label: '管理中心',
-        onPress: () => navigation.navigate('AdminDashboard' as any),
-      });
+        onPress: () => navigation.navigate('AdminDashboard' as any) });
       breadcrumbs.push({
         id: 'reports',
-        label: '使用報表',
-      });
+        label: '使用報表' });
       break;
       
     default:
       // 預設情況只顯示當前頁面
       breadcrumbs.push({
         id: 'current',
-        label: routeName,
-      });
+        label: routeName });
   }
   
   return breadcrumbs;
@@ -186,8 +172,7 @@ export const getRouteTitle = (routeName: string): string => {
     ToolManagementScreen: '工具管理',
     DataImportScreen: '資料匯入',
     UsageReportsScreen: '使用報表',
-    AdminSettings: '管理員設定',
-  };
+    AdminSettings: '管理員設定' };
   
   return titles[routeName] || routeName;
 };

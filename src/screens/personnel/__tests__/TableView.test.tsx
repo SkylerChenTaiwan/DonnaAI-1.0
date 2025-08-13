@@ -19,17 +19,14 @@ vi.mock('@/components/common/DataTable', () => ({
         </div>
       ))}
     </div>
-  )),
-}));
+  )) }));
 
 // Mock 其他組件
 vi.mock('@/components/personnel/StatusIndicator', () => ({
-  StatusIndicator: jest.fn(() => <div testID="status-indicator" />),
-}));
+  StatusIndicator: jest.fn(() => <div testID="status-indicator" />) }));
 
 vi.mock('@/components/personnel/PermissionBadge', () => ({
-  PermissionBadge: jest.fn(() => <div testID="permission-badge" />),
-}));
+  PermissionBadge: jest.fn(() => <div testID="permission-badge" />) }));
 
 const mockTeamMembers: TeamMember[] = [
   {
@@ -43,9 +40,7 @@ const mockTeamMembers: TeamMember[] = [
     performance: {
       meetings: 10,
       customers: 20,
-      deals: 5,
-    },
-  },
+      deals: 5 } },
   {
     id: '2',
     name: '李四',
@@ -57,9 +52,7 @@ const mockTeamMembers: TeamMember[] = [
     performance: {
       meetings: 5,
       customers: 10,
-      deals: 2,
-    },
-  },
+      deals: 2 } },
 ];
 
 describe('TableView with Toolbar', () => {
@@ -67,8 +60,7 @@ describe('TableView with Toolbar', () => {
     teamMembers: mockTeamMembers,
     searchQuery: '',
     refreshing: false,
-    onRefresh: vi.fn(),
-  };
+    onRefresh: vi.fn() };
 
   it('應該顯示工具列而非統計列', () => {
     const { queryByText } = render(<TableView {...defaultProps} />);
@@ -115,8 +107,7 @@ describe('TableView with Toolbar', () => {
     const DataTable = require('@/components/common/DataTable').DataTable;
     expect(DataTable).toHaveBeenCalledWith(
       expect.objectContaining({
-        showCheckboxes: true,
-      }),
+        showCheckboxes: true }),
       expect.anything()
     );
   });
@@ -141,8 +132,7 @@ describe('TableView with Toolbar', () => {
         filters: [
           { key: 'search', value: '張' },
           ...activeFilters,
-        ],
-      }),
+        ] }),
       expect.anything()
     );
   });

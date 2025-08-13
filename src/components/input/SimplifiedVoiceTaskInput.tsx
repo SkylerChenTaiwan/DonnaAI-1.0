@@ -24,8 +24,7 @@ import {
   validateExtractionQuality,
   VoiceToTaskResult,
   VoiceToTaskOptions,
-  TaskExtractionProgress,
-} from '@/services/ai/voice-to-task';
+  TaskExtractionProgress } from '@/services/ai/voice-to-task';
 import { createTask } from '@/services/firebase/tasks';
 import { TaskCreateRequest } from '@/types/task';
 import { showToast } from '@/utils/toast';
@@ -45,8 +44,7 @@ export const SimplifiedVoiceTaskInput: React.FC<SimplifiedVoiceTaskInputProps> =
   onTaskCreated,
   userId,
   organizationId,
-  teamId,
-}) => {
+  teamId }) => {
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [recordingStatus, setRecordingStatus] = useState<RecordingStatus>('idle');
   const [duration, setDuration] = useState(0);
@@ -66,8 +64,7 @@ export const SimplifiedVoiceTaskInput: React.FC<SimplifiedVoiceTaskInputProps> =
         playsInSilentModeIOS: true,
         staysActiveInBackground: true,
         interruptionModeIOS: 1,
-        interruptionModeAndroid: 1,
-      });
+        interruptionModeAndroid: 1 });
     } catch (error) {
       console.error('音訊模式初始化失敗:', error);
       throw error;
@@ -99,13 +96,11 @@ export const SimplifiedVoiceTaskInput: React.FC<SimplifiedVoiceTaskInputProps> =
         Animated.timing(pulseAnim, {
           toValue: 1.2,
           duration: 1000,
-          useNativeDriver: true,
-        }),
+          useNativeDriver: true }),
         Animated.timing(pulseAnim, {
           toValue: 1,
           duration: 1000,
-          useNativeDriver: true,
-        }),
+          useNativeDriver: true }),
       ])
     ).start();
   }, [pulseAnim]);
@@ -116,8 +111,7 @@ export const SimplifiedVoiceTaskInput: React.FC<SimplifiedVoiceTaskInputProps> =
     Animated.timing(pulseAnim, {
       toValue: 1,
       duration: 200,
-      useNativeDriver: true,
-    }).start();
+      useNativeDriver: true }).start();
   }, [pulseAnim]);
 
   // 淡入動畫
@@ -125,8 +119,7 @@ export const SimplifiedVoiceTaskInput: React.FC<SimplifiedVoiceTaskInputProps> =
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 500,
-      useNativeDriver: true,
-    }).start();
+      useNativeDriver: true }).start();
   }, [fadeAnim]);
 
   // 開始錄音
@@ -189,8 +182,7 @@ export const SimplifiedVoiceTaskInput: React.FC<SimplifiedVoiceTaskInputProps> =
         extractDeadline: true,
         extractPriority: true,
         extractAssignee: true,
-        autoDetectTaskType: true,
-      };
+        autoDetectTaskType: true };
 
       const result = await convertVoiceToTask(
         uri,
@@ -230,8 +222,7 @@ export const SimplifiedVoiceTaskInput: React.FC<SimplifiedVoiceTaskInputProps> =
       const priorityMap: Record<string, 'low' | 'medium' | 'high'> = {
         '低': 'low',
         '中': 'medium',
-        '高': 'high',
-      };
+        '高': 'high' };
 
       // 基礎任務資料
       const taskData: TaskCreateRequest = {
@@ -244,8 +235,7 @@ export const SimplifiedVoiceTaskInput: React.FC<SimplifiedVoiceTaskInputProps> =
         teamId: teamId,
         organizationId: organizationId,
         customerIds: data.customerId ? [data.customerId] : [],
-        tags: data.tags || [],
-      };
+        tags: data.tags || [] };
       
       // 只有在有值時才添加 optional 欄位
       if (data.dueDate) {
@@ -309,8 +299,7 @@ export const SimplifiedVoiceTaskInput: React.FC<SimplifiedVoiceTaskInputProps> =
             style={[
               styles.recordButton,
               recordingStatus === 'recording' && {
-                transform: Platform.OS === 'web' ? `scale(${pulseAnim})` : [{ scale: pulseAnim }],
-              },
+                transform: Platform.OS === 'web' ? `scale(${pulseAnim})` : [{ scale: pulseAnim }] },
             ]}
           >
             <View style={recordingStatus === 'recording' ? styles.stopIcon : styles.micIcon}>
@@ -456,40 +445,33 @@ const styles = StyleSheet.create({
   recordingContainer: {
     flex: 1,
     paddingTop: 40,
-    paddingHorizontal: 20,
-  },
+    paddingHorizontal: 20 },
   topSection: {
     alignItems: 'center',
-    marginBottom: 40,
-  },
+    marginBottom: 40 },
   title: {
     fontSize: 24,
     fontWeight: '700',
     color: '#1A1A1A',
     marginTop: 16,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   description: {
     fontSize: 16,
     color: '#7A7A7A',
     textAlign: 'center',
-    lineHeight: 22,
-  },
+    lineHeight: 22 },
   centerSection: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 40,
-  },
+    marginBottom: 40 },
   duration: {
     fontSize: 48,
     fontWeight: '200',
     color: '#1A1A1A',
-    marginBottom: 40,
-  },
+    marginBottom: 40 },
   recordButtonContainer: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   recordButton: {
     width: 120,
     height: 120,
@@ -499,155 +481,125 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 8,
     shadowColor: '#FF6B6B',
-    shadowOffset: { width: 0, height: 4 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),
     shadowOpacity: 0.3,
-    shadowRadius: 8,
-  },
+    shadowRadius: 8 },
   micIcon: {
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   stopIcon: {
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   stopSquare: {
     width: 40,
     height: 40,
     backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-  },
+    borderRadius: 8 },
   hint: {
     fontSize: 16,
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   tipsSection: {
     backgroundColor: '#FFF5F5',
     borderRadius: 12,
     padding: 16,
-    marginBottom: 20,
-  },
+    marginBottom: 20 },
   tipsTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1A1A1A',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   tipText: {
     fontSize: 14,
     color: '#7A7A7A',
     lineHeight: 20,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   processingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 40,
-  },
+    padding: 40 },
   processingTitle: {
     fontSize: 20,
     fontWeight: '600',
     color: '#1A1A1A',
     marginTop: 16,
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   progressInfo: {
     width: '100%',
-    marginTop: 24,
-  },
+    marginTop: 24 },
   progressMessage: {
     fontSize: 16,
     color: '#1A1A1A',
     textAlign: 'center',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   progressBar: {
     height: 4,
     backgroundColor: '#E3E1DC',
     borderRadius: 2,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   progressFill: {
     height: '100%',
     backgroundColor: '#FF6B6B',
-    borderRadius: 2,
-  },
+    borderRadius: 2 },
   reviewContainer: {
     flex: 1,
-    padding: 20,
-  },
+    padding: 20 },
   reviewTitle: {
     fontSize: 24,
     fontWeight: '700',
     color: '#1A1A1A',
     marginBottom: 24,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   taskPreview: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 20,
     marginBottom: 24,
     borderWidth: 1,
-    borderColor: '#E3E1DC',
-  },
+    borderColor: '#E3E1DC' },
   taskField: {
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   fieldLabel: {
     fontSize: 14,
     fontWeight: '600',
     color: '#7A7A7A',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   fieldValue: {
     fontSize: 16,
     color: '#1A1A1A',
-    lineHeight: 22,
-  },
+    lineHeight: 22 },
   taskMetadata: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 16,
-    marginTop: 16,
-  },
+    marginTop: 16 },
   metaItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-  },
+    gap: 4 },
   metaText: {
     fontSize: 14,
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   reviewActions: {
     flexDirection: 'row',
-    gap: 12,
-  },
+    gap: 12 },
   reviewButton: {
-    flex: 1,
-  },
+    flex: 1 },
   errorContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 40,
-  },
+    padding: 40 },
   errorTitle: {
     fontSize: 20,
     fontWeight: '600',
     color: '#FF6B6B',
     marginTop: 16,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   errorMessage: {
     fontSize: 16,
     color: '#7A7A7A',
     textAlign: 'center',
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   retryButton: {
-    minWidth: 120,
-  },
-});
+    minWidth: 120 } });

@@ -13,5 +13,4 @@ interface AnalyticsStore {
 export const useAnalyticsStore = create<AnalyticsStore>((set) => ({
   isDialogOpen: false,
   openDialog: () => set({ isDialogOpen: true }),
-  closeDialog: () => set({ isDialogOpen: false }),
-}));
+  closeDialog: () => set({ isDialogOpen: false }) }));

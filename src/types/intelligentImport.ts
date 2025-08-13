@@ -271,8 +271,7 @@ export const FIELD_PATTERNS: Record<string, RegExp> = {
   age: /^(age|年齡|年龄)/i,
   title: /^(title|標題|职位|職稱|头衔|主題)/i,
   department: /^(department|部門|部门|dept|科室)/i,
-  tags: /^(tags|標籤|标签|labels|分類|类别)/i,
-};
+  tags: /^(tags|標籤|标签|labels|分類|类别)/i };
 
 // 常見資料格式
 export const DATA_FORMATS = {
@@ -289,8 +288,7 @@ export const DATA_FORMATS = {
     /^\d{2}\/\d{2}\/\d{4}$/,        // MM/DD/YYYY
     /^\d{4}\/\d{2}\/\d{2}$/,        // YYYY/MM/DD
     /^\d{4}年\d{1,2}月\d{1,2}日$/,   // 中文日期
-  ],
-};
+  ] };
 
 // 匯出結果
 export interface ImportResult {

@@ -10,8 +10,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { 
   getOrganizationBillingSummary,
@@ -41,8 +40,7 @@ interface BillingSummary {
 
 export const BillingManagementSection: React.FC<BillingManagementSectionProps> = ({
   organization,
-  onUpdate,
-}) => {
+  onUpdate }) => {
   const [billingSummary, setBillingSummary] = useState<BillingSummary | null>(null);
   const [billingHistory, setBillingHistory] = useState<BillingRecord[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -87,8 +85,7 @@ export const BillingManagementSection: React.FC<BillingManagementSectionProps> =
               console.error('升級方案失敗:', error);
               toast.error('升級失敗');
             }
-          },
-        },
+          } },
       ]
     );
   };
@@ -113,8 +110,7 @@ export const BillingManagementSection: React.FC<BillingManagementSectionProps> =
             } finally {
               setIsGenerating(false);
             }
-          },
-        },
+          } },
       ]
     );
   };
@@ -139,8 +135,7 @@ export const BillingManagementSection: React.FC<BillingManagementSectionProps> =
       paid: '已付款',
       pending: '待付款',
       overdue: '逾期',
-      cancelled: '已取消',
-    };
+      cancelled: '已取消' };
     return statusMap[status] || status;
   };
 
@@ -312,35 +307,29 @@ export const BillingManagementSection: React.FC<BillingManagementSectionProps> =
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: DesignSystem.spacing.xl,
-  },
+    padding: DesignSystem.spacing.xl },
   loadingText: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   summaryCard: {
     backgroundColor: DesignSystem.colors.background.surface,
     padding: DesignSystem.spacing.lg,
     borderRadius: DesignSystem.borderRadius.md,
     marginBottom: DesignSystem.spacing.md,
-    ...DesignSystem.shadows.sm,
-  },
+    ...DesignSystem.shadows.sm },
   summaryHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   summaryTitle: {
     ...DesignSystem.typography.h4,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   generateButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -349,65 +338,53 @@ const styles = StyleSheet.create({
     paddingVertical: DesignSystem.spacing.xs,
     borderWidth: 1,
     borderColor: DesignSystem.colors.primary,
-    borderRadius: DesignSystem.borderRadius.sm,
-  },
+    borderRadius: DesignSystem.borderRadius.sm },
   generateButtonText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.primary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   planInfo: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: DesignSystem.spacing.sm,
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   planBadge: {
     backgroundColor: DesignSystem.colors.primary,
     paddingHorizontal: DesignSystem.spacing.sm,
     paddingVertical: DesignSystem.spacing.xs,
-    borderRadius: DesignSystem.borderRadius.sm,
-  },
+    borderRadius: DesignSystem.borderRadius.sm },
   planText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.inverse,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   billingCycleText: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   billingRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: DesignSystem.spacing.sm,
-  },
+    paddingVertical: DesignSystem.spacing.sm },
   billingLabel: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   billingValue: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   totalRow: {
     borderTopWidth: 1,
     borderTopColor: DesignSystem.colors.border.light,
     marginTop: DesignSystem.spacing.sm,
-    paddingTop: DesignSystem.spacing.md,
-  },
+    paddingTop: DesignSystem.spacing.md },
   totalLabel: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   totalValue: {
     ...DesignSystem.typography.h4,
     color: DesignSystem.colors.primary,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   trialInfo: {
     marginTop: DesignSystem.spacing.md,
     padding: DesignSystem.spacing.md,
@@ -415,149 +392,122 @@ const styles = StyleSheet.create({
     borderRadius: DesignSystem.borderRadius.sm,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   trialText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.warning,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   upgradeButton: {
     backgroundColor: DesignSystem.colors.success,
     paddingHorizontal: DesignSystem.spacing.sm,
     paddingVertical: DesignSystem.spacing.xs,
-    borderRadius: DesignSystem.borderRadius.sm,
-  },
+    borderRadius: DesignSystem.borderRadius.sm },
   upgradeButtonText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.inverse,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   featuresCard: {
     backgroundColor: DesignSystem.colors.background.surface,
     padding: DesignSystem.spacing.lg,
     borderRadius: DesignSystem.borderRadius.md,
     marginBottom: DesignSystem.spacing.md,
-    ...DesignSystem.shadows.sm,
-  },
+    ...DesignSystem.shadows.sm },
   featuresTitle: {
     ...DesignSystem.typography.h4,
     color: DesignSystem.colors.text.primary,
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   featureItem: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: DesignSystem.spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   featureContent: {
     flex: 1,
-    marginLeft: DesignSystem.spacing.sm,
-  },
+    marginLeft: DesignSystem.spacing.sm },
   featureName: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   featureDesc: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginTop: DesignSystem.spacing.xs,
-  },
+    marginTop: DesignSystem.spacing.xs },
   historyCard: {
     backgroundColor: DesignSystem.colors.background.surface,
     padding: DesignSystem.spacing.lg,
     borderRadius: DesignSystem.borderRadius.md,
     marginBottom: DesignSystem.spacing.md,
-    ...DesignSystem.shadows.sm,
-  },
+    ...DesignSystem.shadows.sm },
   historyTitle: {
     ...DesignSystem.typography.h4,
     color: DesignSystem.colors.text.primary,
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   historyRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: DesignSystem.spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   historyInfo: {
-    flex: 1,
-  },
+    flex: 1 },
   historyPeriod: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   historyDetails: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginTop: DesignSystem.spacing.xs,
-  },
+    marginTop: DesignSystem.spacing.xs },
   historyAmount: {
-    alignItems: 'flex-end',
-  },
+    alignItems: 'flex-end' },
   amountText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
     fontWeight: '500',
-    marginBottom: DesignSystem.spacing.xs,
-  },
+    marginBottom: DesignSystem.spacing.xs },
   statusBadge: {
     paddingHorizontal: DesignSystem.spacing.sm,
     paddingVertical: DesignSystem.spacing.xs,
-    borderRadius: DesignSystem.borderRadius.sm,
-  },
+    borderRadius: DesignSystem.borderRadius.sm },
   statusText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.inverse,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   showMoreButton: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     gap: DesignSystem.spacing.xs,
     paddingVertical: DesignSystem.spacing.md,
-    marginTop: DesignSystem.spacing.sm,
-  },
+    marginTop: DesignSystem.spacing.sm },
   showMoreText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.primary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   pricingCard: {
     backgroundColor: DesignSystem.colors.background.surface,
     padding: DesignSystem.spacing.lg,
     borderRadius: DesignSystem.borderRadius.md,
     marginBottom: DesignSystem.spacing.md,
-    ...DesignSystem.shadows.sm,
-  },
+    ...DesignSystem.shadows.sm },
   pricingTitle: {
     ...DesignSystem.typography.h4,
     color: DesignSystem.colors.text.primary,
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   pricingRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: DesignSystem.spacing.sm,
-  },
+    paddingVertical: DesignSystem.spacing.sm },
   pricingLabel: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   pricingValue: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   pricingNote: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -565,14 +515,12 @@ const styles = StyleSheet.create({
     marginTop: DesignSystem.spacing.md,
     padding: DesignSystem.spacing.md,
     backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
-    borderRadius: DesignSystem.borderRadius.sm,
-  },
+    borderRadius: DesignSystem.borderRadius.sm },
   pricingNoteText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
     flex: 1,
-    lineHeight: 18,
-  },
+    lineHeight: 18 },
   developmentNotice: {
     backgroundColor: withAlpha(DesignSystem.colors.warning, 0.125),
     padding: DesignSystem.spacing.lg,
@@ -580,17 +528,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: withAlpha(DesignSystem.colors.warning, 0.25),
     alignItems: 'center',
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   developmentTitle: {
     ...DesignSystem.typography.h4,
     color: DesignSystem.colors.warning,
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   developmentText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.secondary,
     textAlign: 'center',
-    lineHeight: 20,
-  },
-});
+    lineHeight: 20 } });

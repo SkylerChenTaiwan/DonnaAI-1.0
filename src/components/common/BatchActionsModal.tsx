@@ -12,8 +12,7 @@ import {
   ScrollView,
   Pressable,
   Alert,
-  ActivityIndicator,
-} from 'react-native';
+  ActivityIndicator } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 
@@ -41,8 +40,7 @@ export const BatchActionsModal: React.FC<BatchActionsModalProps> = ({
   selectedCount,
   actions,
   onAction,
-  loading = false,
-}) => {
+  loading = false }) => {
   const handleAction = (action: BatchAction) => {
     if (action.confirmRequired) {
       Alert.alert(
@@ -56,8 +54,7 @@ export const BatchActionsModal: React.FC<BatchActionsModalProps> = ({
             onPress: () => {
               onAction(action);
               onClose();
-            },
-          },
+            } },
         ]
       );
     } else {
@@ -142,58 +139,48 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    justifyContent: 'flex-end',
-  },
+    justifyContent: 'flex-end' },
   container: {
     backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     paddingBottom: 34, // Safe area bottom
-    maxHeight: '80%',
-  },
+    maxHeight: '80%' },
   header: {
     alignItems: 'center',
     paddingTop: 12,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
-  },
+    borderBottomColor: '#E3E1DC' },
   handle: {
     width: 36,
     height: 5,
     backgroundColor: '#BEBEBE',
     borderRadius: 3,
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   title: {
     fontSize: 17,
     fontWeight: '600',
     color: '#1A1A1A',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   subtitle: {
     fontSize: 14,
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   content: {
-    paddingVertical: 8,
-  },
+    paddingVertical: 8 },
   loadingContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 60,
-  },
+    paddingVertical: 60 },
   loadingText: {
     fontSize: 16,
     color: '#7A7A7A',
-    marginTop: 12,
-  },
+    marginTop: 12 },
   actionItem: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 12,
-    paddingHorizontal: 20,
-  },
+    paddingHorizontal: 20 },
   actionIconContainer: {
     width: 44,
     height: 44,
@@ -201,33 +188,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0F0F0',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
-  },
+    marginRight: 12 },
   deleteIconContainer: {
-    backgroundColor: '#FFE5E5',
-  },
+    backgroundColor: '#FFE5E5' },
   actionTextContainer: {
-    flex: 1,
-  },
+    flex: 1 },
   actionLabel: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   deleteActionLabel: {
-    color: '#A94438',
-  },
+    color: '#A94438' },
   cancelButton: {
     backgroundColor: '#F0F0F0',
     borderRadius: 12,
     paddingVertical: 16,
     marginHorizontal: 20,
     marginTop: 16,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1A1A1A',
-  },
-});
+    color: '#1A1A1A' } });

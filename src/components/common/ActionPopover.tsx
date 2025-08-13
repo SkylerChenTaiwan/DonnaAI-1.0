@@ -40,22 +40,19 @@ const actions: Action[] = [
     type: 'customer',
     title: '客戶',
     subtitle: '建立新的客戶資料',
-    icon: 'person-add-outline',
-  },
+    icon: 'person-add-outline' },
   {
     id: '2',
     type: 'record',
     title: '紀錄',
     subtitle: '記錄會議或通話內容',
-    icon: 'document-text-outline',
-  },
+    icon: 'document-text-outline' },
   {
     id: '3',
     type: 'task',
     title: '任務',
     subtitle: '建立待辦事項',
-    icon: 'checkbox-outline',
-  },
+    icon: 'checkbox-outline' },
 ];
 
 export const ActionPopover = ({
@@ -63,8 +60,7 @@ export const ActionPopover = ({
   onClose,
   onAction,
   fromRef,
-  tabBarHeight = 88,
-}: ActionPopoverProps) => {
+  tabBarHeight = 88 }: ActionPopoverProps) => {
   const insets = useSafeAreaInsets();
   const slideAnim = React.useRef(new Animated.Value(0)).current;
   const [panelBottom, setPanelBottom] = React.useState(0);
@@ -87,26 +83,22 @@ export const ActionPopover = ({
       Animated.timing(slideAnim, {
         toValue: 1,
         duration: 250,
-        useNativeDriver: true,
-      }).start();
+        useNativeDriver: true }).start();
     } else {
       Animated.timing(slideAnim, {
         toValue: 0,
         duration: 200,
-        useNativeDriver: true,
-      }).start();
+        useNativeDriver: true }).start();
     }
   }, [visible, slideAnim]);
 
   const translateY = slideAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: [100, 0],
-  });
+    outputRange: [100, 0] });
 
   const opacity = slideAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, 0.3],
-  });
+    outputRange: [0, 0.3] });
 
   return (
     <Modal
@@ -133,8 +125,7 @@ export const ActionPopover = ({
             styles.actionPanel,
             {
               bottom: panelBottom || (tabBarHeight + insets.bottom),
-              transform: Platform.OS === 'web' ? `translateY(${0}px)` : [{ translateY: 0 }],
-            },
+              transform: Platform.OS === 'web' ? `translateY(${0}px)` : [{ translateY: 0 }] },
           ]}
         >
           <View style={styles.actionContainer}>
@@ -165,15 +156,13 @@ const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   overlay: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#000000',
-  },
+    backgroundColor: '#000000' },
   actionPanel: {
     position: 'absolute',
     left: 0,
@@ -182,21 +171,18 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#E5E7EB',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: -2 } }),
     shadowOpacity: 0.08,
     shadowRadius: 4,
-    elevation: 5,
-  },
+    elevation: 5 },
   actionContainer: {
     flexDirection: 'row',
     paddingVertical: 16, // 減小垂直內距
-    paddingHorizontal: 24,
-  },
+    paddingHorizontal: 24 },
   actionButton: {
     flex: 1,
     alignItems: 'center',
-    paddingHorizontal: 4,
-  },
+    paddingHorizontal: 4 },
   actionIconContainer: {
     width: 48, // 減小圖標容器
     height: 48,
@@ -204,12 +190,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 6,
-  },
+    marginBottom: 6 },
   actionTitle: {
     fontSize: 13,
     fontWeight: '500',
     color: '#1A1A1A',
-    textAlign: 'center',
-  },
-});
+    textAlign: 'center' } });

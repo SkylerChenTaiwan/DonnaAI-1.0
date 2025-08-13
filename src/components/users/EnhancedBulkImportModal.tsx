@@ -12,8 +12,7 @@ import {
   TouchableOpacity,
   Modal,
   Alert,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { 
   ImportUserData,
   UserImportStage,
@@ -57,8 +56,7 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
   visible,
   organization,
   onClose,
-  onImportComplete,
-}) => {
+  onImportComplete }) => {
   // 主要狀態
   const [currentStage, setCurrentStage] = useState<UserImportStage>('upload');
   const [completedStages, setCompletedStages] = useState<UserImportStage[]>([]);
@@ -827,8 +825,7 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -836,31 +833,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: DesignSystem.spacing.lg,
     paddingVertical: DesignSystem.spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
-  },
+    flex: 1 },
   closeButton: {
-    marginRight: DesignSystem.spacing.sm,
-  },
+    marginRight: DesignSystem.spacing.sm },
   headerTitle: {
     ...DesignSystem.typography.h3,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   organizationName: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   stageContent: {
     flex: 1,
-    padding: DesignSystem.spacing.lg,
-  },
+    padding: DesignSystem.spacing.lg },
   
   // Upload Stage
   uploadArea: {
@@ -871,21 +861,18 @@ const styles = StyleSheet.create({
     borderColor: DesignSystem.colors.border.light,
     borderStyle: 'dashed',
     borderRadius: DesignSystem.borderRadius.lg,
-    padding: DesignSystem.spacing.xl,
-  },
+    padding: DesignSystem.spacing.xl },
   uploadTitle: {
     ...DesignSystem.typography.h2,
     color: DesignSystem.colors.text.primary,
     marginTop: DesignSystem.spacing.lg,
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   uploadDesc: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.secondary,
     textAlign: 'center',
     marginBottom: DesignSystem.spacing.xl,
-    lineHeight: 24,
-  },
+    lineHeight: 24 },
   errorContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -893,63 +880,50 @@ const styles = StyleSheet.create({
     paddingHorizontal: DesignSystem.spacing.md,
     paddingVertical: DesignSystem.spacing.sm,
     borderRadius: DesignSystem.borderRadius.sm,
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   errorText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.error,
     marginLeft: DesignSystem.spacing.xs,
-    flex: 1,
-  },
+    flex: 1 },
   uploadButton: {
     marginBottom: DesignSystem.spacing.md,
-    minWidth: 120,
-  },
+    minWidth: 120 },
   templateLink: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: DesignSystem.spacing.xs,
-  },
+    gap: DesignSystem.spacing.xs },
   templateText: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.primary,
-  },
+    color: DesignSystem.colors.primary },
 
   // Preview Stage
   previewHeader: {
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   previewTitle: {
     ...DesignSystem.typography.h4,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
 
   // Configure Stage
   configTitle: {
     ...DesignSystem.typography.h3,
     color: DesignSystem.colors.text.primary,
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   configSection: {
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   configSectionTitle: {
     ...DesignSystem.typography.h5,
     color: DesignSystem.colors.text.primary,
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   configRow: {
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   configLabel: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   roleButtons: {
     flexDirection: 'row',
-    gap: DesignSystem.spacing.sm,
-  },
+    gap: DesignSystem.spacing.sm },
   roleButton: {
     flex: 1,
     paddingVertical: DesignSystem.spacing.sm,
@@ -958,24 +932,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: DesignSystem.colors.border.medium,
     backgroundColor: DesignSystem.colors.background.surface,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   roleButtonActive: {
     backgroundColor: DesignSystem.colors.primary,
-    borderColor: DesignSystem.colors.primary,
-  },
+    borderColor: DesignSystem.colors.primary },
   roleButtonText: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   roleButtonTextActive: {
-    color: DesignSystem.colors.text.inverse,
-  },
+    color: DesignSystem.colors.text.inverse },
   checkboxRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   checkbox: {
     width: 20,
     height: 20,
@@ -985,148 +954,118 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: DesignSystem.colors.background.primary,
-    marginRight: DesignSystem.spacing.sm,
-  },
+    marginRight: DesignSystem.spacing.sm },
   checkboxChecked: {
     backgroundColor: DesignSystem.colors.primary,
-    borderColor: DesignSystem.colors.primary,
-  },
+    borderColor: DesignSystem.colors.primary },
   checkboxLabel: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
-    flex: 1,
-  },
+    flex: 1 },
 
   // Importing Stage
   importingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   importingTitle: {
     ...DesignSystem.typography.h3,
     color: DesignSystem.colors.text.primary,
     marginTop: DesignSystem.spacing.lg,
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   importingCurrent: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.secondary,
     textAlign: 'center',
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   progressStats: {
     alignItems: 'center',
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   progressText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
-    marginBottom: DesignSystem.spacing.xs,
-  },
+    marginBottom: DesignSystem.spacing.xs },
   importErrors: {
     width: '100%',
-    maxWidth: 300,
-  },
+    maxWidth: 300 },
   importErrorsTitle: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.error,
     fontWeight: '600',
-    marginBottom: DesignSystem.spacing.xs,
-  },
+    marginBottom: DesignSystem.spacing.xs },
   importErrorItem: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.error,
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
 
   // Complete Stage
   resultContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   resultTitle: {
     ...DesignSystem.typography.h2,
     color: DesignSystem.colors.text.primary,
     marginTop: DesignSystem.spacing.lg,
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   resultStats: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     width: '100%',
     maxWidth: 300,
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   resultStatItem: {
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   resultStatNumber: {
     ...DesignSystem.typography.h3,
     color: DesignSystem.colors.success,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   resultStatNumberError: {
-    color: DesignSystem.colors.error,
-  },
+    color: DesignSystem.colors.error },
   resultStatNumberSkipped: {
-    color: DesignSystem.colors.warning,
-  },
+    color: DesignSystem.colors.warning },
   resultStatLabel: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginTop: DesignSystem.spacing.xxs,
-  },
+    marginTop: DesignSystem.spacing.xxs },
   resultErrors: {
     width: '100%',
     maxWidth: 400,
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   resultErrorsTitle: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.error,
     fontWeight: '600',
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   resultErrorsList: {
-    maxHeight: 150,
-  },
+    maxHeight: 150 },
   resultErrorItem: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.error,
-    marginBottom: DesignSystem.spacing.xxs,
-  },
+    marginBottom: DesignSystem.spacing.xxs },
   resultWarnings: {
     width: '100%',
     maxWidth: 400,
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   resultWarningsTitle: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.warning,
     fontWeight: '600',
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   resultWarningItem: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.warning,
-    marginBottom: DesignSystem.spacing.xxs,
-  },
+    marginBottom: DesignSystem.spacing.xxs },
   completeButton: {
-    minWidth: 120,
-  },
+    minWidth: 120 },
 
   // Common
   stageActions: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: DesignSystem.spacing.xl,
-  },
+    marginTop: DesignSystem.spacing.xl },
   actionButton: {
     flex: 1,
-    marginHorizontal: DesignSystem.spacing.xs,
-  },
-});
+    marginHorizontal: DesignSystem.spacing.xs } });
 
 export default EnhancedBulkImportModal;

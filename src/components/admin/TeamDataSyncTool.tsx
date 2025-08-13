@@ -13,8 +13,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
-  Alert as RNAlert,
-} from 'react-native';
+  Alert as RNAlert, Platform } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { useAuthStore } from '@/stores/authStore';
 import {
@@ -262,66 +261,53 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 8,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
     margin: 16,
-    padding: 16,
-  },
+    padding: 16 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   title: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
-  },
+    color: '#333' },
   expandButton: {
-    padding: 4,
-  },
+    padding: 4 },
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   description: {
     fontSize: 14,
     color: '#666',
     marginBottom: 16,
-    lineHeight: 20,
-  },
+    lineHeight: 20 },
   alert: {
     padding: 12,
     borderRadius: 4,
     marginBottom: 16,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   alertsuccess: {
-    backgroundColor: '#e8f5e9',
-  },
+    backgroundColor: '#e8f5e9' },
   alerterror: {
-    backgroundColor: '#ffebee',
-  },
+    backgroundColor: '#ffebee' },
   alertinfo: {
-    backgroundColor: '#e3f2fd',
-  },
+    backgroundColor: '#e3f2fd' },
   alertText: {
     flex: 1,
     fontSize: 14,
-    color: '#333',
-  },
+    color: '#333' },
   alertClose: {
-    padding: 4,
-  },
+    padding: 4 },
   buttonRow: {
     flexDirection: 'row',
     gap: 12,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   button: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -329,83 +315,66 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 4,
-    flex: 1,
-  },
+    flex: 1 },
   outlineButton: {
     borderWidth: 1,
     borderColor: '#1976d2',
-    backgroundColor: 'transparent',
-  },
+    backgroundColor: 'transparent' },
   primaryButton: {
-    backgroundColor: '#1976d2',
-  },
+    backgroundColor: '#1976d2' },
   buttonDisabled: {
-    opacity: 0.5,
-  },
+    opacity: 0.5 },
   outlineButtonText: {
     color: '#1976d2',
     fontSize: 14,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   primaryButtonText: {
     color: 'white',
     fontSize: 14,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   loadingContainer: {
     paddingVertical: 20,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   divider: {
     height: 1,
     backgroundColor: '#e0e0e0',
-    marginVertical: 16,
-  },
+    marginVertical: 16 },
   subtitle: {
     fontSize: 16,
     fontWeight: '500',
     color: '#333',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   list: {
-    maxHeight: 300,
-  },
+    maxHeight: 300 },
   listItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
+    borderBottomColor: '#f0f0f0' },
   listItemContent: {
-    flex: 1,
-  },
+    flex: 1 },
   chipContainer: {
     flexDirection: 'row',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   chip: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 16,
-    gap: 4,
-  },
+    gap: 4 },
   chipText: {
     fontSize: 12,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   itemText: {
     fontSize: 14,
     color: '#333',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   itemDescription: {
     fontSize: 12,
-    color: '#666',
-  },
+    color: '#666' },
   syncButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -413,20 +382,15 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: '#1976d2',
-  },
+    borderColor: '#1976d2' },
   syncButtonText: {
     fontSize: 12,
-    color: '#1976d2',
-  },
+    color: '#1976d2' },
   successContainer: {
     alignItems: 'center',
-    paddingVertical: 32,
-  },
+    paddingVertical: 32 },
   successText: {
     fontSize: 14,
     color: '#666',
     marginTop: 12,
-    textAlign: 'center',
-  },
-});
+    textAlign: 'center' } });

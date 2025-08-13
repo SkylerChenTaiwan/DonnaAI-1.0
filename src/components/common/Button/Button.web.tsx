@@ -41,8 +41,7 @@ export const Button: React.FC<ButtonProps> = ({
   type = 'button',
   fullWidth = false,
   'aria-label': ariaLabel,
-  'data-testid': dataTestId,
-}) => {
+  'data-testid': dataTestId }) => {
   // 使用內聯樣式確保最高優先級
   const getButtonStyle = (): React.CSSProperties => {
     // 基礎樣式
@@ -61,8 +60,7 @@ export const Button: React.FC<ButtonProps> = ({
       width: fullWidth ? '100%' : 'auto',
       boxSizing: 'border-box',
       userSelect: 'none',
-      position: 'relative',
-    };
+      position: 'relative' };
 
     // 尺寸樣式
     const sizeStyles = {
@@ -83,42 +81,34 @@ export const Button: React.FC<ButtonProps> = ({
         fontSize: '16px', 
         lineHeight: '22px',
         gap: '8px'
-      },
-    };
+      } };
 
     // 變體樣式 - 使用 !important 確保顏色生效
     const variantStyles = {
       primary: {
         backgroundColor: webColorOverrides.button.primary.default,
-        color: `${webColorOverrides.button.primary.text} !important`,
-      },
+        color: `${webColorOverrides.button.primary.text} !important` },
       secondary: {
         backgroundColor: webColorOverrides.button.secondary.default,
-        color: `${webColorOverrides.button.secondary.text} !important`,
-      },
+        color: `${webColorOverrides.button.secondary.text} !important` },
       outline: {
         backgroundColor: 'transparent',
         color: `${webColorOverrides.button.outline.text} !important`,
-        border: `1px solid ${webColorOverrides.button.outline.border}`,
-      },
+        border: `1px solid ${webColorOverrides.button.outline.border}` },
       ghost: {
         backgroundColor: 'transparent',
-        color: `${webColorOverrides.text.primary} !important`,
-      },
+        color: `${webColorOverrides.text.primary} !important` },
       text: {
         backgroundColor: 'transparent',
         color: `${webColorOverrides.text.primary} !important`,
         padding: '0',
-        textDecoration: 'underline',
-      },
-    };
+        textDecoration: 'underline' } };
 
     return {
       ...baseStyle,
       ...sizeStyles[size],
       ...variantStyles[variant],
-      ...style,
-    };
+      ...style };
   };
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {

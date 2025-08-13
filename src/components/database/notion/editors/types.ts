@@ -36,8 +36,7 @@ export const EDITOR_STYLES = {
     backgroundColor: '#ffffff',
     border: '2px solid #0073E6',
     borderRadius: '3px',
-    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
-  },
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)' },
   input: {
     width: '100%',
     height: '100%',
@@ -47,8 +46,7 @@ export const EDITOR_STYLES = {
     fontSize: '14px',
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
     color: '#37352f',
-    backgroundColor: 'transparent',
-  },
+    backgroundColor: 'transparent' },
   dropdown: {
     position: 'absolute' as const,
     top: '100%',
@@ -61,20 +59,15 @@ export const EDITOR_STYLES = {
     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
     maxHeight: '300px',
     overflowY: 'auto' as const,
-    zIndex: 1001,
-  },
+    zIndex: 1001 },
   option: {
     padding: '6px 12px',
     fontSize: '14px',
     color: '#37352f',
     cursor: 'pointer',
-    transition: 'background-color 0.15s ease',
-  },
+    transition: 'background-color 0.15s ease' },
   optionHover: {
-    backgroundColor: 'rgba(0, 0, 0, 0.03)',
-  },
+    backgroundColor: 'rgba(0, 0, 0, 0.03)' },
   optionSelected: {
     backgroundColor: 'rgba(35, 131, 226, 0.08)',
-    color: '#0073E6',
-  },
-};
+    color: '#0073E6' } };

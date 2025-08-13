@@ -12,8 +12,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { responsive } from '@/styles/web';
 
@@ -109,8 +108,7 @@ export const AddColumnDialog: React.FC<AddColumnDialogProps> = ({
       type: columnType,
       required,
       options,
-      defaultValue: defaultValue || undefined,
-    };
+      defaultValue: defaultValue || undefined };
 
     // 根據類型添加特定屬性
     switch (columnType) {
@@ -302,16 +300,14 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   modalOverlay: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
+    backgroundColor: 'rgba(0, 0, 0, 0.5)' },
   modalContent: {
     width: '90%',
     maxWidth: responsive({ mobile: 400, tablet: 500, desktop: 600 }),
@@ -320,10 +316,9 @@ const styles = StyleSheet.create({
     borderRadius: responsive({ mobile: 12, tablet: 14, desktop: 16 }),
     elevation: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),
     shadowOpacity: 0.3,
-    shadowRadius: 12,
-  },
+    shadowRadius: 12 },
   modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -331,29 +326,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: responsive({ mobile: 20, tablet: 24, desktop: 28 }),
     paddingVertical: responsive({ mobile: 16, tablet: 18, desktop: 20 }),
     borderBottomWidth: 1,
-    borderBottomColor: '#eeeeec',
-  },
+    borderBottomColor: '#eeeeec' },
   modalTitle: {
     fontSize: responsive({ mobile: 18, tablet: 20, desktop: 22 }),
     fontWeight: '600',
-    color: '#37352f',
-  },
+    color: '#37352f' },
   closeButton: {
-    padding: responsive({ mobile: 4, tablet: 6, desktop: 8 }),
-  },
+    padding: responsive({ mobile: 4, tablet: 6, desktop: 8 }) },
   modalBody: {
     paddingHorizontal: responsive({ mobile: 20, tablet: 24, desktop: 28 }),
-    paddingVertical: responsive({ mobile: 16, tablet: 18, desktop: 20 }),
-  },
+    paddingVertical: responsive({ mobile: 16, tablet: 18, desktop: 20 }) },
   inputSection: {
-    marginBottom: responsive({ mobile: 20, tablet: 24, desktop: 28 }),
-  },
+    marginBottom: responsive({ mobile: 20, tablet: 24, desktop: 28 }) },
   label: {
     fontSize: responsive({ mobile: 14, tablet: 15, desktop: 16 }),
     fontWeight: '500',
     color: '#37352f',
-    marginBottom: responsive({ mobile: 8, tablet: 10, desktop: 12 }),
-  },
+    marginBottom: responsive({ mobile: 8, tablet: 10, desktop: 12 }) },
   input: {
     borderWidth: 1,
     borderColor: '#eeeeec',
@@ -361,17 +350,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: responsive({ mobile: 12, tablet: 14, desktop: 16 }),
     paddingVertical: responsive({ mobile: 10, tablet: 12, desktop: 14 }),
     fontSize: responsive({ mobile: 14, tablet: 15, desktop: 16 }),
-    color: '#37352f',
-  },
+    color: '#37352f' },
   textArea: {
     minHeight: responsive({ mobile: 80, tablet: 90, desktop: 100 }),
-    textAlignVertical: 'top',
-  },
+    textAlignVertical: 'top' },
   typeGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: responsive({ mobile: 8, tablet: 10, desktop: 12 }),
-  },
+    gap: responsive({ mobile: 8, tablet: 10, desktop: 12 }) },
   typeButton: {
     width: responsive({ mobile: 100, tablet: 110, desktop: 120 }),
     paddingVertical: responsive({ mobile: 12, tablet: 14, desktop: 16 }),
@@ -380,52 +366,42 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#eeeeec',
     alignItems: 'center',
-    backgroundColor: '#f9f8f7',
-  },
+    backgroundColor: '#f9f8f7' },
   typeButtonActive: {
     borderColor: '#FF6B6B',
-    backgroundColor: 'rgba(255, 107, 107, 0.1)',
-  },
+    backgroundColor: 'rgba(255, 107, 107, 0.1)' },
   typeLabel: {
     fontSize: responsive({ mobile: 12, tablet: 13, desktop: 14 }),
     fontWeight: '500',
     color: '#666',
-    marginTop: responsive({ mobile: 4, tablet: 5, desktop: 6 }),
-  },
+    marginTop: responsive({ mobile: 4, tablet: 5, desktop: 6 }) },
   typeLabelActive: {
-    color: '#FF6B6B',
-  },
+    color: '#FF6B6B' },
   typeDescription: {
     fontSize: responsive({ mobile: 10, tablet: 11, desktop: 12 }),
     color: '#999',
     marginTop: responsive({ mobile: 2, tablet: 3, desktop: 4 }),
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   advancedToggle: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingVertical: responsive({ mobile: 12, tablet: 14, desktop: 16 }),
-    marginBottom: responsive({ mobile: 12, tablet: 14, desktop: 16 }),
-  },
+    marginBottom: responsive({ mobile: 12, tablet: 14, desktop: 16 }) },
   advancedToggleText: {
     fontSize: responsive({ mobile: 14, tablet: 15, desktop: 16 }),
     color: '#666',
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   advancedSection: {
-    paddingBottom: responsive({ mobile: 12, tablet: 14, desktop: 16 }),
-  },
+    paddingBottom: responsive({ mobile: 12, tablet: 14, desktop: 16 }) },
   checkboxRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: responsive({ mobile: 8, tablet: 10, desktop: 12 }),
-    marginBottom: responsive({ mobile: 16, tablet: 18, desktop: 20 }),
-  },
+    marginBottom: responsive({ mobile: 16, tablet: 18, desktop: 20 }) },
   checkboxLabel: {
     fontSize: responsive({ mobile: 14, tablet: 15, desktop: 16 }),
-    color: '#37352f',
-  },
+    color: '#37352f' },
   modalActions: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
@@ -433,31 +409,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: responsive({ mobile: 20, tablet: 24, desktop: 28 }),
     paddingVertical: responsive({ mobile: 16, tablet: 18, desktop: 20 }),
     borderTopWidth: 1,
-    borderTopColor: '#eeeeec',
-  },
+    borderTopColor: '#eeeeec' },
   cancelButton: {
     paddingHorizontal: responsive({ mobile: 20, tablet: 24, desktop: 28 }),
     paddingVertical: responsive({ mobile: 10, tablet: 12, desktop: 14 }),
     borderRadius: responsive({ mobile: 6, tablet: 8, desktop: 8 }),
-    backgroundColor: '#f9f8f7',
-  },
+    backgroundColor: '#f9f8f7' },
   cancelText: {
     fontSize: responsive({ mobile: 14, tablet: 15, desktop: 16 }),
     color: '#666',
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   confirmButton: {
     paddingHorizontal: responsive({ mobile: 20, tablet: 24, desktop: 28 }),
     paddingVertical: responsive({ mobile: 10, tablet: 12, desktop: 14 }),
     borderRadius: responsive({ mobile: 6, tablet: 8, desktop: 8 }),
-    backgroundColor: '#FF6B6B',
-  },
+    backgroundColor: '#FF6B6B' },
   confirmButtonDisabled: {
-    backgroundColor: '#ffb3b3',
-  },
+    backgroundColor: '#ffb3b3' },
   confirmText: {
     fontSize: responsive({ mobile: 14, tablet: 15, desktop: 16 }),
     color: '#fff',
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600' } });

@@ -10,8 +10,7 @@ import {
   Text,
   StyleSheet,
   Platform,
-  TouchableOpacity,
-} from 'react-native';
+  TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { DesignSystem } from '@/theme/designSystem';
 // Icon import removed - using platform-specific Icon component;
@@ -38,8 +37,7 @@ export const FormSelect: React.FC<FormSelectProps> = ({
   onChange,
   required = false,
   error,
-  placeholder = '請選擇...',
-}) => {
+  placeholder = '請選擇...' }) => {
   return (
     <View style={styles.container}>
       <View style={styles.labelContainer}>
@@ -68,8 +66,7 @@ export const FormSelect: React.FC<FormSelectProps> = ({
                 WebkitAppearance: 'none',
                 MozAppearance: 'none',
                 cursor: 'pointer',
-                fontFamily: 'inherit',
-              } as any}
+                fontFamily: 'inherit' } as any}
             >
               <option value="" disabled>
                 {placeholder}
@@ -112,21 +109,17 @@ export const FormSelect: React.FC<FormSelectProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   labelContainer: {
     flexDirection: 'row',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   label: {
     fontSize: 14,
     fontWeight: '500',
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   required: {
     color: DesignSystem.colors.status.error,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   selectContainer: {
     position: 'relative',
     borderWidth: 1,
@@ -134,15 +127,12 @@ const styles = StyleSheet.create({
     borderRadius: DesignSystem.borderRadius.md,
     backgroundColor: DesignSystem.colors.background.surface,
     minHeight: 48,
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   selectError: {
-    borderColor: DesignSystem.colors.status.error,
-  },
+    borderColor: DesignSystem.colors.status.error },
   picker: {
     height: 48,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   webSelect: {
     width: '100%',
     height: 48,
@@ -156,18 +146,14 @@ const styles = StyleSheet.create({
     appearance: 'none',
     WebkitAppearance: 'none',
     MozAppearance: 'none',
-    cursor: 'pointer',
-  } as any,
+    cursor: 'pointer' } as any,
   selectIcon: {
     position: 'absolute',
     right: 12,
     top: '50%',
     transform: Platform.OS === 'web' ? `translateY(${-10}px)` : [{ translateY: -10 }],
-    pointerEvents: 'none',
-  },
+    pointerEvents: 'none' },
   error: {
     fontSize: 12,
     color: DesignSystem.colors.status.error,
-    marginTop: 4,
-  },
-});
+    marginTop: 4 } });

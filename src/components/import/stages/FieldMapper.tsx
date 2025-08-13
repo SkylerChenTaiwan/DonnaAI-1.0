@@ -474,7 +474,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                     top: 2,
                     elevation: 2,
                     shadowColor: '#000000',
-                    shadowOffset: { width: 0, height: 1 },
+                    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
                     shadowOpacity: 0.15,
                     shadowRadius: 2
                   }
@@ -969,8 +969,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                     styles.fieldOption,
                     { 
                       backgroundColor: colors.gray50,
-                      borderColor: colors.gray200,
-                    }
+                      borderColor: colors.gray200 }
                   ]}
                   onPress={() => {
                     console.log('選擇欄位:', field.key);
@@ -1002,8 +1001,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                   styles.fieldOption,
                   { 
                     backgroundColor: withAlpha(colors.success, 0.063),
-                    borderColor: withAlpha(colors.success, 0.25),
-                  }
+                    borderColor: withAlpha(colors.success, 0.25) }
                 ]}
                 onPress={() => {
                   console.log('建立新欄位');
@@ -1059,8 +1057,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                   styles.fieldOption,
                   { 
                     backgroundColor: colors.gray50,
-                    borderColor: colors.gray200,
-                  }
+                    borderColor: colors.gray200 }
                 ]}
                 onPress={() => selectField(field.key)}
               >
@@ -1088,8 +1085,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                 styles.fieldOption,
                 { 
                   backgroundColor: withAlpha(colors.success, 0.063),
-                  borderColor: withAlpha(colors.success, 0.25),
-                }
+                  borderColor: withAlpha(colors.success, 0.25) }
               ]}
               onPress={() => selectField('new_field')}
             >
@@ -1162,8 +1158,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                     styles.fieldOption,
                     { 
                       backgroundColor: colors.gray50,
-                      borderColor: colors.gray200,
-                    }
+                      borderColor: colors.gray200 }
                   ]}
                   onPress={() => {
                     console.log('選擇目標資料庫:', database);
@@ -1225,8 +1220,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                       styles.fieldOption,
                       { 
                         backgroundColor: colors.gray50,
-                        borderColor: colors.gray200,
-                      }
+                        borderColor: colors.gray200 }
                     ]}
                     onPress={() => {
                       console.log('選擇關聯類型:', type.value);
@@ -1307,8 +1301,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                     styles.fieldOption,
                     { 
                       backgroundColor: colors.gray50,
-                      borderColor: colors.gray200,
-                    }
+                      borderColor: colors.gray200 }
                   ]}
                   onPress={() => {
                     if (selectedMapping) {
@@ -1366,8 +1359,7 @@ const FieldMapper: React.FC<FieldMapperProps> = ({
                       styles.fieldOption,
                       { 
                         backgroundColor: colors.gray50,
-                        borderColor: colors.gray200,
-                      }
+                        borderColor: colors.gray200 }
                     ]}
                     onPress={() => {
                       console.log('選擇關聯類型:', type.value);
@@ -1504,7 +1496,7 @@ const styles = StyleSheet.create({
     left: 3,
     elevation: 2,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
     shadowOpacity: 0.15,
     shadowRadius: 2
   },
@@ -1678,7 +1670,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     elevation: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),
     shadowOpacity: 0.25,
     shadowRadius: 8
   },

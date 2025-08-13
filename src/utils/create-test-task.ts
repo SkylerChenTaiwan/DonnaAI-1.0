@@ -17,8 +17,7 @@ export async function createTestTask(userId: string, organizationId: string) {
     dueDate: Timestamp.fromDate(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)), // 一週後
     assigneeId: userId,
     organizationId: organizationId,
-    tags: ['測試', 'NotionTable'],
-  };
+    tags: ['測試', 'NotionTable'] };
   
   try {
     const result = await createTask(testTask, userId);

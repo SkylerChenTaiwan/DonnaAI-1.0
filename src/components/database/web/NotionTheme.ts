@@ -41,8 +41,7 @@ export const NotionColors = {
   purpleBg: '#eae4f2',
   pinkBg: '#f4dfeb',
   redBg: '#fbe4e4',
-  grayBg: '#ebeced',
-};
+  grayBg: '#ebeced' };
 
 export const NotionFonts = {
   // 字體家族
@@ -63,8 +62,7 @@ export const NotionFonts = {
   
   // 行高
   lineHeightBody: 1.5,
-  lineHeightHeader: 1.2,
-};
+  lineHeightHeader: 1.2 };
 
 export const NotionSpacing = {
   // 間距
@@ -83,8 +81,7 @@ export const NotionSpacing = {
   cellPaddingH: '8px',
   cellPaddingV: '5px',
   headerHeight: '36px',
-  rowHeight: '36px',
-};
+  rowHeight: '36px' };
 
 export const NotionStyles = {
   // 圓角
@@ -103,8 +100,7 @@ export const NotionStyles = {
     borderCollapse: 'collapse',
     width: '100%',
     fontSize: NotionFonts.sizeBody,
-    color: NotionColors.default,
-  },
+    color: NotionColors.default },
   
   tableHeader: {
     backgroundColor: NotionColors.bgDefault,
@@ -112,8 +108,7 @@ export const NotionStyles = {
     height: NotionSpacing.headerHeight,
     fontSize: NotionFonts.sizeBody,
     fontWeight: NotionFonts.weightMedium,
-    color: NotionColors.gray,
-  },
+    color: NotionColors.gray },
   
   tableCell: {
     padding: `${NotionSpacing.cellPaddingV} ${NotionSpacing.cellPaddingH}`,
@@ -121,10 +116,7 @@ export const NotionStyles = {
     borderBottom: `1px solid ${NotionColors.border}`,
     height: NotionSpacing.rowHeight,
     fontSize: NotionFonts.sizeBody,
-    color: NotionColors.default,
-  },
+    color: NotionColors.default },
   
   tableCellHover: {
-    backgroundColor: NotionColors.bgGray,
-  },
-};
+    backgroundColor: NotionColors.bgGray } };

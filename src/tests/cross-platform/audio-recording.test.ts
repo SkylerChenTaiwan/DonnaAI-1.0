@@ -87,8 +87,7 @@ describe('跨平台音訊錄製測試', () => {
       try {
         await Audio.setAudioModeAsync({
           allowsRecordingIOS: true,
-          playsInSilentModeIOS: true,
-        });
+          playsInSilentModeIOS: true });
         
         // 如果沒有拋出錯誤，則初始化成功
         expect(true).toBe(true);

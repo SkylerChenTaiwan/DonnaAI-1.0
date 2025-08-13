@@ -10,8 +10,7 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
+  ActivityIndicator, Platform } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '../../theme/DesignSystem';
@@ -47,8 +46,7 @@ interface ActivityModalProps {
 export const ActivityModal: React.FC<ActivityModalProps> = ({
   visible,
   user,
-  onClose,
-}) => {
+  onClose }) => {
   const [activityLogs, setActivityLogs] = useState<ActivityLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState<'overview' | 'logs'>('overview');
@@ -79,8 +77,7 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({
           action: data.action,
           timestamp: data.timestamp?.toDate() || new Date(),
           details: data.details,
-          module: data.module,
-        });
+          module: data.module });
       });
       
       setActivityLogs(logs);
@@ -273,182 +270,144 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   modalContent: {
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: DesignSystem.radius.lg,
     width: '90%',
     maxWidth: 600,
     maxHeight: '85%',
-    shadowOffset: { width: 0, height: 4 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),
     shadowOpacity: 0.15,
     shadowRadius: 12,
-    elevation: 8,
-  },
+    elevation: 8 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: DesignSystem.spacing.lg,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   title: {
     fontSize: DesignSystem.typography.title.fontSize,
     fontWeight: DesignSystem.typography.title.fontWeight as any,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   closeButton: {
-    padding: DesignSystem.spacing.sm,
-  },
+    padding: DesignSystem.spacing.sm },
   userInfo: {
     padding: DesignSystem.spacing.lg,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   userName: {
     fontSize: DesignSystem.typography.heading.fontSize,
     fontWeight: DesignSystem.typography.heading.fontWeight as any,
     color: DesignSystem.colors.text.primary,
-    marginBottom: DesignSystem.spacing.xs,
-  },
+    marginBottom: DesignSystem.spacing.xs },
   userEmail: {
     fontSize: DesignSystem.typography.body.fontSize,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   tabContainer: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   tab: {
     flex: 1,
     paddingVertical: DesignSystem.spacing.md,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   tabActive: {
     borderBottomWidth: 2,
-    borderBottomColor: DesignSystem.colors.primary,
-  },
+    borderBottomColor: DesignSystem.colors.primary },
   tabText: {
     fontSize: DesignSystem.typography.body.fontSize,
     color: DesignSystem.colors.text.secondary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   tabTextActive: {
     color: DesignSystem.colors.primary,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   contentContainer: {
-    flex: 1,
-  },
+    flex: 1 },
   overviewContainer: {
-    padding: DesignSystem.spacing.lg,
-  },
+    padding: DesignSystem.spacing.lg },
   statusCard: {
     backgroundColor: DesignSystem.colors.background.elevated,
     borderRadius: DesignSystem.radius.md,
     padding: DesignSystem.spacing.md,
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   statusRow: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
+    justifyContent: 'space-around' },
   statusItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: DesignSystem.spacing.sm,
-  },
+    gap: DesignSystem.spacing.sm },
   statusDot: {
     width: 8,
     height: 8,
-    borderRadius: 4,
-  },
+    borderRadius: 4 },
   onlineDot: {
-    backgroundColor: DesignSystem.colors.status.success,
-  },
+    backgroundColor: DesignSystem.colors.status.success },
   offlineDot: {
-    backgroundColor: DesignSystem.colors.gray400,
-  },
+    backgroundColor: DesignSystem.colors.gray400 },
   statusLabel: {
     fontSize: DesignSystem.typography.body.fontSize,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   statsGrid: {
     flexDirection: 'row',
     gap: DesignSystem.spacing.md,
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   statCard: {
     flex: 1,
     backgroundColor: DesignSystem.colors.background.elevated,
     borderRadius: DesignSystem.radius.md,
     padding: DesignSystem.spacing.md,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   statValue: {
     fontSize: 24,
     fontWeight: 'bold',
     color: DesignSystem.colors.primary,
-    marginBottom: DesignSystem.spacing.xs,
-  },
+    marginBottom: DesignSystem.spacing.xs },
   statLabel: {
     fontSize: DesignSystem.typography.caption.fontSize,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   chartContainer: {
     backgroundColor: DesignSystem.colors.background.elevated,
     borderRadius: DesignSystem.radius.md,
-    padding: DesignSystem.spacing.md,
-  },
+    padding: DesignSystem.spacing.md },
   chartTitle: {
     fontSize: DesignSystem.typography.subheading.fontSize,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   logsContainer: {
-    padding: DesignSystem.spacing.lg,
-  },
+    padding: DesignSystem.spacing.lg },
   logItem: {
     flexDirection: 'row',
     marginBottom: DesignSystem.spacing.md,
-    gap: DesignSystem.spacing.md,
-  },
+    gap: DesignSystem.spacing.md },
   logIcon: {
     width: 40,
     height: 40,
     borderRadius: 20,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   logContent: {
-    flex: 1,
-  },
+    flex: 1 },
   logAction: {
     fontSize: DesignSystem.typography.body.fontSize,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   logDetails: {
     fontSize: DesignSystem.typography.caption.fontSize,
     color: DesignSystem.colors.text.secondary,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   logTime: {
     fontSize: DesignSystem.typography.caption.fontSize,
-    color: DesignSystem.colors.text.tertiary,
-  },
+    color: DesignSystem.colors.text.tertiary },
   emptyState: {
     alignItems: 'center',
-    paddingVertical: DesignSystem.spacing.xxl,
-  },
+    paddingVertical: DesignSystem.spacing.xxl },
   emptyText: {
     fontSize: DesignSystem.typography.body.fontSize,
     color: DesignSystem.colors.text.tertiary,
-    marginTop: DesignSystem.spacing.md,
-  },
-});
+    marginTop: DesignSystem.spacing.md } });

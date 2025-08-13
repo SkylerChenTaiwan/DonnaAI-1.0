@@ -76,8 +76,7 @@ export async function importLegacyRecords(
     nameToCode,
     codeToLevel,
     batchSize = BATCH_SIZE,
-    updateCustomerLastContact = true,
-  } = options;
+    updateCustomerLastContact = true } = options;
 
   const errors: ImportError[] = [];
   const warnings: ImportWarning[] = [];
@@ -100,8 +99,7 @@ export async function importLegacyRecords(
     skipped: 0,
     currentBatch: 0,
     totalBatches,
-    phase: 'preparing',
-  };
+    phase: 'preparing' };
   onProgress?.(progress);
 
   try {
@@ -134,8 +132,7 @@ export async function importLegacyRecords(
           codeToName,
           nameToCode,
           codeToLevel,
-          customerLastContactDates,
-        }
+          customerLastContactDates }
       );
 
       // 更新統計
@@ -189,8 +186,7 @@ export async function importLegacyRecords(
       recordMappings,
       unmatchedCustomers,
       unmatchedUsers,
-      duration: Date.now() - startTime,
-    };
+      duration: Date.now() - startTime };
 
   } catch (error) {
     console.error('批量導入記錄失敗:', error);
@@ -270,8 +266,7 @@ async function processBatch(
           row,
           field: '業務帳號',
           message: `找不到業務人員: ${record.業務帳號}`,
-          suggestion: '記錄將被跳過',
-        });
+          suggestion: '記錄將被跳過' });
         skippedCount++;
         continue;
       }
@@ -286,8 +281,7 @@ async function processBatch(
           row,
           field: '客戶名稱',
           message: `找不到客戶: ${record.客戶名稱}`,
-          suggestion: '記錄將被跳過',
-        });
+          suggestion: '記錄將被跳過' });
         skippedCount++;
         continue;
       }
@@ -317,8 +311,7 @@ async function processBatch(
         updatedAt: Timestamp.now(),
         createdBy: userId, // 添加 createdBy 欄位
         teamMembers: [userId], // 添加 teamMembers 欄位以符合 Firestore 規則
-        metadata: mappedRecord.metadata,
-      };
+        metadata: mappedRecord.metadata };
 
       // 如果有下次跟進日期，創建對應的任務
       if (mappedRecord.nextFollowUpDate) {
@@ -328,8 +321,7 @@ async function processBatch(
           row,
           field: '下次跟進日期',
           message: `記錄有跟進日期 ${mappedRecord.nextFollowUpDate.toLocaleDateString()}`,
-          suggestion: '請手動創建跟進任務',
-        });
+          suggestion: '請手動創建跟進任務' });
       }
 
       batch.set(recordRef, recordData);
@@ -359,8 +351,7 @@ async function processBatch(
         row,
         field: 'general',
         message: error instanceof Error ? error.message : '未知錯誤',
-        data: record,
-      });
+        data: record });
       failureCount++;
     }
   }
@@ -378,8 +369,7 @@ async function processBatch(
     warnings,
     mappings,
     unmatchedCustomers,
-    unmatchedUsers,
-  };
+    unmatchedUsers };
 }
 
 /**
@@ -397,8 +387,7 @@ async function updateCustomerLastContactDates(
       const customerRef = doc(db, 'customers', customerId);
       batch.update(customerRef, {
         lastContactDate: Timestamp.fromDate(lastContactDate),
-        updatedAt: Timestamp.now(),
-      });
+        updatedAt: Timestamp.now() });
       
       operationCount++;
       

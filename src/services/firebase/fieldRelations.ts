@@ -65,8 +65,7 @@ export async function createFieldRelation(
     const forwardRelation: FieldRelation = {
       ...relation,
       id: forwardId,
-      createdAt: serverTimestamp() as Timestamp,
-    };
+      createdAt: serverTimestamp() as Timestamp };
     batch.set(forwardRef, forwardRelation);
     relationIds.forward = forwardId;
 

@@ -14,8 +14,7 @@ interface SettingSectionProps extends SettingSectionType {
 export const SettingSection = ({
   title,
   items,
-  onItemValueChange,
-}: SettingSectionProps) => {
+  onItemValueChange }: SettingSectionProps) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
@@ -34,21 +33,17 @@ export const SettingSection = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 32,
-  },
+    marginBottom: 32 },
   title: {
     fontSize: 14,
     fontWeight: '600',
     color: '#7A7A7A',
     textTransform: 'uppercase',
     paddingHorizontal: 16,
-    paddingBottom: 8,
-  },
+    paddingBottom: 8 },
   itemsContainer: {
     backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
     borderTopColor: '#E1DFDB',
     borderBottomWidth: 1,
-    borderBottomColor: '#E1DFDB',
-  },
-});
+    borderBottomColor: '#E1DFDB' } });

@@ -40,8 +40,7 @@ export const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({
   style,
   contentStyle,
   maxWidth = 1200,
-  padding = true,
-}) => {
+  padding = true }) => {
   const isDesktop = isDesktopWeb();
   const isTablet = isTabletWeb();
   const isWeb = isWebPlatform();
@@ -72,8 +71,7 @@ export const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({
         mobile: styles.paddingMobile,
         tablet: styles.paddingTablet,
         desktop: styles.paddingDesktop,
-        default: styles.paddingMobile,
-      }),
+        default: styles.paddingMobile }),
       contentStyle,
     ]}>
       {children}
@@ -118,62 +116,47 @@ const styles = StyleSheet.create({
   // 原生平台樣式
   nativeContainer: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   nativeScrollView: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   nativeContent: {
-    flexGrow: 1,
-  },
+    flexGrow: 1 },
   
   // Web 平台樣式
   container: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   scrollView: {
     flex: 1,
-    ...webStyles.scrollView,
-  },
+    ...webStyles.scrollView },
   scrollContent: {
     flexGrow: 1,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   contentWrapper: {
     width: '100%',
     ...Platform.select({
       web: {
-        marginHorizontal: 'auto' as any,
-      },
-      default: {},
-    }),
-  },
+        marginHorizontal: 'auto' as any },
+      default: {} }) },
   header: {
     backgroundColor: DesignSystem.colors.background.surface,
     borderBottomWidth: 1,
     borderBottomColor: DesignSystem.colors.border.light,
     ...Platform.select({
       web: webStyles.fixedHeader,
-      default: {},
-    }),
-  },
+      default: {} }) },
   
   // 響應式內邊距
   paddingMobile: {
     paddingHorizontal: 16,
-    paddingVertical: 16,
-  },
+    paddingVertical: 16 },
   paddingTablet: {
     paddingHorizontal: 24,
-    paddingVertical: 20,
-  },
+    paddingVertical: 20 },
   paddingDesktop: {
     paddingHorizontal: 32,
-    paddingVertical: 24,
-  },
-});
+    paddingVertical: 24 } });
 
 // 匯出響應式網格樣式
 export const responsiveGrid = StyleSheet.create({
@@ -182,85 +165,60 @@ export const responsiveGrid = StyleSheet.create({
       web: responsive({
         mobile: {
           flexDirection: 'column' as const,
-          gap: 16,
-        },
+          gap: 16 },
         tablet: {
           display: 'grid' as any,
           gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: 20,
-        },
+          gap: 20 },
         desktop: {
           display: 'grid' as any,
           gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: 24,
-        },
+          gap: 24 },
         default: {
           flexDirection: 'column' as const,
-          gap: 16,
-        },
-      }),
+          gap: 16 } }),
       default: {
         flexDirection: 'column' as const,
-        gap: 16,
-      },
-    }),
-  },
+        gap: 16 } }) },
   
   twoColumn: {
     ...Platform.select({
       web: responsive({
         mobile: {
           flexDirection: 'column' as const,
-          gap: 16,
-        },
+          gap: 16 },
         tablet: {
           display: 'grid' as any,
           gridTemplateColumns: '1fr 1fr',
-          gap: 20,
-        },
+          gap: 20 },
         desktop: {
           display: 'grid' as any,
           gridTemplateColumns: '1fr 1fr',
-          gap: 24,
-        },
+          gap: 24 },
         default: {
           flexDirection: 'column' as const,
-          gap: 16,
-        },
-      }),
+          gap: 16 } }),
       default: {
         flexDirection: 'column' as const,
-        gap: 16,
-      },
-    }),
-  },
+        gap: 16 } }) },
   
   sidebar: {
     ...Platform.select({
       web: responsive({
         mobile: {
           flexDirection: 'column' as const,
-          gap: 16,
-        },
+          gap: 16 },
         tablet: {
           display: 'grid' as any,
           gridTemplateColumns: '250px 1fr',
-          gap: 20,
-        },
+          gap: 20 },
         desktop: {
           display: 'grid' as any,
           gridTemplateColumns: '300px 1fr',
-          gap: 24,
-        },
+          gap: 24 },
         default: {
           flexDirection: 'column' as const,
-          gap: 16,
-        },
-      }),
+          gap: 16 } }),
       default: {
         flexDirection: 'column' as const,
-        gap: 16,
-      },
-    }),
-  },
-});
+        gap: 16 } }) } });

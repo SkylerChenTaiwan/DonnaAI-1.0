@@ -71,8 +71,7 @@ export const WebModal: React.FC<WebModalProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: 'relative',
-  },
+    position: 'relative' },
   closeButton: {
     position: 'absolute',
     top: 16,
@@ -87,15 +86,10 @@ const styles = StyleSheet.create({
     // Web 專用陰影
     ...Platform.select({
       web: {
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
-      },
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)' },
       default: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
         shadowOpacity: 0.15,
         shadowRadius: 4,
-        elevation: 4,
-      },
-    }),
-  },
-});
+        elevation: 4 } }) } });

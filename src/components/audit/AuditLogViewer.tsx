@@ -13,8 +13,7 @@ import {
   TextInput,
   ActivityIndicator,
   Platform,
-  RefreshControl,
-} from 'react-native';
+  RefreshControl } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {
@@ -24,8 +23,7 @@ import {
   AuditActionType,
   ActionCategory,
   RiskLevel,
-  OperationStatus,
-} from '@/types/audit';
+  OperationStatus } from '@/types/audit';
 import { auditLogQuery } from '@/services/audit/AuditLogQuery';
 import { format } from 'date-fns';
 import { zhTW } from 'date-fns/locale';
@@ -48,8 +46,7 @@ export const AuditLogViewer: React.FC<AuditLogViewerProps> = ({
   userId,
   showFilters = true,
   pageSize = 20,
-  onLogSelect,
-}) => {
+  onLogSelect }) => {
   // 狀態管理
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [loading, setLoading] = useState(false);
@@ -64,8 +61,7 @@ export const AuditLogViewer: React.FC<AuditLogViewerProps> = ({
     organizationId,
     userId,
     limit: pageSize,
-    sortOrder: 'desc',
-  });
+    sortOrder: 'desc' });
   const [showDatePicker, setShowDatePicker] = useState<'start' | 'end' | null>(null);
   const [searchText, setSearchText] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<ActionCategory | ''>('');
@@ -73,8 +69,7 @@ export const AuditLogViewer: React.FC<AuditLogViewerProps> = ({
   const [selectedStatus, setSelectedStatus] = useState<OperationStatus | ''>('');
   const [dateRange, setDateRange] = useState({
     start: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 預設最近 7 天
-    end: new Date(),
-  });
+    end: new Date() });
 
   /**
    * 載入審計日誌
@@ -93,8 +88,7 @@ export const AuditLogViewer: React.FC<AuditLogViewerProps> = ({
         riskLevels: selectedRisk ? [selectedRisk] : undefined,
         status: selectedStatus || undefined,
         dateRange,
-        startAfter: append ? lastDoc : undefined,
-      };
+        startAfter: append ? lastDoc : undefined };
 
       const result: SearchResult = await auditLogQuery.search(criteria);
       
@@ -151,16 +145,14 @@ export const AuditLogViewer: React.FC<AuditLogViewerProps> = ({
     setSelectedStatus('');
     setDateRange({
       start: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-      end: new Date(),
-    });
+      end: new Date() });
     setLastDoc(null);
     
     const defaultFilters: SearchCriteria = {
       organizationId,
       userId,
       limit: pageSize,
-      sortOrder: 'desc',
-    };
+      sortOrder: 'desc' };
     setFilters(defaultFilters);
   }, [organizationId, userId, pageSize]);
 
@@ -607,8 +599,7 @@ const getActionLabel = (action: AuditActionType): string => {
     [AuditActionType.SECURITY_ALERT]: '安全警報',
     [AuditActionType.SUSPICIOUS_ACTIVITY]: '可疑活動',
     [AuditActionType.ACCESS_DENIED]: '存取拒絕',
-    [AuditActionType.RATE_LIMIT_EXCEEDED]: '超過速率限制',
-  };
+    [AuditActionType.RATE_LIMIT_EXCEEDED]: '超過速率限制' };
   return labels[action] || action;
 };
 
@@ -621,8 +612,7 @@ const getCategoryLabel = (category: ActionCategory): string => {
     [ActionCategory.SYSTEM_ADMINISTRATION]: '系統管理',
     [ActionCategory.SECURITY]: '安全',
     [ActionCategory.BILLING]: '帳單',
-    [ActionCategory.COMPLIANCE]: '合規',
-  };
+    [ActionCategory.COMPLIANCE]: '合規' };
   return labels[category] || category;
 };
 
@@ -631,8 +621,7 @@ const getRiskLabel = (risk: RiskLevel): string => {
     critical: '關鍵',
     high: '高',
     medium: '中',
-    low: '低',
-  };
+    low: '低' };
   return labels[risk] || risk;
 };
 
@@ -640,8 +629,7 @@ const getStatusLabel = (status: OperationStatus): string => {
   const labels: Record<OperationStatus, string> = {
     success: '成功',
     failure: '失敗',
-    partial: '部分成功',
-  };
+    partial: '部分成功' };
   return labels[status] || status;
 };
 
@@ -650,8 +638,7 @@ const getRiskColor = (risk?: RiskLevel): string => {
     critical: '#D32F2F',
     high: '#F57C00',
     medium: '#FBC02D',
-    low: '#388E3C',
-  };
+    low: '#388E3C' };
   return risk ? colors[risk] : '#757575';
 };
 
@@ -659,8 +646,7 @@ const getStatusColor = (status: OperationStatus): string => {
   const colors: Record<OperationStatus, string> = {
     success: '#4CAF50',
     failure: '#F44336',
-    partial: '#FF9800',
-  };
+    partial: '#FF9800' };
   return colors[status] || '#757575';
 };
 
@@ -670,44 +656,36 @@ const getStatusColor = (status: OperationStatus): string => {
 const styles: any = {
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
-  },
+    backgroundColor: '#F5F5F5' },
   filtersContainer: {
     backgroundColor: '#FFFFFF',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
-  },
+    borderBottomColor: '#E0E0E0' },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F5F5F5',
     borderRadius: 8,
     paddingHorizontal: 12,
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   searchIcon: {
-    marginRight: 8,
-  },
+    marginRight: 8 },
   searchInput: {
     flex: 1,
     height: 40,
-    fontSize: 14,
-  },
+    fontSize: 14 },
   filterScroll: {
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   filterChip: {
     backgroundColor: '#E3F2FD',
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 16,
-    marginRight: 8,
-  },
+    marginRight: 8 },
   filterChipText: {
     fontSize: 13,
-    color: '#1976D2',
-  },
+    color: '#1976D2' },
   filterSelect: {
     height: 32,
     paddingHorizontal: 12,
@@ -715,41 +693,33 @@ const styles: any = {
     borderRadius: 4,
     borderWidth: 1,
     borderColor: '#E0E0E0',
-    backgroundColor: '#FFFFFF',
-  },
+    backgroundColor: '#FFFFFF' },
   picker: {
     width: 120,
-    height: 32,
-  },
+    height: 32 },
   filterActions: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
+    justifyContent: 'flex-end' },
   filterButton: {
     backgroundColor: '#0066CC',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 4,
-    marginLeft: 8,
-  },
+    marginLeft: 8 },
   filterButtonText: {
     color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   resetButton: {
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#E0E0E0',
-  },
+    borderColor: '#E0E0E0' },
   resetButtonText: {
     color: '#666666',
     fontSize: 14,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   logsContainer: {
-    flex: 1,
-  },
+    flex: 1 },
   logItem: {
     backgroundColor: '#FFFFFF',
     padding: 16,
@@ -757,105 +727,84 @@ const styles: any = {
     marginHorizontal: 8,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E0E0E0',
-  },
+    borderColor: '#E0E0E0' },
   selectedLogItem: {
     borderColor: '#0066CC',
-    borderWidth: 2,
-  },
+    borderWidth: 2 },
   logHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   timestamp: {
     fontSize: 12,
-    color: '#666666',
-  },
+    color: '#666666' },
   badges: {
-    flexDirection: 'row',
-  },
+    flexDirection: 'row' },
   badge: {
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 12,
-    marginLeft: 4,
-  },
+    marginLeft: 4 },
   badgeText: {
     fontSize: 10,
     color: '#FFFFFF',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   logContent: {
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   actionType: {
     fontSize: 14,
     fontWeight: '600',
     color: '#333333',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   resource: {
     fontSize: 13,
-    color: '#666666',
-  },
+    color: '#666666' },
   logFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   actor: {
     fontSize: 12,
     color: '#666666',
-    flex: 1,
-  },
+    flex: 1 },
   duration: {
     fontSize: 12,
-    color: '#666666',
-  },
+    color: '#666666' },
   errorContainer: {
     marginTop: 8,
     padding: 8,
     backgroundColor: '#FFEBEE',
-    borderRadius: 4,
-  },
+    borderRadius: 4 },
   errorText: {
     fontSize: 12,
-    color: '#C62828',
-  },
+    color: '#C62828' },
   loadingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 16,
-  },
+    padding: 16 },
   loadingText: {
     marginLeft: 8,
     fontSize: 14,
-    color: '#666666',
-  },
+    color: '#666666' },
   emptyContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 48,
-  },
+    padding: 48 },
   emptyText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#999999',
-  },
+    color: '#999999' },
   errorBanner: {
     backgroundColor: '#FFEBEE',
     padding: 12,
     marginHorizontal: 8,
     marginVertical: 4,
-    borderRadius: 4,
-  },
+    borderRadius: 4 },
   errorBannerText: {
     color: '#C62828',
-    fontSize: 14,
-  },
+    fontSize: 14 },
   detailsContainer: {
     position: 'absolute',
     top: 0,
@@ -868,101 +817,79 @@ const styles: any = {
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: -2, height: 0 },
+        ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: -2, height: 0 } }),
         shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
+        shadowRadius: 4 },
       android: {
-        elevation: 4,
-      },
-    }),
-  },
+        elevation: 4 } }) },
   detailsHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
-  },
+    borderBottomColor: '#E0E0E0' },
   detailsTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333333',
-  },
+    color: '#333333' },
   detailsContent: {
     flex: 1,
-    padding: 16,
-  },
+    padding: 16 },
   detailSection: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   detailSectionTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: '#666666',
     marginBottom: 12,
-    textTransform: 'uppercase',
-  },
+    textTransform: 'uppercase' },
   detailRow: {
     flexDirection: 'row',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   detailLabel: {
     fontSize: 13,
     color: '#666666',
-    width: 100,
-  },
+    width: 100 },
   detailValue: {
     fontSize: 13,
     color: '#333333',
-    flex: 1,
-  },
+    flex: 1 },
   diffItem: {
     marginBottom: 12,
     padding: 8,
     backgroundColor: '#F5F5F5',
-    borderRadius: 4,
-  },
+    borderRadius: 4 },
   diffField: {
     fontSize: 13,
     fontWeight: '600',
     color: '#333333',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   diffOld: {
     fontSize: 12,
-    color: '#D32F2F',
-  },
+    color: '#D32F2F' },
   diffArrow: {
     fontSize: 12,
     color: '#666666',
-    marginVertical: 2,
-  },
+    marginVertical: 2 },
   diffNew: {
     fontSize: 12,
-    color: '#388E3C',
-  },
+    color: '#388E3C' },
   tagsContainer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   tags: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    flex: 1,
-  },
+    flex: 1 },
   tag: {
     backgroundColor: '#E3F2FD',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
     marginRight: 4,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   tagText: {
     fontSize: 11,
-    color: '#1976D2',
-  },
-};
+    color: '#1976D2' } };

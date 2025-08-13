@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet , Platform } from 'react-native';
 import { NotionTable } from '@/components/database/notion';
 import { Layout } from '@/components/common/Layout';
 
@@ -15,24 +15,21 @@ const testData = [
     company: '測試公司 A',
     phone: '0912345678',
     email: 'test1@example.com',
-    status: 'active',
-  },
+    status: 'active' },
   {
     id: '2',
     name: '測試客戶 2',
     company: '測試公司 B',
     phone: '0923456789',
     email: 'test2@example.com',
-    status: 'pending',
-  },
+    status: 'pending' },
   {
     id: '3',
     name: '測試客戶 3',
     company: '測試公司 C',
     phone: '0934567890',
     email: 'test3@example.com',
-    status: 'inactive',
-  },
+    status: 'inactive' },
 ];
 
 const testColumns = [
@@ -42,32 +39,28 @@ const testColumns = [
     title: '客戶名稱',
     type: 'text' as const,
     width: 200,
-    editable: true,
-  },
+    editable: true },
   {
     id: 'company',
     key: 'company',
     title: '公司',
     type: 'text' as const,
     width: 200,
-    editable: true,
-  },
+    editable: true },
   {
     id: 'phone',
     key: 'phone',
     title: '電話',
     type: 'text' as const,
     width: 150,
-    editable: true,
-  },
+    editable: true },
   {
     id: 'email',
     key: 'email',
     title: '電子郵件',
     type: 'text' as const,
     width: 250,
-    editable: true,
-  },
+    editable: true },
   {
     id: 'status',
     key: 'status',
@@ -79,8 +72,7 @@ const testColumns = [
       { value: 'active', label: '活躍', color: 'green' },
       { value: 'pending', label: '待處理', color: 'yellow' },
       { value: 'inactive', label: '非活躍', color: 'red' },
-    ],
-  },
+    ] },
 ];
 
 export const NotionTableTest: React.FC = () => {
@@ -132,25 +124,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f5f5f5',
-  },
+    backgroundColor: '#f5f5f5' },
   info: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 20,
-  },
+    marginBottom: 20 },
   tableContainer: {
     flex: 1,
     backgroundColor: 'white',
     borderRadius: 8,
     overflow: 'hidden',
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
-    elevation: 5,
-  },
-});
+    elevation: 5 } });

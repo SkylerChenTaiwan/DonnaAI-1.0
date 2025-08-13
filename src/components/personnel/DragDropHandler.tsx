@@ -5,20 +5,17 @@
 import React, { useCallback } from 'react';
 import {
   View,
-  StyleSheet,
-} from 'react-native';
+  StyleSheet, Platform } from 'react-native';
 import {
   GestureDetector,
   Gesture,
-  GestureHandlerRootView,
-} from 'react-native-gesture-handler';
+  GestureHandlerRootView } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
   runOnJS,
-  interpolate,
-} from 'react-native-reanimated';
+  interpolate } from 'react-native-reanimated';
 import { OrgNode, DragDropEvent } from '@/types/organization';
 import { DesignSystem } from '@/theme/designSystem';
 
@@ -37,8 +34,7 @@ export function DragDropHandler({
   onDragStart,
   onDragEnd,
   onDrop,
-  enabled = true,
-}: DragDropHandlerProps) {
+  enabled = true }: DragDropHandlerProps) {
   // 動畫值
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
@@ -86,18 +82,14 @@ export function DragDropHandler({
       const dropEvent: DragDropEvent = {
         source: {
           nodeId: node.id,
-          position: node.position || { x: 0, y: 0 },
-        },
+          position: node.position || { x: 0, y: 0 } },
         target: null, // TODO: 需要實作碰撞檢測
         position: {
           x: event.absoluteX,
-          y: event.absoluteY,
-        },
+          y: event.absoluteY },
         translation: {
           x: event.translationX,
-          y: event.translationY,
-        },
-      };
+          y: event.translationY } };
       handleDragEnd(dropEvent);
     });
 
@@ -131,8 +123,7 @@ export function DragDropHandler({
       // 添加陰影效果
       shadowOpacity: interpolate(scale.value, [1, 1.1], [0.1, 0.3]),
       shadowRadius: interpolate(scale.value, [1, 1.1], [4, 8]),
-      elevation: interpolate(scale.value, [1, 1.1], [2, 10]),
-    };
+      elevation: interpolate(scale.value, [1, 1.1], [2, 10]) };
   });
 
   if (!enabled) {
@@ -160,8 +151,7 @@ export function DragDropProvider({ children }: { children: React.ReactNode }) {
 // 放置目標指示器
 export function DropTarget({
   isActive,
-  children,
-}: {
+  children }: {
   isActive: boolean;
   children: React.ReactNode;
 }) {
@@ -174,19 +164,14 @@ export function DropTarget({
 
 const styles = StyleSheet.create({
   provider: {
-    flex: 1,
-  },
+    flex: 1 },
   container: {
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-  },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }) },
   dropTarget: {
-    position: 'relative',
-  },
+    position: 'relative' },
   dropTargetActive: {
     borderWidth: 2,
     borderColor: DesignSystem.colors.primary,
     borderStyle: 'dashed',
-    borderRadius: 12,
-  },
-});
+    borderRadius: 12 } });

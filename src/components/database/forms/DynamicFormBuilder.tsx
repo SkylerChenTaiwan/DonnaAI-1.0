@@ -461,24 +461,19 @@ const TagsField: React.FC<{
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   form: {
     padding: 20,
-    gap: 16,
-  },
+    gap: 16 },
   fieldContainer: {
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   label: {
     fontSize: 14,
     fontWeight: '600',
     color: '#333',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   required: {
-    color: '#FF3B30',
-  },
+    color: '#FF3B30' },
   input: {
     borderWidth: 1,
     borderColor: '#E5E5EA',
@@ -486,11 +481,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 16,
-    backgroundColor: '#ffffff',
-  },
+    backgroundColor: '#ffffff' },
   inputError: {
-    borderColor: '#FF3B30',
-  },
+    borderColor: '#FF3B30' },
   textarea: {
     borderWidth: 1,
     borderColor: '#E5E5EA',
@@ -499,19 +492,16 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     fontSize: 16,
     backgroundColor: '#ffffff',
-    minHeight: 100,
-  },
+    minHeight: 100 },
   errorText: {
     fontSize: 12,
     color: '#FF3B30',
-    marginTop: 4,
-  },
+    marginTop: 4 },
   pickerContainer: {
     borderWidth: 1,
     borderColor: '#E5E5EA',
     borderRadius: 8,
-    backgroundColor: '#ffffff',
-  },
+    backgroundColor: '#ffffff' },
   webSelect: {
     width: '100%',
     height: 44,
@@ -520,46 +510,37 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 12,
     fontSize: 16,
-    backgroundColor: '#ffffff',
-  },
+    backgroundColor: '#ffffff' },
   booleanContainer: {
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   booleanRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   fieldDescription: {
     fontSize: 12,
     color: '#666',
-    marginTop: 4,
-  },
+    marginTop: 4 },
   tagsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   tag: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F0F0F0',
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 16,
-  },
+    borderRadius: 16 },
   tagText: {
     fontSize: 14,
-    color: '#333',
-  },
+    color: '#333' },
   tagRemove: {
-    marginLeft: 8,
-  },
+    marginLeft: 8 },
   tagInputRow: {
     flexDirection: 'row',
-    gap: 8,
-  },
+    gap: 8 },
   tagInput: {
     flex: 1,
     borderWidth: 1,
@@ -568,18 +549,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     fontSize: 14,
-    backgroundColor: '#ffffff',
-  },
+    backgroundColor: '#ffffff' },
   addTagButton: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     backgroundColor: '#2EAADC',
     borderRadius: 8,
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   addTagButtonText: {
     color: '#ffffff',
     fontSize: 14,
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600' } });

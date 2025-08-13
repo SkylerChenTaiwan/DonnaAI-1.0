@@ -12,16 +12,14 @@ import {
   RefreshControl,
   ActivityIndicator,
   Dimensions,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import {
   AuditStatistics,
   TimeRange,
   RiskAssessment,
   Anomaly,
   SecurityIncident,
-  AuditLog,
-} from '@/types/audit';
+  AuditLog } from '@/types/audit';
 import { auditLogQuery } from '@/services/audit/AuditLogQuery';
 import { auditAnalytics } from '@/services/audit/AuditAnalytics';
 // Icon import removed - using platform-specific Icon component;
@@ -43,8 +41,7 @@ export const AuditDashboard: React.FC<AuditDashboardProps> = ({
   organizationId,
   onAnomalyClick,
   onIncidentClick,
-  onViewDetails,
-}) => {
+  onViewDetails }) => {
   // 狀態管理
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -89,8 +86,7 @@ export const AuditDashboard: React.FC<AuditDashboardProps> = ({
     return {
       start,
       end: now,
-      granularity,
-    };
+      granularity };
   }, [selectedPeriod]);
 
   /**
@@ -117,8 +113,7 @@ export const AuditDashboard: React.FC<AuditDashboardProps> = ({
         auditLogQuery.search({
           organizationId,
           dateRange: { start: timeRange.start, end: timeRange.end },
-          limit: 1000,
-        }),
+          limit: 1000 }),
       ]);
 
       // 分析資料
@@ -205,9 +200,7 @@ export const AuditDashboard: React.FC<AuditDashboardProps> = ({
     const data = {
       labels: labels.slice(-10), // 只顯示最近 10 個數據點
       datasets: [{
-        data: statistics.timeline.buckets.slice(-10).map(b => b.count),
-      }],
-    };
+        data: statistics.timeline.buckets.slice(-10).map(b => b.count) }] };
 
     const screenWidth = Dimensions.get('window').width;
     const chartWidth = screenWidth - 32;
@@ -229,19 +222,15 @@ export const AuditDashboard: React.FC<AuditDashboardProps> = ({
             color: (opacity = 1) => `rgba(0, 102, 204, ${opacity})`,
             labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
             style: {
-              borderRadius: 16,
-            },
+              borderRadius: 16 },
             propsForDots: {
               r: '4',
               strokeWidth: '2',
-              stroke: '#0066CC',
-            },
-          }}
+              stroke: '#0066CC' } }}
           bezier
           style={{
             marginVertical: 8,
-            borderRadius: 16,
-          }}
+            borderRadius: 16 }}
         />
       </View>
     );
@@ -259,29 +248,25 @@ export const AuditDashboard: React.FC<AuditDashboardProps> = ({
         population: statistics.riskDistribution.low,
         color: '#4CAF50',
         legendFontColor: '#7F7F7F',
-        legendFontSize: 12,
-      },
+        legendFontSize: 12 },
       {
         name: '中',
         population: statistics.riskDistribution.medium,
         color: '#FFC107',
         legendFontColor: '#7F7F7F',
-        legendFontSize: 12,
-      },
+        legendFontSize: 12 },
       {
         name: '高',
         population: statistics.riskDistribution.high,
         color: '#FF9800',
         legendFontColor: '#7F7F7F',
-        legendFontSize: 12,
-      },
+        legendFontSize: 12 },
       {
         name: '關鍵',
         population: statistics.riskDistribution.critical,
         color: '#F44336',
         legendFontColor: '#7F7F7F',
-        legendFontSize: 12,
-      },
+        legendFontSize: 12 },
     ];
 
     const screenWidth = Dimensions.get('window').width;
@@ -295,8 +280,7 @@ export const AuditDashboard: React.FC<AuditDashboardProps> = ({
           width={chartWidth}
           height={200}
           chartConfig={{
-            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          }}
+            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})` }}
           accessor="population"
           backgroundColor="transparent"
           paddingLeft="15"
@@ -616,8 +600,7 @@ const getRiskColor = (risk: string): string => {
     critical: '#D32F2F',
     high: '#F57C00',
     medium: '#FBC02D',
-    low: '#388E3C',
-  };
+    low: '#388E3C' };
   return colors[risk] || '#757575';
 };
 
@@ -626,8 +609,7 @@ const getRiskBackgroundColor = (risk: string): string => {
     critical: '#FFEBEE',
     high: '#FFF3E0',
     medium: '#FFFDE7',
-    low: '#E8F5E9',
-  };
+    low: '#E8F5E9' };
   return colors[risk] || '#F5F5F5';
 };
 
@@ -635,8 +617,7 @@ const getStatusColor = (status: string): string => {
   const colors: Record<string, string> = {
     success: '#4CAF50',
     failure: '#F44336',
-    partial: '#FF9800',
-  };
+    partial: '#FF9800' };
   return colors[status] || '#757575';
 };
 
@@ -657,19 +638,16 @@ const getActionIcon = (actionType: string): string => {
 const styles: any = {
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
-  },
+    backgroundColor: '#F5F5F5' },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5F5F5',
-  },
+    backgroundColor: '#F5F5F5' },
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#666666',
-  },
+    color: '#666666' },
   header: {
     backgroundColor: '#FFFFFF',
     padding: 16,
@@ -677,115 +655,92 @@ const styles: any = {
     borderBottomColor: '#E0E0E0',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   title: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#333333',
-  },
+    color: '#333333' },
   headerActions: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   periodSelector: {
     flexDirection: 'row',
     backgroundColor: '#F5F5F5',
     borderRadius: 8,
-    padding: 2,
-  },
+    padding: 2 },
   periodButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 6,
-  },
+    borderRadius: 6 },
   periodButtonActive: {
-    backgroundColor: '#0066CC',
-  },
+    backgroundColor: '#0066CC' },
   periodButtonText: {
     fontSize: 12,
-    color: '#666666',
-  },
+    color: '#666666' },
   periodButtonTextActive: {
     color: '#FFFFFF',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   autoRefreshButton: {
     marginLeft: 12,
-    padding: 8,
-  },
+    padding: 8 },
   viewDetailsButton: {
     marginLeft: 12,
     paddingHorizontal: 12,
     paddingVertical: 6,
     backgroundColor: '#0066CC',
-    borderRadius: 4,
-  },
+    borderRadius: 4 },
   viewDetailsButtonText: {
     color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   errorBanner: {
     backgroundColor: '#FFEBEE',
     padding: 12,
     marginHorizontal: 8,
     marginVertical: 4,
-    borderRadius: 4,
-  },
+    borderRadius: 4 },
   errorBannerText: {
     color: '#C62828',
-    fontSize: 14,
-  },
+    fontSize: 14 },
   riskSummary: {
     margin: 8,
     padding: 16,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E0E0E0',
-  },
+    borderColor: '#E0E0E0' },
   riskSummaryHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   riskSummaryTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333333',
-  },
+    color: '#333333' },
   riskBadge: {
     paddingHorizontal: 12,
     paddingVertical: 4,
-    borderRadius: 12,
-  },
+    borderRadius: 12 },
   riskBadgeText: {
     fontSize: 12,
     color: '#FFFFFF',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   riskSummaryContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   riskScore: {
     fontSize: 14,
-    color: '#666666',
-  },
+    color: '#666666' },
   riskTrend: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   riskTrendText: {
     marginLeft: 4,
     fontSize: 14,
-    color: '#666666',
-  },
+    color: '#666666' },
   statsContainer: {
-    paddingVertical: 8,
-  },
+    paddingVertical: 8 },
   statCard: {
     backgroundColor: '#FFFFFF',
     marginHorizontal: 4,
@@ -796,39 +751,30 @@ const styles: any = {
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
         shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
+        shadowRadius: 4 },
       android: {
-        elevation: 2,
-      },
-    }),
-  },
+        elevation: 2 } }) },
   statCardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   statCardTitle: {
     marginLeft: 8,
     fontSize: 12,
-    color: '#666666',
-  },
+    color: '#666666' },
   statCardValue: {
     fontSize: 24,
     fontWeight: '600',
-    color: '#333333',
-  },
+    color: '#333333' },
   statCardTrend: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 4,
-  },
+    marginTop: 4 },
   statCardTrendText: {
     marginLeft: 4,
-    fontSize: 12,
-  },
+    fontSize: 12 },
   chartContainer: {
     backgroundColor: '#FFFFFF',
     margin: 8,
@@ -837,27 +783,20 @@ const styles: any = {
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
         shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
+        shadowRadius: 4 },
       android: {
-        elevation: 2,
-      },
-    }),
-  },
+        elevation: 2 } }) },
   chartTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#333333',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   alertsContainer: {
-    flexDirection: Platform.OS === 'web' ? 'row' : 'column',
-  },
+    flexDirection: Platform.OS === 'web' ? 'row' : 'column' },
   activityContainer: {
-    flexDirection: Platform.OS === 'web' ? 'row' : 'column',
-  },
+    flexDirection: Platform.OS === 'web' ? 'row' : 'column' },
   sectionContainer: {
     flex: 1,
     backgroundColor: '#FFFFFF',
@@ -867,40 +806,32 @@ const styles: any = {
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
         shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
+        shadowRadius: 4 },
       android: {
-        elevation: 2,
-      },
-    }),
-  },
+        elevation: 2 } }) },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#333333',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   alertBadge: {
     backgroundColor: '#FF9800',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 10,
     minWidth: 20,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   alertBadgeText: {
     fontSize: 12,
     color: '#FFFFFF',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   anomalyItem: {
     flexDirection: 'row',
     marginBottom: 12,
@@ -908,82 +839,66 @@ const styles: any = {
     backgroundColor: '#FFF9F0',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#FFE0B2',
-  },
+    borderColor: '#FFE0B2' },
   anomalyIndicator: {
     width: 4,
     marginRight: 12,
-    borderRadius: 2,
-  },
+    borderRadius: 2 },
   anomalyContent: {
-    flex: 1,
-  },
+    flex: 1 },
   anomalyType: {
     fontSize: 14,
     fontWeight: '600',
     color: '#333333',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   anomalyDescription: {
     fontSize: 13,
     color: '#666666',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   anomalyMeta: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   anomalyTime: {
     fontSize: 12,
-    color: '#999999',
-  },
+    color: '#999999' },
   anomalyConfidence: {
     fontSize: 12,
-    color: '#999999',
-  },
+    color: '#999999' },
   incidentItem: {
     marginBottom: 12,
     padding: 12,
     backgroundColor: '#FFEBEE',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#FFCDD2',
-  },
+    borderColor: '#FFCDD2' },
   incidentHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   incidentType: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333333',
-  },
+    color: '#333333' },
   severityBadge: {
     paddingHorizontal: 8,
     paddingVertical: 2,
-    borderRadius: 10,
-  },
+    borderRadius: 10 },
   severityBadgeText: {
     fontSize: 10,
     color: '#FFFFFF',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   incidentDescription: {
     fontSize: 13,
     color: '#666666',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   incidentTime: {
     fontSize: 12,
-    color: '#999999',
-  },
+    color: '#999999' },
   userItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   userRank: {
     width: 28,
     height: 28,
@@ -991,33 +906,27 @@ const styles: any = {
     backgroundColor: '#E3F2FD',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
-  },
+    marginRight: 12 },
   userRankText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1976D2',
-  },
+    color: '#1976D2' },
   userInfo: {
-    flex: 1,
-  },
+    flex: 1 },
   userName: {
     fontSize: 14,
     color: '#333333',
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   userStats: {
     fontSize: 12,
-    color: '#666666',
-  },
+    color: '#666666' },
   activityItem: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 12,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
-  },
+    borderBottomColor: '#F0F0F0' },
   activityIcon: {
     width: 36,
     height: 36,
@@ -1025,54 +934,42 @@ const styles: any = {
     backgroundColor: '#F5F5F5',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
-  },
+    marginRight: 12 },
   activityContent: {
-    flex: 1,
-  },
+    flex: 1 },
   activityAction: {
     fontSize: 13,
     color: '#333333',
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   activityUser: {
     fontSize: 12,
     color: '#666666',
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   activityTime: {
     fontSize: 11,
-    color: '#999999',
-  },
+    color: '#999999' },
   highRiskItem: {
     flexDirection: 'row',
     marginBottom: 12,
     padding: 12,
     backgroundColor: '#FFEBEE',
-    borderRadius: 8,
-  },
+    borderRadius: 8 },
   highRiskIndicator: {
     width: 4,
     backgroundColor: '#F44336',
     marginRight: 12,
-    borderRadius: 2,
-  },
+    borderRadius: 2 },
   highRiskContent: {
-    flex: 1,
-  },
+    flex: 1 },
   highRiskAction: {
     fontSize: 14,
     fontWeight: '600',
     color: '#333333',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   highRiskResource: {
     fontSize: 13,
     color: '#666666',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   highRiskUser: {
     fontSize: 12,
-    color: '#999999',
-  },
-};
+    color: '#999999' } };

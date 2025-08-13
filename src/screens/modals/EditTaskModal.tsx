@@ -11,8 +11,7 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { WebModal } from '@/components/web/WebModal';
@@ -40,8 +39,7 @@ export const EditTaskModal: React.FC = () => {
     description: '',
     status: 'todo' as 'todo' | 'completed',
     priority: 'medium' as 'low' | 'medium' | 'high' | 'urgent',
-    type: 'unscheduled' as 'scheduled' | 'unscheduled' | 'pending',
-  });
+    type: 'unscheduled' as 'scheduled' | 'unscheduled' | 'pending' });
   
   const [isSaving, setIsSaving] = useState(false);
 
@@ -52,8 +50,7 @@ export const EditTaskModal: React.FC = () => {
         description: task.description || '',
         status: task.status || 'todo',
         priority: task.priority || 'medium',
-        type: task.type || 'unscheduled',
-      });
+        type: task.type || 'unscheduled' });
     }
   }, [task]);
 
@@ -73,8 +70,7 @@ export const EditTaskModal: React.FC = () => {
         description: formData.description.trim(),
         status: formData.status,
         priority: formData.priority,
-        type: formData.type,
-      };
+        type: formData.type };
       
       await updateTask(taskId, updates, user);
       navigation.goBack();
@@ -249,18 +245,15 @@ export const EditTaskModal: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
-  },
+    backgroundColor: '#F8F9FA' },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   loadingText: {
     marginTop: 12,
     fontSize: 16,
-    color: '#8E8E93',
-  },
+    color: '#8E8E93' },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -269,36 +262,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
-  },
+    borderBottomColor: '#E5E5EA' },
   headerButton: {
-    padding: 4,
-  },
+    padding: 4 },
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1C1C1E',
-  },
+    color: '#1C1C1E' },
   saveButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#007AFF',
-  },
+    color: '#007AFF' },
   scrollView: {
-    flex: 1,
-  },
+    flex: 1 },
   form: {
-    padding: 16,
-  },
+    padding: 16 },
   formGroup: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   label: {
     fontSize: 14,
     fontWeight: '600',
     color: '#1C1C1E',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   input: {
     backgroundColor: '#FFFFFF',
     borderRadius: 8,
@@ -307,35 +292,27 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#1C1C1E',
     borderWidth: 1,
-    borderColor: '#E5E5EA',
-  },
+    borderColor: '#E5E5EA' },
   textArea: {
     minHeight: 100,
-    paddingTop: 12,
-  },
+    paddingTop: 12 },
   optionContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
-  },
+    gap: 8 },
   optionButton: {
     backgroundColor: '#FFFFFF',
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderWidth: 1,
-    borderColor: '#E5E5EA',
-  },
+    borderColor: '#E5E5EA' },
   optionButtonActive: {
     backgroundColor: '#007AFF',
-    borderColor: '#007AFF',
-  },
+    borderColor: '#007AFF' },
   optionButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#8E8E93',
-  },
+    color: '#8E8E93' },
   optionButtonTextActive: {
-    color: '#FFFFFF',
-  },
-});
+    color: '#FFFFFF' } });

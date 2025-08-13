@@ -60,29 +60,22 @@ const DummyAudioService: IAudioService = {
             isRecording: false,
             isDoneRecording: false,
             canRecord: false,
-            durationMillis: 0,
-          };
+            durationMillis: 0 };
         },
         async stopAndUnloadAsync() {},
         async getURI() { return null; },
-        setOnRecordingStatusUpdate() {},
-      };
+        setOnRecordingStatusUpdate() {} };
       return {
         recording: dummyRecording,
         status: {
           isRecording: false,
           isDoneRecording: false,
           canRecord: false,
-          durationMillis: 0,
-        },
-      };
-    },
-  },
+          durationMillis: 0 } };
+    } },
   RecordingOptionsPresets: {
     HIGH_QUALITY: {},
-    LOW_QUALITY: {},
-  },
-};
+    LOW_QUALITY: {} } };
 
 if (Platform.OS === 'web') {
   // Web 平台使用 WebAudioRecorder

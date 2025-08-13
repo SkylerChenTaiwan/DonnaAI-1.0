@@ -27,8 +27,7 @@ export async function parseLegacyCSV<T = any>(
   const {
     skipEmptyLines = true,
     trimWhitespace = true,
-    encoding = 'UTF-8',
-  } = options;
+    encoding = 'UTF-8' } = options;
 
   return new Promise((resolve, reject) => {
     Papa.parse(fileContent, {
@@ -75,8 +74,7 @@ export async function parseBusinessCodeMapping(
     業務名稱: row['業務名稱'] || row['姓名'] || '',
     職級: row['職級'] || row['層級'] || '',
     顧問代碼: row['顧問代碼'] || row['代碼'] || row['業務代碼'] || '',
-    主管清單: row['主管清單'] || row['主管'] || row['上級主管'] || '',
-  }));
+    主管清單: row['主管清單'] || row['主管'] || row['上級主管'] || '' }));
 }
 
 /**
@@ -92,8 +90,7 @@ export async function parseLegacyUsers(
   return data.map(row => {
     const user: LegacyUser = {
       業務帳號: row['業務帳號'] || row['帳號'] || row['姓名'] || '',
-      你的層級: row['你的層級'] || row['層級'] || row['職級'] || '',
-    };
+      你的層級: row['你的層級'] || row['層級'] || row['職級'] || '' };
     
     // 複製所有欄位
     Object.keys(row).forEach(key => {
@@ -119,8 +116,7 @@ export async function parseLegacyCustomers(
   return data.map(row => {
     const customer: LegacyCustomer = {
       負責業務: row['負責業務'] || row['業務'] || row['業務人員'] || '',
-      客戶名稱: row['客戶名稱'] || row['姓名'] || row['客戶'] || '',
-    };
+      客戶名稱: row['客戶名稱'] || row['姓名'] || row['客戶'] || '' };
     
     // 複製所有欄位
     Object.keys(row).forEach(key => {
@@ -152,8 +148,7 @@ export async function parseLegacyRecords(
     提交時間: row['提交時間'] || undefined,
     客戶名單資料庫: row['客戶名單資料庫'] || undefined,
     建立時間: row['建立時間'] || undefined,
-    匯入時間: row['匯入時間'] || undefined,
-  }));
+    匯入時間: row['匯入時間'] || undefined }));
 }
 
 /**
@@ -226,8 +221,7 @@ export async function previewCSV(
           headers,
           data: allData.slice(0, rows),
           totalRows,
-          detectedType,
-        });
+          detectedType });
       },
       error: (error) => {
         reject(new Error(`CSV 預覽失敗: ${error.message}`));

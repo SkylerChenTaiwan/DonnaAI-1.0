@@ -12,8 +12,7 @@ export const SelectEditor: React.FC<EditorProps> = ({
   onKeyDown,
   column,
   autoFocus = true,
-  style,
-}) => {
+  style }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [isOpen, setIsOpen] = useState(true);
@@ -104,8 +103,7 @@ export const SelectEditor: React.FC<EditorProps> = ({
               onClick={() => handleOptionClick(option)}
               style={{
                 ...EDITOR_STYLES.option,
-                ...(index === selectedIndex ? EDITOR_STYLES.optionSelected : {}),
-              }}
+                ...(index === selectedIndex ? EDITOR_STYLES.optionSelected : {}) }}
               onMouseEnter={() => setSelectedIndex(index)}
             >
               {option.color && (
@@ -116,8 +114,7 @@ export const SelectEditor: React.FC<EditorProps> = ({
                     height: 8,
                     borderRadius: '50%',
                     backgroundColor: option.color,
-                    marginRight: 8,
-                  }}
+                    marginRight: 8 }}
                 />
               )}
               {option.label}

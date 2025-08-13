@@ -64,8 +64,7 @@ export class UserDataValidator {
       role: rawData.role?.toLowerCase() === 'admin' ? 'admin' : 'user',
       department: rawData.department?.trim() || undefined,
       position: rawData.position?.trim() || rawData.title?.trim() || undefined,
-      phoneNumber: rawData.phoneNumber?.trim() || rawData.phone?.trim() || undefined,
-    };
+      phoneNumber: rawData.phoneNumber?.trim() || rawData.phone?.trim() || undefined };
   }
 
   /**

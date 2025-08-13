@@ -37,26 +37,20 @@ export const AdminPlaceholder: React.FC<AdminPlaceholderProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: DesignSystem.spacing.xl,
-  },
+    padding: DesignSystem.spacing.xl },
   iconContainer: {
-    marginBottom: DesignSystem.spacing.xl,
-  },
+    marginBottom: DesignSystem.spacing.xl },
   description: {
     ...DesignSystem.typography.h2,
     color: DesignSystem.colors.text.primary,
     textAlign: 'center',
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   subtitle: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.secondary,
-    textAlign: 'center',
-  },
-});
+    textAlign: 'center' } });

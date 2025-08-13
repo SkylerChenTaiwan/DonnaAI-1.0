@@ -60,8 +60,7 @@ export const SmartLayout: React.FC<SmartLayoutProps> = ({
   contentStyle,
   maxWidth = 1200,
   forceBasicLayout = false,
-  keyboardAvoidingEnabled = false,
-}) => {
+  keyboardAvoidingEnabled = false }) => {
   const route = useRoute();
   
   // 獲取當前頁面名稱

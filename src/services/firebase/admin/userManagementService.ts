@@ -12,8 +12,7 @@ import {
   query,
   where,
   getDocs,
-  Timestamp,
-} from 'firebase/firestore';
+  Timestamp } from 'firebase/firestore';
 import { getFirebaseDb } from '../config';
 import { getAuth, deleteUser as deleteAuthUser } from 'firebase/auth';
 import { getFunctions, httpsCallable } from 'firebase/functions';
@@ -58,8 +57,7 @@ export async function batchUpdateUserStatus(
         const userRef = doc(db, 'users', userId);
         batch.update(userRef, {
           isActive,
-          updatedAt: Timestamp.now(),
-        });
+          updatedAt: Timestamp.now() });
         updateCount++;
       } catch (error) {
         errors.push(`用戶 ${userId}: ${error instanceof Error ? error.message : '更新失敗'}`);
@@ -72,8 +70,7 @@ export async function batchUpdateUserStatus(
     return {
       success: updateCount,
       failed: userIds.length - updateCount,
-      errors,
-    };
+      errors };
   } catch (error) {
     console.error('batchUpdateUserStatus 錯誤:', error);
     throw error;
@@ -118,8 +115,7 @@ export async function batchUpdateUserRole(
         const userRef = doc(db, 'users', userId);
         batch.update(userRef, {
           role,
-          updatedAt: Timestamp.now(),
-        });
+          updatedAt: Timestamp.now() });
         updateCount++;
       } catch (error) {
         errors.push(`用戶 ${userId}: ${error instanceof Error ? error.message : '更新失敗'}`);
@@ -132,8 +128,7 @@ export async function batchUpdateUserRole(
     return {
       success: updateCount,
       failed: userIds.length - updateCount,
-      errors,
-    };
+      errors };
   } catch (error) {
     console.error('batchUpdateUserRole 錯誤:', error);
     throw error;
@@ -198,8 +193,7 @@ export async function batchDeleteUsers(
     return {
       success: deleteCount,
       failed: userIds.length - deleteCount,
-      errors,
-    };
+      errors };
   } catch (error) {
     console.error('batchDeleteUsers 錯誤:', error);
     throw error;

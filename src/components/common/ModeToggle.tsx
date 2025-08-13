@@ -8,8 +8,7 @@ import {
   Text,
   Switch,
   StyleSheet,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { DesignSystem } from '@/theme/designSystem';
 
 interface ModeToggleProps {
@@ -21,8 +20,7 @@ interface ModeToggleProps {
 export const ModeToggle = ({
   value,
   onToggle,
-  label = '主管模式',
-}: ModeToggleProps) => {
+  label = '主管模式' }: ModeToggleProps) => {
   const isManagerMode = value === 'manager';
 
   const handleToggle = (newValue: boolean) => {
@@ -51,21 +49,14 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-  },
+    gap: 8 },
   label: {
     ...DesignSystem.typography.bodySmall,
     fontWeight: '500',
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   iosSwitch: {
     ...Platform.select({
       web: {
-        transform: 'scale(0.8)',
-      },
+        transform: 'scale(0.8)' },
       default: {
-        transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }],
-      },
-    }),
-  },
-});
+        transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] } }) } });

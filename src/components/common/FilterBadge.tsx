@@ -8,8 +8,7 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  ScrollView,
-} from 'react-native';
+  ScrollView } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 
 const getOperatorLabel = (operator?: string): string => {
@@ -43,8 +42,7 @@ interface FilterBadgeProps {
 export const FilterBadge: React.FC<FilterBadgeProps> = ({
   filters = [],
   onRemoveFilter,
-  onClearAll,
-}) => {
+  onClearAll }) => {
   if (!filters || filters.length === 0) {
     return null;
   }
@@ -89,18 +87,15 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
-  },
+    borderBottomColor: '#E3E1DC' },
   scrollView: {
-    flexGrow: 0,
-  },
+    flexGrow: 0 },
   filtersContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 8,
-    gap: 8,
-  },
+    gap: 8 },
   filterItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -110,21 +105,16 @@ const styles = StyleSheet.create({
     paddingRight: 8,
     paddingVertical: 6,
     gap: 4,
-    maxWidth: 150,
-  },
+    maxWidth: 150 },
   filterText: {
     fontSize: 14,
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   clearAllButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
-    backgroundColor: '#A94438',
-  },
+    backgroundColor: '#A94438' },
   clearAllText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#F7F6F3',
-  },
-});
+    color: '#F7F6F3' } });

@@ -50,8 +50,7 @@ export const useOrgStructure = (): UseOrgStructureReturn => {
     collapseNode,
     updateUserOrganization,
     subscribeToUsers,
-    unsubscribeFromUsers,
-  } = usePersonnelStore();
+    unsubscribeFromUsers } = usePersonnelStore();
   
   // 訂閱使用者資料
   useEffect(() => {
@@ -257,6 +256,5 @@ export const useOrgStructure = (): UseOrgStructureReturn => {
     
     // 狀態
     isLoading,
-    error,
-  };
+    error };
 };

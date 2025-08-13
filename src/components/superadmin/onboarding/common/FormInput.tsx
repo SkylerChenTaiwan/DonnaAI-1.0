@@ -10,8 +10,7 @@ import {
   TextInput,
   StyleSheet,
   TextInputProps,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { DesignSystem } from '@/theme/designSystem';
 
 interface FormInputProps extends TextInputProps {
@@ -43,8 +42,7 @@ export const FormInput: React.FC<FormInputProps> = ({
       color: DesignSystem.colors.text.primary,
       outline: 'none',
       boxSizing: 'border-box' as const,
-      fontFamily: 'inherit',
-    };
+      fontFamily: 'inherit' };
 
     return (
       <View style={styles.container}>
@@ -109,21 +107,17 @@ export const FormInput: React.FC<FormInputProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   labelContainer: {
     flexDirection: 'row',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   label: {
     fontSize: 14,
     fontWeight: '500',
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   required: {
     color: DesignSystem.colors.status.error,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   input: {
     borderWidth: 1,
     borderColor: DesignSystem.colors.border.light,
@@ -138,21 +132,14 @@ const styles = StyleSheet.create({
     ...Platform.select({
       web: {
         outlineStyle: 'none',
-        outlineWidth: 0,
-      } as any,
-    }),
-  },
+        outlineWidth: 0 } as any }) },
   inputError: {
-    borderColor: DesignSystem.colors.status.error,
-  },
+    borderColor: DesignSystem.colors.status.error },
   hint: {
     fontSize: 12,
     color: DesignSystem.colors.text.tertiary,
-    marginTop: 4,
-  },
+    marginTop: 4 },
   error: {
     fontSize: 12,
     color: DesignSystem.colors.status.error,
-    marginTop: 4,
-  },
-});
+    marginTop: 4 } });

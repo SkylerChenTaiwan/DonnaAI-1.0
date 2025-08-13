@@ -28,8 +28,7 @@ export function normalizeTeam(data: Partial<Team>): Team {
     ...(data.leaderId && { leaderId: data.leaderId }),
     ...(data.managerIds && { managerIds: data.managerIds }),
     ...(data.memberIds && { memberIds: data.memberIds }),
-    ...(data.memberCount !== undefined && { memberCount: data.memberCount }),
-  };
+    ...(data.memberCount !== undefined && { memberCount: data.memberCount }) };
 }
 
 // 從 Firestore 文檔轉換為 Team 物件

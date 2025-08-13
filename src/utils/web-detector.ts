@@ -89,8 +89,7 @@ export const checkWebFeatures = () => {
       serviceWorker: false,
       webRTC: false,
       fileAPI: false,
-      webGL: false,
-    };
+      webGL: false };
   }
 
   return {
@@ -108,8 +107,7 @@ export const checkWebFeatures = () => {
       } catch (e) {
         return false;
       }
-    })(),
-  };
+    })() };
 };
 
 /**
@@ -122,8 +120,7 @@ export const getWebScreenInfo = () => {
       height: 0,
       devicePixelRatio: 1,
       orientation: 'portrait' as 'portrait' | 'landscape',
-      isTouchDevice: false,
-    };
+      isTouchDevice: false };
   }
 
   const width = window.innerWidth;
@@ -134,8 +131,7 @@ export const getWebScreenInfo = () => {
     height,
     devicePixelRatio: window.devicePixelRatio || 1,
     orientation: width > height ? 'landscape' as const : 'portrait' as const,
-    isTouchDevice: 'ontouchstart' in window || navigator.maxTouchPoints > 0,
-  };
+    isTouchDevice: 'ontouchstart' in window || navigator.maxTouchPoints > 0 };
 };
 
 /**
@@ -195,8 +191,7 @@ export const getWebLimitations = () => {
       hasBackgroundAudio: true,
       hasFileSystemAccess: true,
       hasPushNotifications: true,
-      hasOfflineCapability: true,
-    };
+      hasOfflineCapability: true };
   }
 
   const features = checkWebFeatures();
@@ -206,8 +201,7 @@ export const getWebLimitations = () => {
     hasBackgroundAudio: false, // Web 無法在背景播放音訊
     hasFileSystemAccess: features.fileAPI,
     hasPushNotifications: features.notifications && features.serviceWorker,
-    hasOfflineCapability: features.serviceWorker && features.indexedDB,
-  };
+    hasOfflineCapability: features.serviceWorker && features.indexedDB };
 };
 
 /**
@@ -217,8 +211,7 @@ export const getWebStyles = () => {
   const baseStyles = {
     container: {},
     scrollView: {},
-    touchable: {},
-  };
+    touchable: {} };
 
   if (!isWebPlatform()) return baseStyles;
 
@@ -229,25 +222,17 @@ export const getWebStyles = () => {
     container: {
       ...(isDesktop && {
         maxWidth: 1200,
-        marginHorizontal: 'auto' as const,
-      }),
-    },
+        marginHorizontal: 'auto' as const }) },
     scrollView: {
       // Web 平台的滾動行為
       scrollBehavior: 'smooth' as const,
-      WebkitOverflowScrolling: 'touch' as const,
-    },
+      WebkitOverflowScrolling: 'touch' as const },
     touchable: {
       // 桌面平台的游標樣式
       ...(isDesktop && {
-        cursor: 'pointer' as const,
-      }),
+        cursor: 'pointer' as const }),
       // 觸控裝置的樣式
       ...(!screenInfo.isTouchDevice && {
         ':hover': {
-          opacity: 0.8,
-        },
-      }),
-    },
-  };
+          opacity: 0.8 } }) } };
 };

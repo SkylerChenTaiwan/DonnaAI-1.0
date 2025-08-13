@@ -151,8 +151,7 @@ export const CreateCustomerModal: React.FC = () => {
         ...customer,
         assignedTo: user.uid,
         teamId: currentTeam.id,
-        organizationId: currentOrganization.id,
-      }));
+        organizationId: currentOrganization.id }));
 
       // 批量創建客戶
       const results = await createMultipleCustomers(customersData, user.uid);
@@ -198,12 +197,10 @@ export const CreateCustomerModal: React.FC = () => {
               儲存
             </Text>
           </TouchableOpacity>
-        ),
-      });
+        ) });
     } else {
       navigation.setOptions({
-        headerRight: undefined,
-      });
+        headerRight: undefined });
     }
   }, [navigation, handleSavePress, loading, mode]);
 
@@ -345,31 +342,25 @@ export const CreateCustomerModal: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
-  },
+    backgroundColor: '#F8F9FA' },
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   headerButton: {
     paddingHorizontal: 16,
-    paddingVertical: 8,
-  },
+    paddingVertical: 8 },
   headerButtonText: {
     fontSize: 17,
     color: '#1A1A1A',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   disabledText: {
-    color: '#C7C7CC',
-  },
+    color: '#C7C7CC' },
   
   // Modal 樣式
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   modalContainer: {
     backgroundColor: '#ffffff',
     borderRadius: 12,
@@ -378,84 +369,64 @@ const styles = StyleSheet.create({
     maxHeight: '80%',
     ...Platform.select({
       web: {
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)',
-      },
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)' },
       default: {
-        elevation: 8,
-      },
-    }),
-  },
+        elevation: 8 } }) },
   modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
+    borderBottomColor: '#e0e0e0' },
   modalTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#333',
-  },
+    color: '#333' },
   modalCloseButton: {
-    padding: 4,
-  },
+    padding: 4 },
   modalContent: {
     flex: 1,
-    padding: 20,
-  },
+    padding: 20 },
   modalFooter: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     padding: 20,
     borderTopWidth: 1,
     borderTopColor: '#e0e0e0',
-    gap: 12,
-  },
+    gap: 12 },
   modalButton: {
     paddingHorizontal: 20,
     paddingVertical: 10,
-    borderRadius: 8,
-  },
+    borderRadius: 8 },
   cancelButton: {
-    backgroundColor: '#f0f0f0',
-  },
+    backgroundColor: '#f0f0f0' },
   cancelButtonText: {
     color: '#666',
     fontSize: 16,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   saveButton: {
-    backgroundColor: 'rgb(46, 170, 220)',
-  },
+    backgroundColor: 'rgb(46, 170, 220)' },
   saveButtonText: {
     color: '#ffffff',
     fontSize: 16,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   disabledButton: {
-    opacity: 0.6,
-  },
+    opacity: 0.6 },
   modeSwitchContainer: {
     paddingHorizontal: 20,
     paddingTop: 10,
-    paddingBottom: 5,
-  },
+    paddingBottom: 5 },
   modeLabel: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 60,
-  },
+    paddingVertical: 60 },
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#7A7A7A',
-  },
-});
+    color: '#7A7A7A' } });

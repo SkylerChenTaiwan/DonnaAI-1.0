@@ -9,8 +9,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Linking,
-} from 'react-native';
+  Linking } from 'react-native';
 import { Layout } from '@/components/common/Layout';
 import { Icon } from '@/components/common/Icon';
 
@@ -163,61 +162,49 @@ export const PrivacyPolicyScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
-  },
+    backgroundColor: '#F5F5F5' },
   content: {
-    padding: 20,
-  },
+    padding: 20 },
   updateInfo: {
     fontSize: 12,
     color: '#8E8E93',
     textAlign: 'center',
-    marginBottom: 20,
-  },
+    marginBottom: 20 },
   section: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   title: {
     fontSize: 28,
     fontWeight: '700',
     color: '#1C1C1E',
     marginBottom: 16,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   sectionTitle: {
     fontSize: 20,
     fontWeight: '600',
     color: '#1C1C1E',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   subtitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#3C3C43',
     marginTop: 12,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   paragraph: {
     fontSize: 14,
     color: '#3C3C43',
     lineHeight: 22,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   contactButton: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#E3F2FD',
     padding: 12,
     borderRadius: 8,
-    marginTop: 8,
-  },
+    marginTop: 8 },
   contactText: {
     fontSize: 14,
     color: '#007AFF',
     fontWeight: '500',
-    marginLeft: 8,
-  },
+    marginLeft: 8 },
   footer: {
-    height: 40,
-  },
-});
+    height: 40 } });

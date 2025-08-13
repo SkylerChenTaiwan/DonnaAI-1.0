@@ -13,8 +13,7 @@ import {
   calculateUserGrowthRate,
   getPlatformStats,
   getMonthlyRevenueStats,
-  getOrganizationUsageStats,
-} from '@/services/firebase/admin/statsService';
+  getOrganizationUsageStats } from '@/services/firebase/admin/statsService';
 import { getCountFromServer, getDocs, collection, query, where } from 'firebase/firestore';
 import { getFirebaseDb } from '@/services/firebase/config';
 
@@ -29,13 +28,10 @@ vi.mock('firebase/firestore', () => ({
   getCountFromServer: vi.fn(),
   Timestamp: {
     fromDate: vi.fn((date) => ({ toDate: () => date })),
-    now: vi.fn(() => ({ toDate: () => new Date() })),
-  },
-}));
+    now: vi.fn(() => ({ toDate: () => new Date() })) } }));
 
 vi.mock('@/services/firebase/config', () => ({
-  getFirebaseDb: vi.fn(() => ({})),
-}));
+  getFirebaseDb: vi.fn(() => ({})) }));
 
 // Mock 計費配置
 vi.mock('@/config/billing', () => ({
@@ -43,8 +39,7 @@ vi.mock('@/config/billing', () => ({
     const billableUsers = Math.max(0, users - gifted);
     const basePrice = billableUsers * 200;
     return cycle === 'yearly' ? basePrice * 12 * 0.8 : basePrice;
-  }),
-}));
+  }) }));
 
 describe('Stats Service', () => {
   beforeEach(() => {
@@ -99,21 +94,16 @@ describe('Stats Service', () => {
           data: () => ({
             monthlyUsage: { activeUsers: 10 },
             giftedSeats: 2,
-            billingCycle: 'monthly',
-          }),
-        },
+            billingCycle: 'monthly' }) },
         {
           data: () => ({
             monthlyUsage: { activeUsers: 20 },
             giftedSeats: 5,
-            billingCycle: 'yearly',
-          }),
-        },
+            billingCycle: 'yearly' }) },
       ];
 
       const mockSnapshot = {
-        docs: mockOrgs,
-      };
+        docs: mockOrgs };
 
       vi.mocked(getDocs).mockResolvedValue(mockSnapshot as any);
 
@@ -178,10 +168,7 @@ describe('Stats Service', () => {
           data: () => ({
             monthlyUsage: { activeUsers: 10, aiProcessingCount: 50 },
             giftedSeats: 0,
-            billingCycle: 'monthly',
-          }),
-        }],
-      };
+            billingCycle: 'monthly' }) }] };
       vi.mocked(getDocs).mockResolvedValue(mockOrgsSnapshot as any);
 
       const stats = await getPlatformStats();
@@ -206,21 +193,15 @@ describe('Stats Service', () => {
         {
           data: () => ({
             status: 'paid',
-            amount: 5000,
-          }),
-        },
+            amount: 5000 }) },
         {
           data: () => ({
             status: 'paid',
-            amount: 3000,
-          }),
-        },
+            amount: 3000 }) },
         {
           data: () => ({
             status: 'pending',
-            amount: 2000,
-          }),
-        },
+            amount: 2000 }) },
       ];
 
       const mockSnapshot = {
@@ -239,8 +220,7 @@ describe('Stats Service', () => {
         totalRevenue: 8000,
         paidOrganizations: 2,
         pendingPayments: 2000,
-        averageRevenuePerOrg: 4000,
-      });
+        averageRevenuePerOrg: 4000 });
     });
   });
 
@@ -254,13 +234,10 @@ describe('Stats Service', () => {
             monthlyUsage: {
               activeUsers: 50,
               recordCount: 1000,
-              aiProcessingCount: 200,
-            },
+              aiProcessingCount: 200 },
             giftedSeats: 5,
             billingCycle: 'monthly',
-            lastActive: { toDate: () => new Date() },
-          }),
-        },
+            lastActive: { toDate: () => new Date() } }) },
         {
           id: 'org2',
           data: () => ({
@@ -268,18 +245,14 @@ describe('Stats Service', () => {
             monthlyUsage: {
               activeUsers: 30,
               recordCount: 500,
-              aiProcessingCount: 100,
-            },
+              aiProcessingCount: 100 },
             giftedSeats: 0,
             billingCycle: 'yearly',
-            lastActive: { toDate: () => new Date() },
-          }),
-        },
+            lastActive: { toDate: () => new Date() } }) },
       ];
 
       const mockSnapshot = {
-        docs: mockOrgs,
-      };
+        docs: mockOrgs };
 
       vi.mocked(getDocs).mockResolvedValue(mockSnapshot as any);
 

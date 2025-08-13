@@ -11,8 +11,7 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 import { UserFieldMapping } from '@/types/userImport';
@@ -45,8 +44,7 @@ const UserFieldMapper: React.FC<UserFieldMapperProps> = ({
   mappings,
   mode,
   useIntelligentMapping,
-  onMappingUpdate,
-}) => {
+  onMappingUpdate }) => {
   const [localMappings, setLocalMappings] = useState<UserFieldMapping[]>(mappings);
   const [isProcessing, setIsProcessing] = useState(false);
   const [draggedField, setDraggedField] = useState<string | null>(null);
@@ -79,8 +77,7 @@ const UserFieldMapper: React.FC<UserFieldMapperProps> = ({
       confidence: 0,
       isRequired: target.required,
       dataType: target.type,
-      method: 'manual',
-    }));
+      method: 'manual' }));
 
     // 簡易模式：自動匹配明顯的欄位
     if (mode === 'simple') {
@@ -119,8 +116,7 @@ const UserFieldMapper: React.FC<UserFieldMapperProps> = ({
       role: [
         /^(role|角色|權限|權限等級|用戶類型|使用者類型)$/i,
         /^(permission|access_?level|user_?type|member_?type)$/i,
-      ],
-    };
+      ] };
 
     const updatedMappings = baseMappings.map(mapping => {
       const targetPatterns = patterns[mapping.targetField];
@@ -145,8 +141,7 @@ const UserFieldMapper: React.FC<UserFieldMapperProps> = ({
           ...mapping,
           sourceField: bestMatch.field,
           confidence: bestMatch.confidence,
-          method: 'pattern' as const,
-        };
+          method: 'pattern' as const };
       }
 
       return mapping;
@@ -184,8 +179,7 @@ const UserFieldMapper: React.FC<UserFieldMapperProps> = ({
           ...mapping,
           sourceField: sourceField || mapping.sourceField,
           confidence: sourceField ? 0.85 : mapping.confidence,
-          method: 'ai' as const,
-        };
+          method: 'ai' as const };
       });
 
       setLocalMappings(aiMappings);
@@ -267,16 +261,14 @@ const UserFieldMapper: React.FC<UserFieldMapperProps> = ({
           ...mapping,
           sourceField,
           confidence: sourceField ? 0.9 : 0,
-          method: 'manual' as const,
-        };
+          method: 'manual' as const };
       }
       // 清除其他映射到相同來源欄位的映射（避免重複）
       if (mapping.sourceField === sourceField && sourceField !== '') {
         return {
           ...mapping,
           sourceField: '',
-          confidence: 0,
-        };
+          confidence: 0 };
       }
       return mapping;
     });
@@ -293,8 +285,7 @@ const UserFieldMapper: React.FC<UserFieldMapperProps> = ({
       ...mapping,
       sourceField: '',
       confidence: 0,
-      method: 'manual' as const,
-    }));
+      method: 'manual' as const }));
     setLocalMappings(clearedMappings);
     onMappingUpdate(clearedMappings);
   };
@@ -342,8 +333,7 @@ const UserFieldMapper: React.FC<UserFieldMapperProps> = ({
                 backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23666\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpolyline points=\'6 9 12 15 18 9\'%3E%3C/polyline%3E%3C/svg%3E")',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'right 12px center',
-                paddingRight: '36px',
-              }}
+                paddingRight: '36px' }}
               disabled={false}
             >
               <option value="" style={{ color: DesignSystem.colors.text.tertiary }}>
@@ -383,8 +373,7 @@ const UserFieldMapper: React.FC<UserFieldMapperProps> = ({
                 fontWeight: 600,
                 color: mapping.confidence > 0.8 
                   ? DesignSystem.colors.success
-                  : DesignSystem.colors.warning,
-              }}>
+                  : DesignSystem.colors.warning }}>
                 {Math.round(mapping.confidence * 100)}%
               </span>
             )}
@@ -547,13 +536,11 @@ const UserFieldMapper: React.FC<UserFieldMapperProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   toolbar: {
     flexDirection: 'row',
     marginBottom: DesignSystem.spacing.lg,
-    gap: DesignSystem.spacing.sm,
-  },
+    gap: DesignSystem.spacing.sm },
   toolButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -562,55 +549,44 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: DesignSystem.borderRadius.sm,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.border.light,
-  },
+    borderColor: DesignSystem.colors.border.light },
   toolButtonDisabled: {
-    opacity: 0.5,
-  },
+    opacity: 0.5 },
   toolButtonText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.primary,
-    marginLeft: DesignSystem.spacing.xs,
-  },
+    marginLeft: DesignSystem.spacing.xs },
   mappingList: {
-    flex: 1,
-  },
+    flex: 1 },
   mappingHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingBottom: DesignSystem.spacing.md,
     borderBottomWidth: 1,
     borderBottomColor: DesignSystem.colors.border.light,
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   mappingHeaderText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
     flex: 1,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   mappingItem: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: DesignSystem.spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   targetField: {
-    flex: 1,
-  },
+    flex: 1 },
   targetFieldLabel: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   targetFieldKey: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.tertiary,
-    marginTop: DesignSystem.spacing.xxs,
-  },
+    marginTop: DesignSystem.spacing.xxs },
   required: {
-    color: DesignSystem.colors.error,
-  },
+    color: DesignSystem.colors.error },
   sourceField: {
     flex: 1,
     flexDirection: 'row',
@@ -622,88 +598,69 @@ const styles = StyleSheet.create({
     borderRadius: DesignSystem.borderRadius.sm,
     borderWidth: 1,
     borderColor: DesignSystem.colors.border.light,
-    marginLeft: DesignSystem.spacing.md,
-  },
+    marginLeft: DesignSystem.spacing.md },
   sourceFieldEmpty: {
-    borderStyle: 'dashed',
-  },
+    borderStyle: 'dashed' },
   sourceFieldHovered: {
     borderColor: DesignSystem.colors.primary,
-    backgroundColor: `${DesignSystem.colors.primary}10`,
-  },
+    backgroundColor: `${DesignSystem.colors.primary}10` },
   sourceFieldText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
-    flex: 1,
-  },
+    flex: 1 },
   sourceFieldPlaceholder: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.text.tertiary,
-  },
+    color: DesignSystem.colors.text.tertiary },
   confidenceBadge: {
     paddingHorizontal: DesignSystem.spacing.xs,
     paddingVertical: 2,
     borderRadius: DesignSystem.borderRadius.xs,
-    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.125),
-  },
+    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.125) },
   confidenceBadgeHigh: {
-    backgroundColor: withAlpha(DesignSystem.colors.success, 0.125),
-  },
+    backgroundColor: withAlpha(DesignSystem.colors.success, 0.125) },
   confidenceBadgeMedium: {
-    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.125),
-  },
+    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.125) },
   confidenceText: {
     ...DesignSystem.typography.caption,
     fontSize: 10,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   clearButton: {
-    marginLeft: DesignSystem.spacing.sm,
-  },
+    marginLeft: DesignSystem.spacing.sm },
   availableFieldsSection: {
     marginTop: DesignSystem.spacing.lg,
     paddingTop: DesignSystem.spacing.lg,
     borderTopWidth: 1,
-    borderTopColor: DesignSystem.colors.border.light,
-  },
+    borderTopColor: DesignSystem.colors.border.light },
   sectionTitle: {
     ...DesignSystem.typography.h5,
     color: DesignSystem.colors.text.primary,
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   availableFieldsList: {
     flexDirection: 'row',
-    gap: DesignSystem.spacing.sm,
-  },
+    gap: DesignSystem.spacing.sm },
   availableField: {
     paddingHorizontal: DesignSystem.spacing.md,
     paddingVertical: DesignSystem.spacing.sm,
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: DesignSystem.borderRadius.sm,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.border.medium,
-  },
+    borderColor: DesignSystem.colors.border.medium },
   availableFieldText: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   stats: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingTop: DesignSystem.spacing.lg,
     marginTop: DesignSystem.spacing.lg,
     borderTopWidth: 1,
-    borderTopColor: DesignSystem.colors.border.light,
-  },
+    borderTopColor: DesignSystem.colors.border.light },
   statItem: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   statText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginLeft: DesignSystem.spacing.xs,
-  },
-});
+    marginLeft: DesignSystem.spacing.xs } });
 
 export default UserFieldMapper;

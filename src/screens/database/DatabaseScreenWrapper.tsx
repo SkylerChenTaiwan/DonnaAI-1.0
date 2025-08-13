@@ -17,8 +17,7 @@ export const DatabaseScreenWrapper: React.FC = () => {
       routeName: route.name,
       params: route.params,
       navigationState: navigation.getState(),
-      timestamp: new Date().toISOString(),
-    });
+      timestamp: new Date().toISOString() });
     
     return () => {
       console.log('👋 DatabaseScreenWrapper - 卸載');
@@ -41,8 +40,7 @@ export const DatabaseScreenWrapper: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   debugInfo: {
     position: 'absolute',
     top: 0,
@@ -50,11 +48,8 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: 'rgba(255, 0, 0, 0.8)',
     padding: 10,
-    zIndex: 9999,
-  },
+    zIndex: 9999 },
   debugText: {
     color: 'white',
     fontSize: 12,
-    fontFamily: 'monospace',
-  },
-});
+    fontFamily: 'monospace' } });

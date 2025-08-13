@@ -8,8 +8,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Platform,
-  ViewStyle,
-} from 'react-native';
+  ViewStyle } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 
@@ -26,25 +25,20 @@ export const SearchButton: React.FC<SearchButtonProps> = ({
   size = 'medium',
   style,
   disabled = false,
-  accessibilityLabel = '搜索',
-}) => {
+  accessibilityLabel = '搜索' }) => {
   const sizeStyles = {
     small: {
       width: 32,
       height: 32,
-      iconSize: 16,
-    },
+      iconSize: 16 },
     medium: {
       width: 40,
       height: 40,
-      iconSize: 18,
-    },
+      iconSize: 18 },
     large: {
       width: 48,
       height: 48,
-      iconSize: 22,
-    },
-  };
+      iconSize: 22 } };
 
   const currentSize = sizeStyles[size];
 
@@ -54,8 +48,7 @@ export const SearchButton: React.FC<SearchButtonProps> = ({
         styles.button,
         {
           width: currentSize.width,
-          height: currentSize.height,
-        },
+          height: currentSize.height },
         disabled && styles.disabled,
         style,
       ]}
@@ -81,10 +74,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     // 無陰影 - 扁平化設計
-    ...DesignSystem.shadows.none,
-  },
+    ...DesignSystem.shadows.none },
   disabled: {
     backgroundColor: DesignSystem.colors.gray400, // #A3A3A3
-    opacity: 0.5,
-  },
-});
+    opacity: 0.5 } });

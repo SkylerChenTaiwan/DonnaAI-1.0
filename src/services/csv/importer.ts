@@ -75,8 +75,7 @@ export async function importCustomers(
     onProgress,
     userId,
     teamId,
-    organizationId,
-  } = options;
+    organizationId } = options;
 
   const errors: ImportError[] = [];
   const duplicates: ImportDuplicate[] = [];
@@ -96,8 +95,7 @@ export async function importCustomers(
     currentBatch: 0,
     totalBatches,
     percentage: 0,
-    currentOperation: '準備導入...',
-  };
+    currentOperation: '準備導入...' };
 
   onProgress?.(progress);
 
@@ -132,8 +130,7 @@ export async function importCustomers(
             updateExisting,
             userId,
             teamId,
-            organizationId,
-          }
+            organizationId }
         );
 
         successCount += batchResult.successCount;
@@ -169,8 +166,7 @@ export async function importCustomers(
             row: batchStart + index + 1,
             data: item,
             error: `批次處理失敗: ${error instanceof Error ? error.message : '未知錯誤'}`,
-            code: 'BATCH_ERROR',
-          });
+            code: 'BATCH_ERROR' });
         });
         
         failureCount += batchData.length;
@@ -191,8 +187,7 @@ export async function importCustomers(
       skippedCount,
       errors,
       duplicates,
-      duration,
-    };
+      duration };
 
   } catch (error) {
     console.error('批量導入失敗:', error);
@@ -243,8 +238,7 @@ async function processBatch(
             data: item,
             existingId,
             matchedField: duplicateKey.includes('@') ? 'email' : 'name+company',
-            action: 'skipped',
-          });
+            action: 'skipped' });
           return { type: 'skipped' };
         } else if (options.updateExisting) {
           // TODO: 實作更新現有記錄的邏輯
@@ -253,8 +247,7 @@ async function processBatch(
             data: item,
             existingId,
             matchedField: duplicateKey.includes('@') ? 'email' : 'name+company',
-            action: 'updated',
-          });
+            action: 'updated' });
           return { type: 'updated' };
         }
       }
@@ -270,8 +263,7 @@ async function processBatch(
         phone: item.phone || undefined,
         industry: item.industry || undefined,
         address: item.address || undefined,
-        notes: item.notes || undefined,
-      };
+        notes: item.notes || undefined };
 
       // 創建客戶
       await createCustomer(customerData, options.userId);
@@ -286,9 +278,7 @@ async function processBatch(
           row: rowNumber,
           data: item,
           error: errorMessage,
-          code: getErrorCode(errorMessage),
-        },
-      };
+          code: getErrorCode(errorMessage) } };
     }
   });
 
@@ -319,8 +309,7 @@ async function processBatch(
     failureCount,
     skippedCount,
     errors,
-    duplicates,
-  };
+    duplicates };
 }
 
 /**
@@ -462,8 +451,7 @@ function getErrorCodeName(code: string): string {
     FORMAT_ERROR: '格式錯誤',
     DUPLICATE_ERROR: '重複錯誤',
     BATCH_ERROR: '批次錯誤',
-    UNKNOWN_ERROR: '未知錯誤',
-  };
+    UNKNOWN_ERROR: '未知錯誤' };
 
   return codeNames[code] || code;
 }

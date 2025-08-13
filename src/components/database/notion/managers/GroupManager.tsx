@@ -27,8 +27,7 @@ export class GroupManager {
     this.options = {
       showEmptyGroups: true,
       sortGroups: true,
-      ...options,
-    };
+      ...options };
   }
 
   /**
@@ -47,8 +46,7 @@ export class GroupManager {
         label: '所有項目',
         items: data,
         count: data.length,
-        collapsed: false,
-      }];
+        collapsed: false }];
     }
 
     const column = columns.find(col => col.key === groupConfig.columnKey);
@@ -60,8 +58,7 @@ export class GroupManager {
         label: '所有項目',
         items: data,
         count: data.length,
-        collapsed: false,
-      }];
+        collapsed: false }];
     }
 
     // 建立分組映射
@@ -100,8 +97,7 @@ export class GroupManager {
       label: groupLabels.get(groupKey) || groupKey,
       items,
       count: items.length,
-      collapsed: groupConfig.collapsedGroups?.includes(groupKey) || false,
-    }));
+      collapsed: groupConfig.collapsedGroups?.includes(groupKey) || false }));
 
     // 排序群組
     if (this.options.sortGroups) {
@@ -219,8 +215,7 @@ export class GroupManager {
       ...groupConfig,
       collapsedGroups: isCollapsed
         ? collapsedGroups.filter(key => key !== groupKey)
-        : [...collapsedGroups, groupKey],
-    };
+        : [...collapsedGroups, groupKey] };
   }
 
   /**
@@ -232,8 +227,7 @@ export class GroupManager {
   ): GroupConfig {
     return {
       ...groupConfig,
-      groupOrder: newOrder,
-    };
+      groupOrder: newOrder };
   }
 
   /**
@@ -256,8 +250,7 @@ export class GroupManager {
 
     return {
       isValid: errors.length === 0,
-      errors,
-    };
+      errors };
   }
 
   /**
@@ -301,6 +294,5 @@ export function createGroupConfig(columnKey: string = ''): GroupConfig {
   return {
     columnKey,
     collapsedGroups: [],
-    groupOrder: [],
-  };
+    groupOrder: [] };
 }

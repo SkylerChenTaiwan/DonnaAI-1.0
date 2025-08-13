@@ -13,8 +13,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator,
-} from 'react-native';
+  ActivityIndicator } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import DateTimePicker from '@react-native-community/datetimepicker';
 // @ts-ignore - Picker type issues
@@ -34,8 +33,7 @@ interface TaskAssignmentModalProps {
 
 export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
   visible,
-  onClose,
-}) => {
+  onClose }) => {
   const { user } = useAuth();
   const { currentTeam } = useOrganization();
   
@@ -99,8 +97,7 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
           description: description.trim(),
           priority,
           type: taskType,
-          dueDate: dueDate || undefined,
-        },
+          dueDate: dueDate || undefined },
         assigneeIds,
         user.uid,
         user.displayName || user.email || '管理員',
@@ -126,8 +123,7 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
     return date.toLocaleDateString('zh-TW', {
       year: 'numeric',
       month: '2-digit',
-      day: '2-digit',
-    });
+      day: '2-digit' });
   };
 
   return (
@@ -214,8 +210,7 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
                       styles.priorityButton,
                       priority === option.value && {
                         backgroundColor: option.color,
-                        borderColor: option.color,
-                      },
+                        borderColor: option.color },
                     ]}
                     onPress={() => setPriority(option.value as typeof priority)}
                     activeOpacity={0.7}
@@ -316,15 +311,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'flex-end',
-  },
+    justifyContent: 'flex-end' },
   modalContent: {
     backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '90%',
-    paddingBottom: Platform.OS === 'ios' ? 34 : 20,
-  },
+    paddingBottom: Platform.OS === 'ios' ? 34 : 20 },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -332,29 +325,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-  },
+    borderBottomColor: '#E5E7EB' },
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   closeButton: {
-    padding: 4,
-  },
+    padding: 4 },
   scrollView: {
     flex: 1,
-    paddingHorizontal: 20,
-  },
+    paddingHorizontal: 20 },
   formGroup: {
-    marginVertical: 12,
-  },
+    marginVertical: 12 },
   label: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1A1A1A',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   input: {
     backgroundColor: '#F8F9FA',
     borderRadius: 12,
@@ -363,42 +350,34 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#1A1A1A',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
-  },
+    borderColor: '#E5E7EB' },
   textArea: {
     minHeight: 80,
-    paddingTop: 12,
-  },
+    paddingTop: 12 },
   pickerContainer: {
     backgroundColor: '#F8F9FA',
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#E5E7EB',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   picker: {
-    height: 50,
-  },
+    height: 50 },
   priorityContainer: {
     flexDirection: 'row',
-    gap: 12,
-  },
+    gap: 12 },
   priorityButton: {
     flex: 1,
     paddingVertical: 10,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#E5E7EB',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   priorityText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#666666',
-  },
+    color: '#666666' },
   priorityTextActive: {
-    color: '#FFFFFF',
-  },
+    color: '#FFFFFF' },
   dateButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -408,21 +387,18 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderWidth: 1,
     borderColor: '#E5E7EB',
-    gap: 8,
-  },
+    gap: 8 },
   dateText: {
     fontSize: 16,
     color: '#1A1A1A',
-    flex: 1,
-  },
+    flex: 1 },
   footer: {
     flexDirection: 'row',
     paddingHorizontal: 20,
     paddingTop: 16,
     gap: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
-  },
+    borderTopColor: '#E5E7EB' },
   button: {
     flex: 1,
     paddingVertical: 14,
@@ -430,25 +406,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    gap: 8,
-  },
+    gap: 8 },
   cancelButton: {
-    backgroundColor: '#F3F4F6',
-  },
+    backgroundColor: '#F3F4F6' },
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#666666',
-  },
+    color: '#666666' },
   submitButton: {
-    backgroundColor: colors.primary,
-  },
+    backgroundColor: colors.primary },
   submitButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
-  },
+    color: '#FFFFFF' },
   disabledButton: {
-    opacity: 0.6,
-  },
-});
+    opacity: 0.6 } });

@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Alert, Modal } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Alert, Modal , Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Layout } from '@/components/common/Layout';
@@ -334,163 +334,134 @@ export const MeetingsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
-  },
+    backgroundColor: '#F5F5F5' },
   contentContainer: {
-    padding: 16,
-  },
+    padding: 16 },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#6b7280',
-  },
+    color: '#6b7280' },
   header: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 24,
     marginBottom: 16,
     shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 4,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   title: {
     fontSize: 28,
     fontWeight: '700',
     color: '#1f2937',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   subtitle: {
     fontSize: 16,
     color: '#6b7280',
     textAlign: 'center',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   notificationStatus: {
     fontSize: 14,
     color: '#22c55e',
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   sectionTitle: {
     fontSize: 20,
     fontWeight: '600',
     color: '#1f2937',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   quickActionsContainer: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 20,
     marginBottom: 16,
     shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    elevation: 4,
-  },
+    elevation: 4 },
   quickActionsGrid: {
-    gap: 12,
-  },
+    gap: 12 },
   quickActionButton: {
     paddingVertical: 16,
     borderRadius: 12,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   quickActionText: {
     color: '#ffffff',
     fontSize: 16,
     fontWeight: '600',
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   recordsContainer: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 20,
     shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    elevation: 4,
-  },
+    elevation: 4 },
   emptyState: {
     alignItems: 'center',
-    paddingVertical: 40,
-  },
+    paddingVertical: 40 },
   emptyStateText: {
     fontSize: 18,
     fontWeight: '500',
     color: '#6b7280',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   emptyStateSubtext: {
     fontSize: 14,
     color: '#9ca3af',
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   recordsList: {
-    maxHeight: 400,
-  },
+    maxHeight: 400 },
   recordItem: {
     backgroundColor: '#F5F5F5',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#e5e7eb',
-  },
+    borderColor: '#e5e7eb' },
   recordHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   recordTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1f2937',
     flex: 1,
-    marginRight: 12,
-  },
+    marginRight: 12 },
   statusBadge: {
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 12,
-  },
+    borderRadius: 12 },
   statusText: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#ffffff',
-  },
+    color: '#ffffff' },
   recordDate: {
     fontSize: 14,
     color: '#6b7280',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   recordType: {
     fontSize: 13,
     color: '#374151',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   recordActionButton: {
     backgroundColor: '#3b82f6',
     paddingVertical: 8,
     paddingHorizontal: 16,
-    borderRadius: 8,
-  },
+    borderRadius: 8 },
   pendingActionButton: {
-    backgroundColor: '#f59e0b',
-  },
+    backgroundColor: '#f59e0b' },
   recordActionText: {
     color: '#ffffff',
     fontSize: 14,
     fontWeight: '500',
-    textAlign: 'center',
-  },
-});
+    textAlign: 'center' } });

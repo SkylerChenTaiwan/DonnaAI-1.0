@@ -80,19 +80,16 @@ export function createImportSession(
       nameToCode: new Map(),
       codeToLevel: new Map(),
       userNameToId: new Map(),
-      customerNameToId: new Map(),
-    },
+      customerNameToId: new Map() },
     results: {
       codeMapping: { total: 0, success: 0, failed: 0, errors: [] },
       users: { total: 0, success: 0, failed: 0, errors: [] },
       customers: { total: 0, success: 0, failed: 0, errors: [] },
-      records: { total: 0, success: 0, failed: 0, errors: [] },
-    },
+      records: { total: 0, success: 0, failed: 0, errors: [] } },
     createdAt: new Date(),
     createdBy: userId,
     errors: [],
-    warnings: [],
-  };
+    warnings: [] };
 }
 
 /**
@@ -133,8 +130,7 @@ export async function loadAndValidateFile(
     if (rawData.length === 0) {
       return {
         success: false,
-        errors: ['檔案沒有資料'],
-      };
+        errors: ['檔案沒有資料'] };
     }
 
     // 根據檔案類型進行驗證
@@ -165,8 +161,7 @@ export async function loadAndValidateFile(
     // 儲存到會話
     session.files[fileType] = {
       fileName,
-      data: rawData,
-    };
+      data: rawData };
 
     // 回報驗證結果
     const errors: string[] = [];
@@ -185,14 +180,12 @@ export async function loadAndValidateFile(
     return {
       success: validationResult.invalidRecords === 0,
       data: rawData,
-      errors: errors.length > 0 ? errors : undefined,
-    };
+      errors: errors.length > 0 ? errors : undefined };
 
   } catch (error) {
     return {
       success: false,
-      errors: [error instanceof Error ? error.message : '檔案載入失敗'],
-    };
+      errors: [error instanceof Error ? error.message : '檔案載入失敗'] };
   }
 }
 
@@ -208,8 +201,7 @@ export async function executeLegacyImport(
   const errors: ImportError[] = [];
   const warnings: ImportWarning[] = [];
   const reports: ImportSessionResult['reports'] = {
-    summary: '',
-  };
+    summary: '' };
 
   try {
     // 更新狀態
@@ -245,8 +237,7 @@ export async function executeLegacyImport(
             type: 'codeMapping',
             row: 0,
             message: error,
-            data: null,
-          });
+            data: null });
         });
       }
       
@@ -254,8 +245,7 @@ export async function executeLegacyImport(
         warnings.push({
           type: 'codeMapping',
           row: 0,
-          message: warning,
-        });
+          message: warning });
       });
       
       processedItems += session.files.codeMapping.data.length;
@@ -264,8 +254,7 @@ export async function executeLegacyImport(
         total: session.files.codeMapping.data.length,
         success: validation.isValid ? session.files.codeMapping.data.length : 0,
         failed: validation.isValid ? 0 : session.files.codeMapping.data.length,
-        errors: validation.errors.map(e => ({ row: 0, message: e })),
-      };
+        errors: validation.errors.map(e => ({ row: 0, message: e })) };
     }
 
     // 更新狀態
@@ -291,8 +280,7 @@ export async function executeLegacyImport(
             currentProcessed,
             totalItems
           );
-        },
-      });
+        } });
 
       session.mappings.userNameToId = userResult.userMappings;
       processedItems += session.files.users.data.length;
@@ -301,8 +289,7 @@ export async function executeLegacyImport(
         total: userResult.totalProcessed,
         success: userResult.successCount,
         failed: userResult.failureCount,
-        errors: userResult.errors.map(e => ({ row: e.row, message: e.message })),
-      };
+        errors: userResult.errors.map(e => ({ row: e.row, message: e.message })) };
       
       errors.push(...userResult.errors);
       warnings.push(...userResult.warnings);
@@ -330,8 +317,7 @@ export async function executeLegacyImport(
             currentProcessed,
             totalItems
           );
-        },
-      });
+        } });
 
       session.mappings.customerNameToId = customerResult.customerMappings;
       processedItems += session.files.customers.data.length;
@@ -340,8 +326,7 @@ export async function executeLegacyImport(
         total: customerResult.totalProcessed,
         success: customerResult.successCount,
         failed: customerResult.failureCount,
-        errors: customerResult.errors.map(e => ({ row: e.row, message: e.message })),
-      };
+        errors: customerResult.errors.map(e => ({ row: e.row, message: e.message })) };
       
       errors.push(...customerResult.errors);
       warnings.push(...customerResult.warnings);
@@ -370,8 +355,7 @@ export async function executeLegacyImport(
             currentProcessed,
             totalItems
           );
-        },
-      });
+        } });
 
       processedItems += session.files.records.data.length;
       
@@ -379,8 +363,7 @@ export async function executeLegacyImport(
         total: recordResult.totalProcessed,
         success: recordResult.successCount,
         failed: recordResult.failureCount,
-        errors: recordResult.errors.map(e => ({ row: e.row, message: e.message })),
-      };
+        errors: recordResult.errors.map(e => ({ row: e.row, message: e.message })) };
       
       errors.push(...recordResult.errors);
       warnings.push(...recordResult.warnings);
@@ -408,8 +391,7 @@ export async function executeLegacyImport(
       skippedCount: 0, // TODO: 從各個結果中計算
       warningCount: warnings.length,
       duration: Date.now() - startTime,
-      averageTimePerRecord: (Date.now() - startTime) / processedItems,
-    };
+      averageTimePerRecord: (Date.now() - startTime) / processedItems };
 
     // 生成總報告
     reports.summary = generateSummaryReport(session, stats);
@@ -422,8 +404,7 @@ export async function executeLegacyImport(
       stats,
       errors,
       warnings,
-      reports,
-    };
+      reports };
 
   } catch (error) {
     session.status = 'failed';
@@ -434,8 +415,7 @@ export async function executeLegacyImport(
       row: 0,
       field: 'general',
       message: `導入流程失敗: ${errorMessage}`,
-      data: null,
-    });
+      data: null });
 
     return {
       sessionId: session.id,
@@ -447,14 +427,11 @@ export async function executeLegacyImport(
         skippedCount: 0,
         warningCount: warnings.length,
         duration: Date.now() - startTime,
-        averageTimePerRecord: 0,
-      },
+        averageTimePerRecord: 0 },
       errors,
       warnings,
       reports: {
-        summary: `導入失敗: ${errorMessage}`,
-      },
-    };
+        summary: `導入失敗: ${errorMessage}` } };
   }
 
   // 內部函數：更新進度
@@ -469,8 +446,7 @@ export async function executeLegacyImport(
         percentage: total > 0 ? (processed / total) * 100 : 0,
         errors: errors.length,
         warnings: warnings.length,
-        estimatedTimeRemaining: calculateEstimatedTime(processed, total, startTime),
-      });
+        estimatedTimeRemaining: calculateEstimatedTime(processed, total, startTime) });
     }
   }
 }
@@ -587,5 +563,4 @@ import { generateRecordImportReport } from './recordImporter';
 export {
   generateUserImportReport,
   generateCustomerImportReport,
-  generateRecordImportReport,
-};
+  generateRecordImportReport };

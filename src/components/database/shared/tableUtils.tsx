@@ -31,8 +31,7 @@ export const convertToTanStackColumns = (
       
       // 否則顯示原始值
       return value || '-';
-    },
-  }));
+    } }));
 };
 
 /**
@@ -57,20 +56,17 @@ export const generateCustomerColumns = (
       id: 'name',
       accessorKey: 'name',
       header: '姓名',
-      enableSorting: true,
-    },
+      enableSorting: true },
     {
       id: 'company',
       accessorKey: 'company',
       header: '公司',
-      enableSorting: true,
-    },
+      enableSorting: true },
     {
       id: 'phone',
       accessorKey: 'phone',
       header: '電話',
-      enableSorting: true,
-    },
+      enableSorting: true },
     {
       id: 'tags',
       accessorKey: 'tags',
@@ -79,8 +75,7 @@ export const generateCustomerColumns = (
       cell: ({ getValue }) => {
         const tags = getValue();
         return Array.isArray(tags) ? tags.join(', ') : (tags || '-');
-      },
-    },
+      } },
   ];
 };
 
@@ -99,26 +94,22 @@ export const generateRecordColumns = (
       cell: ({ getValue }) => {
         const type = getValue();
         return type === 'meeting' ? '會議' : '通話';
-      },
-    },
+      } },
     {
       id: 'customerName',
       accessorKey: 'customerName',
       header: '客戶',
-      enableSorting: true,
-    },
+      enableSorting: true },
     {
       id: 'date',
       accessorKey: 'date',
       header: '日期',
-      enableSorting: true,
-    },
+      enableSorting: true },
     {
       id: 'summary',
       accessorKey: 'summary',
       header: '摘要',
-      enableSorting: true,
-    },
+      enableSorting: true },
   ];
 };
 
@@ -133,20 +124,17 @@ export const generateTaskColumns = (
       id: 'title',
       accessorKey: 'title',
       header: '標題',
-      enableSorting: true,
-    },
+      enableSorting: true },
     {
       id: 'assignee',
       accessorKey: 'assignee',
       header: '負責人',
-      enableSorting: true,
-    },
+      enableSorting: true },
     {
       id: 'dueDate',
       accessorKey: 'dueDate',
       header: '到期日',
-      enableSorting: true,
-    },
+      enableSorting: true },
     {
       id: 'status',
       accessorKey: 'status',
@@ -173,8 +161,7 @@ export const generateTaskColumns = (
             {statusText}
           </div>
         );
-      },
-    },
+      } },
   ];
 };
 

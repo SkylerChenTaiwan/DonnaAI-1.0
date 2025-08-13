@@ -52,8 +52,7 @@ export const webColorOverrides = {
       background: 'transparent',
       backgroundHover: 'rgba(0, 0, 0, 0.05)',
       text: '#000000',       // 文字純黑
-    },
-  },
+    } },
   
   // 狀態色 - 確保在白色背景上有足夠對比
   status: {
@@ -61,8 +60,7 @@ export const webColorOverrides = {
     warning: '#ED6C02',      // 深橙，從 #FF9500 加深
     error: '#D32F2F',        // 深紅，從 #FF3B30 加深
     info: '#0288D1',         // 深藍，從 #5856D6 調整
-  },
-};
+  } };
 
 // 根據平台返回適當的顏色
 export function getAdaptiveColor(nativeColor: string, webColor: string): string {
@@ -85,12 +83,9 @@ export const webStyleOverrides = {
     fontFamily: 'inherit',
     '&:focus': {
       borderColor: webColorOverrides.button.primary.default,
-      boxShadow: `0 0 0 2px ${webColorOverrides.button.primary.default}20`,
-    },
+      boxShadow: `0 0 0 2px ${webColorOverrides.button.primary.default}20` },
     '&::placeholder': {
-      color: webColorOverrides.text.tertiary,
-    },
-  },
+      color: webColorOverrides.text.tertiary } },
   
   // 下拉選單樣式
   select: {
@@ -114,14 +109,11 @@ export const webStyleOverrides = {
     backgroundSize: '20px',
     '&:focus': {
       borderColor: webColorOverrides.button.primary.default,
-      boxShadow: `0 0 0 2px ${webColorOverrides.button.primary.default}20`,
-    },
+      boxShadow: `0 0 0 2px ${webColorOverrides.button.primary.default}20` },
     '&:disabled': {
       backgroundColor: webColorOverrides.background.primary,
       color: webColorOverrides.text.disabled,
-      cursor: 'not-allowed',
-    },
-  },
+      cursor: 'not-allowed' } },
   
   // 按鈕樣式
   button: {
@@ -137,16 +129,12 @@ export const webStyleOverrides = {
       outline: 'none',
       transition: 'all 0.2s ease',
       '&:hover': {
-        backgroundColor: webColorOverrides.button.primary.hover,
-      },
+        backgroundColor: webColorOverrides.button.primary.hover },
       '&:active': {
-        backgroundColor: webColorOverrides.button.primary.pressed,
-      },
+        backgroundColor: webColorOverrides.button.primary.pressed },
       '&:disabled': {
         backgroundColor: webColorOverrides.text.disabled,
-        cursor: 'not-allowed',
-      },
-    },
+        cursor: 'not-allowed' } },
     secondary: {
       padding: '12px 20px',
       backgroundColor: webColorOverrides.button.secondary.default,
@@ -159,13 +147,9 @@ export const webStyleOverrides = {
       outline: 'none',
       transition: 'all 0.2s ease',
       '&:hover': {
-        backgroundColor: webColorOverrides.button.secondary.hover,
-      },
+        backgroundColor: webColorOverrides.button.secondary.hover },
       '&:active': {
-        backgroundColor: webColorOverrides.button.secondary.pressed,
-      },
-    },
-  },
+        backgroundColor: webColorOverrides.button.secondary.pressed } } },
   
   // 卡片樣式
   card: {
@@ -175,7 +159,4 @@ export const webStyleOverrides = {
     padding: '16px',
     '&:hover': {
       borderColor: webColorOverrides.border.default,
-      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-    },
-  },
-};
+      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' } } };

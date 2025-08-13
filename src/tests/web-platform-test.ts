@@ -30,8 +30,7 @@ export async function testAudioService() {
       // 測試錄音設定
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: true,
-        playsInSilentModeIOS: true,
-      });
+        playsInSilentModeIOS: true });
       console.log('✅ 音訊模式設定成功');
       
       // 測試錄音預設
@@ -56,8 +55,7 @@ export async function testNotificationService() {
       // 測試通知頻道設定
       await Notifications.setNotificationChannelAsync('test-channel', {
         name: '測試頻道',
-        importance: 3,
-      });
+        importance: 3 });
       console.log('✅ 通知頻道設定成功');
     } catch (error) {
       console.error('❌ 通知服務測試失敗:', error);

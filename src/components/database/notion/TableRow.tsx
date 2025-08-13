@@ -38,8 +38,7 @@ export const TableRow: React.FC<TableRowProps> = memo(({
   onCellEdit,
   getCellState,
   multiSelectMode,
-  onSelectRow,
-}) => {
+  onSelectRow }) => {
   const [isHovered, setIsHovered] = useState(false);
   
   const handleRowClick = useCallback(() => {
@@ -63,8 +62,7 @@ export const TableRow: React.FC<TableRowProps> = memo(({
       onPress={handleRowClick}
       {...(Platform.OS === 'web' ? {
         onMouseEnter: handleMouseEnter,
-        onMouseLeave: handleMouseLeave,
-      } : {})}
+        onMouseLeave: handleMouseLeave } : {})}
       activeOpacity={1}
       style={getRowStyles(isHovered, isSelected)}
     >

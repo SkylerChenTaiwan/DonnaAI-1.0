@@ -103,6 +103,5 @@ export const useDatabaseKeyboardShortcuts = (config: DatabaseShortcutConfig) => 
       { keys: ['Cmd/Ctrl', 'A'], description: '全選' },
       { keys: ['Esc'], description: '退出模式' },
       { keys: ['Delete'], description: '刪除選中' },
-    ],
-  };
+    ] };
 };

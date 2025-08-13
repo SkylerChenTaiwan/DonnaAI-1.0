@@ -11,8 +11,7 @@ import {
   TouchableOpacity,
   Alert,
   Platform,
-  Animated,
-} from 'react-native';
+  Animated } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { Audio } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
@@ -28,8 +27,7 @@ type RecordingStatus = 'idle' | 'recording' | 'paused' | 'loading';
 
 export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
   onComplete,
-  disabled = false,
-}) => {
+  disabled = false }) => {
   // 組件實例ID，用於調試
   const instanceId = useRef(Math.random().toString(36).substr(2, 9)).current;
   
@@ -96,13 +94,11 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
         Animated.timing(pulseAnim, {
           toValue: 1.1,
           duration: 800,
-          useNativeDriver: true,
-        }),
+          useNativeDriver: true }),
         Animated.timing(pulseAnim, {
           toValue: 1,
           duration: 800,
-          useNativeDriver: true,
-        }),
+          useNativeDriver: true }),
       ])
     ).start();
   }, [pulseAnim]);
@@ -113,8 +109,7 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
     Animated.timing(pulseAnim, {
       toValue: 1,
       duration: 200,
-      useNativeDriver: true,
-    }).start();
+      useNativeDriver: true }).start();
   }, [pulseAnim]);
 
   // 開始波形動畫
@@ -124,13 +119,11 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
         Animated.timing(waveformAnim, {
           toValue: 1,
           duration: 1000,
-          useNativeDriver: true,
-        }),
+          useNativeDriver: true }),
         Animated.timing(waveformAnim, {
           toValue: 0,
           duration: 1000,
-          useNativeDriver: true,
-        }),
+          useNativeDriver: true }),
       ])
     ).start();
   }, [waveformAnim]);
@@ -141,8 +134,7 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
     Animated.timing(waveformAnim, {
       toValue: 0,
       duration: 200,
-      useNativeDriver: true,
-    }).start();
+      useNativeDriver: true }).start();
   }, [waveformAnim]);
 
   // 開始錄音
@@ -370,8 +362,7 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
   const renderWaveform = () => {
     const waveOpacity = waveformAnim.interpolate({
       inputRange: [0, 1],
-      outputRange: [0.3, 1],
-    });
+      outputRange: [0.3, 1] });
 
     return (
       <View style={styles.waveformContainer}>
@@ -424,8 +415,7 @@ export const SimplifiedAudioInput: React.FC<SimplifiedAudioInputProps> = ({
               recordingStatus === 'recording' && styles.recordingButton,
               recordingStatus === 'paused' && styles.pausedButton,
               {
-                transform: Platform.OS === 'web' ? `scale(${pulseAnim})` : [{ scale: pulseAnim }],
-              },
+                transform: Platform.OS === 'web' ? `scale(${pulseAnim})` : [{ scale: pulseAnim }] },
             ]}
           >
             {recordingStatus === 'loading' ? (
@@ -477,54 +467,45 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 40,
-  },
+    paddingHorizontal: 40 },
   visualizationArea: {
     height: 100,
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 40,
-  },
+    marginBottom: 40 },
   waveformContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-  },
+    gap: 6 },
   waveformBar: {
     width: 4,
     backgroundColor: '#C7C7CC',
-    borderRadius: 2,
-  },
+    borderRadius: 2 },
   timer: {
     fontSize: 48,
     fontWeight: '300',
     color: '#1A1A1A',
     marginBottom: 60,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif-light',
-  },
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif-light' },
   controlsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 24,
-    marginBottom: 40,
-  },
+    marginBottom: 40 },
   recordButtonWrapper: {
-    position: 'relative',
-  },
+    position: 'relative' },
   sideButtonContainer: {
     width: 56,
     height: 56,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   sideButton: {
     width: 56,
     height: 56,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   recordButton: {
     width: 88,
     height: 88,
@@ -533,20 +514,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#B91C1C',
-    shadowOffset: { width: 0, height: 4 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),
     shadowOpacity: 0.3,
     shadowRadius: 8,
-    elevation: 8,
-  },
+    elevation: 8 },
   recordingButton: {
-    backgroundColor: '#991B1B',
-  },
+    backgroundColor: '#991B1B' },
   pausedButton: {
-    backgroundColor: '#F59E0B',
-  },
+    backgroundColor: '#F59E0B' },
   hint: {
     fontSize: 16,
     color: '#7A7A7A',
-    textAlign: 'center',
-  },
-});
+    textAlign: 'center' } });

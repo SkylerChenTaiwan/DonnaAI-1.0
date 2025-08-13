@@ -140,8 +140,7 @@ export async function safeCreateUsers(
         row: userData.row || i + 1,
         field: 'general',
         message: error instanceof Error ? error.message : '建立用戶文檔失敗',
-        data: userData,
-      });
+        data: userData });
     }
   }
   

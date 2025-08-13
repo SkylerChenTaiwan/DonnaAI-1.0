@@ -26,27 +26,22 @@ export const NotionTokens = {
     // 互動狀態
     hoverBg: 'rgba(55, 53, 47, 0.03)',
     selectedBg: 'rgba(35, 131, 226, 0.06)',
-    focusShadow: '0 0 0 1px #2383e2, 0 0 0 3px #e8f4fd',
-  },
+    focusShadow: '0 0 0 1px #2383e2, 0 0 0 3px #e8f4fd' },
   typography: {
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
     sizes: {
       small: '12px',
       body: '13px',              // 縮小主要字體
       header: '12px',            // 表頭更小
-      title: '16px',
-    },
+      title: '16px' },
     weights: {
       normal: 400,
       medium: 500,
-      semibold: 600,
-    },
+      semibold: 600 },
     lineHeights: {
       tight: 1.2,                // 更緊湊的行高
       normal: 1.3,               
-      relaxed: 1.4,             
-    },
-  },
+      relaxed: 1.4 } },
   spacing: {
     xs: '2px',
     sm: '4px', 
@@ -66,19 +61,16 @@ export const NotionTokens = {
     width: '1px',
     style: 'solid',
     radius: '3px',
-    radiusLarge: '6px',
-  },
+    radiusLarge: '6px' },
   shadows: {
     subtle: '0 1px 2px rgba(0, 0, 0, 0.04)',
     focus: '0 0 0 1px #2383e2, 0 0 0 3px #e8f4fd',
     hover: '0 1px 2px rgba(0, 0, 0, 0.08)',
-    button: '0 1px 2px rgba(0, 0, 0, 0.05)',
-  },
+    button: '0 1px 2px rgba(0, 0, 0, 0.05)' },
   transitions: {
     fast: '0.1s ease',
     normal: '0.12s ease',
-    slow: '0.15s ease-out',
-  },
+    slow: '0.15s ease-out' },
   layout: {
     tableLayout: 'auto',         // 彈性欄寬
     minColumnWidth: '50px',      // 最小欄寬
@@ -87,7 +79,4 @@ export const NotionTokens = {
       title: '200px',
       status: '120px',
       date: '140px',
-      tags: '160px',
-    },
-  },
-};
+      tags: '160px' } } };

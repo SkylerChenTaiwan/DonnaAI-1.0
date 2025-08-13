@@ -10,8 +10,7 @@ import {
   ScrollView,
   StyleSheet,
   RefreshControl,
-  SafeAreaView,
-} from 'react-native';
+  SafeAreaView } from 'react-native';
 import { Layout } from '@/components/common/Layout';
 import { ModeToggle } from '@/components/common/ModeToggle';
 import { TaskListSection } from '@/components/dashboard/TaskListSection';
@@ -109,11 +108,9 @@ export const EnhancedDashboard: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
-  },
+    backgroundColor: '#F8F9FA' },
   safeArea: {
-    flex: 1,
-  },
+    flex: 1 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -122,35 +119,26 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-  },
+    borderBottomColor: '#E5E7EB' },
   userInfo: {
-    flex: 1,
-  },
+    flex: 1 },
   userName: {
     fontSize: 22,
     fontWeight: '700',
     color: '#1A1A1A',
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   userEmail: {
     fontSize: 14,
-    color: '#6B7280',
-  },
+    color: '#6B7280' },
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   section: {
     marginTop: 20,
-    marginBottom: 20,
-  },
+    marginBottom: 20 },
   emptyState: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   emptyText: {
     fontSize: 16,
-    color: '#6B7280',
-  },
-});
+    color: '#6B7280' } });

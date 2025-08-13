@@ -63,8 +63,7 @@ export const CreateTaskModal: React.FC = () => {
       const priorityMap: Record<string, 'low' | 'medium' | 'high'> = {
         '低': 'low',
         '中': 'medium',
-        '高': 'high',
-      };
+        '高': 'high' };
 
       // 基礎任務資料
       const taskData: TaskCreateRequest = {
@@ -77,8 +76,7 @@ export const CreateTaskModal: React.FC = () => {
         teamId: currentTeam.id,
         organizationId: currentOrganization.id,
         customerIds: data.customerId ? [data.customerId] : [],
-        tags: data.tags || [],
-      };
+        tags: data.tags || [] };
       
       // 只有在有值時才添加 optional 欄位
       if (data.dueDate) {
@@ -123,12 +121,10 @@ export const CreateTaskModal: React.FC = () => {
               儲存
             </Text>
           </TouchableOpacity>
-        ),
-      });
+        ) });
     } else {
       navigation.setOptions({
-        headerRight: null,
-      });
+        headerRight: null });
     }
   }, [navigation, handleSavePress, loading, mode]);
 
@@ -173,8 +169,7 @@ export const CreateTaskModal: React.FC = () => {
             onSubmit={handleFormSubmit}
             initialData={{
               customerIds: customerId ? [customerId] : [],
-              recordId: recordId,
-            }}
+              recordId: recordId }}
             isSubmitting={loading}
             userId={user?.uid || ''}
             organizationId={currentOrganization?.id || ''}
@@ -191,15 +186,12 @@ export const CreateTaskModal: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
-  },
+    backgroundColor: '#F8F9FA' },
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   voiceContent: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
+    backgroundColor: '#FFFFFF' },
   textInputLink: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -208,12 +200,10 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     backgroundColor: '#F8F9FA',
     borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
-  },
+    borderBottomColor: '#E3E1DC' },
   linkText: {
     fontSize: 14,
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   voiceInputLink: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -223,24 +213,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF5F5',
     borderBottomWidth: 1,
     borderBottomColor: '#FFE0E0',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   voiceLinkText: {
     fontSize: 16,
     color: '#FF6B6B',
     fontWeight: '500',
-    flex: 1,
-  },
+    flex: 1 },
   headerButton: {
     paddingHorizontal: 16,
-    paddingVertical: 8,
-  },
+    paddingVertical: 8 },
   headerButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   disabledText: {
-    opacity: 0.5,
-  },
-});
+    opacity: 0.5 } });

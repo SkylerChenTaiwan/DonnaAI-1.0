@@ -11,8 +11,7 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
-  RefreshControl,
-} from 'react-native';
+  RefreshControl } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { useAuth } from '@/hooks/useAuth';
@@ -28,8 +27,7 @@ import { useAnalyticsStore } from '@/stores/analyticsStore';
 import {
   defaultReportTemplates,
   createDefaultReport,
-  hasDefaultReports,
-} from '@/services/reports/defaultReports';
+  hasDefaultReports } from '@/services/reports/defaultReports';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -44,8 +42,7 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
   limit = 6,
   onReportPress,
   fullScreen = false,
-  showDefault = true,
-}) => {
+  showDefault = true }) => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [reports, setReports] = useState<SavedReport[]>([]);
@@ -74,8 +71,7 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
           {
             ...reportData,
             createdByName: 'DonnaAI 系統',
-            userId: user.uid,
-          },
+            userId: user.uid },
           user.uid,
           'DonnaAI 系統'
         );
@@ -101,8 +97,7 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
     try {
       const savedReports = await getSavedReports(user.uid, {
         teamId: currentTeam?.id,
-        limit: fullScreen ? undefined : limit,
-      });
+        limit: fullScreen ? undefined : limit });
       
       // 檢查是否需要初始化預設報表
       if (showDefault && savedReports.length === 0 && !hasDefaultReports(savedReports)) {
@@ -303,76 +298,62 @@ export const SavedReportsGrid: React.FC<SavedReportsGridProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   loadingContainer: {
     padding: DesignSystem.spacing.xl,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   fullScreenContainer: {
-    minHeight: 300,
-  },
+    minHeight: 300 },
   loadingText: {
     marginTop: DesignSystem.spacing.sm,
     ...DesignSystem.typography.body,
-    color: colors.textSecondary,
-  },
+    color: colors.textSecondary },
   emptyContainer: {
     padding: DesignSystem.spacing.xl,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   fullScreenEmptyContainer: {
-    minHeight: 300,
-  },
+    minHeight: 300 },
   emptyText: {
     ...DesignSystem.typography.body,
     color: colors.textSecondary,
     marginTop: DesignSystem.spacing.sm,
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   createButton: {
     backgroundColor: colors.primary,
     paddingHorizontal: DesignSystem.spacing.lg,
     paddingVertical: DesignSystem.spacing.sm,
     borderRadius: DesignSystem.borderRadius.full,
-    marginTop: DesignSystem.spacing.md,
-  },
+    marginTop: DesignSystem.spacing.md },
   createButtonText: {
     color: colors.background,
-    ...DesignSystem.typography.button,
-  },
+    ...DesignSystem.typography.button },
   reportsGrid: {
     flexDirection: 'row',
     paddingVertical: DesignSystem.spacing.sm,
-    gap: DesignSystem.spacing.sm,
-  },
+    gap: DesignSystem.spacing.sm },
   fullScreenGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     padding: DesignSystem.spacing.sm,
-    gap: DesignSystem.spacing.sm,
-  },
+    gap: DesignSystem.spacing.sm },
   reportCard: {
     width: 160,
     backgroundColor: colors.background,
     borderRadius: DesignSystem.borderRadius.md,
     padding: DesignSystem.spacing.md,
-    ...DesignSystem.shadows.sm,
-  },
+    ...DesignSystem.shadows.sm },
   fullScreenReportCard: {
     width: '48%',
     backgroundColor: colors.background,
     borderRadius: DesignSystem.borderRadius.md,
     padding: DesignSystem.spacing.md,
-    ...DesignSystem.shadows.sm,
-  },
+    ...DesignSystem.shadows.sm },
   defaultReportCard: {
     borderWidth: 1,
     borderColor: colors.border,
-    borderStyle: 'dashed',
-  },
+    borderStyle: 'dashed' },
   chartIconContainer: {
     width: 64,
     height: 64,
@@ -380,74 +361,62 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: DesignSystem.spacing.sm,
-    alignSelf: 'center',
-  },
+    alignSelf: 'center' },
   reportHeader: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     marginBottom: DesignSystem.spacing.sm,
-    minHeight: 40,
-  },
+    minHeight: 40 },
   reportName: {
     ...DesignSystem.typography.body,
     fontWeight: '600',
     color: colors.text,
-    flex: 1,
-  },
+    flex: 1 },
   defaultBadge: {
     backgroundColor: colors.gray200,
     paddingHorizontal: DesignSystem.spacing.sm,
     paddingVertical: 2,
     borderRadius: DesignSystem.borderRadius.sm,
-    marginLeft: DesignSystem.spacing.xs,
-  },
+    marginLeft: DesignSystem.spacing.xs },
   defaultBadgeText: {
     ...DesignSystem.typography.caption,
     color: colors.textSecondary,
-    fontSize: 10,
-  },
+    fontSize: 10 },
   reportMeta: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   reportDate: {
     ...DesignSystem.typography.caption,
-    color: colors.textTertiary,
-  },
+    color: colors.textTertiary },
   publicBadge: {
     width: 20,
     height: 20,
     borderRadius: 10,
     backgroundColor: colors.primary,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   tagsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: DesignSystem.spacing.xs,
-  },
+    gap: DesignSystem.spacing.xs },
   tag: {
     backgroundColor: colors.gray100,
     paddingHorizontal: DesignSystem.spacing.sm,
     paddingVertical: DesignSystem.spacing.xs,
-    borderRadius: DesignSystem.borderRadius.sm,
-  },
+    borderRadius: DesignSystem.borderRadius.sm },
   tagText: {
     ...DesignSystem.typography.caption,
     fontSize: 10,
-    color: colors.textSecondary,
-  },
+    color: colors.textSecondary },
   moreTagsText: {
     ...DesignSystem.typography.caption,
     fontSize: 10,
     color: colors.textTertiary,
     paddingHorizontal: DesignSystem.spacing.xs,
-    paddingVertical: DesignSystem.spacing.xs,
-  },
+    paddingVertical: DesignSystem.spacing.xs },
   viewMoreCard: {
     width: 160,
     backgroundColor: colors.backgroundSecondary,
@@ -457,11 +426,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: colors.border,
-    borderStyle: 'dashed',
-  },
+    borderStyle: 'dashed' },
   viewMoreText: {
     ...DesignSystem.typography.buttonSmall,
     color: colors.primary,
-    marginTop: DesignSystem.spacing.sm,
-  },
-});
+    marginTop: DesignSystem.spacing.sm } });

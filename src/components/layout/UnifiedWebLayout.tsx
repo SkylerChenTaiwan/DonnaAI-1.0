@@ -19,8 +19,7 @@ import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 // 側邊欄寬度常數
 const SIDEBAR_WIDTH = {
   expanded: 220,
-  collapsed: 80,
-};
+  collapsed: 80 };
 
 interface UnifiedWebLayoutProps {
   children: React.ReactNode;
@@ -35,8 +34,7 @@ export const UnifiedWebLayout: React.FC<UnifiedWebLayoutProps> = ({
   scrollable = true,
   maxWidth = 1200,
   showSidebar = true,
-  containerStyle,
-}) => {
+  containerStyle }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const { mode } = useAuthStore();
   const route = useRoute();
@@ -131,8 +129,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   mainContent: {
     flex: 1,
     flexDirection: 'column',
@@ -140,19 +137,14 @@ const styles = StyleSheet.create({
     transition: 'margin-left 0.3s ease', // 平滑過渡動畫
   },
   pageWrapper: {
-    flex: 1,
-  },
+    flex: 1 },
   scrollView: {
-    flex: 1,
-  },
+    flex: 1 },
   scrollContent: {
     flexGrow: 1,
     alignItems: 'center',
-    paddingVertical: 24,
-  },
+    paddingVertical: 24 },
   contentContainer: {
     width: '100%',
     paddingHorizontal: 24,
-    alignSelf: 'center',
-  },
-});
+    alignSelf: 'center' } });

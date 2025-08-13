@@ -36,8 +36,7 @@ export const WebLayout: React.FC<WebLayoutProps> = ({
   maxWidth = 1440,
   padding = true,
   containerStyle,
-  contentStyle,
-}) => {
+  contentStyle }) => {
   const { isDesktop, isTablet, isMobile } = useResponsive();
   
   // 非 Web 平台直接返回子元素
@@ -48,8 +47,7 @@ export const WebLayout: React.FC<WebLayoutProps> = ({
   // 計算內容的 padding
   const contentPadding = padding ? {
     paddingHorizontal: isDesktop ? 32 : isTablet ? 24 : 16,
-    paddingVertical: isDesktop ? 24 : 20,
-  } : {};
+    paddingVertical: isDesktop ? 24 : 20 } : {};
   
   // 內容容器
   const content = (
@@ -86,20 +84,15 @@ export const WebLayout: React.FC<WebLayoutProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   scrollView: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   scrollContent: {
     flexGrow: 1,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   contentContainer: {
     width: '100%',
-    alignSelf: 'center',
-  },
-});
+    alignSelf: 'center' } });
 
 export default WebLayout;

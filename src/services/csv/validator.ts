@@ -55,8 +55,7 @@ export function validateCustomerBatch(
     standardizePhoneNumbers = true,
     standardizeEmails = true,
     trimWhitespace = true,
-    capitalizeNames = true,
-  } = options;
+    capitalizeNames = true } = options;
 
   const warnings: ValidationWarning[] = [];
   const duplicates: DuplicateRecord[] = [];
@@ -80,16 +79,14 @@ export function validateCustomerBatch(
         standardizePhoneNumbers,
         standardizeEmails,
         trimWhitespace,
-        capitalizeNames,
-      });
+        capitalizeNames });
 
       // 檢查必填欄位
       if (!cleanedRecord.name || !cleanedRecord.company) {
         warnings.push({
           row,
           field: !cleanedRecord.name ? 'name' : 'company',
-          message: `${!cleanedRecord.name ? '客戶姓名' : '公司名稱'}為必填欄位`,
-        });
+          message: `${!cleanedRecord.name ? '客戶姓名' : '公司名稱'}為必填欄位` });
         isValid = false;
       }
 
@@ -99,8 +96,7 @@ export function validateCustomerBatch(
           row,
           field: 'email',
           message: '電子郵件格式不正確',
-          suggestion: `建議修改為正確格式，例如：user@example.com`,
-        });
+          suggestion: `建議修改為正確格式，例如：user@example.com` });
       }
 
       // 驗證電話格式
@@ -109,8 +105,7 @@ export function validateCustomerBatch(
           row,
           field: 'phone',
           message: '電話號碼格式可能不正確',
-          suggestion: '建議使用格式：0912-345-678 或 +886-912-345-678',
-        });
+          suggestion: '建議使用格式：0912-345-678 或 +886-912-345-678' });
       }
 
       // 檢查電子郵件重複
@@ -147,8 +142,7 @@ export function validateCustomerBatch(
           row,
           field: 'general',
           message: '資料完整度較低',
-          suggestion: '建議補充更多客戶資訊以提升資料品質',
-        });
+          suggestion: '建議補充更多客戶資訊以提升資料品質' });
       }
 
       if (isValid) {
@@ -164,8 +158,7 @@ export function validateCustomerBatch(
       warnings.push({
         row,
         field: 'general',
-        message: `資料處理失敗: ${error instanceof Error ? error.message : '未知錯誤'}`,
-      });
+        message: `資料處理失敗: ${error instanceof Error ? error.message : '未知錯誤'}` });
       invalidRecords++;
     }
   });
@@ -178,8 +171,7 @@ export function validateCustomerBatch(
           row,
           duplicateRows: rows.filter(r => r !== row),
           field: 'email',
-          value: email,
-        });
+          value: email });
       });
     }
   });
@@ -191,8 +183,7 @@ export function validateCustomerBatch(
           row,
           duplicateRows: rows.filter(r => r !== row),
           field: 'phone',
-          value: phone,
-        });
+          value: phone });
       });
     }
   });
@@ -204,8 +195,7 @@ export function validateCustomerBatch(
           row,
           duplicateRows: rows.filter(r => r !== row),
           field: 'name_company',
-          value: nameCompany.replace('_', ' + '),
-        });
+          value: nameCompany.replace('_', ' + ') });
       });
     }
   });
@@ -216,8 +206,7 @@ export function validateCustomerBatch(
     invalidRecords,
     skippedRecords,
     warnings,
-    duplicateRecords: duplicates,
-  };
+    duplicateRecords: duplicates };
 }
 
 /**
@@ -433,8 +422,7 @@ export function validateBusinessCodeMapping(
           warnings.push({
             row,
             field: '業務名稱',
-            message: '業務名稱為必填欄位',
-          });
+            message: '業務名稱為必填欄位' });
           isValid = false;
         }
         
@@ -442,8 +430,7 @@ export function validateBusinessCodeMapping(
           warnings.push({
             row,
             field: '顧問代碼',
-            message: '顧問代碼為必填欄位',
-          });
+            message: '顧問代碼為必填欄位' });
           isValid = false;
         }
         
@@ -451,8 +438,7 @@ export function validateBusinessCodeMapping(
           warnings.push({
             row,
             field: '職級',
-            message: '職級為必填欄位',
-          });
+            message: '職級為必填欄位' });
           isValid = false;
         }
       }
@@ -463,8 +449,7 @@ export function validateBusinessCodeMapping(
           row,
           field: '顧問代碼',
           message: '顧問代碼應該是數字',
-          suggestion: '請檢查是否包含非數字字符',
-        });
+          suggestion: '請檢查是否包含非數字字符' });
       }
       
       // 檢查重複
@@ -491,8 +476,7 @@ export function validateBusinessCodeMapping(
       warnings.push({
         row,
         field: 'general',
-        message: `資料處理失敗: ${error instanceof Error ? error.message : '未知錯誤'}`,
-      });
+        message: `資料處理失敗: ${error instanceof Error ? error.message : '未知錯誤'}` });
       invalidRecords++;
     }
   });
@@ -505,8 +489,7 @@ export function validateBusinessCodeMapping(
           row,
           duplicateRows: rows.filter(r => r !== row),
           field: '顧問代碼',
-          value: code,
-        });
+          value: code });
       });
     }
   });
@@ -519,8 +502,7 @@ export function validateBusinessCodeMapping(
           row,
           duplicateRows: rows.filter(r => r !== row),
           field: '業務名稱',
-          value: name,
-        });
+          value: name });
       });
     }
   });
@@ -531,8 +513,7 @@ export function validateBusinessCodeMapping(
     invalidRecords,
     skippedRecords,
     warnings,
-    duplicateRecords: duplicates,
-  };
+    duplicateRecords: duplicates };
 }
 
 /**
@@ -569,8 +550,7 @@ export function validateLegacyUser(
         warnings.push({
           row,
           field: '業務帳號',
-          message: '業務帳號為必填欄位',
-        });
+          message: '業務帳號為必填欄位' });
         isValid = false;
       }
       
@@ -578,8 +558,7 @@ export function validateLegacyUser(
         warnings.push({
           row,
           field: '你的層級',
-          message: '層級為必填欄位',
-        });
+          message: '層級為必填欄位' });
         isValid = false;
       }
       
@@ -589,8 +568,7 @@ export function validateLegacyUser(
           row,
           field: '公司Gmail帳號',
           message: '電子郵件格式不正確',
-          suggestion: '請檢查電子郵件格式',
-        });
+          suggestion: '請檢查電子郵件格式' });
       }
       
       // 驗證電話
@@ -599,8 +577,7 @@ export function validateLegacyUser(
           row,
           field: 'Phone',
           message: '電話號碼格式可能不正確',
-          suggestion: '建議使用格式：0912-345-678',
-        });
+          suggestion: '建議使用格式：0912-345-678' });
       }
       
       // 驗證層級格式
@@ -609,8 +586,7 @@ export function validateLegacyUser(
           row,
           field: '你的層級',
           message: '層級格式不正確',
-          suggestion: '層級應該是 L0, L1, L2 等格式',
-        });
+          suggestion: '層級應該是 L0, L1, L2 等格式' });
       }
       
       // 檢查重複
@@ -638,8 +614,7 @@ export function validateLegacyUser(
       warnings.push({
         row,
         field: 'general',
-        message: `資料處理失敗: ${error instanceof Error ? error.message : '未知錯誤'}`,
-      });
+        message: `資料處理失敗: ${error instanceof Error ? error.message : '未知錯誤'}` });
       invalidRecords++;
     }
   });
@@ -652,8 +627,7 @@ export function validateLegacyUser(
           row,
           duplicateRows: rows.filter(r => r !== row),
           field: '公司Gmail帳號',
-          value: email,
-        });
+          value: email });
       });
     }
   });
@@ -665,8 +639,7 @@ export function validateLegacyUser(
           row,
           duplicateRows: rows.filter(r => r !== row),
           field: '業務帳號',
-          value: name,
-        });
+          value: name });
       });
     }
   });
@@ -677,8 +650,7 @@ export function validateLegacyUser(
     invalidRecords,
     skippedRecords,
     warnings,
-    duplicateRecords: duplicates,
-  };
+    duplicateRecords: duplicates };
 }
 
 /**
@@ -725,8 +697,7 @@ export function validateLegacyCustomer(
           warnings.push({
             row,
             field: '負責業務',
-            message: '負責業務為必填欄位',
-          });
+            message: '負責業務為必填欄位' });
           isValid = false;
         }
         
@@ -734,8 +705,7 @@ export function validateLegacyCustomer(
           warnings.push({
             row,
             field: '客戶名稱',
-            message: '客戶名稱為必填欄位',
-          });
+            message: '客戶名稱為必填欄位' });
           isValid = false;
         }
       }
@@ -746,8 +716,7 @@ export function validateLegacyCustomer(
           row,
           field: '電子郵件地址',
           message: '電子郵件格式不正確',
-          suggestion: '請檢查電子郵件格式',
-        });
+          suggestion: '請檢查電子郵件格式' });
       }
       
       // 驗證電話
@@ -756,8 +725,7 @@ export function validateLegacyCustomer(
           row,
           field: '聯絡電話',
           message: '電話號碼格式可能不正確',
-          suggestion: '建議使用格式：0912-345-678',
-        });
+          suggestion: '建議使用格式：0912-345-678' });
       }
       
       // 標準化電子郵件
@@ -804,8 +772,7 @@ export function validateLegacyCustomer(
       warnings.push({
         row,
         field: 'general',
-        message: `資料處理失敗: ${error instanceof Error ? error.message : '未知錯誤'}`,
-      });
+        message: `資料處理失敗: ${error instanceof Error ? error.message : '未知錯誤'}` });
       invalidRecords++;
     }
   });
@@ -818,8 +785,7 @@ export function validateLegacyCustomer(
           row,
           duplicateRows: rows.filter(r => r !== row),
           field: '電子郵件地址',
-          value: email,
-        });
+          value: email });
       });
     }
   });
@@ -831,8 +797,7 @@ export function validateLegacyCustomer(
           row,
           duplicateRows: rows.filter(r => r !== row),
           field: '聯絡電話',
-          value: phone,
-        });
+          value: phone });
       });
     }
   });
@@ -844,8 +809,7 @@ export function validateLegacyCustomer(
           row,
           duplicateRows: rows.filter(r => r !== row),
           field: '客戶名稱_公司名稱',
-          value: nameCompany.replace('_', ' + '),
-        });
+          value: nameCompany.replace('_', ' + ') });
       });
     }
   });
@@ -856,8 +820,7 @@ export function validateLegacyCustomer(
     invalidRecords,
     skippedRecords,
     warnings,
-    duplicateRecords: duplicates,
-  };
+    duplicateRecords: duplicates };
 }
 
 /**
@@ -900,8 +863,7 @@ export function validateLegacyRecord(
           warnings.push({
             row,
             field: '標題',
-            message: '標題為必填欄位',
-          });
+            message: '標題為必填欄位' });
           isValid = false;
         }
         
@@ -909,8 +871,7 @@ export function validateLegacyRecord(
           warnings.push({
             row,
             field: '訪談結果',
-            message: '訪談結果為必填欄位',
-          });
+            message: '訪談結果為必填欄位' });
           isValid = false;
         }
         
@@ -918,8 +879,7 @@ export function validateLegacyRecord(
           warnings.push({
             row,
             field: '訪談日期',
-            message: '訪談日期為必填欄位',
-          });
+            message: '訪談日期為必填欄位' });
           isValid = false;
         }
         
@@ -927,8 +887,7 @@ export function validateLegacyRecord(
           warnings.push({
             row,
             field: '業務帳號',
-            message: '業務帳號為必填欄位',
-          });
+            message: '業務帳號為必填欄位' });
           isValid = false;
         }
         
@@ -936,8 +895,7 @@ export function validateLegacyRecord(
           warnings.push({
             row,
             field: '客戶名稱',
-            message: '客戶名稱為必填欄位',
-          });
+            message: '客戶名稱為必填欄位' });
           isValid = false;
         }
       }
@@ -948,8 +906,7 @@ export function validateLegacyRecord(
           row,
           field: '訪談日期',
           message: '訪談日期格式不正確',
-          suggestion: '支援格式：MM/DD/YYYY 或 YYYY年M月D日',
-        });
+          suggestion: '支援格式：MM/DD/YYYY 或 YYYY年M月D日' });
       }
       
       if (record.下次跟進日期 && !isValidLegacyDate(record.下次跟進日期)) {
@@ -957,8 +914,7 @@ export function validateLegacyRecord(
           row,
           field: '下次跟進日期',
           message: '下次跟進日期格式不正確',
-          suggestion: '支援格式：MM/DD/YYYY 或 YYYY年M月D日',
-        });
+          suggestion: '支援格式：MM/DD/YYYY 或 YYYY年M月D日' });
       }
       
       if (isValid) {
@@ -970,8 +926,7 @@ export function validateLegacyRecord(
       warnings.push({
         row,
         field: 'general',
-        message: `資料處理失敗: ${error instanceof Error ? error.message : '未知錯誤'}`,
-      });
+        message: `資料處理失敗: ${error instanceof Error ? error.message : '未知錯誤'}` });
       invalidRecords++;
     }
   });
@@ -982,8 +937,7 @@ export function validateLegacyRecord(
     invalidRecords,
     skippedRecords,
     warnings,
-    duplicateRecords: duplicates,
-  };
+    duplicateRecords: duplicates };
 }
 
 /**

@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Alert, ScrollView , Platform } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Layout } from '@/components/common/Layout';
@@ -97,8 +97,7 @@ export const RecordingScreen: React.FC = () => {
     await notificationService.sendLocalNotification({
       type: 'recording_reminder',
       title: '錄音完成',
-      body: `會議「${meetingTitle}」錄音已完成，請選擇處理方式。`,
-    });
+      body: `會議「${meetingTitle}」錄音已完成，請選擇處理方式。` });
   };
 
   // 選擇立即處理
@@ -351,132 +350,105 @@ export const RecordingScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9fafb',
-  },
+    backgroundColor: '#f9fafb' },
   contentContainer: {
-    padding: 16,
-  },
+    padding: 16 },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#6b7280',
-  },
+    color: '#6b7280' },
   stepContainer: {
     backgroundColor: '#ffffff',
     borderRadius: 16,
     padding: 24,
     shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
     shadowOpacity: 0.1,
     shadowRadius: 12,
-    elevation: 4,
-  },
+    elevation: 4 },
   stepTitle: {
     fontSize: 24,
     fontWeight: '700',
     color: '#1f2937',
     textAlign: 'center',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   stepSubtitle: {
     fontSize: 16,
     color: '#6b7280',
     textAlign: 'center',
-    marginBottom: 32,
-  },
+    marginBottom: 32 },
   choiceContainer: {
-    marginBottom: 32,
-  },
+    marginBottom: 32 },
   choiceCard: {
     backgroundColor: '#f9fafb',
     borderRadius: 12,
     padding: 20,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#e5e7eb',
-  },
+    borderColor: '#e5e7eb' },
   choiceTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: '#1f2937',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   choiceDescription: {
     fontSize: 14,
     color: '#6b7280',
     marginBottom: 16,
-    lineHeight: 20,
-  },
+    lineHeight: 20 },
   actionButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    gap: 12,
-  },
+    gap: 12 },
   primaryButton: {
-    backgroundColor: '#3b82f6',
-  },
+    backgroundColor: '#3b82f6' },
   primaryButtonText: {
     color: '#ffffff',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   secondaryButton: {
-    backgroundColor: '#22c55e',
-  },
+    backgroundColor: '#22c55e' },
   secondaryButtonText: {
     color: '#ffffff',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   tertiaryButton: {
     backgroundColor: '#f59e0b',
-    flex: 1,
-  },
+    flex: 1 },
   tertiaryButtonText: {
     color: '#ffffff',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   cancelButton: {
     backgroundColor: '#e5e7eb',
-    flex: 1,
-  },
+    flex: 1 },
   cancelButtonText: {
     color: '#374151',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   progressContainer: {
     marginTop: 24,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   progressBar: {
     width: '100%',
     height: 8,
     backgroundColor: '#e5e7eb',
     borderRadius: 4,
     overflow: 'hidden',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   progressFill: {
     height: '100%',
     backgroundColor: '#3b82f6',
-    borderRadius: 4,
-  },
+    borderRadius: 4 },
   progressText: {
     fontSize: 14,
     color: '#6b7280',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   processingSteps: {
     marginTop: 24,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   processingStep: {
     fontSize: 16,
     color: '#6b7280',
     marginBottom: 8,
-    textAlign: 'center',
-  },
-});
+    textAlign: 'center' } });

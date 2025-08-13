@@ -11,8 +11,7 @@ import {
   StyleSheet,
   RefreshControl,
   Pressable,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { Icon } from '@/components/common/Icon';
 import { TableColumn, TableData } from '@/types/table';
@@ -50,8 +49,7 @@ export const NotionStyleTable: React.FC<NotionStyleTableProps> = ({
   onRefresh,
   loading = false,
   sortConfig,
-  onSort,
-}) => {
+  onSort }) => {
   const [hoveredRow, setHoveredRow] = useState<string | null>(null);
 
   // 顏色系統 - 基於 Notion 的亮色主題
@@ -64,8 +62,7 @@ export const NotionStyleTable: React.FC<NotionStyleTableProps> = ({
     textSecondary: '#787774',
     hover: 'rgba(55, 53, 47, 0.08)',
     selected: 'rgba(35, 131, 226, 0.14)',
-    primaryAccent: '#FF6B6B',
-  };
+    primaryAccent: '#FF6B6B' };
 
   const toggleSelection = useCallback((itemId: string) => {
     if (!onSelect) return;
@@ -199,8 +196,7 @@ export const NotionStyleTable: React.FC<NotionStyleTableProps> = ({
             styles.tableRow,
             { 
               backgroundColor: isSelected ? colors.selected : colors.background,
-              borderBottomColor: colors.border,
-            },
+              borderBottomColor: colors.border },
             Platform.OS === 'web' && isHovered && !isSelected && { backgroundColor: colors.hover },
           ]}
           onPress={() => {
@@ -272,33 +268,28 @@ const styles = StyleSheet.create({
   tableContainer: {
     flex: 1,
     borderRadius: 0,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   tableHeader: {
     flexDirection: 'row',
     borderBottomWidth: 1,
     minHeight: responsive({ mobile: 40, tablet: 42, desktop: 44 }),
     paddingHorizontal: responsive({ mobile: 8, tablet: 12, desktop: 16 }),
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   headerCell: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: responsive({ mobile: 6, tablet: 8, desktop: 10 }),
     paddingVertical: responsive({ mobile: 6, tablet: 8, desktop: 10 }),
-    gap: 4,
-  },
+    gap: 4 },
   headerText: {
     fontSize: responsive({ mobile: 12, tablet: 13, desktop: 14 }),
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   checkboxContainer: {
     width: responsive({ mobile: 32, tablet: 36, desktop: 40 }),
     minWidth: responsive({ mobile: 32, tablet: 36, desktop: 40 }),
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: responsive({ mobile: 8, tablet: 10, desktop: 12 }),
-  },
+    marginRight: responsive({ mobile: 8, tablet: 10, desktop: 12 }) },
   addColumnButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -309,13 +300,9 @@ const styles = StyleSheet.create({
       cursor: 'pointer',
       transition: 'opacity 0.2s ease',
       ':hover': {
-        opacity: 0.7,
-      },
-    }),
-  },
+        opacity: 0.7 } }) },
   addColumnText: {
-    fontSize: responsive({ mobile: 12, tablet: 13, desktop: 14 }),
-  },
+    fontSize: responsive({ mobile: 12, tablet: 13, desktop: 14 }) },
   addFirstRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -324,13 +311,10 @@ const styles = StyleSheet.create({
     minHeight: responsive({ mobile: 48, tablet: 52, desktop: 56 }),
     ...webOnly({
       cursor: 'pointer',
-      transition: 'background-color 0.2s ease',
-    }),
-  },
+      transition: 'background-color 0.2s ease' }) },
   addFirstRowText: {
     marginLeft: responsive({ mobile: 6, tablet: 8, desktop: 10 }),
-    fontSize: responsive({ mobile: 14, tablet: 15, desktop: 16 }),
-  },
+    fontSize: responsive({ mobile: 14, tablet: 15, desktop: 16 }) },
   tableRow: {
     flexDirection: 'row',
     borderBottomWidth: 1,
@@ -339,17 +323,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     ...webOnly({
       cursor: 'pointer',
-      transition: 'background-color 0.2s ease',
-    }),
-  },
+      transition: 'background-color 0.2s ease' }) },
   tableCell: {
     justifyContent: 'center',
     paddingHorizontal: responsive({ mobile: 6, tablet: 8, desktop: 10 }),
-    paddingVertical: responsive({ mobile: 8, tablet: 10, desktop: 12 }),
-  },
+    paddingVertical: responsive({ mobile: 8, tablet: 10, desktop: 12 }) },
   cellText: {
-    fontSize: responsive({ mobile: 14, tablet: 15, desktop: 16 }),
-  },
+    fontSize: responsive({ mobile: 14, tablet: 15, desktop: 16 }) },
   addRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -360,12 +340,7 @@ const styles = StyleSheet.create({
       cursor: 'pointer',
       transition: 'opacity 0.2s ease',
       ':hover': {
-        opacity: 0.7,
-      },
-    }),
-  },
+        opacity: 0.7 } }) },
   addRowText: {
     marginLeft: responsive({ mobile: 4, tablet: 6, desktop: 8 }),
-    fontSize: responsive({ mobile: 14, tablet: 15, desktop: 16 }),
-  },
-});
+    fontSize: responsive({ mobile: 14, tablet: 15, desktop: 16 }) } });

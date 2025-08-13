@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 /**
  * 設計系統常量
  * 基於 Notion 風格的單色灰階設計系統
@@ -25,32 +26,26 @@ export const DesignSystem = {
       primary: {
         default: '#2C2C2C',
         hover: '#3C3C3C',
-        pressed: '#1C1C1C',
-      },
+        pressed: '#1C1C1C' },
       // 次要按鈕
       secondary: {
         default: '#F7F7F7',
         hover: '#ECECEC',
-        pressed: '#E0E0E0',
-      },
+        pressed: '#E0E0E0' },
       // 輪廓按鈕
       outline: {
         border: '#D0D0D0',
         borderHover: '#A0A0A0',
         background: 'transparent',
-        backgroundHover: 'rgba(0, 0, 0, 0.03)',
-      },
+        backgroundHover: 'rgba(0, 0, 0, 0.03)' },
       // Ghost 按鈕
       ghost: {
         background: 'transparent',
-        backgroundHover: 'rgba(0, 0, 0, 0.05)',
-      },
+        backgroundHover: 'rgba(0, 0, 0, 0.05)' },
       // 文字按鈕
       text: {
         color: '#2C2C2C',
-        underline: 'rgba(44, 44, 44, 0.3)',
-      },
-    },
+        underline: 'rgba(44, 44, 44, 0.3)' } },
     
     // 文字色
     text: {
@@ -88,9 +83,7 @@ export const DesignSystem = {
       600: '#525252',
       700: '#404040',
       800: '#262626',
-      900: '#171717',
-    },
-  },
+      900: '#171717' } },
   
   // 間距系統
   spacing: {
@@ -99,8 +92,7 @@ export const DesignSystem = {
     md: 16,
     lg: 24,
     xl: 32,
-    xxl: 48,
-  },
+    xxl: 48 },
   
   // 圓角系統
   borderRadius: {
@@ -116,33 +108,28 @@ export const DesignSystem = {
   shadows: {
     none: {
       shadowColor: 'transparent',
-      shadowOffset: { width: 0, height: 0 },
+      ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 0 } }),
       shadowOpacity: 0,
       shadowRadius: 0,
-      elevation: 0,
-    },
+      elevation: 0 },
     sm: {
       shadowColor: '#000',
-      shadowOffset: { width: 0, height: 1 },
+      ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
       shadowOpacity: 0.05,
       shadowRadius: 2,
-      elevation: 2,
-    },
+      elevation: 2 },
     md: {
       shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
+      ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
       shadowOpacity: 0.08,
       shadowRadius: 4,
-      elevation: 4,
-    },
+      elevation: 4 },
     lg: {
       shadowColor: '#000',
-      shadowOffset: { width: 0, height: 4 },
+      ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),
       shadowOpacity: 0.1,
       shadowRadius: 8,
-      elevation: 8,
-    },
-  },
+      elevation: 8 } },
   
   // 字體大小系統
   typography: {
@@ -150,68 +137,55 @@ export const DesignSystem = {
     h1: {
       fontSize: 32,
       lineHeight: 40,
-      fontWeight: '700' as const,
-    },
+      fontWeight: '700' as const },
     h2: {
       fontSize: 24,
       lineHeight: 32,
-      fontWeight: '600' as const,
-    },
+      fontWeight: '600' as const },
     h3: {
       fontSize: 20,
       lineHeight: 28,
-      fontWeight: '600' as const,
-    },
+      fontWeight: '600' as const },
     h4: {
       fontSize: 18,
       lineHeight: 24,
-      fontWeight: '600' as const,
-    },
+      fontWeight: '600' as const },
     
     // 正文
     body: {
       fontSize: 16,
       lineHeight: 24,
-      fontWeight: '400' as const,
-    },
+      fontWeight: '400' as const },
     bodySmall: {
       fontSize: 14,
       lineHeight: 20,
-      fontWeight: '400' as const,
-    },
+      fontWeight: '400' as const },
     
     // 標籤
     caption: {
       fontSize: 12,
       lineHeight: 16,
-      fontWeight: '400' as const,
-    },
+      fontWeight: '400' as const },
     
     // 按鈕
     button: {
       fontSize: 14,
       lineHeight: 20,
-      fontWeight: '500' as const,
-    },
+      fontWeight: '500' as const },
     buttonSmall: {
       fontSize: 13,
       lineHeight: 18,
-      fontWeight: '500' as const,
-    },
+      fontWeight: '500' as const },
     buttonLarge: {
       fontSize: 16,
       lineHeight: 22,
-      fontWeight: '500' as const,
-    },
-  },
+      fontWeight: '500' as const } },
   
   // 過渡動畫
   transitions: {
     fast: 150,
     normal: 250,
-    slow: 350,
-  },
-};
+    slow: 350 } };
 
 // 輔助函數：生成一致的按鈕樣式
 export const getButtonStyle = (
@@ -225,61 +199,49 @@ export const getButtonStyle = (
     justifyContent: 'center' as const,
     flexDirection: 'row' as const,
     borderWidth: 0,
-    ...DesignSystem.shadows.none,
-  };
+    ...DesignSystem.shadows.none };
   
   // 尺寸樣式
   const sizeStyles = {
     small: {
       paddingHorizontal: 12,
       paddingVertical: 6,
-      ...DesignSystem.typography.buttonSmall,
-    },
+      ...DesignSystem.typography.buttonSmall },
     medium: {
       paddingHorizontal: 16,
       paddingVertical: 8,
-      ...DesignSystem.typography.button,
-    },
+      ...DesignSystem.typography.button },
     large: {
       paddingHorizontal: 20,
       paddingVertical: 10,
-      ...DesignSystem.typography.buttonLarge,
-    },
-  };
+      ...DesignSystem.typography.buttonLarge } };
   
   // 變體樣式
   const variantStyles = {
     primary: {
       backgroundColor: DesignSystem.colors.button.primary.default,
-      color: DesignSystem.colors.text.inverse,
-    },
+      color: DesignSystem.colors.text.inverse },
     secondary: {
       backgroundColor: DesignSystem.colors.button.secondary.default,
-      color: DesignSystem.colors.primary,
-    },
+      color: DesignSystem.colors.primary },
     outline: {
       backgroundColor: DesignSystem.colors.button.outline.background,
       borderWidth: 1,
       borderColor: DesignSystem.colors.button.outline.border,
-      color: DesignSystem.colors.primary,
-    },
+      color: DesignSystem.colors.primary },
     ghost: {
       backgroundColor: DesignSystem.colors.button.ghost.background,
-      color: DesignSystem.colors.primary,
-    },
+      color: DesignSystem.colors.primary },
     text: {
       backgroundColor: 'transparent',
       paddingHorizontal: 0,
       paddingVertical: 0,
-      color: DesignSystem.colors.button.text.color,
-    },
-  };
+      color: DesignSystem.colors.button.text.color } };
   
   return {
     ...base,
     ...sizeStyles[size],
-    ...variantStyles[variant],
-  };
+    ...variantStyles[variant] };
 };
 
 // 輔助函數：生成一致的卡片樣式
@@ -287,21 +249,18 @@ export const getCardStyle = (elevated = false) => ({
   backgroundColor: DesignSystem.colors.background.surface,
   borderRadius: DesignSystem.borderRadius.md,
   padding: DesignSystem.spacing.md,
-  ...(elevated ? DesignSystem.shadows.md : DesignSystem.shadows.sm),
-});
+  ...(elevated ? DesignSystem.shadows.md : DesignSystem.shadows.sm) });
 
 // 輔助函數：生成一致的文字樣式
 export const getTextStyle = (variant: 'primary' | 'secondary' | 'tertiary' = 'primary') => {
   const colors = {
     primary: DesignSystem.colors.text.primary,
     secondary: DesignSystem.colors.text.secondary,
-    tertiary: DesignSystem.colors.text.tertiary,
-  };
+    tertiary: DesignSystem.colors.text.tertiary };
   
   return {
     color: colors[variant],
-    ...DesignSystem.typography.body,
-  };
+    ...DesignSystem.typography.body };
 };
 
 // Web 平台專用的設計 Tokens
@@ -343,16 +302,14 @@ export const webTokens: Partial<WebTokens> = {
     // 動畫
     '--transition-fast': `${DesignSystem.transitions.fast}ms`,
     '--transition-normal': `${DesignSystem.transitions.normal}ms`,
-    '--transition-slow': `${DesignSystem.transitions.slow}ms`,
-  },
+    '--transition-slow': `${DesignSystem.transitions.slow}ms` },
   
   // 媒體查詢斷點
   breakpoints: {
     mobile: '(max-width: 767px)',
     tablet: '(min-width: 768px) and (max-width: 1023px)',
     desktop: '(min-width: 1024px)',
-    wide: '(min-width: 1440px)',
-  },
+    wide: '(min-width: 1440px)' },
   
   // Web 專用陰影（轉換 React Native 陰影到 CSS）
   webShadows: {
@@ -360,8 +317,7 @@ export const webTokens: Partial<WebTokens> = {
     sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
     md: '0 2px 4px rgba(0, 0, 0, 0.08)',
     lg: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    xl: '0 8px 16px rgba(0, 0, 0, 0.15)',
-  },
+    xl: '0 8px 16px rgba(0, 0, 0, 0.15)' },
   
   // Z-index 層級管理
   zIndex: {
@@ -371,9 +327,7 @@ export const webTokens: Partial<WebTokens> = {
     overlay: 1100,
     modal: 1200,
     popover: 1300,
-    tooltip: 1400,
-  },
-};
+    tooltip: 1400 } };
 
 // 生成 CSS 變數字串（用於注入到 document）
 export const generateCSSVariables = (): string => {
@@ -395,6 +349,5 @@ export const createBreakpointChecker = () => {
     isMobile: () => checkBreakpoint('mobile'),
     isTablet: () => checkBreakpoint('tablet'),
     isDesktop: () => checkBreakpoint('desktop'),
-    isWide: () => checkBreakpoint('wide'),
-  };
+    isWide: () => checkBreakpoint('wide') };
 };

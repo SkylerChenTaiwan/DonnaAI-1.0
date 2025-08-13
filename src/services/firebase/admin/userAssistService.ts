@@ -14,8 +14,7 @@ import {
   where,
   writeBatch,
   serverTimestamp,
-  Timestamp,
-} from 'firebase/firestore';
+  Timestamp } from 'firebase/firestore';
 import { getFirebaseDb } from '@/services/firebase/config';
 import { getAuth } from 'firebase/auth';
 import { ImportResult, FieldMapping } from '@/types/entities';
@@ -46,8 +45,7 @@ const DEFAULT_FIELD_MAPPINGS: Record<string, FieldMapping[]> = {
     { sourceField: '負責人', targetField: 'assignee', transform: 'none' },
     { sourceField: '截止日期', targetField: 'dueDate', transform: 'date' },
     { sourceField: '狀態', targetField: 'status', transform: 'lowercase' },
-  ],
-};
+  ] };
 
 // 自訂欄位配置
 export interface CustomFieldConfig {
@@ -134,8 +132,7 @@ export async function importUserData(
             details?.push({
               rowNumber: rowIndex + 1,
               status: 'failed',
-              message: validationResult.errors.join(', '),
-            });
+              message: validationResult.errors.join(', ') });
             continue;
           }
 
@@ -145,8 +142,7 @@ export async function importUserData(
             organizationId,
             createdBy: currentUser.uid,
             createdAt: serverTimestamp(),
-            updatedAt: serverTimestamp(),
-          };
+            updatedAt: serverTimestamp() };
 
           const docRef = doc(collection(db, getCollectionName(dataType)));
           batch.set(docRef, docData);
@@ -154,8 +150,7 @@ export async function importUserData(
           imported++;
           details?.push({
             rowNumber: rowIndex + 1,
-            status: 'success',
-          });
+            status: 'success' });
         } catch (error) {
           failed++;
           const errorMessage = error instanceof Error ? error.message : '未知錯誤';
@@ -163,8 +158,7 @@ export async function importUserData(
           details?.push({
             rowNumber: rowIndex + 1,
             status: 'failed',
-            message: errorMessage,
-          });
+            message: errorMessage });
         }
       }
 
@@ -179,16 +173,14 @@ export async function importUserData(
       dataType,
       totalRows: data.length,
       imported,
-      failed,
-    });
+      failed });
 
     return {
       success: failed === 0,
       imported,
       failed,
       errors,
-      details,
-    };
+      details };
   } catch (error) {
     console.error('匯入用戶資料失敗:', error);
     throw error;
@@ -236,15 +228,13 @@ export async function setupCustomFields(
       fields,
       createdBy: currentUser.uid,
       createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
-    });
+      updatedAt: serverTimestamp() });
 
     // 記錄配置活動
     await logCustomFieldActivity(organizationId, currentUser.uid, {
       entityType,
       fieldsCount: fields.length,
-      action: 'setup',
-    });
+      action: 'setup' });
   } catch (error) {
     console.error('設定自訂欄位失敗:', error);
     throw error;
@@ -380,8 +370,7 @@ function validateData(data: any, dataType: string): { isValid: boolean; errors: 
   const requiredFields: Record<string, string[]> = {
     users: ['name', 'email'],
     customers: ['companyName', 'contactName'],
-    tasks: ['title'],
-  };
+    tasks: ['title'] };
 
   const required = requiredFields[dataType] || [];
   required.forEach(field => {
@@ -397,8 +386,7 @@ function validateData(data: any, dataType: string): { isValid: boolean; errors: 
 
   return {
     isValid: errors.length === 0,
-    errors,
-  };
+    errors };
 }
 
 /**
@@ -431,8 +419,7 @@ function getCollectionName(dataType: string): string {
   const collections: Record<string, string> = {
     users: 'users',
     customers: 'customers',
-    tasks: 'tasks',
-  };
+    tasks: 'tasks' };
   return collections[dataType] || dataType;
 }
 
@@ -453,8 +440,7 @@ async function logImportActivity(
       userId,
       timestamp: serverTimestamp(),
       type: 'data_import',
-      details,
-    });
+      details });
   } catch (error) {
     console.error('記錄匯入活動失敗:', error);
   }
@@ -477,8 +463,7 @@ async function logCustomFieldActivity(
       userId,
       timestamp: serverTimestamp(),
       type: 'custom_field_config',
-      details,
-    });
+      details });
   } catch (error) {
     console.error('記錄自訂欄位活動失敗:', error);
   }

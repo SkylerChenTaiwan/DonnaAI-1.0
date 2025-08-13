@@ -39,8 +39,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
   id,
   required = false,
   'aria-label': ariaLabel,
-  'aria-describedby': ariaDescribedBy,
-}) => {
+  'aria-describedby': ariaDescribedBy }) => {
   // 合併樣式
   const selectStyle: React.CSSProperties = {
     width: '100%',
@@ -62,8 +61,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
     backgroundPosition: 'right 12px center',
     backgroundSize: '20px',
     transition: 'all 0.2s ease',
-    ...style,
-  };
+    ...style };
 
   // 懸停和焦點樣式
   const [isFocused, setIsFocused] = React.useState(false);

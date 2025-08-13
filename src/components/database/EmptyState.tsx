@@ -8,8 +8,7 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { responsive } from '@/styles/web';
 
 interface EmptyStateProps {
@@ -68,27 +67,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 60,
-    paddingHorizontal: 20,
-  },
+    paddingHorizontal: 20 },
   emptyIcon: {
     fontSize: responsive({ mobile: 48, tablet: 56, desktop: 64 }),
-    marginBottom: responsive({ mobile: 16, tablet: 20, desktop: 24 }),
-  },
+    marginBottom: responsive({ mobile: 16, tablet: 20, desktop: 24 }) },
   emptyTitle: {
     fontSize: responsive({ mobile: 18, tablet: 20, desktop: 22 }),
     fontWeight: '600',
     color: '#37352f',
     marginBottom: responsive({ mobile: 8, tablet: 10, desktop: 12 }),
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   emptyDescription: {
     fontSize: responsive({ mobile: 14, tablet: 15, desktop: 16 }),
     color: '#787774',
     textAlign: 'center',
     marginBottom: responsive({ mobile: 24, tablet: 28, desktop: 32 }),
     paddingHorizontal: responsive({ mobile: 20, tablet: 40, desktop: 60 }),
-    lineHeight: responsive({ mobile: 20, tablet: 22, desktop: 24 }),
-  },
+    lineHeight: responsive({ mobile: 20, tablet: 22, desktop: 24 }) },
   emptyButton: {
     backgroundColor: '#FF6B6B',
     paddingHorizontal: responsive({ mobile: 20, tablet: 24, desktop: 28 }),
@@ -97,13 +92,8 @@ const styles = StyleSheet.create({
     ...Platform.select({
       web: {
         transition: 'all 0.2s ease',
-        cursor: 'pointer',
-      },
-    }),
-  },
+        cursor: 'pointer' } }) },
   emptyButtonText: {
     color: '#FFFFFF',
     fontSize: responsive({ mobile: 14, tablet: 15, desktop: 16 }),
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600' } });

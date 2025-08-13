@@ -7,8 +7,7 @@ import {
   View,
   Text,
   TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
+  StyleSheet, Platform } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { OrgNode, DragDropEvent } from '@/types/organization';
 import { StatusIndicator } from './StatusIndicator';
@@ -137,50 +136,41 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
     shadowOpacity: 0.08,
     shadowRadius: 4,
     elevation: 3,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.border.light,
-  },
+    borderColor: DesignSystem.colors.border.light },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   headerLeft: {
     flex: 1,
-    gap: 4,
-  },
+    gap: 4 },
   name: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   expandButton: {
     padding: 4,
-    marginLeft: 8,
-  },
+    marginLeft: 8 },
   info: {
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   role: {
     fontSize: 14,
     fontWeight: '500',
     color: DesignSystem.colors.text.secondary,
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   department: {
     fontSize: 12,
-    color: DesignSystem.colors.text.tertiary,
-  },
+    color: DesignSystem.colors.text.tertiary },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   stats: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -188,11 +178,8 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.background,
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 12,
-  },
+    borderRadius: 12 },
   statsText: {
     fontSize: 11,
     fontWeight: '500',
-    color: DesignSystem.colors.text.tertiary,
-  },
-});
+    color: DesignSystem.colors.text.tertiary } });

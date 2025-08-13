@@ -12,8 +12,7 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { pickDocument } from '@/utils/web-file-picker';
 import * as FileSystem from 'expo-file-system';
@@ -41,8 +40,7 @@ type UploadStage = 'select' | 'preview' | 'validate' | 'import' | 'complete';
 export const CSVUploader: React.FC<CSVUploaderProps> = ({
   onComplete,
   loading: externalLoading = false,
-  dataType,
-}) => {
+  dataType }) => {
   const [stage, setStage] = useState<UploadStage>('select');
   const [selectedFile, setSelectedFile] = useState<{
     name: string;
@@ -88,8 +86,7 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
       const result = await pickDocument({
         type: ['text/csv', 'application/csv', 'text/comma-separated-values'],
         copyToCacheDirectory: true,
-        multiple: false,
-      });
+        multiple: false });
 
       if (!result.canceled && result.assets && result.assets[0]) {
         const file = result.assets[0];
@@ -103,8 +100,7 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
         setSelectedFile({
           name: file.name,
           size: file.size,
-          uri: file.uri,
-        });
+          uri: file.uri });
 
         // 自動進行解析
         await parseFile(file.uri);
@@ -131,16 +127,14 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
       } else {
         // Native 平台：使用 FileSystem 讀取
         fileContent = await FileSystem.readAsStringAsync(uri, {
-          encoding: FileSystem.EncodingType.UTF8,
-        });
+          encoding: FileSystem.EncodingType.UTF8 });
       }
 
       // 解析 CSV
       const result = await parseCSVFile(fileContent, {
         skipEmptyLines: true,
         trimWhitespace: true,
-        checkDuplicates: true,
-      });
+        checkDuplicates: true });
 
       setParseResult(result);
 
@@ -187,8 +181,7 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
         standardizePhoneNumbers: true,
         standardizeEmails: true,
         trimWhitespace: true,
-        capitalizeNames: true,
-      });
+        capitalizeNames: true });
 
       setValidationSummary(summary);
       setStage('import');
@@ -218,10 +211,8 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
           setImportProgress({
             percentage: progress.percentage,
             current: progress.currentOperation,
-            estimatedTime: progress.estimatedTimeRemaining,
-          });
-        },
-      };
+            estimatedTime: progress.estimatedTimeRemaining });
+        } };
 
       // 簡化：直接回傳客戶資料給父組件處理
       onComplete(parseResult.data);
@@ -475,15 +466,12 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F0F0F0',
-  },
+    backgroundColor: '#F0F0F0' },
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   stageContainer: {
     flex: 1,
-    padding: 20,
-  },
+    padding: 20 },
   uploadArea: {
     alignItems: 'center',
     padding: 40,
@@ -491,25 +479,21 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 2,
     borderColor: '#E3E1DC',
-    borderStyle: 'dashed',
-  },
+    borderStyle: 'dashed' },
   uploadTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: '#1A1A1A',
     marginTop: 16,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   uploadDescription: {
     fontSize: 14,
     color: '#7A7A7A',
     textAlign: 'center',
     lineHeight: 20,
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   uploadButton: {
-    minWidth: 120,
-  },
+    minWidth: 120 },
   templateLink: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -518,23 +502,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     backgroundColor: '#F0F0F0',
-    borderRadius: 8,
-  },
+    borderRadius: 8 },
   templateText: {
     fontSize: 14,
     color: '#1A1A1A',
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   fileInfo: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
@@ -542,108 +522,89 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   fileName: {
     fontSize: 16,
     fontWeight: '500',
     color: '#1A1A1A',
-    flex: 1,
-  },
+    flex: 1 },
   fileSize: {
     fontSize: 14,
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   resultSection: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1A1A1A',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   statRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 4,
-  },
+    paddingVertical: 4 },
   statLabel: {
     fontSize: 14,
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   statValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   warningBox: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    paddingVertical: 8,
-  },
+    paddingVertical: 8 },
   warningText: {
     fontSize: 14,
-    color: '#f59e0b',
-  },
+    color: '#f59e0b' },
   progressSection: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   progressTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1A1A1A',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   progressBar: {
     height: 8,
     backgroundColor: '#E3E1DC',
     borderRadius: 4,
     marginBottom: 8,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   progressFill: {
     height: '100%',
     backgroundColor: '#1A1A1A',
-    borderRadius: 4,
-  },
+    borderRadius: 4 },
   progressText: {
     fontSize: 14,
     color: '#7A7A7A',
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   estimatedTime: {
     fontSize: 12,
     color: '#7A7A7A',
     textAlign: 'center',
-    marginTop: 4,
-  },
+    marginTop: 4 },
   completeContainer: {
     alignItems: 'center',
     padding: 40,
     backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-  },
+    borderRadius: 12 },
   completeTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: '#1A1A1A',
     marginTop: 16,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   completeDescription: {
     fontSize: 14,
     color: '#7A7A7A',
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   footer: {
     flexDirection: 'row',
     gap: 12,
@@ -651,9 +612,6 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
-    borderTopColor: '#E3E1DC',
-  },
+    borderTopColor: '#E3E1DC' },
   button: {
-    flex: 1,
-  },
-});
+    flex: 1 } });

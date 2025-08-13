@@ -54,16 +54,14 @@ const generateMonthlyTrend = (): ChartData => {
         borderColor: '#1A1A1A',
         backgroundColor: 'rgba(26, 26, 26, 0.1)',
         tension: 0.4,
-        fill: true,
-      }]
+        fill: true }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
         legend: {
-          display: false,
-        },
+          display: false },
         tooltip: {
           callbacks: {
             label: (context: any) => `銷售額：$${context.parsed.y.toLocaleString()}`
@@ -102,14 +100,12 @@ const generateTeamPerformance = (): ChartData => {
           label: '實際績效',
           data: performances.map(p => p.score),
           backgroundColor: '#1A1A1A',
-          borderRadius: 4,
-        },
+          borderRadius: 4 },
         {
           label: '目標績效',
           data: performances.map(p => p.target),
           backgroundColor: '#E5E7EB',
-          borderRadius: 4,
-        }
+          borderRadius: 4 }
       ]
     },
     options: {
@@ -117,8 +113,7 @@ const generateTeamPerformance = (): ChartData => {
       maintainAspectRatio: false,
       plugins: {
         legend: {
-          position: 'bottom' as const,
-        },
+          position: 'bottom' as const },
         tooltip: {
           callbacks: {
             label: (context: any) => `${context.dataset.label}：${context.parsed.y}分`
@@ -158,16 +153,14 @@ const generateCustomerDistribution = (): ChartData => {
         data: regions.map(r => r.value),
         backgroundColor: regions.map(r => r.color),
         borderWidth: 2,
-        borderColor: '#FFFFFF',
-      }]
+        borderColor: '#FFFFFF' }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
         legend: {
-          position: 'right' as const,
-        },
+          position: 'right' as const },
         tooltip: {
           callbacks: {
             label: (context: any) => {
@@ -206,16 +199,14 @@ const generateTaskCompletion = (): ChartData => {
         label: '任務完成率（%）',
         data: data,
         backgroundColor: data.map(d => d && d >= 85 ? '#34C759' : '#1A1A1A'),
-        borderRadius: 4,
-      }]
+        borderRadius: 4 }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
         legend: {
-          display: false,
-        },
+          display: false },
         tooltip: {
           callbacks: {
             label: (context: any) => `完成率：${context.parsed.y}%`
@@ -258,8 +249,7 @@ const generateMeetingEfficiency = (): ChartData => {
           backgroundColor: meetingTypes.map(m => 
             m.avgDuration <= m.targetDuration ? '#34C759' : '#FF9500'
           ),
-          borderRadius: 4,
-        }
+          borderRadius: 4 }
       ]
     },
     options: {
@@ -268,8 +258,7 @@ const generateMeetingEfficiency = (): ChartData => {
       indexAxis: 'y' as const, // 橫向條形圖
       plugins: {
         legend: {
-          display: false,
-        },
+          display: false },
         tooltip: {
           callbacks: {
             label: (context: any) => `平均時長：${context.parsed.x} 分鐘`
@@ -312,16 +301,14 @@ const generateAIUsageStats = (): ChartData => {
         label: '使用次數',
         data: features.map(f => f.usage),
         backgroundColor: '#1A1A1A',
-        borderRadius: 4,
-      }]
+        borderRadius: 4 }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
         legend: {
-          display: false,
-        },
+          display: false },
         tooltip: {
           callbacks: {
             label: (context: any) => `使用次數：${context.parsed.y} 次`
@@ -350,48 +337,42 @@ export const defaultReportTemplates: DefaultReportTemplate[] = [
     chartType: 'line',
     generateData: generateMonthlyTrend,
     tags: ['銷售', '月度', '趨勢'],
-    description: '追蹤本月每日銷售表現，識別銷售模式和趨勢',
-  },
+    description: '追蹤本月每日銷售表現，識別銷售模式和趨勢' },
   {
     name: '團隊績效對比',
     query: '比較各團隊的績效表現',
     chartType: 'bar',
     generateData: generateTeamPerformance,
     tags: ['團隊', '績效', '對比'],
-    description: '對比不同團隊的績效分數，找出表現優異和需要改進的團隊',
-  },
+    description: '對比不同團隊的績效分數，找出表現優異和需要改進的團隊' },
   {
     name: '客戶分布圖',
     query: '顯示客戶的地理分布',
     chartType: 'pie',
     generateData: generateCustomerDistribution,
     tags: ['客戶', '分布', '地區'],
-    description: '了解客戶在不同地區的分布情況，優化市場策略',
-  },
+    description: '了解客戶在不同地區的分布情況，優化市場策略' },
   {
     name: '任務完成率',
     query: '顯示每週任務完成率',
     chartType: 'bar',
     generateData: generateTaskCompletion,
     tags: ['任務', '完成率', '週報'],
-    description: '追蹤團隊每週的任務完成情況，評估工作效率',
-  },
+    description: '追蹤團隊每週的任務完成情況，評估工作效率' },
   {
     name: '會議效率分析',
     query: '分析各類會議的時間效率',
     chartType: 'bar',
     generateData: generateMeetingEfficiency,
     tags: ['會議', '效率', '時間'],
-    description: '評估不同類型會議的時間使用效率，優化會議安排',
-  },
+    description: '評估不同類型會議的時間使用效率，優化會議安排' },
   {
     name: 'AI 使用統計',
     query: '統計 AI 功能的使用情況',
     chartType: 'bar',
     generateData: generateAIUsageStats,
     tags: ['AI', '統計', '使用率'],
-    description: '了解團隊對各項 AI 功能的使用情況，優化功能投資',
-  },
+    description: '了解團隊對各項 AI 功能的使用情況，優化功能投資' },
 ];
 
 /**
@@ -420,8 +401,7 @@ export const createDefaultReport = (
     // 標記為預設報表
     isDefault: true,
     isEditable: false,
-    description: template.description,
-  };
+    description: template.description };
 };
 
 /**

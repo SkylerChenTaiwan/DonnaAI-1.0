@@ -8,8 +8,7 @@ import {
   TouchableOpacity,
   Text,
   StyleSheet,
-  View,
-} from 'react-native';
+  View } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 
 interface InputMethodLinkProps {
@@ -21,8 +20,7 @@ interface InputMethodLinkProps {
 export const InputMethodLink: React.FC<InputMethodLinkProps> = ({
   targetLabel,
   onSwitch,
-  disabled = false,
-}) => {
+  disabled = false }) => {
   return (
     <TouchableOpacity 
       style={[styles.container, disabled && styles.disabled]}
@@ -53,24 +51,18 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E5E5EA',
-  },
+    borderColor: '#E5E5EA' },
   disabled: {
     backgroundColor: '#F5F5F7',
-    borderColor: '#E5E5EA',
-  },
+    borderColor: '#E5E5EA' },
   linkContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   linkText: {
     fontSize: 14,
     fontWeight: '500',
     color: '#7A7A7A',
-    marginRight: 4,
-  },
+    marginRight: 4 },
   disabledText: {
-    color: '#8E8E93',
-  },
-});
+    color: '#8E8E93' } });

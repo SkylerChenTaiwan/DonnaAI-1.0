@@ -35,16 +35,13 @@ export const lightTheme: WebTheme = {
   spacing: DesignSystem.spacing,
   shadows: {
     native: DesignSystem.shadows,
-    css: webTokens.webShadows!,
-  },
+    css: webTokens.webShadows! },
   borders: {
-    radius: DesignSystem.borderRadius,
-  },
+    radius: DesignSystem.borderRadius },
   transitions: DesignSystem.transitions,
   breakpoints: webTokens.breakpoints!,
   zIndex: webTokens.zIndex!,
-  cssVariables: webTokens.cssVariables!,
-};
+  cssVariables: webTokens.cssVariables! };
 
 // 深色主題（基於淺色主題的反轉）
 export const darkTheme: WebTheme = {
@@ -57,24 +54,20 @@ export const darkTheme: WebTheme = {
       primary: '#1A1A1A',
       surface: '#2A2A2A',
       elevated: '#3A3A3A',
-      input: '#333333',
-    },
+      input: '#333333' },
     // 反轉文字色
     text: {
       primary: '#FFFFFF',
       secondary: '#CCCCCC',
       tertiary: '#999999',
       disabled: '#666666',
-      inverse: '#1A1A1A',
-    },
+      inverse: '#1A1A1A' },
     // 調整邊框色
     border: {
       light: '#404040',
       default: '#555555',
       medium: '#666666',
-      dark: '#777777',
-    },
-  },
+      dark: '#777777' } },
   cssVariables: {
     ...webTokens.cssVariables!,
     // 更新深色主題的 CSS 變數
@@ -84,9 +77,7 @@ export const darkTheme: WebTheme = {
     '--color-text-primary': '#FFFFFF',
     '--color-text-secondary': '#CCCCCC',
     '--color-border-default': '#555555',
-    '--color-border-light': '#404040',
-  },
-};
+    '--color-border-light': '#404040' } };
 
 // 主題管理器類別
 export class WebThemeManager {
@@ -226,8 +217,7 @@ export const createStyledTheme = (theme: WebTheme) => ({
   transitions: theme.transitions,
   breakpoints: theme.breakpoints,
   zIndex: theme.zIndex,
-  mode: theme.mode,
-});
+  mode: theme.mode });
 
 // CSS-in-JS 樣式生成器
 export const createCSSInJS = (theme: WebTheme) => ({
@@ -261,8 +251,7 @@ export const createCSSInJS = (theme: WebTheme) => ({
   // 過渡動畫工具函數
   transition: (property: string = 'all', duration: keyof typeof theme.transitions = 'normal'): string => {
     return `${property} ${theme.transitions[duration]}ms ease`;
-  },
-});
+  } });
 
 // 生成全域 CSS 字串
 export const generateGlobalCSS = (theme: WebTheme): string => {
@@ -331,8 +320,7 @@ export const useWebTheme = () => {
     setTheme: webThemeManager.setTheme.bind(webThemeManager),
     toggleTheme: webThemeManager.toggleTheme.bind(webThemeManager),
     isDark: theme.mode === 'dark',
-    isLight: theme.mode === 'light',
-  };
+    isLight: theme.mode === 'light' };
 };
 
 // React import 修正

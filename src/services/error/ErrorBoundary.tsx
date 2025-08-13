@@ -271,8 +271,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 20,
     marginBottom: 20,
-    width: '100%',
-  },
+    width: '100%' },
   errorMessage: {
     fontSize: 16,
     color: '#E53E3E',

@@ -10,8 +10,7 @@ import {
   ActivityIndicator,
   ViewStyle,
   TextStyle,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { DesignSystem } from '@/theme/designSystem';
 
 interface ButtonProps {
@@ -33,8 +32,7 @@ export const Button = ({
   disabled = false,
   loading = false,
   style,
-  textStyle,
-}: ButtonProps) => {
+  textStyle }: ButtonProps) => {
   const buttonStyle = [
     styles.base,
     variant === 'primary' ? styles.primary : variant === 'secondary' ? styles.secondary : variant === 'tertiary' ? styles.tertiary : variant === 'danger' ? styles.danger : undefined,
@@ -80,88 +78,68 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     // 無陰影 - 扁平化設計
-    ...DesignSystem.shadows.none,
-  },
+    ...DesignSystem.shadows.none },
   
   // 變體樣式
   primary: {
-    backgroundColor: DesignSystem.colors.button.primary.default,
-  },
+    backgroundColor: DesignSystem.colors.button.primary.default },
   secondary: {
     backgroundColor: DesignSystem.colors.button.secondary.default,
-    borderWidth: 0,
-  },
+    borderWidth: 0 },
   outline: {
     backgroundColor: DesignSystem.colors.button.outline.background,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.button.outline.border,
-  },
+    borderColor: DesignSystem.colors.button.outline.border },
   ghost: {
     backgroundColor: DesignSystem.colors.button.ghost.background,
-    borderWidth: 0,
-  },
+    borderWidth: 0 },
   text: {
     backgroundColor: 'transparent',
     borderWidth: 0,
     paddingHorizontal: 0,
-    paddingVertical: 0,
-  },
+    paddingVertical: 0 },
   
   // 尺寸樣式 - 更緊湊
   small: {
     paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
+    paddingVertical: 6 },
   medium: {
     paddingHorizontal: 16,
-    paddingVertical: 8,
-  },
+    paddingVertical: 8 },
   large: {
     paddingHorizontal: 20,
-    paddingVertical: 10,
-  },
+    paddingVertical: 10 },
   
   // 停用狀態
   disabled: {
-    opacity: 0.5,
-  },
+    opacity: 0.5 },
   
   // 文字基礎樣式
   textBase: {
     fontWeight: '500' as const, // 從 600 改為 500
   },
   primaryText: {
-    color: DesignSystem.colors.text.inverse,
-  },
+    color: DesignSystem.colors.text.inverse },
   secondaryText: {
-    color: DesignSystem.colors.primary,
-  },
+    color: DesignSystem.colors.primary },
   outlineText: {
-    color: DesignSystem.colors.primary,
-  },
+    color: DesignSystem.colors.primary },
   ghostText: {
-    color: DesignSystem.colors.primary,
-  },
+    color: DesignSystem.colors.primary },
   textText: {
     color: DesignSystem.colors.button.text.color,
     fontWeight: '400',
     textDecorationLine: 'underline',
     textDecorationStyle: 'solid',
-    textDecorationColor: DesignSystem.colors.button.text.underline,
-  },
+    textDecorationColor: DesignSystem.colors.button.text.underline },
   
   // 尺寸文字
   smallText: {
-    fontSize: 13,
-  },
+    fontSize: 13 },
   mediumText: {
-    fontSize: 14,
-  },
+    fontSize: 14 },
   largeText: {
-    fontSize: 16,
-  },
+    fontSize: 16 },
   
   disabledText: {
-    color: DesignSystem.colors.text.disabled,
-  },
-});
+    color: DesignSystem.colors.text.disabled } });

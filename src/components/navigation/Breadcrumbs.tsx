@@ -67,32 +67,23 @@ const styles = StyleSheet.create({
     paddingVertical: DesignSystem.spacing.sm,
     backgroundColor: DesignSystem.colors.background.surface,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   item: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   separator: {
-    marginHorizontal: DesignSystem.spacing.xs,
-  },
+    marginHorizontal: DesignSystem.spacing.xs },
   linkButton: {
-    padding: DesignSystem.spacing.xs,
-  },
+    padding: DesignSystem.spacing.xs },
   text: {
-    ...DesignSystem.typography.body,
-  },
+    ...DesignSystem.typography.body },
   link: {
-    color: DesignSystem.colors.primary,
-  },
+    color: DesignSystem.colors.primary },
   webLink: {
     cursor: 'pointer' as any,
-    textDecorationLine: 'underline',
-  },
+    textDecorationLine: 'underline' },
   current: {
     color: DesignSystem.colors.text.primary,
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600' } });
 
 export default Breadcrumbs;

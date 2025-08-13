@@ -13,8 +13,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Layout } from '@/components/common/Layout';
 import { TextInput } from '@/components/common/TextInput';
@@ -112,8 +111,7 @@ export const CreateOrganizationScreen: React.FC = () => {
         adminEmail: adminEmail,
         adminName: adminName,
         billingCycle: selectedPlan === 'pro' ? billingCycle : 'monthly',
-        giftedSeats: parseInt(giftedSeats) || 0,
-      };
+        giftedSeats: parseInt(giftedSeats) || 0 };
       
       const organization = await createOrganization(organizationData);
       setCreatedOrganization(organization as Organization);
@@ -129,15 +127,13 @@ export const CreateOrganizationScreen: React.FC = () => {
             onPress: () => {
               toast.success('組織建立成功！管理員帳號資訊將發送至指定信箱。');
               navigation.goBack();
-            },
-          },
+            } },
           {
             text: '批量匯入用戶',
             onPress: () => {
               setCurrentStep('import');
               setShowImportWizard(true);
-            },
-          },
+            } },
         ],
         { cancelable: false }
       );
@@ -366,35 +362,27 @@ export const CreateOrganizationScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   scrollContent: {
-    padding: DesignSystem.spacing.lg,
-  },
+    padding: DesignSystem.spacing.lg },
   section: {
-    marginBottom: DesignSystem.spacing.xl,
-  },
+    marginBottom: DesignSystem.spacing.xl },
   sectionTitle: {
     ...DesignSystem.typography.h2,
     color: DesignSystem.colors.text.primary,
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   planSection: {
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   inputLabel: {
     ...DesignSystem.typography.bodySmall,
     color: DesignSystem.colors.text.secondary,
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   required: {
-    color: DesignSystem.colors.error,
-  },
+    color: DesignSystem.colors.error },
   planGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: DesignSystem.spacing.sm,
-  },
+    gap: DesignSystem.spacing.sm },
   planCard: {
     flex: 1,
     minWidth: '45%',
@@ -403,72 +391,56 @@ const styles = StyleSheet.create({
     borderRadius: DesignSystem.borderRadius.md,
     borderWidth: 2,
     borderColor: DesignSystem.colors.border.light,
-    minHeight: 200,
-  },
+    minHeight: 200 },
   planCardActive: {
     borderColor: DesignSystem.colors.primary,
-    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
-  },
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063) },
   planName: {
     ...DesignSystem.typography.h4,
     color: DesignSystem.colors.text.primary,
-    marginBottom: DesignSystem.spacing.xs,
-  },
+    marginBottom: DesignSystem.spacing.xs },
   planNameActive: {
-    color: DesignSystem.colors.primary,
-  },
+    color: DesignSystem.colors.primary },
   planHeader: {
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   planPrice: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.secondary,
     fontWeight: '600',
-    marginTop: DesignSystem.spacing.xs,
-  },
+    marginTop: DesignSystem.spacing.xs },
   planPriceActive: {
-    color: DesignSystem.colors.primary,
-  },
+    color: DesignSystem.colors.primary },
   planDuration: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   planFeatures: {
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   featuresTitle: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.primary,
     fontWeight: '600',
-    marginBottom: DesignSystem.spacing.xs,
-  },
+    marginBottom: DesignSystem.spacing.xs },
   featureItem: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.success,
-    marginBottom: DesignSystem.spacing.xs / 2,
-  },
+    marginBottom: DesignSystem.spacing.xs / 2 },
   planLimitations: {
-    marginTop: DesignSystem.spacing.sm,
-  },
+    marginTop: DesignSystem.spacing.sm },
   limitationsTitle: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
     fontWeight: '600',
-    marginBottom: DesignSystem.spacing.xs,
-  },
+    marginBottom: DesignSystem.spacing.xs },
   limitationItem: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginBottom: DesignSystem.spacing.xs / 2,
-  },
+    marginBottom: DesignSystem.spacing.xs / 2 },
   billingCycleSection: {
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   cycleOptions: {
     flexDirection: 'row',
-    gap: DesignSystem.spacing.sm,
-  },
+    gap: DesignSystem.spacing.sm },
   cycleOption: {
     flex: 1,
     padding: DesignSystem.spacing.md,
@@ -476,41 +448,31 @@ const styles = StyleSheet.create({
     borderRadius: DesignSystem.borderRadius.sm,
     borderWidth: 2,
     borderColor: DesignSystem.colors.border.light,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   cycleOptionActive: {
     borderColor: DesignSystem.colors.primary,
-    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
-  },
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063) },
   cycleText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
     fontWeight: '600',
-    marginBottom: DesignSystem.spacing.xs,
-  },
+    marginBottom: DesignSystem.spacing.xs },
   cycleTextActive: {
-    color: DesignSystem.colors.primary,
-  },
+    color: DesignSystem.colors.primary },
   cyclePrice: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   cycleDiscount: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.success,
     fontWeight: '600',
-    marginTop: DesignSystem.spacing.xs / 2,
-  },
+    marginTop: DesignSystem.spacing.xs / 2 },
   actions: {
     gap: DesignSystem.spacing.md,
-    marginTop: DesignSystem.spacing.xl,
-  },
+    marginTop: DesignSystem.spacing.xl },
   cancelButton: {
     paddingVertical: DesignSystem.spacing.md,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   cancelButtonText: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.text.secondary,
-  },
-});
+    color: DesignSystem.colors.text.secondary } });

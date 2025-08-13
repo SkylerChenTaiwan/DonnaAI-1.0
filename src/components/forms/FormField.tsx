@@ -287,22 +287,18 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   label: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1A1A1A',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   requiredStar: {
-    color: '#DC2626',
-  },
+    color: '#DC2626' },
   textarea: {
     height: 100,
     paddingTop: 12,
-    textAlignVertical: 'top',
-  },
+    textAlignVertical: 'top' },
   input: {
     borderWidth: 1,
     borderColor: '#E3E1DC',
@@ -311,37 +307,29 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     fontSize: 16,
     color: '#1A1A1A',
-    backgroundColor: '#FFFFFF',
-  },
+    backgroundColor: '#FFFFFF' },
   inputError: {
-    borderColor: '#ef4444',
-  },
+    borderColor: '#ef4444' },
   errorText: {
     fontSize: 14,
     color: '#ef4444',
-    marginTop: 4,
-  },
+    marginTop: 4 },
   // 日期選擇器樣式
   dateInput: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   dateText: {
     fontSize: 16,
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   placeholderText: {
-    color: '#C7C7CC',
-  },
+    color: '#C7C7CC' },
   // 下拉選單樣式
   pickerContainer: {
     paddingHorizontal: 0,
-    paddingVertical: 0,
-  },
+    paddingVertical: 0 },
   picker: {
-    height: 50,
-  },
+    height: 50 },
   // Modal 樣式
   modalContainer: {
     flex: 1,
@@ -352,8 +340,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    paddingBottom: 20,
-  },
+    paddingBottom: 20 },
   datePickerHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -361,32 +348,26 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
-  },
+    borderBottomColor: '#E3E1DC' },
   cancelButton: {
     fontSize: 16,
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   confirmButton: {
     fontSize: 16,
     color: '#FF6B6B',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   // 下拉選單樣式
   selectInput: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   selectText: {
     fontSize: 16,
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   pickerModalContainer: {
     backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
+    borderTopRightRadius: 20 },
   pickerHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -394,9 +375,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
-  },
+    borderBottomColor: '#E3E1DC' },
   modalPicker: {
-    height: 200,
-  },
-});
+    height: 200 } });

@@ -21,10 +21,8 @@ Notifications.setNotificationHandler({
     return {
       shouldShowAlert: notificationsEnabled,
       shouldPlaySound: notificationsEnabled,
-      shouldSetBadge: notificationsEnabled,
-    };
-  },
-});
+      shouldSetBadge: notificationsEnabled };
+  } });
 
 export interface NotificationData {
   type: 'meeting_reminder' | 'recording_reminder' | 'ai_processing_complete';
@@ -91,22 +89,19 @@ class NotificationService {
           name: '會議提醒',
           importance: AndroidImportance.HIGH,
           vibrationPattern: [0, 250, 250, 250],
-          lightColor: '#2563eb',
-        });
+          lightColor: '#2563eb' });
 
         await Notifications.setNotificationChannelAsync('recording-reminders', {
           name: '錄音提醒',
           importance: AndroidImportance.HIGH,
           vibrationPattern: [0, 250, 250, 250],
-          lightColor: '#ef4444',
-        });
+          lightColor: '#ef4444' });
 
         await Notifications.setNotificationChannelAsync('ai-processing', {
           name: 'AI 處理通知',
           importance: Notifications.AndroidImportance.DEFAULT,
           vibrationPattern: [0, 250],
-          lightColor: '#22c55e',
-        });
+          lightColor: '#22c55e' });
       }
 
       this.isInitialized = true;
@@ -137,8 +132,7 @@ class NotificationService {
         token: this.expoPushToken,
         platform: Platform.OS,
         updatedAt: new Date(),
-        active: true,
-      });
+        active: true });
       
       console.log('用戶推送令牌已註冊');
     } catch (error) {
@@ -164,9 +158,7 @@ class NotificationService {
             type: notification.type,
             recordId: notification.recordId,
             meetingId: notification.meetingId,
-            ...notification.data,
-          },
-        },
+            ...notification.data } },
         trigger: null, // 立即發送
       });
 
@@ -190,12 +182,9 @@ class NotificationService {
         content: {
           title: notification.title,
           body: notification.body,
-          data: notification.data || {},
-        },
+          data: notification.data || {} },
         trigger: {
-          date: notification.trigger,
-        },
-      });
+          date: notification.trigger } });
 
       return notificationId;
     } catch (error) {
@@ -256,9 +245,7 @@ class NotificationService {
         data: {
           type: 'meeting_reminder',
           meetingId,
-          action: 'start_recording',
-        },
-      });
+          action: 'start_recording' } });
 
       // 儲存到 Firebase
       const reminder: MeetingReminder = {
@@ -267,14 +254,12 @@ class NotificationService {
         userId,
         scheduledTime: reminderTime as any, // Firestore Timestamp
         reminderType: 'pre_meeting',
-        notificationSent: false,
-      };
+        notificationSent: false };
 
       await setDoc(doc(getFirebaseDb(), 'meeting_reminders', reminderId), {
         ...reminder,
         notificationId,
-        createdAt: new Date(),
-      });
+        createdAt: new Date() });
 
       return reminder;
     } catch (error) {
@@ -292,9 +277,7 @@ class NotificationService {
       title: '錄音提醒',
       body: `別忘了為會議「${meetingTitle}」開始錄音！`,
       data: {
-        action: 'open_recorder',
-      },
-    });
+        action: 'open_recorder' } });
   }
 
   /**
@@ -308,9 +291,7 @@ class NotificationService {
       body: `會議「${meetingTitle}」的 AI 分析已完成，請檢視結果！`,
       data: {
         action: 'view_results',
-        recordId,
-      },
-    });
+        recordId } });
   }
 
   /**
@@ -346,8 +327,7 @@ class NotificationService {
       await updateDoc(doc(getFirebaseDb(), 'meeting_reminders', reminderId), {
         notificationSent: true,
         sentAt: new Date(),
-        userResponse: userResponse || null,
-      });
+        userResponse: userResponse || null });
     } catch (error) {
       console.error('標記會議提醒狀態失敗:', error);
       throw error;
@@ -392,8 +372,7 @@ class NotificationService {
         // 刪除 Firebase 記錄（這裡可以選擇標記為已清理而不是刪除）
         await updateDoc(doc(getFirebaseDb(), 'meeting_reminders', docSnapshot.id), {
           cleaned: true,
-          cleanedAt: new Date(),
-        });
+          cleanedAt: new Date() });
       }
       
       console.log(`清理了 ${querySnapshot.size} 個過期的會議提醒`);
@@ -508,14 +487,12 @@ class NotificationService {
       
       return {
         granted: status === 'granted',
-        canAskAgain: canAskAgain ?? false,
-      };
+        canAskAgain: canAskAgain ?? false };
     } catch (error) {
       console.error('檢查通知權限失敗:', error);
       return {
         granted: false,
-        canAskAgain: false,
-      };
+        canAskAgain: false };
     }
   }
 
@@ -535,15 +512,13 @@ class NotificationService {
       return {
         permissionGranted: granted,
         notificationsEnabled: settings.notifications.enabled,
-        scheduledCount: scheduledNotifications.length,
-      };
+        scheduledCount: scheduledNotifications.length };
     } catch (error) {
       console.error('獲取通知狀態失敗:', error);
       return {
         permissionGranted: false,
         notificationsEnabled: false,
-        scheduledCount: 0,
-      };
+        scheduledCount: 0 };
     }
   }
 }

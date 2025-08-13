@@ -14,8 +14,7 @@ export class SortManager {
       preserveGrouping: false,
       nullsFirst: false,
       stableSort: true,
-      ...options,
-    };
+      ...options };
   }
 
   /**
@@ -183,8 +182,7 @@ export class SortManager {
 
     return {
       isValid: errors.length === 0,
-      errors,
-    };
+      errors };
   }
 
   /**
@@ -207,8 +205,7 @@ export class SortManager {
 
     return {
       isValid: errors.length === 0,
-      errors,
-    };
+      errors };
   }
 
   /**
@@ -245,8 +242,7 @@ export class SortManager {
       const newSorts = [...sorts];
       newSorts[existingIndex] = {
         ...newSorts[existingIndex],
-        direction: direction || this.toggleSortDirection(newSorts[existingIndex].direction),
-      };
+        direction: direction || this.toggleSortDirection(newSorts[existingIndex].direction) };
       return newSorts;
     } else {
       // 添加新排序
@@ -256,8 +252,7 @@ export class SortManager {
         {
           columnKey,
           direction: direction || 'asc',
-          priority: newPriority,
-        },
+          priority: newPriority },
       ];
     }
   }
@@ -291,8 +286,7 @@ export class SortManager {
     // 重新分配優先級
     return newSorts.map((sort, index) => ({
       ...sort,
-      priority: index,
-    }));
+      priority: index }));
   }
 
   /**
@@ -333,8 +327,7 @@ export function createSort(
   return {
     columnKey,
     direction,
-    priority,
-  };
+    priority };
 }
 
 /**
@@ -370,6 +363,5 @@ export function getColumnSortState(
   return {
     isSorted: true,
     direction: sort.direction,
-    priority: sort.priority,
-  };
+    priority: sort.priority };
 }

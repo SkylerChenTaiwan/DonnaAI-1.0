@@ -11,8 +11,7 @@ import {
   RiskAssessment,
   SecurityIncident,
   AuditActionType,
-  RiskLevel,
-} from '@/types/audit';
+  RiskLevel } from '@/types/audit';
 import { Timestamp } from 'firebase/firestore';
 import { differenceInHours, differenceInDays, format, subDays, subHours } from 'date-fns';
 
@@ -29,8 +28,7 @@ export class AuditAnalyticsService {
     failedLoginLimit: 5,
     rapidAccessLimit: 100, // 每小時請求數
     suspiciousIPScore: 0.7,
-    unusualLocationScore: 0.8,
-  };
+    unusualLocationScore: 0.8 };
 
   private constructor() {}
 
@@ -131,8 +129,7 @@ export class AuditAnalyticsService {
           severity: this.assessDataExportSeverity(dayLogs.length, totalRecords),
           timestamp: dayLogs[0].timestamp,
           description: `${day} 有 ${dayLogs.length} 次資料匯出，共 ${totalRecords} 筆記錄`,
-          confidence: Math.min(dayLogs.length / this.thresholds.dailyExportLimit, 1),
-        });
+          confidence: Math.min(dayLogs.length / this.thresholds.dailyExportLimit, 1) });
       }
     }
     
@@ -159,8 +156,7 @@ export class AuditAnalyticsService {
           userId,
           timestamp: attempts[attempts.length - 1].timestamp,
           description: `${attempts.length} 次失敗登入嘗試`,
-          confidence: Math.min(attempts.length / 10, 1),
-        });
+          confidence: Math.min(attempts.length / 10, 1) });
       }
     }
     
@@ -186,8 +182,7 @@ export class AuditAnalyticsService {
           userId,
           timestamp: hourLogs[0].timestamp,
           description: `${hour} 有 ${hourLogs.length} 次存取（超過限制 ${this.thresholds.rapidAccessLimit}）`,
-          confidence: Math.min(hourLogs.length / (this.thresholds.rapidAccessLimit * 2), 1),
-        });
+          confidence: Math.min(hourLogs.length / (this.thresholds.rapidAccessLimit * 2), 1) });
       }
     }
     
@@ -214,8 +209,7 @@ export class AuditAnalyticsService {
           userId: log.actor.userId,
           timestamp: log.timestamp,
           description: `權限提升至 ${log.changes.after.role}`,
-          confidence: 0.9,
-        });
+          confidence: 0.9 });
       }
     });
     
@@ -242,8 +236,7 @@ export class AuditAnalyticsService {
           userId,
           timestamp: userLogs[userLogs.length - 1].timestamp,
           description: `刪除了 ${userLogs.length} 筆資料`,
-          confidence: Math.min(userLogs.length / 20, 1),
-        });
+          confidence: Math.min(userLogs.length / 20, 1) });
       }
     }
     
@@ -267,8 +260,7 @@ export class AuditAnalyticsService {
           userId: pattern.userId,
           timestamp: Timestamp.now(),
           description: pattern.description,
-          confidence: 0.7,
-        });
+          confidence: 0.7 });
       }
     });
     
@@ -295,8 +287,7 @@ export class AuditAnalyticsService {
           description: this.generateThreatDescription(type, typeAnomalies),
           detectedAt: new Date(),
           affectedUsers: this.extractAffectedUsers(typeAnomalies),
-          mitigationSteps: this.generateMitigationSteps(type),
-        });
+          mitigationSteps: this.generateMitigationSteps(type) });
       }
     }
     
@@ -346,8 +337,7 @@ export class AuditAnalyticsService {
         pattern: 'NIGHT_ACCESS',
         frequency: nightAccess,
         risk: 'medium',
-        description: '頻繁的夜間存取',
-      };
+        description: '頻繁的夜間存取' };
     }
     
     return null;
@@ -366,8 +356,7 @@ export class AuditAnalyticsService {
         pattern: 'RESOURCE_SCANNING',
         frequency: uniqueResources.size,
         risk: 'high',
-        description: `短時間內存取了 ${uniqueResources.size} 個不同資源`,
-      };
+        description: `短時間內存取了 ${uniqueResources.size} 個不同資源` };
     }
     
     return null;
@@ -389,8 +378,7 @@ export class AuditAnalyticsService {
         pattern: 'HIGH_FREQUENCY',
         frequency: Math.round(opsPerHour),
         risk: 'high',
-        description: `每小時 ${Math.round(opsPerHour)} 次操作`,
-      };
+        description: `每小時 ${Math.round(opsPerHour)} 次操作` };
     }
     
     return null;
@@ -417,8 +405,7 @@ export class AuditAnalyticsService {
       overallRisk: this.scoreToRiskLevel(totalScore),
       riskScore: Math.round(totalScore * 100) / 100,
       factors,
-      trend,
-    };
+      trend };
   }
 
   /**
@@ -440,8 +427,7 @@ export class AuditAnalyticsService {
         description: anomaly.description,
         affectedResources: this.extractAffectedResources(logs, anomaly),
         responseActions: this.generateResponseActions(anomaly.type),
-        status: 'open',
-      });
+        status: 'open' });
     });
     
     return incidents;
@@ -557,8 +543,7 @@ export class AuditAnalyticsService {
       'RAPID_ACCESS': '異常高頻存取',
       'PRIVILEGE_ESCALATION': '權限提升',
       'MASS_DELETION': '大量資料刪除',
-      'UNUSUAL_ACCESS_PATTERN': '異常存取模式',
-    };
+      'UNUSUAL_ACCESS_PATTERN': '異常存取模式' };
     
     return mapping[anomalyType] || '未知威脅';
   }
@@ -594,8 +579,7 @@ export class AuditAnalyticsService {
         '確認授權流程',
         '檢查角色定義',
         '實施最小權限原則',
-      ],
-    };
+      ] };
     
     return steps[type] || ['調查異常活動', '聯絡安全團隊', '記錄事件詳情'];
   }
@@ -616,8 +600,7 @@ export class AuditAnalyticsService {
     const actions: Record<string, string[]> = {
       'BRUTE_FORCE_ATTEMPT': ['鎖定帳戶', '通知用戶', '增加監控'],
       'EXCESSIVE_DATA_EXPORT': ['限制匯出', '審查活動', '通知管理員'],
-      'PRIVILEGE_ESCALATION': ['審查權限', '確認授權', '記錄變更'],
-    };
+      'PRIVILEGE_ESCALATION': ['審查權限', '確認授權', '記錄變更'] };
     
     return actions[type] || ['調查', '記錄', '監控'];
   }

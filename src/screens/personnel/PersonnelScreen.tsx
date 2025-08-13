@@ -9,8 +9,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   TouchableOpacity,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { Layout } from '@/components/common/Layout';
 import { SearchBar } from '@/components/common/SearchBar';
 import { ToolbarIcons } from '@/components/common/ToolbarIcons';
@@ -133,9 +132,7 @@ export const PersonnelScreen: React.FC = () => {
           performance: {
             meetings: data.performance?.meetings || 0,
             customers: data.performance?.customers || 0,
-            deals: data.performance?.deals || 0,
-          },
-        });
+            deals: data.performance?.deals || 0 } });
       });
       
       console.log(`找到 ${subordinates.length} 位下屬`);
@@ -312,18 +309,15 @@ export const PersonnelScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background,
-  },
+    backgroundColor: DesignSystem.colors.background },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   loadingText: {
     marginTop: 12,
     fontSize: 16,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   toolbar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -333,26 +327,18 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.surface,
     borderBottomWidth: 1,
     borderBottomColor: DesignSystem.colors.border.light,
-    gap: 12,
-  },
+    gap: 12 },
   searchWrapper: {
-    flex: 1,
-  },
+    flex: 1 },
   searchBar: {
-    flex: 1,
-  },
+    flex: 1 },
   toolbarButtons: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   contentArea: {
-    flex: 1,
-  },
+    flex: 1 },
   iconButton: {
     padding: 8,
-    borderRadius: 6,
-  },
+    borderRadius: 6 },
   iconButtonActive: {
-    backgroundColor: 'rgba(255, 92, 0, 0.1)',
-  },
-});
+    backgroundColor: 'rgba(255, 92, 0, 0.1)' } });

@@ -246,8 +246,7 @@ export const AudioEditor = ({
                     {
                       height: amplitude,
                       backgroundColor: isInRange ? '#3b82f6' : '#d1d5db',
-                      left: (index / waveformData.length) * waveformWidth,
-                    }
+                      left: (index / waveformData.length) * waveformWidth }
                   ]}
                 />
               );
@@ -400,173 +399,136 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
-    padding: 16,
-  },
+    padding: 16 },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ffffff',
-  },
+    backgroundColor: '#ffffff' },
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#6b7280',
-  },
+    color: '#6b7280' },
   header: {
     alignItems: 'center',
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   title: {
     fontSize: 24,
     fontWeight: '700',
     color: '#1f2937',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   subtitle: {
     fontSize: 14,
-    color: '#6b7280',
-  },
+    color: '#6b7280' },
   waveformContainer: {
     marginBottom: 24,
     backgroundColor: '#f9fafb',
     borderRadius: 12,
-    padding: 16,
-  },
+    padding: 16 },
   waveform: {
     height: 80,
     position: 'relative',
     backgroundColor: '#ffffff',
-    borderRadius: 8,
-  },
+    borderRadius: 8 },
   waveformBar: {
     position: 'absolute',
     bottom: 0,
     width: 2,
-    borderRadius: 1,
-  },
+    borderRadius: 1 },
   trimIndicator: {
     position: 'absolute',
     top: 0,
     bottom: 0,
-    width: 3,
-  },
+    width: 3 },
   trimStart: {
-    backgroundColor: '#22c55e',
-  },
+    backgroundColor: '#22c55e' },
   trimEnd: {
-    backgroundColor: '#ef4444',
-  },
+    backgroundColor: '#ef4444' },
   playbackIndicator: {
     position: 'absolute',
     top: 0,
     bottom: 0,
     width: 2,
-    backgroundColor: '#f59e0b',
-  },
+    backgroundColor: '#f59e0b' },
   timeLabels: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 8,
-  },
+    marginTop: 8 },
   timeLabel: {
     fontSize: 12,
-    color: '#6b7280',
-  },
+    color: '#6b7280' },
   trimControls: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   trimLabel: {
     fontSize: 16,
     fontWeight: '600',
     color: '#374151',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   trimInputs: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   trimInput: {
     alignItems: 'center',
     backgroundColor: '#f3f4f6',
     borderRadius: 8,
     padding: 12,
     flex: 1,
-    marginHorizontal: 4,
-  },
+    marginHorizontal: 4 },
   trimInputLabel: {
     fontSize: 12,
     color: '#6b7280',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   trimInputValue: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1f2937',
-  },
+    color: '#1f2937' },
   quickTrimButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 24,
-    gap: 12,
-  },
+    gap: 12 },
   quickTrimButton: {
     backgroundColor: '#e5e7eb',
-    flex: 1,
-  },
+    flex: 1 },
   quickTrimButtonText: {
     color: '#374151',
-    fontSize: 14,
-  },
+    fontSize: 14 },
   playbackControls: {
     flexDirection: 'row',
     justifyContent: 'center',
     marginBottom: 32,
-    gap: 12,
-  },
+    gap: 12 },
   playButton: {
     backgroundColor: '#3b82f6',
-    paddingHorizontal: 24,
-  },
+    paddingHorizontal: 24 },
   playButtonText: {
     color: '#ffffff',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   stopButton: {
     backgroundColor: '#6b7280',
-    paddingHorizontal: 24,
-  },
+    paddingHorizontal: 24 },
   stopButtonText: {
     color: '#ffffff',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   resetButton: {
     backgroundColor: '#f59e0b',
-    paddingHorizontal: 24,
-  },
+    paddingHorizontal: 24 },
   resetButtonText: {
     color: '#ffffff',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   actionButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    gap: 16,
-  },
+    gap: 16 },
   cancelButton: {
     backgroundColor: '#e5e7eb',
-    flex: 1,
-  },
+    flex: 1 },
   cancelButtonText: {
     color: '#374151',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   saveButton: {
     backgroundColor: '#22c55e',
-    flex: 1,
-  },
+    flex: 1 },
   saveButtonText: {
     color: '#ffffff',
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600' } });

@@ -81,8 +81,7 @@ export async function importLegacyCustomers(
     codeToName,
     nameToCode,
     codeToLevel,
-    batchSize = BATCH_SIZE,
-  } = options;
+    batchSize = BATCH_SIZE } = options;
 
   const errors: ImportError[] = [];
   const warnings: ImportWarning[] = [];
@@ -104,8 +103,7 @@ export async function importLegacyCustomers(
     skipped: 0,
     currentBatch: 0,
     totalBatches,
-    phase: 'preparing',
-  };
+    phase: 'preparing' };
   onProgress?.(progress);
 
   try {
@@ -139,8 +137,7 @@ export async function importLegacyCustomers(
           codeToName,
           nameToCode,
           codeToLevel,
-          existingCustomers,
-        }
+          existingCustomers }
       );
 
       // 更新統計
@@ -179,8 +176,7 @@ export async function importLegacyCustomers(
       warnings,
       customerMappings,
       duplicates,
-      duration: Date.now() - startTime,
-    };
+      duration: Date.now() - startTime };
 
   } catch (error) {
     console.error('批量導入客戶失敗:', error);
@@ -256,8 +252,7 @@ async function processBatch(
             row,
             field: '負責業務',
             message: `找到業務對照 ${businessName} 但未找到對應的用戶`,
-            suggestion: '請確認該業務人員已被導入',
-          });
+            suggestion: '請確認該業務人員已被導入' });
         }
       } else {
         // 直接查找 userId
@@ -270,8 +265,7 @@ async function processBatch(
           row,
           field: '負責業務',
           message: `找不到負責業務: ${customer.負責業務}`,
-          data: customer,
-        });
+          data: customer });
         failureCount++;
         continue;
       }
@@ -286,8 +280,7 @@ async function processBatch(
             row,
             customerName: customer.客戶名稱,
             existingId,
-            action: 'skipped',
-          });
+            action: 'skipped' });
           mappings.set(customer.客戶名稱, existingId);
           skippedCount++;
           continue;
@@ -297,8 +290,7 @@ async function processBatch(
             row,
             customerName: customer.客戶名稱,
             existingId,
-            action: 'updated',
-          });
+            action: 'updated' });
           mappings.set(customer.客戶名稱, existingId);
           skippedCount++;
           continue;
@@ -332,8 +324,7 @@ async function processBatch(
         updatedAt: Timestamp.now(),
         createdBy: userId,
         teamMembers: [userId], // 添加 teamMembers 欄位以符合 Firestore 規則
-        customFields: (mappedCustomer as any).customFields || {},
-      };
+        customFields: (mappedCustomer as any).customFields || {} };
 
       batch.set(customerRef, customerData);
       mappings.set(customer.客戶名稱, customerRef.id);
@@ -352,8 +343,7 @@ async function processBatch(
         row,
         field: 'general',
         message: error instanceof Error ? error.message : '未知錯誤',
-        data: customer,
-      });
+        data: customer });
       failureCount++;
     }
   }
@@ -370,8 +360,7 @@ async function processBatch(
     errors,
     warnings,
     duplicates,
-    mappings,
-  };
+    mappings };
 }
 
 /**

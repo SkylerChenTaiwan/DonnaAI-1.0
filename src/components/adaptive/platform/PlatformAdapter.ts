@@ -76,8 +76,7 @@ export class PlatformAdapter {
       isTablet,
       isDesktop,
       platform: (platformOS as 'web' | 'ios' | 'android') || 'web',
-      version: Platform.Version ? String(Platform.Version) : undefined,
-    };
+      version: Platform.Version ? String(Platform.Version) : undefined };
   }
 
   /**

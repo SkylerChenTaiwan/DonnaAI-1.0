@@ -20,16 +20,14 @@ export const useTableData = (
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [sortConfig, setSortConfig] = useState({
     key: options?.initialSortKey || null,
-    direction: (options?.initialSortDirection || 'asc') as 'asc' | 'desc',
-  });
+    direction: (options?.initialSortDirection || 'asc') as 'asc' | 'desc' });
 
   // 同步外部排序設定
   React.useEffect(() => {
     if (options?.initialSortKey !== undefined || options?.initialSortDirection !== undefined) {
       setSortConfig({
         key: options?.initialSortKey || null,
-        direction: options?.initialSortDirection || 'asc',
-      });
+        direction: options?.initialSortDirection || 'asc' });
     }
   }, [options?.initialSortKey, options?.initialSortDirection]);
 
@@ -78,8 +76,7 @@ export const useTableData = (
   const setFilter = useCallback((key: string, value: any) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
-      [key]: value,
-    }));
+      [key]: value }));
   }, []);
 
   // 計算過濾和排序後的資料
@@ -167,6 +164,5 @@ export const useTableData = (
     toggleSelection,
     selectAll,
     clearSelection,
-    setFilter,
-  };
+    setFilter };
 };

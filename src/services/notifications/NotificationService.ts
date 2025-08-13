@@ -106,10 +106,8 @@ export const scheduleNotification = async (
     content: {
       title,
       body,
-      data,
-    },
-    trigger: triggerDate,
-  });
+      data },
+    trigger: triggerDate });
 };
 
 export const cancelNotification = async (notificationId: string): Promise<void> => {

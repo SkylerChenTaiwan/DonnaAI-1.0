@@ -13,8 +13,7 @@ import {
   FlatList,
   ActivityIndicator,
   TouchableOpacity,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { Layout } from '@/components/common/Layout';
 import { ResponsiveLayout } from '@/components/common/ResponsiveLayout';
 import { ModeToggle } from '@/components/common/ModeToggle';
@@ -290,8 +289,7 @@ export const EnhancedDashboardV2: React.FC = () => {
         const newStatus = task.status === 'completed' ? 'todo' : 'completed';
         await updateTask(task.id, { 
           status: newStatus,
-          completedAt: newStatus === 'completed' ? new Date() : null,
-        }, authUser.uid);
+          completedAt: newStatus === 'completed' ? new Date() : null }, authUser.uid);
         
         showToast('success', `任務已標記為${newStatus === 'completed' ? '完成' : '待辦'}`);
         await fetchTasks(authUser.uid, { teamId: currentTeam.id });
@@ -485,24 +483,20 @@ export const EnhancedDashboardV2: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
-  },
+    backgroundColor: '#F8F9FA' },
   safeArea: {
-    flex: 1,
-  },
+    flex: 1 },
   listContent: {
     paddingBottom: 120, // 增加底部間距避免被 navbar 擋住
   },
   loadingState: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   loadingText: {
     marginTop: 12,
     fontSize: 16,
-    color: '#6B7280',
-  },
+    color: '#6B7280' },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -511,37 +505,29 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-  },
+    borderBottomColor: '#E5E7EB' },
   userInfo: {
-    flex: 1,
-  },
+    flex: 1 },
   userName: {
     fontSize: 22,
     fontWeight: '700',
     color: '#1A1A1A',
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   userEmail: {
     fontSize: 14,
-    color: '#6B7280',
-  },
+    color: '#6B7280' },
   sectionHeader: {
     paddingHorizontal: 20,
     paddingVertical: 12,
-    backgroundColor: '#F8F9FA',
-  },
+    backgroundColor: '#F8F9FA' },
   overdueHeader: {
-    backgroundColor: '#FEF2F2',
-  },
+    backgroundColor: '#FEF2F2' },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   overdueTitle: {
-    color: '#DC2626',
-  },
+    color: '#DC2626' },
   taskItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -549,52 +535,41 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-  },
+    borderBottomColor: '#E5E7EB' },
   checkbox: {
-    marginRight: 12,
-  },
+    marginRight: 12 },
   taskContent: {
-    flex: 1,
-  },
+    flex: 1 },
   taskTitle: {
     fontSize: 16,
     color: '#1A1A1A',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   taskCompleted: {
     textDecorationLine: 'line-through',
-    color: '#9CA3AF',
-  },
+    color: '#9CA3AF' },
   taskMeta: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-  },
+    gap: 8 },
   taskDue: {
     fontSize: 14,
-    color: '#6B7280',
-  },
+    color: '#6B7280' },
   priorityBadge: {
     paddingHorizontal: 8,
     paddingVertical: 2,
-    borderRadius: 12,
-  },
+    borderRadius: 12 },
   priorityText: {
     fontSize: 12,
     color: '#FFFFFF',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   customersHeader: {
     paddingHorizontal: 20,
     paddingTop: 24,
-    paddingBottom: 12,
-  },
+    paddingBottom: 12 },
   customersTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   customerItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -602,68 +577,50 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-  },
+    borderBottomColor: '#E5E7EB' },
   customerInfo: {
-    flex: 1,
-  },
+    flex: 1 },
   customerName: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1A1A1A',
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   customerCompany: {
     fontSize: 14,
-    color: '#6B7280',
-  },
+    color: '#6B7280' },
   emptyState: {
     paddingVertical: 60,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: '#1A1A1A',
     marginTop: 16,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   emptyDescription: {
     fontSize: 14,
-    color: '#6B7280',
-  },
+    color: '#6B7280' },
   emptyText: {
     fontSize: 16,
-    color: '#6B7280',
-  },
+    color: '#6B7280' },
   // Web 響應式樣式
   webHeader: {
     ...Platform.select({
       web: {
         paddingHorizontal: 32,
-        paddingVertical: 20,
-      },
-      default: {},
-    }),
-  },
+        paddingVertical: 20 },
+      default: {} }) },
   webContent: {
     flex: 1,
     ...Platform.select({
       web: {
         maxWidth: 1200,
         width: '100%',
-        marginHorizontal: 'auto' as any,
-      },
-      default: {},
-    }),
-  },
+        marginHorizontal: 'auto' as any },
+      default: {} }) },
   webListContent: {
     ...Platform.select({
       web: {
         paddingHorizontal: 32,
-        paddingBottom: 40,
-      },
-      default: {},
-    }),
-  },
-});
+        paddingBottom: 40 },
+      default: {} }) } });

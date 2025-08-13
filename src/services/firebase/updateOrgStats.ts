@@ -10,8 +10,7 @@ import {
   where,
   getDocs,
   updateDoc,
-  serverTimestamp,
-} from 'firebase/firestore';
+  serverTimestamp } from 'firebase/firestore';
 import { getFirebaseDb } from './config';
 
 /**

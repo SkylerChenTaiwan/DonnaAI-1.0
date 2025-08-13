@@ -26,8 +26,7 @@ const WebDraggableHeader: React.FC<DraggableTableHeaderProps> = ({
   multiSelectMode,
   onSort,
   sortConfig,
-  onAddColumn,
-}) => {
+  onAddColumn }) => {
   const [draggedColumn, setDraggedColumn] = useState<number | null>(null);
   const [columnOrder, setColumnOrder] = useState(columns.map((_, i) => i));
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -117,8 +116,7 @@ const WebDraggableHeader: React.FC<DraggableTableHeaderProps> = ({
               width: column.width,
               opacity: isDragging ? 0.5 : 1,
               borderLeft: isDragOver ? '2px solid #2383e2' : 'none',
-              transition: 'border-left 0.2s ease',
-            }}
+              transition: 'border-left 0.2s ease' }}
           >
             <TouchableOpacity
               style={[
@@ -169,8 +167,7 @@ const NativeDraggableHeader: React.FC<DraggableTableHeaderProps> = ({
   multiSelectMode,
   onSort,
   sortConfig,
-  onAddColumn,
-}) => {
+  onAddColumn }) => {
   return (
     <View style={styles.tableHeader}>
       {/* 核取方塊欄 - 始終顯示 */}
@@ -235,47 +232,39 @@ const styles = StyleSheet.create({
     borderBottomColor: '#E9E9E7',
     backgroundColor: '#ffffff',
     minHeight: 36,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   
   headerCell: {
     paddingHorizontal: 8,
     paddingVertical: 6,
     flexDirection: 'row',
     alignItems: 'center',
-    cursor: Platform.OS === 'web' ? 'move' : 'default',
-  },
+    cursor: Platform.OS === 'web' ? 'move' : 'default' },
   
   firstHeaderCell: {
-    paddingLeft: 16,
-  },
+    paddingLeft: 16 },
   
   headerText: {
     fontSize: 14,
     fontWeight: '500',
     color: '#787774',
-    marginRight: 4,
-  },
+    marginRight: 4 },
   
   dragHandle: {
     marginRight: 4,
-    cursor: 'grab',
-  },
+    cursor: 'grab' },
   
   sortIcon: {
-    marginLeft: 2,
-  },
+    marginLeft: 2 },
   
   // 核取方塊樣式
   checkboxColumn: {
     width: 44,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   
   headerCheckbox: {
-    padding: 4,
-  },
+    padding: 4 },
   
   checkbox: {
     width: 16,
@@ -285,8 +274,7 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     backgroundColor: '#ffffff',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   
   // 新增欄位按鈕
   addColumnButton: {
@@ -298,8 +286,4 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     ...Platform.select({
       web: {
-        cursor: 'pointer',
-      },
-    }),
-  },
-});
+        cursor: 'pointer' } }) } });

@@ -117,60 +117,47 @@ const styles = StyleSheet.create({
     ...webOnly({
       position: 'sticky' as any,
       top: 0,
-      zIndex: 100,
-    }),
-    ...shadows.small,
-  },
+      zIndex: 100 }),
+    ...shadows.small },
   leftSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
-  },
+    flex: 1 },
   menuButton: {
     padding: 8,
-    marginRight: 8,
-  },
+    marginRight: 8 },
   logoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-  },
+    gap: 8 },
   logo: {
     width: 32,
-    height: 32,
-  },
+    height: 32 },
   logoText: {
     fontSize: 18,
     fontWeight: '600',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   centerSection: {
     flex: 2,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   pageTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   rightSection: {
     flex: 1,
-    alignItems: 'flex-end',
-  },
+    alignItems: 'flex-end' },
   userInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-  },
+    gap: 8 },
   userMode: {
     fontSize: 12,
     color: DesignSystem.colors.text.secondary,
     backgroundColor: DesignSystem.colors.button.secondary.default,
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: DesignSystem.borderRadius.sm,
-  },
+    borderRadius: DesignSystem.borderRadius.sm },
   userAvatar: {
     // Avatar styles
-  },
-});
+  } });

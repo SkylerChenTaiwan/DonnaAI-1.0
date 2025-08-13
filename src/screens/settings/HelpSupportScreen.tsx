@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   Linking,
   Alert,
+  Platform
 } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
@@ -35,24 +36,19 @@ export const HelpSupportScreen: React.FC = () => {
   const faqItems: FAQItem[] = [
     {
       question: '如何開始錄音？',
-      answer: '在主畫面點擊「開始錄音」按鈕，選擇會議類型和客戶後即可開始錄音。錄音會自動儲存並使用 AI 分析內容。',
-    },
+      answer: '在主畫面點擊「開始錄音」按鈕，選擇會議類型和客戶後即可開始錄音。錄音會自動儲存並使用 AI 分析內容。' },
     {
       question: '如何查看 AI 分析結果？',
-      answer: '錄音完成後，系統會自動進行 AI 分析。您可以在「錄音記錄」頁面查看分析結果，包括會議摘要、行動項目和重點內容。',
-    },
+      answer: '錄音完成後，系統會自動進行 AI 分析。您可以在「錄音記錄」頁面查看分析結果，包括會議摘要、行動項目和重點內容。' },
     {
       question: '如何管理客戶資料？',
-      answer: '在「客戶」頁面可以新增、編輯和查看客戶資料。點擊客戶可以查看詳細資訊，包括相關的會議記錄和任務。',
-    },
+      answer: '在「客戶」頁面可以新增、編輯和查看客戶資料。點擊客戶可以查看詳細資訊，包括相關的會議記錄和任務。' },
     {
       question: '如何設定任務提醒？',
-      answer: '在新增或編輯任務時，可以設定到期日和提醒時間。確保已開啟推播通知權限，系統會在指定時間發送提醒。',
-    },
+      answer: '在新增或編輯任務時，可以設定到期日和提醒時間。確保已開啟推播通知權限，系統會在指定時間發送提醒。' },
     {
       question: '資料會儲存在哪裡？',
-      answer: '所有資料都安全地儲存在雲端，並與您的組織帳號關聯。您可以隨時匯出資料備份。',
-    },
+      answer: '所有資料都安全地儲存在雲端，並與您的組織帳號關聯。您可以隨時匯出資料備份。' },
   ];
 
   // 幫助項目
@@ -68,8 +64,7 @@ export const HelpSupportScreen: React.FC = () => {
           '完整使用指南正在準備中，敬請期待！',
           [{ text: '確定' }]
         );
-      },
-    },
+      } },
     {
       id: 'video',
       title: '影片教學',
@@ -81,8 +76,7 @@ export const HelpSupportScreen: React.FC = () => {
           '教學影片正在製作中，敬請期待！',
           [{ text: '確定' }]
         );
-      },
-    },
+      } },
     {
       id: 'contact',
       title: '聯絡支援',
@@ -101,8 +95,7 @@ export const HelpSupportScreen: React.FC = () => {
               [{ text: '確定' }]
             );
           });
-      },
-    },
+      } },
     {
       id: 'feedback',
       title: '意見回饋',
@@ -125,8 +118,7 @@ export const HelpSupportScreen: React.FC = () => {
             },
           ]
         );
-      },
-    },
+      } },
     {
       id: 'report',
       title: '回報問題',
@@ -145,8 +137,7 @@ export const HelpSupportScreen: React.FC = () => {
               [{ text: '確定' }]
             );
           });
-      },
-    },
+      } },
   ];
 
   return (
@@ -229,18 +220,15 @@ export const HelpSupportScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
-  },
+    backgroundColor: '#F5F5F5' },
   section: {
     marginTop: 24,
-    paddingHorizontal: 16,
-  },
+    paddingHorizontal: 16 },
   sectionTitle: {
     fontSize: 20,
     fontWeight: '600',
     color: '#1C1C1E',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   helpItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -249,11 +237,10 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderRadius: 12,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
     shadowOpacity: 0.05,
     shadowRadius: 3,
-    elevation: 2,
-  },
+    elevation: 2 },
   helpIconContainer: {
     width: 40,
     height: 40,
@@ -261,43 +248,36 @@ const styles = StyleSheet.create({
     backgroundColor: '#E3F2FD',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
-  },
+    marginRight: 12 },
   helpContent: {
-    flex: 1,
-  },
+    flex: 1 },
   helpTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1C1C1E',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   helpDescription: {
     fontSize: 14,
-    color: '#8E8E93',
-  },
+    color: '#8E8E93' },
   faqItem: {
     backgroundColor: '#FFFFFF',
     padding: 16,
     marginBottom: 12,
     borderRadius: 12,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
     shadowOpacity: 0.05,
     shadowRadius: 3,
-    elevation: 2,
-  },
+    elevation: 2 },
   faqQuestion: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1C1C1E',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   faqAnswer: {
     fontSize: 14,
     color: '#3C3C43',
-    lineHeight: 20,
-  },
+    lineHeight: 20 },
   resourceItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -307,36 +287,29 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderRadius: 12,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
     shadowOpacity: 0.05,
     shadowRadius: 3,
-    elevation: 2,
-  },
+    elevation: 2 },
   resourceText: {
     fontSize: 16,
     color: '#007AFF',
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   contactInfo: {
     marginTop: 32,
     paddingHorizontal: 16,
     paddingVertical: 24,
     backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
-    borderTopColor: '#E5E5EA',
-  },
+    borderTopColor: '#E5E5EA' },
   contactTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: '#1C1C1E',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   contactText: {
     fontSize: 14,
     color: '#3C3C43',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   footer: {
-    height: 40,
-  },
-});
+    height: 40 } });

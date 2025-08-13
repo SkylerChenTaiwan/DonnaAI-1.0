@@ -24,23 +24,20 @@ export function PermissionBadge({ user, compact = false }: PermissionBadgeProps)
           icon: 'shield-checkmark' as string,
           label: '管理員',
           color: '#FF3B30',
-          bgColor: '#FF3B301A',
-        };
+          bgColor: '#FF3B301A' };
       case 'manager':
         return {
           icon: 'people' as string,
           label: '主管',
           color: '#007AFF',
-          bgColor: '#007AFF1A',
-        };
+          bgColor: '#007AFF1A' };
       case 'salesperson':
       default:
         return {
           icon: 'person' as string,
           label: '業務',
           color: '#34C759',
-          bgColor: '#34C7591A',
-        };
+          bgColor: '#34C7591A' };
     }
   };
 
@@ -74,20 +71,17 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-  },
+    gap: 8 },
   badge: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
-    gap: 4,
-  },
+    gap: 4 },
   label: {
     fontSize: 12,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   accessBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -95,10 +89,7 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     backgroundColor: DesignSystem.colors.background,
     borderRadius: 8,
-    gap: 2,
-  },
+    gap: 2 },
   accessText: {
     fontSize: 10,
-    color: DesignSystem.colors.text.secondary,
-  },
-});
+    color: DesignSystem.colors.text.secondary } });

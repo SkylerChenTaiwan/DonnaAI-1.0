@@ -10,8 +10,7 @@ import {
   getDocs,
   Timestamp,
   runTransaction,
-  doc,
-} from 'firebase/firestore';
+  doc } from 'firebase/firestore';
 import { getFirebaseDb } from '@/services/firebase/config';
 import { Organization } from '@/types/entities';
 import { 
@@ -34,8 +33,7 @@ export async function executeMonthlyBilling(): Promise<{
     success: true,
     processedCount: 0,
     failedCount: 0,
-    errors: [] as Array<{ organizationId: string; error: string }>,
-  };
+    errors: [] as Array<{ organizationId: string; error: string }> };
 
   try {
     // 獲取所有活躍的付費組織
@@ -61,8 +59,7 @@ export async function executeMonthlyBilling(): Promise<{
         results.failedCount++;
         results.errors.push({
           organizationId: orgDoc.id,
-          error: error instanceof Error ? error.message : '未知錯誤',
-        });
+          error: error instanceof Error ? error.message : '未知錯誤' });
       }
     }
     
@@ -80,8 +77,7 @@ export async function executeMonthlyBilling(): Promise<{
       success: false,
       processedCount: results.processedCount,
       failedCount: results.failedCount,
-      errors: results.errors,
-    };
+      errors: results.errors };
   }
 }
 
@@ -130,8 +126,7 @@ async function processOrganizationBilling(
     const orgRef = doc(db, 'organizations', organizationId);
     transaction.update(orgRef, {
       lastBillingDate: Timestamp.now(),
-      lastBillingPeriod: yearMonth,
-    });
+      lastBillingPeriod: yearMonth });
     
     console.log(`成功生成組織 ${organizationId} 的 ${yearMonth} 計費記錄`);
   });
@@ -210,8 +205,7 @@ export async function recalculateBillingRecords(
   const db = getFirebaseDb();
   const results = {
     updatedCount: 0,
-    errors: [] as Array<{ organizationId: string; error: string }>,
-  };
+    errors: [] as Array<{ organizationId: string; error: string }> };
   
   try {
     // 建立查詢
@@ -252,8 +246,7 @@ export async function recalculateBillingRecords(
             transaction.update(billingDoc.ref, {
               ...usage,
               updatedAt: Timestamp.now(),
-              isRecalculated: true,
-            });
+              isRecalculated: true });
           });
           
           results.updatedCount++;
@@ -262,8 +255,7 @@ export async function recalculateBillingRecords(
         console.error(`重新計算組織 ${orgDoc.id} 計費失敗:`, error);
         results.errors.push({
           organizationId: orgDoc.id,
-          error: error instanceof Error ? error.message : '未知錯誤',
-        });
+          error: error instanceof Error ? error.message : '未知錯誤' });
       }
     }
     

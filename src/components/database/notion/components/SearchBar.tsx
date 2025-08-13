@@ -74,8 +74,7 @@ export class SearchManager {
         columnKey,
         matchedText: String(value).substring(index, index + query.length),
         startIndex: index,
-        endIndex: index + query.length - 1,
-      });
+        endIndex: index + query.length - 1 });
 
       startIndex = index + 1;
     }
@@ -151,8 +150,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     debounceTimeoutRef.current = setTimeout(() => {
       onSearchChange({
         ...searchConfig,
-        query: query.trim(),
-      });
+        query: query.trim() });
     }, 300); // 300ms 防抖
   }, [searchConfig, onSearchChange]);
 
@@ -182,8 +180,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     setLocalQuery('');
     onSearchChange({
       ...searchConfig,
-      query: '',
-    });
+      query: '' });
     inputRef.current?.focus();
   }, [searchConfig, onSearchChange]);
 
@@ -196,16 +193,14 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     
     onSearchChange({
       ...searchConfig,
-      columns: newColumns,
-    });
+      columns: newColumns });
   }, [searchConfig, onSearchChange]);
 
   // 處理大小寫敏感切換
   const handleCaseSensitiveToggle = useCallback(() => {
     onSearchChange({
       ...searchConfig,
-      caseSensitive: !searchConfig.caseSensitive,
-    });
+      caseSensitive: !searchConfig.caseSensitive });
   }, [searchConfig, onSearchChange]);
 
   // 清理定時器
@@ -321,8 +316,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 onChange: () => {
                   onSearchChange({
                     ...searchConfig,
-                    columns: [],
-                  });
+                    columns: [] });
                 }
               }),
               '全部欄位'
@@ -370,8 +364,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             onChange: () => {
               onSearchChange({
                 ...searchConfig,
-                highlightMatches: !searchConfig.highlightMatches,
-              });
+                highlightMatches: !searchConfig.highlightMatches });
             }
           }),
           '高亮搜尋結果'
@@ -398,8 +391,7 @@ export function useSearch(
   return {
     filteredData,
     searchResults: results,
-    searchManager,
-  };
+    searchManager };
 }
 
 /**
@@ -410,6 +402,5 @@ export function createDefaultSearchConfig(): SearchConfig {
     query: '',
     columns: [], // 空陣列表示搜尋所有欄位
     caseSensitive: false,
-    highlightMatches: true,
-  };
+    highlightMatches: true };
 }

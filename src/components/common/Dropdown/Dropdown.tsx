@@ -29,8 +29,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
   placeholder = '請選擇...',
   onChange,
   disabled = false,
-  style = {},
-}) => {
+  style = {} }) => {
   const colors = DesignSystem.colors;
 
   return (
@@ -43,8 +42,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
           styles.picker,
           {
             backgroundColor: colors.background.input,
-            color: disabled ? colors.text.disabled : colors.text.primary,
-          },
+            color: disabled ? colors.text.disabled : colors.text.primary },
         ]}
       >
         {placeholder && (
@@ -67,10 +65,7 @@ const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
     borderRadius: 8,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   picker: {
     height: 48,
-    paddingHorizontal: 16,
-  },
-});
+    paddingHorizontal: 16 } });

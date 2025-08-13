@@ -1714,8 +1714,7 @@ const aiRoleplayHTML = `<!DOCTYPE html>
 // WebApp 集合
 const webApps: Record<string, string> = {
   calculator: calculatorHTML,
-  'ai-roleplay': aiRoleplayHTML,
-};
+  'ai-roleplay': aiRoleplayHTML };
 
 /**
  * 取得 WebApp HTML 內容

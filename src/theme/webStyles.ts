@@ -31,8 +31,7 @@ export class WebStyleConverter {
       useImportant = false,
       prefix = '',
       responsive = false,
-      designTokens = true,
-    } = options;
+      designTokens = true } = options;
 
     let convertedStyle = this.basicConvert(style, { designTokens });
 
@@ -123,8 +122,7 @@ export class WebStyleConverter {
       fontWeight: 'fontWeight',
       opacity: 'opacity',
       width: 'width',
-      height: 'height',
-    };
+      height: 'height' };
 
     if (directMap[key]) {
       return { [directMap[key]]: value };
@@ -144,16 +142,14 @@ export class WebStyleConverter {
     // 為小螢幕添加調整
     if (style.fontSize) {
       responsiveStyle[`@media ${webTokens.breakpoints.mobile}`] = {
-        fontSize: `calc(${style.fontSize} * 0.9)`,
-      };
+        fontSize: `calc(${style.fontSize} * 0.9)` };
     }
 
     // 為大螢幕添加調整
     if (style.padding || style.margin) {
       responsiveStyle[`@media ${webTokens.breakpoints.desktop}`] = {
         padding: style.padding ? `calc(${style.padding} * 1.1)` : undefined,
-        margin: style.margin ? `calc(${style.margin} * 1.1)` : undefined,
-      };
+        margin: style.margin ? `calc(${style.margin} * 1.1)` : undefined };
     }
 
     return responsiveStyle;
@@ -426,5 +422,4 @@ cssPriorityManager.registerGlobalCSS([
 // 匯出常用的轉換函數
 export {
   WebStyleConverter,
-  CSSPriorityManager,
-};
+  CSSPriorityManager };

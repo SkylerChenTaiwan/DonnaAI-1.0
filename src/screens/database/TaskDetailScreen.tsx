@@ -10,8 +10,7 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { WebLayout } from '@/components/layout/WebLayout';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -55,8 +54,7 @@ export const TaskDetailScreen: React.FC = () => {
       
       await updateTask(task.id!, { 
         status: newStatus as any,
-        completedAt: newStatus === 'completed' ? new Date() : null,
-      }, user.uid);
+        completedAt: newStatus === 'completed' ? new Date() : null }, user.uid);
       
       showToast('success', `任務已標記為${newStatus === 'completed' ? '已完成' : '待開始'}`);
     } catch (error) {
@@ -229,18 +227,15 @@ export const TaskDetailScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
-  },
+    backgroundColor: '#F5F5F5' },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   loadingText: {
     marginTop: 12,
     fontSize: 16,
-    color: '#8E8E93',
-  },
+    color: '#8E8E93' },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -248,122 +243,97 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
-  },
+    borderBottomColor: '#E5E5EA' },
   backButton: {
-    padding: 4,
-  },
+    padding: 4 },
   headerTitle: {
     flex: 1,
     fontSize: 18,
     fontWeight: '600',
     color: '#1C1C1E',
     marginHorizontal: 16,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   editButton: {
-    padding: 4,
-  },
+    padding: 4 },
   scrollView: {
-    flex: 1,
-  },
+    flex: 1 },
   titleSection: {
     backgroundColor: '#FFFFFF',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
-  },
+    borderBottomColor: '#E5E5EA' },
   taskTitle: {
     fontSize: 24,
     fontWeight: '700',
     color: '#1C1C1E',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   section: {
     backgroundColor: '#FFFFFF',
     marginTop: 16,
     paddingVertical: 16,
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: '#E5E5EA',
-  },
+    borderColor: '#E5E5EA' },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: '#1C1C1E',
     paddingHorizontal: 16,
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   infoRow: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
-  },
+    borderBottomColor: '#F2F2F7' },
   label: {
     fontSize: 16,
     color: '#8E8E93',
-    width: 100,
-  },
+    width: 100 },
   value: {
     flex: 1,
     fontSize: 16,
-    color: '#1C1C1E',
-  },
+    color: '#1C1C1E' },
   linkText: {
     color: '#007AFF',
-    textDecorationLine: 'underline',
-  },
+    textDecorationLine: 'underline' },
   statusBadge: {
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    alignSelf: 'flex-start',
-  },
+    alignSelf: 'flex-start' },
   statusTodo: {
-    backgroundColor: '#FEF3E2',
-  },
+    backgroundColor: '#FEF3E2' },
   statusCompleted: {
-    backgroundColor: '#E3F2E6',
-  },
+    backgroundColor: '#E3F2E6' },
   statusText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1C1C1E',
-  },
+    color: '#1C1C1E' },
   priorityContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-  },
+    gap: 4 },
   priorityText: {
     fontSize: 16,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   contentContainer: {
-    paddingHorizontal: 16,
-  },
+    paddingHorizontal: 16 },
   contentText: {
     fontSize: 16,
     color: '#1C1C1E',
-    lineHeight: 24,
-  },
+    lineHeight: 24 },
   tagsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     paddingHorizontal: 16,
-    gap: 8,
-  },
+    gap: 8 },
   tag: {
     backgroundColor: '#E5E5EA',
     borderRadius: 16,
     paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
+    paddingVertical: 6 },
   tagText: {
     fontSize: 14,
-    color: '#1C1C1E',
-  },
-});
+    color: '#1C1C1E' } });

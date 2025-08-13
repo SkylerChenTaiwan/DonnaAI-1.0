@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet , Platform } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
@@ -33,8 +33,7 @@ const chartOptions: ChartOption[] = [
 export const ChartSelector: React.FC<ChartSelectorProps> = ({
   selectedType,
   onSelectType,
-  availableTypes = ['line', 'bar', 'pie', 'area'],
-}) => {
+  availableTypes = ['line', 'bar', 'pie', 'area'] }) => {
   const filteredOptions = chartOptions.filter(option => 
     availableTypes.includes(option.id)
   );
@@ -77,8 +76,7 @@ const styles = StyleSheet.create({
     padding: 4,
     backgroundColor: DesignSystem.colors.background.elevated,
     borderRadius: 12,
-    gap: 4,
-  },
+    gap: 4 },
   option: {
     flex: 1,
     flexDirection: 'row',
@@ -87,22 +85,17 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 8,
-    gap: 6,
-  },
+    gap: 6 },
   optionActive: {
     backgroundColor: DesignSystem.colors.background.surface,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
     shadowOpacity: 0.05,
     shadowRadius: 2,
-    elevation: 1,
-  },
+    elevation: 1 },
   optionText: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   optionTextActive: {
     color: DesignSystem.colors.primary,
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600' } });

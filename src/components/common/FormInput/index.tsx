@@ -8,7 +8,6 @@ import { Platform } from 'react-native';
 // 動態導入以避免 Web 平台載入 Native 元件
 const FormInputComponent = Platform.select({
   web: () => require('./FormInput.web').FormInput,
-  default: () => require('./FormInput').FormInput,
-})();
+  default: () => require('./FormInput').FormInput })();
 
 export const FormInput = FormInputComponent;

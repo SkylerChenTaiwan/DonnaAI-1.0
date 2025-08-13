@@ -17,8 +17,7 @@ export const NotionTableCell: React.FC<NotionTableCellProps> = ({
   placeholder = '',
   autoFocus = false,
   disabled = false,
-  options = [],
-}) => {
+  options = [] }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [localValue, setLocalValue] = useState(value);
   const inputRef = useRef<HTMLInputElement>(null);

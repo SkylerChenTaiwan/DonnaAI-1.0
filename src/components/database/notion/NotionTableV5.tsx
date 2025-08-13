@@ -9,8 +9,7 @@ import {
   getCoreRowModel,
   flexRender,
   ColumnDef,
-  ColumnResizeMode,
-} from '@tanstack/react-table';
+  ColumnResizeMode } from '@tanstack/react-table';
 import { Platform, View, Text, TouchableOpacity } from 'react-native';
 import { NotionIcons } from './NotionIcons';
 import { FilterPanel } from './components/FilterPanel';
@@ -51,8 +50,7 @@ export const NotionTableV5: React.FC<NotionTableV5Props> = ({
   loading = false,
   error = null,
   emptyMessage = '沒有資料',
-  activeTab,
-}) => {
+  activeTab }) => {
   // 狀態管理
   const [visibleColumns, setVisibleColumns] = useState<string[]>(
     inputColumns.map(col => col.id)
@@ -94,8 +92,7 @@ export const NotionTableV5: React.FC<NotionTableV5Props> = ({
         size: col.width || 180,
         minSize: 50,
         maxSize: 500,
-        enableResizing: col.resizable !== false,
-      }));
+        enableResizing: col.resizable !== false }));
   }, [inputColumns, visibleColumns]);
 
   // 建立 table 實例
@@ -114,14 +111,12 @@ export const NotionTableV5: React.FC<NotionTableV5Props> = ({
           if (onColumnReorder) {
             const updatedColumns = inputColumns.map(col => ({
               ...col,
-              width: newSizing[col.id] || col.width || 180,
-            }));
+              width: newSizing[col.id] || col.width || 180 }));
             onColumnReorder(updatedColumns);
           }
         }, 300);
       }
-    },
-  });
+    } });
 
   if (Platform.OS !== 'web') {
     return (
@@ -212,8 +207,7 @@ export const NotionTableV5: React.FC<NotionTableV5Props> = ({
                     className="notion-header-cell"
                     style={{
                       width: header.getSize(),
-                      position: 'relative',
-                    }}
+                      position: 'relative' }}
                   >
                     {header.isPlaceholder
                       ? null
@@ -281,8 +275,7 @@ export const NotionTableV5: React.FC<NotionTableV5Props> = ({
                       key={cell.id}
                       className="notion-cell"
                       style={{
-                        width: cell.column.getSize(),
-                      }}
+                        width: cell.column.getSize() }}
                     >
                       <div className="notion-cell-content">
                         {flexRender(

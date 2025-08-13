@@ -31,8 +31,7 @@ export const WebIcon: React.FC<WebIconProps> = ({ name, size = 24, color = '#000
         name={webIconName}
         style={{
           fontSize: `${size}px`,
-          color: color,
-        }}
+          color: color }}
       />
     </View>
   );
@@ -42,5 +41,4 @@ export const WebIcon: React.FC<WebIconProps> = ({ name, size = 24, color = '#000
 export const WebIonicons = {
   ...Ionicons,
   // 覆寫預設的組件
-  render: (props: any) => <WebIcon {...props} />,
-};
+  render: (props: any) => <WebIcon {...props} /> };

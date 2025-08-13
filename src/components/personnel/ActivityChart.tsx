@@ -10,8 +10,7 @@ import {
   VictoryAxis,
   VictoryTheme,
   VictoryContainer,
-  VictoryArea,
-} from 'victory-native';
+  VictoryArea } from 'victory-native';
 import { DesignSystem } from '../../theme/DesignSystem';
 
 interface ActivityChartProps {
@@ -25,13 +24,11 @@ const { width: screenWidth } = Dimensions.get('window');
 export const ActivityChart: React.FC<ActivityChartProps> = ({
   data,
   height = 200,
-  showArea = true,
-}) => {
+  showArea = true }) => {
   // 將數據轉換為 Victory 格式
   const chartData = data.map((value, index) => ({
     x: index + 1,
-    y: value,
-  }));
+    y: value }));
 
   // 計算 Y 軸最大值
   const maxValue = Math.max(...data, 5);
@@ -57,14 +54,11 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({
             axis: { stroke: DesignSystem.colors.border.light },
             tickLabels: {
               fontSize: 10,
-              fill: DesignSystem.colors.text.tertiary,
-            },
+              fill: DesignSystem.colors.text.tertiary },
             grid: {
               stroke: DesignSystem.colors.border.light,
               strokeDasharray: '2,2',
-              opacity: 0.5,
-            },
-          }}
+              opacity: 0.5 } }}
           tickFormat={(x) => {
             // 只顯示部分標籤
             if (x === 1) return '30天前';
@@ -81,14 +75,11 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({
             axis: { stroke: DesignSystem.colors.border.light },
             tickLabels: {
               fontSize: 10,
-              fill: DesignSystem.colors.text.tertiary,
-            },
+              fill: DesignSystem.colors.text.tertiary },
             grid: {
               stroke: DesignSystem.colors.border.light,
               strokeDasharray: '2,2',
-              opacity: 0.5,
-            },
-          }}
+              opacity: 0.5 } }}
           domain={[0, yMax]}
           tickFormat={(y) => Math.round(y).toString()}
         />
@@ -100,9 +91,7 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({
             style={{
               data: {
                 fill: DesignSystem.colors.primary,
-                fillOpacity: 0.1,
-              },
-            }}
+                fillOpacity: 0.1 } }}
             interpolation="monotoneX"
           />
         )}
@@ -113,9 +102,7 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({
           style={{
             data: {
               stroke: DesignSystem.colors.primary,
-              strokeWidth: 2,
-            },
-          }}
+              strokeWidth: 2 } }}
           interpolation="monotoneX"
         />
       </VictoryChart>
@@ -125,9 +112,6 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   chartContainer: {
-    backgroundColor: 'transparent',
-  },
-});
+    backgroundColor: 'transparent' } });

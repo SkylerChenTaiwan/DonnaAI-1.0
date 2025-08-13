@@ -5,8 +5,7 @@
 
 import {
   IRelationBuilder,
-  FileRelation,
-} from '@/types/intelligentImport';
+  FileRelation } from '@/types/intelligentImport';
 
 interface ParsedFile {
   name: string;
@@ -80,8 +79,7 @@ export class RelationBuilder implements IRelationBuilder {
         relationType,
         joinType: 'left', // 預設使用 left join
         confidence,
-        matchedSamples: this.getMatchedSamples(file1, file2, key),
-      });
+        matchedSamples: this.getMatchedSamples(file1, file2, key) });
     }
 
     return relations;
@@ -112,8 +110,7 @@ export class RelationBuilder implements IRelationBuilder {
               field1: header1,
               field2: header2,
               similarity,
-              dataOverlap,
-            });
+              dataOverlap });
           }
         }
       }
@@ -331,8 +328,7 @@ export class RelationBuilder implements IRelationBuilder {
             field1: file1.headers[i],
             field2: file2.headers[j],
             similarity: 0.5, // 名稱相似度較低
-            dataOverlap: overlap,
-          });
+            dataOverlap: overlap });
         }
       }
     }
@@ -369,8 +365,7 @@ export class RelationBuilder implements IRelationBuilder {
             field1: id1,
             field2: id2,
             similarity: 0.9, // ID 欄位優先級較高
-            dataOverlap: overlap,
-          });
+            dataOverlap: overlap });
         }
       }
     }
@@ -497,8 +492,7 @@ export class RelationBuilder implements IRelationBuilder {
       if (normalized && index2.has(normalized)) {
         samples.push({
           sourceValue: value1,
-          targetValue: index2.get(normalized),
-        });
+          targetValue: index2.get(normalized) });
 
         if (samples.length >= 5) {
           break;

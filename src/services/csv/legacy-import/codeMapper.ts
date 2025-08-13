@@ -48,8 +48,7 @@ export function buildCodeMappings(mappingData: BusinessCodeMapping[]): {
     codeToName,
     nameToCode,
     codeToLevel,
-    supervisorMap,
-  };
+    supervisorMap };
 }
 
 /**
@@ -71,8 +70,7 @@ export function resolveBusinessIdentifier(
       name: '',
       code: '',
       found: false,
-      source: 'manual',
-    };
+      source: 'manual' };
   }
 
   // 嘗試作為代碼查找
@@ -83,8 +81,7 @@ export function resolveBusinessIdentifier(
       code: normalizedCode,
       level: codeToLevel.get(normalizedCode),
       found: true,
-      source: 'code',
-    };
+      source: 'code' };
   }
 
   // 嘗試作為姓名查找
@@ -95,8 +92,7 @@ export function resolveBusinessIdentifier(
       code,
       level: codeToLevel.get(code),
       found: true,
-      source: 'name',
-    };
+      source: 'name' };
   }
 
   // 嘗試模糊匹配姓名（忽略大小寫）
@@ -107,8 +103,7 @@ export function resolveBusinessIdentifier(
         code,
         level: codeToLevel.get(code),
         found: true,
-        source: 'name',
-      };
+        source: 'name' };
     }
   }
 
@@ -120,8 +115,7 @@ export function resolveBusinessIdentifier(
     name: isLikelyCode ? '' : cleanInput,
     code: isLikelyCode ? normalizedCode : '',
     found: false,
-    source: 'manual',
-  };
+    source: 'manual' };
 }
 
 /**
@@ -252,8 +246,7 @@ export function validateCodeMappings(
   return {
     isValid: errors.length === 0,
     errors,
-    warnings,
-  };
+    warnings };
 }
 
 /**

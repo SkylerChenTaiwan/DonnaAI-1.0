@@ -10,8 +10,7 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 
 export interface EditableCellProps {
@@ -47,8 +46,7 @@ export const EditableCell: React.FC<EditableCellProps> = ({
   disabled = false,
   onCancel,
   onTab,
-  autoFocus = false,
-}) => {
+  autoFocus = false }) => {
   const [editValue, setEditValue] = useState(String(value || ''));
   const inputRef = useRef<TextInput>(null);
 
@@ -218,8 +216,7 @@ export const EditableCell: React.FC<EditableCellProps> = ({
 const styles = StyleSheet.create({
   editContainer: {
     flex: 1,
-    position: 'relative',
-  },
+    position: 'relative' },
   editInput: {
     fontSize: 14,
     paddingHorizontal: 8,
@@ -229,45 +226,36 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderWidth: 0,
     borderRadius: 0,
-    outline: 'none',
-  },
+    outline: 'none' },
   multilineInput: {
     minHeight: 60,
-    textAlignVertical: 'top',
-  },
+    textAlignVertical: 'top' },
   inputError: {
-    borderColor: '#DC3545',
-  },
+    borderColor: '#DC3545' },
   errorText: {
     fontSize: 12,
     color: '#DC3545',
     marginTop: 4,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   cellContainer: {
     flex: 1,
     position: 'relative',
     minHeight: 40,
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   cellError: {
     backgroundColor: 'rgba(220, 53, 69, 0.1)',
-    borderRadius: 4,
-  },
+    borderRadius: 4 },
   cellContent: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   cellText: {
     fontSize: 16,
     color: '#1A1A1A',
-    flex: 1,
-  },
+    flex: 1 },
   cellTextError: {
-    color: '#DC3545',
-  },
+    color: '#DC3545' },
   errorIndicator: {
     position: 'absolute',
     top: 2,
@@ -277,6 +265,4 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+    justifyContent: 'center' } });

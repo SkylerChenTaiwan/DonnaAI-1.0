@@ -9,8 +9,7 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { responsive, webOnly } from '@/styles/web';
 
@@ -41,16 +40,14 @@ export const DatabaseToolbar: React.FC<ToolbarProps> = ({
   currentView = 'table',
   hasActiveFilters = false,
   hasActiveSort = false,
-  multiSelectMode = false,
-}) => {
+  multiSelectMode = false }) => {
   // 視圖類型對應的圖標和文字
   const viewConfig = {
     table: { icon: 'grid-outline', label: '表格' },
     board: { icon: 'albums-outline', label: '看板' },
     calendar: { icon: 'calendar-outline', label: '日曆' },
     list: { icon: 'list-outline', label: '列表' },
-    gallery: { icon: 'images-outline', label: '圖庫' },
-  };
+    gallery: { icon: 'images-outline', label: '圖庫' } };
 
   const currentViewConfig = viewConfig[currentView];
   
@@ -222,17 +219,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    flex: 1,
-  },
+    flex: 1 },
   toolbarLeft: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   toolbarRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-  },
+    gap: 4 },
   viewButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -245,10 +239,7 @@ const styles = StyleSheet.create({
       cursor: 'pointer',
       transition: 'all 0.2s ease',
       ':hover': {
-        backgroundColor: '#eeeeec',
-      },
-    }),
-  },
+        backgroundColor: '#eeeeec' } }) },
   toolButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -261,20 +252,13 @@ const styles = StyleSheet.create({
       cursor: 'pointer',
       transition: 'all 0.2s ease',
       ':hover': {
-        backgroundColor: '#f7f7f7',
-      },
-    }),
-  },
+        backgroundColor: '#f7f7f7' } }) },
   activeToolButton: {
-    backgroundColor: '#f0f0f0',
-  },
+    backgroundColor: '#f0f0f0' },
   toolbarText: {
     fontSize: 13,
     color: '#666',
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   activeToolbarText: {
     color: '#37352f',
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600' } });

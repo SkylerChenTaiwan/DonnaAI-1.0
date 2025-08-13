@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { withAlpha } from '@/utils/colorUtils';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet , Platform } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
@@ -25,8 +25,7 @@ export const StatCard: React.FC<StatCardProps> = ({
   changeType = 'neutral',
   icon,
   color = DesignSystem.colors.primary,
-  size = 'medium',
-}) => {
+  size = 'medium' }) => {
   const getChangeColor = () => {
     switch (changeType) {
       case 'positive':
@@ -55,20 +54,17 @@ export const StatCard: React.FC<StatCardProps> = ({
         return {
           container: styles.containerSmall,
           value: styles.valueSmall,
-          label: styles.labelSmall,
-        };
+          label: styles.labelSmall };
       case 'large':
         return {
           container: styles.containerLarge,
           value: styles.valueLarge,
-          label: styles.labelLarge,
-        };
+          label: styles.labelLarge };
       default:
         return {
           container: {},
           value: {},
-          label: {},
-        };
+          label: {} };
     }
   };
 
@@ -120,74 +116,58 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     minWidth: 150,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
     shadowOpacity: 0.05,
     shadowRadius: 4,
-    elevation: 2,
-  },
+    elevation: 2 },
   containerSmall: {
     padding: 12,
-    minWidth: 120,
-  },
+    minWidth: 120 },
   containerLarge: {
     padding: 20,
-    minWidth: 180,
-  },
+    minWidth: 180 },
   iconContainer: {
     width: 40,
     height: 40,
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   label: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   labelSmall: {
     fontSize: 11,
-    marginBottom: 6,
-  },
+    marginBottom: 6 },
   labelLarge: {
     fontSize: 14,
-    marginBottom: 10,
-  },
+    marginBottom: 10 },
   valueContainer: {
     flexDirection: 'row',
     alignItems: 'baseline',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   value: {
     ...DesignSystem.typography.h1,
     color: DesignSystem.colors.text.primary,
-    fontWeight: '700',
-  },
+    fontWeight: '700' },
   valueSmall: {
-    fontSize: 20,
-  },
+    fontSize: 20 },
   valueLarge: {
-    fontSize: 32,
-  },
+    fontSize: 32 },
   unit: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginLeft: 4,
-  },
+    marginLeft: 4 },
   changeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-  },
+    gap: 4 },
   change: {
     ...DesignSystem.typography.caption,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   row: {
     flexDirection: 'row',
     paddingHorizontal: 20,
     paddingVertical: 16,
-    gap: 12,
-  },
-});
+    gap: 12 } });

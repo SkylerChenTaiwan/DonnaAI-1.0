@@ -46,24 +46,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
     padding: 20,
-    paddingTop: 60,
-  },
+    paddingTop: 60 },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   test: {
     marginBottom: 30,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   image: {
     width: 150,
     height: 150,
     backgroundColor: '#e0e0e0',
     marginTop: 10,
     borderWidth: 1,
-    borderColor: 'red',
-  },
-});
+    borderColor: 'red' } });

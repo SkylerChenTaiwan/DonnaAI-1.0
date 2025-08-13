@@ -56,22 +56,19 @@ export async function convertVoiceToTask(
     extractDeadline = true,
     extractPriority = true,
     extractAssignee = true,
-    autoDetectTaskType = true,
-  } = options;
+    autoDetectTaskType = true } = options;
 
   try {
     // 階段 1：語音轉文字
     onProgress?.({
       stage: 'transcribing',
       percentage: 10,
-      message: '正在進行語音識別...',
-    });
+      message: '正在進行語音識別...' });
 
     const speechOptions: SpeechToTextOptions = {
       language,
       enableAutomaticPunctuation: true,
-      maxAlternatives: 2,
-    };
+      maxAlternatives: 2 };
 
     const transcriptionResult = await transcribeAudio(
       audioUri,
@@ -80,8 +77,7 @@ export async function convertVoiceToTask(
         onProgress?.({
           stage: 'transcribing',
           percentage: 10 + (speechProgress.percentage * 0.4), // 10%-50%
-          message: speechProgress.message,
-        });
+          message: speechProgress.message });
       }
     );
 
@@ -96,21 +92,18 @@ export async function convertVoiceToTask(
     onProgress?.({
       stage: 'analyzing',
       percentage: 50,
-      message: '正在分析任務內容...',
-    });
+      message: '正在分析任務內容...' });
 
     const extractedTask = await extractTaskFromText(cleanedText, {
       extractDeadline,
       extractPriority,
       extractAssignee,
-      autoDetectTaskType,
-    });
+      autoDetectTaskType });
 
     onProgress?.({
       stage: 'extracting',
       percentage: 80,
-      message: '正在提取任務資訊...',
-    });
+      message: '正在提取任務資訊...' });
 
     // 階段 3：轉換為表單資料格式
     const taskFormData = convertToTaskFormData(extractedTask);
@@ -118,8 +111,7 @@ export async function convertVoiceToTask(
     onProgress?.({
       stage: 'completing',
       percentage: 100,
-      message: '任務提取完成',
-    });
+      message: '任務提取完成' });
 
     const processingTime = Date.now() - startTime;
 
@@ -127,13 +119,11 @@ export async function convertVoiceToTask(
       success: true,
       extractedTask: {
         ...extractedTask,
-        rawTranscription: cleanedText,
-      },
+        rawTranscription: cleanedText },
       taskFormData,
       audioUri,
       duration: transcriptionResult.duration || 0,
-      processingTime,
-    };
+      processingTime };
 
   } catch (error) {
     console.error('語音轉任務失敗:', error);
@@ -145,8 +135,7 @@ export async function convertVoiceToTask(
       audioUri,
       duration: 0,
       processingTime,
-      error: error instanceof Error ? error.message : '語音轉任務處理失敗',
-    };
+      error: error instanceof Error ? error.message : '語音轉任務處理失敗' };
   }
 }
 
@@ -206,8 +195,7 @@ async function extractTaskFromText(
     description,
     priority,
     dueDate,
-    assignedTo,
-  });
+    assignedTo });
 
   return {
     title: title || '語音任務',
@@ -216,8 +204,7 @@ async function extractTaskFromText(
     dueDate,
     assignedTo,
     tags,
-    confidence,
-  };
+    confidence };
 }
 
 /**
@@ -471,8 +458,7 @@ function convertToTaskFormData(extractedTask: ExtractedTaskData): Partial<TaskFo
     status: 'pending',
     dueDate: extractedTask.dueDate,
     assignedTo: extractedTask.assignedTo,
-    tags: extractedTask.tags || [],
-  };
+    tags: extractedTask.tags || [] };
 }
 
 // 輔助函數：取得各種模式的正則表達式
@@ -520,8 +506,7 @@ export function validateExtractionQuality(result: ExtractedTaskData): {
   return {
     isValid: issues.length === 0,
     issues,
-    suggestions,
-  };
+    suggestions };
 }
 
 /**

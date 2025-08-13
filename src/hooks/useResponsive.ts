@@ -34,8 +34,7 @@ export function useResponsive(): ResponsiveState {
     const handleResize = () => {
       setScreenDimensions({
         width: window.innerWidth,
-        height: window.innerHeight,
-      });
+        height: window.innerHeight });
     };
     
     // 初始設定
@@ -84,8 +83,7 @@ export function useResponsive(): ResponsiveState {
     screenWidth: actualWidth,
     screenHeight: actualHeight,
     isPortrait,
-    isLandscape,
-  };
+    isLandscape };
 }
 
 /**

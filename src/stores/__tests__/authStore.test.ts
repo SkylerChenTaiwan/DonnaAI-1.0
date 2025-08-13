@@ -11,10 +11,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 // Mock Firebase
 vi.mock('@/services/firebase/config', () => ({
   getFirebaseAuth: jest.fn(() => ({
-    signOut: vi.fn().mockResolvedValue(undefined),
-  })),
-  getFirebaseDb: vi.fn(),
-}));
+    signOut: vi.fn().mockResolvedValue(undefined) })),
+  getFirebaseDb: vi.fn() }));
 
 // Mock Firebase Auth
 vi.mock('firebase/auth', () => ({
@@ -23,14 +21,12 @@ vi.mock('firebase/auth', () => ({
     callback(null);
     // 返回取消訂閱函數
     return vi.fn();
-  }),
-}));
+  }) }));
 
 // Mock Firebase Firestore
 vi.mock('firebase/firestore', () => ({
   doc: vi.fn(),
-  getDoc: vi.fn(),
-}));
+  getDoc: vi.fn() }));
 
 describe('authStore mode persistence', () => {
   beforeEach(() => {
@@ -45,8 +41,7 @@ describe('authStore mode persistence', () => {
       isLoading: true,
       isAuthenticated: false,
       error: null,
-      mode: 'business',
-    });
+      mode: 'business' });
   });
 
   it('應該從 AsyncStorage 載入模式', async () => {

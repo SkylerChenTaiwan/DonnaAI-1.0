@@ -12,8 +12,7 @@ import {
   TimelineData,
   AuditActionType,
   ActionCategory,
-  RiskLevel,
-} from '@/types/audit';
+  RiskLevel } from '@/types/audit';
 import { getFirebaseDb } from '@/services/firebase/config';
 const db = getFirebaseDb();
 import {
@@ -27,8 +26,7 @@ import {
   getCountFromServer,
   QueryConstraint,
   DocumentSnapshot,
-  Timestamp,
-} from 'firebase/firestore';
+  Timestamp } from 'firebase/firestore';
 import { format, startOfDay, endOfDay, differenceInHours, differenceInDays } from 'date-fns';
 
 /**
@@ -73,8 +71,7 @@ export class AuditLogQueryService {
       // 轉換結果
       const logs = snapshot.docs.map(doc => ({
         ...doc.data(),
-        id: doc.id,
-      } as AuditLog));
+        id: doc.id } as AuditLog));
       
       // 獲取總數
       const totalCount = await this.getTotalCount(criteria);
@@ -83,8 +80,7 @@ export class AuditLogQueryService {
         logs,
         totalCount,
         hasMore: logs.length === (criteria.limit || 50),
-        lastDoc: snapshot.docs[snapshot.docs.length - 1],
-      };
+        lastDoc: snapshot.docs[snapshot.docs.length - 1] };
       
       // 快取結果
       this.setCache(cacheKey, result);
@@ -207,8 +203,7 @@ export class AuditLogQueryService {
         averageResponseTime: this.calculateAverageResponseTime(logs),
         topUsers: this.getTopUsers(logs),
         riskDistribution: this.getRiskDistribution(logs),
-        timeline: this.generateTimeline(logs, timeRange),
-      };
+        timeline: this.generateTimeline(logs, timeRange) };
       
       // 快取結果
       this.setCache(cacheKey, statistics);
@@ -239,8 +234,7 @@ export class AuditLogQueryService {
     
     return snapshot.docs.map(doc => ({
       ...doc.data(),
-      id: doc.id,
-    } as AuditLog));
+      id: doc.id } as AuditLog));
   }
 
   /**
@@ -320,8 +314,7 @@ export class AuditLogQueryService {
       if (!userCounts[userId]) {
         userCounts[userId] = {
           name: log.actor.userName,
-          count: 0,
-        };
+          count: 0 };
       }
       userCounts[userId].count++;
     });
@@ -330,8 +323,7 @@ export class AuditLogQueryService {
       .map(([userId, data]) => ({
         userId,
         userName: data.name,
-        eventCount: data.count,
-      }))
+        eventCount: data.count }))
       .sort((a, b) => b.eventCount - a.eventCount)
       .slice(0, topN);
   }
@@ -349,8 +341,7 @@ export class AuditLogQueryService {
       low: 0,
       medium: 0,
       high: 0,
-      critical: 0,
-    };
+      critical: 0 };
     
     logs.forEach(log => {
       const risk = log.metadata?.risk || 'low';
@@ -378,9 +369,7 @@ export class AuditLogQueryService {
       buckets: Object.entries(buckets).map(([time, data]) => ({
         time,
         count: data.count,
-        uniqueEvents: data.events.size,
-      })),
-    };
+        uniqueEvents: data.events.size })) };
   }
 
   /**
@@ -463,8 +452,7 @@ export class AuditLogQueryService {
     
     return snapshot.docs.map(doc => ({
       ...doc.data(),
-      id: doc.id,
-    } as AuditLog));
+      id: doc.id } as AuditLog));
   }
 
   /**
@@ -486,8 +474,7 @@ export class AuditLogQueryService {
     
     return snapshot.docs.map(doc => ({
       ...doc.data(),
-      id: doc.id,
-    } as AuditLog));
+      id: doc.id } as AuditLog));
   }
 
   /**
@@ -509,8 +496,7 @@ export class AuditLogQueryService {
     
     return snapshot.docs.map(doc => ({
       ...doc.data(),
-      id: doc.id,
-    } as AuditLog));
+      id: doc.id } as AuditLog));
   }
 
   /**
@@ -535,8 +521,7 @@ export class AuditLogQueryService {
   private setCache(key: string, data: any): void {
     this.cache.set(key, {
       data,
-      timestamp: Date.now(),
-    });
+      timestamp: Date.now() });
     
     // 限制快取大小
     if (this.cache.size > 100) {

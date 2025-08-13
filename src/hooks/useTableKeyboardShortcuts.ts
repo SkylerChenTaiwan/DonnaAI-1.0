@@ -37,8 +37,7 @@ export function useTableKeyboardShortcuts({
   onNavigate,
   onEscape,
   onEnter,
-  enabled = true,
-}: TableKeyboardShortcutsProps) {
+  enabled = true }: TableKeyboardShortcutsProps) {
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (!enabled) return;
     

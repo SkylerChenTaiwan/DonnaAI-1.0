@@ -12,28 +12,22 @@ import { describe, it, expect, vi } from 'vitest';
 vi.mock('@react-native-async-storage/async-storage', () => ({
   default: {
     getItem: jest.fn(() => Promise.resolve(null)),
-    setItem: jest.fn(() => Promise.resolve()),
-  },
-}));
+    setItem: jest.fn(() => Promise.resolve()) } }));
 
 vi.mock('expo-file-system', () => ({
   documentDirectory: '/mock/',
   writeAsStringAsync: jest.fn(() => Promise.resolve()),
   deleteAsync: jest.fn(() => Promise.resolve()),
   EncodingType: {
-    UTF8: 'utf8',
-  },
-}));
+    UTF8: 'utf8' } }));
 
 vi.mock('expo-sharing', () => ({
   isAvailableAsync: jest.fn(() => Promise.resolve(true)),
-  shareAsync: jest.fn(() => Promise.resolve()),
-}));
+  shareAsync: jest.fn(() => Promise.resolve()) }));
 
 vi.mock('expo-mail-composer', () => ({
   isAvailableAsync: jest.fn(() => Promise.resolve(false)),
-  composeAsync: jest.fn(() => Promise.resolve()),
-}));
+  composeAsync: jest.fn(() => Promise.resolve()) }));
 
 // Mock stores
 vi.mock('@/stores/authStore', () => ({
@@ -41,10 +35,7 @@ vi.mock('@/stores/authStore', () => ({
     user: {
       id: 'test-user',
       email: 'test@example.com',
-      teamIds: ['team1'],
-    },
-  }),
-}));
+      teamIds: ['team1'] } }) }));
 
 vi.mock('@/stores/customerStore', () => ({
   useCustomerStore: () => ({
@@ -53,9 +44,7 @@ vi.mock('@/stores/customerStore', () => ({
       { id: '2', name: '測試客戶 2', company: '公司 B', phone: '0987654321', tags: [] },
     ],
     isLoading: false,
-    fetchCustomers: vi.fn(),
-  }),
-}));
+    fetchCustomers: vi.fn() }) }));
 
 vi.mock('@/stores/recordStore', () => ({
   useRecordStore: () => ({
@@ -65,12 +54,9 @@ vi.mock('@/stores/recordStore', () => ({
         type: 'meeting', 
         customerIds: ['1'], 
         createdAt: { seconds: Date.now() / 1000 },
-        aiSummary: '會議摘要',
-      },
+        aiSummary: '會議摘要' },
     ],
-    isLoading: false,
-  }),
-}));
+    isLoading: false }) }));
 
 vi.mock('@/stores/taskStore', () => ({
   useTaskStore: () => ({
@@ -80,12 +66,9 @@ vi.mock('@/stores/taskStore', () => ({
         title: '測試任務',
         assigneeId: 'user1',
         dueDate: { seconds: Date.now() / 1000 },
-        status: 'todo',
-      },
+        status: 'todo' },
     ],
-    isLoading: false,
-  }),
-}));
+    isLoading: false }) }));
 
 describe('DatabaseScreen', () => {
   const renderScreen = () => {

@@ -11,8 +11,7 @@ import {
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { ResponsiveLayout } from '@/components/common/ResponsiveLayout';
@@ -145,11 +144,9 @@ export const ManagerDashboard: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   safeArea: {
-    flex: 1,
-  },
+    flex: 1 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -158,25 +155,20 @@ const styles = StyleSheet.create({
     paddingVertical: DesignSystem.spacing.md,
     backgroundColor: DesignSystem.colors.background.surface,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   userInfo: {
-    flex: 1,
-  },
+    flex: 1 },
   userName: {
     ...DesignSystem.typography.h3,
     color: DesignSystem.colors.text.primary,
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   userEmail: {
     ...DesignSystem.typography.bodySmall,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   quickActions: {
     flexDirection: 'row',
     padding: DesignSystem.spacing.md,
-    gap: DesignSystem.spacing.sm,
-  },
+    gap: DesignSystem.spacing.sm },
   quickActionButton: {
     flex: 1,
     flexDirection: 'row',
@@ -186,41 +178,32 @@ const styles = StyleSheet.create({
     paddingHorizontal: DesignSystem.spacing.md,
     borderRadius: 20,
     gap: DesignSystem.spacing.sm,
-    ...DesignSystem.shadows.none,
-  },
+    ...DesignSystem.shadows.none },
   primaryButton: {
     backgroundColor: DesignSystem.colors.gray600, // 使用較淺的灰色
   },
   quickActionText: {
     ...DesignSystem.typography.button,
-    color: DesignSystem.colors.text.inverse,
-  },
+    color: DesignSystem.colors.text.inverse },
   mainContent: {
-    padding: DesignSystem.spacing.md,
-  },
+    padding: DesignSystem.spacing.md },
   mainTitle: {
     ...DesignSystem.typography.h2,
     color: DesignSystem.colors.text.primary,
-    marginBottom: DesignSystem.spacing.xs,
-  },
+    marginBottom: DesignSystem.spacing.xs },
   mainSubtitle: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.secondary,
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   reportsContainer: {
-    minHeight: 400,
-  },
+    minHeight: 400 },
   // Web 響應式樣式
   webHeader: {
     ...Platform.select({
       web: {
         paddingHorizontal: 32,
-        paddingVertical: 20,
-      },
-      default: {},
-    }),
-  },
+        paddingVertical: 20 },
+      default: {} }) },
   webContent: {
     flex: 1,
     ...Platform.select({
@@ -229,9 +212,5 @@ const styles = StyleSheet.create({
         width: '100%',
         marginHorizontal: 'auto' as any,
         paddingHorizontal: 32,
-        paddingVertical: 24,
-      },
-      default: {},
-    }),
-  },
-});
+        paddingVertical: 24 },
+      default: {} }) } });

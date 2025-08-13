@@ -12,8 +12,7 @@ import {
   TouchableOpacity,
   Switch,
   ActivityIndicator,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { Layout } from '@/components/common/Layout';
 import { Icon } from '@/components/common/Icon';
 import { useNavigation } from '@react-navigation/native';
@@ -79,8 +78,7 @@ export const ToolManagementScreen: React.FC = () => {
             } catch (error) {
               showToast('error', '更新用量限制失敗');
             }
-          },
-        },
+          } },
       ],
       'plain-text',
       newLimit.toString()
@@ -316,121 +314,95 @@ export const ToolManagementScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background,
-  },
+    backgroundColor: DesignSystem.colors.background },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   loadingText: {
     marginTop: 12,
     fontSize: 16,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: DesignSystem.spacing.lg,
     backgroundColor: DesignSystem.colors.background.surface,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   backButton: {
-    marginRight: DesignSystem.spacing.md,
-  },
+    marginRight: DesignSystem.spacing.md },
   title: {
     ...DesignSystem.typography.h1,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   section: {
     backgroundColor: DesignSystem.colors.background.surface,
-    marginVertical: 8,
-  },
+    marginVertical: 8 },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: DesignSystem.spacing.lg,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   sectionTitleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-  },
+    gap: 12 },
   sectionTitle: {
     ...DesignSystem.typography.h2,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   subscriptionContent: {
-    padding: DesignSystem.spacing.lg,
-  },
+    padding: DesignSystem.spacing.lg },
   infoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 8,
-  },
+    paddingVertical: 8 },
   infoLabel: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   infoValue: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   toolsContent: {
-    padding: DesignSystem.spacing.lg,
-  },
+    padding: DesignSystem.spacing.lg },
   categoryContainer: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   categoryTitle: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
     marginBottom: 12,
-    textTransform: 'uppercase',
-  },
+    textTransform: 'uppercase' },
   toolItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   toolInfo: {
     flex: 1,
-    marginRight: 16,
-  },
+    marginRight: 16 },
   toolName: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   toolDescription: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginTop: 4,
-  },
+    marginTop: 4 },
   toolLimit: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.primary,
-    marginTop: 4,
-  },
+    marginTop: 4 },
   customContent: {
-    padding: DesignSystem.spacing.lg,
-  },
+    padding: DesignSystem.spacing.lg },
   settingItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 12,
-  },
+    paddingVertical: 12 },
   settingLabel: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.text.primary,
-  },
-});
+    color: DesignSystem.colors.text.primary } });

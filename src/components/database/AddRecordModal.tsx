@@ -11,8 +11,7 @@ import {
   ScrollView,
   TouchableOpacity,
   KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { Button } from '@/components/common/Button';
 import { Layout } from '@/components/common/Layout';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -170,43 +169,32 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
-    backgroundColor: colors.background,
-  },
+    backgroundColor: colors.background },
   headerLeft: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   closeButton: {
     padding: 8,
-    marginRight: 8,
-  },
+    marginRight: 8 },
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: colors.text,
-  },
+    color: colors.text },
   container: {
     flex: 1,
-    backgroundColor: colors.background,
-  },
+    backgroundColor: colors.background },
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   contentContainer: {
     paddingVertical: 24,
-    paddingHorizontal: 16,
-  },
+    paddingHorizontal: 16 },
   fieldContainer: {
-    marginBottom: 20,
-  },
+    marginBottom: 20 },
   emptyState: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 40,
-  },
+    paddingVertical: 40 },
   emptyStateText: {
     fontSize: 16,
-    color: colors.textSecondary,
-  },
-});
+    color: colors.textSecondary } });

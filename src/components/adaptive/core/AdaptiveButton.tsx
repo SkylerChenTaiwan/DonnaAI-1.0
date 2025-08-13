@@ -96,8 +96,7 @@ const createButtonStyles = (
       } else if (variant === 'outline') {
         stateStyle = { 
           backgroundColor: DesignSystem.colors.button.outline.backgroundHover,
-          borderColor: DesignSystem.colors.button.outline.borderHover,
-        };
+          borderColor: DesignSystem.colors.button.outline.borderHover };
       } else if (variant === 'ghost') {
         stateStyle = { backgroundColor: DesignSystem.colors.button.ghost.backgroundHover };
       }
@@ -114,15 +113,13 @@ const createButtonStyles = (
     case 'disabled':
       stateStyle = {
         opacity: 0.5,
-        cursor: platformAdapter.isWeb ? 'not-allowed' : undefined,
-      };
+        cursor: platformAdapter.isWeb ? 'not-allowed' : undefined };
       break;
       
     case 'loading':
       stateStyle = {
         opacity: 0.7,
-        cursor: platformAdapter.isWeb ? 'wait' : undefined,
-      };
+        cursor: platformAdapter.isWeb ? 'wait' : undefined };
       break;
   }
   
@@ -194,8 +191,7 @@ const WebButton = forwardRef<HTMLButtonElement, AdaptiveButtonProps>(
         outline: 'none',
         cursor: disabled || loading ? 'not-allowed' : 'pointer',
         transition: 'all 150ms ease',
-        userSelect: 'none',
-      };
+        userSelect: 'none' };
       
       return finalStyle;
     }, [variant, size, currentState, platformAdapter, styleAdapter, style, webStyle, disabled, loading]);
@@ -422,8 +418,7 @@ const NativeButton = forwardRef<any, AdaptiveButtonProps>(
         accessibilityHint={accessibilityHint}
         accessibilityRole={accessibilityRole || 'button'}
         accessibilityState={{
-          disabled: disabled || loading,
-        }}
+          disabled: disabled || loading }}
         {...props}
       >
         {renderContent()}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput , Platform } from 'react-native';
 import { useAuthStore } from '../../stores/authStore';
 import { createCustomer, getCustomer } from '../../services/firebase/customers';
 import { getFirebaseDb } from '../../services/firebase/config';
@@ -210,86 +210,70 @@ export function FirebaseTestScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
+    backgroundColor: '#f5f5f5' },
   header: {
     backgroundColor: 'white',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
+    borderBottomColor: '#e0e0e0' },
   title: {
     fontSize: 24,
     fontWeight: '600',
-    marginBottom: 5,
-  },
+    marginBottom: 5 },
   subtitle: {
     fontSize: 14,
-    color: '#666',
-  },
+    color: '#666' },
   section: {
     backgroundColor: 'white',
     margin: 15,
     padding: 20,
     borderRadius: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
     shadowOpacity: 0.1,
     shadowRadius: 3,
-    elevation: 3,
-  },
+    elevation: 3 },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    marginBottom: 15,
-  },
+    marginBottom: 15 },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
-  },
+    marginBottom: 15 },
   label: {
     fontSize: 14,
-    marginRight: 10,
-  },
+    marginRight: 10 },
   input: {
     flex: 1,
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 5,
     padding: 10,
-    fontSize: 14,
-  },
+    fontSize: 14 },
   button: {
     backgroundColor: '#007AFF',
     padding: 15,
     borderRadius: 5,
-    marginBottom: 10,
-  },
+    marginBottom: 10 },
   clearButton: {
-    backgroundColor: '#666',
-  },
+    backgroundColor: '#666' },
   buttonText: {
     color: 'white',
     textAlign: 'center',
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   results: {
     backgroundColor: '#f8f8f8',
     padding: 15,
     borderRadius: 5,
-    minHeight: 200,
-  },
+    minHeight: 200 },
   resultText: {
     fontSize: 12,
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
     marginBottom: 5,
-    color: '#333',
-  },
+    color: '#333' },
   placeholder: {
     fontSize: 14,
     color: '#999',
     fontStyle: 'italic',
-    textAlign: 'center',
-  },
-});
+    textAlign: 'center' } });

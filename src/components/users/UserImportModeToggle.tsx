@@ -9,8 +9,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -26,8 +25,7 @@ const STORAGE_KEY = 'userImportMode';
 const UserImportModeToggle: React.FC<UserImportModeToggleProps> = ({
   mode,
   onChange,
-  disabled = false,
-}) => {
+  disabled = false }) => {
   // 從 localStorage 載入偏好設定
   useEffect(() => {
     loadModePreference();
@@ -145,8 +143,7 @@ const UserImportModeToggle: React.FC<UserImportModeToggleProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'flex-end',
-  },
+    alignItems: 'flex-end' },
   toggle: {
     flexDirection: 'row',
     backgroundColor: DesignSystem.colors.background.surface,
@@ -154,30 +151,25 @@ const styles = StyleSheet.create({
     padding: 2,
     borderWidth: 1,
     borderColor: DesignSystem.colors.border.light,
-    position: 'relative',
-  },
+    position: 'relative' },
   toggleDisabled: {
-    opacity: 0.5,
-  },
+    opacity: 0.5 },
   option: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: DesignSystem.spacing.md,
     paddingVertical: DesignSystem.spacing.xs,
-    zIndex: 2,
-  },
+    zIndex: 2 },
   optionActive: {
     // Active styles handled by text and icon colors
   },
   optionText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginLeft: DesignSystem.spacing.xs,
-  },
+    marginLeft: DesignSystem.spacing.xs },
   optionTextActive: {
     color: DesignSystem.colors.primary,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   slider: {
     position: 'absolute',
     top: 2,
@@ -189,34 +181,25 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
+        ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
         shadowOpacity: 0.1,
-        shadowRadius: 2,
-      },
+        shadowRadius: 2 },
       android: {
-        elevation: 2,
-      },
+        elevation: 2 },
       web: {
-        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-      } as any,
-    }),
-    transition: Platform.OS === 'web' ? 'transform 0.2s ease' : undefined,
-  } as any,
+        boxShadow: '0 1px 3px rgba(0,0,0,0.1)' } as any }),
+    transition: Platform.OS === 'web' ? 'transform 0.2s ease' : undefined } as any,
   sliderActive: {
-    transform: Platform.OS === 'web' ? `translateX(${Platform.OS === 'web' ? 'calc(100% - 4px)' : 80}px)` : [{ translateX: Platform.OS === 'web' ? 'calc(100% - 4px)' : 80 }] as any,
-  },
+    transform: Platform.OS === 'web' ? `translateX(${Platform.OS === 'web' ? 'calc(100% - 4px)' : 80}px)` : [{ translateX: Platform.OS === 'web' ? 'calc(100% - 4px)' : 80 }] as any },
   tooltip: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: DesignSystem.spacing.xs,
-    paddingHorizontal: DesignSystem.spacing.sm,
-  },
+    paddingHorizontal: DesignSystem.spacing.sm },
   tooltipText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.tertiary,
     marginLeft: DesignSystem.spacing.xxs,
-    maxWidth: 200,
-  },
-});
+    maxWidth: 200 } });
 
 export default UserImportModeToggle;

@@ -9,8 +9,7 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { TableColumn } from '@/types/table';
 import { FilterCondition } from '@/components/common/FilterBadge';
@@ -29,16 +28,14 @@ const operatorLabels: Record<FilterOperator, string> = {
   equals: '等於',
   contains: '包含',
   startsWith: '開頭是',
-  endsWith: '結尾是',
-};
+  endsWith: '結尾是' };
 
 export const FilterForm: React.FC<FilterFormProps> = ({
   condition,
   columns,
   tabType,
   onChange,
-  onRemove,
-}) => {
+  onRemove }) => {
   // 只顯示可篩選的欄位
   const filterableColumns = columns.filter(col => col.filterable !== false);
   const [showColumnPicker, setShowColumnPicker] = useState(false);
@@ -63,8 +60,7 @@ export const FilterForm: React.FC<FilterFormProps> = ({
     onChange({
       ...condition,
       value,
-      operator,
-    } as any);
+      operator } as any);
   };
 
   const handleOperatorChange = (newOperator: FilterOperator) => {
@@ -72,8 +68,7 @@ export const FilterForm: React.FC<FilterFormProps> = ({
     setShowOperatorPicker(false);
     onChange({
       ...condition,
-      operator: newOperator,
-    } as any);
+      operator: newOperator } as any);
   };
 
   // 根據不同的 tabType 和欄位提供預設選項
@@ -235,31 +230,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   headerText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   removeButton: {
-    padding: 4,
-  },
+    padding: 4 },
   fieldGroup: {
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   label: {
     fontSize: 14,
     fontWeight: '500',
     color: '#7A7A7A',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   selectButton: {
     backgroundColor: '#F0F0F0',
     borderRadius: 8,
@@ -267,43 +256,35 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   selectButtonText: {
     fontSize: 16,
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   pickerOptions: {
     backgroundColor: '#FFFFFF',
     borderRadius: 8,
     marginTop: 4,
     borderWidth: 1,
-    borderColor: '#E5E5E5',
-  },
+    borderColor: '#E5E5E5' },
   pickerOption: {
     paddingHorizontal: 12,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
-  },
+    borderBottomColor: '#F0F0F0' },
   pickerOptionText: {
     fontSize: 16,
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   pickerOptionTextSelected: {
     color: '#1A1A1A',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   fixedField: {
     backgroundColor: '#F0F0F0',
     borderRadius: 8,
     paddingHorizontal: 12,
-    paddingVertical: 12,
-  },
+    paddingVertical: 12 },
   fixedFieldText: {
     fontSize: 16,
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   input: {
     backgroundColor: '#F0F0F0',
     borderRadius: 8,
@@ -311,6 +292,4 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     fontSize: 16,
     color: '#1A1A1A',
-    minHeight: 44,
-  },
-});
+    minHeight: 44 } });

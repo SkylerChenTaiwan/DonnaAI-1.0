@@ -9,8 +9,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   FlatList,
-  ActivityIndicator,
-} from 'react-native';
+  ActivityIndicator } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { useNavigation } from '@react-navigation/native';
@@ -42,8 +41,7 @@ export const RecentCustomersSection: React.FC<RecentCustomersProps> = ({
   userId,
   organizationId,
   teamId,
-  limit = 5,
-}) => {
+  limit = 5 }) => {
   const navigation = useNavigation<NavigationProp>();
   const { customers, fetchCustomers } = useCustomerStore();
   const { records, fetchRecords } = useRecordStore();
@@ -85,8 +83,7 @@ export const RecentCustomersSection: React.FC<RecentCustomersProps> = ({
         if (!existing || recordDate > existing.date) {
           customerLastInteraction.set(customerId, {
             date: recordDate,
-            type: record.type,
-          });
+            type: record.type });
         }
       });
     });
@@ -99,8 +96,7 @@ export const RecentCustomersSection: React.FC<RecentCustomersProps> = ({
         return {
           ...customer,
           lastInteractionDate: interaction.date,
-          lastInteractionType: interaction.type,
-        };
+          lastInteractionType: interaction.type };
       })
       .sort((a, b) => {
         const dateA = a.lastInteractionDate?.getTime() || 0;
@@ -232,12 +228,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginHorizontal: 20,
     marginBottom: 20,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   loadingContainer: {
     paddingVertical: 40,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -245,26 +239,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-  },
+    borderBottomColor: '#E5E7EB' },
   title: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   viewAllText: {
     fontSize: 14,
     color: '#FF6B6B',
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   customerItem: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
-  },
+    borderBottomColor: '#F3F4F6' },
   customerAvatar: {
     width: 40,
     height: 40,
@@ -272,44 +262,34 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF5F5',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
-  },
+    marginRight: 12 },
   avatarText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FF6B6B',
-  },
+    color: '#FF6B6B' },
   customerInfo: {
-    flex: 1,
-  },
+    flex: 1 },
   customerName: {
     fontSize: 16,
     fontWeight: '500',
     color: '#1A1A1A',
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   interactionInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-  },
+    gap: 4 },
   interactionText: {
     fontSize: 13,
-    color: '#6B7280',
-  },
+    color: '#6B7280' },
   emptyState: {
     alignItems: 'center',
-    paddingVertical: 40,
-  },
+    paddingVertical: 40 },
   emptyTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1A1A1A',
     marginTop: 12,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   emptyDescription: {
     fontSize: 14,
-    color: '#6B7280',
-  },
-});
+    color: '#6B7280' } });

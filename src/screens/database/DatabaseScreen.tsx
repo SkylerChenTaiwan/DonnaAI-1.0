@@ -15,8 +15,7 @@ import {
   Modal,
   Alert,
   Platform,
-  ScrollView,
-} from 'react-native';
+  ScrollView } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { ResponsiveLayout } from '@/components/common/ResponsiveLayout';
@@ -101,13 +100,11 @@ export const DatabaseScreen: React.FC = () => {
   const [customColumns, setCustomColumns] = useState<Record<TabType, ColumnConfig[]>>({
     customers: [],
     records: [],
-    tasks: [],
-  });
+    tasks: [] });
   const [dynamicFields, setDynamicFields] = useState<Record<TabType, DynamicFieldConfig[]>>({
     customers: [],
     records: [],
-    tasks: [],
-  });
+    tasks: [] });
   
   const { user } = useAuthStore();
   const { currentOrganization } = useOrganization();
@@ -186,8 +183,7 @@ export const DatabaseScreen: React.FC = () => {
       const newCustomer = await createCustomer({
         ...customerData,
         organizationId: user?.organizationId || '',
-        createdBy: user?.uid || '',
-      }, user?.uid || '');
+        createdBy: user?.uid || '' }, user?.uid || '');
       
       console.log('✅ 客戶創建成功，新 ID:', newCustomer.id);
       
@@ -217,8 +213,7 @@ export const DatabaseScreen: React.FC = () => {
       const newRecord = await createRecord({
         ...recordData,
         organizationId: user?.organizationId || '',
-        createdBy: user?.uid || '',
-      }, user?.uid || '');
+        createdBy: user?.uid || '' }, user?.uid || '');
       console.log('✅ 記錄創建成功，新 ID:', newRecord.id);
       return { newId: newRecord.id };
     } else {
@@ -244,8 +239,7 @@ export const DatabaseScreen: React.FC = () => {
       const newTask = await createTask({
         ...taskData,
         organizationId: user?.organizationId || '',
-        createdBy: user?.uid || '',
-      }, user?.uid || '');
+        createdBy: user?.uid || '' }, user?.uid || '');
       console.log('✅ 任務創建成功，新 ID:', newTask.id);
       return { newId: newTask.id };
     } else {
@@ -430,8 +424,7 @@ export const DatabaseScreen: React.FC = () => {
         [
           {
             text: '取消',
-            style: 'cancel',
-          },
+            style: 'cancel' },
           {
             text: '儲存並切換',
             onPress: async () => {
@@ -450,8 +443,7 @@ export const DatabaseScreen: React.FC = () => {
               setActiveTab(newTab);
               setMultiSelectMode(false);
               setSelectedItems([]);
-            },
-          },
+            } },
           {
             text: '捨棄變更',
             style: 'destructive',
@@ -459,8 +451,7 @@ export const DatabaseScreen: React.FC = () => {
               setActiveTab(newTab);
               setMultiSelectMode(false);
               setSelectedItems([]);
-            },
-          },
+            } },
         ],
       );
     } else {
@@ -486,8 +477,7 @@ export const DatabaseScreen: React.FC = () => {
         filterable: true,
         type: field.type as any,
         required: field.required || false,
-        options: field.options?.map(opt => opt.value),
-      })) : [
+        options: field.options?.map(opt => opt.value) })) : [
         { key: 'name', title: '客戶姓名', sortable: true, filterable: true, type: 'text' as const, required: true },
         { key: 'company', title: '公司名稱', sortable: true, filterable: true, type: 'text' as const, required: true },
         { key: 'email', title: '電子郵件', sortable: true, filterable: true, type: 'email' as const },
@@ -500,8 +490,7 @@ export const DatabaseScreen: React.FC = () => {
         filterable: true,
         type: field.type as any,
         required: field.required || false,
-        options: field.options?.map(opt => opt.value),
-      })) : [
+        options: field.options?.map(opt => opt.value) })) : [
         { key: 'type', title: '類型', sortable: true, filterable: true, type: 'select' as const, 
           options: ['meeting', 'call'] },
         { key: 'customerName', title: '客戶', sortable: true, filterable: true, type: 'text' as const },
@@ -539,15 +528,13 @@ export const DatabaseScreen: React.FC = () => {
               </View>
             );
           }
-        } : {}),
-      })) : [
+        } : {}) })) : [
         { key: 'title', title: '任務標題', sortable: true, filterable: true, type: 'text' as const, required: true },
         { key: 'assignee', title: '負責人', sortable: true, filterable: true, type: 'text' as const },
         { key: 'dueDate', title: '到期日期', sortable: true, filterable: true, type: 'date' as const },
         { key: 'status', title: '狀態', sortable: true, filterable: true, type: 'select' as const,
           options: ['todo', 'in_progress', 'completed', 'cancelled'] },
-      ],
-    };
+      ] };
   }, [dynamicFields]);
 
   // 合併基礎欄位和自訂欄位
@@ -558,8 +545,7 @@ export const DatabaseScreen: React.FC = () => {
       title: col.title,
       sortable: true,
       filterable: true,
-      custom: true,
-    }));
+      custom: true }));
     return [...base, ...custom];
   }, [activeTab, baseColumns, customColumns]);
 
@@ -592,8 +578,7 @@ export const DatabaseScreen: React.FC = () => {
       activeTab,
       taskLoading,
       customerLoading,
-      recordLoading,
-    });
+      recordLoading });
     
     switch (activeTab) {
       case 'customers':
@@ -610,8 +595,7 @@ export const DatabaseScreen: React.FC = () => {
         return {
           data: customerData,
           loading: customerLoading,
-          syncStatus: customerDraftSystem.syncStatus,
-        };
+          syncStatus: customerDraftSystem.syncStatus };
       case 'records':
         const recordData = recordDraftSystem.draftData.map(r => ({
           ...r,
@@ -629,8 +613,7 @@ export const DatabaseScreen: React.FC = () => {
         return {
           data: recordData,
           loading: recordLoading,
-          syncStatus: recordDraftSystem.syncStatus,
-        };
+          syncStatus: recordDraftSystem.syncStatus };
       case 'tasks':
         const taskData = taskDraftSystem.draftData.map(t => ({
           ...t,
@@ -648,8 +631,7 @@ export const DatabaseScreen: React.FC = () => {
         return {
           data: taskData,
           loading: taskLoading,
-          syncStatus: taskDraftSystem.syncStatus,
-        };
+          syncStatus: taskDraftSystem.syncStatus };
       default:
         return { data: [], loading: false, syncStatus: 'idle' };
     }
@@ -753,16 +735,14 @@ export const DatabaseScreen: React.FC = () => {
           await createCustomer({
             ...data,
             organizationId: user?.organizationId || '',
-            createdBy: user?.uid || '',
-          });
+            createdBy: user?.uid || '' });
           break;
           
         case 'records':
           await createRecord({
             ...data,
             organizationId: user?.organizationId || '',
-            createdBy: user?.uid || '',
-          });
+            createdBy: user?.uid || '' });
           break;
           
         case 'tasks':
@@ -773,8 +753,7 @@ export const DatabaseScreen: React.FC = () => {
             organizationId: user?.organizationId || '',
             teamId: user?.teamId || '',
             assigneeId: data.assigneeId || user?.uid || '',
-            source: 'manual',
-          }, user?.uid || '');
+            source: 'manual' }, user?.uid || '');
           break;
       }
       
@@ -852,8 +831,7 @@ export const DatabaseScreen: React.FC = () => {
           ]
         );
       }
-    },
-  });
+    } });
 
   const handleBatchDelete = async () => {
     // TODO: 實作批量刪除
@@ -936,8 +914,7 @@ export const DatabaseScreen: React.FC = () => {
       width: col.width,
       editable: col.editable !== false,
       options: col.options,
-      required: col.required || false,
-    }));
+      required: col.required || false }));
   }, [currentColumns]);
 
   // 記憶化回調函數
@@ -1213,8 +1190,7 @@ export const DatabaseScreen: React.FC = () => {
                                 // 系統欄位
                                 assignedTo: user!.uid,
                                 teamId: currentTeam?.id || '',
-                                organizationId: currentOrganization?.id || '',
-                              };
+                                organizationId: currentOrganization?.id || '' };
                               
                               // 處理動態欄位
                               dynamicFields.customers.forEach(field => {
@@ -1303,16 +1279,14 @@ export const DatabaseScreen: React.FC = () => {
                   paddingVertical: 6,
                   borderRadius: 6,
                   height: 30,
-                  justifyContent: 'center',
-                }}
+                  justifyContent: 'center' }}
                 onPress={handleAddNew}
               >
                 <Text style={{ color: 'white', fontSize: 14, fontWeight: '500' }}>新建</Text>
               </TouchableOpacity>
             )}
           </View>
-        ),
-      }}
+        ) }}
       scrollable={false}
     >
       {renderContent()}
@@ -1328,61 +1302,48 @@ const styles = StyleSheet.create({
     ...Platform.select({
       web: {
         backgroundColor: '#fbfbfa', // Notion 背景色
-      },
-    }),
-  },
+      } }) },
   // syncStatusContainer 已移除 - 唯讀模式不需要
   databaseContainer: {
     flex: 1,
-    padding: '0 96px',
-  },
+    padding: '0 96px' },
   pageHeader: {
     paddingTop: 40,
-    paddingBottom: 16,
-  },
+    paddingBottom: 16 },
   pageTitle: {
     fontSize: 40,
     fontWeight: '700',
-    color: '#37352f',
-  },
+    color: '#37352f' },
   tabContainer: {
     flexDirection: 'row',
     borderBottom: '1px solid rgba(55, 53, 47, 0.09)',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   tab: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
     padding: '8px 12px',
-    cursor: 'pointer',
-  },
+    cursor: 'pointer' },
   activeTab: {
-    borderBottom: '2px solid #2383e2',
-  },
+    borderBottom: '2px solid #2383e2' },
   tabText: {
     fontSize: 14,
-    color: '#787774',
-  },
+    color: '#787774' },
   activeTabText: {
     color: '#37352f',
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   toolbar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 8,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   toolbarLeft: {
     flexDirection: 'row',
-    gap: 8,
-  },
+    gap: 8 },
   toolbarRight: {
     flexDirection: 'row',
-    gap: 8,
-  },
+    gap: 8 },
   toolButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1390,35 +1351,28 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 8,
     borderRadius: 3,
-    cursor: 'pointer',
-  },
+    cursor: 'pointer' },
   toolButtonText: {
     fontSize: 14,
-    color: '#787774',
-  },
+    color: '#787774' },
   primaryButton: {
-    backgroundColor: '#2383e2',
-  },
+    backgroundColor: '#2383e2' },
   primaryButtonText: {
     fontSize: 14,
     color: '#ffffff',
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
     ...Platform.select({
       web: {
         backgroundColor: '#fbfbfa', // Notion 背景色
-      },
-    }),
-  },
+      } }) },
   desktopContainer: {
     // 不需要設定 marginLeft，WebNavigator 會處理佈局
   },
   contentWrapper: {
-    flex: 1,
-  },
+    flex: 1 },
   toolbarContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1427,29 +1381,23 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#E9E9E7',
-    gap: 16,
-  },
+    gap: 16 },
   searchBar: {
     width: 200,
     backgroundColor: '#f9f8f7',
-    borderWidth: 0,
-  },
+    borderWidth: 0 },
   tableContainer: {
     flex: 1,
     backgroundColor: '#FFFFFF',
     ...Platform.select({
       web: {
         flex: 'unset' as any,
-        height: '100%',
-      },
-    }),
-  },
+        height: '100%' } }) },
   tabContainer: {
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#eeeeec',
-  },
+    borderBottomColor: '#eeeeec' },
   tab: {
     flex: 1,
     flexDirection: 'row',
@@ -1457,33 +1405,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 16,
     paddingVertical: 14,
-    gap: 8,
-  },
+    gap: 8 },
   activeTab: {
     borderBottomWidth: 2,
-    borderBottomColor: '#FF6B6B',
-  },
+    borderBottomColor: '#FF6B6B' },
   tabText: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#787774',
-  },
+    color: '#787774' },
   activeTabText: {
     color: '#37352f',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   tabCount: {
     fontSize: 14,
     color: '#787774',
     backgroundColor: '#f9f8f7',
     paddingHorizontal: 8,
     paddingVertical: 2,
-    borderRadius: 10,
-  },
+    borderRadius: 10 },
   activeTabCount: {
     backgroundColor: 'rgba(255, 107, 107, 0.1)',
-    color: '#FF6B6B',
-  },
+    color: '#FF6B6B' },
   
   
   // 批量操作工具列
@@ -1500,45 +1442,37 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     elevation: 8,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: -2 } }),
     shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
+    shadowRadius: 4 },
   batchActionsLeft: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   batchActionsText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#F7F6F3',
-  },
+    color: '#F7F6F3' },
   batchActionsRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-  },
+    gap: 12 },
   batchActionButton: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
-    gap: 6,
-  },
+    gap: 6 },
   batchActionButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#F7F6F3',
-  },
+    color: '#F7F6F3' },
   cancelButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-  },
+    backgroundColor: 'rgba(255, 255, 255, 0.2)' },
   cancelButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#F7F6F3',
-  },
+    color: '#F7F6F3' },
   
   // 未儲存變更提示列
   unsavedChangesBar: {
@@ -1549,51 +1483,42 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   unsavedChangesContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-  },
+    gap: 8 },
   unsavedChangesText: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#E65100',
-  },
+    color: '#E65100' },
   unsavedChangesActions: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-  },
+    gap: 12 },
   discardButton: {
     paddingHorizontal: 10,
-    paddingVertical: 4,
-  },
+    paddingVertical: 4 },
   discardButtonText: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#757575',
-  },
+    color: '#757575' },
   saveButton: {
     backgroundColor: '#FF6B6B',
     paddingHorizontal: 12,
     paddingVertical: 5,
-    borderRadius: 4,
-  },
+    borderRadius: 4 },
   saveButtonText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#FFFFFF',
-  },
+    color: '#FFFFFF' },
   
   // Modal 樣式
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   modalContent: {
     backgroundColor: '#ffffff',
     borderRadius: 12,
@@ -1604,32 +1529,24 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     ...Platform.select({
       web: {
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)',
-      },
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)' },
       default: {
-        elevation: 8,
-      },
-    }),
-  },
+        elevation: 8 } }) },
   modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
+    borderBottomColor: '#e0e0e0' },
   modalTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
-  },
+    color: '#333' },
   modalCloseButton: {
-    padding: 4,
-  },
+    padding: 4 },
   modalScrollContent: {
-    flex: 1,
-  },
+    flex: 1 },
   
   // 模式切換樣式
   modalModeSwitch: {
@@ -1639,8 +1556,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
-    gap: 15,
-  },
+    gap: 15 },
   modeSwitchButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1648,28 +1564,21 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 20,
     backgroundColor: '#f5f5f5',
-    gap: 8,
-  },
+    gap: 8 },
   modeSwitchButtonActive: {
-    backgroundColor: '#e3f2fd',
-  },
+    backgroundColor: '#e3f2fd' },
   modeSwitchText: {
     fontSize: 14,
     color: '#666',
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   modeSwitchTextActive: {
-    color: '#2196F3',
-  },
+    color: '#2196F3' },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 60,
-  },
+    paddingVertical: 60 },
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#7A7A7A',
-  },
-});
+    color: '#7A7A7A' } });

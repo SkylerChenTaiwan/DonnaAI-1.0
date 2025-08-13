@@ -143,8 +143,7 @@ export const createOrganization = async (data: CreateOrganizationData): Promise<
           period: new Date().toISOString().slice(0, 7), // YYYY-MM
           activeUsers: 0,
           toolUsage: {},
-          calculatedAt: serverTimestamp(),
-        } as MonthlyUsage,
+          calculatedAt: serverTimestamp() } as MonthlyUsage,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp()
       };

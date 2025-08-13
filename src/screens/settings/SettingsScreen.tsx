@@ -11,8 +11,7 @@ import {
   TouchableOpacity,
   Alert,
   ActionSheetIOS,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { Layout } from '@/components/common/Layout';
 import { SettingSection } from '@/components/settings/SettingSection';
 import { useAuthStore } from '@/stores/authStore';
@@ -83,21 +82,18 @@ export const SettingsScreen: React.FC = () => {
           {
             options: ['取消', 'CSV 格式', 'JSON 格式'],
             cancelButtonIndex: 0,
-            message: `預估檔案大小：${sizeEstimate}`,
-          },
+            message: `預估檔案大小：${sizeEstimate}` },
           async (buttonIndex) => {
             if (buttonIndex === 1) {
               // CSV 格式
               await exportUserData({
                 format: 'csv',
-                dataTypes: ['all'],
-              });
+                dataTypes: ['all'] });
             } else if (buttonIndex === 2) {
               // JSON 格式
               await exportUserData({
                 format: 'json',
-                dataTypes: ['all'],
-              });
+                dataTypes: ['all'] });
             }
           }
         );
@@ -113,8 +109,7 @@ export const SettingsScreen: React.FC = () => {
               onPress: async () => {
                 await exportUserData({
                   format: 'csv',
-                  dataTypes: ['all'],
-                });
+                  dataTypes: ['all'] });
               }
             },
             { 
@@ -122,8 +117,7 @@ export const SettingsScreen: React.FC = () => {
               onPress: async () => {
                 await exportUserData({
                   format: 'json',
-                  dataTypes: ['all'],
-                });
+                  dataTypes: ['all'] });
               }
             },
           ]
@@ -166,10 +160,8 @@ export const SettingsScreen: React.FC = () => {
           subtitle: isSuperAdmin ? '管理所有組織和用戶' : '管理組織用戶和設定',
           type: 'navigation' as const,
           icon: 'settings-outline' as const,
-          action: handleOpenAdmin,
-        },
-      ],
-    }] : []),
+          action: handleOpenAdmin },
+      ] }] : []),
     {
       id: 'general',
       title: '一般設定',
@@ -180,18 +172,15 @@ export const SettingsScreen: React.FC = () => {
           subtitle: '接收任務提醒和客戶更新',
           type: 'switch',
           value: notificationsEnabled,
-          icon: 'notifications-outline',
-        },
+          icon: 'notifications-outline' },
         {
           id: 'soundEffects',
           title: '音效',
           subtitle: '操作音效和提示音',
           type: 'switch',
           value: soundsEnabled,
-          icon: 'volume-high-outline',
-        },
-      ],
-    },
+          icon: 'volume-high-outline' },
+      ] },
     {
       id: 'data',
       title: '資料管理',
@@ -201,10 +190,8 @@ export const SettingsScreen: React.FC = () => {
           title: '匯出資料',
           type: 'action',
           icon: 'download-outline',
-          action: handleExportData,
-        },
-      ],
-    },
+          action: handleExportData },
+      ] },
     {
       id: 'about',
       title: '關於',
@@ -214,24 +201,20 @@ export const SettingsScreen: React.FC = () => {
           title: '說明與支援',
           type: 'navigation',
           icon: 'help-circle-outline',
-          action: handleOpenHelp,
-        },
+          action: handleOpenHelp },
         {
           id: 'privacy',
           title: '隱私權政策',
           type: 'navigation',
           icon: 'shield-outline',
-          action: handleOpenPrivacy,
-        },
+          action: handleOpenPrivacy },
         {
           id: 'version',
           title: '版本',
           subtitle: Constants.expoConfig?.version || '1.0.0',
           type: 'navigation',
-          icon: 'information-circle-outline',
-        },
-      ],
-    },
+          icon: 'information-circle-outline' },
+      ] },
   ];
 
   const handleSettingChange = async (settingId: string, value: any) => {
@@ -307,8 +290,7 @@ export const SettingsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
-  },
+    backgroundColor: '#F5F5F5' },
   userInfo: {
     backgroundColor: '#FFFFFF',
     padding: 20,
@@ -317,28 +299,23 @@ const styles = StyleSheet.create({
     borderBottomColor: '#E5E5EA',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   userDetails: {
-    flex: 1,
-  },
+    flex: 1 },
   editButton: {
     padding: 8,
     borderRadius: 20,
     backgroundColor: '#F0F0F0',
-    marginLeft: 12,
-  },
+    marginLeft: 12 },
   userName: {
     fontSize: 18,
     fontWeight: '600',
     color: '#1C1C1E',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   userEmail: {
     fontSize: 14,
     color: '#8E8E93',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   userRole: {
     fontSize: 12,
     fontWeight: '500',
@@ -347,8 +324,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 4,
-    alignSelf: 'flex-start',
-  },
+    alignSelf: 'flex-start' },
   signOutButton: {
     backgroundColor: '#FFFFFF',
     marginHorizontal: 16,
@@ -357,14 +333,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#FF3B30',
-  },
+    borderColor: '#FF3B30' },
   signOutText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FF3B30',
-  },
+    color: '#FF3B30' },
   footer: {
-    height: 40,
-  },
-});
+    height: 40 } });

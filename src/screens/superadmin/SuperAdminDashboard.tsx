@@ -13,8 +13,7 @@ import {
   ActivityIndicator,
   RefreshControl,
   Alert,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
@@ -154,12 +153,10 @@ export const SuperAdminDashboard: React.FC = () => {
           {
             id: 'home',
             label: '首頁',
-            onPress: () => navigation.navigate('Home' as any),
-          },
+            onPress: () => navigation.navigate('Home' as any) },
           {
             id: 'current',
-            label: 'Super Admin 控制台',
-          },
+            label: 'Super Admin 控制台' },
         ]}
       />
       
@@ -295,92 +292,75 @@ export const SuperAdminDashboard: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   loadingText: {
     marginTop: 12,
     fontSize: 16,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   welcomeSection: {
     padding: 20,
     backgroundColor: DesignSystem.colors.background.surface,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   welcomeTitle: {
     fontSize: 24,
     fontWeight: '700',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   welcomeSubtitle: {
     fontSize: 14,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   statsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    padding: 10,
-  },
+    padding: 10 },
   statCard: {
     width: '50%',
-    padding: 10,
-  },
+    padding: 10 },
   statIconContainer: {
     width: 48,
     height: 48,
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   statValue: {
     fontSize: 24,
     fontWeight: '700',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   statTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   statSubtitle: {
     fontSize: 12,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   section: {
-    padding: 20,
-  },
+    padding: 20 },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   viewAllLink: {
     fontSize: 14,
     color: DesignSystem.colors.primary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   actionsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginHorizontal: -8,
-  },
+    marginHorizontal: -8 },
   actionCard: {
     width: '50%',
     padding: 8,
@@ -390,15 +370,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     minHeight: 80,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.border.light,
-  },
+    borderColor: DesignSystem.colors.border.light },
   actionTitle: {
     fontSize: 14,
     fontWeight: '500',
     color: DesignSystem.colors.text.primary,
     marginTop: 8,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   orgCard: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -408,8 +386,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.border.light,
-  },
+    borderColor: DesignSystem.colors.border.light },
   orgRank: {
     width: 32,
     height: 32,
@@ -417,98 +394,78 @@ const styles = StyleSheet.create({
     backgroundColor: withAlpha(DesignSystem.colors.primary, 0.094),
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
-  },
+    marginRight: 12 },
   orgRankText: {
     fontSize: 14,
     fontWeight: '700',
-    color: DesignSystem.colors.primary,
-  },
+    color: DesignSystem.colors.primary },
   orgInfo: {
-    flex: 1,
-  },
+    flex: 1 },
   orgName: {
     fontSize: 16,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   orgStats: {
     fontSize: 12,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   orgRevenue: {
     fontSize: 16,
     fontWeight: '700',
-    color: DesignSystem.colors.success,
-  },
+    color: DesignSystem.colors.success },
   orgPlan: {
     fontSize: 14,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   orgStatus: {
     paddingHorizontal: 12,
     paddingVertical: 4,
-    borderRadius: 4,
-  },
+    borderRadius: 4 },
   orgStatusText: {
     fontSize: 12,
     fontWeight: '600',
-    color: DesignSystem.colors.text.inverse,
-  },
+    color: DesignSystem.colors.text.inverse },
   footer: {
-    height: 20,
-  },
+    height: 20 },
   systemInfoCard: {
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: 8,
     padding: 16,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.border.light,
-  },
+    borderColor: DesignSystem.colors.border.light },
   systemInfoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   systemInfoLabel: {
     fontSize: 14,
     fontWeight: '500',
     color: DesignSystem.colors.text.secondary,
-    flex: 1,
-  },
+    flex: 1 },
   systemInfoValue: {
     fontSize: 14,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
     flex: 1,
-    textAlign: 'right',
-  },
+    textAlign: 'right' },
   // Web 響應式樣式
   webScrollContent: {
     ...Platform.select({
       web: {
         maxWidth: 1200,
         width: '100%',
-        marginHorizontal: 'auto' as any,
-      },
-      default: {},
-    }),
-  },
+        marginHorizontal: 'auto' as any },
+      default: {} }) },
   webStatsGrid: {
     ...Platform.select({
       web: {
         display: 'grid' as any,
         gridTemplateColumns: 'repeat(4, 1fr)',
         gap: 16,
-        padding: 20,
-      },
-      default: {},
-    }),
-  },
+        padding: 20 },
+      default: {} }) },
   webStatCard: {
     ...Platform.select({
       web: {
@@ -517,38 +474,25 @@ const styles = StyleSheet.create({
         backgroundColor: DesignSystem.colors.background.surface,
         borderRadius: 8,
         borderWidth: 1,
-        borderColor: DesignSystem.colors.border.light,
-      },
-      default: {},
-    }),
-  },
+        borderColor: DesignSystem.colors.border.light },
+      default: {} }) },
   webSection: {
     ...Platform.select({
       web: {
-        padding: 32,
-      },
-      default: {},
-    }),
-  },
+        padding: 32 },
+      default: {} }) },
   webActionsGrid: {
     ...Platform.select({
       web: {
         display: 'grid' as any,
         gridTemplateColumns: 'repeat(5, 1fr)',
         gap: 16,
-        marginHorizontal: 0,
-      },
-      default: {},
-    }),
-  },
+        marginHorizontal: 0 },
+      default: {} }) },
   webActionCard: {
     ...Platform.select({
       web: {
         width: 'auto',
         padding: 20,
-        minHeight: 100,
-      },
-      default: {},
-    }),
-  },
-});
+        minHeight: 100 },
+      default: {} }) } });

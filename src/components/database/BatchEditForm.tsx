@@ -11,8 +11,7 @@ import {
   StyleSheet,
   ScrollView,
   Switch,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { Picker } from '@react-native-picker/picker';
 
@@ -37,16 +36,14 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
   selectedCount,
   onSubmit,
   onCancel,
-  tabType,
-}) => {
+  tabType }) => {
   const [values, setValues] = useState<Record<string, any>>({});
   const [showPreview, setShowPreview] = useState(false);
 
   const updateValue = (fieldKey: string, value: any) => {
     setValues({
       ...values,
-      [fieldKey]: value,
-    });
+      [fieldKey]: value });
   };
 
   // 檢查是否有任何修改
@@ -246,8 +243,7 @@ export const BatchEditForm: React.FC<BatchEditFormProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F0F0F0',
-  },
+    backgroundColor: '#F0F0F0' },
   header: {
     backgroundColor: '#FFFFFF',
     paddingVertical: 16,
@@ -256,16 +252,13 @@ const styles = StyleSheet.create({
     borderBottomColor: '#E3E1DC',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   headerContent: {
-    flex: 1,
-  },
+    flex: 1 },
   headerActions: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-  },
+    gap: 12 },
   saveButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -273,52 +266,43 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     backgroundColor: '#1A1A1A',
-    borderRadius: 18,
-  },
+    borderRadius: 18 },
   saveButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#F7F6F3',
-  },
+    color: '#F7F6F3' },
   closeButton: {
     width: 32,
     height: 32,
     borderRadius: 16,
     backgroundColor: '#F0F0F0',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   title: {
     fontSize: 20,
     fontWeight: '700',
     color: '#1A1A1A',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   subtitle: {
     fontSize: 14,
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   content: {
     flex: 1,
-    padding: 16,
-  },
+    padding: 16 },
   instruction: {
     fontSize: 14,
     color: '#7A7A7A',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   fieldItem: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     marginBottom: 12,
-    padding: 16,
-  },
+    padding: 16 },
   fieldLabel: {
     fontSize: 14,
     fontWeight: '600',
     color: '#1A1A1A',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   fieldInputContainer: {
     // 移除左邊距
   },
@@ -328,76 +312,60 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 12,
     fontSize: 16,
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   previewSubtitle: {
     fontSize: 14,
     color: '#7A7A7A',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   pickerWrapper: {
     backgroundColor: '#F0F0F0',
     borderRadius: 8,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   picker: {
-    height: 44,
-  },
+    height: 44 },
   previewSection: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
-    marginTop: 24,
-  },
+    marginTop: 24 },
   previewTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1A1A1A',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   previewItem: {
     flexDirection: 'row',
-    paddingVertical: 8,
-  },
+    paddingVertical: 8 },
   previewLabel: {
     fontSize: 14,
     color: '#7A7A7A',
-    width: 100,
-  },
+    width: 100 },
   previewValue: {
     fontSize: 14,
     color: '#1A1A1A',
     flex: 1,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   footer: {
     flexDirection: 'row',
     padding: 16,
     backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
     borderTopColor: '#E3E1DC',
-    gap: 12,
-  },
+    gap: 12 },
   button: {
     flex: 1,
     paddingVertical: 16,
     borderRadius: 12,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   cancelButton: {
-    backgroundColor: '#F0F0F0',
-  },
+    backgroundColor: '#F0F0F0' },
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   submitButton: {
-    backgroundColor: '#1A1A1A',
-  },
+    backgroundColor: '#1A1A1A' },
   submitButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#F7F6F3',
-  },
-});
+    color: '#F7F6F3' } });

@@ -15,8 +15,7 @@ import {
   limit,
   Timestamp,
   serverTimestamp,
-  writeBatch,
-} from 'firebase/firestore';
+  writeBatch } from 'firebase/firestore';
 import { getFirebaseDb } from './config';
 import { notificationService } from '../notifications';
 import { getUserPermissionContext } from './permissions-v2';
@@ -88,8 +87,7 @@ export const createAnnouncement = async (
       createdBy: currentUserId,
       createdByName: currentUserName || '管理員',
       createdAt: serverTimestamp() as Timestamp,
-      isRead: {},
-    };
+      isRead: {} };
 
     const db = getFirebaseDb();
     const docRef = await addDoc(
@@ -103,8 +101,7 @@ export const createAnnouncement = async (
         await notificationService.sendLocalNotification({
           type: 'meeting_reminder',
           title: `新公告：${announcement.title}`,
-          body: announcement.content.substring(0, 100) + '...',
-        });
+          body: announcement.content.substring(0, 100) + '...' });
       } catch (error) {
         console.error(`發送通知給用戶 ${userId} 失敗:`, error);
       }
@@ -166,8 +163,7 @@ export const bulkAssignTasks = async (
         status: 'todo',
         createdAt: now,
         updatedAt: now,
-        dueDate: taskData.dueDate ? Timestamp.fromDate(taskData.dueDate) : null,
-      };
+        dueDate: taskData.dueDate ? Timestamp.fromDate(taskData.dueDate) : null };
 
       batch.set(taskRef, task);
       taskIds.push(taskRef.id);
@@ -182,8 +178,7 @@ export const bulkAssignTasks = async (
         await notificationService.sendLocalNotification({
           type: 'meeting_reminder',
           title: '新任務指派',
-          body: `${assignerName || '管理員'} 指派了新任務：${taskData.title}`,
-        });
+          body: `${assignerName || '管理員'} 指派了新任務：${taskData.title}` });
       } catch (error) {
         console.error(`發送通知給用戶 ${assigneeId} 失敗:`, error);
       }
@@ -214,8 +209,7 @@ export const saveReport = async (
       ...report,
       createdBy: currentUserId,
       createdByName: currentUserName || '未知用戶',
-      createdAt: serverTimestamp() as Timestamp,
-    };
+      createdAt: serverTimestamp() as Timestamp };
 
     const db = getFirebaseDb();
     const docRef = await addDoc(collection(db, 'savedReports'), reportData);
@@ -258,8 +252,7 @@ export const getAnnouncements = async (
     const snapshot = await getDocs(q);
     return snapshot.docs.map((doc) => ({
       id: doc.id,
-      ...doc.data(),
-    })) as Announcement[];
+      ...doc.data() })) as Announcement[];
   } catch (error) {
     console.error('獲取公告列表失敗:', error);
     return [];
@@ -301,8 +294,7 @@ export const getSavedReports = async (
     myReportsSnapshot.docs.forEach((doc) => {
       reports.push({
         id: doc.id,
-        ...doc.data(),
-      } as SavedReport);
+        ...doc.data() } as SavedReport);
     });
 
     // 查詢2: 獲取公開的報表（如果不是只查詢私有報表）
@@ -329,8 +321,7 @@ export const getSavedReports = async (
           if (!reports.find(r => r.id === doc.id)) {
             reports.push({
               id: doc.id,
-              ...doc.data(),
-            } as SavedReport);
+              ...doc.data() } as SavedReport);
           }
         });
       }
@@ -365,8 +356,7 @@ export const markAnnouncementAsRead = async (
     const db = getFirebaseDb();
     const announcementRef = doc(db, 'announcements', announcementId);
     await updateDoc(announcementRef, {
-      [`isRead.${userId}`]: true,
-    });
+      [`isRead.${userId}`]: true });
   } catch (error) {
     console.error('標記公告已讀失敗:', error);
   }

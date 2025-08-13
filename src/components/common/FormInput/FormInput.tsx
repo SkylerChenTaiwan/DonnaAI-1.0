@@ -52,8 +52,7 @@ export const FormInput: React.FC<FormInputProps> = ({
         {
           backgroundColor: editable ? colors.background.input : colors.background.primary,
           borderColor: colors.border.default,
-          color: editable ? colors.text.primary : colors.text.disabled,
-        },
+          color: editable ? colors.text.primary : colors.text.disabled },
         style,
       ]}
       placeholderTextColor={colors.text.tertiary}
@@ -68,6 +67,4 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     fontSize: 14,
-    lineHeight: 20,
-  },
-});
+    lineHeight: 20 } });

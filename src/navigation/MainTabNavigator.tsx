@@ -127,31 +127,25 @@ export const MainTabNavigator = () => {
               position: 'absolute',
               bottom: 0,
               elevation: 0,
-              shadowOpacity: 0,
-            },
+              shadowOpacity: 0 },
             tabBarLabelStyle: {
               fontSize: 12,
-              fontWeight: '500',
-            },
+              fontWeight: '500' },
             headerStyle: {
               backgroundColor: '#FFFFFF',
               borderBottomWidth: 1,
-              borderBottomColor: '#E3E1DC',
-            },
+              borderBottomColor: '#E3E1DC' },
             headerTitleStyle: {
               fontSize: 18,
               fontWeight: '600',
-              color: '#1A1A1A',
-            },
-          })}
+              color: '#1A1A1A' } })}
         >
           <Tab.Screen
             name="Home"
             component={HomeScreen}
             options={{
               title: '首頁',
-              headerShown: false,
-            }}
+              headerShown: false }}
           />
 
           <Tab.Screen
@@ -159,8 +153,7 @@ export const MainTabNavigator = () => {
             component={DatabaseScreen}
             options={{
               title: '資料庫',
-              headerShown: false,
-            }}
+              headerShown: false }}
           />
 
           <Tab.Screen
@@ -168,8 +161,7 @@ export const MainTabNavigator = () => {
             component={EmptyComponent}
             options={{
               title: '',
-              tabBarLabel: () => null,
-            }}
+              tabBarLabel: () => null }}
             listeners={{
               tabPress: (e) => {
                 e.preventDefault();
@@ -178,8 +170,7 @@ export const MainTabNavigator = () => {
                 } else {
                   setShowActionModal(true);
                 }
-              },
-            }}
+              } }}
           />
 
           <Tab.Screen
@@ -187,8 +178,7 @@ export const MainTabNavigator = () => {
             component={mode === 'manager' ? PersonnelScreen : ToolsScreen}
             options={{
               title: mode === 'manager' ? '人事' : '小工具',
-              headerShown: false,
-            }}
+              headerShown: false }}
           />
 
           <Tab.Screen
@@ -196,8 +186,7 @@ export const MainTabNavigator = () => {
             component={SettingsScreen}
             options={{
               title: '設定',
-              headerTitle: '設定',
-            }}
+              headerTitle: '設定' }}
           />
 
           {__DEV__ && (
@@ -206,8 +195,7 @@ export const MainTabNavigator = () => {
               component={FirebaseTestScreen}
               options={{
                 title: '測試',
-                headerTitle: 'Firebase 測試',
-              }}
+                headerTitle: 'Firebase 測試' }}
             />
           )}
         </Tab.Navigator>
@@ -235,8 +223,7 @@ const EmptyComponent = () => null;
 const styles = StyleSheet.create({
   addButtonContainer: {
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   addButton: {
     width: 40,
     height: 40,
@@ -246,10 +233,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     elevation: 6,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 3 } }),
     shadowOpacity: 0.25,
-    shadowRadius: 5,
-  },
+    shadowRadius: 5 },
   searchButton: {
     width: 44,
     height: 44,
@@ -260,15 +246,13 @@ const styles = StyleSheet.create({
     // 較輕的陰影以配合灰色調
     elevation: 3,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
     shadowOpacity: 0.08,
-    shadowRadius: 4,
-  },
+    shadowRadius: 4 },
   plusIcon: {
     width: 20,
     height: 20,
-    position: 'relative',
-  },
+    position: 'relative' },
   plusHorizontal: {
     position: 'absolute',
     left: 0,
@@ -279,10 +263,9 @@ const styles = StyleSheet.create({
     borderRadius: 1.5,
     transform: Platform.OS === 'web' ? `translateY(${-1.5}px)` : [{ translateY: -1.5 }],
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
     shadowOpacity: 0.2,
-    shadowRadius: 1,
-  },
+    shadowRadius: 1 },
   plusVertical: {
     position: 'absolute',
     left: '50%',
@@ -293,8 +276,6 @@ const styles = StyleSheet.create({
     borderRadius: 1.5,
     transform: Platform.OS === 'web' ? `translateX(${-1.5}px)` : [{ translateX: -1.5 }],
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
     shadowOpacity: 0.2,
-    shadowRadius: 1,
-  },
-});
+    shadowRadius: 1 } });

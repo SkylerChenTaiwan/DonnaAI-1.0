@@ -9,8 +9,7 @@ import {
   Text,
   StyleSheet,
   TextInputProps as RNTextInputProps,
-  ViewStyle,
-} from 'react-native';
+  ViewStyle } from 'react-native';
 
 interface TextInputProps extends RNTextInputProps {
   label?: string;
@@ -44,14 +43,12 @@ export const TextInput = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   label: {
     fontSize: 16,
     fontWeight: '500',
     color: '#1A1A1A',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   input: {
     borderWidth: 1,
     borderColor: '#E3E1DC',
@@ -60,14 +57,10 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     fontSize: 16,
     color: '#1A1A1A',
-    backgroundColor: '#FFFFFF',
-  },
+    backgroundColor: '#FFFFFF' },
   inputError: {
-    borderColor: '#A94438',
-  },
+    borderColor: '#A94438' },
   errorText: {
     fontSize: 14,
     color: '#A94438',
-    marginTop: 4,
-  },
-});
+    marginTop: 4 } });

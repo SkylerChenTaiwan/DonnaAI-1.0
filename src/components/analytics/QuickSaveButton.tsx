@@ -8,8 +8,7 @@ import {
   StyleSheet,
   Alert,
   ActivityIndicator,
-  Switch,
-} from 'react-native';
+  Switch } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { colors } from '../../theme/colors';
 import { DesignSystem } from '../../theme/designSystem';
@@ -151,86 +150,68 @@ const styles = StyleSheet.create({
     borderRadius: DesignSystem.borderRadius.full,
     flexDirection: 'row',
     alignItems: 'center',
-    ...DesignSystem.shadows.none,
-  },
+    ...DesignSystem.shadows.none },
   floatingButtonText: {
     color: colors.background,
     ...DesignSystem.typography.button,
-    marginLeft: DesignSystem.spacing.xs,
-  },
+    marginLeft: DesignSystem.spacing.xs },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(26, 26, 26, 0.5)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   dialogContainer: {
     backgroundColor: colors.background,
     borderRadius: DesignSystem.borderRadius.lg,
     padding: DesignSystem.spacing.lg,
     width: '85%',
-    maxWidth: 400,
-  },
+    maxWidth: 400 },
   dialogTitle: {
     ...DesignSystem.typography.h4,
     color: colors.text,
     marginBottom: DesignSystem.spacing.lg,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   inputContainer: {
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   label: {
     ...DesignSystem.typography.bodySmall,
     color: colors.textSecondary,
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   input: {
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: DesignSystem.borderRadius.sm,
     padding: DesignSystem.spacing.sm,
     ...DesignSystem.typography.body,
-    color: colors.text,
-  },
+    color: colors.text },
   publicContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   hint: {
     ...DesignSystem.typography.caption,
     color: colors.textTertiary,
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   buttonRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   button: {
     flex: 1,
     paddingVertical: DesignSystem.spacing.sm,
     borderRadius: DesignSystem.borderRadius.button,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   cancelButton: {
     backgroundColor: DesignSystem.colors.button.secondary.default,
-    marginRight: DesignSystem.spacing.sm,
-  },
+    marginRight: DesignSystem.spacing.sm },
   saveButton: {
     backgroundColor: DesignSystem.colors.button.primary.default,
-    marginLeft: DesignSystem.spacing.sm,
-  },
+    marginLeft: DesignSystem.spacing.sm },
   disabledButton: {
-    opacity: 0.6,
-  },
+    opacity: 0.6 },
   cancelButtonText: {
     color: colors.textSecondary,
-    ...DesignSystem.typography.button,
-  },
+    ...DesignSystem.typography.button },
   saveButtonText: {
     color: colors.background,
-    ...DesignSystem.typography.button,
-  },
-});
+    ...DesignSystem.typography.button } });

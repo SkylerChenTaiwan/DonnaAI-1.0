@@ -25,20 +25,17 @@ export function NetworkStatusBar() {
           if (!online) {
             Animated.timing(slideAnim, getAnimationConfig({
               toValue: 0,
-              duration: 300,
-            })).start();
+              duration: 300 })).start();
           } else {
             // 線上時顯示綠色提示 2 秒後隱藏
             Animated.timing(slideAnim, getAnimationConfig({
               toValue: 0,
-              duration: 300,
-            })).start();
+              duration: 300 })).start();
             
             setTimeout(() => {
               Animated.timing(slideAnim, getAnimationConfig({
                 toValue: -50,
-                duration: 300,
-              })).start(() => setShowBar(false));
+                duration: 300 })).start(() => setShowBar(false));
             }, 2000);
           }
         }
@@ -94,8 +91,7 @@ const styles = StyleSheet.create({
     zIndex: 9999,
     paddingTop: 50, // 留出狀態列空間
     paddingBottom: 10,
-    paddingHorizontal: 15,
-  },
+    paddingHorizontal: 15 },
   online: {
     backgroundColor: '#10B981', // 綠色
   },
@@ -105,14 +101,10 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   icon: {
-    marginRight: 8,
-  },
+    marginRight: 8 },
   text: {
     color: 'white',
     fontSize: 14,
-    fontWeight: '500',
-  },
-});
+    fontWeight: '500' } });

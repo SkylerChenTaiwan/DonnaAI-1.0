@@ -11,8 +11,7 @@ import {
   FieldMapping,
   ImportProgress,
   ImportResult,
-  ImportError,
-} from '@/types/admin';
+  ImportError } from '@/types/admin';
 import { CustomerDoc } from '@/types/firebase';
 import { Task } from '@/types';
 import { createCustomer } from './firebase/customers';
@@ -58,13 +57,11 @@ export class DataImportService {
           resolve({
             headers: results.meta.fields || [],
             rows: results.data,
-            totalRows: results.data.length,
-          });
+            totalRows: results.data.length });
         },
         error: (error) => {
           reject(new Error(`CSV 解析失敗: ${error.message}`));
-        },
-      });
+        } });
     });
   }
 
@@ -94,8 +91,7 @@ export class DataImportService {
       return {
         headers,
         rows,
-        totalRows: rows.length,
-      };
+        totalRows: rows.length };
     } catch (error) {
       throw new Error(`Excel 解析失敗: ${(error as Error).message}`);
     }
@@ -117,8 +113,7 @@ export class DataImportService {
       errors.push({
         row: 0,
         error: `缺少必填欄位: ${missingFields.join(', ')}`,
-        severity: 'error',
-      });
+        severity: 'error' });
     }
 
     // 驗證每一行資料
@@ -133,8 +128,7 @@ export class DataImportService {
             field,
             value: row[field],
             error: `${field} 不能為空`,
-            severity: 'error',
-          });
+            severity: 'error' });
         }
       });
 
@@ -148,8 +142,7 @@ export class DataImportService {
               field: 'email',
               value: row.email,
               error: '無效的 Email 格式',
-              severity: 'error',
-            });
+              severity: 'error' });
           }
           
           // 驗證電話格式
@@ -159,8 +152,7 @@ export class DataImportService {
               field: 'phone',
               value: row.phone,
               error: '電話格式可能不正確',
-              severity: 'warning',
-            });
+              severity: 'warning' });
           }
           break;
 
@@ -172,8 +164,7 @@ export class DataImportService {
               field: 'dueDate',
               value: row.dueDate,
               error: '無效的日期格式',
-              severity: 'error',
-            });
+              severity: 'error' });
           }
           
           // 驗證優先級
@@ -183,8 +174,7 @@ export class DataImportService {
               field: 'priority',
               value: row.priority,
               error: '無效的優先級，將使用預設值 medium',
-              severity: 'warning',
-            });
+              severity: 'warning' });
           }
           break;
       }
@@ -193,8 +183,7 @@ export class DataImportService {
     return {
       isValid: errors.length === 0,
       errors,
-      warnings,
-    };
+      warnings };
   }
 
   // 映射欄位
@@ -227,8 +216,7 @@ export class DataImportService {
 
     return {
       type,
-      items: mappedItems,
-    };
+      items: mappedItems };
   }
 
   // 批次匯入
@@ -247,14 +235,12 @@ export class DataImportService {
       totalSkipped: 0,
       errors: [],
       duplicates: [],
-      createdIds: [],
-    };
+      createdIds: [] };
 
     const updateProgress = async (progress: ImportProgress) => {
       await updateDoc(jobRef, {
         progress,
-        'updatedAt': serverTimestamp(),
-      });
+        'updatedAt': serverTimestamp() });
     };
 
     try {
@@ -284,8 +270,7 @@ export class DataImportService {
           result.errors?.push({
             row: i + 1,
             error: (error as Error).message,
-            severity: 'error',
-          });
+            severity: 'error' });
         }
 
         // 更新進度（每10筆或最後一筆）
@@ -296,8 +281,7 @@ export class DataImportService {
             succeeded: result.totalSucceeded,
             failed: result.totalFailed,
             skipped: result.totalSkipped,
-            percentage: Math.round((result.totalProcessed / totalItems) * 100),
-          });
+            percentage: Math.round((result.totalProcessed / totalItems) * 100) });
         }
       }
 
@@ -305,8 +289,7 @@ export class DataImportService {
       await updateDoc(jobRef, {
         status: result.totalFailed === 0 ? 'completed' : 'completed',
         result,
-        completedAt: serverTimestamp(),
-      });
+        completedAt: serverTimestamp() });
 
       // logOperation('data_import_completed', {
       //   jobId,
@@ -322,8 +305,7 @@ export class DataImportService {
         status: 'failed',
         result,
         error: (error as Error).message,
-        completedAt: serverTimestamp(),
-      });
+        completedAt: serverTimestamp() });
 
       console.error('importBatch 錯誤:', error);
       throw error;
@@ -351,11 +333,9 @@ export class DataImportService {
         succeeded: 0,
         failed: 0,
         skipped: 0,
-        percentage: 0,
-      },
+        percentage: 0 },
       createdBy: options.userId,
-      createdAt: serverTimestamp() as any,
-    };
+      createdAt: serverTimestamp() as any };
 
     await setDoc(jobRef, job);
     
@@ -389,7 +369,7 @@ export class DataImportService {
   }
 
   private isValidPhone(phone: string): boolean {
-    const phoneRegex = /^[\d\s\-+()]{8,}$/;
+    const phoneRegex = /^[\d\s\-+()]{8 }$/;
     return phoneRegex.test(phone);
   }
 
@@ -439,8 +419,7 @@ export class DataImportService {
           teamId: options.teamId,
           assignedTo: options.userId,
           createdBy: options.userId,
-          tags: item.tags ? item.tags.split(',').map((t: string) => t.trim()) : [],
-        });
+          tags: item.tags ? item.tags.split(',').map((t: string) => t.trim()) : [] });
 
       case 'tasks':
         const task = await createTask({
@@ -453,8 +432,7 @@ export class DataImportService {
           priority: item.priority || 'medium',
           status: 'todo',
           source: 'import',
-          dueDate: item.dueDate ? new Date(item.dueDate) : undefined,
-        }, options.userId);
+          dueDate: item.dueDate ? new Date(item.dueDate) : undefined }, options.userId);
         return task.id!;
 
       case 'records':
@@ -465,8 +443,7 @@ export class DataImportService {
           type: item.type || 'note',
           status: 'completed',
           createdBy: options.userId,
-          participantIds: [options.userId],
-        }, options.userId);
+          participantIds: [options.userId] }, options.userId);
         return record.id!;
 
       default:

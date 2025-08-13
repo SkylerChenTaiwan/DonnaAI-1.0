@@ -28,8 +28,7 @@ export const BILLING_CONFIG = {
   MIN_BILLABLE_USERS: 1,
   
   // 贈送人數上限
-  MAX_GIFTED_SEATS: 1000,
-} as const;
+  MAX_GIFTED_SEATS: 1000 } as const;
 
 // 計算價格的輔助函數
 export function calculatePrice(

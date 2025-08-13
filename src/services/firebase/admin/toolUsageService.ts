@@ -15,8 +15,7 @@ import {
   Timestamp,
   serverTimestamp,
   increment,
-  writeBatch,
-} from 'firebase/firestore';
+  writeBatch } from 'firebase/firestore';
 import { getFirebaseDb } from '@/services/firebase/config';
 import { getAuth } from 'firebase/auth';
 import { ToolUsageStats, ToolUsageItem } from '@/types/entities';
@@ -30,8 +29,7 @@ export const TOOL_TYPES = {
   ANALYTICS: 'analytics',
   TASK_MANAGER: 'task-manager',
   CUSTOMER_MANAGER: 'customer-manager',
-  REPORT_GENERATOR: 'report-generator',
-} as const;
+  REPORT_GENERATOR: 'report-generator' } as const;
 
 export type ToolType = typeof TOOL_TYPES[keyof typeof TOOL_TYPES];
 
@@ -44,8 +42,7 @@ const TOOL_NAMES: Record<ToolType, string> = {
   [TOOL_TYPES.ANALYTICS]: '數據分析',
   [TOOL_TYPES.TASK_MANAGER]: '任務管理',
   [TOOL_TYPES.CUSTOMER_MANAGER]: '客戶管理',
-  [TOOL_TYPES.REPORT_GENERATOR]: '報表生成',
-};
+  [TOOL_TYPES.REPORT_GENERATOR]: '報表生成' };
 
 /**
  * 記錄工具使用
@@ -91,8 +88,7 @@ export async function trackToolUsage(
       userName: userData.name || currentUser.email,
       organizationId,
       timestamp: serverTimestamp(),
-      metadata: metadata || {},
-    };
+      metadata: metadata || {} };
     
     // 儲存使用記錄
     const usageRef = doc(collection(db, 'tool_usage'));
@@ -138,10 +134,8 @@ async function updateDailyStats(
         date: dateKey,
         usageCount: increment(1),
         uniqueUsers: {
-          [userId]: true,
-        },
-        lastUpdated: serverTimestamp(),
-      },
+          [userId]: true },
+        lastUpdated: serverTimestamp() },
       { merge: true }
     );
     
@@ -202,8 +196,7 @@ export async function getToolUsageStats(
           period,
           uniqueUsers: new Set<string>(),
           totalUsage: 0,
-          createdAt: serverTimestamp() as Timestamp,
-        });
+          createdAt: serverTimestamp() as Timestamp });
       }
       
       const stats = toolStatsMap.get(toolId)!;
@@ -214,8 +207,7 @@ export async function getToolUsageStats(
     // 轉換為陣列並處理 Set
     const results: ToolUsageStats[] = Array.from(toolStatsMap.values()).map(stats => ({
       ...stats,
-      uniqueUsers: Array.from(stats.uniqueUsers as Set<string>),
-    }));
+      uniqueUsers: Array.from(stats.uniqueUsers as Set<string>) }));
     
     return results;
   } catch (error) {
@@ -257,8 +249,7 @@ export async function getPopularTools(
       toolId: stats.toolId,
       toolName: stats.toolName,
       activeUsers: (stats.uniqueUsers as string[]).length,
-      usageCount: stats.totalUsage,
-    }))
+      usageCount: stats.totalUsage }))
     .sort((a, b) => b.activeUsers - a.activeUsers)
     .slice(0, topN);
   
@@ -318,8 +309,7 @@ export async function getUserToolUsage(
         toolUsageMap.set(toolId, {
           toolName: toolName || TOOL_NAMES[toolId as ToolType] || toolId,
           usageCount: 0,
-          lastUsed: timestamp.toDate(),
-        });
+          lastUsed: timestamp.toDate() });
       }
       
       const usage = toolUsageMap.get(toolId)!;
@@ -335,8 +325,7 @@ export async function getUserToolUsage(
     // 轉換為陣列
     return Array.from(toolUsageMap.entries()).map(([toolId, usage]) => ({
       toolId,
-      ...usage,
-    }));
+      ...usage }));
   } catch (error) {
     console.error('獲取用戶工具使用記錄失敗:', error);
     throw error;

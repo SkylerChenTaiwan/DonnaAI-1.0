@@ -4,5 +4,4 @@
 
 // 導出所有圖片資源
 export const images = {
-  donnaLogo: require('./donna-logo.png'),
-};
+  donnaLogo: require('./donna-logo.png') };

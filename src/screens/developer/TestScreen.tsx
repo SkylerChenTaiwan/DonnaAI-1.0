@@ -11,8 +11,7 @@ import {
   StyleSheet,
   ScrollView,
   Alert,
-  ActivityIndicator,
-} from 'react-native';
+  ActivityIndicator, Platform } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { runCompleteTestSuite, TestSuite, TestResult } from '@/utils/testValidator';
@@ -30,8 +29,7 @@ export const TestScreen: React.FC = () => {
     isRunning: false,
     testResults: null,
     overallResult: null,
-    showDetails: new Set(),
-  });
+    showDetails: new Set() });
 
   // 執行測試
   const runTests = async () => {
@@ -43,8 +41,7 @@ export const TestScreen: React.FC = () => {
         ...prev,
         isRunning: false,
         testResults: results.suites,
-        overallResult: results.overallResult,
-      }));
+        overallResult: results.overallResult }));
     } catch (error) {
       console.error('測試執行失敗:', error);
       Alert.alert('測試失敗', `無法執行測試: ${error}`);
@@ -249,32 +246,27 @@ export const TestScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
-  },
+    backgroundColor: '#F5F5F5' },
   header: {
     padding: 20,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
-  },
+    borderBottomColor: '#E3E1DC' },
   title: {
     fontSize: 24,
     fontWeight: '700',
     color: '#1A1A1A',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   subtitle: {
     fontSize: 16,
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   controls: {
     flexDirection: 'row',
     padding: 16,
     gap: 12,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
-  },
+    borderBottomColor: '#E3E1DC' },
   button: {
     flex: 1,
     flexDirection: 'row',
@@ -283,166 +275,134 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
-    gap: 8,
-  },
+    gap: 8 },
   primaryButton: {
-    backgroundColor: '#1A1A1A',
-  },
+    backgroundColor: '#1A1A1A' },
   primaryButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
-  },
+    color: '#FFFFFF' },
   secondaryButton: {
     backgroundColor: '#F0F0F0',
     borderWidth: 1,
-    borderColor: '#E3E1DC',
-  },
+    borderColor: '#E3E1DC' },
   secondaryButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   results: {
-    flex: 1,
-  },
+    flex: 1 },
   summary: {
     backgroundColor: '#FFFFFF',
     margin: 16,
     padding: 16,
     borderRadius: 12,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
-  },
+    elevation: 3 },
   summaryTitle: {
     fontSize: 20,
     fontWeight: '700',
     color: '#1A1A1A',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   summaryStats: {
-    gap: 8,
-  },
+    gap: 8 },
   summaryRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   summaryLabel: {
     fontSize: 16,
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   summaryValue: {
     fontSize: 16,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   summaryResultContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-  },
+    gap: 8 },
   summaryResult: {
     fontSize: 16,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   testSuite: {
     backgroundColor: '#FFFFFF',
     marginHorizontal: 16,
     marginBottom: 12,
     borderRadius: 12,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 2,
-  },
+    elevation: 2 },
   suiteHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 16,
-  },
+    padding: 16 },
   suiteInfo: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    flex: 1,
-  },
+    flex: 1 },
   suiteName: {
     fontSize: 18,
     fontWeight: '600',
     color: '#1A1A1A',
-    flex: 1,
-  },
+    flex: 1 },
   suiteStats: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-  },
+    gap: 8 },
   suiteStatsText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   suiteDetails: {
     borderTopWidth: 1,
     borderTopColor: '#F0F0F0',
     paddingTop: 16,
     paddingHorizontal: 16,
     paddingBottom: 16,
-    gap: 12,
-  },
+    gap: 12 },
   testResult: {
     backgroundColor: '#F8F9FA',
     padding: 12,
     borderRadius: 8,
     borderLeftWidth: 3,
-    borderLeftColor: '#E3E1DC',
-  },
+    borderLeftColor: '#E3E1DC' },
   resultHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   resultName: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1A1A1A',
-    flex: 1,
-  },
+    flex: 1 },
   resultMessage: {
     fontSize: 14,
     color: '#7A7A7A',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   resultDetails: {
     backgroundColor: '#FFFFFF',
     padding: 8,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#E3E1DC',
-  },
+    borderColor: '#E3E1DC' },
   detailsText: {
     fontSize: 12,
     fontFamily: 'monospace',
-    color: '#666666',
-  },
+    color: '#666666' },
   passedText: {
-    color: '#28A745',
-  },
+    color: '#28A745' },
   failedText: {
-    color: '#DC3545',
-  },
+    color: '#DC3545' },
   footer: {
     padding: 16,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   footerText: {
     fontSize: 14,
-    color: '#7A7A7A',
-  },
-});
+    color: '#7A7A7A' } });

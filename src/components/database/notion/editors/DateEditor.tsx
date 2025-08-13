@@ -37,8 +37,7 @@ export const DateEditor: React.FC<EditorProps> = ({
   onKeyDown,
   column,
   autoFocus = true,
-  style,
-}) => {
+  style }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [showCalendar, setShowCalendar] = useState(true);
@@ -149,16 +148,14 @@ export const DateEditor: React.FC<EditorProps> = ({
     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
     padding: '8px',
     zIndex: 1000,
-    minWidth: '280px',
-  };
+    minWidth: '280px' };
 
   const headerStyles: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: '8px',
-    padding: '0 4px',
-  };
+    padding: '0 4px' };
 
   const navButtonStyles: React.CSSProperties = {
     background: 'none',
@@ -167,22 +164,19 @@ export const DateEditor: React.FC<EditorProps> = ({
     padding: '4px 8px',
     borderRadius: '3px',
     color: 'rgba(55, 53, 47, 0.65)',
-    fontSize: '14px',
-  };
+    fontSize: '14px' };
 
   const monthYearStyles: React.CSSProperties = {
     fontSize: '14px',
     fontWeight: 500,
-    color: 'rgb(55, 53, 47)',
-  };
+    color: 'rgb(55, 53, 47)' };
 
   const weekdayStyles: React.CSSProperties = {
     fontSize: '12px',
     color: 'rgba(55, 53, 47, 0.5)',
     fontWeight: 500,
     textAlign: 'center',
-    padding: '4px',
-  };
+    padding: '4px' };
 
   const dayStyles = (day: number | null): React.CSSProperties => ({
     width: '32px',
@@ -198,14 +192,12 @@ export const DateEditor: React.FC<EditorProps> = ({
                 day && isToday(day) ? 'rgba(55, 53, 47, 0.08)' : 
                 'transparent',
     color: day && isSelected(day) ? 'white' : 'rgb(55, 53, 47)',
-    fontWeight: day && (isToday(day) || isSelected(day)) ? 500 : 400,
-  });
+    fontWeight: day && (isToday(day) || isSelected(day)) ? 500 : 400 });
 
   const gridStyles: React.CSSProperties = {
     display: 'grid',
     gridTemplateColumns: 'repeat(7, 1fr)',
-    gap: '2px',
-  };
+    gap: '2px' };
 
   return (
     <div ref={containerRef} style={{ ...EDITOR_STYLES.container, ...style, position: 'relative' }}>
@@ -282,8 +274,7 @@ export const DateEditor: React.FC<EditorProps> = ({
                 ...navButtonStyles,
                 width: '100%',
                 padding: '6px',
-                fontSize: '13px',
-              }}
+                fontSize: '13px' }}
               onClick={() => {
                 const today = new Date();
                 setSelectedDate(today);

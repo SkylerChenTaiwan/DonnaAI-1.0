@@ -12,8 +12,7 @@ export const TextEditor: React.FC<EditorProps> = ({
   onKeyDown,
   column,
   autoFocus = true,
-  style,
-}) => {
+  style }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [tempValue, setTempValue] = useState(value || '');
   

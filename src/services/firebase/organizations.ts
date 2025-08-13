@@ -17,8 +17,7 @@ import {
   limit,
   serverTimestamp,
   Timestamp,
-  writeBatch,
-} from 'firebase/firestore';
+  writeBatch } from 'firebase/firestore';
 import { getFirebaseDb } from './config';
 import { Organization } from '@/types/entities';
 import { OrganizationDetails, EnterpriseConfig } from '@/types/admin';
@@ -37,16 +36,14 @@ export async function createOrganization(
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
       createdBy,
-      status: 'active' as const,
-    };
+      status: 'active' as const };
 
     await setDoc(orgRef, orgData);
 
     return {
       id: orgRef.id,
       ...data,
-      createdAt: new Date(),
-    };
+      createdAt: new Date() };
   } catch (error) {
     console.error('createOrganization 錯誤:', error);
     throw error;
@@ -86,15 +83,13 @@ export async function getOrganization(orgId: string): Promise<OrganizationDetail
       dataVolume: {
         customers: orgData.stats?.customerCount || 0,
         records: orgData.monthlyUsage?.recordCount || 0,
-        tasks: 0,
-      },
+        tasks: 0 },
       createdAt: orgData.createdAt,
       lastActivityAt: orgData.lastActivityAt,
       config: configDoc || undefined,
       // 保留原始資料供除錯
       monthlyUsage: orgData.monthlyUsage,
-      stats: orgData.stats,
-    };
+      stats: orgData.stats };
   } catch (error) {
     console.error('getOrganization 錯誤:', error);
     throw error;
@@ -119,8 +114,7 @@ export async function getAllOrganizations(
     return snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
-      createdAt: (doc.data().createdAt as Timestamp)?.toDate() || new Date(),
-    })) as Organization[];
+      createdAt: (doc.data().createdAt as Timestamp)?.toDate() || new Date() })) as Organization[];
   } catch (error) {
     console.error('getAllOrganizations 錯誤:', error);
     throw error;
@@ -138,8 +132,7 @@ export async function updateOrganization(
     
     await updateDoc(orgRef, {
       ...data,
-      updatedAt: serverTimestamp(),
-    });
+      updatedAt: serverTimestamp() });
   } catch (error) {
     console.error('updateOrganization 錯誤:', error);
     throw error;
@@ -155,8 +148,7 @@ export async function deleteOrganization(orgId: string): Promise<void> {
     // 軟刪除：只更新狀態
     await updateDoc(orgRef, {
       status: 'cancelled',
-      updatedAt: serverTimestamp(),
-    });
+      updatedAt: serverTimestamp() });
   } catch (error) {
     console.error('deleteOrganization 錯誤:', error);
     throw error;
@@ -181,8 +173,7 @@ export async function getEnterpriseConfig(orgId: string): Promise<EnterpriseConf
     const doc = snapshot.docs[0];
     return {
       id: doc.id,
-      ...doc.data(),
-    } as EnterpriseConfig;
+      ...doc.data() } as EnterpriseConfig;
   } catch (error) {
     console.error('getEnterpriseConfig 錯誤:', error);
     throw error;
@@ -203,8 +194,7 @@ export async function saveEnterpriseConfig(
     const configData = {
       ...config,
       updatedAt: serverTimestamp(),
-      ...(configId ? {} : { createdAt: serverTimestamp() }),
-    };
+      ...(configId ? {} : { createdAt: serverTimestamp() }) };
 
     await setDoc(configRef, configData, { merge: configId !== undefined });
 
@@ -212,8 +202,7 @@ export async function saveEnterpriseConfig(
       id: configRef.id,
       ...config,
       createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+      updatedAt: new Date() };
   } catch (error) {
     console.error('saveEnterpriseConfig 錯誤:', error);
     throw error;
@@ -279,8 +268,7 @@ export async function createOrganizationWithAdmin(
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
       createdBy: adminUserData.uid,
-      status: 'active' as const,
-    };
+      status: 'active' as const };
     batch.set(orgRef, organization);
 
     // 2. 建立管理員用戶
@@ -292,8 +280,7 @@ export async function createOrganizationWithAdmin(
       role: 'admin' as const,
       organizationId: orgRef.id,
       createdAt: serverTimestamp(),
-      lastLoginAt: serverTimestamp(),
-    };
+      lastLoginAt: serverTimestamp() };
     batch.set(userRef, userData);
 
     // 3. 建立企業配置（如果提供）
@@ -305,8 +292,7 @@ export async function createOrganizationWithAdmin(
         organizationId: orgRef.id,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
-        createdBy: adminUserData.uid,
-      };
+        createdBy: adminUserData.uid };
       batch.set(configRef, enterpriseConfig);
     }
 
@@ -317,8 +303,7 @@ export async function createOrganizationWithAdmin(
       organization: {
         id: orgRef.id,
         ...orgData,
-        createdAt: new Date(),
-      },
+        createdAt: new Date() },
       adminUser: userData,
       config: enterpriseConfig ? {
         id: orgRef.id,
@@ -326,9 +311,7 @@ export async function createOrganizationWithAdmin(
         organizationId: orgRef.id,
         createdAt: new Date(),
         updatedAt: new Date(),
-        createdBy: adminUserData.uid,
-      } : undefined,
-    };
+        createdBy: adminUserData.uid } : undefined };
   } catch (error) {
     console.error('createOrganizationWithAdmin 錯誤:', error);
     throw error;

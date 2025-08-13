@@ -6,8 +6,7 @@ import {
   ScrollView,
   Text,
   ActivityIndicator,
-  StyleSheet,
-} from 'react-native';
+  StyleSheet } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { useQueryStore } from '../../stores/queryStore';
 import { useAuthStore } from '../../stores/authStore';
@@ -47,13 +46,11 @@ export default function QueryChat() {
       
       addMessage({
         type: 'assistant',
-        text: message,
-      });
+        text: message });
     } else if (currentSession?.status === 'error') {
       addMessage({
         type: 'error',
-        text: currentSession.error || '處理查詢時發生錯誤',
-      });
+        text: currentSession.error || '處理查詢時發生錯誤' });
     }
   }, [currentSession?.status, currentSession?.interpretation, currentSession?.error]);
 
@@ -61,8 +58,7 @@ export default function QueryChat() {
     const newMessage: Message = {
       ...message,
       id: Date.now().toString(),
-      timestamp: new Date(),
-    };
+      timestamp: new Date() };
     setMessages(prev => [...prev, newMessage]);
     
     // 自動滾動到底部
@@ -77,8 +73,7 @@ export default function QueryChat() {
     // 添加用戶訊息
     addMessage({
       type: 'user',
-      text: query,
-    });
+      text: query });
     
     // 清空輸入框
     const queryText = query;
@@ -89,8 +84,7 @@ export default function QueryChat() {
       userId: user.id,
       role: user.role || 'manager',
       organizationId: user.organizationId || '',
-      teamIds: user.teamIds || [],
-    };
+      teamIds: user.teamIds || [] };
     
     try {
       // 開始查詢
@@ -99,8 +93,7 @@ export default function QueryChat() {
       console.error('查詢失敗:', error);
       addMessage({
         type: 'error',
-        text: '無法處理您的查詢，請稍後再試',
-      });
+        text: '無法處理您的查詢，請稍後再試' });
     }
   };
 
@@ -231,95 +224,73 @@ export default function QueryChat() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   welcomeContainer: {
     padding: 20,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   welcomeTitle: {
     fontSize: 20,
     fontWeight: '600',
     color: '#333',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   welcomeText: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   exampleContainer: {
-    width: '100%',
-  },
+    width: '100%' },
   exampleButton: {
     backgroundColor: '#F5F5F5',
     padding: 12,
     borderRadius: 8,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   exampleText: {
     fontSize: 14,
-    color: '#333',
-  },
+    color: '#333' },
   messagesContainer: {
-    flex: 1,
-  },
+    flex: 1 },
   messagesContent: {
-    paddingVertical: 16,
-  },
+    paddingVertical: 16 },
   messageContainer: {
     paddingHorizontal: 16,
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   userMessageContainer: {
-    alignItems: 'flex-end',
-  },
+    alignItems: 'flex-end' },
   assistantMessageContainer: {
-    alignItems: 'flex-start',
-  },
+    alignItems: 'flex-start' },
   messageBubble: {
     maxWidth: '80%',
     padding: 12,
-    borderRadius: 16,
-  },
+    borderRadius: 16 },
   userBubble: {
-    backgroundColor: '#007AFF',
-  },
+    backgroundColor: '#007AFF' },
   assistantBubble: {
-    backgroundColor: '#F0F0F0',
-  },
+    backgroundColor: '#F0F0F0' },
   errorBubble: {
-    backgroundColor: '#FFE5E5',
-  },
+    backgroundColor: '#FFE5E5' },
   messageText: {
     fontSize: 15,
-    lineHeight: 20,
-  },
+    lineHeight: 20 },
   userText: {
-    color: 'white',
-  },
+    color: 'white' },
   assistantText: {
-    color: '#333',
-  },
+    color: '#333' },
   processingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 8,
-  },
+    paddingVertical: 8 },
   processingText: {
     marginLeft: 8,
     fontSize: 14,
-    color: '#666',
-  },
+    color: '#666' },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
-  },
+    borderTopColor: '#E0E0E0' },
   input: {
     flex: 1,
     backgroundColor: '#F5F5F5',
@@ -329,8 +300,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     marginRight: 8,
     fontSize: 15,
-    maxHeight: 100,
-  },
+    maxHeight: 100 },
   sendButton: {
     width: 36,
     height: 36,
@@ -338,9 +308,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   sendButtonDisabled: {
-    opacity: 0.5,
-  },
-});
+    opacity: 0.5 } });

@@ -171,16 +171,14 @@ const NativeView = forwardRef<any, AdaptiveViewProps>(
       onPressIn,
       onPressOut,
       onLongPress,
-      activeOpacity: 0.8,
-    } : {};
+      activeOpacity: 0.8 } : {};
     
     // 無障礙屬性
     const accessibilityProps = {
       accessible: accessible !== false,
       accessibilityLabel,
       accessibilityRole: accessibilityRole as any,
-      accessibilityHint,
-    };
+      accessibilityHint };
     
     return (
       <Component
@@ -222,8 +220,7 @@ export const createStyledAdaptiveView = (defaultStyle: ViewStyle | CSSProperties
   return forwardRef<any, AdaptiveViewProps>((props, ref) => {
     const mergedStyle = {
       ...defaultStyle,
-      ...props.style,
-    };
+      ...props.style };
     
     return (
       <AdaptiveView
@@ -237,28 +234,23 @@ export const createStyledAdaptiveView = (defaultStyle: ViewStyle | CSSProperties
 
 // 常用的預設樣式變體
 export const FlexView = createStyledAdaptiveView({
-  display: 'flex',
-});
+  display: 'flex' });
 
 export const CenterView = createStyledAdaptiveView({
   display: 'flex',
   justifyContent: 'center',
-  alignItems: 'center',
-});
+  alignItems: 'center' });
 
 export const RowView = createStyledAdaptiveView({
   display: 'flex',
-  flexDirection: 'row',
-});
+  flexDirection: 'row' });
 
 export const ColumnView = createStyledAdaptiveView({
   display: 'flex',
-  flexDirection: 'column',
-});
+  flexDirection: 'column' });
 
 export const ScrollView = createStyledAdaptiveView({
-  overflow: 'auto',
-});
+  overflow: 'auto' });
 
 // 響應式容器
 export const ResponsiveView = forwardRef<any, AdaptiveViewProps & {

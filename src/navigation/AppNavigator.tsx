@@ -99,8 +99,7 @@ export const AppNavigator = () => {
             <View style={{ paddingLeft: Platform.OS === 'web' ? 10 : 0 }}>
               <Icon name="chevron-back" size={24} color="#1A1A1A" />
             </View>
-          ),
-        }}
+          ) }}
       >
         {isAuthenticated ? (
           <>
@@ -109,8 +108,7 @@ export const AppNavigator = () => {
               component={shouldUseWebNav ? WebNavigator : MainTabNavigator}
               options={{
                 headerShown: false,
-                animationTypeForReplace: 'push',
-              }}
+                animationTypeForReplace: 'push' }}
             />
             {/* 詳細檢視頁面 */}
             <Stack.Screen
@@ -136,8 +134,7 @@ export const AppNavigator = () => {
                 headerShown: shouldShowHeader('HelpSupport'),
                 title: '說明與支援',
                 headerTintColor: '#1A1A1A',
-                headerBackTitleVisible: false,
-              }}
+                headerBackTitleVisible: false }}
             />
             <Stack.Screen
               name="PrivacyPolicy"
@@ -146,8 +143,7 @@ export const AppNavigator = () => {
                 headerShown: shouldShowHeader('PrivacyPolicy'),
                 title: '隱私權政策',
                 headerTintColor: '#1A1A1A',
-                headerBackTitleVisible: false,
-              }}
+                headerBackTitleVisible: false }}
             />
             
             {/* Admin 頁面路由 - 僅在非 Web 導航模式下註冊（避免重複） */}
@@ -161,8 +157,7 @@ export const AppNavigator = () => {
                     headerShown: shouldShowHeader('SuperAdminDashboard'),
                     title: 'Super Admin 控制台',
                     headerTintColor: '#1A1A1A',
-                    headerBackTitleVisible: false,
-                  }}
+                    headerBackTitleVisible: false }}
                 />
                 <Stack.Screen
                   name="OrganizationsScreen"
@@ -181,14 +176,12 @@ export const AppNavigator = () => {
                           borderRadius: 16,
                           backgroundColor: DesignSystem.colors.primary,
                           justifyContent: 'center',
-                          alignItems: 'center',
-                        }}
+                          alignItems: 'center' }}
                         onPress={() => navigation.navigate('CreateOrganizationScreen')}
                       >
                         <Icon name="add" size={20} color={DesignSystem.colors.text.inverse} />
                       </TouchableOpacity>
-                    ),
-                  })}
+                    ) })}
                 />
                 <Stack.Screen
                   name="CreateOrganizationScreen"
@@ -197,15 +190,13 @@ export const AppNavigator = () => {
                     headerShown: shouldShowHeader('CreateOrganizationScreen'),
                     title: '建立組織',
                     headerTintColor: '#1A1A1A',
-                    headerBackTitleVisible: false,
-                  }}
+                    headerBackTitleVisible: false }}
                 />
                 <Stack.Screen
                   name="OrganizationDetailScreen"
                   component={OrganizationDetailScreen}
                   options={{ 
-                    headerShown: shouldShowHeader('OrganizationDetailScreen'),
-                  }}
+                    headerShown: shouldShowHeader('OrganizationDetailScreen') }}
                 />
                 <Stack.Screen
                   name="PlatformDashboard"
@@ -214,8 +205,7 @@ export const AppNavigator = () => {
                     headerShown: shouldShowHeader('PlatformDashboard'),
                     title: '平台統計',
                     headerTintColor: '#1A1A1A',
-                    headerBackTitleVisible: false,
-                  }}
+                    headerBackTitleVisible: false }}
                 />
                 
                 {/* Enterprise Admin 頁面 */}
@@ -226,8 +216,7 @@ export const AppNavigator = () => {
                     headerShown: shouldShowHeader('AdminDashboard'),
                     title: '管理中心',
                     headerTintColor: '#1A1A1A',
-                    headerBackTitleVisible: false,
-                  }}
+                    headerBackTitleVisible: false }}
                 />
                 <Stack.Screen
                   name="UserManagementScreen"
@@ -236,8 +225,7 @@ export const AppNavigator = () => {
                     headerShown: shouldShowHeader('UserManagementScreen'),
                     title: '用戶管理',
                     headerTintColor: '#1A1A1A',
-                    headerBackTitleVisible: false,
-                  }}
+                    headerBackTitleVisible: false }}
                 />
                 <Stack.Screen
                   name="ToolManagementScreen"
@@ -246,8 +234,7 @@ export const AppNavigator = () => {
                     headerShown: shouldShowHeader('ToolManagementScreen'),
                     title: '工具管理',
                     headerTintColor: '#1A1A1A',
-                    headerBackTitleVisible: false,
-                  }}
+                    headerBackTitleVisible: false }}
                 />
                 <Stack.Screen
                   name="DataImportScreen"
@@ -256,15 +243,13 @@ export const AppNavigator = () => {
                     headerShown: shouldShowHeader('DataImportScreen'),
                     title: '資料匯入',
                     headerTintColor: '#1A1A1A',
-                    headerBackTitleVisible: false,
-                  }}
+                    headerBackTitleVisible: false }}
                 />
                 <Stack.Screen
                   name="LegacyDataImportScreen"
                   component={LegacyDataImportScreen}
                   options={{ 
-                    headerShown: shouldShowHeader('LegacyDataImportScreen'),
-                  }}
+                    headerShown: shouldShowHeader('LegacyDataImportScreen') }}
                 />
                 <Stack.Screen
                   name="UsageReportsScreen"
@@ -273,8 +258,7 @@ export const AppNavigator = () => {
                     headerShown: shouldShowHeader('UsageReportsScreen'),
                     title: '使用報表',
                     headerTintColor: '#1A1A1A',
-                    headerBackTitleVisible: false,
-                  }}
+                    headerBackTitleVisible: false }}
                 />
                 
                 {/* Admin 通用頁面 */}
@@ -285,8 +269,7 @@ export const AppNavigator = () => {
                     headerShown: shouldShowHeader('AdminSettings'),
                     title: '管理員設定',
                     headerTintColor: '#1A1A1A',
-                    headerBackTitleVisible: false,
-                  }}
+                    headerBackTitleVisible: false }}
                 />
               </>
             )}
@@ -296,8 +279,7 @@ export const AppNavigator = () => {
               name="WebApp"
               component={WebAppContainer}
               options={{ 
-                headerShown: shouldShowHeader('WebAppContainer'),
-              }}
+                headerShown: shouldShowHeader('WebAppContainer') }}
             />
             
             <Stack.Group screenOptions={{ 
@@ -421,8 +403,7 @@ export const AppNavigator = () => {
             name="Auth"
             component={AuthNavigator}
             options={{
-              animationTypeForReplace: 'pop',
-            }}
+              animationTypeForReplace: 'pop' }}
           />
         )}
       </Stack.Navigator>

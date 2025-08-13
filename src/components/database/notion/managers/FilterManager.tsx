@@ -21,8 +21,7 @@ export class FilterManager {
       enableNestedGroups: true,
       maxNestingLevel: 2,
       debugMode: false,
-      ...options,
-    };
+      ...options };
   }
 
   /**
@@ -256,8 +255,7 @@ export class FilterManager {
 
     return {
       isValid: errors.length === 0,
-      errors,
-    };
+      errors };
   }
 
   /**
@@ -280,8 +278,7 @@ export class FilterManager {
 
     return {
       isValid: errors.length === 0,
-      errors,
-    };
+      errors };
   }
 
   /**
@@ -356,8 +353,7 @@ export function createEmptyFilterGroup(): FilterGroup {
   return {
     id: `group_${Date.now()}`,
     operator: 'and',
-    filters: [],
-  };
+    filters: [] };
 }
 
 /**
@@ -373,6 +369,5 @@ export function createFilter(
     columnKey,
     operator,
     value,
-    isActive: true,
-  };
+    isActive: true };
 }

@@ -37,8 +37,7 @@ export class WebAudioRecording {
       isRecording: this._isRecording,
       isDoneRecording: this._isDoneRecording,
       canRecord: !this._isRecording && !this._isDoneRecording,
-      durationMillis,
-    };
+      durationMillis };
   }
 
   async getStatusAsync(): Promise<WebRecordingStatus> {
@@ -51,8 +50,7 @@ export class WebAudioRecording {
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
-          sampleRate: 44100,
-        } 
+          sampleRate: 44100 } 
       });
 
       // 決定使用的 MIME 類型
@@ -157,8 +155,7 @@ export class WebAudioRecording {
     return {
       uri: this.uri,
       blob,
-      mimeType: blob.type || 'audio/webm',
-    };
+      mimeType: blob.type || 'audio/webm' };
   }
 }
 
@@ -238,8 +235,7 @@ export class WebAudio {
         audioEncoder: 'aac',
         sampleRate: 44100,
         numberOfChannels: 2,
-        bitRate: 128000,
-      },
+        bitRate: 128000 },
       ios: {
         extension: '.m4a',
         outputFormat: 'mp4',
@@ -249,13 +245,10 @@ export class WebAudio {
         bitRate: 128000,
         linearPCMBitDepth: 16,
         linearPCMIsBigEndian: false,
-        linearPCMIsFloat: false,
-      },
+        linearPCMIsFloat: false },
       web: {
         mimeType: 'audio/webm',
-        bitsPerSecond: 128000,
-      },
-    },
+        bitsPerSecond: 128000 } },
     LOW_QUALITY: {
       isMeteringEnabled: true,
       android: {
@@ -264,8 +257,7 @@ export class WebAudio {
         audioEncoder: 'aac',
         sampleRate: 22050,
         numberOfChannels: 1,
-        bitRate: 64000,
-      },
+        bitRate: 64000 },
       ios: {
         extension: '.m4a',
         outputFormat: 'mp4',
@@ -275,14 +267,10 @@ export class WebAudio {
         bitRate: 64000,
         linearPCMBitDepth: 16,
         linearPCMIsBigEndian: false,
-        linearPCMIsFloat: false,
-      },
+        linearPCMIsFloat: false },
       web: {
         mimeType: 'audio/webm',
-        bitsPerSecond: 64000,
-      },
-    },
-  };
+        bitsPerSecond: 64000 } } };
 }
 
 // 權限檢查工具

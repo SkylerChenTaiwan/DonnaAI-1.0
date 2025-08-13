@@ -134,8 +134,7 @@ export const columnToFormField = (column: TableColumn): FormFieldConfig => {
     type: fieldType,
     required: isRequiredField(column.key),
     placeholder: generatePlaceholder(column.title, fieldType),
-    validation: createValidator(fieldType, column.key),
-  };
+    validation: createValidator(fieldType, column.key) };
 };
 
 /**

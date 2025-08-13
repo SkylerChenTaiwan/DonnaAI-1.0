@@ -9,8 +9,7 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  ScrollView,
-} from 'react-native';
+  ScrollView } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { TableColumn, TableData } from '@/types/table';
 
@@ -27,8 +26,7 @@ export const NotionStyleTableDebug: React.FC<NotionStyleTableDebugProps> = ({
   columns,
   onAddRow,
   onAddColumn,
-  onRowPress,
-}) => {
+  onRowPress }) => {
   return (
     <View style={styles.container}>
       {/* 表頭 - 始終顯示 */}
@@ -87,73 +85,58 @@ export const NotionStyleTableDebug: React.FC<NotionStyleTableDebugProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-  },
+    backgroundColor: '#fff' },
   header: {
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderBottomColor: '#eeeeec',
     backgroundColor: '#fff',
     paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
+    paddingVertical: 12 },
   headerCell: {
     flex: 1,
-    paddingHorizontal: 8,
-  },
+    paddingHorizontal: 8 },
   headerText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#787774',
-  },
+    color: '#787774' },
   addColumnButton: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 12,
-    gap: 4,
-  },
+    gap: 4 },
   addColumnText: {
     fontSize: 13,
-    color: '#787774',
-  },
+    color: '#787774' },
   body: {
-    flex: 1,
-  },
+    flex: 1 },
   row: {
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderBottomColor: '#eeeeec',
     paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
+    paddingVertical: 12 },
   cell: {
     flex: 1,
-    paddingHorizontal: 8,
-  },
+    paddingHorizontal: 8 },
   cellText: {
     fontSize: 14,
-    color: '#37352f',
-  },
+    color: '#37352f' },
   addFirstRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 24,
-    gap: 8,
-  },
+    gap: 8 },
   addFirstRowText: {
     fontSize: 16,
-    color: '#787774',
-  },
+    color: '#787774' },
   addRow: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 12,
     paddingHorizontal: 16,
-    gap: 6,
-  },
+    gap: 6 },
   addRowText: {
     fontSize: 14,
-    color: '#787774',
-  },
-});
+    color: '#787774' } });

@@ -12,8 +12,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator,
-} from 'react-native';
+  ActivityIndicator } from 'react-native';
 import { Button } from '@/components/common/Button';
 import { Layout } from '@/components/common/Layout';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -58,8 +57,7 @@ export const CreateUserModal: React.FC = () => {
     name: '',
     role: 'salesperson',
     department: '',
-    phone: '',
-  });
+    phone: '' });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
 
@@ -131,16 +129,14 @@ export const CreateUserModal: React.FC = () => {
         phone: formData.phone || undefined,
         isActive: true,
         createdAt: new Date(),
-        lastLoginAt: new Date(),
-      };
+        lastLoginAt: new Date() };
 
       // 儲存到 Firestore
       const userRef = doc(getFirebaseDb(), 'users', newUser.uid);
       await setDoc(userRef, {
         ...userData,
         createdAt: Timestamp.now(),
-        lastLoginAt: Timestamp.now(),
-      });
+        lastLoginAt: Timestamp.now() });
 
       showToast('success', '用戶建立成功');
       
@@ -299,51 +295,39 @@ const styles = StyleSheet.create({
     padding: DesignSystem.spacing.lg,
     backgroundColor: DesignSystem.colors.background.surface,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   backButton: {
-    marginRight: DesignSystem.spacing.md,
-  },
+    marginRight: DesignSystem.spacing.md },
   title: {
     ...DesignSystem.typography.h1,
     color: DesignSystem.colors.text.primary,
-    flex: 1,
-  },
+    flex: 1 },
   container: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background,
-  },
+    backgroundColor: DesignSystem.colors.background },
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   contentContainer: {
     paddingVertical: 24,
-    paddingHorizontal: 20,
-  },
+    paddingHorizontal: 20 },
   section: {
-    marginBottom: 32,
-  },
+    marginBottom: 32 },
   sectionTitle: {
     ...DesignSystem.typography.h3,
     color: DesignSystem.colors.text.primary,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   fieldContainer: {
-    marginTop: 20,
-  },
+    marginTop: 20 },
   infoBox: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: withAlpha(DesignSystem.colors.info, 0.125),
     padding: 16,
     borderRadius: 8,
-    marginTop: 24,
-  },
+    marginTop: 24 },
   infoText: {
     flex: 1,
     marginLeft: 12,
     fontSize: 14,
     color: DesignSystem.colors.text.secondary,
-    lineHeight: 20,
-  },
-});
+    lineHeight: 20 } });

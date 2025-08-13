@@ -227,8 +227,7 @@ function getPositionStyle(anchorEl: HTMLElement): React.CSSProperties {
     position: 'fixed',
     top,
     right,
-    zIndex: 1000,
-  };
+    zIndex: 1000 };
 }
 
 function getColumnIcon(type: string): React.ReactElement {

@@ -11,8 +11,7 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { Layout } from '@/components/common/Layout';
 import { Icon } from '@/components/common/Icon';
 import { useNavigation } from '@react-navigation/native';
@@ -28,8 +27,7 @@ import {
   parseImportFile,
   importData,
   generateImportTemplate,
-  SmartDataImporter,
-} from '@/services/firebase/admin/dataImportService';
+  SmartDataImporter } from '@/services/firebase/admin/dataImportService';
 import { useAuth } from '@/hooks/useAuth';
 import { FieldMappingModal, FieldMapping, RelationMapping } from '@/components/import/FieldMappingModal';
 import { withAlpha } from '@/utils/colorUtils';
@@ -135,8 +133,7 @@ export const DataImportScreen: React.FC = () => {
       current: 0,
       total: 0,
       status: 'parsing',
-      message: '準備匯入資料...',
-    });
+      message: '準備匯入資料...' });
     
     try {
       const importer = new SmartDataImporter(userProfile.organizationId);
@@ -190,8 +187,7 @@ export const DataImportScreen: React.FC = () => {
         current: 0,
         total: 0,
         status: 'error',
-        message: error instanceof Error ? error.message : '匯入失敗',
-      });
+        message: error instanceof Error ? error.message : '匯入失敗' });
     } finally {
       setImporting(false);
     }
@@ -228,8 +224,7 @@ export const DataImportScreen: React.FC = () => {
               current: 0,
               total: previewData.length,
               status: 'parsing',
-              message: '準備匯入資料...',
-            });
+              message: '準備匯入資料...' });
             
             try {
               let result: ImportResult;
@@ -279,13 +274,11 @@ export const DataImportScreen: React.FC = () => {
                 current: 0,
                 total: previewData.length,
                 status: 'error',
-                message: error instanceof Error ? error.message : '匯入失敗',
-              });
+                message: error instanceof Error ? error.message : '匯入失敗' });
             } finally {
               setImporting(false);
             }
-          },
-        },
+          } },
       ]
     );
   };
@@ -305,15 +298,13 @@ export const DataImportScreen: React.FC = () => {
       
       // 寫入檔案
       await FileSystem.writeAsStringAsync(fileUri, templateContent, {
-        encoding: FileSystem.EncodingType.UTF8,
-      });
+        encoding: FileSystem.EncodingType.UTF8 });
       
       // 分享檔案
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(fileUri, {
           mimeType: 'text/csv',
-          dialogTitle: '下載匯入範本',
-        });
+          dialogTitle: '下載匯入範本' });
       } else {
         showToast('error', '您的裝置不支援檔案分享功能');
       }
@@ -522,38 +513,31 @@ export const DataImportScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background,
-  },
+    backgroundColor: DesignSystem.colors.background },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: DesignSystem.spacing.lg,
     backgroundColor: DesignSystem.colors.background.surface,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   backButton: {
-    marginRight: DesignSystem.spacing.md,
-  },
+    marginRight: DesignSystem.spacing.md },
   title: {
     ...DesignSystem.typography.h1,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   section: {
     backgroundColor: DesignSystem.colors.background.surface,
     padding: DesignSystem.spacing.lg,
-    marginVertical: 8,
-  },
+    marginVertical: 8 },
   sectionTitle: {
     ...DesignSystem.typography.h2,
     color: DesignSystem.colors.text.primary,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   typeGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
-  },
+    gap: 12 },
   typeCard: {
     width: '47%',
     padding: 20,
@@ -561,21 +545,17 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.background.elevated,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: DesignSystem.colors.border.light,
-  },
+    borderColor: DesignSystem.colors.border.light },
   typeCardActive: {
     borderColor: DesignSystem.colors.primary,
-    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
-  },
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063) },
   typeLabel: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.secondary,
-    marginTop: 8,
-  },
+    marginTop: 8 },
   typeLabelActive: {
     color: DesignSystem.colors.primary,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   uploadButton: {
     padding: 40,
     alignItems: 'center',
@@ -583,34 +563,28 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 2,
     borderColor: DesignSystem.colors.border.light,
-    borderStyle: 'dashed',
-  },
+    borderStyle: 'dashed' },
   uploadText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.secondary,
     marginTop: 12,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   templateLink: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 16,
-    gap: 8,
-  },
+    gap: 8 },
   templateText: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.primary,
-  },
+    color: DesignSystem.colors.primary },
   previewTable: {
     borderWidth: 1,
     borderColor: DesignSystem.colors.border.light,
     borderRadius: 8,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   previewRow: {
-    flexDirection: 'row',
-  },
+    flexDirection: 'row' },
   previewHeader: {
     ...DesignSystem.typography.caption,
     fontWeight: '600',
@@ -619,58 +593,47 @@ const styles = StyleSheet.create({
     minWidth: 120,
     backgroundColor: DesignSystem.colors.background.elevated,
     borderRightWidth: 1,
-    borderRightColor: DesignSystem.colors.border.light,
-  },
+    borderRightColor: DesignSystem.colors.border.light },
   previewCell: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
     padding: 12,
     minWidth: 120,
     borderRightWidth: 1,
-    borderRightColor: DesignSystem.colors.border.light,
-  },
+    borderRightColor: DesignSystem.colors.border.light },
   statusContainer: {
     backgroundColor: DesignSystem.colors.background.elevated,
     padding: 16,
-    borderRadius: 8,
-  },
+    borderRadius: 8 },
   statusRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 8,
-  },
+    paddingVertical: 8 },
   statusLabel: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   statusValue: {
     ...DesignSystem.typography.body,
     fontWeight: '600',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   successText: {
-    color: DesignSystem.colors.success,
-  },
+    color: DesignSystem.colors.success },
   errorText: {
-    color: DesignSystem.colors.error,
-  },
+    color: DesignSystem.colors.error },
   errorContainer: {
     marginTop: 16,
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: DesignSystem.colors.border.light,
-  },
+    borderTopColor: DesignSystem.colors.border.light },
   errorTitle: {
     ...DesignSystem.typography.caption,
     fontWeight: '600',
     color: DesignSystem.colors.error,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   errorItem: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginVertical: 2,
-  },
+    marginVertical: 2 },
   importButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -679,38 +642,29 @@ const styles = StyleSheet.create({
     padding: 16,
     margin: 20,
     borderRadius: 12,
-    gap: 8,
-  },
+    gap: 8 },
   importButtonDisabled: {
-    backgroundColor: DesignSystem.colors.gray400,
-  },
+    backgroundColor: DesignSystem.colors.gray400 },
   importButtonText: {
     ...DesignSystem.typography.button,
     color: DesignSystem.colors.white,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   progressContainer: {
-    gap: 12,
-  },
+    gap: 12 },
   progressText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.secondary,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   progressBar: {
     height: 8,
     backgroundColor: DesignSystem.colors.background.elevated,
     borderRadius: 4,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   progressFill: {
     height: '100%',
     borderRadius: 4,
-    transition: 'width 0.3s ease',
-  },
+    transition: 'width 0.3s ease' },
   progressCount: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    textAlign: 'center',
-  },
-});
+    textAlign: 'center' } });

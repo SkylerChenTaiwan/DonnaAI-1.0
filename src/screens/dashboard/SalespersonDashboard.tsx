@@ -8,8 +8,7 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+  TouchableOpacity, Platform } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
@@ -28,8 +27,7 @@ export const SalespersonDashboard: React.FC = () => {
       onPress: () => {
         // TODO: 導航到新增會議畫面
         console.log('導航到新增會議');
-      },
-    },
+      } },
     {
       id: 'record-audio',
       title: 'AI 錄音',
@@ -39,8 +37,7 @@ export const SalespersonDashboard: React.FC = () => {
       onPress: () => {
         // TODO: 開始錄音功能
         console.log('開始錄音');
-      },
-    },
+      } },
     {
       id: 'view-customers',
       title: '我的客戶',
@@ -50,8 +47,7 @@ export const SalespersonDashboard: React.FC = () => {
       onPress: () => {
         // TODO: 導航到客戶列表
         console.log('查看客戶');
-      },
-    },
+      } },
     {
       id: 'quick-note',
       title: '快速筆記',
@@ -61,8 +57,7 @@ export const SalespersonDashboard: React.FC = () => {
       onPress: () => {
         // TODO: 開啟筆記功能
         console.log('快速筆記');
-      },
-    },
+      } },
   ];
 
   const stats = [
@@ -179,27 +174,22 @@ export const SalespersonDashboard: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
-  },
+    backgroundColor: '#F8F9FA' },
   welcomeSection: {
     padding: 24,
-    backgroundColor: '#FFFFFF',
-  },
+    backgroundColor: '#FFFFFF' },
   welcomeText: {
     fontSize: 24,
     fontWeight: '700',
     color: '#1C1C1E',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   welcomeSubtext: {
     fontSize: 16,
-    color: '#8E8E93',
-  },
+    color: '#8E8E93' },
   statsContainer: {
     flexDirection: 'row',
     padding: 16,
-    gap: 12,
-  },
+    gap: 12 },
   statCard: {
     flex: 1,
     backgroundColor: '#FFFFFF',
@@ -207,35 +197,29 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
     shadowOpacity: 0.05,
     shadowRadius: 2,
-    elevation: 1,
-  },
+    elevation: 1 },
   statValue: {
     fontSize: 24,
     fontWeight: '700',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   statLabel: {
     fontSize: 12,
     color: '#8E8E93',
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   section: {
-    padding: 16,
-  },
+    padding: 16 },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: '#1C1C1E',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   quickActionsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
-  },
+    gap: 12 },
   actionCard: {
     width: '47%',
     backgroundColor: '#FFFFFF',
@@ -243,48 +227,42 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
     shadowOpacity: 0.05,
     shadowRadius: 2,
-    elevation: 1,
-  },
+    elevation: 1 },
   actionIcon: {
     width: 48,
     height: 48,
     borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   actionTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: '#1C1C1E',
     marginBottom: 4,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   actionSubtitle: {
     fontSize: 12,
     color: '#8E8E93',
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   activityCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
     shadowOpacity: 0.05,
     shadowRadius: 2,
-    elevation: 1,
-  },
+    elevation: 1 },
   activityItem: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
-  },
+    borderBottomColor: '#F2F2F7' },
   activityIcon: {
     width: 32,
     height: 32,
@@ -292,45 +270,36 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2F2F7',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
-  },
+    marginRight: 12 },
   activityContent: {
-    flex: 1,
-  },
+    flex: 1 },
   activityTitle: {
     fontSize: 14,
     fontWeight: '500',
     color: '#1C1C1E',
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   activityTime: {
     fontSize: 12,
-    color: '#8E8E93',
-  },
+    color: '#8E8E93' },
   suggestionCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
     shadowOpacity: 0.05,
     shadowRadius: 2,
-    elevation: 1,
-  },
+    elevation: 1 },
   suggestionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   suggestionTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1C1C1E',
-    marginLeft: 8,
-  },
+    marginLeft: 8 },
   suggestionText: {
     fontSize: 14,
     color: '#3C3C43',
-    lineHeight: 20,
-  },
-});
+    lineHeight: 20 } });

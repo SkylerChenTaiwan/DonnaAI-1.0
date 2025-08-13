@@ -70,8 +70,7 @@ class RecordingManager {
         interruptionModeIOS: 1, // Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX
         interruptionModeAndroid: 1, // Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX
         shouldDuckAndroid: false,
-        playThroughEarpieceAndroid: false,
-      });
+        playThroughEarpieceAndroid: false });
       
       // 添加延遲以確保資源釋放
       await new Promise(resolve => setTimeout(resolve, 200));

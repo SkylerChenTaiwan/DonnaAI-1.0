@@ -11,8 +11,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Alert,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { WebLayout } from '@/components/layout/WebLayout';
 import { SearchBar } from '@/components/common/SearchBar';
 import { ToolbarIcons } from '@/components/common/ToolbarIcons';
@@ -72,9 +71,7 @@ export const UserManagementScreen: React.FC = () => {
         actions: [],
         dataAccess: user.role === 'super_admin' ? 'organization' : 
                    user.role === 'admin' ? 'organization' :
-                   user.role === 'manager' ? 'team' : 'own',
-      },
-    }));
+                   user.role === 'manager' ? 'team' : 'own' } }));
   }, [users]);
   
   // 過濾用戶
@@ -115,30 +112,26 @@ export const UserManagementScreen: React.FC = () => {
           <Text style={styles.nameText}>{value}</Text>
           <Text style={styles.emailText}>{item.email}</Text>
         </View>
-      ),
-    },
+      ) },
     {
       key: 'status',
       title: '狀態',
       width: 100,
       render: (value, item) => (
         <StatusIndicator user={item} size="small" />
-      ),
-    },
+      ) },
     {
       key: 'role',
       title: '角色權限',
       width: 150,
       render: (value, item) => (
         <PermissionBadge user={item} />
-      ),
-    },
+      ) },
     {
       key: 'department',
       title: '部門',
       sortable: true,
-      render: (value) => value || '未設定',
-    },
+      render: (value) => value || '未設定' },
     {
       key: 'lastActive',
       title: '最後登入',
@@ -154,14 +147,12 @@ export const UserManagementScreen: React.FC = () => {
         if (diffDays === 1) return '昨天';
         if (diffDays < 7) return `${diffDays}天前`;
         return date.toLocaleDateString('zh-TW');
-      },
-    },
+      } },
     {
       key: 'joinDate',
       title: '加入日期',
       sortable: true,
-      render: (value) => value ? new Date(value).toLocaleDateString('zh-TW') : '-',
-    },
+      render: (value) => value ? new Date(value).toLocaleDateString('zh-TW') : '-' },
   ];
   
   // 處理行點擊
@@ -435,23 +426,19 @@ export const UserManagementScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background,
-  },
+    backgroundColor: DesignSystem.colors.background },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   loadingText: {
     marginTop: 12,
     fontSize: 16,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   addButton: {
     padding: 8,
     borderRadius: 8,
-    backgroundColor: DesignSystem.colors.background.elevated,
-  },
+    backgroundColor: DesignSystem.colors.background.elevated },
   toolbar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -460,57 +447,45 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.surface,
     borderBottomWidth: 1,
     borderBottomColor: DesignSystem.colors.border.light,
-    gap: 12,
-  },
+    gap: 12 },
   searchWrapper: {
-    flex: 1,
-  },
+    flex: 1 },
   searchBar: {
-    flex: 1,
-  },
+    flex: 1 },
   toolbarButtons: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   statsContainer: {
     flexDirection: 'row',
     paddingHorizontal: 20,
     paddingVertical: 16,
     backgroundColor: DesignSystem.colors.background.elevated,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   statItem: {
     flex: 1,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   statValue: {
     fontSize: 24,
     fontWeight: '600',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   statLabel: {
     fontSize: 12,
     color: DesignSystem.colors.text.secondary,
-    marginTop: 4,
-  },
+    marginTop: 4 },
   tableContainer: {
     flex: 1,
-    paddingHorizontal: 16,
-  },
+    paddingHorizontal: 16 },
   nameCell: {
-    paddingVertical: 4,
-  },
+    paddingVertical: 4 },
   nameText: {
     fontSize: 14,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   emailText: {
     fontSize: 12,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   batchActions: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -519,38 +494,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderTopWidth: 1,
-    borderTopColor: DesignSystem.colors.border.light,
-  },
+    borderTopColor: DesignSystem.colors.border.light },
   selectedCount: {
     fontSize: 14,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   actionButtons: {
     flexDirection: 'row',
-    gap: 12,
-  },
+    gap: 12 },
   actionButton: {
     paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 8,
-  },
+    borderRadius: 8 },
   enableButton: {
-    backgroundColor: DesignSystem.colors.success,
-  },
+    backgroundColor: DesignSystem.colors.success },
   disableButton: {
-    backgroundColor: DesignSystem.colors.warning,
-  },
+    backgroundColor: DesignSystem.colors.warning },
   deleteButton: {
-    backgroundColor: DesignSystem.colors.error,
-  },
+    backgroundColor: DesignSystem.colors.error },
   actionButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFFFFF',
-  },
+    color: '#FFFFFF' },
   deleteButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFFFFF',
-  },
-});
+    color: '#FFFFFF' } });

@@ -10,8 +10,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  StatusBar,
-} from 'react-native';
+  StatusBar } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { TableColumn } from '@/types/table';
 import { FilterCondition } from './FilterBadge';
@@ -32,8 +31,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
   columns,
   filters,
   onApply,
-  tabType,
-}) => {
+  tabType }) => {
   const [conditions, setConditions] = useState<FilterCondition[]>(filters || []);
 
   // 同步外部篩選條件
@@ -49,8 +47,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
     const newCondition: FilterCondition = {
       key: filterableColumns[0].key,
       label: filterableColumns[0].title,
-      value: '',
-    };
+      value: '' };
     setConditions([...(conditions || []), newCondition]);
   };
 
@@ -140,8 +137,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F0F0F0',
-    paddingTop: StatusBar.currentHeight || 0,
-  },
+    paddingTop: StatusBar.currentHeight || 0 },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -150,32 +146,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
-  },
+    borderBottomColor: '#E3E1DC' },
   title: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   closeButton: {
-    padding: 8,
-  },
+    padding: 8 },
   closeButtonText: {
     fontSize: 17,
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   applyButton: {
-    padding: 8,
-  },
+    padding: 8 },
   applyButtonText: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   content: {
     flex: 1,
-    padding: 16,
-  },
+    padding: 16 },
   addButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -184,24 +173,19 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     marginTop: 16,
-    gap: 8,
-  },
+    gap: 8 },
   addButtonText: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   clearButton: {
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#A94438',
     borderRadius: 12,
     padding: 16,
-    marginTop: 12,
-  },
+    marginTop: 12 },
   clearButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
-  },
-});
+    color: '#FFFFFF' } });

@@ -8,8 +8,7 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Image,
-} from 'react-native';
+  Image, Platform } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 
@@ -28,8 +27,7 @@ export const ToolCard = ({
   description,
   icon,
   color = '#1A1A1A',
-  onPress,
-}: ToolCardProps) => {
+  onPress }: ToolCardProps) => {
   return (
     <TouchableOpacity
       style={styles.container}
@@ -56,12 +54,11 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
     shadowOpacity: 0.05,
     shadowRadius: 2,
     elevation: 2,
-    minHeight: 160,
-  },
+    minHeight: 160 },
   iconContainer: {
     width: 80,
     height: 80,
@@ -69,19 +66,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   title: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1A1A1A',
     marginBottom: 4,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   description: {
     fontSize: 14,
     color: '#7A7A7A',
     textAlign: 'center',
-    lineHeight: 18,
-  },
-});
+    lineHeight: 18 } });

@@ -36,8 +36,7 @@ export function usePendingChanges(tableType: 'customers' | 'records' | 'tasks') 
     const schemas = {
       customers: CustomerFormSchema,
       records: RecordFormSchema,
-      tasks: TaskFormSchema,
-    };
+      tasks: TaskFormSchema };
     return schemas[tableType];
   }, [tableType]);
 
@@ -197,6 +196,5 @@ export function usePendingChanges(tableType: 'customers' | 'records' | 'tasks') 
     validateRow,
     validateAllChanges,
     clearPendingChanges,
-    removeDraftRow,
-  };
+    removeDraftRow };
 }

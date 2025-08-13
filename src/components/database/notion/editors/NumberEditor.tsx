@@ -12,8 +12,7 @@ export const NumberEditor: React.FC<EditorProps> = ({
   onKeyDown,
   column,
   autoFocus = true,
-  style,
-}) => {
+  style }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [tempValue, setTempValue] = useState(value?.toString() || '');
   const [error, setError] = useState('');
@@ -91,8 +90,7 @@ export const NumberEditor: React.FC<EditorProps> = ({
         placeholder={column.placeholder || '0'}
         style={{
           ...EDITOR_STYLES.input,
-          borderColor: error ? '#e03e3e' : undefined,
-        }}
+          borderColor: error ? '#e03e3e' : undefined }}
       />
       {error && (
         <div style={{
@@ -100,8 +98,7 @@ export const NumberEditor: React.FC<EditorProps> = ({
           bottom: -20,
           left: 0,
           fontSize: '12px',
-          color: '#e03e3e',
-        }}>
+          color: '#e03e3e' }}>
           {error}
         </div>
       )}

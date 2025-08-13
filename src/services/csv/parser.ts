@@ -229,8 +229,7 @@ function normalizeFieldNames(row: any): any {
     '標籤': 'tags',
     'tags': 'tags',
     'Tags': 'tags',
-    '分類': 'tags',
-  };
+    '分類': 'tags' };
 
   const normalizedRow: any = {};
 

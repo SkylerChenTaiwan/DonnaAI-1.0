@@ -14,8 +14,7 @@ export const VirtualScroller: React.FC<VirtualScrollerProps> = ({
   onScroll,
   renderRow,
   className,
-  style,
-}) => {
+  style }) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const [scrollTop, setScrollTop] = useState(0);
   const [containerHeight, setContainerHeight] = useState(0);
@@ -37,8 +36,7 @@ export const VirtualScroller: React.FC<VirtualScrollerProps> = ({
     return {
       startIndex: start,
       endIndex: end,
-      offsetY: offset,
-    };
+      offsetY: offset };
   }, [scrollTop, containerHeight, rowHeight, overscan, items.length]);
   
   // Get visible items
@@ -108,9 +106,7 @@ export const VirtualScroller: React.FC<VirtualScrollerProps> = ({
           ...style,
           // Custom scrollbar styles for web
           scrollbarWidth: 'thin',
-          scrollbarColor: '#D3D1CB #FFFFFF',
-        } as any,
-      } : {})}
+          scrollbarColor: '#D3D1CB #FFFFFF' } as any } : {})}
     >
       {/* Total height spacer */}
       <View style={{ height: totalHeight }}>
@@ -119,8 +115,7 @@ export const VirtualScroller: React.FC<VirtualScrollerProps> = ({
           style={[
             styles.itemsContainer,
             {
-              transform: Platform.OS === 'web' ? `translateY(${offsetY}px)` : [{ translateY: offsetY }],
-            },
+              transform: Platform.OS === 'web' ? `translateY(${offsetY}px)` : [{ translateY: offsetY }] },
           ]}
         >
           {visibleItems.map((item, index) => (
@@ -131,8 +126,7 @@ export const VirtualScroller: React.FC<VirtualScrollerProps> = ({
                 {
                   height: rowHeight,
                   // Reduce quality during scrolling for performance
-                  opacity: isScrolling ? 0.99 : 1,
-                },
+                  opacity: isScrolling ? 0.99 : 1 },
               ]}
             >
               {renderRow(item, startIndex + index)}
@@ -146,21 +140,17 @@ export const VirtualScroller: React.FC<VirtualScrollerProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   
   itemsContainer: {
     position: 'absolute',
     top: 0,
     left: 0,
-    right: 0,
-  },
+    right: 0 },
   
   rowContainer: {
     width: '100%',
-    overflow: 'hidden',
-  },
-});
+    overflow: 'hidden' } });
 
 // Performance optimization hook for virtual scrolling
 export const useVirtualScroll = (
@@ -182,7 +172,6 @@ export const useVirtualScroll = (
       endIndex,
       visibleItems: items.slice(startIndex, endIndex + 1),
       offsetY: startIndex * rowHeight,
-      totalHeight: items.length * rowHeight,
-    };
+      totalHeight: items.length * rowHeight };
   }, [items, rowHeight, containerHeight, scrollTop, overscan]);
 };

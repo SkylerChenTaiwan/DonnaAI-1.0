@@ -32,8 +32,7 @@ export function normalizeOrganization(data: Partial<Organization>): Organization
     ...(data.domain && { domain: data.domain }),
     ...(data.contactEmail && { contactEmail: data.contactEmail }),
     ...(data.settings && { settings: data.settings }),
-    ...(data.stats && { stats: data.stats }),
-  };
+    ...(data.stats && { stats: data.stats }) };
 }
 
 // 從 Firestore 文檔轉換為 Organization 物件

@@ -11,8 +11,7 @@ import {
   Switch,
   TouchableOpacity,
   ScrollView,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { updateOrganization } from '@/services/firebase/admin/organizationService';
 import { TOOL_TYPES } from '@/services/firebase/admin/toolUsageService';
@@ -49,24 +48,21 @@ interface UserRoleSettings {
 export const PermissionsManagementSection: React.FC<PermissionsManagementSectionProps> = ({
   organization,
   onUpdate,
-  isEditing = false,
-}) => {
+  isEditing = false }) => {
   const [permissions, setPermissions] = useState<FeaturePermissions>({
     allowDataImport: true,
     allowDataExport: true,
     allowCustomFields: false,
     allowAPIAccess: false,
     allowAdvancedAnalytics: false,
-    allowBulkOperations: false,
-  });
+    allowBulkOperations: false });
 
   const [toolAccess, setToolAccess] = useState<ToolAccess>({});
   const [roleSettings, setRoleSettings] = useState<UserRoleSettings>({
     maxAdmins: 3,
     allowUserSelfRegistration: true,
     requireAdminApproval: false,
-    allowGuestAccess: false,
-  });
+    allowGuestAccess: false });
 
   const [isSaving, setIsSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<'features' | 'tools' | 'roles'>('features');
@@ -85,8 +81,7 @@ export const PermissionsManagementSection: React.FC<PermissionsManagementSection
       allowCustomFields: settings.allowCustomFields ?? (organization.subscriptionPlan === 'pro'),
       allowAPIAccess: settings.allowAPIAccess ?? (organization.subscriptionPlan === 'pro'),
       allowAdvancedAnalytics: settings.allowAdvancedAnalytics ?? (organization.subscriptionPlan === 'pro'),
-      allowBulkOperations: settings.allowBulkOperations ?? (organization.subscriptionPlan === 'pro'),
-    });
+      allowBulkOperations: settings.allowBulkOperations ?? (organization.subscriptionPlan === 'pro') });
 
     // 載入工具存取權限
     const tools: ToolAccess = {};
@@ -100,8 +95,7 @@ export const PermissionsManagementSection: React.FC<PermissionsManagementSection
       maxAdmins: settings.maxAdmins ?? 3,
       allowUserSelfRegistration: settings.allowUserSelfRegistration ?? true,
       requireAdminApproval: settings.requireAdminApproval ?? false,
-      allowGuestAccess: settings.allowGuestAccess ?? false,
-    });
+      allowGuestAccess: settings.allowGuestAccess ?? false });
   };
 
   const getDefaultToolAccess = (toolId: string): boolean => {
@@ -143,12 +137,10 @@ export const PermissionsManagementSection: React.FC<PermissionsManagementSection
       const updatedSettings = {
         ...permissions,
         ...roleSettings,
-        enabledTools,
-      };
+        enabledTools };
 
       await updateOrganization(organization.id, {
-        settings: updatedSettings,
-      });
+        settings: updatedSettings });
 
       toast.success('權限設定已更新');
       onUpdate?.();
@@ -172,8 +164,7 @@ export const PermissionsManagementSection: React.FC<PermissionsManagementSection
           onPress: () => {
             loadPermissions();
             toast.success('已重設為預設值');
-          },
-        },
+          } },
       ]
     );
   };
@@ -192,8 +183,7 @@ export const PermissionsManagementSection: React.FC<PermissionsManagementSection
       [TOOL_TYPES.ANALYTICS]: '數據分析',
       [TOOL_TYPES.TASK_MANAGER]: '任務管理',
       [TOOL_TYPES.CUSTOMER_MANAGER]: '客戶管理',
-      [TOOL_TYPES.REPORT_GENERATOR]: '報表生成',
-    };
+      [TOOL_TYPES.REPORT_GENERATOR]: '報表生成' };
     return toolNames[toolId] || toolId;
   };
 
@@ -206,8 +196,7 @@ export const PermissionsManagementSection: React.FC<PermissionsManagementSection
       [TOOL_TYPES.ANALYTICS]: '數據統計和分析圖表',
       [TOOL_TYPES.TASK_MANAGER]: '任務建立和進度追蹤',
       [TOOL_TYPES.CUSTOMER_MANAGER]: '客戶資料管理',
-      [TOOL_TYPES.REPORT_GENERATOR]: '自動生成各種報表',
-    };
+      [TOOL_TYPES.REPORT_GENERATOR]: '自動生成各種報表' };
     return descriptions[toolId] || '功能描述';
   };
 
@@ -486,15 +475,13 @@ export const PermissionsManagementSection: React.FC<PermissionsManagementSection
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   tabContainer: {
     flexDirection: 'row',
     marginBottom: DesignSystem.spacing.lg,
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: DesignSystem.borderRadius.md,
-    padding: DesignSystem.spacing.xs,
-  },
+    padding: DesignSystem.spacing.xs },
   tab: {
     flex: 1,
     flexDirection: 'row',
@@ -503,115 +490,93 @@ const styles = StyleSheet.create({
     gap: DesignSystem.spacing.xs,
     paddingVertical: DesignSystem.spacing.sm,
     paddingHorizontal: DesignSystem.spacing.sm,
-    borderRadius: DesignSystem.borderRadius.sm,
-  },
+    borderRadius: DesignSystem.borderRadius.sm },
   activeTab: {
-    backgroundColor: DesignSystem.colors.primary,
-  },
+    backgroundColor: DesignSystem.colors.primary },
   tabText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   activeTabText: {
-    color: DesignSystem.colors.text.inverse,
-  },
+    color: DesignSystem.colors.text.inverse },
   sectionCard: {
     backgroundColor: DesignSystem.colors.background.surface,
     padding: DesignSystem.spacing.lg,
     borderRadius: DesignSystem.borderRadius.md,
     marginBottom: DesignSystem.spacing.md,
-    ...DesignSystem.shadows.sm,
-  },
+    ...DesignSystem.shadows.sm },
   sectionHeader: {
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   sectionTitle: {
     ...DesignSystem.typography.h4,
     color: DesignSystem.colors.text.primary,
-    marginBottom: DesignSystem.spacing.xs,
-  },
+    marginBottom: DesignSystem.spacing.xs },
   sectionDesc: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   permissionItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: DesignSystem.spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   permissionInfo: {
     flex: 1,
-    marginRight: DesignSystem.spacing.md,
-  },
+    marginRight: DesignSystem.spacing.md },
   permissionName: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
     fontWeight: '500',
-    marginBottom: DesignSystem.spacing.xs,
-  },
+    marginBottom: DesignSystem.spacing.xs },
   permissionDesc: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   proLabel: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.warning,
     fontWeight: '600',
-    marginTop: DesignSystem.spacing.xs,
-  },
+    marginTop: DesignSystem.spacing.xs },
   toolItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: DesignSystem.spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   toolInfo: {
     flex: 1,
-    marginRight: DesignSystem.spacing.md,
-  },
+    marginRight: DesignSystem.spacing.md },
   toolName: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
     fontWeight: '500',
-    marginBottom: DesignSystem.spacing.xs,
-  },
+    marginBottom: DesignSystem.spacing.xs },
   toolDesc: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   roleItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: DesignSystem.spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   roleInfo: {
     flex: 1,
-    marginRight: DesignSystem.spacing.md,
-  },
+    marginRight: DesignSystem.spacing.md },
   roleName: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
     fontWeight: '500',
-    marginBottom: DesignSystem.spacing.xs,
-  },
+    marginBottom: DesignSystem.spacing.xs },
   roleDesc: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   numberInput: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: DesignSystem.spacing.sm,
-  },
+    gap: DesignSystem.spacing.sm },
   numberButton: {
     width: 32,
     height: 32,
@@ -620,68 +585,55 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: DesignSystem.colors.border.light,
-  },
+    borderColor: DesignSystem.colors.border.light },
   numberValue: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
     fontWeight: '500',
     minWidth: 24,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   actions: {
     gap: DesignSystem.spacing.md,
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   saveButton: {
     backgroundColor: DesignSystem.colors.primary,
     paddingVertical: DesignSystem.spacing.md,
     paddingHorizontal: DesignSystem.spacing.lg,
     borderRadius: DesignSystem.borderRadius.sm,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   saveButtonText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.inverse,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   resetButton: {
     paddingVertical: DesignSystem.spacing.md,
     paddingHorizontal: DesignSystem.spacing.lg,
     borderRadius: DesignSystem.borderRadius.sm,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: DesignSystem.colors.border.default,
-  },
+    borderColor: DesignSystem.colors.border.default },
   resetButtonText: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   summaryCard: {
     backgroundColor: DesignSystem.colors.background.primary,
     padding: DesignSystem.spacing.lg,
     borderRadius: DesignSystem.borderRadius.md,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.border.light,
-  },
+    borderColor: DesignSystem.colors.border.light },
   summaryTitle: {
     ...DesignSystem.typography.h4,
     color: DesignSystem.colors.text.primary,
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   summaryRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: DesignSystem.spacing.sm,
-  },
+    paddingVertical: DesignSystem.spacing.sm },
   summaryLabel: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   summaryValue: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
-    fontWeight: '500',
-  },
-});
+    fontWeight: '500' } });

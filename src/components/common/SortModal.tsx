@@ -10,8 +10,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  StatusBar,
-} from 'react-native';
+  StatusBar } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { TableColumn } from '@/types/table';
 
@@ -34,8 +33,7 @@ export const SortModal: React.FC<SortModalProps> = ({
   onClose,
   columns,
   currentSort,
-  onApply,
-}) => {
+  onApply }) => {
   const [selectedColumn, setSelectedColumn] = useState<string | null>(
     currentSort?.key || null
   );
@@ -71,8 +69,7 @@ export const SortModal: React.FC<SortModalProps> = ({
       onApply({
         key: selectedColumn,
         direction: sortDirection,
-        label: column?.title,
-      });
+        label: column?.title });
     } else {
       onApply(null);
     }
@@ -217,8 +214,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F0F0F0',
-    paddingTop: StatusBar.currentHeight || 0,
-  },
+    paddingTop: StatusBar.currentHeight || 0 },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -227,101 +223,80 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
-  },
+    borderBottomColor: '#E3E1DC' },
   title: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   closeButton: {
-    padding: 8,
-  },
+    padding: 8 },
   closeButtonText: {
     fontSize: 17,
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   applyButton: {
-    padding: 8,
-  },
+    padding: 8 },
   applyButtonText: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   section: {
     backgroundColor: '#FFFFFF',
     marginTop: 16,
-    paddingVertical: 8,
-  },
+    paddingVertical: 8 },
   sectionTitle: {
     fontSize: 13,
     fontWeight: '600',
     color: '#7A7A7A',
     textTransform: 'uppercase',
     paddingHorizontal: 16,
-    paddingVertical: 8,
-  },
+    paddingVertical: 8 },
   optionItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
-  },
+    backgroundColor: '#FFFFFF' },
   selectedOption: {
-    backgroundColor: '#F0F0F0',
-  },
+    backgroundColor: '#F0F0F0' },
   optionContent: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   optionText: {
     fontSize: 16,
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   selectedOptionText: {
     fontWeight: '600',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   directionIndicator: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-  },
+    gap: 4 },
   directionText: {
     fontSize: 14,
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   directionButtons: {
     paddingHorizontal: 16,
-    gap: 12,
-  },
+    gap: 12 },
   directionButton: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F0F0F0',
     borderRadius: 12,
     padding: 16,
-    gap: 8,
-  },
+    gap: 8 },
   activeDirectionButton: {
-    backgroundColor: '#007AFF',
-  },
+    backgroundColor: '#007AFF' },
   directionButtonText: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   activeDirectionButtonText: {
-    color: '#FFFFFF',
-  },
+    color: '#FFFFFF' },
   clearButton: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -330,11 +305,8 @@ const styles = StyleSheet.create({
     padding: 16,
     marginHorizontal: 16,
     marginTop: 24,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   clearButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
-  },
-});
+    color: '#FFFFFF' } });

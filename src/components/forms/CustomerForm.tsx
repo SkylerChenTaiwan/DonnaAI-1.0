@@ -10,8 +10,7 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -37,16 +36,14 @@ export const CustomerForm = forwardRef<any, CustomerFormProps>(({
   onCancel,
   initialData = {},
   loading = false,
-  mode = 'create',
-}, ref) => {
+  mode = 'create' }, ref) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     control,
     handleSubmit,
     formState: { errors, isDirty },
-    reset,
-  } = useForm<CustomerFormData>({
+    reset } = useForm<CustomerFormData>({
     resolver: zodResolver(CustomerFormSchema),
     defaultValues: {
       name: '',
@@ -57,9 +54,7 @@ export const CustomerForm = forwardRef<any, CustomerFormProps>(({
       address: '',
       notes: '',
       tags: [],
-      ...initialData,
-    },
-  });
+      ...initialData } });
 
   // 暴露方法給父組件
   useImperativeHandle(ref, () => ({
@@ -78,29 +73,25 @@ export const CustomerForm = forwardRef<any, CustomerFormProps>(({
       label: '客戶姓名',
       type: 'text',
       required: true,
-      placeholder: '請輸入客戶姓名',
-    },
+      placeholder: '請輸入客戶姓名' },
     {
       name: 'company',
       label: '公司名稱',
       type: 'text',
       required: false,
-      placeholder: '請輸入公司名稱',
-    },
+      placeholder: '請輸入公司名稱' },
     {
       name: 'email',
       label: '電子郵件',
       type: 'email',
       required: false,
-      placeholder: 'example@company.com',
-    },
+      placeholder: 'example@company.com' },
     {
       name: 'phone',
       label: '聯絡電話',
       type: 'tel',
       required: false,
-      placeholder: '0912-345-678',
-    },
+      placeholder: '0912-345-678' },
     {
       name: 'industry',
       label: '所屬產業',
@@ -118,28 +109,24 @@ export const CustomerForm = forwardRef<any, CustomerFormProps>(({
         { label: '建築業', value: '建築業' },
         { label: '運輸業', value: '運輸業' },
         { label: '其他', value: '其他' },
-      ],
-    },
+      ] },
     {
       name: 'address',
       label: '地址',
       type: 'textarea',
       required: false,
-      placeholder: '請輸入公司地址',
-    },
+      placeholder: '請輸入公司地址' },
     {
       name: 'tags',
       label: '標籤',
       type: 'tags',
-      required: false,
-    },
+      required: false },
     {
       name: 'notes',
       label: '備註',
       type: 'textarea',
       required: false,
-      placeholder: '請輸入相關備註資訊',
-    },
+      placeholder: '請輸入相關備註資訊' },
   ];
 
   // 提交處理
@@ -160,12 +147,10 @@ export const CustomerForm = forwardRef<any, CustomerFormProps>(({
               text: '繼續新增',
               onPress: () => {
                 reset();
-              },
-            },
+              } },
             {
               text: '完成',
-              onPress: onCancel,
-            },
+              onPress: onCancel },
           ]
         );
       } else {
@@ -201,8 +186,7 @@ export const CustomerForm = forwardRef<any, CustomerFormProps>(({
             onPress: () => {
               reset();
               onCancel?.();
-            },
-          },
+            } },
         ]
       );
     } else {
@@ -261,36 +245,28 @@ export const CustomerForm = forwardRef<any, CustomerFormProps>(({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F0F0F0',
-  },
+    backgroundColor: '#F0F0F0' },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F0F0F0',
-  },
+    backgroundColor: '#F0F0F0' },
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   formInfo: {
     backgroundColor: '#F8F9FA',
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
-  },
+    borderBottomColor: '#E5E5EA' },
   infoText: {
     fontSize: 14,
     color: '#7A7A7A',
-    lineHeight: 20,
-  },
+    lineHeight: 20 },
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   form: {
     padding: 20,
-    gap: 16,
-  },
-});
+    gap: 16 } });

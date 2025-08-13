@@ -106,30 +106,26 @@ const createInputStyles = (state: InputState, hasError: boolean) => {
     paddingVertical: DesignSystem.spacing.sm,
     fontSize: DesignSystem.typography.body.fontSize,
     lineHeight: DesignSystem.typography.body.lineHeight,
-    color: DesignSystem.colors.text.primary,
-  };
+    color: DesignSystem.colors.text.primary };
   
   let stateStyle = {};
   
   if (hasError) {
     stateStyle = {
-      borderColor: DesignSystem.colors.status.error,
-    };
+      borderColor: DesignSystem.colors.status.error };
   } else {
     switch (state) {
       case 'focused':
         stateStyle = {
           borderColor: DesignSystem.colors.primary,
-          borderWidth: 2,
-        };
+          borderWidth: 2 };
         break;
       case 'disabled':
         stateStyle = {
           backgroundColor: DesignSystem.colors.gray100,
           borderColor: DesignSystem.colors.border.light,
           color: DesignSystem.colors.text.disabled,
-          opacity: 0.6,
-        };
+          opacity: 0.6 };
         break;
     }
   }
@@ -195,8 +191,7 @@ const WebInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, AdaptiveInpu
       let finalStyle: CSSProperties = {
         display: 'flex',
         flexDirection: 'column',
-        gap: DesignSystem.spacing.xs,
-      };
+        gap: DesignSystem.spacing.xs };
       
       if (containerStyle) {
         const convertedStyle = styleAdapter.adaptStyle(containerStyle as any);
@@ -236,8 +231,7 @@ const WebInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, AdaptiveInpu
         transition: 'border-color 150ms ease, box-shadow 150ms ease',
         fontFamily: 'inherit',
         resize: multiline ? 'vertical' : 'none',
-        minHeight: multiline && numberOfLines ? `${numberOfLines * 1.5}em` : undefined,
-      };
+        minHeight: multiline && numberOfLines ? `${numberOfLines * 1.5}em` : undefined };
       
       // 聚焦陰影
       if (currentState === 'focused') {
@@ -275,16 +269,14 @@ const WebInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, AdaptiveInpu
     const inputWrapperStyle: CSSProperties = useMemo(() => ({
       position: 'relative',
       display: 'flex',
-      alignItems: 'center',
-    }), []);
+      alignItems: 'center' }), []);
     
     // 圖示樣式
     const iconStyle: CSSProperties = useMemo(() => ({
       position: 'absolute',
       zIndex: 1,
       pointerEvents: 'none',
-      color: DesignSystem.colors.text.secondary,
-    }), []);
+      color: DesignSystem.colors.text.secondary }), []);
     
     const leftIconStyle: CSSProperties = { ...iconStyle, left: DesignSystem.spacing.sm };
     const rightIconStyle: CSSProperties = { ...iconStyle, right: DesignSystem.spacing.sm };
@@ -323,20 +315,17 @@ const WebInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, AdaptiveInpu
         spellCheck,
         tabIndex,
         style: adjustedInputStyle,
-        ...props,
-      };
+        ...props };
       
       if (multiline) {
         return React.createElement('textarea', {
           ...commonProps,
-          rows: numberOfLines,
-        });
+          rows: numberOfLines });
       } else {
         const htmlType = type === 'multiline' ? 'text' : type;
         return React.createElement('input', {
           ...commonProps,
-          type: htmlType,
-        });
+          type: htmlType });
       }
     };
     
@@ -465,8 +454,7 @@ const NativeInput = forwardRef<any, AdaptiveInputProps>(
         email: 'email-address',
         number: 'numeric',
         tel: 'phone-pad',
-        url: 'url',
-      };
+        url: 'url' };
       return keyboardType || typeMap[type as keyof typeof typeMap] || 'default';
     };
     

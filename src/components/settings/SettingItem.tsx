@@ -8,8 +8,7 @@ import {
   Text,
   TouchableOpacity,
   Switch,
-  StyleSheet,
-} from 'react-native';
+  StyleSheet } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { SettingItem as SettingItemType } from '@/types/settings';
 
@@ -24,8 +23,7 @@ export const SettingItem = ({
   value,
   action,
   icon,
-  onValueChange,
-}: SettingItemProps) => {
+  onValueChange }: SettingItemProps) => {
   const renderRight = () => {
     switch (type) {
       case 'switch':
@@ -35,8 +33,7 @@ export const SettingItem = ({
             onValueChange={onValueChange}
             trackColor={{
               false: '#E3E1DC',
-              true: '#1A1A1A',
-            }}
+              true: '#1A1A1A' }}
             thumbColor="#F7F6F3"
           />
         );
@@ -94,13 +91,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     minHeight: 56,
     borderBottomWidth: 1,
-    borderBottomColor: '#E1DFDB',
-  },
+    borderBottomColor: '#E1DFDB' },
   leftContent: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   iconContainer: {
     width: 32,
     height: 32,
@@ -108,27 +103,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0F0F0',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
-  },
+    marginRight: 12 },
   textContainer: {
-    flex: 1,
-  },
+    flex: 1 },
   title: {
     fontSize: 16,
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   subtitle: {
     fontSize: 14,
     color: '#7A7A7A',
-    marginTop: 2,
-  },
+    marginTop: 2 },
   selectContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-  },
+    gap: 4 },
   selectValue: {
     fontSize: 14,
-    color: '#7A7A7A',
-  },
-});
+    color: '#7A7A7A' } });

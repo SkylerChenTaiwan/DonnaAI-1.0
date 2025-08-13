@@ -78,8 +78,7 @@ export async function importLegacyUsers(
     codeToName,
     nameToCode,
     codeToLevel,
-    supervisorMap,
-  } = options;
+    supervisorMap } = options;
 
   const errors: ImportError[] = [];
   const warnings: ImportWarning[] = [];
@@ -95,8 +94,7 @@ export async function importLegacyUsers(
     succeeded: 0,
     failed: 0,
     skipped: 0,
-    phase: 'preparing',
-  };
+    phase: 'preparing' };
   onProgress?.(progress);
 
   try {
@@ -140,8 +138,7 @@ export async function importLegacyUsers(
             row,
             field: '業務帳號',
             message: `找不到業務代碼對照: ${user.業務帳號}`,
-            suggestion: '將使用原始輸入作為姓名',
-          });
+            suggestion: '將使用原始輸入作為姓名' });
         }
       }
 
@@ -152,8 +149,7 @@ export async function importLegacyUsers(
           row,
           field: '公司Gmail帳號',
           message: '缺少電子郵件地址',
-          data: user,
-        });
+          data: user });
         failureCount++;
         continue;
       }
@@ -168,8 +164,7 @@ export async function importLegacyUsers(
             row,
             field: '公司Gmail帳號',
             message: `用戶已存在: ${user.公司Gmail帳號}`,
-            suggestion: '已跳過',
-          });
+            suggestion: '已跳過' });
           userMappings.set(user.業務帳號, existingUserId);
           skippedCount++;
           continue;
@@ -180,8 +175,7 @@ export async function importLegacyUsers(
             user,
             businessName,
             businessCode,
-            row,
-          });
+            row });
           continue;
         }
       }
@@ -208,8 +202,7 @@ export async function importLegacyUsers(
         supervisorId: null,
         customFields: (mappedUser as any).customFields || {},
         originalBusinessId: user.業務帳號,
-        row,
-      });
+        row });
     }
 
     // 批量建立用戶（使用 Cloud Function）
@@ -238,8 +231,7 @@ export async function importLegacyUsers(
             users: batch,
             organizationId,
             teamId,
-            defaultPassword,
-          });
+            defaultPassword });
 
           console.log('✅ Cloud Function 回應:', result);
           const response = result.data as any;
@@ -258,8 +250,7 @@ export async function importLegacyUsers(
                   row: originalData.row,
                   field: 'general',
                   message: userResult.error || '創建用戶失敗',
-                  data: originalData,
-                });
+                  data: originalData });
               }
             });
           } else {
@@ -271,8 +262,7 @@ export async function importLegacyUsers(
                 row: userData.row,
                 field: 'general',
                 message: '批量建立失敗',
-                data: userData,
-              });
+                data: userData });
             });
           }
         } catch (error) {
@@ -323,8 +313,7 @@ export async function importLegacyUsers(
               row: userData.row,
               field: 'general',
               message: `Cloud Function 錯誤: ${errorMessage}`,
-              data: userData,
-            });
+              data: userData });
           });
           
           // 提供建議
@@ -365,8 +354,7 @@ export async function importLegacyUsers(
           row: updateData.row,
           field: 'general',
           message: '更新用戶失敗',
-          data: updateData.user,
-        });
+          data: updateData.user });
       }
       
       progress.processed++;
@@ -397,8 +385,7 @@ export async function importLegacyUsers(
       errors,
       warnings,
       userMappings,
-      duration: Date.now() - startTime,
-    };
+      duration: Date.now() - startTime };
 
   } catch (error) {
     console.error('批量導入用戶失敗:', error);
@@ -461,8 +448,7 @@ async function updateExistingUser(
     const updateData: Partial<User> = {
       name: mappedUser.name || businessName,
       phone: mappedUser.phone || undefined,
-      updatedAt: Timestamp.now() as any,
-    };
+      updatedAt: Timestamp.now() as any };
 
     // 添加到團隊（如果還不在團隊中）
     const currentUser = await getDocs(query(collection(db, 'users'), where('uid', '==', userId)));
@@ -478,8 +464,7 @@ async function updateExistingUser(
     if ((mappedUser as any).customFields) {
       updateData.customFields = {
         ...(currentUser.docs[0]?.data()?.customFields || {}),
-        ...(mappedUser as any).customFields,
-      };
+        ...(mappedUser as any).customFields };
     }
 
     await setDoc(userRef, updateData, { merge: true });
@@ -535,8 +520,7 @@ async function linkSupervisorRelationships(
           const userRef = doc(db, 'users', subordinateUserId);
           batch.update(userRef, {
             supervisorId: supervisorUserId,
-            updatedAt: Timestamp.now(),
-          });
+            updatedAt: Timestamp.now() });
           updateCount++;
         }
       }

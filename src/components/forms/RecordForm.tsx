@@ -11,8 +11,7 @@ import {
   ScrollView,
   Alert,
   TouchableOpacity,
-  Modal,
-} from 'react-native';
+  Modal } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@/components/common/Icon';
@@ -42,8 +41,7 @@ export const RecordForm: React.FC<RecordFormProps> = ({
   isSubmitting = false,
   userId,
   organizationId,
-  teamId,
-}) => {
+  teamId }) => {
   const [inputMode, setInputMode] = useState<InputMode>('text');
   const [showAudioInput, setShowAudioInput] = useState(false);
   const [showCustomerSelector, setShowCustomerSelector] = useState(false);
@@ -60,17 +58,14 @@ export const RecordForm: React.FC<RecordFormProps> = ({
     formState: { errors, isValid },
     setValue,
     watch,
-    reset,
-  } = useForm<RecordFormData>({
+    reset } = useForm<RecordFormData>({
     resolver: zodResolver(RecordFormSchema),
     defaultValues: {
       type: 'meeting',
       priority: 'medium',
       status: 'draft',
       tags: [],
-      ...initialData,
-    },
-  });
+      ...initialData } });
 
   const watchedContent = watch('content');
   const watchedCustomerId = watch('customerId');
@@ -523,31 +518,26 @@ export const RecordForm: React.FC<RecordFormProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F0F0F0',
-  },
+    backgroundColor: '#F0F0F0' },
   form: {
     flex: 1,
-    padding: 20,
-  },
+    padding: 20 },
   
   // 輸入模式切換
   inputModeContainer: {
-    marginBottom: 20,
-  },
+    marginBottom: 20 },
   inputModeLabel: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1A1A1A',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   inputModeToggle: {
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 4,
     borderWidth: 1,
-    borderColor: '#E3E1DC',
-  },
+    borderColor: '#E3E1DC' },
   modeButton: {
     flex: 1,
     flexDirection: 'row',
@@ -556,39 +546,31 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
-    gap: 6,
-  },
+    gap: 6 },
   modeButtonActive: {
-    backgroundColor: '#1A1A1A',
-  },
+    backgroundColor: '#1A1A1A' },
   modeButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   modeButtonTextActive: {
-    color: '#FFFFFF',
-  },
+    color: '#FFFFFF' },
 
   // 表單欄位
   fieldContainer: {
-    marginBottom: 20,
-  },
+    marginBottom: 20 },
   fieldLabel: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1A1A1A',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   required: {
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   contentLabelRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   voiceInputButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -596,13 +578,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    gap: 4,
-  },
+    gap: 4 },
   voiceInputButtonText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#FFFFFF',
-  },
+    color: '#FFFFFF' },
 
   // 客戶選擇器
   customerSelector: {
@@ -610,39 +590,32 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#E3E1DC',
-    minHeight: 56,
-  },
+    minHeight: 56 },
   customerSelectorContent: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
+    paddingVertical: 12 },
   selectedCustomer: {
-    flex: 1,
-  },
+    flex: 1 },
   selectedCustomerName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   selectedCustomerCompany: {
     fontSize: 14,
     color: '#7A7A7A',
-    marginTop: 2,
-  },
+    marginTop: 2 },
   customerPlaceholder: {
     fontSize: 16,
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
 
   // 客戶選擇器 Modal
   customerSelectorModal: {
     flex: 1,
-    backgroundColor: '#F0F0F0',
-  },
+    backgroundColor: '#F0F0F0' },
   customerSelectorHeader: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -651,36 +624,30 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
-  },
+    borderBottomColor: '#E3E1DC' },
   customerSelectorTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   customerSelectorClose: {
     width: 32,
     height: 32,
     borderRadius: 16,
     backgroundColor: '#F0F0F0',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   customerList: {
     flex: 1,
-    padding: 20,
-  },
+    padding: 20 },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 60,
-  },
+    paddingVertical: 60 },
   loadingText: {
     fontSize: 16,
     color: '#7A7A7A',
-    marginTop: 12,
-  },
+    marginTop: 12 },
   customerOption: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -690,21 +657,17 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: '#E3E1DC',
-  },
+    borderColor: '#E3E1DC' },
   customerInfo: {
-    flex: 1,
-  },
+    flex: 1 },
   customerName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   customerCompany: {
     fontSize: 14,
     color: '#7A7A7A',
-    marginTop: 2,
-  },
+    marginTop: 2 },
 
   // 底部按鈕
   footer: {
@@ -714,9 +677,6 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
-    borderTopColor: '#E3E1DC',
-  },
+    borderTopColor: '#E3E1DC' },
   footerButton: {
-    flex: 1,
-  },
-});
+    flex: 1 } });

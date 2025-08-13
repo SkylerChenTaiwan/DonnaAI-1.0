@@ -8,8 +8,7 @@ import {
   View,
   StyleSheet,
   Animated,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { responsive } from '@/styles/web';
 
 interface SkeletonLoaderProps {
@@ -36,8 +35,7 @@ export const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
       Animated.timing(shimmerAnimation, {
         toValue: 1,
         duration: 1500,
-        useNativeDriver: true,
-      })
+        useNativeDriver: true })
     ).start();
 
     // 漸進式淡入動畫
@@ -47,16 +45,14 @@ export const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
         Animated.timing(anim, {
           toValue: 1,
           duration: 600,
-          useNativeDriver: true,
-        }).start();
+          useNativeDriver: true }).start();
       }, delay);
     });
   }, []);
 
   const translateX = shimmerAnimation.interpolate({
     inputRange: [0, 1],
-    outputRange: [-300, 300],
-  });
+    outputRange: [-300, 300] });
 
   // 生成隨機寬度（模擬真實資料的不同長度）
   const getRandomWidth = () => {
@@ -70,8 +66,7 @@ export const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
       style={[
         styles.shimmerGradient,
         {
-          transform: Platform.OS === 'web' ? `translateX(${0}px)` : [{ translateX: 0 }],
-        },
+          transform: Platform.OS === 'web' ? `translateX(${0}px)` : [{ translateX: 0 }] },
       ]}
     />
   );
@@ -104,8 +99,7 @@ export const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
       style={[
         styles.skeletonRow,
         {
-          opacity: fadeAnimations[rowIndex],
-        },
+          opacity: fadeAnimations[rowIndex] },
       ]}
     >
       {Array(columns).fill(null).map((_, colIndex) => (
@@ -134,43 +128,35 @@ export const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
 const styles = StyleSheet.create({
   skeletonContainer: {
     flex: 1,
-    backgroundColor: '#fff',
-  },
+    backgroundColor: '#fff' },
   skeletonHeader: {
     flexDirection: 'row',
     paddingHorizontal: responsive({ mobile: 8, tablet: 12, desktop: 16 }),
     paddingVertical: responsive({ mobile: 12, tablet: 14, desktop: 16 }),
     borderBottomWidth: 1,
-    borderBottomColor: '#eeeeec',
-  },
+    borderBottomColor: '#eeeeec' },
   skeletonRow: {
     flexDirection: 'row',
     paddingHorizontal: responsive({ mobile: 8, tablet: 12, desktop: 16 }),
     paddingVertical: responsive({ mobile: 12, tablet: 14, desktop: 16 }),
     borderBottomWidth: 1,
-    borderBottomColor: '#eeeeec',
-  },
+    borderBottomColor: '#eeeeec' },
   headerCellContainer: {
     flex: 1,
-    marginHorizontal: responsive({ mobile: 6, tablet: 8, desktop: 10 }),
-  },
+    marginHorizontal: responsive({ mobile: 6, tablet: 8, desktop: 10 }) },
   cellContainer: {
     flex: 1,
-    marginHorizontal: responsive({ mobile: 6, tablet: 8, desktop: 10 }),
-  },
+    marginHorizontal: responsive({ mobile: 6, tablet: 8, desktop: 10 }) },
   skeletonCell: {
     height: responsive({ mobile: 12, tablet: 14, desktop: 16 }),
     borderRadius: responsive({ mobile: 6, tablet: 8, desktop: 10 }),
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   shimmerContainer: {
     flex: 1,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   shimmerBase: {
     flex: 1,
-    backgroundColor: '#e3e2e0',
-  },
+    backgroundColor: '#e3e2e0' },
   shimmerGradient: {
     position: 'absolute',
     top: 0,
@@ -178,16 +164,11 @@ const styles = StyleSheet.create({
     width: 300,
     backgroundColor: Platform.select({
       web: 'transparent',
-      default: 'transparent',
-    }),
+      default: 'transparent' }),
     // 使用偽元素在 Web 上創建漸變效果
     ...Platform.select({
       web: {
-        background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%)',
-      },
-    }),
-  },
-});
+        background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%)' } }) } });
 
 // 進階骨架屏組件 - 支援更複雜的佈局
 export const AdvancedSkeletonLoader: React.FC<{
@@ -201,8 +182,7 @@ export const AdvancedSkeletonLoader: React.FC<{
       Animated.timing(shimmerAnimation, {
         toValue: 1,
         duration: 1500,
-        useNativeDriver: true,
-      })
+        useNativeDriver: true })
     ).start();
   }, []);
 
@@ -265,13 +245,11 @@ export const AdvancedSkeletonLoader: React.FC<{
 const advancedStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-  },
+    backgroundColor: '#fff' },
   skeleton: {
     backgroundColor: '#e3e2e0',
     borderRadius: responsive({ mobile: 4, tablet: 6, desktop: 8 }),
-    height: responsive({ mobile: 12, tablet: 14, desktop: 16 }),
-  },
+    height: responsive({ mobile: 12, tablet: 14, desktop: 16 }) },
   // 卡片骨架樣式
   card: {
     backgroundColor: '#fff',
@@ -279,25 +257,20 @@ const advancedStyles = StyleSheet.create({
     borderColor: '#eeeeec',
     borderRadius: responsive({ mobile: 8, tablet: 10, desktop: 12 }),
     padding: responsive({ mobile: 16, tablet: 20, desktop: 24 }),
-    marginBottom: responsive({ mobile: 12, tablet: 16, desktop: 20 }),
-  },
+    marginBottom: responsive({ mobile: 12, tablet: 16, desktop: 20 }) },
   cardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: responsive({ mobile: 12, tablet: 16, desktop: 20 }),
-  },
+    marginBottom: responsive({ mobile: 12, tablet: 16, desktop: 20 }) },
   avatar: {
     width: responsive({ mobile: 40, tablet: 48, desktop: 56 }),
     height: responsive({ mobile: 40, tablet: 48, desktop: 56 }),
     borderRadius: responsive({ mobile: 20, tablet: 24, desktop: 28 }),
-    marginRight: responsive({ mobile: 12, tablet: 14, desktop: 16 }),
-  },
+    marginRight: responsive({ mobile: 12, tablet: 14, desktop: 16 }) },
   cardHeaderText: {
-    flex: 1,
-  },
+    flex: 1 },
   cardBody: {
-    marginTop: responsive({ mobile: 8, tablet: 10, desktop: 12 }),
-  },
+    marginTop: responsive({ mobile: 8, tablet: 10, desktop: 12 }) },
   // 列表骨架樣式
   listItem: {
     flexDirection: 'row',
@@ -305,21 +278,16 @@ const advancedStyles = StyleSheet.create({
     paddingVertical: responsive({ mobile: 12, tablet: 16, desktop: 20 }),
     paddingHorizontal: responsive({ mobile: 16, tablet: 20, desktop: 24 }),
     borderBottomWidth: 1,
-    borderBottomColor: '#eeeeec',
-  },
+    borderBottomColor: '#eeeeec' },
   listIcon: {
     width: responsive({ mobile: 24, tablet: 28, desktop: 32 }),
     height: responsive({ mobile: 24, tablet: 28, desktop: 32 }),
     borderRadius: responsive({ mobile: 4, tablet: 6, desktop: 8 }),
-    marginRight: responsive({ mobile: 12, tablet: 14, desktop: 16 }),
-  },
+    marginRight: responsive({ mobile: 12, tablet: 14, desktop: 16 }) },
   listContent: {
     flex: 1,
-    marginRight: responsive({ mobile: 12, tablet: 14, desktop: 16 }),
-  },
+    marginRight: responsive({ mobile: 12, tablet: 14, desktop: 16 }) },
   listAction: {
     width: responsive({ mobile: 20, tablet: 24, desktop: 28 }),
     height: responsive({ mobile: 20, tablet: 24, desktop: 28 }),
-    borderRadius: responsive({ mobile: 10, tablet: 12, desktop: 14 }),
-  },
-});
+    borderRadius: responsive({ mobile: 10, tablet: 12, desktop: 14 }) } });

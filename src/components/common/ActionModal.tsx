@@ -36,29 +36,25 @@ const actions: Action[] = [
     type: 'customer',
     title: '新增客戶',
     subtitle: '建立新的客戶資料',
-    icon: 'person-add-outline',
-  },
+    icon: 'person-add-outline' },
   {
     id: '2',
     type: 'record',
     title: '新增紀錄',
     subtitle: '記錄會議或通話內容',
-    icon: 'document-text-outline',
-  },
+    icon: 'document-text-outline' },
   {
     id: '3',
     type: 'task',
     title: '新增任務',
     subtitle: '建立待辦事項',
-    icon: 'checkbox-outline',
-  },
+    icon: 'checkbox-outline' },
 ];
 
 export const ActionModal = ({
   visible,
   onClose,
-  onAction,
-}: ActionModalProps) => {
+  onAction }: ActionModalProps) => {
   const scaleAnim = React.useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {
@@ -67,14 +63,12 @@ export const ActionModal = ({
         toValue: 1,
         useNativeDriver: true,
         tension: 50,
-        friction: 7,
-      }).start();
+        friction: 7 }).start();
     } else {
       Animated.timing(scaleAnim, {
         toValue: 0,
         duration: 200,
-        useNativeDriver: true,
-      }).start();
+        useNativeDriver: true }).start();
     }
   }, [visible, scaleAnim]);
 
@@ -90,8 +84,7 @@ export const ActionModal = ({
           style={[
             styles.bubble,
             {
-              transform: Platform.OS === 'web' ? `scale(${scaleAnim})` : [{ scale: scaleAnim }],
-            },
+              transform: Platform.OS === 'web' ? `scale(${scaleAnim})` : [{ scale: scaleAnim }] },
           ]}
         >
           {actions.map((action) => (
@@ -122,27 +115,24 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
     justifyContent: 'flex-end',
-    paddingBottom: 120,
-  },
+    paddingBottom: 120 },
   bubble: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 16,
     marginHorizontal: 20,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 8 } }),
     shadowOpacity: 0.2,
     shadowRadius: 16,
-    elevation: 8,
-  },
+    elevation: 8 },
   actionItem: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
-    marginVertical: 4,
-  },
+    marginVertical: 4 },
   actionIconContainer: {
     width: 40,
     height: 40,
@@ -150,19 +140,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0F0F0',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
-  },
+    marginRight: 12 },
   actionTextContainer: {
-    flex: 1,
-  },
+    flex: 1 },
   actionTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1A1A1A',
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   actionSubtitle: {
     fontSize: 14,
-    color: '#7A7A7A',
-  },
-});
+    color: '#7A7A7A' } });

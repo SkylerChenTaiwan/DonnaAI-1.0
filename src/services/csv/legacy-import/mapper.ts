@@ -22,8 +22,7 @@ const LEVEL_TO_ROLE: LevelToRoleMapping = {
   'L3': 'admin',
   'L4': 'admin',
   'L5': 'admin',
-  'L6': 'admin',
-};
+  'L6': 'admin' };
 
 // 客戶欄位的預設值對照
 const CUSTOMER_FIELD_MAPPINGS: Record<string, string> = {
@@ -33,8 +32,7 @@ const CUSTOMER_FIELD_MAPPINGS: Record<string, string> = {
   '名單等級': 'listLevel',
   '已成交': 'isClosed',
   '興趣': 'interests',
-  '關係': 'relationship',
-};
+  '關係': 'relationship' };
 
 /**
  * 映射業務人員資料
@@ -88,8 +86,7 @@ export function mapLegacyUser(
     personalGoals: {},
     supervisorId: null, // 將在後續處理主管關係時更新
     department: null,
-    lastLoginAt: null,
-  };
+    lastLoginAt: null };
 
   // 只有在有自定義欄位時才添加
   if (Object.keys(customFields).length > 0) {
@@ -255,8 +252,7 @@ export function mapLegacyRecord(
   const metadata: Record<string, any> = {
     importedFrom: 'legacy',
     originalBusinessAccount: legacyRecord.業務帳號,
-    originalCustomerName: legacyRecord.客戶名稱,
-  };
+    originalCustomerName: legacyRecord.客戶名稱 };
 
   if (legacyRecord.提交時間) metadata.submitTime = legacyRecord.提交時間;
   if (legacyRecord.建立時間) metadata.createTime = legacyRecord.建立時間;
@@ -271,8 +267,7 @@ export function mapLegacyRecord(
     date: meetingDate,
     nextFollowUpDate: followUpDate,
     tags,
-    metadata,
-  };
+    metadata };
 }
 
 /**
@@ -410,6 +405,5 @@ export function generateMappingStatistics(
     userStats,
     customerStats,
     recordStats,
-    dateFormats,
-  };
+    dateFormats };
 }

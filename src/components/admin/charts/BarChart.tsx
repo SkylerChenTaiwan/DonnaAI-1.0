@@ -31,8 +31,7 @@ export const BarChart: React.FC<BarChartProps> = ({
   color = DesignSystem.colors.primary,
   yAxisLabel,
   xAxisLabel,
-  variant = 'single',
-}) => {
+  variant = 'single' }) => {
   // 處理多系列資料
   const chartData = isMultiSeries(data) ? flattenSeries(data) : data;
   return (
@@ -71,28 +70,23 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
     shadowOpacity: 0.05,
     shadowRadius: 4,
-    elevation: 2,
-  },
+    elevation: 2 },
   title: {
     ...DesignSystem.typography.h3,
     color: DesignSystem.colors.text.primary,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   xLabel: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
     textAlign: 'center',
-    marginTop: 8,
-  },
+    marginTop: 8 },
   yLabel: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
     position: 'absolute',
     left: 16,
     top: '50%',
-    transform: Platform.OS === 'web' ? `rotate(-90deg)` : [{ rotate: '-90deg' }],
-  },
-});
+    transform: Platform.OS === 'web' ? `rotate(-90deg)` : [{ rotate: '-90deg' }] } });

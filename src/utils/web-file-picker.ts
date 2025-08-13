@@ -81,14 +81,12 @@ export const pickDocument = async (options: FilePickerOptions): Promise<FilePick
             uri,
             name: file.name,
             size: file.size,
-            mimeType: file.type || undefined,
-          });
+            mimeType: file.type || undefined });
         }
         
         resolve({
           canceled: false,
-          assets,
-        });
+          assets });
         
         // 清理
         document.body.removeChild(input);
@@ -117,9 +115,7 @@ export const pickDocument = async (options: FilePickerOptions): Promise<FilePick
           uri: asset.uri,
           name: asset.name,
           size: asset.size || 0,
-          mimeType: asset.mimeType,
-        })),
-      };
+          mimeType: asset.mimeType })) };
     }
     
     return { canceled: true };

@@ -62,8 +62,7 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
   overscan = NOTION_DEFAULTS.OVERSCAN_COUNT,
   activeTab,
   onRowEdit,
-  onRowDelete,
-}) => {
+  onRowDelete }) => {
   // 除錯日誌（移到元件內部）
   
   // 表格 ID
@@ -79,8 +78,7 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
         title: '',
         type: 'custom' as any,
         width: 80,
-        editable: false,
-      });
+        editable: false });
     }
     return cols;
   }, [columns, onRowEdit, onRowDelete]);
@@ -195,8 +193,7 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
     userRole: userProfile?.role,
     hasOrg: !!currentOrganization,
     dataLength: data?.length,
-    columnsLength: columns?.length,
-  });
+    columnsLength: columns?.length });
 
   // 檢查欄位編輯權限
   useEffect(() => {
@@ -268,8 +265,7 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
     setEditingCell,
     editingCell,
     selectedCell,
-    setSelectedCell,
-  } = useCellStateMachine();
+    setSelectedCell } = useCellStateMachine();
   
   // Read-only mode - no cell updates
   
@@ -280,8 +276,7 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
     }
     return {
       rowId: processedData[position.row].id,
-      columnKey: columnsWithActions[position.col].key,
-    };
+      columnKey: columnsWithActions[position.col].key };
   }, [processedData, columns]);
   
   // 將 rowId/columnKey 格式轉換為 row/col 格式
@@ -314,8 +309,7 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
     onCellUpdate: undefined,
     onEditComplete: () => {
       setEditingCell(null);
-    },
-  });
+    } });
 
   // === 新功能事件處理器 ===
 
@@ -431,8 +425,7 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
       activeFilters,
       activeSorts,
       isSearching,
-      hasTransformations: activeFilters > 0 || activeSorts > 0 || isSearching,
-    };
+      hasTransformations: activeFilters > 0 || activeSorts > 0 || isSearching };
   }, [filters.filters, sorts.length, searchConfig.query, data.length, processedData.length]);
   
   // Handle row selection
@@ -598,8 +591,7 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
   const columnsWithWidths = useMemo(() => {
     return columns.map(col => ({
       ...col,
-      width: columnWidths[col.id] || col.width || NOTION_DEFAULTS.DEFAULT_COLUMN_WIDTH,
-    }));
+      width: columnWidths[col.id] || col.width || NOTION_DEFAULTS.DEFAULT_COLUMN_WIDTH }));
   }, [columns, columnWidths]);
   
   
@@ -1203,8 +1195,7 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
               paddingHorizontal: 16,
               paddingVertical: 8,
               backgroundColor: NotionColors.interactive.hover,
-              borderRadius: 4,
-            }}
+              borderRadius: 4 }}
             onPress={handleAddRow}
           >
             <Text style={{ color: NotionColors.text.default }}>
@@ -1291,6 +1282,5 @@ function getSettingsMenuPosition(anchorEl: HTMLElement): React.CSSProperties {
     position: 'absolute',
     top: rect.bottom + 8,
     right: `${window.innerWidth - rect.right}px`,
-    zIndex: 1000,
-  };
+    zIndex: 1000 };
 }

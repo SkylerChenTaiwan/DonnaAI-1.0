@@ -110,6 +110,5 @@ export function useColumnOrder(tableKey: string, defaultColumns: TableColumn[]):
   return {
     getOrderedColumns,
     saveColumnOrder,
-    resetColumnOrder,
-  };
+    resetColumnOrder };
 }

@@ -133,8 +133,7 @@ export function mergeFiles(
         console.warn('中文關鍵值未匹配:', {
           原始值: baseRow[baseKeyField],
           標準化後: baseKeyValue,
-          可用的關鍵值: Array.from(lookupMap.keys()).slice(0, 5),
-        });
+          可用的關鍵值: Array.from(lookupMap.keys()).slice(0, 5) });
       }
       
       if (matchedRow) {
@@ -280,8 +279,7 @@ function normalizeKeyValue(value: any, caseSensitive?: boolean): string {
     '"': '"',
     '"': '"',
     "'": "'",
-    "'": "'",
-  };
+    "'": "'" };
   
   Object.entries(punctuationMap).forEach(([fullWidth, halfWidth]) => {
     normalized = normalized.replace(new RegExp(fullWidth, 'g'), halfWidth);

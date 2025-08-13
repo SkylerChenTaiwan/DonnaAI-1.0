@@ -91,9 +91,7 @@ Object.defineProperty(window, 'matchMedia', {
     removeListener: vi.fn(), // deprecated
     addEventListener: vi.fn(),
     removeEventListener: vi.fn(),
-    dispatchEvent: vi.fn(),
-  })),
-});
+    dispatchEvent: vi.fn() })) });
 
 // Mock IntersectionObserver
 global.IntersectionObserver = vi.fn().mockImplementation(() => ({
@@ -107,8 +105,7 @@ global.IntersectionObserver = vi.fn().mockImplementation(() => ({
 global.ResizeObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
   unobserve: vi.fn(),
-  disconnect: vi.fn(),
-})) as any;
+  disconnect: vi.fn() })) as any;
 
 // Mock requestAnimationFrame
 global.requestAnimationFrame = vi.fn().mockImplementation(cb => {

@@ -50,31 +50,27 @@ export async function transcribeAudio(
     sampleRateHertz = 48000,
     maxAlternatives = 3,
     profanityFilter = false,
-    enableAutomaticPunctuation = true,
-  } = options;
+    enableAutomaticPunctuation = true } = options;
 
   try {
     // 第一階段：上傳音頻檔案
     onProgress?.({
       stage: 'uploading',
       percentage: 10,
-      message: '正在上傳音頻檔案...',
-    });
+      message: '正在上傳音頻檔案...' });
 
     const audioUrl = await uploadAudioFile(audioUri, (uploadProgress) => {
       onProgress?.({
         stage: 'uploading',
         percentage: 10 + uploadProgress * 0.3, // 10%-40%
-        message: `上傳中... ${Math.round(uploadProgress)}%`,
-      });
+        message: `上傳中... ${Math.round(uploadProgress)}%` });
     });
 
     // 第二階段：呼叫 Cloud Function 進行處理
     onProgress?.({
       stage: 'processing',
       percentage: 40,
-      message: '正在進行語音識別...',
-    });
+      message: '正在進行語音識別...' });
 
     const transcribeFunction = httpsCallable(getFirebaseFunctions(), 'transcribeAudio');
     
@@ -86,9 +82,7 @@ export async function transcribeAudio(
         sampleRateHertz,
         maxAlternatives,
         profanityFilter,
-        enableAutomaticPunctuation,
-      },
-    });
+        enableAutomaticPunctuation } });
 
     const result = response.data as any;
 
@@ -96,8 +90,7 @@ export async function transcribeAudio(
     onProgress?.({
       stage: 'completing',
       percentage: 100,
-      message: '轉錄完成',
-    });
+      message: '轉錄完成' });
 
     if (result.error) {
       throw new Error(result.error);
@@ -108,8 +101,7 @@ export async function transcribeAudio(
       confidence: result.confidence || 0,
       alternatives: result.alternatives || [],
       duration: result.duration || 0,
-      languageCode: result.languageCode || language,
-    };
+      languageCode: result.languageCode || language };
 
   } catch (error) {
     console.error('語音轉文字失敗:', error);
@@ -185,8 +177,7 @@ export function validateAudioFile(
         resolve({
           isValid: false,
           reason: `檔案大小超過限制 (${sizeMB.toFixed(1)}MB > ${maxSizeMB}MB)`,
-          size: blob.size,
-        });
+          size: blob.size });
         return;
       }
 
@@ -195,14 +186,12 @@ export function validateAudioFile(
 
       resolve({
         isValid: true,
-        size: blob.size,
-      });
+        size: blob.size });
 
     } catch (error) {
       resolve({
         isValid: false,
-        reason: '無法讀取音頻檔案',
-      });
+        reason: '無法讀取音頻檔案' });
     }
   });
 }
@@ -257,20 +246,17 @@ export async function batchTranscribeAudio(
       total: audioFiles.length,
       completed: i,
       current: file.name || file.id,
-      percentage: (i / audioFiles.length) * 100,
-    });
+      percentage: (i / audioFiles.length) * 100 });
 
     try {
       const result = await transcribeAudio(file.uri, options);
       results.push({
         id: file.id,
-        result,
-      });
+        result });
     } catch (error) {
       results.push({
         id: file.id,
-        error: error instanceof Error ? error.message : '轉錄失敗',
-      });
+        error: error instanceof Error ? error.message : '轉錄失敗' });
     }
 
     // 短暫延遲避免過度負載
@@ -283,8 +269,7 @@ export async function batchTranscribeAudio(
     total: audioFiles.length,
     completed: audioFiles.length,
     current: '完成',
-    percentage: 100,
-  });
+    percentage: 100 });
 
   return results;
 }
@@ -359,6 +344,5 @@ export function analyzeTranscriptionQuality(result: TranscriptionResult): {
     quality,
     score,
     issues,
-    suggestions,
-  };
+    suggestions };
 }

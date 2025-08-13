@@ -12,8 +12,7 @@ import {
   TimeRange,
   ActionCategory,
   AuditActionType,
-  RiskLevel,
-} from '@/types/audit';
+  RiskLevel } from '@/types/audit';
 import { auditLogQuery } from './AuditLogQuery';
 import { auditAnalytics } from './AuditAnalytics';
 import { getFirebaseDb } from '@/services/firebase/config';
@@ -85,16 +84,14 @@ export class AuditReportGenerator {
         organization: {
           id: organizationId,
           name: orgInfo.name,
-          totalUsers: orgInfo.totalUsers,
-        },
+          totalUsers: orgInfo.totalUsers },
         summary,
         userActivity,
         dataAccess,
         securityEvents,
         recommendations,
         generatedAt: new Date(),
-        signature: this.generateReportSignature(),
-      };
+        signature: this.generateReportSignature() };
       
       return report;
     } catch (error) {
@@ -135,8 +132,7 @@ export class AuditReportGenerator {
         accessPatterns,
         riskAssessment,
         incidents,
-        recommendations,
-      };
+        recommendations };
       
       return report;
     } catch (error) {
@@ -155,24 +151,18 @@ export class AuditReportGenerator {
         header: {
           fontSize: 18,
           bold: true,
-          margin: [0, 0, 0, 10],
-        },
+          margin: [0, 0, 0, 10] },
         subheader: {
           fontSize: 14,
           bold: true,
-          margin: [0, 10, 0, 5],
-        },
+          margin: [0, 10, 0, 5] },
         tableHeader: {
           bold: true,
           fontSize: 10,
           color: 'black',
-          fillColor: '#f3f3f3',
-        },
-      },
+          fillColor: '#f3f3f3' } },
       defaultStyle: {
-        font: 'Roboto',
-      },
-    };
+        font: 'Roboto' } };
 
     if (type === 'compliance') {
       const compReport = report as ComplianceReport;
@@ -326,8 +316,7 @@ export class AuditReportGenerator {
       enabled: true,
       createdAt: Timestamp.now(),
       lastRun: null,
-      nextRun: this.calculateNextRun(frequency),
-    };
+      nextRun: this.calculateNextRun(frequency) };
 
     try {
       await db.collection('auditReportSchedules').add(scheduleDoc);
@@ -364,8 +353,7 @@ export class AuditReportGenerator {
     return {
       start,
       end,
-      granularity: period.month ? 'day' : period.quarter ? 'week' : 'month',
-    };
+      granularity: period.month ? 'day' : period.quarter ? 'week' : 'month' };
   }
 
   private async getOrganizationInfo(organizationId: string): Promise<any> {
@@ -380,14 +368,12 @@ export class AuditReportGenerator {
       
       return {
         name: orgData?.name || 'Unknown Organization',
-        totalUsers: usersSnapshot.size,
-      };
+        totalUsers: usersSnapshot.size };
     } catch (error) {
       console.error('獲取組織資訊失敗:', error);
       return {
         name: 'Unknown Organization',
-        totalUsers: 0,
-      };
+        totalUsers: 0 };
     }
   }
 
@@ -396,9 +382,7 @@ export class AuditReportGenerator {
       organizationId,
       dateRange: {
         start: dateRange.start,
-        end: dateRange.end,
-      },
-    };
+        end: dateRange.end } };
 
     const result = await auditLogQuery.search(criteria);
     return result.logs;
@@ -423,8 +407,7 @@ export class AuditReportGenerator {
         l.action.type === AuditActionType.USER_CREATED ||
         l.action.type === AuditActionType.USER_UPDATED ||
         l.action.type === AuditActionType.USER_DELETED
-      ).length,
-    };
+      ).length };
   }
 
   private analyzeUserActivity(logs: AuditLog[]): any[] {
@@ -439,8 +422,7 @@ export class AuditReportGenerator {
           userName: log.actor.userName,
           loginCount: 0,
           actionCount: 0,
-          lastActive: log.timestamp.toDate(),
-        });
+          lastActive: log.timestamp.toDate() });
       }
 
       const user = userMap.get(userId);
@@ -472,8 +454,7 @@ export class AuditReportGenerator {
             resource,
             accessCount: 0,
             uniqueUsers: new Set(),
-            exportCount: 0,
-          });
+            exportCount: 0 });
         }
 
         const res = resourceMap.get(resource);
@@ -489,8 +470,7 @@ export class AuditReportGenerator {
     return Array.from(resourceMap.values())
       .map(r => ({
         ...r,
-        uniqueUsers: r.uniqueUsers.size,
-      }))
+        uniqueUsers: r.uniqueUsers.size }))
       .sort((a, b) => b.accessCount - a.accessCount)
       .slice(0, 20); // 前 20 個資源
   }
@@ -507,8 +487,7 @@ export class AuditReportGenerator {
             type,
             count: 0,
             severity: log.metadata?.risk || 'low',
-            lastOccurrence: log.timestamp.toDate(),
-          });
+            lastOccurrence: log.timestamp.toDate() });
         }
 
         const event = eventMap.get(type);
@@ -646,14 +625,11 @@ export class AuditReportGenerator {
             ['資料匯出', report.summary.dataExports],
             ['權限變更', report.summary.permissionChanges],
             ['用戶修改', report.summary.userModifications],
-          ],
-        },
-      },
+          ] } },
       
       { text: '建議事項', style: 'subheader' },
       {
-        ul: report.recommendations,
-      },
+        ul: report.recommendations },
     ];
   }
 
@@ -670,9 +646,7 @@ export class AuditReportGenerator {
           body: [
             ['威脅類型', '嚴重程度', '描述'],
             ...report.threats.slice(0, 10).map(t => [t.type, t.severity, t.description]),
-          ],
-        },
-      },
+          ] } },
       
       { text: '異常活動', style: 'subheader' },
       {
@@ -680,14 +654,11 @@ export class AuditReportGenerator {
           body: [
             ['類型', '嚴重程度', '描述'],
             ...report.anomalies.slice(0, 10).map(a => [a.type, a.severity, a.description]),
-          ],
-        },
-      },
+          ] } },
       
       { text: '建議事項', style: 'subheader' },
       {
-        ul: report.recommendations,
-      },
+        ul: report.recommendations },
     ];
   }
 

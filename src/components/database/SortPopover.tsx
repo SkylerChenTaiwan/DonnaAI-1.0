@@ -9,8 +9,7 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  ScrollView,
-} from 'react-native';
+  ScrollView } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { Popover } from '@/components/common/Popover';
 import { TableColumn } from '@/types/table';
@@ -35,8 +34,7 @@ export const SortPopover: React.FC<SortPopoverProps> = ({
   anchor,
   columns,
   currentSort,
-  onApply,
-}) => {
+  onApply }) => {
   const [selectedSort, setSelectedSort] = useState<SortConfig | null>(currentSort);
 
   useEffect(() => {
@@ -180,34 +178,28 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 8,
     width: 280,
-    maxHeight: 400,
-  },
+    maxHeight: 400 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#e9e9e7',
-  },
+    borderBottomColor: '#e9e9e7' },
   title: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#37352f',
-  },
+    color: '#37352f' },
   content: {
-    padding: 16,
-  },
+    padding: 16 },
   columnSection: {
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   columnTitle: {
     fontSize: 13,
     fontWeight: '600',
     color: '#787774',
     marginBottom: 8,
-    textTransform: 'uppercase',
-  },
+    textTransform: 'uppercase' },
   sortOption: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -215,57 +207,45 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 6,
     marginBottom: 4,
-    gap: 8,
-  },
+    gap: 8 },
   sortOptionSelected: {
-    backgroundColor: '#e3f2fd',
-  },
+    backgroundColor: '#e3f2fd' },
   sortOptionText: {
     flex: 1,
     fontSize: 14,
-    color: '#37352f',
-  },
+    color: '#37352f' },
   sortOptionTextSelected: {
     color: '#2383e2',
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   checkIcon: {
     width: 20,
     height: 20,
     borderRadius: 10,
     backgroundColor: 'rgba(35, 131, 226, 0.1)',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
     borderTopWidth: 1,
-    borderTopColor: '#e9e9e7',
-  },
+    borderTopColor: '#e9e9e7' },
   clearButton: {
     paddingHorizontal: 16,
-    paddingVertical: 8,
-  },
+    paddingVertical: 8 },
   clearButtonText: {
     fontSize: 14,
     color: '#666',
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   applyButton: {
     backgroundColor: '#2383e2',
     borderRadius: 6,
     paddingHorizontal: 20,
-    paddingVertical: 8,
-  },
+    paddingVertical: 8 },
   applyButtonText: {
     fontSize: 14,
     color: '#fff',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   disabledText: {
-    opacity: 0.4,
-  },
-});
+    opacity: 0.4 } });

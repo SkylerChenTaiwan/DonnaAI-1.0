@@ -109,8 +109,7 @@ const WebText = forwardRef<HTMLElement, AdaptiveTextProps>(
         success: DesignSystem.colors.status.success,
         warning: DesignSystem.colors.status.warning,
         error: DesignSystem.colors.status.error,
-        info: DesignSystem.colors.status.info,
-      };
+        info: DesignSystem.colors.status.info };
       
       return colorMap[color as keyof typeof colorMap] || color;
     }, [color]);
@@ -120,8 +119,7 @@ const WebText = forwardRef<HTMLElement, AdaptiveTextProps>(
       let finalStyle: CSSProperties = {
         ...variantStyle,
         color: colorValue,
-        textAlign: align,
-      };
+        textAlign: align };
       
       // 自定義字體屬性
       if (weight) finalStyle.fontWeight = weight;
@@ -173,8 +171,7 @@ const WebText = forwardRef<HTMLElement, AdaptiveTextProps>(
         h1: 'h1',
         h2: 'h2', 
         h3: 'h3',
-        h4: 'h4',
-      };
+        h4: 'h4' };
       
       return headingTags[variant as keyof typeof headingTags] || 'span';
     }, [variant]);
@@ -200,8 +197,7 @@ const WebText = forwardRef<HTMLElement, AdaptiveTextProps>(
         onClick,
         'data-testid': testID,
         ...accessibilityProps,
-        ...props,
-      },
+        ...props },
       children
     );
   }
@@ -250,8 +246,7 @@ const NativeText = forwardRef<any, AdaptiveTextProps>(
         success: DesignSystem.colors.status.success,
         warning: DesignSystem.colors.status.warning,
         error: DesignSystem.colors.status.error,
-        info: DesignSystem.colors.status.info,
-      };
+        info: DesignSystem.colors.status.info };
       
       return colorMap[color as keyof typeof colorMap] || color;
     }, [color]);
@@ -261,8 +256,7 @@ const NativeText = forwardRef<any, AdaptiveTextProps>(
       let finalStyle: TextStyle = {
         ...variantStyle,
         color: colorValue,
-        textAlign: align,
-      };
+        textAlign: align };
       
       // 自定義字體屬性
       if (weight) finalStyle.fontWeight = weight as any;
@@ -286,8 +280,7 @@ const NativeText = forwardRef<any, AdaptiveTextProps>(
     const accessibilityProps = {
       accessible: accessible !== false,
       accessibilityLabel,
-      accessibilityRole: accessibilityRole as any,
-    };
+      accessibilityRole: accessibilityRole as any };
     
     return (
       <Text

@@ -9,8 +9,7 @@ export const CheckboxEditor: React.FC<EditorProps> = ({
   value,
   onChange,
   onBlur,
-  column,
-}) => {
+  column }) => {
   useEffect(() => {
     // 核取方塊立即切換狀態
     onChange(!value);

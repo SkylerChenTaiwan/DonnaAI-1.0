@@ -10,8 +10,7 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { MaterialIcon } from '@/components/common/MaterialIcon';
 import { Dropdown } from '@/components/common/Dropdown';
 import { 
@@ -23,8 +22,7 @@ import {
 import {
   FieldAnalysis,
   MappingSuggestion,
-  DataType,
-} from '@/types/intelligentImport';
+  DataType } from '@/types/intelligentImport';
 import { FieldDefinition } from '@/types/organization';
 import { styles } from './styles/IntelligentFieldMapperStyles';
 
@@ -51,8 +49,7 @@ export const IntelligentFieldMapper: React.FC<Props> = ({
   targetFields,
   onMappingChange,
   onCreateField,
-  openAIKey,
-}) => {
+  openAIKey }) => {
   const [mappings, setMappings] = useState<FieldMapping[]>([]);
   const [fieldAnalyses, setFieldAnalyses] = useState<FieldAnalysis[]>([]);
   const [suggestions, setSuggestions] = useState<Map<string, MappingSuggestion>>(new Map());
@@ -104,8 +101,7 @@ export const IntelligentFieldMapper: React.FC<Props> = ({
           newMappings.push({
             sourceField: header,
             targetField: suggestion.bestMatch.targetField,
-            confidence: suggestion.bestMatch.confidence,
-          });
+            confidence: suggestion.bestMatch.confidence });
         }
       }
 
@@ -165,8 +161,7 @@ export const IntelligentFieldMapper: React.FC<Props> = ({
         newMappings.push({
           sourceField,
           targetField: suggestion.bestMatch.targetField,
-          confidence: suggestion.bestMatch.confidence,
-        });
+          confidence: suggestion.bestMatch.confidence });
       }
     });
 

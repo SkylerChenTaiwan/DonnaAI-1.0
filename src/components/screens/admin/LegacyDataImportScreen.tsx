@@ -181,13 +181,11 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
               size: file.size,
               uri: URL.createObjectURL(file),
               content,
-              preview,
-            };
+              preview };
             
             setFiles(prev => ({
               ...prev,
-              [fileType]: fileInfo,
-            }));
+              [fileType]: fileInfo }));
           };
           
           reader.readAsText(file);
@@ -198,16 +196,14 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
         // 原生平台使用 DocumentPicker
         const result = await DocumentPicker.getDocumentAsync({
           type: ['text/csv', 'text/comma-separated-values', 'application/csv'],
-          copyToCacheDirectory: true,
-        });
+          copyToCacheDirectory: true });
 
         if (!result.canceled && result.assets[0]) {
           const asset = result.assets[0];
           
           // 讀取檔案內容
           const content = await FileSystem.readAsStringAsync(asset.uri, {
-            encoding: FileSystem.EncodingType.UTF8,
-          });
+            encoding: FileSystem.EncodingType.UTF8 });
 
           // 預覽檔案
           const preview = await previewCSV(content, 5);
@@ -217,13 +213,11 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
             size: asset.size || 0,
             uri: asset.uri,
             content,
-            preview,
-          };
+            preview };
 
           setFiles(prev => ({
             ...prev,
-            [fileType]: fileInfo,
-          }));
+            [fileType]: fileInfo }));
         }
       }
     } catch (error) {
@@ -286,9 +280,7 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
               [fileType.key]: {
                 ...file,
                 validated: false,
-                errors: validation.errors,
-              },
-            }));
+                errors: validation.errors } }));
             console.error(`${fileType.label} 驗證失敗:`, validation.errors);
           } else {
             setFiles(prev => ({
@@ -296,9 +288,7 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
               [fileType.key]: {
                 ...file,
                 validated: true,
-                errors: undefined,
-              },
-            }));
+                errors: undefined } }));
             console.log(`${fileType.label} 驗證成功`);
           }
         }
@@ -380,8 +370,7 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
           updateExisting: false,
           validateOnly: false,
           batchSize: 500,
-          continueOnError: true,
-        },
+          continueOnError: true },
         (progress) => {
           setImportProgress(progress);
         }
@@ -401,12 +390,10 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
             [
               {
                 text: '查看報告',
-                onPress: () => showImportReport(result),
-              },
+                onPress: () => showImportReport(result) },
               {
                 text: '確定',
-                style: 'default',
-              },
+                style: 'default' },
             ]
           );
         }
@@ -421,12 +408,10 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
             [
               {
                 text: '查看報告',
-                onPress: () => showImportReport(result),
-              },
+                onPress: () => showImportReport(result) },
               {
                 text: '確定',
-                style: 'default',
-              },
+                style: 'default' },
             ]
           );
         }
@@ -500,8 +485,7 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
             },
             {
               text: '開始導入',
-              onPress: executeImport,
-            },
+              onPress: executeImport },
           ]
         );
       }
@@ -774,8 +758,7 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
           headerProps: {
             title: '資料匯入精靈',
             showBack: true,
-            onBack: () => navigation.goBack(),
-          }
+            onBack: () => navigation.goBack() }
         }
       }
     );
@@ -862,12 +845,10 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   wizardContainer: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   switchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -875,33 +856,27 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: DesignSystem.colors.background.secondary,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.gray200,
-  },
+    borderBottomColor: DesignSystem.colors.gray200 },
   switchLabel: {
     fontSize: 14,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   switchButton: {
     paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 20,
-  },
+    borderRadius: 20 },
   switchButtonText: {
     color: '#fff',
     fontSize: 12,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   stepIndicator: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 24,
-    paddingHorizontal: 16,
-  },
+    paddingHorizontal: 16 },
   stepItem: {
     alignItems: 'center',
-    flex: 1,
-  },
+    flex: 1 },
   stepCircle: {
     width: 40,
     height: 40,
@@ -909,59 +884,46 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.gray200,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   stepCircleActive: {
-    backgroundColor: DesignSystem.colors.primary,
-  },
+    backgroundColor: DesignSystem.colors.primary },
   stepLabel: {
     fontSize: 12,
-    color: DesignSystem.colors.gray500,
-  },
+    color: DesignSystem.colors.gray500 },
   stepLabelActive: {
     color: DesignSystem.colors.text.primary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   stepLine: {
     position: 'absolute',
     top: 20,
     left: '50%',
     right: '-50%',
     height: 2,
-    backgroundColor: DesignSystem.colors.gray200,
-  },
+    backgroundColor: DesignSystem.colors.gray200 },
   stepLineActive: {
-    backgroundColor: DesignSystem.colors.primary,
-  },
+    backgroundColor: DesignSystem.colors.primary },
   stepContent: {
-    padding: 16,
-  },
+    padding: 16 },
   stepTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
     marginBottom: 24,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   fileSection: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   fileSectionHeader: {
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   fileLabel: {
     fontSize: 16,
     fontWeight: '500',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   required: {
-    color: DesignSystem.colors.status.error,
-  },
+    color: DesignSystem.colors.status.error },
   fileDescription: {
     fontSize: 14,
-    color: DesignSystem.colors.gray500,
-  },
+    color: DesignSystem.colors.gray500 },
   uploadButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -971,167 +933,134 @@ const styles = StyleSheet.create({
     borderColor: DesignSystem.colors.primary,
     borderStyle: 'dashed',
     borderRadius: 8,
-    backgroundColor: 'rgba(229, 229, 229, 0.125)',
-  },
+    backgroundColor: 'rgba(229, 229, 229, 0.125)' },
   uploadText: {
     marginLeft: 8,
     fontSize: 16,
     color: DesignSystem.colors.primary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   fileInfo: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 12,
     backgroundColor: 'rgba(229, 229, 229, 0.25)',
-    borderRadius: 8,
-  },
+    borderRadius: 8 },
   fileDetails: {
     flex: 1,
-    marginLeft: 12,
-  },
+    marginLeft: 12 },
   fileName: {
     fontSize: 14,
     fontWeight: '500',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   fileSize: {
     fontSize: 12,
     color: DesignSystem.colors.gray500,
-    marginTop: 2,
-  },
+    marginTop: 2 },
   fileRows: {
     fontSize: 12,
     color: DesignSystem.colors.primary,
-    marginTop: 2,
-  },
+    marginTop: 2 },
   errorBox: {
     marginTop: 8,
     padding: 12,
     backgroundColor: 'rgba(255, 59, 48, 0.0625)',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: 'rgba(255, 59, 48, 0.125)',
-  },
+    borderColor: 'rgba(255, 59, 48, 0.125)' },
   errorText: {
     fontSize: 14,
     color: DesignSystem.colors.status.error,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   actionButton: {
     backgroundColor: DesignSystem.colors.primary,
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 8,
     alignItems: 'center',
-    marginTop: 24,
-  },
+    marginTop: 24 },
   actionButtonText: {
     color: DesignSystem.colors.text.inverse,
     fontSize: 16,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   disabledButton: {
     backgroundColor: DesignSystem.colors.gray500,
-    opacity: 0.5,
-  },
+    opacity: 0.5 },
   secondaryButton: {
     backgroundColor: 'transparent',
     borderWidth: 1,
     borderColor: DesignSystem.colors.primary,
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   secondaryButtonText: {
     color: DesignSystem.colors.primary,
     fontSize: 16,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   progressSection: {
     alignItems: 'center',
-    paddingVertical: 24,
-  },
+    paddingVertical: 24 },
   progressPhase: {
     fontSize: 16,
     fontWeight: '500',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   progressBar: {
     width: '100%',
     height: 8,
     backgroundColor: DesignSystem.colors.gray200,
     borderRadius: 4,
     overflow: 'hidden',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   progressFill: {
     height: '100%',
-    backgroundColor: DesignSystem.colors.primary,
-  },
+    backgroundColor: DesignSystem.colors.primary },
   progressText: {
     fontSize: 14,
     color: DesignSystem.colors.gray500,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   currentItem: {
     fontSize: 14,
     color: DesignSystem.colors.text.primary,
-    marginTop: 8,
-  },
+    marginTop: 8 },
   timeRemaining: {
     fontSize: 14,
     color: DesignSystem.colors.gray500,
-    marginTop: 4,
-  },
+    marginTop: 4 },
   issuesSummary: {
     flexDirection: 'row',
-    marginTop: 16,
-  },
+    marginTop: 16 },
   errorCount: {
     color: DesignSystem.colors.status.error,
-    marginRight: 16,
-  },
+    marginRight: 16 },
   warningCount: {
-    color: DesignSystem.colors.status.warning,
-  },
+    color: DesignSystem.colors.status.warning },
   completeTitle: {
     fontSize: 20,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
     marginTop: 16,
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   summarySection: {
     width: '100%',
     padding: 16,
     backgroundColor: 'rgba(229, 229, 229, 0.125)',
     borderRadius: 8,
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   summaryRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   summaryLabel: {
     fontSize: 14,
-    color: DesignSystem.colors.gray500,
-  },
+    color: DesignSystem.colors.gray500 },
   summaryValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   successText: {
-    color: DesignSystem.colors.status.success,
-  },
+    color: DesignSystem.colors.status.success },
   warningText: {
-    color: DesignSystem.colors.status.warning,
-  },
+    color: DesignSystem.colors.status.warning },
   completeActions: {
-    width: '100%',
-  },
-});
+    width: '100%' } });
 
 // 匯出元件
 export default LegacyDataImportScreen;

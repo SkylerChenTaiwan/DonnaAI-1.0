@@ -147,8 +147,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
         { name: 'dueDate', label: '到期日', type: 'date' as const, required: false },
         { name: 'priority', label: '優先級', type: 'text' as const, required: false },
         { name: 'status', label: '狀態', type: 'text' as const, required: false },
-      ],
-    };
+      ] };
 
     return fieldsByDatabase[database] || [];
   };
@@ -936,7 +935,7 @@ const styles = StyleSheet.create({
     padding: 24,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 5,

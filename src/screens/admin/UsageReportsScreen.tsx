@@ -12,8 +12,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Dimensions,
-  Modal,
-} from 'react-native';
+  Modal, Platform } from 'react-native';
 import { Layout } from '@/components/common/Layout';
 import { Icon } from '@/components/common/Icon';
 import { useNavigation } from '@react-navigation/native';
@@ -26,8 +25,7 @@ import { Period } from '@/types/admin';
 import { 
   ExportFormat, 
   exportUsageReport,
-  generateReportSummary,
-} from '@/services/firebase/admin/reportExportService';
+  generateReportSummary } from '@/services/firebase/admin/reportExportService';
 import { withAlpha } from '@/utils/colorUtils';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -72,8 +70,7 @@ export const UsageReportsScreen: React.FC = () => {
       const days = selectedPeriod === 'daily' ? 7 : selectedPeriod === 'weekly' ? 4 : 12;
       return Array.from({ length: days }, (_, i) => ({
         x: i + 1,
-        y: Math.floor(Math.random() * 100) + 20,
-      }));
+        y: Math.floor(Math.random() * 100) + 20 }));
     }
     
     // TODO: 轉換實際的 usageReport 資料
@@ -101,8 +98,7 @@ export const UsageReportsScreen: React.FC = () => {
         {
           format: exportFormat,
           includeCharts: false, // 暫時不支援圖表匯出
-          includeDetails: true,
-        }
+          includeDetails: true }
       );
       
       showToast('success', '報表匯出成功');
@@ -121,29 +117,25 @@ export const UsageReportsScreen: React.FC = () => {
       value: '1,234',
       unit: '分鐘',
       change: '+12%',
-      isPositive: true,
-    },
+      isPositive: true },
     {
       label: '活躍用戶數',
       value: '156',
       unit: '人',
       change: '+5%',
-      isPositive: true,
-    },
+      isPositive: true },
     {
       label: '儲存使用量',
       value: '45.2',
       unit: 'GB',
       change: '+8%',
-      isPositive: false,
-    },
+      isPositive: false },
     {
       label: '本月記錄數',
       value: '3,421',
       unit: '筆',
       change: '+23%',
-      isPositive: true,
-    },
+      isPositive: true },
   ];
   
   if (isLoading && !usageReport) {
@@ -412,65 +404,52 @@ export const UsageReportsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background,
-  },
+    backgroundColor: DesignSystem.colors.background },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   loadingText: {
     marginTop: 12,
     fontSize: 16,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: DesignSystem.spacing.lg,
     backgroundColor: DesignSystem.colors.background.surface,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   backButton: {
-    marginRight: DesignSystem.spacing.md,
-  },
+    marginRight: DesignSystem.spacing.md },
   title: {
     ...DesignSystem.typography.h1,
     color: DesignSystem.colors.text.primary,
-    flex: 1,
-  },
+    flex: 1 },
   exportButton: {
-    padding: 8,
-  },
+    padding: 8 },
   periodSelector: {
     flexDirection: 'row',
     paddingHorizontal: 20,
     paddingVertical: 12,
-    gap: 8,
-  },
+    gap: 8 },
   periodButton: {
     flex: 1,
     paddingVertical: 8,
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: DesignSystem.colors.background.elevated,
-  },
+    backgroundColor: DesignSystem.colors.background.elevated },
   periodButtonActive: {
-    backgroundColor: DesignSystem.colors.primary,
-  },
+    backgroundColor: DesignSystem.colors.primary },
   periodButtonText: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   periodButtonTextActive: {
     color: DesignSystem.colors.white,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   statsContainer: {
     paddingHorizontal: 20,
-    paddingVertical: 16,
-  },
+    paddingVertical: 16 },
   statCard: {
     backgroundColor: DesignSystem.colors.background.surface,
     padding: 16,
@@ -478,46 +457,38 @@ const styles = StyleSheet.create({
     marginRight: 12,
     minWidth: 150,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
     shadowOpacity: 0.05,
     shadowRadius: 4,
-    elevation: 2,
-  },
+    elevation: 2 },
   statLabel: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   statValueContainer: {
     flexDirection: 'row',
     alignItems: 'baseline',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   statValue: {
     ...DesignSystem.typography.h1,
     color: DesignSystem.colors.text.primary,
-    fontWeight: '700',
-  },
+    fontWeight: '700' },
   statUnit: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginLeft: 4,
-  },
+    marginLeft: 4 },
   statChangeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-  },
+    gap: 4 },
   statChange: {
     ...DesignSystem.typography.caption,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   metricSelector: {
     flexDirection: 'row',
     paddingHorizontal: 20,
     paddingVertical: 12,
-    gap: 8,
-  },
+    gap: 8 },
   metricButton: {
     flex: 1,
     flexDirection: 'row',
@@ -526,42 +497,35 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 8,
     backgroundColor: DesignSystem.colors.background.elevated,
-    gap: 6,
-  },
+    gap: 6 },
   metricButtonActive: {
     backgroundColor: withAlpha(DesignSystem.colors.primary, 0.125),
     borderWidth: 1,
-    borderColor: DesignSystem.colors.primary,
-  },
+    borderColor: DesignSystem.colors.primary },
   metricButtonText: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   metricButtonTextActive: {
     color: DesignSystem.colors.primary,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   chartContainer: {
     backgroundColor: DesignSystem.colors.background.surface,
     margin: 20,
     padding: 20,
     borderRadius: 12,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
     shadowOpacity: 0.05,
     shadowRadius: 4,
-    elevation: 2,
-  },
+    elevation: 2 },
   chartTitle: {
     ...DesignSystem.typography.h3,
     color: DesignSystem.colors.text.primary,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'flex-end',
-  },
+    justifyContent: 'flex-end' },
   modalContent: {
     backgroundColor: DesignSystem.colors.background.surface,
     borderTopLeftRadius: 20,
@@ -569,19 +533,16 @@ const styles = StyleSheet.create({
     paddingTop: 24,
     paddingHorizontal: 24,
     paddingBottom: 40,
-    maxHeight: '80%',
-  },
+    maxHeight: '80%' },
   modalTitle: {
     ...DesignSystem.typography.h2,
     color: DesignSystem.colors.text.primary,
     textAlign: 'center',
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   exportOptions: {
     flexDirection: 'row',
     gap: 12,
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   exportOption: {
     flex: 1,
     padding: 16,
@@ -589,50 +550,40 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.background.elevated,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: DesignSystem.colors.border.light,
-  },
+    borderColor: DesignSystem.colors.border.light },
   exportOptionActive: {
     borderColor: DesignSystem.colors.primary,
-    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
-  },
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063) },
   exportOptionText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
     fontWeight: '600',
-    marginTop: 8,
-  },
+    marginTop: 8 },
   exportOptionTextActive: {
-    color: DesignSystem.colors.primary,
-  },
+    color: DesignSystem.colors.primary },
   exportOptionDesc: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
     marginTop: 4,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   previewContainer: {
     backgroundColor: DesignSystem.colors.background.elevated,
     borderRadius: 12,
     padding: 16,
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   previewTitle: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   previewContent: {
-    maxHeight: 100,
-  },
+    maxHeight: 100 },
   previewText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
-    lineHeight: 20,
-  },
+    lineHeight: 20 },
   modalActions: {
     flexDirection: 'row',
-    gap: 12,
-  },
+    gap: 12 },
   modalButton: {
     flex: 1,
     flexDirection: 'row',
@@ -640,23 +591,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 14,
     borderRadius: 12,
-    gap: 8,
-  },
+    gap: 8 },
   cancelButton: {
     backgroundColor: DesignSystem.colors.background.elevated,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.border.default,
-  },
+    borderColor: DesignSystem.colors.border.default },
   cancelButtonText: {
     ...DesignSystem.typography.button,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   exportButton: {
-    backgroundColor: DesignSystem.colors.primary,
-  },
+    backgroundColor: DesignSystem.colors.primary },
   exportButtonText: {
     ...DesignSystem.typography.button,
     color: DesignSystem.colors.white,
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600' } });

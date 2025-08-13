@@ -137,8 +137,7 @@ export const uploadFile = async (): Promise<{
       return {
         uri: result.uri,
         name: result.name,
-        content,
-      };
+        content };
     }
     return null;
   } else {
@@ -146,16 +145,14 @@ export const uploadFile = async (): Promise<{
     const DocumentPicker = require('expo-document-picker');
     const result = await DocumentPicker.getDocumentAsync({
       type: '*/*',
-      copyToCacheDirectory: true,
-    });
+      copyToCacheDirectory: true });
     
     if (result.type === 'success') {
       const content = await readFile(result.uri);
       return {
         uri: result.uri,
         name: result.name,
-        content,
-      };
+        content };
     }
     return null;
   }

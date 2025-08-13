@@ -46,8 +46,7 @@ export const RecordPurposeSelector: React.FC<RecordPurposeSelectorProps> = ({
   visible,
   onSelect,
   onCancel,
-  duration,
-}) => {
+  duration }) => {
   const insets = useSafeAreaInsets();
   const slideAnim = React.useRef(new Animated.Value(0)).current;
 
@@ -56,26 +55,22 @@ export const RecordPurposeSelector: React.FC<RecordPurposeSelectorProps> = ({
       Animated.timing(slideAnim, {
         toValue: 1,
         duration: 250,
-        useNativeDriver: true,
-      }).start();
+        useNativeDriver: true }).start();
     } else {
       Animated.timing(slideAnim, {
         toValue: 0,
         duration: 200,
-        useNativeDriver: true,
-      }).start();
+        useNativeDriver: true }).start();
     }
   }, [visible, slideAnim]);
 
   const translateY = slideAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: [300, 0],
-  });
+    outputRange: [300, 0] });
 
   const opacity = slideAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, 0.5],
-  });
+    outputRange: [0, 0.5] });
 
   const formatDuration = useCallback((seconds: number): string => {
     const mins = Math.floor(seconds / 60);
@@ -106,8 +101,7 @@ export const RecordPurposeSelector: React.FC<RecordPurposeSelectorProps> = ({
             styles.panel,
             {
               transform: Platform.OS === 'web' ? `translateY(${0}px)` : [{ translateY: 0 }],
-              paddingBottom: insets.bottom + 20,
-            },
+              paddingBottom: insets.bottom + 20 },
           ]}
         >
           {/* 標題區域 */}
@@ -154,16 +148,14 @@ export const RecordPurposeSelector: React.FC<RecordPurposeSelectorProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   overlay: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: '#000000',
-  },
+    backgroundColor: '#000000' },
   panel: {
     position: 'absolute',
     bottom: 0,
@@ -173,44 +165,37 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: -2 } }),
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    elevation: 5,
-  },
+    elevation: 5 },
   header: {
     alignItems: 'center',
     paddingTop: 12,
     paddingHorizontal: 20,
-    paddingBottom: 20,
-  },
+    paddingBottom: 20 },
   indicator: {
     width: 36,
     height: 4,
     backgroundColor: '#E5E5EA',
     borderRadius: 2,
-    marginBottom: 20,
-  },
+    marginBottom: 20 },
   title: {
     fontSize: 20,
     fontWeight: '600',
     color: '#1A1A1A',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   duration: {
     fontSize: 14,
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   optionsContainer: {
-    paddingHorizontal: 20,
-  },
+    paddingHorizontal: 20 },
   purposeOption: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
-  },
+    borderBottomColor: '#F2F2F7' },
   purposeIcon: {
     width: 44,
     height: 44,
@@ -218,18 +203,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2F2F7',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 16,
-  },
+    marginRight: 16 },
   purposeTitle: {
     flex: 1,
     fontSize: 16,
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   buttonContainer: {
     paddingHorizontal: 20,
-    paddingTop: 20,
-  },
+    paddingTop: 20 },
   cancelButton: {
-    width: '100%',
-  },
-});
+    width: '100%' } });

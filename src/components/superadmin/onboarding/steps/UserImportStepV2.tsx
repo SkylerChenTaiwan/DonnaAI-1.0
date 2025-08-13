@@ -11,8 +11,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Switch,
-} from 'react-native';
+  Switch } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { DesignSystem } from '@/theme/designSystem';
 import { StepProps, UserImportData } from '@/types/onboarding';
@@ -24,8 +23,7 @@ const UserImportStepV2: React.FC<StepProps> = ({
   data,
   onChange,
   onValidate,
-  isActive,
-}) => {
+  isActive }) => {
   const colors = DesignSystem.colors;
   
   // 狀態
@@ -39,15 +37,12 @@ const UserImportStepV2: React.FC<StepProps> = ({
       domain: '',
       autoCreateUsers: true,
       syncGroups: false,
-      groupMappings: [],
-    },
+      groupMappings: [] },
     passwordStrategy: {
       type: 'auto-generate',
-      requireChange: true,
-    },
+      requireChange: true },
     sendWelcomeEmail: true,
-    ...data,
-  });
+    ...data });
 
   // 當資料變更時通知父元件
   useEffect(() => {
@@ -73,10 +68,8 @@ const UserImportStepV2: React.FC<StepProps> = ({
             email: `imported_user_${i}@example.com`,
             name: `匯入用戶 ${i + 1}`,
             role: 'user',
-            authMethod: 'password',
-          })),
-        ],
-      }));
+            authMethod: 'password' })),
+        ] }));
     }
   };
 
@@ -93,8 +86,7 @@ const UserImportStepV2: React.FC<StepProps> = ({
     userCount: 0,
     activeUserCount: 0,
     billingCycle: 'monthly',
-    isSuperAdmin: false,
-  };
+    isSuperAdmin: false };
 
   // 渲染 Google 登入設定
   const renderGoogleAuthSettings = () => {
@@ -116,9 +108,7 @@ const UserImportStepV2: React.FC<StepProps> = ({
               ...prev,
               googleAuthConfig: {
                 ...prev.googleAuthConfig!,
-                enabled: value,
-              },
-            }))}
+                enabled: value } }))}
             trackColor={{ false: colors.gray300, true: colors.primary }}
           />
         </View>
@@ -146,9 +136,7 @@ const UserImportStepV2: React.FC<StepProps> = ({
               ...prev,
               passwordStrategy: {
                 ...prev.passwordStrategy,
-                type: value ? 'auto-generate' : 'send-reset',
-              },
-            }))}
+                type: value ? 'auto-generate' : 'send-reset' } }))}
             trackColor={{ false: colors.gray300, true: colors.primary }}
           />
         </View>
@@ -164,9 +152,7 @@ const UserImportStepV2: React.FC<StepProps> = ({
               ...prev,
               passwordStrategy: {
                 ...prev.passwordStrategy,
-                requireChange: value,
-              },
-            }))}
+                requireChange: value } }))}
             trackColor={{ false: colors.gray300, true: colors.primary }}
           />
         </View>
@@ -192,8 +178,7 @@ const UserImportStepV2: React.FC<StepProps> = ({
             value={formData.sendWelcomeEmail}
             onValueChange={(value) => setFormData(prev => ({
               ...prev,
-              sendWelcomeEmail: value,
-            }))}
+              sendWelcomeEmail: value }))}
             trackColor={{ false: colors.gray300, true: colors.primary }}
           />
         </View>
@@ -303,33 +288,28 @@ const UserImportStepV2: React.FC<StepProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   mainSection: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   importPrompt: {
     alignItems: 'center',
     paddingVertical: 32,
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: 12,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   promptTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
     marginTop: 16,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   promptDescription: {
     fontSize: 14,
     color: DesignSystem.colors.text.secondary,
     textAlign: 'center',
     paddingHorizontal: 32,
     lineHeight: 20,
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   importButton: {
     flexDirection: 'row',
     backgroundColor: DesignSystem.colors.primary,
@@ -337,49 +317,40 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 24,
     alignItems: 'center',
-    gap: 8,
-  },
+    gap: 8 },
   importButtonText: {
     color: DesignSystem.colors.white,
     fontSize: 15,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   summaryCard: {
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: 8,
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.border.light,
-  },
+    borderColor: DesignSystem.colors.border.light },
   summaryHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   summaryTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   summaryStats: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
+    justifyContent: 'space-around' },
   statItem: {
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   statLabel: {
     fontSize: 12,
     color: DesignSystem.colors.text.secondary,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   statValue: {
     fontSize: 20,
     fontWeight: '600',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   userCount: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -387,76 +358,61 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingVertical: 12,
     backgroundColor: `${DesignSystem.colors.primary}10`,
-    borderRadius: 8,
-  },
+    borderRadius: 8 },
   userCountText: {
     fontSize: 14,
     fontWeight: '500',
-    color: DesignSystem.colors.primary,
-  },
+    color: DesignSystem.colors.primary },
   settingsSection: {
-    gap: 16,
-  },
+    gap: 16 },
   authSection: {
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: 8,
-    padding: 16,
-  },
+    padding: 16 },
   passwordSection: {
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: 8,
-    padding: 16,
-  },
+    padding: 16 },
   emailSection: {
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: 8,
-    padding: 16,
-  },
+    padding: 16 },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
-    gap: 8,
-  },
+    gap: 8 },
   sectionTitle: {
     fontSize: 15,
     fontWeight: '600',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   switchRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 8,
-  },
+    paddingVertical: 8 },
   switchContent: {
     flex: 1,
-    marginRight: 12,
-  },
+    marginRight: 12 },
   switchLabel: {
     fontSize: 14,
     fontWeight: '500',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   switchHint: {
     fontSize: 12,
     color: DesignSystem.colors.text.secondary,
-    marginTop: 2,
-  },
+    marginTop: 2 },
   tipCard: {
     flexDirection: 'row',
     backgroundColor: `${DesignSystem.colors.info}10`,
     borderRadius: 8,
     padding: 12,
     marginTop: 24,
-    gap: 8,
-  },
+    gap: 8 },
   tipText: {
     flex: 1,
     fontSize: 13,
     color: DesignSystem.colors.info,
-    lineHeight: 18,
-  },
-});
+    lineHeight: 18 } });
 
 export default UserImportStepV2;

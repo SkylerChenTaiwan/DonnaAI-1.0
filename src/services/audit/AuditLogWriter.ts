@@ -5,8 +5,7 @@
 
 import {
   AuditLog,
-  RetentionPolicy,
-} from '@/types/audit';
+  RetentionPolicy } from '@/types/audit';
 import { getFirebaseDb } from '@/services/firebase/config';
 const db = getFirebaseDb();
 import {
@@ -21,8 +20,7 @@ import {
   arrayUnion,
   setDoc,
   updateDoc,
-  WriteBatch,
-} from 'firebase/firestore';
+  WriteBatch } from 'firebase/firestore';
 import { format } from 'date-fns';
 
 /**
@@ -42,8 +40,7 @@ export class AuditLogWriter {
     retentionDays: 30,
     archiveEnabled: true,
     deleteAfterArchive: true,
-    compressArchive: false,
-  };
+    compressArchive: false };
 
   private constructor() {
     this.startFlushTimer();
@@ -178,15 +175,13 @@ export class AuditLogWriter {
       // 嘗試更新現有文檔
       batch.update(indexRef, {
         logs: arrayUnion(logId),
-        lastUpdated: Timestamp.now(),
-      });
+        lastUpdated: Timestamp.now() });
     } catch {
       // 如果文檔不存在，創建新文檔
       batch.set(indexRef, {
         logs: [logId],
         createdAt: Timestamp.now(),
-        lastUpdated: Timestamp.now(),
-      }, { merge: true });
+        lastUpdated: Timestamp.now() }, { merge: true });
     }
   }
 
@@ -241,8 +236,7 @@ export class AuditLogWriter {
           
           batch.set(archiveRef, {
             ...archiveData,
-            archivedAt: Timestamp.now(),
-          });
+            archivedAt: Timestamp.now() });
         }
         
         if (this.retentionPolicy.deleteAfterArchive) {
@@ -322,9 +316,7 @@ export class AuditLogWriter {
       // 簡化 changes
       changes: log.changes ? {
         hasChanges: true,
-        changeCount: log.changes.diff?.length || 0,
-      } : undefined,
-    };
+        changeCount: log.changes.diff?.length || 0 } : undefined };
     
     return compressed;
   }
@@ -401,8 +393,7 @@ export class AuditLogWriter {
     return {
       bufferSize: this.buffer.length,
       isArchiving: this.isArchiving,
-      retentionDays: this.retentionPolicy.retentionDays,
-    };
+      retentionDays: this.retentionPolicy.retentionDays };
   }
 
   /**

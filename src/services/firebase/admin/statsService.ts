@@ -11,8 +11,7 @@ import {
   getCountFromServer,
   Timestamp,
   orderBy,
-  limit,
-} from 'firebase/firestore';
+  limit } from 'firebase/firestore';
 import { getFirebaseDb } from '@/services/firebase/config';
 import { SuperAdminStats, PlatformRevenue, OrganizationUsageStats } from '@/types/superadmin';
 import { Organization } from '@/types/entities';

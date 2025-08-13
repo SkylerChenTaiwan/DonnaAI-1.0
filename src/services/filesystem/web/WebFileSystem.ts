@@ -6,8 +6,7 @@
 // 編碼類型
 export const EncodingType = {
   UTF8: 'utf8' as const,
-  Base64: 'base64' as const,
-};
+  Base64: 'base64' as const };
 
 // 檔案資訊介面
 export interface FileInfo {
@@ -73,8 +72,7 @@ class WebFileSystemService {
       contents,
       encoding: options?.encoding || EncodingType.UTF8,
       modificationTime: Date.now(),
-      size: new Blob([contents]).size,
-    };
+      size: new Blob([contents]).size };
 
     return new Promise((resolve, reject) => {
       const request = store.put(fileData);
@@ -147,13 +145,11 @@ class WebFileSystemService {
             uri: fileUri,
             size: options?.size ? result.size : undefined,
             modificationTime: result.modificationTime,
-            isDirectory: false,
-          });
+            isDirectory: false });
         } else {
           resolve({
             exists: false,
-            uri: fileUri,
-          });
+            uri: fileUri });
         }
       };
       request.onerror = () => reject(request.error);
@@ -282,8 +278,7 @@ export const FileSystem = {
   
   revokeFileURL: (url: string) => webFileSystem.revokeFileURL(url),
   
-  clearAll: () => webFileSystem.clearAll(),
-};
+  clearAll: () => webFileSystem.clearAll() };
 
 // 匯出類型
 export type { FileInfo };

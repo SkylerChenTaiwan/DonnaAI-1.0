@@ -13,8 +13,7 @@ import {
   getDocs,
   setDoc,
   updateDoc,
-  limit,
-} from 'firebase/firestore';
+  limit } from 'firebase/firestore';
 import { getFirebaseDb } from '../config';
 import { getAuth } from 'firebase/auth';
 // import { createUserWithEmailAndPassword } from 'firebase/auth'; // 不應該在這裡使用，改用 Cloud Function
@@ -75,8 +74,7 @@ async function parseCSV(fileUri: string): Promise<any[]> {
         const result = Papa.parse(text, {
           header: true,
           skipEmptyLines: true,
-          encoding: 'UTF-8',
-        });
+          encoding: 'UTF-8' });
         
         if (result.errors.length > 0) {
           reject(new Error(`CSV 解析錯誤: ${result.errors[0].message}`));
@@ -103,8 +101,7 @@ async function parseExcel(fileUri: string): Promise<any[]> {
     
     const data = XLSX.utils.sheet_to_json(worksheet, {
       raw: false, // 將日期轉換為字串
-      dateNF: 'yyyy-mm-dd',
-    });
+      dateNF: 'yyyy-mm-dd' });
     
     return data;
   } catch (error) {
@@ -253,16 +250,14 @@ export async function importData(
     total: data.length,
     success: 0,
     failed: 0,
-    errors: [],
-  };
+    errors: [] };
   
   // 更新進度：開始驗證
   onProgress?.({
     current: 0,
     total: data.length,
     status: 'validating',
-    message: '正在驗證資料...',
-  });
+    message: '正在驗證資料...' });
   
   // 驗證資料
   const validatedData: Array<{ data: any; row: number }> = [];
@@ -296,8 +291,7 @@ export async function importData(
       result.failed++;
       result.errors.push({
         row,
-        message: validation.error || '驗證失敗',
-      });
+        message: validation.error || '驗證失敗' });
     }
   }
   
@@ -306,8 +300,7 @@ export async function importData(
     current: 0,
     total: validatedData.length,
     status: 'importing',
-    message: '正在匯入資料...',
-  });
+    message: '正在匯入資料...' });
   
   // 批量匯入（每批最多 500 筆）
   const batchSize = 500;
@@ -348,8 +341,7 @@ export async function importData(
           current: processedCount,
           total: validatedData.length,
           status: 'importing',
-          message: `正在匯入第 ${processedCount} / ${validatedData.length} 筆資料...`,
-        });
+          message: `正在匯入第 ${processedCount} / ${validatedData.length} 筆資料...` });
       }
       
       // 提交批次（用戶除外，因為已經單獨處理）
@@ -363,8 +355,7 @@ export async function importData(
         result.success = Math.max(0, result.success - 1);
         result.errors.push({
           row,
-          message: error instanceof Error ? error.message : '匯入失敗',
-        });
+          message: error instanceof Error ? error.message : '匯入失敗' });
       }
     }
   }
@@ -374,8 +365,7 @@ export async function importData(
     current: processedCount,
     total: validatedData.length,
     status: 'complete',
-    message: '匯入完成',
-  });
+    message: '匯入完成' });
   
   // 匯入完成後，更新組織統計
   if (result.success > 0) {
@@ -488,8 +478,7 @@ async function importTask(
     userId,
     createdAt: Timestamp.now(),
     updatedAt: Timestamp.now(),
-    completedAt: null,
-  };
+    completedAt: null };
   
   batch.set(taskRef, task);
 }
@@ -590,8 +579,7 @@ async function importUser(
       lastLoginAt: null,
       supervisorId: null,
       teamIds: [],
-      personalGoals: {},
-    };
+      personalGoals: {} };
     
     await setDoc(userRef, userData);
     console.warn(`⚠️ 已建立用戶文件但無 Auth 帳號: ${cleanedUser.email}`);
@@ -610,8 +598,7 @@ async function importUser(
         const existingUser = snapshot.docs[0];
         await existingUser.ref.update({
           ...cleanedUser,
-          updatedAt: Timestamp.now(),
-        });
+          updatedAt: Timestamp.now() });
       }
     } else {
       throw error;
@@ -631,16 +618,14 @@ export function generateImportTemplate(type: ImportType): string {
         電子郵件: 'contact@abc.com',
         電話: '02-12345678',
         地址: '台北市信義區信義路一段1號',
-        產業: '科技業',
-      },
+        產業: '科技業' },
       {
         公司名稱: 'XYZ 企業',
         聯絡人: '李四',
         電子郵件: 'info@xyz.com',
         電話: '03-87654321',
         地址: '新竹市東區光復路二段2號',
-        產業: '製造業',
-      },
+        產業: '製造業' },
     ],
     records: [
       {
@@ -648,15 +633,13 @@ export function generateImportTemplate(type: ImportType): string {
         內容: '討論新產品開發進度和市場策略',
         類型: 'meeting',
         日期: '2024-03-01',
-        標籤: '產品,策略',
-      },
+        標籤: '產品,策略' },
       {
         標題: '客戶拜訪記錄',
         內容: '拜訪客戶了解需求，介紹新服務方案',
         類型: 'visit',
         日期: '2024-03-02',
-        標籤: '客戶,銷售',
-      },
+        標籤: '客戶,銷售' },
     ],
     tasks: [
       {
@@ -664,15 +647,13 @@ export function generateImportTemplate(type: ImportType): string {
         描述: '為下週的客戶會議準備產品提案簡報',
         優先級: 'high',
         截止日期: '2024-03-10',
-        狀態: 'pending',
-      },
+        狀態: 'pending' },
       {
         任務名稱: '更新客戶資料',
         描述: '更新本月新增客戶的聯絡資訊',
         優先級: 'medium',
         截止日期: '2024-03-15',
-        狀態: 'pending',
-      },
+        狀態: 'pending' },
     ],
     users: [
       {
@@ -680,23 +661,19 @@ export function generateImportTemplate(type: ImportType): string {
         電子郵件: 'wang@example.com',
         角色: 'salesperson',
         部門: '業務部',
-        電話: '0912-345678',
-      },
+        電話: '0912-345678' },
       {
         姓名: '陳小華',
         電子郵件: 'chen@example.com',
         角色: 'manager',
         部門: '業務部',
-        電話: '0923-456789',
-      },
-    ],
-  };
+        電話: '0923-456789' },
+    ] };
   
   const template = templates[type];
   const csv = Papa.unparse(template, {
     header: true,
-    encoding: 'UTF-8',
-  });
+    encoding: 'UTF-8' });
   
   return csv;
 }

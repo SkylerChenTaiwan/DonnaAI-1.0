@@ -10,8 +10,7 @@ export const NotionCheckbox: React.FC<NotionCheckboxProps> = ({
   checked,
   onChange,
   indeterminate = false,
-  disabled = false,
-}) => {
+  disabled = false }) => {
   const checkboxRef = useRef<HTMLInputElement>(null);
 
   // 設定 indeterminate 狀態
@@ -109,19 +108,16 @@ const styles = StyleSheet.create({
     height: 18,
     alignItems: 'center',
     justifyContent: 'center',
-    cursor: 'pointer' as any,
-  },
+    cursor: 'pointer' as any },
   disabledContainer: {
     cursor: 'not-allowed' as any,
-    opacity: 0.5,
-  },
+    opacity: 0.5 },
   hiddenInput: {
     position: 'absolute',
     opacity: 0,
     pointerEvents: 'none',
     width: 0,
-    height: 0,
-  },
+    height: 0 },
   checkbox: {
     width: 16,
     height: 16,
@@ -131,18 +127,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
-    transition: 'all 0.15s ease',
-  },
+    transition: 'all 0.15s ease' },
   checkedCheckbox: {
     backgroundColor: '#0f7b0f',
-    borderColor: '#0f7b0f',
-  },
+    borderColor: '#0f7b0f' },
   indeterminateCheckbox: {
     backgroundColor: '#0f7b0f',
-    borderColor: '#0f7b0f',
-  },
+    borderColor: '#0f7b0f' },
   disabledCheckbox: {
     backgroundColor: '#f1f1ef',
-    borderColor: '#e9e9e7',
-  },
-});
+    borderColor: '#e9e9e7' } });

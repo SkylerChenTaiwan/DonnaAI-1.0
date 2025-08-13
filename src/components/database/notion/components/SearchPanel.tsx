@@ -24,8 +24,7 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({
   anchorEl,
   searchConfig,
   onSearchChange,
-  columns,
-}) => {
+  columns }) => {
   const [localQuery, setLocalQuery] = useState(searchConfig.query);
   const [selectedColumns, setSelectedColumns] = useState<string[]>(searchConfig.columns);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -51,8 +50,7 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({
     debounceTimeoutRef.current = setTimeout(() => {
       onSearchChange({
         ...searchConfig,
-        query: value,
-      });
+        query: value });
     }, 300);
   }, [searchConfig, onSearchChange]);
 
@@ -65,8 +63,7 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({
     setSelectedColumns(newColumns);
     onSearchChange({
       ...searchConfig,
-      columns: newColumns,
-    });
+      columns: newColumns });
   }, [selectedColumns, searchConfig, onSearchChange]);
 
   // 全選/取消全選
@@ -78,8 +75,7 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({
     setSelectedColumns([]);
     onSearchChange({
       ...searchConfig,
-      columns: [],
-    });
+      columns: [] });
   }, [searchConfig, onSearchChange]);
 
   // 清除搜尋
@@ -90,8 +86,7 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({
       query: '',
       columns: [],
       caseSensitive: false,
-      highlightMatches: true,
-    });
+      highlightMatches: true });
   }, [onSearchChange]);
 
   // 清理定時器

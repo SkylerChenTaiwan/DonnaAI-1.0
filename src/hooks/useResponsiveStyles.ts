@@ -46,156 +46,126 @@ export function useResponsiveStyles() {
         flex: 1,
         paddingHorizontal: padding.horizontal,
         paddingVertical: padding.vertical,
-        backgroundColor: DesignSystem.colors.background.primary,
-      },
+        backgroundColor: DesignSystem.colors.background.primary },
       
       // 內容容器（有最大寬度限制）
       contentContainer: {
         width: '100%',
         maxWidth: layout.contentMaxWidth,
         marginHorizontal: 'auto' as any,
-        paddingHorizontal: layout.contentPadding,
-      },
+        paddingHorizontal: layout.contentPadding },
       
       // 響應式網格
       grid: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        marginHorizontal: -gridConfig.gap / 2,
-      },
+        marginHorizontal: -gridConfig.gap / 2 },
       
       gridItem: {
         width: `${100 / gridConfig.columns}%`,
         paddingHorizontal: gridConfig.gap / 2,
-        marginBottom: gridConfig.gap,
-      },
+        marginBottom: gridConfig.gap },
       
       // 響應式卡片
       card: {
         backgroundColor: DesignSystem.colors.background.surface,
         borderRadius: DesignSystem.borderRadius.md,
         padding: isDesktop ? 24 : isTablet ? 20 : 16,
-        ...DesignSystem.shadows.sm,
-      },
+        ...DesignSystem.shadows.sm },
       
       // 響應式文字
       title: {
         ...DesignSystem.typography.h1,
         fontSize: isDesktop ? 32 : isTablet ? 28 : 24,
-        marginBottom: isDesktop ? 24 : isTablet ? 20 : 16,
-      },
+        marginBottom: isDesktop ? 24 : isTablet ? 20 : 16 },
       
       subtitle: {
         ...DesignSystem.typography.h2,
         fontSize: isDesktop ? 24 : isTablet ? 22 : 20,
-        marginBottom: isDesktop ? 20 : isTablet ? 16 : 12,
-      },
+        marginBottom: isDesktop ? 20 : isTablet ? 16 : 12 },
       
       body: {
         ...DesignSystem.typography.body,
         fontSize: isDesktop ? 16 : isTablet ? 15 : 14,
-        lineHeight: isDesktop ? 24 : isTablet ? 22 : 20,
-      },
+        lineHeight: isDesktop ? 24 : isTablet ? 22 : 20 },
       
       // 響應式按鈕
       button: {
         paddingVertical: isDesktop ? 14 : isTablet ? 12 : 10,
         paddingHorizontal: isDesktop ? 24 : isTablet ? 20 : 16,
-        borderRadius: DesignSystem.borderRadius.md,
-      },
+        borderRadius: DesignSystem.borderRadius.md },
       
       // 響應式表單
       formField: {
-        marginBottom: isDesktop ? 24 : isTablet ? 20 : 16,
-      },
+        marginBottom: isDesktop ? 24 : isTablet ? 20 : 16 },
       
       input: {
         height: isDesktop ? 48 : isTablet ? 44 : 40,
         paddingHorizontal: isDesktop ? 16 : isTablet ? 14 : 12,
-        fontSize: isDesktop ? 16 : isTablet ? 15 : 14,
-      },
+        fontSize: isDesktop ? 16 : isTablet ? 15 : 14 },
       
       // 響應式間距
       spacingXS: {
-        margin: DesignSystem.spacing.xs,
-      },
+        margin: DesignSystem.spacing.xs },
       spacingSM: {
-        margin: DesignSystem.spacing.sm,
-      },
+        margin: DesignSystem.spacing.sm },
       spacingMD: {
-        margin: DesignSystem.spacing.md,
-      },
+        margin: DesignSystem.spacing.md },
       spacingLG: {
-        margin: DesignSystem.spacing.lg,
-      },
+        margin: DesignSystem.spacing.lg },
       spacingXL: {
-        margin: DesignSystem.spacing.xl,
-      },
+        margin: DesignSystem.spacing.xl },
       
       // 響應式列表
       listItem: {
         paddingVertical: isDesktop ? 16 : isTablet ? 14 : 12,
-        paddingHorizontal: isDesktop ? 20 : isTablet ? 16 : 12,
-      },
+        paddingHorizontal: isDesktop ? 20 : isTablet ? 16 : 12 },
       
       // 響應式側邊欄佈局
       sidebarLayout: {
         flexDirection: isDesktop ? 'row' : 'column',
-        gap: isDesktop ? 24 : 0,
-      },
+        gap: isDesktop ? 24 : 0 },
       
       sidebar: {
         width: isDesktop ? 300 : '100%',
-        marginBottom: isDesktop ? 0 : 16,
-      },
+        marginBottom: isDesktop ? 0 : 16 },
       
       mainContent: {
         flex: 1,
-        minWidth: 0,
-      },
+        minWidth: 0 },
       
       // 響應式 Modal
       modalOverlay: {
-        padding: isMobile ? 16 : 24,
-      },
+        padding: isMobile ? 16 : 24 },
       
       modalContent: {
         width: '100%',
         maxWidth: isDesktop ? 600 : isTablet ? 480 : '100%',
         maxHeight: '90vh',
-        padding: isDesktop ? 32 : isTablet ? 24 : 20,
-      },
+        padding: isDesktop ? 32 : isTablet ? 24 : 20 },
       
       // 響應式表格
       tableContainer: {
-        overflowX: isMobile ? 'scroll' : 'auto',
-      },
+        overflowX: isMobile ? 'scroll' : 'auto' },
       
       // 工具類
       hiddenOnMobile: {
-        display: isMobile ? 'none' : 'flex',
-      },
+        display: isMobile ? 'none' : 'flex' },
       
       hiddenOnTablet: {
-        display: isTablet ? 'none' : 'flex',
-      },
+        display: isTablet ? 'none' : 'flex' },
       
       hiddenOnDesktop: {
-        display: isDesktop ? 'none' : 'flex',
-      },
+        display: isDesktop ? 'none' : 'flex' },
       
       visibleOnMobile: {
-        display: isMobile ? 'flex' : 'none',
-      },
+        display: isMobile ? 'flex' : 'none' },
       
       visibleOnTablet: {
-        display: isTablet ? 'flex' : 'none',
-      },
+        display: isTablet ? 'flex' : 'none' },
       
       visibleOnDesktop: {
-        display: isDesktop ? 'flex' : 'none',
-      },
-    });
+        display: isDesktop ? 'flex' : 'none' } });
   }, [breakpoint, isMobile, isTablet, isDesktop, layout]);
 }
 

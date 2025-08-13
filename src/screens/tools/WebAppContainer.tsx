@@ -9,8 +9,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   Alert,
-  SafeAreaView,
-} from 'react-native';
+  SafeAreaView } from 'react-native';
 import { WebView } from 'react-native-webview';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Layout } from '@/components/common/Layout';
@@ -54,8 +53,7 @@ export const WebAppContainer: React.FC = () => {
         user: ${JSON.stringify({
           id: user?.uid,
           email: user?.email,
-          organizationId: user?.organizationId,
-        })},
+          organizationId: user?.organizationId })},
         
         // 傳送訊息到原生應用
         sendMessage: function(type, data) {
@@ -448,8 +446,7 @@ export const WebAppContainer: React.FC = () => {
     <Layout
       headerProps={{
         title,
-        showBackButton: true,
-      }}
+        showBackButton: true }}
       style={styles.container}
     >
       <SafeAreaView style={styles.container}>
@@ -494,15 +491,11 @@ export const WebAppContainer: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
+    backgroundColor: '#FFFFFF' },
   webView: {
-    flex: 1,
-  },
+    flex: 1 },
   loadingContainer: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
+    alignItems: 'center' } });

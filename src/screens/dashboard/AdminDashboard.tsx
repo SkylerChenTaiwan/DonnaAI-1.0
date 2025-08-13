@@ -8,8 +8,7 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+  TouchableOpacity, Platform } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
@@ -25,8 +24,7 @@ export const AdminDashboard: React.FC = () => {
       color: '#007AFF',
       onPress: () => {
         console.log('組織管理');
-      },
-    },
+      } },
     {
       id: 'user-management',
       title: '使用者管理',
@@ -35,8 +33,7 @@ export const AdminDashboard: React.FC = () => {
       color: '#34C759',
       onPress: () => {
         console.log('使用者管理');
-      },
-    },
+      } },
     {
       id: 'ai-usage',
       title: 'AI 使用統計',
@@ -45,8 +42,7 @@ export const AdminDashboard: React.FC = () => {
       color: '#FF9500',
       onPress: () => {
         console.log('AI 使用統計');
-      },
-    },
+      } },
     {
       id: 'billing',
       title: '計費管理',
@@ -55,8 +51,7 @@ export const AdminDashboard: React.FC = () => {
       color: '#FF3B30',
       onPress: () => {
         console.log('計費管理');
-      },
-    },
+      } },
   ];
 
   const organizationStats = [
@@ -211,27 +206,22 @@ export const AdminDashboard: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
-  },
+    backgroundColor: '#F8F9FA' },
   welcomeSection: {
     padding: 24,
-    backgroundColor: '#FFFFFF',
-  },
+    backgroundColor: '#FFFFFF' },
   welcomeText: {
     fontSize: 24,
     fontWeight: '700',
     color: '#1C1C1E',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   welcomeSubtext: {
     fontSize: 16,
-    color: '#8E8E93',
-  },
+    color: '#8E8E93' },
   statsContainer: {
     flexDirection: 'row',
     padding: 16,
-    gap: 12,
-  },
+    gap: 12 },
   statCard: {
     flex: 1,
     backgroundColor: '#FFFFFF',
@@ -239,35 +229,29 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
     shadowOpacity: 0.05,
     shadowRadius: 2,
-    elevation: 1,
-  },
+    elevation: 1 },
   statValue: {
     fontSize: 16,
     fontWeight: '700',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   statLabel: {
     fontSize: 10,
     color: '#8E8E93',
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   section: {
-    padding: 16,
-  },
+    padding: 16 },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: '#1C1C1E',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   actionsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
-  },
+    gap: 12 },
   actionCard: {
     width: '47%',
     backgroundColor: '#FFFFFF',
@@ -275,85 +259,73 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
     shadowOpacity: 0.05,
     shadowRadius: 2,
-    elevation: 1,
-  },
+    elevation: 1 },
   actionIcon: {
     width: 48,
     height: 48,
     borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   actionTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: '#1C1C1E',
     marginBottom: 4,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   actionSubtitle: {
     fontSize: 12,
     color: '#8E8E93',
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   statusCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
     shadowOpacity: 0.05,
     shadowRadius: 2,
-    elevation: 1,
-  },
+    elevation: 1 },
   statusItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
-  },
+    borderBottomColor: '#F2F2F7' },
   statusIndicator: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   statusDot: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    marginRight: 12,
-  },
+    marginRight: 12 },
   statusTitle: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#1C1C1E',
-  },
+    color: '#1C1C1E' },
   statusValue: {
     fontSize: 14,
-    color: '#8E8E93',
-  },
+    color: '#8E8E93' },
   activityCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
     shadowOpacity: 0.05,
     shadowRadius: 2,
-    elevation: 1,
-  },
+    elevation: 1 },
   activityItem: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
-  },
+    borderBottomColor: '#F2F2F7' },
   activityIcon: {
     width: 32,
     height: 32,
@@ -361,52 +333,41 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2F2F7',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
-  },
+    marginRight: 12 },
   activityContent: {
-    flex: 1,
-  },
+    flex: 1 },
   activityTitle: {
     fontSize: 14,
     fontWeight: '500',
     color: '#1C1C1E',
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   activityTime: {
     fontSize: 12,
-    color: '#8E8E93',
-  },
+    color: '#8E8E93' },
   summaryCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
     shadowOpacity: 0.05,
     shadowRadius: 2,
-    elevation: 1,
-  },
+    elevation: 1 },
   summaryTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1C1C1E',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   summaryStats: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   summaryItem: {
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   summaryLabel: {
     fontSize: 12,
     color: '#8E8E93',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   summaryValue: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#007AFF',
-  },
-});
+    color: '#007AFF' } });

@@ -104,8 +104,7 @@ const initialState = {
   filterStatus: 'all' as const,
   sortBy: 'name' as const,
   sortOrder: 'asc' as const,
-  unsubscribe: null,
-};
+  unsubscribe: null };
 
 export const usePersonnelStore = create<PersonnelState>()(
   devtools(
@@ -155,8 +154,7 @@ export const usePersonnelStore = create<PersonnelState>()(
               ...data,
               lastActiveAt: data.lastActiveAt?.toDate(),
               createdAt: data.createdAt?.toDate(),
-              updatedAt: data.updatedAt?.toDate(),
-            } as EnhancedUser);
+              updatedAt: data.updatedAt?.toDate() } as EnhancedUser);
           });
           
           set({ users, isLoading: false });
@@ -176,8 +174,7 @@ export const usePersonnelStore = create<PersonnelState>()(
           const userRef = doc(db, 'users', userId);
           await updateDoc(userRef, {
             reportingTo,
-            updatedAt: new Date(),
-          });
+            updatedAt: new Date() });
           
           // 更新本地狀態
           set(state => ({
@@ -185,8 +182,7 @@ export const usePersonnelStore = create<PersonnelState>()(
               user.id === userId
                 ? { ...user, reportingTo }
                 : user
-            ),
-          }));
+            ) }));
           
           // 重建組織結構
           get().buildOrgStructure();
@@ -201,8 +197,7 @@ export const usePersonnelStore = create<PersonnelState>()(
           const userRef = doc(db, 'users', userId);
           await updateDoc(userRef, {
             permissions,
-            updatedAt: new Date(),
-          });
+            updatedAt: new Date() });
           
           // 更新本地狀態
           set(state => ({
@@ -210,8 +205,7 @@ export const usePersonnelStore = create<PersonnelState>()(
               user.id === userId
                 ? { ...user, permissions }
                 : user
-            ),
-          }));
+            ) }));
         } catch (error) {
           console.error('更新權限失敗:', error);
           set({ error: '更新權限失敗' });
@@ -267,16 +261,14 @@ export const usePersonnelStore = create<PersonnelState>()(
             organizationId: users[0].organizationId,
             isActive: true,
             createdAt: new Date(),
-            updatedAt: new Date(),
-          };
+            updatedAt: new Date() };
           
           orgStructure = {
             id: 'root',
             user: virtualRoot,
             children: rootUsers.map(user => buildNode(user)),
             expanded: true,
-            position: { x: 0, y: 0 },
-          };
+            position: { x: 0, y: 0 } };
         } else {
           orgStructure = null;
         }
@@ -291,13 +283,11 @@ export const usePersonnelStore = create<PersonnelState>()(
           }
           return {
             ...node,
-            children: node.children.map(updateNodeExpansion),
-          };
+            children: node.children.map(updateNodeExpansion) };
         };
         
         set(state => ({
-          orgStructure: state.orgStructure ? updateNodeExpansion(state.orgStructure) : null,
-        }));
+          orgStructure: state.orgStructure ? updateNodeExpansion(state.orgStructure) : null }));
       },
       
       collapseNode: (nodeId: string) => {
@@ -307,13 +297,11 @@ export const usePersonnelStore = create<PersonnelState>()(
           }
           return {
             ...node,
-            children: node.children.map(updateNodeExpansion),
-          };
+            children: node.children.map(updateNodeExpansion) };
         };
         
         set(state => ({
-          orgStructure: state.orgStructure ? updateNodeExpansion(state.orgStructure) : null,
-        }));
+          orgStructure: state.orgStructure ? updateNodeExpansion(state.orgStructure) : null }));
       },
       
       updateNodePosition: (nodeId: string, position: { x: number; y: number }) => {
@@ -323,13 +311,11 @@ export const usePersonnelStore = create<PersonnelState>()(
           }
           return {
             ...node,
-            children: node.children.map(updatePosition),
-          };
+            children: node.children.map(updatePosition) };
         };
         
         set(state => ({
-          orgStructure: state.orgStructure ? updatePosition(state.orgStructure) : null,
-        }));
+          orgStructure: state.orgStructure ? updatePosition(state.orgStructure) : null }));
       },
       
       // 訂閱管理
@@ -375,8 +361,7 @@ export const usePersonnelStore = create<PersonnelState>()(
                   ...data,
                   lastActiveAt: data.lastActiveAt?.toDate(),
                   createdAt: data.createdAt?.toDate(),
-                  updatedAt: data.updatedAt?.toDate(),
-                } as EnhancedUser);
+                  updatedAt: data.updatedAt?.toDate() } as EnhancedUser);
               });
               
               set({ users });
@@ -458,11 +443,9 @@ export const usePersonnelStore = create<PersonnelState>()(
         });
       },
       
-      reset: () => set(initialState),
-    }),
+      reset: () => set(initialState) }),
     {
-      name: 'personnel-store',
-    }
+      name: 'personnel-store' }
   )
 );
 

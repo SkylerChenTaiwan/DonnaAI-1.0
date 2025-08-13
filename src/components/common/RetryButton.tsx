@@ -37,18 +37,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#FFE0D6',
-    alignSelf: 'center',
-  },
+    alignSelf: 'center' },
   content: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   icon: {
-    marginRight: 8,
-  },
+    marginRight: 8 },
   text: {
     color: '#FF6B35',
     fontSize: 16,
-    fontWeight: '500',
-  },
-});
+    fontWeight: '500' } });

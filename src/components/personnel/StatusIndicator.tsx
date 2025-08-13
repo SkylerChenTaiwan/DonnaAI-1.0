@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet , Platform } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 import { EnhancedUser } from '@/types/personnel';
@@ -88,31 +88,24 @@ export function StatusIndicator({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    gap: 4,
-  },
+    gap: 4 },
   statusRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-  },
+    gap: 6 },
   statusDot: {
     borderRadius: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
     shadowOpacity: 0.1,
     shadowRadius: 1,
-    elevation: 1,
-  },
+    elevation: 1 },
   statusText: {
     fontWeight: '500',
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   lastActiveRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-  },
+    gap: 4 },
   lastActiveText: {
-    color: DesignSystem.colors.text.tertiary,
-  },
-});
+    color: DesignSystem.colors.text.tertiary } });

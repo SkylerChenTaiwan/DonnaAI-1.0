@@ -95,8 +95,7 @@ export const SortPanel: React.FC<SortPanelProps> = ({
     // 重新分配優先級
     const reorderedSorts = newSorts.map((sort, index) => ({
       ...sort,
-      priority: index,
-    }));
+      priority: index }));
 
     onSortsChange(reorderedSorts);
     setDraggedIndex(null);
@@ -305,8 +304,7 @@ function getColumnTypeLabel(type: string): string {
     'email': '電子郵件',
     'phone': '電話',
     'tags': '標籤',
-    'relation': '關聯',
-  };
+    'relation': '關聯' };
   return labels[type] || type;
 }
 

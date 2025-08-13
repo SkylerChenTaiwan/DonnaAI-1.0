@@ -19,8 +19,7 @@ if (Platform.OS === 'web') {
       version: '1.0.0',
       nextTick: (callback: Function) => {
         setTimeout(callback, 0);
-      },
-    };
+      } };
   }
 
   // 3. Buffer polyfill (某些套件可能需要)
@@ -33,8 +32,7 @@ if (Platform.OS === 'web') {
         return data;
       },
       alloc: (size: number) => new Uint8Array(size),
-      isBuffer: (obj: any) => obj instanceof Uint8Array,
-    };
+      isBuffer: (obj: any) => obj instanceof Uint8Array };
   }
 
   // 4. Crypto polyfill 

@@ -10,8 +10,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { ImportUserData, UserEditEvent, BatchOperationOptions, UserImportStats } from '@/types/userImport';
 import { DesignSystem } from '@/theme/designSystem';
@@ -399,54 +398,41 @@ export const UserDataPreviewTable: React.FC<UserDataPreviewTableProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   statsContainer: {
     padding: DesignSystem.spacing.md,
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: DesignSystem.borderRadius.md,
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   statsTitle: {
     ...DesignSystem.typography.h4,
     color: DesignSystem.colors.text.primary,
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   statsRow: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
+    justifyContent: 'space-around' },
   statItem: {
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   statNumber: {
     ...DesignSystem.typography.h3,
     color: DesignSystem.colors.text.primary,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   statNumberValid: {
-    color: DesignSystem.colors.success,
-  },
+    color: DesignSystem.colors.success },
   statNumberInvalid: {
-    color: DesignSystem.colors.error,
-  },
+    color: DesignSystem.colors.error },
   statNumberDuplicate: {
-    color: DesignSystem.colors.warning,
-  },
+    color: DesignSystem.colors.warning },
   statNumberSelected: {
-    color: DesignSystem.colors.primary,
-  },
+    color: DesignSystem.colors.primary },
   statLabel: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginTop: DesignSystem.spacing.xxs,
-  },
+    marginTop: DesignSystem.spacing.xxs },
   filtersContainer: {
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   filtersContent: {
-    paddingHorizontal: DesignSystem.spacing.md,
-  },
+    paddingHorizontal: DesignSystem.spacing.md },
   filterChip: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -456,21 +442,17 @@ const styles = StyleSheet.create({
     borderRadius: DesignSystem.borderRadius.sm,
     backgroundColor: DesignSystem.colors.background.surface,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.border.light,
-  },
+    borderColor: DesignSystem.colors.border.light },
   filterChipActive: {
     backgroundColor: DesignSystem.colors.primary,
-    borderColor: DesignSystem.colors.primary,
-  },
+    borderColor: DesignSystem.colors.primary },
   filterChipText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.secondary,
     marginLeft: DesignSystem.spacing.xxs,
-    marginRight: DesignSystem.spacing.xxs,
-  },
+    marginRight: DesignSystem.spacing.xxs },
   filterChipTextActive: {
-    color: DesignSystem.colors.text.inverse,
-  },
+    color: DesignSystem.colors.text.inverse },
   filterChipCount: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.tertiary,
@@ -480,12 +462,10 @@ const styles = StyleSheet.create({
     borderRadius: DesignSystem.borderRadius.xs,
     fontSize: 11,
     minWidth: 20,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   filterChipCountActive: {
     color: DesignSystem.colors.text.inverse,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-  },
+    backgroundColor: 'rgba(255, 255, 255, 0.2)' },
   toolbar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -493,72 +473,56 @@ const styles = StyleSheet.create({
     paddingHorizontal: DesignSystem.spacing.md,
     paddingVertical: DesignSystem.spacing.sm,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   toolbarLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
-  },
+    flex: 1 },
   toolbarRight: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   selectAllButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: DesignSystem.spacing.md,
-  },
+    marginRight: DesignSystem.spacing.md },
   selectAllText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
-    marginLeft: DesignSystem.spacing.xs,
-  },
+    marginLeft: DesignSystem.spacing.xs },
   countText: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   batchActionsButton: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   batchActionsText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.primary,
-    marginLeft: DesignSystem.spacing.xs,
-  },
+    marginLeft: DesignSystem.spacing.xs },
   batchActionsPanel: {
     backgroundColor: DesignSystem.colors.background.surface,
     borderBottomWidth: 1,
     borderBottomColor: DesignSystem.colors.border.light,
     paddingVertical: DesignSystem.spacing.sm,
-    paddingHorizontal: DesignSystem.spacing.md,
-  },
+    paddingHorizontal: DesignSystem.spacing.md },
   batchActionButton: {
-    marginRight: DesignSystem.spacing.sm,
-  },
+    marginRight: DesignSystem.spacing.sm },
   tableContainer: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   userRow: {
-    marginHorizontal: DesignSystem.spacing.md,
-  },
+    marginHorizontal: DesignSystem.spacing.md },
   userRowLast: {
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: DesignSystem.spacing.xl,
-  },
+    padding: DesignSystem.spacing.xl },
   emptyText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.tertiary,
     textAlign: 'center',
-    marginTop: DesignSystem.spacing.md,
-  },
-});
+    marginTop: DesignSystem.spacing.md } });
 
 export default UserDataPreviewTable;

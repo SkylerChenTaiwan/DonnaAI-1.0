@@ -6,8 +6,7 @@
 import {
   IDataTypeInferrer,
   DataType,
-  DATA_FORMATS,
-} from '@/types/intelligentImport';
+  DATA_FORMATS } from '@/types/intelligentImport';
 
 export class DataTypeInferrer implements IDataTypeInferrer {
   private readonly sampleSize: number = 100;
@@ -525,8 +524,6 @@ export class DataTypeInferrer implements IDataTypeInferrer {
         nonNullValues: nonNullValues.length,
         uniqueValues: valueCounts.size,
         mostCommonValue: sortedCounts[0]?.[0],
-        mostCommonValueCount: sortedCounts[0]?.[1],
-      },
-    };
+        mostCommonValueCount: sortedCounts[0]?.[1] } };
   }
 }

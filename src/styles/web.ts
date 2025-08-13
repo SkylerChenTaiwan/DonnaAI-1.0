@@ -52,12 +52,8 @@ export const webStyles = StyleSheet.create({
           mobile: 16,
           tablet: 24,
           desktop: 32,
-          default: 16,
-        }),
-      },
-      default: {},
-    }),
-  },
+          default: 16 }) },
+      default: {} }) },
 
   // 響應式網格容器
   gridContainer: {
@@ -69,16 +65,11 @@ export const webStyles = StyleSheet.create({
           tablet: 'repeat(2, 1fr)',
           desktop: 'repeat(3, 1fr)',
           largeDesktop: 'repeat(4, 1fr)',
-          default: '1fr',
-        }),
-        gap: 16,
-      },
+          default: '1fr' }),
+        gap: 16 },
       default: {
         flexDirection: 'row' as const,
-        flexWrap: 'wrap' as const,
-      },
-    }),
-  },
+        flexWrap: 'wrap' as const } }) },
 
   // 側邊欄佈局
   sidebarLayout: {
@@ -86,11 +77,8 @@ export const webStyles = StyleSheet.create({
       web: {
         display: 'flex' as any,
         flexDirection: 'row' as const,
-        gap: 24,
-      },
-      default: {},
-    }),
-  },
+        gap: 24 },
+      default: {} }) },
 
   sidebar: {
     ...Platform.select({
@@ -99,13 +87,9 @@ export const webStyles = StyleSheet.create({
           mobile: '100%',
           tablet: 280,
           desktop: 320,
-          default: '100%',
-        }),
-        flexShrink: 0,
-      },
-      default: {},
-    }),
-  },
+          default: '100%' }),
+        flexShrink: 0 },
+      default: {} }) },
 
   mainContent: {
     ...Platform.select({
@@ -114,10 +98,7 @@ export const webStyles = StyleSheet.create({
         minWidth: 0, // 防止內容溢出
       },
       default: {
-        flex: 1,
-      },
-    }),
-  },
+        flex: 1 } }) },
 
   // 滾動容器
   scrollView: {
@@ -127,11 +108,8 @@ export const webStyles = StyleSheet.create({
         overflowY: 'auto' as any,
         overflowX: 'hidden' as any,
         WebkitOverflowScrolling: 'touch' as any,
-        scrollBehavior: 'smooth' as any,
-      },
-      default: {},
-    }),
-  },
+        scrollBehavior: 'smooth' as any },
+      default: {} }) },
 
   // 觸控優化
   touchable: {
@@ -141,26 +119,18 @@ export const webStyles = StyleSheet.create({
         userSelect: 'none' as any,
         transition: 'all 0.2s ease' as any,
         ':hover': {
-          opacity: 0.8,
-        },
+          opacity: 0.8 },
         ':active': {
-          transform: 'scale(0.98)',
-        },
-      },
-      default: {},
-    }),
-  },
+          transform: 'scale(0.98)' } },
+      default: {} }) },
 
   // 文字選擇
   selectableText: {
     ...Platform.select({
       web: {
         userSelect: 'text' as any,
-        cursor: 'text' as any,
-      },
-      default: {},
-    }),
-  },
+        cursor: 'text' as any },
+      default: {} }) },
 
   // 隱藏滾動條
   hideScrollbar: {
@@ -169,12 +139,8 @@ export const webStyles = StyleSheet.create({
         scrollbarWidth: 'none' as any,
         msOverflowStyle: 'none' as any,
         '::-webkit-scrollbar': {
-          display: 'none',
-        },
-      },
-      default: {},
-    }),
-  },
+          display: 'none' } },
+      default: {} }) },
 
   // 桌面優化的模態框
   modalOverlay: {
@@ -189,11 +155,8 @@ export const webStyles = StyleSheet.create({
         display: 'flex' as any,
         alignItems: 'center',
         justifyContent: 'center',
-        zIndex: 1000,
-      },
-      default: {},
-    }),
-  },
+        zIndex: 1000 },
+      default: {} }) },
 
   modalContent: {
     ...Platform.select({
@@ -205,15 +168,11 @@ export const webStyles = StyleSheet.create({
           mobile: '90%',
           tablet: 600,
           desktop: 800,
-          default: '90%',
-        }),
+          default: '90%' }),
         maxHeight: '90vh',
         overflowY: 'auto' as any,
-        boxShadow: '0 4px 24px rgba(0, 0, 0, 0.15)' as any,
-      },
-      default: {},
-    }),
-  },
+        boxShadow: '0 4px 24px rgba(0, 0, 0, 0.15)' as any },
+      default: {} }) },
 
   // 固定頭部
   fixedHeader: {
@@ -224,11 +183,8 @@ export const webStyles = StyleSheet.create({
         zIndex: 100,
         backgroundColor: 'white',
         borderBottomWidth: 1,
-        borderBottomColor: '#e0e0e0',
-      },
-      default: {},
-    }),
-  },
+        borderBottomColor: '#e0e0e0' },
+      default: {} }) },
 
   // 浮動操作按鈕
   fab: {
@@ -239,24 +195,17 @@ export const webStyles = StyleSheet.create({
           mobile: 16,
           tablet: 24,
           desktop: 32,
-          default: 16,
-        }),
+          default: 16 }),
         right: responsive({
           mobile: 16,
           tablet: 24,
           desktop: 32,
-          default: 16,
-        }),
-        zIndex: 999,
-      },
+          default: 16 }),
+        zIndex: 999 },
       default: {
         position: 'absolute' as const,
         bottom: 16,
-        right: 16,
-      },
-    }),
-  },
-});
+        right: 16 } }) } });
 
 // 條件樣式助手
 export const webOnly = (styles: any) => {
@@ -290,64 +239,47 @@ export const mediaQuery = (
 export const transitions = {
   default: Platform.select({
     web: {
-      transition: 'all 0.3s ease' as any,
-    },
-    default: {},
-  }),
+      transition: 'all 0.3s ease' as any },
+    default: {} }),
   
   fast: Platform.select({
     web: {
-      transition: 'all 0.15s ease' as any,
-    },
-    default: {},
-  }),
+      transition: 'all 0.15s ease' as any },
+    default: {} }),
   
   slow: Platform.select({
     web: {
-      transition: 'all 0.5s ease' as any,
-    },
-    default: {},
-  }),
-};
+      transition: 'all 0.5s ease' as any },
+    default: {} }) };
 
 // 陰影效果（Web 優化）
 export const shadows = {
   small: Platform.select({
     web: {
-      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' as any,
-    },
+      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' as any },
     default: {
       shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
+      ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
       shadowOpacity: 0.1,
       shadowRadius: 4,
-      elevation: 2,
-    },
-  }),
+      elevation: 2 } }),
   
   medium: Platform.select({
     web: {
-      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.15)' as any,
-    },
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.15)' as any },
     default: {
       shadowColor: '#000',
-      shadowOffset: { width: 0, height: 4 },
+      ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 4 } }),
       shadowOpacity: 0.15,
       shadowRadius: 8,
-      elevation: 4,
-    },
-  }),
+      elevation: 4 } }),
   
   large: Platform.select({
     web: {
-      boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)' as any,
-    },
+      boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)' as any },
     default: {
       shadowColor: '#000',
-      shadowOffset: { width: 0, height: 8 },
+      ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 8 } }),
       shadowOpacity: 0.2,
       shadowRadius: 16,
-      elevation: 8,
-    },
-  }),
-};
+      elevation: 8 } }) };

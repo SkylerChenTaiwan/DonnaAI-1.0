@@ -16,8 +16,7 @@ export const useNotionColumns = ({
   onUpdateCell,
   onColumnsReorder,
   activeTab,
-  includeSelectColumn = true,
-}: UseNotionColumnsProps): TanStackTableColumn[] => {
+  includeSelectColumn = true }: UseNotionColumnsProps): TanStackTableColumn[] => {
   
   const dataColumns = useMemo(() => {
     const baseColumns = generateColumnsByType(activeTab, onUpdateCell);
@@ -44,8 +43,7 @@ export const useNotionColumns = ({
             placeholder={`輸入${col.header}`}
           />
         );
-      },
-    }));
+      } }));
   }, [activeTab, onUpdateCell]);
 
   const columns = useMemo(() => {
@@ -69,8 +67,7 @@ export const useNotionColumns = ({
           />
         ),
         size: 40,
-        enableSorting: false,
-      });
+        enableSorting: false });
     }
     
     // 資料欄位

@@ -8,8 +8,7 @@ import {
   Text,
   StyleSheet,
   Alert,
-  Image,
-} from 'react-native';
+  Image } from 'react-native';
 import { Layout } from '@/components/common/Layout';
 import { TextInput } from '@/components/common/TextInput';
 import { Button } from '@/components/common/Button';
@@ -21,8 +20,7 @@ interface LoginScreenProps {
 }
 
 export const LoginScreen: React.FC<LoginScreenProps> = ({
-  onNavigateToRegister,
-}) => {
+  onNavigateToRegister }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -136,46 +134,35 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   header: {
     alignItems: 'center',
-    marginBottom: 48,
-  },
+    marginBottom: 48 },
   logo: {
     width: 120,
     height: 60,
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   title: {
     ...DesignSystem.typography.h1,
     color: DesignSystem.colors.text.primary,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   subtitle: {
     fontSize: 18,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   form: {
-    width: '100%',
-  },
+    width: '100%' },
   loginButton: {
     marginTop: 8,
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   footer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   footerText: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   errorText: {
     ...DesignSystem.typography.bodySmall,
     color: DesignSystem.colors.status.error,
     textAlign: 'center',
-    marginBottom: 16,
-  },
-});
+    marginBottom: 16 } });

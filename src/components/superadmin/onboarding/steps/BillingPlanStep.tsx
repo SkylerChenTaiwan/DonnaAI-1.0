@@ -12,24 +12,21 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { DesignSystem } from '@/theme/designSystem';
 import {
   StepProps,
   BillingPlanData,
   BillingPlan,
-  DEFAULT_BILLING_PLANS,
-} from '@/types/onboarding';
+  DEFAULT_BILLING_PLANS } from '@/types/onboarding';
 import { withAlpha } from '@/utils/colorUtils';
 
 const BillingPlanStep: React.FC<StepProps> = ({
   data,
   onChange,
   onValidate,
-  isActive,
-}) => {
+  isActive }) => {
   const colors = DesignSystem.colors;
   
   // 初始化資料
@@ -41,8 +38,7 @@ const BillingPlanStep: React.FC<StepProps> = ({
     paymentMethod: 'card', // 預設為信用卡
     billingEmail: '',
     notes: '',
-    ...data,
-  });
+    ...data });
 
   // 當資料變更時通知父元件
   useEffect(() => {
@@ -57,16 +53,14 @@ const BillingPlanStep: React.FC<StepProps> = ({
       ...prev,
       planId,
       // 根據方案調整預設座位數
-      seats: planId === 'trial' ? 5 : planId === 'enterprise' ? 100 : prev.seats,
-    }));
+      seats: planId === 'trial' ? 5 : planId === 'enterprise' ? 100 : prev.seats }));
   };
 
   // 切換計費週期
   const toggleBillingCycle = () => {
     setFormData(prev => ({
       ...prev,
-      billingCycle: prev.billingCycle === 'monthly' ? 'yearly' : 'monthly',
-    }));
+      billingCycle: prev.billingCycle === 'monthly' ? 'yearly' : 'monthly' }));
   };
 
   // 計算價格
@@ -409,15 +403,13 @@ const BillingPlanStep: React.FC<StepProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   billingCycleContainer: {
     flexDirection: 'row',
     backgroundColor: DesignSystem.colors.gray100,
     borderRadius: 8,
     padding: 4,
-    marginBottom: 20,
-  },
+    marginBottom: 20 },
   cycleOption: {
     flex: 1,
     flexDirection: 'row',
@@ -425,42 +417,35 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 10,
     borderRadius: 6,
-    position: 'relative',
-  },
+    position: 'relative' },
   cycleOptionActive: {
     backgroundColor: DesignSystem.colors.background.surface,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
     shadowOpacity: 0.05,
     shadowRadius: 2,
-    elevation: 1,
-  },
+    elevation: 1 },
   cycleText: {
     fontSize: 14,
     color: DesignSystem.colors.gray600,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   cycleTextActive: {
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   discountBadge: {
     backgroundColor: DesignSystem.colors.status.success,
     borderRadius: 10,
     paddingHorizontal: 6,
     paddingVertical: 2,
-    marginLeft: 8,
-  },
+    marginLeft: 8 },
   discountText: {
     fontSize: 11,
     color: DesignSystem.colors.background.surface,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   plansGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 16,
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   planCard: {
     flex: 1,
     minWidth: Platform.OS === 'web' ? 280 : '100%',
@@ -469,15 +454,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: DesignSystem.colors.gray200,
     padding: 20,
-    position: 'relative',
-  },
+    position: 'relative' },
   planCardSelected: {
     borderColor: DesignSystem.colors.primary,
-    borderWidth: 2,
-  },
+    borderWidth: 2 },
   planCardPopular: {
-    borderColor: DesignSystem.colors.primary,
-  },
+    borderColor: DesignSystem.colors.primary },
   popularBadge: {
     position: 'absolute',
     top: -12,
@@ -485,85 +467,67 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.primary,
     borderRadius: 12,
     paddingHorizontal: 12,
-    paddingVertical: 4,
-  },
+    paddingVertical: 4 },
   popularText: {
     fontSize: 11,
     color: DesignSystem.colors.background.surface,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   planHeader: {
-    marginBottom: 20,
-  },
+    marginBottom: 20 },
   planName: {
     fontSize: 20,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   planNameSelected: {
-    color: DesignSystem.colors.primary,
-  },
+    color: DesignSystem.colors.primary },
   planPrice: {
     fontSize: 28,
     fontWeight: '700',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   planPriceSelected: {
-    color: DesignSystem.colors.primary,
-  },
+    color: DesignSystem.colors.primary },
   planPriceUnit: {
     fontSize: 14,
     color: DesignSystem.colors.gray600,
-    marginTop: 4,
-  },
+    marginTop: 4 },
   planPriceUnitSelected: {
-    color: DesignSystem.colors.primary,
-  },
+    color: DesignSystem.colors.primary },
   planFeatures: {
-    gap: 12,
-  },
+    gap: 12 },
   featureRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: 8,
-  },
+    gap: 8 },
   featureText: {
     flex: 1,
     fontSize: 14,
     color: DesignSystem.colors.gray700,
-    lineHeight: 20,
-  },
+    lineHeight: 20 },
   featureTextSelected: {
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   selectedIndicator: {
     position: 'absolute',
     top: 16,
-    right: 16,
-  },
+    right: 16 },
   seatsContainer: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   seatsLabel: {
     fontSize: 16,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   seatsSelector: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 16,
-  },
+    gap: 16 },
   seatButton: {
     width: 36,
     height: 36,
     borderRadius: 18,
     backgroundColor: DesignSystem.colors.gray100,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   seatsInput: {
     flex: 1,
     maxWidth: 100,
@@ -575,26 +539,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    backgroundColor: DesignSystem.colors.background.surface,
-  },
+    backgroundColor: DesignSystem.colors.background.surface },
   seatsHint: {
     fontSize: 13,
     color: DesignSystem.colors.gray600,
-    marginTop: 8,
-  },
+    marginTop: 8 },
   paymentContainer: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   paymentLabel: {
     fontSize: 16,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   paymentOptions: {
     flexDirection: 'row',
-    gap: 12,
-  },
+    gap: 12 },
   paymentOption: {
     flex: 1,
     alignItems: 'center',
@@ -604,38 +563,30 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: DesignSystem.colors.gray300,
     backgroundColor: DesignSystem.colors.background.surface,
-    gap: 8,
-  },
+    gap: 8 },
   paymentOptionActive: {
     borderColor: DesignSystem.colors.primary,
-    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
-  },
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063) },
   paymentText: {
     fontSize: 12,
     color: DesignSystem.colors.gray700,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   paymentTextActive: {
-    color: DesignSystem.colors.primary,
-  },
+    color: DesignSystem.colors.primary },
   additionalInfo: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   additionalLabel: {
     fontSize: 16,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   inputGroup: {
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   inputLabel: {
     fontSize: 14,
     color: DesignSystem.colors.gray700,
     marginBottom: 8,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   input: {
     borderWidth: 1,
     borderColor: DesignSystem.colors.gray300,
@@ -644,59 +595,47 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     fontSize: 14,
     color: DesignSystem.colors.text.primary,
-    backgroundColor: DesignSystem.colors.background.surface,
-  },
+    backgroundColor: DesignSystem.colors.background.surface },
   textArea: {
     minHeight: 80,
-    textAlignVertical: 'top',
-  },
+    textAlignVertical: 'top' },
   priceSummary: {
     backgroundColor: DesignSystem.colors.gray50,
     borderRadius: 12,
     padding: 20,
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   summaryTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   summaryRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   summaryLabel: {
     fontSize: 14,
-    color: DesignSystem.colors.gray600,
-  },
+    color: DesignSystem.colors.gray600 },
   summaryValue: {
     fontSize: 14,
     color: DesignSystem.colors.text.primary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   discountValue: {
-    color: DesignSystem.colors.status.success,
-  },
+    color: DesignSystem.colors.status.success },
   summaryTotal: {
     borderTopWidth: 1,
     borderTopColor: DesignSystem.colors.gray200,
     paddingTop: 12,
     marginTop: 12,
-    marginBottom: 0,
-  },
+    marginBottom: 0 },
   totalLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   totalValue: {
     fontSize: 20,
     fontWeight: '700',
-    color: DesignSystem.colors.primary,
-  },
-});
+    color: DesignSystem.colors.primary } });
 
 export default BillingPlanStep;

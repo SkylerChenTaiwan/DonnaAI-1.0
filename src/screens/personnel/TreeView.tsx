@@ -9,8 +9,7 @@ import {
   StyleSheet,
   RefreshControl,
   ScrollView,
-  ActivityIndicator,
-} from 'react-native';
+  ActivityIndicator, Platform } from 'react-native';
 import { OrgChart } from '@/components/personnel/OrgChart';
 import { OrgNode } from '@/types/organization';
 import { TeamMember } from './PersonnelScreen';
@@ -172,31 +171,26 @@ export function TreeView({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background,
-  },
+    backgroundColor: DesignSystem.colors.background },
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 100,
-  },
+    paddingVertical: 100 },
   emptyTitle: {
     fontSize: 20,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
     marginTop: 16,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   emptyText: {
     fontSize: 14,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   statsContainer: {
     flexDirection: 'row',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    gap: 12,
-  },
+    gap: 12 },
   statCard: {
     flex: 1,
     backgroundColor: DesignSystem.colors.surface,
@@ -204,21 +198,18 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
     shadowOpacity: 0.05,
     shadowRadius: 2,
     elevation: 1,
-    gap: 4,
-  },
+    gap: 4 },
   statValue: {
     fontSize: 20,
     fontWeight: '700',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   statLabel: {
     fontSize: 12,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   chartContainer: {
     flex: 1,
     backgroundColor: DesignSystem.colors.surface,
@@ -227,18 +218,16 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     overflow: 'hidden',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
     shadowOpacity: 0.05,
     shadowRadius: 4,
-    elevation: 2,
-  },
+    elevation: 2 },
   loadMoreContainer: {
     position: 'absolute',
     bottom: 16,
     left: 0,
     right: 0,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   loadMoreText: {
     fontSize: 12,
     color: DesignSystem.colors.text.secondary,
@@ -248,9 +237,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     overflow: 'hidden',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 1 } }),
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 1,
-  },
-});
+    elevation: 1 } });

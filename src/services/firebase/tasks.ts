@@ -77,8 +77,7 @@ export async function createTask(
       assignerId: userId,
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
-      createdBy: userId,
-    };
+      createdBy: userId };
     
     // 只有在有值時才添加日期欄位
     if (task.scheduledAt) {

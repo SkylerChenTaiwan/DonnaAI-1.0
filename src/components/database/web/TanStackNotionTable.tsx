@@ -34,8 +34,7 @@ export const TanStackNotionTable: React.FC<TanStackTableProps> = ({
   loading = false,
   sortConfig,
   onSort,
-  enableColumnDrag = false,
-}) => {
+  enableColumnDrag = false }) => {
   const [isAddingRow, setIsAddingRow] = useState(false);
   const [newRowData, setNewRowData] = useState<Record<string, any>>({});
   const [editingCell, setEditingCell] = useState<{rowId: string, columnId: string} | null>(null);
@@ -63,15 +62,13 @@ export const TanStackNotionTable: React.FC<TanStackTableProps> = ({
     onUpdateCell,
     onColumnsReorder,
     activeTab: dataType,
-    includeSelectColumn: multiSelectMode,
-  });
+    includeSelectColumn: multiSelectMode });
 
   // 建立表格實例
   const { table, selectedRows, setSelectedRows } = useNotionTable({
     data,
     columns,
-    enableRowSelection: multiSelectMode,
-  });
+    enableRowSelection: multiSelectMode });
 
   // 同步選擇狀態
   React.useEffect(() => {
@@ -108,8 +105,7 @@ export const TanStackNotionTable: React.FC<TanStackTableProps> = ({
   const handleNewRowCellChange = useCallback((columnKey: string, value: any) => {
     setNewRowData(prev => ({
       ...prev,
-      [columnKey]: value,
-    }));
+      [columnKey]: value }));
   }, []);
 
   // 取消新增行

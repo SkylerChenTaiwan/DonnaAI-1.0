@@ -8,8 +8,7 @@ import {
   Dimensions,
   KeyboardAvoidingView,
   Platform,
-  PanResponder,
-} from 'react-native';
+  PanResponder } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import QueryChat from './QueryChat';
 import QuickSaveButton from './QuickSaveButton';
@@ -60,11 +59,9 @@ export default function AnalyticsDialog({ visible, onClose }: AnalyticsDialogPro
             toValue: 1,
             useNativeDriver: true,
             tension: 65,
-            friction: 11,
-          }).start();
+            friction: 11 }).start();
         }
-      },
-    })
+      } })
   ).current;
 
   // 動畫效果
@@ -76,26 +73,22 @@ export default function AnalyticsDialog({ visible, onClose }: AnalyticsDialogPro
           toValue: 1,
           useNativeDriver: true,
           tension: 65,
-          friction: 11,
-        }),
+          friction: 11 }),
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 250,
-          useNativeDriver: true,
-        }),
+          useNativeDriver: true }),
       ]).start();
     } else {
       Animated.parallel([
         Animated.timing(slideAnim, {
           toValue: 0,
           duration: 200,
-          useNativeDriver: true,
-        }),
+          useNativeDriver: true }),
         Animated.timing(fadeAnim, {
           toValue: 0,
           duration: 200,
-          useNativeDriver: true,
-        }),
+          useNativeDriver: true }),
       ]).start(() => {
         setIsVisible(false);
       });
@@ -120,8 +113,7 @@ export default function AnalyticsDialog({ visible, onClose }: AnalyticsDialogPro
         createdByName: user.name,
         teamId: user.teamIds?.[0] || '',
         organizationId: user.organizationId || '',
-        tags: ['智能分析'],
-      };
+        tags: ['智能分析'] };
 
       await saveReport(reportData, user.id, user.name);
       toast.success('報表已保存到主頁');
@@ -134,8 +126,7 @@ export default function AnalyticsDialog({ visible, onClose }: AnalyticsDialogPro
 
   const translateY = slideAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: [DIALOG_HEIGHT, 0],
-  });
+    outputRange: [DIALOG_HEIGHT, 0] });
 
   return (
     <Modal
@@ -155,9 +146,7 @@ export default function AnalyticsDialog({ visible, onClose }: AnalyticsDialogPro
               {
                 opacity: fadeAnim.interpolate({
                   inputRange: [0, 1],
-                  outputRange: [0, 0.3],
-                }),
-              },
+                  outputRange: [0, 0.3] }) },
             ]}
           />
         </TouchableWithoutFeedback>
@@ -169,8 +158,7 @@ export default function AnalyticsDialog({ visible, onClose }: AnalyticsDialogPro
             {
               height: DIALOG_HEIGHT,
               paddingBottom: insets.bottom,
-              transform: Platform.OS === 'web' ? `translateY(${0}px)` : [{ translateY: 0 }],
-            },
+              transform: Platform.OS === 'web' ? `translateY(${0}px)` : [{ translateY: 0 }] },
           ]}
         >
           {/* 拖曳手柄 */}
@@ -203,8 +191,7 @@ export default function AnalyticsDialog({ visible, onClose }: AnalyticsDialogPro
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   overlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: colors.text, // 使用深灰黑色
@@ -217,25 +204,20 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     borderTopLeftRadius: DesignSystem.borderRadius.lg,
     borderTopRightRadius: DesignSystem.borderRadius.lg,
-    ...DesignSystem.shadows.lg,
-  },
+    ...DesignSystem.shadows.lg },
   handleContainer: {
     alignItems: 'center',
     paddingTop: DesignSystem.spacing.sm,
-    paddingBottom: DesignSystem.spacing.sm,
-  },
+    paddingBottom: DesignSystem.spacing.sm },
   handle: {
     width: 40,
     height: 4,
     backgroundColor: colors.border,
-    borderRadius: 2,
-  },
+    borderRadius: 2 },
   content: {
     flex: 1,
-    paddingHorizontal: DesignSystem.spacing.lg,
-  },
+    paddingHorizontal: DesignSystem.spacing.lg },
   chartContainer: {
     marginTop: DesignSystem.spacing.md,
     marginBottom: 80, // 為保存按鈕留空間
-  },
-});
+  } });

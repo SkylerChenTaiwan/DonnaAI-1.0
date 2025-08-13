@@ -23,8 +23,7 @@ export const PanelContainer: React.FC<PanelContainerProps> = ({
   title,
   icon,
   children,
-  width = 280,
-}) => {
+  width = 280 }) => {
   const panelRef = useRef<HTMLDivElement>(null);
 
   // 處理點擊外部關閉
@@ -110,8 +109,7 @@ export const PanelContainer: React.FC<PanelContainerProps> = ({
       style: {
         top: position.top,
         left: position.left,
-        width,
-      }
+        width }
     },
       // 面板標題
       React.createElement('div', {

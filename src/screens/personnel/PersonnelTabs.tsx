@@ -8,8 +8,7 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Animated,
-} from 'react-native';
+  Animated } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
@@ -68,8 +67,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: DesignSystem.colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   tab: {
     flex: 1,
     flexDirection: 'row',
@@ -77,19 +75,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: DesignSystem.spacing.md,
     paddingVertical: 14,
-    gap: 8,
-  },
+    gap: 8 },
   activeTab: {
     borderBottomWidth: 2,
-    borderBottomColor: DesignSystem.colors.text.primary,
-  },
+    borderBottomColor: DesignSystem.colors.text.primary },
   tabText: {
     fontSize: 16,
     fontWeight: '500',
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   activeTabText: {
     color: DesignSystem.colors.text.primary,
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600' } });

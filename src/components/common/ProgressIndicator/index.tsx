@@ -8,8 +8,7 @@ import { Platform } from 'react-native';
 // 根據平台動態載入
 const ProgressIndicator = Platform.select({
   web: () => require('./ProgressIndicator.web').default,
-  default: () => require('./ProgressIndicator').default,
-})!();
+  default: () => require('./ProgressIndicator').default })!();
 
 export { ProgressIndicator };
 export default ProgressIndicator;

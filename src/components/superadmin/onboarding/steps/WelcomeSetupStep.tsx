@@ -13,14 +13,12 @@ import {
   TouchableOpacity,
   ScrollView,
   Switch,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { DesignSystem } from '@/theme/designSystem';
 import {
   StepProps,
-  WelcomeSetupData,
-} from '@/types/onboarding';
+  WelcomeSetupData } from '@/types/onboarding';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { withAlpha } from '@/utils/colorUtils';
 
@@ -28,8 +26,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
   data,
   onChange,
   onValidate,
-  isActive,
-}) => {
+  isActive }) => {
   const colors = DesignSystem.colors;
   
   // 初始化資料
@@ -53,19 +50,15 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
 
 \${organizationName} 團隊`,
       includeLoginGuide: true,
-      includeCompanyLogo: true,
-    },
+      includeCompanyLogo: true },
     firstLoginExperience: {
       showTour: true,
       showGettingStarted: true,
-      defaultDashboard: 'home',
-    },
+      defaultDashboard: 'home' },
     scheduledSend: {
       enabled: false,
-      sendAt: new Date(),
-    },
-    ...data,
-  });
+      sendAt: new Date() },
+    ...data });
   
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [previewMode, setPreviewMode] = useState(false);
@@ -350,8 +343,7 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
                   borderRadius: '8px',
                   border: `1px solid ${colors.gray300}`,
                   fontSize: '14px',
-                  marginTop: '8px',
-                }}
+                  marginTop: '8px' }}
               />
             )}
           </View>
@@ -376,28 +368,24 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
         icon: 'email',
         label: '歡迎郵件',
         value: '已設定',
-        color: colors.success,
-      },
+        color: colors.success },
       {
         icon: 'login',
         label: '登入指引',
         value: formData.emailTemplate.includeLoginGuide ? '包含' : '不包含',
-        color: formData.emailTemplate.includeLoginGuide ? colors.success : colors.gray600,
-      },
+        color: formData.emailTemplate.includeLoginGuide ? colors.success : colors.gray600 },
       {
         icon: 'tour',
         label: '導覽教學',
         value: formData.firstLoginExperience.showTour ? '啟用' : '停用',
-        color: formData.firstLoginExperience.showTour ? colors.success : colors.gray600,
-      },
+        color: formData.firstLoginExperience.showTour ? colors.success : colors.gray600 },
       {
         icon: 'schedule',
         label: '發送時間',
         value: formData.scheduledSend?.enabled 
           ? formData.scheduledSend.sendAt?.toLocaleString() 
           : '立即發送',
-        color: colors.primary,
-      },
+        color: colors.primary },
     ];
     
     return (
@@ -457,41 +445,33 @@ const WelcomeSetupStep: React.FC<StepProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   templateEditor: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   editorHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   editorTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   previewButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-  },
+    gap: 4 },
   previewButtonText: {
     fontSize: 13,
     color: DesignSystem.colors.primary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   inputGroup: {
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   inputLabel: {
     fontSize: 14,
     color: DesignSystem.colors.gray700,
     marginBottom: 8,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   input: {
     borderWidth: 1,
     borderColor: DesignSystem.colors.gray300,
@@ -500,107 +480,86 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     fontSize: 14,
     color: DesignSystem.colors.text.primary,
-    backgroundColor: DesignSystem.colors.background.surface,
-  },
+    backgroundColor: DesignSystem.colors.background.surface },
   textArea: {
     minHeight: 200,
-    textAlignVertical: 'top',
-  },
+    textAlignVertical: 'top' },
   variablesContainer: {
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   variablesTitle: {
     fontSize: 13,
     color: DesignSystem.colors.gray700,
     marginBottom: 8,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   variablesList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
-  },
+    gap: 8 },
   variableChip: {
     backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
     borderRadius: 16,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderWidth: 1,
-    borderColor: withAlpha(DesignSystem.colors.primary, 0.188),
-  },
+    borderColor: withAlpha(DesignSystem.colors.primary, 0.188) },
   variableText: {
     fontSize: 12,
     color: DesignSystem.colors.primary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   previewContainer: {
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   emailPreview: {
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: DesignSystem.colors.gray200,
-    padding: 20,
-  },
+    padding: 20 },
   previewSubject: {
     fontSize: 16,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   previewDivider: {
     height: 1,
     backgroundColor: DesignSystem.colors.gray200,
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   previewBody: {
     fontSize: 14,
     color: DesignSystem.colors.gray700,
-    lineHeight: 20,
-  },
+    lineHeight: 20 },
   templateOptions: {
-    gap: 8,
-  },
+    gap: 8 },
   experienceSection: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
-    gap: 8,
-  },
+    gap: 8 },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   switchRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 12,
-  },
+    paddingVertical: 12 },
   switchContent: {
     flex: 1,
-    marginRight: 12,
-  },
+    marginRight: 12 },
   switchLabel: {
     fontSize: 14,
     fontWeight: '500',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   switchHint: {
     fontSize: 12,
     color: DesignSystem.colors.gray600,
-    marginTop: 2,
-  },
+    marginTop: 2 },
   dashboardOptions: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
-  },
+    gap: 12 },
   dashboardOption: {
     flex: 1,
     minWidth: 140,
@@ -611,27 +570,21 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: DesignSystem.colors.gray300,
     backgroundColor: DesignSystem.colors.background.surface,
-    gap: 8,
-  },
+    gap: 8 },
   dashboardOptionActive: {
     borderColor: DesignSystem.colors.primary,
-    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
-  },
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063) },
   dashboardText: {
     fontSize: 12,
     color: DesignSystem.colors.gray700,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   dashboardTextActive: {
-    color: DesignSystem.colors.primary,
-  },
+    color: DesignSystem.colors.primary },
   scheduleSection: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   scheduleOptions: {
     marginTop: 12,
-    paddingLeft: 20,
-  },
+    paddingLeft: 20 },
   datePickerButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -641,78 +594,63 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
     backgroundColor: DesignSystem.colors.background.surface,
-    gap: 8,
-  },
+    gap: 8 },
   datePickerText: {
     fontSize: 14,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   infoBox: {
     flexDirection: 'row',
     backgroundColor: withAlpha(DesignSystem.colors.status.info, 0.063),
     borderRadius: 8,
     padding: 12,
     marginTop: 12,
-    gap: 8,
-  },
+    gap: 8 },
   infoText: {
     flex: 1,
     fontSize: 13,
     color: DesignSystem.colors.status.info,
-    lineHeight: 18,
-  },
+    lineHeight: 18 },
   summarySection: {
     backgroundColor: DesignSystem.colors.gray50,
     borderRadius: 12,
     padding: 20,
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   summaryTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   summaryGrid: {
-    gap: 12,
-  },
+    gap: 12 },
   summaryItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-  },
+    gap: 12 },
   summaryLabel: {
     flex: 1,
     fontSize: 14,
-    color: DesignSystem.colors.gray700,
-  },
+    color: DesignSystem.colors.gray700 },
   summaryValue: {
     fontSize: 14,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   tipBox: {
     flexDirection: 'row',
     backgroundColor: withAlpha(DesignSystem.colors.status.warning, 0.063),
     borderRadius: 8,
     padding: 16,
     marginBottom: 24,
-    gap: 12,
-  },
+    gap: 12 },
   tipContent: {
-    flex: 1,
-  },
+    flex: 1 },
   tipTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: DesignSystem.colors.status.warning,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   tipText: {
     fontSize: 13,
     color: DesignSystem.colors.gray700,
     lineHeight: 18,
-    marginBottom: 4,
-  },
-});
+    marginBottom: 4 } });
 
 export default WelcomeSetupStep;

@@ -13,16 +13,14 @@ import {
   TextInput,
   ActivityIndicator,
   Platform,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {
   ComplianceReport,
   SecurityReport,
   ReportPeriod,
-  TimeRange,
-} from '@/types/audit';
+  TimeRange } from '@/types/audit';
 import { auditReportGenerator } from '@/services/audit/AuditReportGenerator';
 // Icon import removed - using platform-specific Icon component;
 import { format } from 'date-fns';
@@ -40,8 +38,7 @@ interface AuditReportInterfaceProps {
  */
 export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
   organizationId,
-  onReportGenerated,
-}) => {
+  onReportGenerated }) => {
   // 狀態管理
   const [activeTab, setActiveTab] = useState<'generate' | 'schedule' | 'history'>('generate');
   const [reportType, setReportType] = useState<'compliance' | 'security'>('compliance');
@@ -56,8 +53,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
   const [periodType, setPeriodType] = useState<'month' | 'quarter' | 'year'>('month');
   const [dateRange, setDateRange] = useState({
     start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-    end: new Date(),
-  });
+    end: new Date() });
   const [showDatePicker, setShowDatePicker] = useState<'start' | 'end' | null>(null);
   
   // 排程參數
@@ -89,8 +85,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
       if (reportType === 'compliance') {
         // 生成合規報告
         const period: ReportPeriod = {
-          year: selectedYear,
-        };
+          year: selectedYear };
         
         if (periodType === 'month') {
           period.month = selectedMonth;
@@ -104,8 +99,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
         const timeRange: TimeRange = {
           start: dateRange.start,
           end: dateRange.end,
-          granularity: 'day',
-        };
+          granularity: 'day' };
         
         report = await auditReportGenerator.generateSecurityReport(organizationId, timeRange);
       }
@@ -120,8 +114,7 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
         period: reportType === 'compliance' 
           ? formatReportPeriod({ year: selectedYear, month: periodType === 'month' ? selectedMonth : undefined, quarter: periodType === 'quarter' ? selectedQuarter : undefined })
           : `${format(dateRange.start, 'yyyy-MM-dd')} 至 ${format(dateRange.end, 'yyyy-MM-dd')}`,
-        generatedAt: new Date(),
-      };
+        generatedAt: new Date() };
       setReportHistory(prev => [historyItem, ...prev].slice(0, 20)); // 保留最近 20 條記錄
       
       Alert.alert('成功', '報告已生成');
@@ -183,14 +176,12 @@ export const AuditReportInterface: React.FC<AuditReportInterfaceProps> = ({
           const base64 = base64data.split(',')[1];
           
           await FileSystem.writeAsStringAsync(fileUri, base64, {
-            encoding: FileSystem.EncodingType.Base64,
-          });
+            encoding: FileSystem.EncodingType.Base64 });
           
           if (await Sharing.isAvailableAsync()) {
             await Sharing.shareAsync(fileUri, {
               mimeType,
-              dialogTitle: '分享報告',
-            });
+              dialogTitle: '分享報告' });
           } else {
             Alert.alert('成功', `報告已保存到 ${fileUri}`);
           }
@@ -717,37 +708,30 @@ const formatReportPeriod = (period: ReportPeriod): string => {
 const styles: any = {
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
-  },
+    backgroundColor: '#F5F5F5' },
   tabBar: {
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
-  },
+    borderBottomColor: '#E0E0E0' },
   tab: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 12,
-  },
+    paddingVertical: 12 },
   tabActive: {
     borderBottomWidth: 2,
-    borderBottomColor: '#0066CC',
-  },
+    borderBottomColor: '#0066CC' },
   tabText: {
     marginLeft: 8,
     fontSize: 14,
-    color: '#666666',
-  },
+    color: '#666666' },
   tabTextActive: {
     color: '#0066CC',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   tabContent: {
-    flex: 1,
-  },
+    flex: 1 },
   section: {
     backgroundColor: '#FFFFFF',
     margin: 8,
@@ -756,24 +740,18 @@ const styles: any = {
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
         shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
+        shadowRadius: 4 },
       android: {
-        elevation: 2,
-      },
-    }),
-  },
+        elevation: 2 } }) },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#333333',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   reportTypeSelector: {
-    flexDirection: Platform.OS === 'web' ? 'row' : 'column',
-  },
+    flexDirection: Platform.OS === 'web' ? 'row' : 'column' },
   reportTypeButton: {
     flex: 1,
     padding: 16,
@@ -781,34 +759,27 @@ const styles: any = {
     borderRadius: 8,
     borderWidth: 2,
     borderColor: '#E0E0E0',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   reportTypeButtonActive: {
     backgroundColor: '#0066CC',
-    borderColor: '#0066CC',
-  },
+    borderColor: '#0066CC' },
   reportTypeText: {
     marginTop: 8,
     fontSize: 14,
     fontWeight: '600',
-    color: '#333333',
-  },
+    color: '#333333' },
   reportTypeTextActive: {
-    color: '#FFFFFF',
-  },
+    color: '#FFFFFF' },
   reportTypeDescription: {
     marginTop: 4,
     fontSize: 12,
     color: '#666666',
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   reportTypeDescriptionActive: {
-    color: '#E3F2FD',
-  },
+    color: '#E3F2FD' },
   periodTypeSelector: {
     flexDirection: 'row',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   periodTypeButton: {
     flex: 1,
     paddingVertical: 8,
@@ -816,37 +787,29 @@ const styles: any = {
     borderRadius: 4,
     borderWidth: 1,
     borderColor: '#E0E0E0',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   periodTypeButtonActive: {
     backgroundColor: '#0066CC',
-    borderColor: '#0066CC',
-  },
+    borderColor: '#0066CC' },
   periodTypeText: {
     fontSize: 14,
-    color: '#666666',
-  },
+    color: '#666666' },
   periodTypeTextActive: {
     color: '#FFFFFF',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   periodSelector: {
-    flexDirection: 'row',
-  },
+    flexDirection: 'row' },
   pickerContainer: {
     flex: 1,
-    marginHorizontal: 4,
-  },
+    marginHorizontal: 4 },
   pickerLabel: {
     fontSize: 12,
     color: '#666666',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   picker: {
     height: 44,
     backgroundColor: '#F5F5F5',
-    borderRadius: 4,
-  },
+    borderRadius: 4 },
   webSelect: {
     height: 44,
     padding: 8,
@@ -854,11 +817,9 @@ const styles: any = {
     borderRadius: 4,
     borderWidth: 1,
     borderColor: '#E0E0E0',
-    fontSize: 14,
-  },
+    fontSize: 14 },
   dateRangeSelector: {
-    flexDirection: Platform.OS === 'web' ? 'row' : 'column',
-  },
+    flexDirection: Platform.OS === 'web' ? 'row' : 'column' },
   dateButton: {
     flex: 1,
     flexDirection: 'row',
@@ -866,13 +827,11 @@ const styles: any = {
     padding: 12,
     margin: 4,
     backgroundColor: '#F5F5F5',
-    borderRadius: 8,
-  },
+    borderRadius: 8 },
   dateButtonText: {
     marginLeft: 8,
     fontSize: 14,
-    color: '#333333',
-  },
+    color: '#333333' },
   generateButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -880,47 +839,38 @@ const styles: any = {
     backgroundColor: '#0066CC',
     margin: 8,
     padding: 16,
-    borderRadius: 8,
-  },
+    borderRadius: 8 },
   generateButtonDisabled: {
-    opacity: 0.6,
-  },
+    opacity: 0.6 },
   generateButtonText: {
     marginLeft: 8,
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
-  },
+    color: '#FFFFFF' },
   generatedReportContainer: {
     backgroundColor: '#FFFFFF',
     margin: 8,
     padding: 16,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#4CAF50',
-  },
+    borderColor: '#4CAF50' },
   generatedReportHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   generatedReportTitle: {
     marginLeft: 8,
     fontSize: 16,
     fontWeight: '600',
-    color: '#4CAF50',
-  },
+    color: '#4CAF50' },
   reportSummary: {
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   reportSummaryItem: {
     fontSize: 14,
     color: '#666666',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   exportButtons: {
-    flexDirection: 'row',
-  },
+    flexDirection: 'row' },
   exportButton: {
     flex: 1,
     flexDirection: 'row',
@@ -929,28 +879,22 @@ const styles: any = {
     backgroundColor: '#D32F2F',
     margin: 4,
     padding: 12,
-    borderRadius: 4,
-  },
+    borderRadius: 4 },
   exportButtonExcel: {
-    backgroundColor: '#388E3C',
-  },
+    backgroundColor: '#388E3C' },
   exportButtonDisabled: {
-    opacity: 0.6,
-  },
+    opacity: 0.6 },
   exportButtonText: {
     marginLeft: 4,
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
-  },
+    color: '#FFFFFF' },
   scheduleField: {
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   scheduleFieldLabel: {
     fontSize: 14,
     color: '#666666',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   emailInput: {
     backgroundColor: '#F5F5F5',
     padding: 12,
@@ -958,72 +902,57 @@ const styles: any = {
     borderWidth: 1,
     borderColor: '#E0E0E0',
     fontSize: 14,
-    minHeight: 80,
-  },
+    minHeight: 80 },
   scheduleButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#0066CC',
     padding: 12,
-    borderRadius: 4,
-  },
+    borderRadius: 4 },
   scheduleButtonText: {
     marginLeft: 8,
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
-  },
+    color: '#FFFFFF' },
   emptyState: {
     alignItems: 'center',
-    padding: 32,
-  },
+    padding: 32 },
   emptyStateText: {
     marginTop: 12,
     fontSize: 14,
-    color: '#999999',
-  },
+    color: '#999999' },
   historyItem: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 12,
     marginBottom: 8,
     backgroundColor: '#F5F5F5',
-    borderRadius: 8,
-  },
+    borderRadius: 8 },
   historyItemIcon: {
-    marginRight: 12,
-  },
+    marginRight: 12 },
   historyItemContent: {
-    flex: 1,
-  },
+    flex: 1 },
   historyItemType: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333333',
-  },
+    color: '#333333' },
   historyItemPeriod: {
     fontSize: 13,
     color: '#666666',
-    marginTop: 2,
-  },
+    marginTop: 2 },
   historyItemDate: {
     fontSize: 12,
     color: '#999999',
-    marginTop: 2,
-  },
+    marginTop: 2 },
   historyItemDownload: {
-    padding: 8,
-  },
+    padding: 8 },
   errorBanner: {
     backgroundColor: '#FFEBEE',
     padding: 12,
     marginHorizontal: 8,
     marginVertical: 4,
-    borderRadius: 4,
-  },
+    borderRadius: 4 },
   errorBannerText: {
     color: '#C62828',
-    fontSize: 14,
-  },
-};
+    fontSize: 14 } };

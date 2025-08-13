@@ -9,8 +9,7 @@ import {
   StyleSheet,
   Platform,
   ViewStyle,
-  ActivityIndicator,
-} from 'react-native';
+  ActivityIndicator } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
@@ -40,26 +39,21 @@ export const IconButton: React.FC<IconButtonProps> = ({
   style,
   disabled = false,
   loading = false,
-  accessibilityLabel,
-}) => {
+  accessibilityLabel }) => {
   // 尺寸配置 - 更精緻的尺寸
   const sizeConfig = {
     sm: {
       button: 28,
       icon: 14,
-      padding: 7,
-    },
+      padding: 7 },
     md: {
       button: 36,
       icon: 18,
-      padding: 9,
-    },
+      padding: 9 },
     lg: {
       button: 44,
       icon: 22,
-      padding: 11,
-    },
-  };
+      padding: 11 } };
 
   const currentSize = sizeConfig[size];
 
@@ -68,17 +62,13 @@ export const IconButton: React.FC<IconButtonProps> = ({
     const variantColors = {
       primary: {
         background: backgroundColor || DesignSystem.colors.button.primary.default,
-        icon: iconColor || DesignSystem.colors.text.inverse,
-      },
+        icon: iconColor || DesignSystem.colors.text.inverse },
       secondary: {
         background: backgroundColor || DesignSystem.colors.button.secondary.default,
-        icon: iconColor || DesignSystem.colors.primary,
-      },
+        icon: iconColor || DesignSystem.colors.primary },
       ghost: {
         background: backgroundColor || DesignSystem.colors.button.ghost.background,
-        icon: iconColor || DesignSystem.colors.primary,
-      },
-    };
+        icon: iconColor || DesignSystem.colors.primary } };
 
     return variantColors[variant];
   };
@@ -92,8 +82,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
         {
           width: currentSize.button,
           height: currentSize.button,
-          backgroundColor: colors.background,
-        },
+          backgroundColor: colors.background },
         variant === 'secondary' && styles.secondaryBorder,
         disabled && styles.disabled,
         style,
@@ -126,12 +115,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     // 無陰影 - 扁平化設計
-    ...DesignSystem.shadows.none,
-  },
+    ...DesignSystem.shadows.none },
   secondaryBorder: {
     borderWidth: 0, // 次要按鈕不需要邊框
   },
   disabled: {
-    opacity: 0.5,
-  },
-});
+    opacity: 0.5 } });

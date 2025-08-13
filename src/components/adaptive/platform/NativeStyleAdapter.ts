@@ -216,8 +216,7 @@ export class NativeStyleAdapter implements StyleAdapter {
     
     return {
       isValid: errors.length === 0,
-      errors,
-    };
+      errors };
   }
 
   /**
@@ -273,8 +272,7 @@ export class NativeStyleAdapter implements StyleAdapter {
     Object.entries(variants).forEach(([key, variantStyle]) => {
       result[key as keyof T] = {
         ...baseStyle,
-        ...variantStyle,
-      };
+        ...variantStyle };
     });
     
     return result;
@@ -293,8 +291,7 @@ export class NativeStyleAdapter implements StyleAdapter {
   getCacheStats(): { size: number; keys: string[] } {
     return {
       size: this.styleSheetCache.size,
-      keys: Array.from(this.styleSheetCache.keys()),
-    };
+      keys: Array.from(this.styleSheetCache.keys()) };
   }
 
   /**
@@ -317,7 +314,6 @@ export class NativeStyleAdapter implements StyleAdapter {
     
     return {
       ...inherited,
-      ...childStyle,
-    };
+      ...childStyle };
   }
 }

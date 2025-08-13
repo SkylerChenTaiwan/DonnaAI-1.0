@@ -7,8 +7,7 @@ import {
   IStreamProcessor,
   BatchProcessOptions,
   ImportProgress,
-  ImportError,
-} from '@/types/intelligentImport';
+  ImportError } from '@/types/intelligentImport';
 import { getFirebaseDb } from '@/services/firebase/config';
 const db = getFirebaseDb();
 import { 
@@ -41,8 +40,7 @@ export class StreamProcessor implements IStreamProcessor {
       total: 0,
       percentage: 0,
       errors: 0,
-      warnings: 0,
-    };
+      warnings: 0 };
   }
 
   /**
@@ -88,8 +86,7 @@ export class StreamProcessor implements IStreamProcessor {
               options.onError({
                 type: 'import',
                 message: `處理資料塊失敗: ${error}`,
-                recoverable: true,
-              });
+                recoverable: true });
             }
             
             // 決定是否繼續
@@ -131,8 +128,7 @@ export class StreamProcessor implements IStreamProcessor {
             options.onError({
               type: 'parse',
               message: `解析檔案失敗: ${error.message}`,
-              recoverable: false,
-            });
+              recoverable: false });
           }
           reject(error);
         }
@@ -173,8 +169,7 @@ export class StreamProcessor implements IStreamProcessor {
             message: error.message,
             row: this.currentProgress.processed,
             value: row,
-            recoverable: true,
-          });
+            recoverable: true });
         }
       }
     }
@@ -204,8 +199,7 @@ export class StreamProcessor implements IStreamProcessor {
     this.currentBatch.set(docRef, {
       ...data,
       _importedAt: serverTimestamp(),
-      _importBatch: Math.floor(this.currentProgress.processed / this.MAX_BATCH_SIZE),
-    });
+      _importBatch: Math.floor(this.currentProgress.processed / this.MAX_BATCH_SIZE) });
 
     this.batchOperationCount++;
 
@@ -287,8 +281,7 @@ export class StreamProcessor implements IStreamProcessor {
         type: 'import',
         message: `${failedItems.length} 筆資料匯入失敗`,
         value: failedItems,
-        recoverable: false,
-      });
+        recoverable: false });
     }
   }
 
@@ -299,8 +292,7 @@ export class StreamProcessor implements IStreamProcessor {
     for (const row of data) {
       this.retryQueue.push({
         data: row,
-        attempts: 0,
-      });
+        attempts: 0 });
     }
   }
 
@@ -420,8 +412,7 @@ export class StreamProcessor implements IStreamProcessor {
       total: 0,
       percentage: 0,
       errors: 0,
-      warnings: 0,
-    };
+      warnings: 0 };
   }
 
   /**
@@ -441,8 +432,7 @@ export class StreamProcessor implements IStreamProcessor {
       totalErrors: this.currentProgress.errors,
       processingTime: Math.round(processingTime),
       averageSpeed: Math.round(this.currentProgress.processed / processingTime),
-      peakMemoryUsage: Math.round(this.peakMemoryUsage),
-    };
+      peakMemoryUsage: Math.round(this.peakMemoryUsage) };
   }
 }
 

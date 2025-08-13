@@ -8,8 +8,7 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  Dimensions,
-} from 'react-native';
+  Dimensions } from 'react-native';
 import Svg, { Line, G } from 'react-native-svg';
 import { OrgNode, DragDropEvent } from '@/types/organization';
 import { TeamMember } from '@/screens/personnel/PersonnelScreen';
@@ -71,8 +70,7 @@ export function OrgChart({
         user: member as any, // TODO: 轉換為 EnhancedUser
         children: [],
         expanded: true,
-        position: { x: 0, y: 0 },
-      };
+        position: { x: 0, y: 0 } };
       nodeMap.set(member.id, node);
     });
 
@@ -151,8 +149,7 @@ export function OrgChart({
     
     return {
       chartWidth: Math.max(maxX + 100, screenWidth),
-      chartHeight: maxY + 100,
-    };
+      chartHeight: maxY + 100 };
   }, [orgTree]);
 
   // 渲染連接線
@@ -204,8 +201,7 @@ export function OrgChart({
             position: 'absolute',
             left: node.position!.x,
             top: node.position!.y,
-            opacity: matchesSearch ? 1 : 0.3,
-          },
+            opacity: matchesSearch ? 1 : 0.3 },
         ]}
       >
         <OrgNodeComponent
@@ -276,23 +272,17 @@ export function OrgChart({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   contentContainer: {
-    position: 'relative',
-  },
+    position: 'relative' },
   nodeContainer: {
     width: NODE_WIDTH,
-    height: NODE_HEIGHT,
-  },
+    height: NODE_HEIGHT },
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 40,
-  },
+    padding: 40 },
   emptyText: {
     fontSize: 16,
-    color: DesignSystem.colors.text.secondary,
-  },
-});
+    color: DesignSystem.colors.text.secondary } });

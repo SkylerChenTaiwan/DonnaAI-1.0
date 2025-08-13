@@ -121,20 +121,17 @@ async function exportReportAsCSV(
   // 轉換為 CSV
   const csv = Papa.unparse(allData, {
     header: false,
-    encoding: 'UTF-8',
-  });
+    encoding: 'UTF-8' });
   
   // 寫入檔案並分享
   const fileUri = `${FileSystem.documentDirectory}${fileName}.csv`;
   await FileSystem.writeAsStringAsync(fileUri, csv, {
-    encoding: FileSystem.EncodingType.UTF8,
-  });
+    encoding: FileSystem.EncodingType.UTF8 });
   
   if (await Sharing.isAvailableAsync()) {
     await Sharing.shareAsync(fileUri, {
       mimeType: 'text/csv',
-      dialogTitle: '匯出使用報表',
-    });
+      dialogTitle: '匯出使用報表' });
   } else {
     throw new Error('您的裝置不支援檔案分享功能');
   }
@@ -155,8 +152,7 @@ async function exportReportAsExcel(
   const summarySheet = XLSX.utils.json_to_sheet([
     {
       項目: '期間',
-      數值: `${report.period.start.toLocaleDateString('zh-TW')} - ${report.period.end.toLocaleDateString('zh-TW')}`,
-    },
+      數值: `${report.period.start.toLocaleDateString('zh-TW')} - ${report.period.end.toLocaleDateString('zh-TW')}` },
     { 項目: '總使用時數', 數值: `${report.summary.totalUsageHours} 小時` },
     { 項目: '活躍用戶數', 數值: report.summary.activeUsers },
     { 項目: 'AI 對話時數', 數值: `${report.summary.aiChatMinutes} 分鐘` },
@@ -170,8 +166,7 @@ async function exportReportAsExcel(
       用戶名稱: activity.userName,
       登入次數: activity.loginCount,
       使用時數: activity.totalHours,
-      最後登入: activity.lastActive.toLocaleString('zh-TW'),
-    }))
+      最後登入: activity.lastActive.toLocaleString('zh-TW') }))
   );
   XLSX.utils.book_append_sheet(wb, userActivitySheet, '用戶活動');
   
@@ -181,8 +176,7 @@ async function exportReportAsExcel(
       工具名稱: tool.toolName,
       使用次數: tool.usageCount,
       使用分鐘數: tool.totalMinutes,
-      用戶數: tool.uniqueUsers,
-    }))
+      用戶數: tool.uniqueUsers }))
   );
   XLSX.utils.book_append_sheet(wb, toolUsageSheet, '工具使用');
   
@@ -192,8 +186,7 @@ async function exportReportAsExcel(
       部門名稱: dept.name,
       用戶數: dept.userCount,
       活躍率: `${(dept.activeRate * 100).toFixed(1)}%`,
-      平均使用時數: dept.avgHoursPerUser,
-    }))
+      平均使用時數: dept.avgHoursPerUser }))
   );
   XLSX.utils.book_append_sheet(wb, departmentSheet, '部門統計');
   
@@ -205,8 +198,7 @@ async function exportReportAsExcel(
         日期: stat.date.toLocaleDateString('zh-TW'),
         登入次數: stat.loginCount,
         活躍用戶: stat.activeUsers,
-        使用時數: stat.totalHours,
-      }))
+        使用時數: stat.totalHours }))
     );
     XLSX.utils.book_append_sheet(wb, dailySheet, '每日統計');
   }
@@ -217,14 +209,12 @@ async function exportReportAsExcel(
   // 寫入檔案並分享
   const fileUri = `${FileSystem.documentDirectory}${fileName}.xlsx`;
   await FileSystem.writeAsStringAsync(fileUri, excelBuffer, {
-    encoding: FileSystem.EncodingType.Base64,
-  });
+    encoding: FileSystem.EncodingType.Base64 });
   
   if (await Sharing.isAvailableAsync()) {
     await Sharing.shareAsync(fileUri, {
       mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      dialogTitle: '匯出使用報表',
-    });
+      dialogTitle: '匯出使用報表' });
   } else {
     throw new Error('您的裝置不支援檔案分享功能');
   }
@@ -295,8 +285,7 @@ export function previewReport(
           ['摘要', '活躍用戶數', report.summary.activeUsers],
           ['摘要', 'AI 對話時數', `${report.summary.aiChatMinutes} 分鐘`],
           ['摘要', 'AI 通話時數', `${report.summary.aiCallMinutes} 分鐘`],
-        ],
-      };
+        ] };
     default:
       return { headers: [], rows: [] };
   }

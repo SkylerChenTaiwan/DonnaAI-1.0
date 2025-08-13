@@ -135,8 +135,7 @@ export const getAccessibleTeamMembers = async (userId: string): Promise<User[]> 
       id: doc.id,
       ...doc.data(),
       createdAt: doc.data().createdAt.toDate(),
-      lastLoginAt: doc.data().lastLoginAt.toDate(),
-    })) as User[];
+      lastLoginAt: doc.data().lastLoginAt.toDate() })) as User[];
   } catch (error) {
     console.error('取得可存取團隊成員時發生錯誤:', error);
     return [];

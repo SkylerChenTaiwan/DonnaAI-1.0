@@ -12,8 +12,7 @@ import {
   RefreshControl,
   Pressable,
   Platform,
-  ScrollView,
-} from 'react-native';
+  ScrollView } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { Icon } from '@/components/common/Icon';
 import { EditableCell } from '@/components/common/EditableCell';
@@ -61,8 +60,7 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
   onSort,
   onUpdateCell,
   onColumnsReorder,
-  enableColumnDrag = true,
-}) => {
+  enableColumnDrag = true }) => {
   const [hoveredRow, setHoveredRow] = useState<string | null>(null);
   const [hoveredAddNew, setHoveredAddNew] = useState(false);
   const [isAddingRow, setIsAddingRow] = useState(false);
@@ -210,8 +208,7 @@ export const NotionStyleTableV2: React.FC<NotionStyleTableV2Props> = ({
         setEditingCell(focusedCell);
       }
     },
-    enabled: true,
-  });
+    enabled: true });
 
   // 根據欄位類型取得輸入類型
   const getInputTypeForColumn = (column: TableColumn): 'text' | 'number' | 'email' | 'phone' | 'multiline' => {
@@ -514,8 +511,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
     borderRadius: 3,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   
   // 表頭樣式
   tableHeader: {
@@ -524,45 +520,37 @@ const styles = StyleSheet.create({
     borderBottomColor: '#E9E9E7',
     backgroundColor: '#ffffff',
     minHeight: 36,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   
   headerCell: {
     paddingHorizontal: 8,
     paddingVertical: 6,
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   
   firstHeaderCell: {
-    paddingLeft: 16,
-  },
+    paddingLeft: 16 },
   
   headerText: {
     fontSize: 14,
     fontWeight: '500',
     color: '#787774',
-    marginRight: 4,
-  },
+    marginRight: 4 },
   
   sortIcon: {
-    marginLeft: 2,
-  },
+    marginLeft: 2 },
   
   // 核取方塊樣式
   checkboxColumn: {
     width: 44,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   
   headerCheckbox: {
-    padding: 4,
-  },
+    padding: 4 },
   
   rowCheckbox: {
-    padding: 2,
-  },
+    padding: 2 },
   
   checkbox: {
     width: 16,
@@ -572,29 +560,24 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     backgroundColor: '#ffffff',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   
   checkboxChecked: {
     backgroundColor: '#2383e2',
-    borderColor: '#2383e2',
-  },
+    borderColor: '#2383e2' },
   
   checkboxIndeterminate: {
     backgroundColor: '#2383e2',
-    borderColor: '#2383e2',
-  },
+    borderColor: '#2383e2' },
   
   checkboxDisabled: {
     opacity: 0.5,
-    borderColor: '#E9E9E7',
-  },
+    borderColor: '#E9E9E7' },
   
   indeterminateLine: {
     width: 8,
     height: 2,
-    backgroundColor: '#ffffff',
-  },
+    backgroundColor: '#ffffff' },
   
   // 新增欄位按鈕
   addColumnButton: {
@@ -606,16 +589,12 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     ...Platform.select({
       web: {
-        cursor: 'pointer',
-      },
-    }),
-  },
+        cursor: 'pointer' } }) },
   
   // 空狀態樣式
   emptyStateContainer: {
     paddingVertical: 12,
-    paddingHorizontal: 16,
-  },
+    paddingHorizontal: 16 },
   
   addNewButton: {
     flexDirection: 'row',
@@ -627,31 +606,24 @@ const styles = StyleSheet.create({
     ...Platform.select({
       web: {
         cursor: 'pointer',
-        transition: 'background-color 0.1s ease',
-      },
-    }),
-  },
+        transition: 'background-color 0.1s ease' } }) },
   
   addNewButtonHovered: {
-    backgroundColor: '#f7f6f3',
-  },
+    backgroundColor: '#f7f6f3' },
   
   addNewText: {
     fontSize: 14,
-    color: '#91918e',
-  },
+    color: '#91918e' },
   
   emptyHintText: {
     fontSize: 12,
     color: '#b4b3af',
     marginTop: 4,
-    marginLeft: 42,
-  },
+    marginLeft: 42 },
   
   // 表格行樣式
   listContent: {
-    paddingBottom: 1,
-  },
+    paddingBottom: 1 },
   
   tableRow: {
     flexDirection: 'row',
@@ -663,35 +635,27 @@ const styles = StyleSheet.create({
     ...Platform.select({
       web: {
         cursor: 'pointer',
-        transition: 'background-color 0.1s ease',
-      },
-    }),
-  },
+        transition: 'background-color 0.1s ease' } }) },
   
   tableRowHovered: {
-    backgroundColor: '#F7F6F3',
-  },
+    backgroundColor: '#F7F6F3' },
   
   tableRowSelected: {
-    backgroundColor: '#e3f2fd',
-  },
+    backgroundColor: '#e3f2fd' },
   
   tableCell: {
     paddingHorizontal: 8,
     paddingVertical: 4,
     justifyContent: 'center',
-    minHeight: 32,
-  },
+    minHeight: 32 },
   
   firstTableCell: {
-    paddingLeft: 16,
-  },
+    paddingLeft: 16 },
   
   cellText: {
     fontSize: 14,
     color: '#37352F',
-    lineHeight: 20,
-  },
+    lineHeight: 20 },
   
   // 底部新增按鈕
   footerAddButton: {
@@ -703,30 +667,21 @@ const styles = StyleSheet.create({
     minHeight: 44,
     ...Platform.select({
       web: {
-        cursor: 'pointer',
-      },
-    }),
-  },
+        cursor: 'pointer' } }) },
   
   footerAddText: {
     fontSize: 14,
-    color: '#91918e',
-  },
+    color: '#91918e' },
   
   // 儲存格選擇樣式
   selectedCell: {
     backgroundColor: 'rgba(35, 131, 226, 0.1)',
     borderWidth: 1,
-    borderColor: 'rgba(35, 131, 226, 0.3)',
-  },
+    borderColor: 'rgba(35, 131, 226, 0.3)' },
   
   focusedCell: {
     borderWidth: 2,
     borderColor: '#2383e2',
     ...Platform.select({
       web: {
-        boxShadow: '0 0 0 1px #2383e2',
-      },
-    }),
-  },
-});
+        boxShadow: '0 0 0 1px #2383e2' } }) } });

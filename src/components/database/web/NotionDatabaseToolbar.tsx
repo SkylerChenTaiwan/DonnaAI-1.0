@@ -12,8 +12,7 @@ export const NotionDatabaseToolbar: React.FC<NotionDatabaseToolbarProps> = ({
   onAddRow,
   onViewSettings,
   viewCount,
-  selectedCount,
-}) => {
+  selectedCount }) => {
   return (
     <div className="notion-database-toolbar">
       <div className="notion-toolbar-left">

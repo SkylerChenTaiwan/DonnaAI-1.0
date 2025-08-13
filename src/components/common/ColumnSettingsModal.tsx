@@ -12,8 +12,7 @@ import {
   ScrollView,
   StatusBar,
   Switch,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { TableColumn } from '@/types/table';
 
@@ -30,8 +29,7 @@ export const ColumnSettingsModal: React.FC<ColumnSettingsModalProps> = ({
   onClose,
   columns,
   visibleColumns: initialVisibleColumns,
-  onApply,
-}) => {
+  onApply }) => {
   const [visibleColumns, setVisibleColumns] = useState<Set<string>>(
     new Set(initialVisibleColumns)
   );
@@ -89,8 +87,7 @@ export const ColumnSettingsModal: React.FC<ColumnSettingsModalProps> = ({
             const defaultColumns = columns.map(col => col.key);
             setVisibleColumns(new Set(defaultColumns));
             setColumnOrder(defaultColumns);
-          },
-        },
+          } },
       ]
     );
   };
@@ -194,8 +191,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F0F0F0',
-    paddingTop: StatusBar.currentHeight || 0,
-  },
+    paddingTop: StatusBar.currentHeight || 0 },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -204,64 +200,51 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
-  },
+    borderBottomColor: '#E3E1DC' },
   title: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   closeButton: {
-    padding: 8,
-  },
+    padding: 8 },
   closeButtonText: {
     fontSize: 17,
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   applyButton: {
-    padding: 8,
-  },
+    padding: 8 },
   applyButtonText: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   quickActions: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 16,
     backgroundColor: '#FFFFFF',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   quickActionButton: {
     paddingHorizontal: 20,
     paddingVertical: 8,
     borderRadius: 16,
-    backgroundColor: '#F0F0F0',
-  },
+    backgroundColor: '#F0F0F0' },
   quickActionText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   section: {
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
-  },
+    backgroundColor: '#FFFFFF' },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1A1A1A',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   sectionSubtitle: {
     fontSize: 14,
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   columnItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -270,26 +253,20 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
-  },
+    borderBottomColor: '#F2F2F7' },
   columnItemLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-  },
+    gap: 12 },
   columnLabel: {
     fontSize: 16,
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   tipContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
-    gap: 8,
-  },
+    gap: 8 },
   tipText: {
     fontSize: 14,
     color: '#7A7A7A',
-    flex: 1,
-  },
-});
+    flex: 1 } });

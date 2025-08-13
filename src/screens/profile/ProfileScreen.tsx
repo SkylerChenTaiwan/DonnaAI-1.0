@@ -33,26 +33,22 @@ export const ProfileScreen: React.FC = () => {
       icon: 'person-outline' as string,
       title: '編輯個人資料',
       subtitle: '更新您的基本資訊',
-      onPress: () => console.log('編輯個人資料'),
-    },
+      onPress: () => console.log('編輯個人資料') },
     {
       icon: 'notifications-outline' as string,
       title: '通知設定',
       subtitle: '管理推播通知偏好',
-      onPress: () => console.log('通知設定'),
-    },
+      onPress: () => console.log('通知設定') },
     {
       icon: 'lock-closed-outline' as string,
       title: '隱私設定',
       subtitle: '資料安全與隱私控制',
-      onPress: () => console.log('隱私設定'),
-    },
+      onPress: () => console.log('隱私設定') },
     {
       icon: 'help-circle-outline' as string,
       title: '幫助與支援',
       subtitle: '常見問題與聯絡客服',
-      onPress: () => console.log('幫助與支援'),
-    },
+      onPress: () => console.log('幫助與支援') },
   ];
 
   return (
@@ -136,15 +132,13 @@ export const ProfileScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
-  },
+    backgroundColor: '#F8F9FA' },
   userCard: {
     backgroundColor: '#FFFFFF',
     padding: 24,
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   avatar: {
     width: 80,
     height: 80,
@@ -152,66 +146,54 @@ const styles = StyleSheet.create({
     backgroundColor: '#007AFF',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 16,
-  },
+    marginRight: 16 },
   avatarText: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#FFFFFF',
-  },
+    color: '#FFFFFF' },
   userInfo: {
-    flex: 1,
-  },
+    flex: 1 },
   userName: {
     fontSize: 24,
     fontWeight: '700',
     color: '#1C1C1E',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   userEmail: {
     fontSize: 16,
     color: '#8E8E93',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   roleBadge: {
     alignSelf: 'flex-start',
     backgroundColor: '#007AFF15',
     paddingHorizontal: 12,
     paddingVertical: 4,
-    borderRadius: 12,
-  },
+    borderRadius: 12 },
   roleText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#007AFF',
-  },
+    color: '#007AFF' },
   section: {
-    padding: 16,
-  },
+    padding: 16 },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: '#1C1C1E',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   settingsCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   settingItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
-  },
+    borderBottomColor: '#F2F2F7' },
   settingLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
-  },
+    flex: 1 },
   settingIcon: {
     width: 40,
     height: 40,
@@ -219,49 +201,37 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2F2F7',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
-  },
+    marginRight: 12 },
   settingContent: {
-    flex: 1,
-  },
+    flex: 1 },
   settingTitle: {
     fontSize: 16,
     fontWeight: '500',
     color: '#1C1C1E',
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   settingSubtitle: {
     fontSize: 12,
-    color: '#8E8E93',
-  },
+    color: '#8E8E93' },
   appInfoCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
-    padding: 16,
-  },
+    padding: 16 },
   appInfoItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 8,
-  },
+    paddingVertical: 8 },
   appInfoLabel: {
     fontSize: 16,
-    color: '#1C1C1E',
-  },
+    color: '#1C1C1E' },
   appInfoValue: {
     fontSize: 16,
     color: '#8E8E93',
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   logoutSection: {
     padding: 16,
-    marginTop: 'auto',
-  },
+    marginTop: 'auto' },
   logoutButton: {
-    borderColor: '#FF3B30',
-  },
+    borderColor: '#FF3B30' },
   logoutButtonText: {
-    color: '#FF3B30',
-  },
-});
+    color: '#FF3B30' } });

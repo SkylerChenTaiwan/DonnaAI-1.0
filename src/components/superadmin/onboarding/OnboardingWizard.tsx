@@ -12,8 +12,7 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { DesignSystem } from '@/theme/designSystem';
 import {
@@ -21,8 +20,7 @@ import {
   OnboardingWizardState,
   OnboardingSession,
   OnboardingStep,
-  ValidationResult,
-} from '@/types/onboarding';
+  ValidationResult } from '@/types/onboarding';
 import {
   createOnboardingSession,
   getOnboardingSession,
@@ -33,8 +31,7 @@ import {
   validateBasicInfo,
   validateBillingPlan,
   validateUserImport,
-  validateWelcomeSetup,
-} from '@/services/firebase/onboardingService';
+  validateWelcomeSetup } from '@/services/firebase/onboardingService';
 import { showSuccessToast, showErrorToast } from '@/utils/toast';
 import { useAuthStore } from '@/stores/authStore';
 import { getFirebaseAuth } from '@/services/firebase/config';
@@ -54,32 +51,28 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
     description: '設定組織名稱、聯絡資訊等',
     component: BasicInfoStep,
     validation: validateBasicInfo,
-    canSkip: false,
-  },
+    canSkip: false },
   {
     id: 'billing-plan',
     title: '設定組織人數',
     description: '設定組織人數與計費',
     component: SimpleBillingStep,
     validation: validateBillingPlan,
-    canSkip: false,
-  },
+    canSkip: false },
   {
     id: 'user-import',
     title: '匯入用戶',
     description: '批量建立組織用戶',
     component: UserImportStepV2,
     validation: validateUserImport,
-    canSkip: true,
-  },
+    canSkip: true },
   {
     id: 'welcome-setup',
     title: '歡迎設定',
     description: '發送歡迎郵件和初始設定',
     component: WelcomeSetupStep,
     validation: validateWelcomeSetup,
-    canSkip: true,
-  },
+    canSkip: true },
 ];
 
 const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
@@ -87,8 +80,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
   sessionId,
   onComplete,
   onCancel,
-  onSaveDraft,
-}) => {
+  onSaveDraft }) => {
   const colors = DesignSystem.colors;
   
   // 精靈狀態
@@ -100,8 +92,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
     completedSteps: new Set(),
     validationErrors: {},
     canProceed: false,
-    canGoBack: false,
-  });
+    canGoBack: false });
 
   // 初始化會話
   useEffect(() => {
@@ -113,8 +104,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
     setState(prev => ({
       ...prev,
       canGoBack: prev.currentStep > 0,
-      canProceed: !state.isLoading && !state.isSaving,
-    }));
+      canProceed: !state.isLoading && !state.isSaving }));
   }, [state.currentStep, state.isLoading, state.isSaving]);
 
   // 初始化會話
@@ -143,8 +133,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
         session,
         currentStep: session.currentStep || 0,
         completedSteps: new Set(session.completedSteps || []),
-        isLoading: false,
-      }));
+        isLoading: false }));
     } catch (error) {
       console.error('初始化會話失敗:', error);
       showErrorToast('初始化失敗');
@@ -178,10 +167,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
           ...prev.session,
           stepData: {
             ...prev.session.stepData,
-            [stepKey]: data,
-          },
-        } : null,
-      }));
+            [stepKey]: data } } : null }));
       
       // 儲存到資料庫
       await saveStepData(state.session.id, stepKey as any, data);
@@ -206,9 +192,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
         errors: [{
           field: 'general',
           message: '請完成此步驟',
-          severity: 'error',
-        }],
-      };
+          severity: 'error' }] };
     }
     
     if (stepData) {
@@ -228,9 +212,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
       setState(prev => ({
         ...prev,
         validationErrors: {
-          [state.currentStep]: validation.errors,
-        },
-      }));
+          [state.currentStep]: validation.errors } }));
       showErrorToast('請修正錯誤後繼續');
       return;
     }
@@ -244,13 +226,11 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
       ...prev,
       currentStep: prev.currentStep + 1,
       completedSteps: new Set([...prev.completedSteps, currentStepId]),
-      validationErrors: {},
-    }));
+      validationErrors: {} }));
     
     // 儲存進度
     await saveOnboardingProgress(state.session.id, {
-      currentStep: state.currentStep + 1,
-    });
+      currentStep: state.currentStep + 1 });
   };
 
   // 返回上一步
@@ -260,13 +240,11 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
     setState(prev => ({
       ...prev,
       currentStep: prev.currentStep - 1,
-      validationErrors: {},
-    }));
+      validationErrors: {} }));
     
     if (state.session) {
       await saveOnboardingProgress(state.session.id, {
-        currentStep: state.currentStep - 1,
-      });
+        currentStep: state.currentStep - 1 });
     }
   };
 
@@ -290,8 +268,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
       setState(prev => ({ ...prev, isSaving: true }));
       
       await saveOnboardingProgress(state.session.id, {
-        status: 'draft',
-      });
+        status: 'draft' });
       
       showSuccessToast('草稿已儲存');
       
@@ -371,8 +348,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
               styles.progressFill,
               { 
                 width: `${progress}%`,
-                backgroundColor: colors.primary,
-              }
+                backgroundColor: colors.primary }
             ]}
           />
         </View>
@@ -570,8 +546,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -579,49 +554,39 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.gray200,
-  },
+    borderBottomColor: DesignSystem.colors.gray200 },
   headerContent: {
-    flex: 1,
-  },
+    flex: 1 },
   headerTitle: {
     fontSize: 20,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   headerSubtitle: {
     fontSize: 14,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   closeButton: {
-    padding: 8,
-  },
+    padding: 8 },
   progressContainer: {
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.gray200,
-  },
+    borderBottomColor: DesignSystem.colors.gray200 },
   progressBar: {
     height: 4,
     backgroundColor: DesignSystem.colors.gray200,
     borderRadius: 2,
     overflow: 'hidden',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   progressFill: {
     height: '100%',
-    borderRadius: 2,
-  },
+    borderRadius: 2 },
   stepsIndicator: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   stepIndicator: {
     alignItems: 'center',
-    flex: 1,
-  },
+    flex: 1 },
   stepCircle: {
     width: 32,
     height: 32,
@@ -629,76 +594,59 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.gray200,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   stepCompleted: {
-    backgroundColor: DesignSystem.colors.status.success,
-  },
+    backgroundColor: DesignSystem.colors.status.success },
   stepCurrent: {
-    backgroundColor: DesignSystem.colors.primary,
-  },
+    backgroundColor: DesignSystem.colors.primary },
   stepPast: {
     backgroundColor: DesignSystem.colors.primary,
-    opacity: 0.6,
-  },
+    opacity: 0.6 },
   stepNumber: {
     fontSize: 14,
     fontWeight: '600',
-    color: DesignSystem.colors.gray600,
-  },
+    color: DesignSystem.colors.gray600 },
   stepNumberActive: {
-    color: DesignSystem.colors.background.surface,
-  },
+    color: DesignSystem.colors.background.surface },
   stepLabel: {
     fontSize: 12,
     color: DesignSystem.colors.gray500,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   stepLabelCurrent: {
     color: DesignSystem.colors.text.primary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   stepContent: {
-    padding: 20,
-  },
+    padding: 20 },
   stepHeader: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   stepTitle: {
     fontSize: 24,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   stepDescription: {
     fontSize: 14,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 60,
-  },
+    paddingVertical: 60 },
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: DesignSystem.colors.gray600,
-  },
+    color: DesignSystem.colors.gray600 },
   errorContainer: {
     backgroundColor: withAlpha(DesignSystem.colors.status.error, 0.063),
     borderRadius: 8,
     padding: 12,
-    marginTop: 16,
-  },
+    marginTop: 16 },
   errorText: {
     fontSize: 14,
     color: DesignSystem.colors.status.error,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -706,50 +654,40 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderTopWidth: 1,
-    borderTopColor: DesignSystem.colors.gray200,
-  },
+    borderTopColor: DesignSystem.colors.gray200 },
   footerLeft: {
     flexDirection: 'row',
-    gap: 12,
-  },
+    gap: 12 },
   footerRight: {
     flexDirection: 'row',
-    gap: 12,
-  },
+    gap: 12 },
   button: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 8,
-    gap: 8,
-  },
+    gap: 8 },
   primaryButton: {
-    backgroundColor: DesignSystem.colors.primary,
-  },
+    backgroundColor: DesignSystem.colors.primary },
   primaryButtonText: {
     color: DesignSystem.colors.text.inverse,
     fontSize: 14,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   secondaryButton: {
     backgroundColor: DesignSystem.colors.background.surface,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.border.light,
-  },
+    borderColor: DesignSystem.colors.border.light },
   secondaryButtonText: {
     color: DesignSystem.colors.text.primary,
     fontSize: 14,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   ghostButton: {
-    backgroundColor: 'transparent',
-  },
+    backgroundColor: 'transparent' },
   ghostButtonText: {
     color: DesignSystem.colors.text.secondary,
     fontSize: 14,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   savingOverlay: {
     position: 'absolute',
     top: 60,
@@ -761,16 +699,13 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 20,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-    gap: 8,
-  },
+    gap: 8 },
   savingText: {
     fontSize: 12,
-    color: DesignSystem.colors.gray600,
-  },
-});
+    color: DesignSystem.colors.gray600 } });
 
 export default OnboardingWizard;

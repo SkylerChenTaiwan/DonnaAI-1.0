@@ -8,8 +8,7 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  RefreshControl,
-} from 'react-native';
+  RefreshControl } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Layout } from '@/components/common/Layout';
 import { SearchBar } from '@/components/common/SearchBar';
@@ -51,9 +50,7 @@ export const ToolsScreen: React.FC = () => {
       category: '銷售工具',
       webApp: {
         type: 'local',
-        source: 'calculator',
-      },
-    },
+        source: 'calculator' } },
     {
       id: '2',
       title: 'AI 業務訓練',
@@ -63,9 +60,7 @@ export const ToolsScreen: React.FC = () => {
       category: 'AI 工具',
       webApp: {
         type: 'local',
-        source: 'ai-roleplay',
-      },
-    },
+        source: 'ai-roleplay' } },
   ];
 
   const onRefresh = React.useCallback(() => {
@@ -170,45 +165,36 @@ export const ToolsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
-  },
+    backgroundColor: '#F5F5F5' },
   searchContainer: {
     padding: 16,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
-  },
+    borderBottomColor: '#E5E5EA' },
   categorySection: {
     paddingHorizontal: 16,
     paddingTop: 24,
-    paddingBottom: 8,
-  },
+    paddingBottom: 8 },
   categoryTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: '#8E8E93',
     textTransform: 'uppercase',
     marginBottom: 12,
-    marginLeft: 4,
-  },
+    marginLeft: 4 },
   toolsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginHorizontal: -6,
-  },
+    marginHorizontal: -6 },
   toolCardWrapper: {
     width: '50%',
-    padding: 6,
-  },
+    padding: 6 },
   emptyContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 80,
-  },
+    paddingVertical: 80 },
   emptyText: {
     fontSize: 16,
     color: '#8E8E93',
-    marginTop: 12,
-  },
-});
+    marginTop: 12 } });

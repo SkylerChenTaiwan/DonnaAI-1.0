@@ -6,8 +6,7 @@
 import {
   IDataMerger,
   FileRelation,
-  MergeStrategy,
-} from '@/types/intelligentImport';
+  MergeStrategy } from '@/types/intelligentImport';
 
 interface ParsedFile {
   name: string;
@@ -74,8 +73,7 @@ export class DataMerger implements IDataMerger {
     result.metadata = {
       sourceFiles: files.map(f => f.name),
       mergeDate: new Date(),
-      totalRows: result.data.length,
-    };
+      totalRows: result.data.length };
 
     return result;
   }
@@ -91,13 +89,11 @@ export class DataMerger implements IDataMerger {
     // 使用有限的資料進行預覽
     const previewFiles = files.map(file => ({
       ...file,
-      data: file.data.slice(0, Math.min(limit, file.data.length)),
-    }));
+      data: file.data.slice(0, Math.min(limit, file.data.length)) }));
 
     const result = this.merge(previewFiles, relations, {
       removeDuplicates: false,
-      fillMissingValues: false,
-    });
+      fillMissingValues: false });
 
     // 限制結果行數
     if (result.data.length > limit) {
@@ -161,8 +157,7 @@ export class DataMerger implements IDataMerger {
   private prepareBaseTable(file: ParsedFile): DataTable {
     return {
       headers: [...file.headers],
-      data: file.data.map(row => [...row]),
-    };
+      data: file.data.map(row => [...row]) };
   }
 
   /**
@@ -228,8 +223,7 @@ export class DataMerger implements IDataMerger {
   ): DataTable {
     const result: DataTable = {
       headers: this.mergeHeaders(left.headers, right.headers, right.name),
-      data: [],
-    };
+      data: [] };
 
     // 建立右表索引
     const rightIndex = this.buildIndex(right.data, rightKeyIndex);
@@ -260,8 +254,7 @@ export class DataMerger implements IDataMerger {
   ): DataTable {
     const result: DataTable = {
       headers: this.mergeHeaders(left.headers, right.headers, right.name),
-      data: [],
-    };
+      data: [] };
 
     // 建立右表索引
     const rightIndex = this.buildIndex(right.data, rightKeyIndex);
@@ -296,8 +289,7 @@ export class DataMerger implements IDataMerger {
   ): DataTable {
     const result: DataTable = {
       headers: this.mergeHeaders(left.headers, right.headers, right.name),
-      data: [],
-    };
+      data: [] };
 
     // 建立左表索引
     const leftIndex = this.buildIndex(left.data, leftKeyIndex);
@@ -335,8 +327,7 @@ export class DataMerger implements IDataMerger {
   ): DataTable {
     const result: DataTable = {
       headers: this.mergeHeaders(left.headers, right.headers, right.name),
-      data: [],
-    };
+      data: [] };
 
     // 建立索引
     const rightIndex = this.buildIndex(right.data, rightKeyIndex);
@@ -521,8 +512,7 @@ export class DataMerger implements IDataMerger {
 
     const result = {
       ...data,
-      data: uniqueRows,
-    };
+      data: uniqueRows };
 
     if (result.metadata) {
       result.metadata.duplicatesRemoved = duplicatesRemoved;
@@ -563,8 +553,7 @@ export class DataMerger implements IDataMerger {
 
     const result = {
       ...data,
-      data: filledData,
-    };
+      data: filledData };
 
     if (result.metadata) {
       result.metadata.missingValuesFilled = missingValuesFilled;
@@ -630,8 +619,7 @@ export class DataMerger implements IDataMerger {
       // 反轉資料，保留最後出現的值
       return {
         ...data,
-        data: data.data.reverse(),
-      };
+        data: data.data.reverse() };
     }
 
     return data;
@@ -662,7 +650,6 @@ export class DataMerger implements IDataMerger {
       totalColumns: result.headers.length,
       nullValues,
       duplicates: result.metadata?.duplicatesRemoved,
-      sourceFiles: result.metadata?.sourceFiles || [],
-    };
+      sourceFiles: result.metadata?.sourceFiles || [] };
   }
 }

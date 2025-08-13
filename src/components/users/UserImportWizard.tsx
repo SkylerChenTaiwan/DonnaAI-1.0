@@ -13,8 +13,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Platform,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
@@ -35,8 +34,7 @@ import {
   UserFieldMapping,
   ImportUserData,
   UserImportResult,
-  ParsedUserFile,
-} from '@/types/userImport';
+  ParsedUserFile } from '@/types/userImport';
 import { Organization } from '@/types/entities';
 import { UploadedFile, MergedTable, MergeConfig } from '@/types/import';
 
@@ -72,8 +70,7 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
   onClose,
   onImportComplete,
   useIntelligentMapping = true,
-  openAIKey,
-}) => {
+  openAIKey }) => {
   // 初始化服務
   const [mappingEngine] = useState(() => new UserFieldMappingEngine(openAIKey));
   const [importOrchestrator] = useState(() => new UserImportOrchestrator());
@@ -96,8 +93,7 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
       successCount: 0,
       errorCount: 0,
       currentUser: '',
-      errors: [],
-    },
+      errors: [] },
     config: {
       organizationId: organization.id,
       defaultRole: 'user',
@@ -107,9 +103,7 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
       generatePasswords: true,
       fieldMappings: [],
       aiAssisted: useIntelligentMapping,
-      mode: 'simple',
-    },
-  });
+      mode: 'simple' } });
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -201,9 +195,7 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
         mappings: suggestions,
         config: {
           ...prev.config,
-          fieldMappings: suggestions,
-        },
-      }));
+          fieldMappings: suggestions } }));
       
       toast.success('已生成智能欄位映射建議');
     } catch (error) {
@@ -232,8 +224,7 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
       
       setWizardState(prev => ({
         ...prev,
-        importData: validatedData,
-      }));
+        importData: validatedData }));
       
       toast.success(`已準備 ${validatedData.length} 筆用戶資料`);
     } catch (error) {
@@ -250,8 +241,7 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
   const handleFilesUploaded = useCallback((files: UploadedFile[]) => {
     setWizardState(prev => ({
       ...prev,
-      files,
-    }));
+      files }));
   }, []);
 
   /**
@@ -261,8 +251,7 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
     setWizardState(prev => ({
       ...prev,
       mergeConfig,
-      mergedTable,
-    }));
+      mergedTable }));
   }, []);
 
   /**
@@ -274,9 +263,7 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
       mappings,
       config: {
         ...prev.config,
-        fieldMappings: mappings,
-      },
-    }));
+        fieldMappings: mappings } }));
   }, []);
 
   /**
@@ -285,8 +272,7 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
   const handleDataEdit = useCallback((updatedData: ImportUserData[]) => {
     setWizardState(prev => ({
       ...prev,
-      importData: updatedData,
-    }));
+      importData: updatedData }));
   }, []);
 
   /**
@@ -297,9 +283,7 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
       ...prev,
       config: {
         ...prev.config,
-        ...config,
-      },
-    }));
+        ...config } }));
   }, []);
 
   /**
@@ -315,8 +299,7 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
         (progress) => {
           setWizardState(prev => ({
             ...prev,
-            importProgress: progress,
-          }));
+            importProgress: progress }));
         }
       );
       
@@ -350,9 +333,7 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
       mode,
       config: {
         ...prev.config,
-        mode,
-      },
-    }));
+        mode } }));
   }, []);
 
   /**
@@ -375,8 +356,7 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
         successCount: 0,
         errorCount: 0,
         currentUser: '',
-        errors: [],
-      },
+        errors: [] },
       config: {
         organizationId: organization.id,
         defaultRole: 'user',
@@ -386,9 +366,7 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
         generatePasswords: true,
         fieldMappings: [],
         aiAssisted: useIntelligentMapping,
-        mode: 'simple',
-      },
-    });
+        mode: 'simple' } });
     setError(null);
   }, [organization.id, useIntelligentMapping]);
 
@@ -407,8 +385,7 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
             onPress: () => {
               resetWizard();
               onClose();
-            },
-          },
+            } },
         ]
       );
     } else {
@@ -595,8 +572,7 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -604,32 +580,26 @@ const styles = StyleSheet.create({
     paddingHorizontal: DesignSystem.spacing.lg,
     paddingVertical: DesignSystem.spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   headerLeft: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   closeButton: {
-    marginRight: DesignSystem.spacing.md,
-  },
+    marginRight: DesignSystem.spacing.md },
   headerTitle: {
     ...DesignSystem.typography.h3,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   stageIndicator: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: DesignSystem.spacing.lg,
     paddingVertical: DesignSystem.spacing.lg,
-    backgroundColor: DesignSystem.colors.background.surface,
-  },
+    backgroundColor: DesignSystem.colors.background.surface },
   stageItem: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    position: 'relative',
-  },
+    position: 'relative' },
   stageCircle: {
     width: 36,
     height: 36,
@@ -638,25 +608,20 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: DesignSystem.colors.border.medium,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   stageCircleActive: {
     backgroundColor: DesignSystem.colors.primary,
-    borderColor: DesignSystem.colors.primary,
-  },
+    borderColor: DesignSystem.colors.primary },
   stageCircleCompleted: {
     backgroundColor: DesignSystem.colors.success,
-    borderColor: DesignSystem.colors.success,
-  },
+    borderColor: DesignSystem.colors.success },
   stageLabel: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginLeft: DesignSystem.spacing.xs,
-  },
+    marginLeft: DesignSystem.spacing.xs },
   stageLabelActive: {
     color: DesignSystem.colors.primary,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   stageConnector: {
     position: 'absolute',
     left: 36,
@@ -664,11 +629,9 @@ const styles = StyleSheet.create({
     height: 2,
     backgroundColor: DesignSystem.colors.border.light,
     top: 17,
-    zIndex: -1,
-  },
+    zIndex: -1 },
   stageConnectorCompleted: {
-    backgroundColor: DesignSystem.colors.success,
-  },
+    backgroundColor: DesignSystem.colors.success },
   errorBanner: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -677,45 +640,35 @@ const styles = StyleSheet.create({
     paddingVertical: DesignSystem.spacing.sm,
     marginHorizontal: DesignSystem.spacing.lg,
     marginTop: DesignSystem.spacing.md,
-    borderRadius: DesignSystem.borderRadius.sm,
-  },
+    borderRadius: DesignSystem.borderRadius.sm },
   errorText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.error,
     flex: 1,
-    marginLeft: DesignSystem.spacing.sm,
-  },
+    marginLeft: DesignSystem.spacing.sm },
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   contentContainer: {
     flexGrow: 1,
-    padding: DesignSystem.spacing.lg,
-  },
+    padding: DesignSystem.spacing.lg },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   loadingText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.secondary,
-    marginTop: DesignSystem.spacing.md,
-  },
+    marginTop: DesignSystem.spacing.md },
   footer: {
     borderTopWidth: 1,
     borderTopColor: DesignSystem.colors.border.light,
     paddingHorizontal: DesignSystem.spacing.lg,
-    paddingVertical: DesignSystem.spacing.md,
-  },
+    paddingVertical: DesignSystem.spacing.md },
   footerButtons: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    gap: DesignSystem.spacing.md,
-  },
+    gap: DesignSystem.spacing.md },
   footerButton: {
-    minWidth: 100,
-  },
-});
+    minWidth: 100 } });
 
 export default UserImportWizard;

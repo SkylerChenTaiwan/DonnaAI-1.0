@@ -30,8 +30,7 @@ export const TableCell: React.FC<TableCellProps> = memo(({
   onCellDoubleClick,
   onCellMouseEnter,
   onCellMouseLeave,
-  onCellEdit,
-}) => {
+  onCellEdit }) => {
   const [editValue, setEditValue] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<TextInput>(null);
@@ -139,8 +138,7 @@ export const TableCell: React.FC<TableCellProps> = memo(({
                   tableStyles.selectTag,
                   { 
                     backgroundColor: getTagColor('blue', 'bg'),
-                    marginBottom: 2,
-                  },
+                    marginBottom: 2 },
                 ]}
               >
                 <Text
@@ -197,8 +195,7 @@ export const TableCell: React.FC<TableCellProps> = memo(({
       onPress={handleClick}
       {...(Platform.OS === 'web' ? {
         onMouseEnter: () => onCellMouseEnter?.(position),
-        onMouseLeave: () => onCellMouseLeave?.(position),
-      } : {})}
+        onMouseLeave: () => onCellMouseLeave?.(position) } : {})}
       activeOpacity={1}
       style={[
         ...getCellStyles(state),
@@ -257,8 +254,7 @@ function getTagColor(color: string, type: 'bg' | 'text'): string {
     blue: { bg: NotionColors.background.blue, text: NotionColors.text.blue },
     purple: { bg: NotionColors.background.purple, text: NotionColors.text.purple },
     pink: { bg: NotionColors.background.pink, text: NotionColors.text.pink },
-    red: { bg: NotionColors.background.red, text: NotionColors.text.red },
-  };
+    red: { bg: NotionColors.background.red, text: NotionColors.text.red } };
   
   const colors = colorMap[color] || colorMap.gray;
   return type === 'bg' ? colors.bg : colors.text;

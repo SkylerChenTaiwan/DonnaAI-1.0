@@ -98,8 +98,7 @@ export const exportTableData = async (
     // 寫入暫存檔案
     const fileUri = `${FileSystem.documentDirectory}${fullFilename}`;
     await FileSystem.writeAsStringAsync(fileUri, content, {
-      encoding: FileSystem.EncodingType.UTF8,
-    });
+      encoding: FileSystem.EncodingType.UTF8 });
 
     // 根據選項決定如何處理檔案
     if (Platform.OS === 'web') {
@@ -116,14 +115,12 @@ export const exportTableData = async (
         recipients: [options.email],
         subject: `資料匯出 - ${fullFilename}`,
         body: `請查收附件中的匯出資料。\n\n匯出時間：${new Date().toLocaleString('zh-TW')}`,
-        attachments: [fileUri],
-      });
+        attachments: [fileUri] });
     } else if (await Sharing.isAvailableAsync()) {
       // 分享檔案
       await Sharing.shareAsync(fileUri, {
         mimeType: options.format === 'csv' ? 'text/csv' : 'application/json',
-        dialogTitle: '匯出資料',
-      });
+        dialogTitle: '匯出資料' });
     } else {
       throw new Error('無法匯出檔案，裝置不支援分享功能');
     }

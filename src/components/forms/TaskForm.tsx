@@ -10,8 +10,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@/components/common/Icon';
@@ -43,8 +42,7 @@ export const TaskForm = forwardRef<any, TaskFormProps>((props, ref) => {
     userId,
     organizationId,
     teamId,
-    hideInputToggle = false,
-  } = props;
+    hideInputToggle = false } = props;
   const [inputMode, setInputMode] = useState<'text' | 'voice'>('text');
 
   const {
@@ -53,16 +51,13 @@ export const TaskForm = forwardRef<any, TaskFormProps>((props, ref) => {
     formState: { errors, isValid },
     setValue,
     watch,
-    reset,
-  } = useForm<TaskFormData>({
+    reset } = useForm<TaskFormData>({
     resolver: zodResolver(TaskFormSchema),
     defaultValues: {
       priority: '中',
       status: '待處理',
       tags: [],
-      ...initialData,
-    },
-  });
+      ...initialData } });
 
   const watchedTitle = watch('title');
   const watchedDescription = watch('description');
@@ -319,31 +314,26 @@ export const TaskForm = forwardRef<any, TaskFormProps>((props, ref) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F0F0F0',
-  },
+    backgroundColor: '#F0F0F0' },
   form: {
     flex: 1,
-    padding: 20,
-  },
+    padding: 20 },
   
   // 輸入模式切換
   inputModeContainer: {
-    marginBottom: 20,
-  },
+    marginBottom: 20 },
   inputModeLabel: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1A1A1A',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   inputModeToggle: {
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 4,
     borderWidth: 1,
-    borderColor: '#E3E1DC',
-  },
+    borderColor: '#E3E1DC' },
   modeButton: {
     flex: 1,
     flexDirection: 'row',
@@ -352,19 +342,15 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
-    gap: 6,
-  },
+    gap: 6 },
   modeButtonActive: {
-    backgroundColor: '#1A1A1A',
-  },
+    backgroundColor: '#1A1A1A' },
   modeButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   modeButtonTextActive: {
-    color: '#FFFFFF',
-  },
+    color: '#FFFFFF' },
 
   // 語音輸入區域
   voiceInputSection: {
@@ -373,61 +359,51 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: '#E3E1DC',
-  },
+    borderColor: '#E3E1DC' },
   voiceInputHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   voiceInputTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   voiceInputDescription: {
     fontSize: 16,
     color: '#7A7A7A',
     lineHeight: 22,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   voiceInputTips: {
     backgroundColor: '#F9FAFB',
     borderRadius: 8,
     padding: 12,
-    marginBottom: 20,
-  },
+    marginBottom: 20 },
   tipsTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: '#1A1A1A',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   tipText: {
     fontSize: 14,
     color: '#7A7A7A',
     lineHeight: 18,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   voiceInputButton: {
     backgroundColor: '#ef4444',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   voiceResultBanner: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#dcfce7',
     borderRadius: 8,
     padding: 12,
-    gap: 8,
-  },
+    gap: 8 },
   voiceResultText: {
     flex: 1,
     fontSize: 14,
     color: '#166534',
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
 
   // 底部按鈕
   footer: {
@@ -437,18 +413,15 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
-    borderTopColor: '#E3E1DC',
-  },
+    borderTopColor: '#E3E1DC' },
   footerButton: {
-    flex: 1,
-  },
+    flex: 1 },
   inputModeTabs: {
     flexDirection: 'row',
     backgroundColor: '#F0F0F0',
     padding: 4,
     borderRadius: 8,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   tabButton: {
     flex: 1,
     flexDirection: 'row',
@@ -457,17 +430,12 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 6,
-    gap: 6,
-  },
+    gap: 6 },
   tabButtonActive: {
-    backgroundColor: '#1C1C1E',
-  },
+    backgroundColor: '#1C1C1E' },
   tabText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   tabTextActive: {
-    color: '#FFFFFF',
-  },
-});
+    color: '#FFFFFF' } });

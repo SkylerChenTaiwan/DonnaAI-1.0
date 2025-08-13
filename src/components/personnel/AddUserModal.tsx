@@ -12,8 +12,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { Button } from '@/components/common/Button';
 import { Layout } from '@/components/common/Layout';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -55,8 +54,7 @@ export const AddUserModal: React.FC = () => {
     email: '',
     password: '',
     name: '',
-    role: 'salesperson',
-  });
+    role: 'salesperson' });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
@@ -162,16 +160,14 @@ export const AddUserModal: React.FC = () => {
         teamIds: [targetTeamId],
         managedTeamIds: formData.role === 'manager' ? [targetTeamId] : undefined,
         createdAt: new Date(),
-        lastLoginAt: new Date(),
-      };
+        lastLoginAt: new Date() };
 
       // 儲存到 Firestore
       const userRef = doc(getFirebaseDb(), 'users', newUser.uid);
       await setDoc(userRef, {
         ...userData,
         createdAt: Timestamp.now(),
-        lastLoginAt: Timestamp.now(),
-      });
+        lastLoginAt: Timestamp.now() });
 
       showToast('success', '使用者建立成功');
       onUserCreated?.();
@@ -330,72 +326,57 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
-    backgroundColor: colors.background,
-  },
+    backgroundColor: colors.background },
   headerLeft: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   closeButton: {
     padding: 8,
-    marginRight: 8,
-  },
+    marginRight: 8 },
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: colors.text,
-  },
+    color: colors.text },
   container: {
     flex: 1,
-    backgroundColor: colors.background,
-  },
+    backgroundColor: colors.background },
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   contentContainer: {
     paddingVertical: 24,
-    paddingHorizontal: 16,
-  },
+    paddingHorizontal: 16 },
   fieldContainer: {
-    marginTop: 20,
-  },
+    marginTop: 20 },
   infoBox: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.backgroundSecondary,
     padding: 16,
     borderRadius: 8,
-    marginTop: 24,
-  },
+    marginTop: 24 },
   infoText: {
     flex: 1,
     marginLeft: 12,
     fontSize: 14,
     color: colors.textSecondary,
-    lineHeight: 20,
-  },
+    lineHeight: 20 },
   loadingContainer: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   noPermissionContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 32,
-  },
+    paddingHorizontal: 32 },
   noPermissionText: {
     fontSize: 18,
     fontWeight: '600',
     color: colors.text,
     marginTop: 16,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   noPermissionSubtext: {
     fontSize: 14,
     color: colors.textSecondary,
     textAlign: 'center',
-    lineHeight: 20,
-  },
-});
+    lineHeight: 20 } });

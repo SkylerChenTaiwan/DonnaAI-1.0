@@ -40,16 +40,14 @@ export const useColumnSettings = (
           // 使用預設值
           setSettings({
             visibleColumns: [...defaultColumns],
-            columnOrder: [...defaultColumns],
-          });
+            columnOrder: [...defaultColumns] });
         }
       } catch (error) {
         console.error('載入欄位設定失敗:', error);
         // 出錯時使用預設值
         setSettings({
           visibleColumns: [...defaultColumns],
-          columnOrder: [...defaultColumns],
-        });
+          columnOrder: [...defaultColumns] });
       } finally {
         setLoading(false);
       }
@@ -74,8 +72,7 @@ export const useColumnSettings = (
   const resetToDefaults = useCallback(async () => {
     const defaultSettings: ColumnSettings = {
       visibleColumns: [...defaultColumns],
-      columnOrder: [...defaultColumns],
-    };
+      columnOrder: [...defaultColumns] };
     await saveSettings(defaultSettings);
   }, [defaultColumns, saveSettings]);
 
@@ -84,8 +81,7 @@ export const useColumnSettings = (
     if (!settings && defaultColumns.length > 0) {
       setSettings({
         visibleColumns: [...defaultColumns],
-        columnOrder: [...defaultColumns],
-      });
+        columnOrder: [...defaultColumns] });
       setLoading(false);
     }
   }, [defaultColumns, settings]);
@@ -94,6 +90,5 @@ export const useColumnSettings = (
     settings,
     loading,
     saveSettings,
-    resetToDefaults,
-  };
+    resetToDefaults };
 };

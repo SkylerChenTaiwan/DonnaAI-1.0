@@ -18,12 +18,10 @@ vi.mock('firebase/firestore', () => ({
   doc: vi.fn(),
   updateDoc: jest.fn(() => Promise.resolve()),
   getDocs: vi.fn(),
-  Unsubscribe: vi.fn(),
-}));
+  Unsubscribe: vi.fn() }));
 
 vi.mock('../../services/firebase', () => ({
-  db: {},
-}));
+  db: {} }));
 
 vi.mock('../../services/firebase/permissions-v2', () => ({
   getUserPermissionContext: jest.fn(() => Promise.resolve({
@@ -32,10 +30,8 @@ vi.mock('../../services/firebase/permissions-v2', () => ({
     organizationId: 'org-1',
     teamIds: ['team-1'],
     managedTeamIds: ['team-1'],
-    cachedAt: Date.now(),
-  })),
-  clearUserPermissionCache: vi.fn(),
-}));
+    cachedAt: Date.now() })),
+  clearUserPermissionCache: vi.fn() }));
 
 describe('personnelStore', () => {
   const mockCurrentUser: User = {
@@ -46,8 +42,7 @@ describe('personnelStore', () => {
     organizationId: 'org-1',
     isActive: true,
     createdAt: new Date(),
-    updatedAt: new Date(),
-  };
+    updatedAt: new Date() };
 
   const mockUsers = [
     {
@@ -62,8 +57,7 @@ describe('personnelStore', () => {
       createdAt: new Date(),
       updatedAt: new Date(),
       lastActiveAt: new Date(),
-      isOnline: true,
-    },
+      isOnline: true },
     {
       id: 'user-2',
       email: 'user2@example.com',
@@ -77,8 +71,7 @@ describe('personnelStore', () => {
       createdAt: new Date(),
       updatedAt: new Date(),
       lastActiveAt: new Date(Date.now() - 86400000), // 1天前
-      isOnline: false,
-    },
+      isOnline: false },
   ];
 
   beforeEach(() => {
@@ -94,12 +87,9 @@ describe('personnelStore', () => {
               ...user,
               lastActiveAt: { toDate: () => user.lastActiveAt },
               createdAt: { toDate: () => user.createdAt },
-              updatedAt: { toDate: () => user.updatedAt },
-            }),
-          });
+              updatedAt: { toDate: () => user.updatedAt } }) });
         });
-      }),
-    });
+      }) });
   });
 
   afterEach(() => {
@@ -236,8 +226,7 @@ describe('personnelStore', () => {
       expect(updateDoc).toHaveBeenCalledWith(
         expect.anything(),
         expect.objectContaining({
-          reportingTo: null,
-        })
+          reportingTo: null })
       );
     });
   });

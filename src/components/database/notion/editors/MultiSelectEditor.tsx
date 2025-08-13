@@ -31,8 +31,7 @@ export const MultiSelectEditor: React.FC<EditorProps> = ({
   onKeyDown,
   column,
   autoFocus = true,
-  style,
-}) => {
+  style }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -49,8 +48,7 @@ export const MultiSelectEditor: React.FC<EditorProps> = ({
   const availableOptions: Tag[] = column.options?.map((opt: any, index: number) => ({
     id: opt.value || opt.id || String(index),
     name: opt.label || opt.name || opt,
-    color: opt.color || TAG_COLORS[index % TAG_COLORS.length].name,
-  })) || [];
+    color: opt.color || TAG_COLORS[index % TAG_COLORS.length].name })) || [];
 
   // 過濾選項
   const filteredOptions = availableOptions.filter(
@@ -92,8 +90,7 @@ export const MultiSelectEditor: React.FC<EditorProps> = ({
         const newTag: Tag = {
           id: `new-${Date.now()}`,
           name: searchTerm.trim(),
-          color: TAG_COLORS[selectedTags.length % TAG_COLORS.length].name,
-        };
+          color: TAG_COLORS[selectedTags.length % TAG_COLORS.length].name };
         handleAddTag(newTag);
       }
     } else if (e.key === 'Escape') {
@@ -130,15 +127,13 @@ export const MultiSelectEditor: React.FC<EditorProps> = ({
     ...style,
     flexDirection: 'column',
     padding: '4px',
-    minHeight: '32px',
-  };
+    minHeight: '32px' };
 
   const tagsContainerStyles: React.CSSProperties = {
     display: 'flex',
     flexWrap: 'wrap',
     gap: '4px',
-    marginBottom: '4px',
-  };
+    marginBottom: '4px' };
 
   const tagStyles = (colorName: string): React.CSSProperties => {
     const color = getTagColor(colorName);
@@ -152,8 +147,7 @@ export const MultiSelectEditor: React.FC<EditorProps> = ({
       fontWeight: 500,
       background: color.background,
       color: color.text,
-      cursor: 'default',
-    };
+      cursor: 'default' };
   };
 
   const removeButtonStyles: React.CSSProperties = {
@@ -165,16 +159,14 @@ export const MultiSelectEditor: React.FC<EditorProps> = ({
     fontSize: '14px',
     opacity: 0.6,
     display: 'flex',
-    alignItems: 'center',
-  };
+    alignItems: 'center' };
 
   const inputStyles: React.CSSProperties = {
     ...EDITOR_STYLES.input,
     border: 'none',
     padding: '2px 4px',
     minWidth: '100px',
-    flex: 1,
-  };
+    flex: 1 };
 
   const dropdownStyles: React.CSSProperties = {
     position: 'absolute',
@@ -188,15 +180,13 @@ export const MultiSelectEditor: React.FC<EditorProps> = ({
     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
     maxHeight: '200px',
     overflowY: 'auto',
-    zIndex: 1000,
-  };
+    zIndex: 1000 };
 
   const optionStyles: React.CSSProperties = {
     padding: '6px 12px',
     cursor: 'pointer',
     fontSize: '14px',
-    color: 'rgb(55, 53, 47)',
-  };
+    color: 'rgb(55, 53, 47)' };
 
   const optionTagStyles = (colorName: string): React.CSSProperties => {
     const color = getTagColor(colorName);
@@ -207,15 +197,13 @@ export const MultiSelectEditor: React.FC<EditorProps> = ({
       fontSize: '12px',
       fontWeight: 500,
       background: color.background,
-      color: color.text,
-    };
+      color: color.text };
   };
 
   const createNewStyles: React.CSSProperties = {
     ...optionStyles,
     color: 'rgba(55, 53, 47, 0.65)',
-    borderTop: '1px solid rgba(55, 53, 47, 0.09)',
-  };
+    borderTop: '1px solid rgba(55, 53, 47, 0.09)' };
 
   return (
     <div ref={containerRef} style={{ position: 'relative' }}>
@@ -274,8 +262,7 @@ export const MultiSelectEditor: React.FC<EditorProps> = ({
                 const newTag: Tag = {
                   id: `new-${Date.now()}`,
                   name: searchTerm.trim(),
-                  color: TAG_COLORS[selectedTags.length % TAG_COLORS.length].name,
-                };
+                  color: TAG_COLORS[selectedTags.length % TAG_COLORS.length].name };
                 handleAddTag(newTag);
               }}
               onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(55, 53, 47, 0.08)'}

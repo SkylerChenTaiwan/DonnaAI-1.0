@@ -14,8 +14,7 @@ import {
   ScrollView,
   Switch,
   ActivityIndicator,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { DesignSystem } from '@/theme/designSystem';
 import {
@@ -23,8 +22,7 @@ import {
   UserImportData,
   UserData,
   GoogleAuthConfig,
-  PasswordStrategy,
-} from '@/types/onboarding';
+  PasswordStrategy } from '@/types/onboarding';
 import { showErrorToast, showSuccessToast } from '@/utils/toast';
 import { withAlpha } from '@/utils/colorUtils';
 
@@ -32,8 +30,7 @@ const UserImportStep: React.FC<StepProps> = ({
   data,
   onChange,
   onValidate,
-  isActive,
-}) => {
+  isActive }) => {
   const colors = DesignSystem.colors;
   const fileInputRef = useRef<HTMLInputElement>(null);
   
@@ -46,15 +43,12 @@ const UserImportStep: React.FC<StepProps> = ({
       domain: '',
       autoCreateUsers: true,
       syncGroups: false,
-      groupMappings: [],
-    },
+      groupMappings: [] },
     passwordStrategy: {
       type: 'auto-generate',
-      requireChange: true,
-    },
+      requireChange: true },
     sendWelcomeEmail: true,
-    ...data,
-  });
+    ...data });
   
   const [isProcessing, setIsProcessing] = useState(false);
   const [jsonInput, setJsonInput] = useState('');
@@ -62,8 +56,7 @@ const UserImportStep: React.FC<StepProps> = ({
     email: '',
     name: '',
     role: 'user',
-    department: '',
-  });
+    department: '' });
 
   // 當資料變更時通知父元件
   useEffect(() => {
@@ -88,8 +81,7 @@ const UserImportStep: React.FC<StepProps> = ({
       
       setFormData(prev => ({
         ...prev,
-        users: [...prev.users, ...users],
-      }));
+        users: [...prev.users, ...users] }));
       
       showSuccessToast(`成功匯入 ${users.length} 個用戶`);
     } catch (error) {
@@ -135,8 +127,7 @@ const UserImportStep: React.FC<StepProps> = ({
           name: user.name,
           role: user.role || 'user',
           department: user.department,
-          phone: user.phone,
-        });
+          phone: user.phone });
       }
     }
     
@@ -154,13 +145,11 @@ const UserImportStep: React.FC<StepProps> = ({
         name: u.name,
         role: u.role || 'user',
         department: u.department,
-        phone: u.phone,
-      }));
+        phone: u.phone }));
       
       setFormData(prev => ({
         ...prev,
-        users: [...prev.users, ...validUsers],
-      }));
+        users: [...prev.users, ...validUsers] }));
       
       setJsonInput('');
       showSuccessToast(`成功新增 ${validUsers.length} 個用戶`);
@@ -180,16 +169,13 @@ const UserImportStep: React.FC<StepProps> = ({
       ...prev,
       users: [...prev.users, {
         ...manualInput,
-        authMethod: 'password',
-      }],
-    }));
+        authMethod: 'password' }] }));
     
     setManualInput({
       email: '',
       name: '',
       role: 'user',
-      department: '',
-    });
+      department: '' });
     
     showSuccessToast('用戶已新增');
   };
@@ -198,16 +184,14 @@ const UserImportStep: React.FC<StepProps> = ({
   const removeUser = (index: number) => {
     setFormData(prev => ({
       ...prev,
-      users: prev.users.filter((_, i) => i !== index),
-    }));
+      users: prev.users.filter((_, i) => i !== index) }));
   };
 
   // 清空所有用戶
   const clearAllUsers = () => {
     setFormData(prev => ({
       ...prev,
-      users: [],
-    }));
+      users: [] }));
   };
 
   // 渲染匯入方式選擇
@@ -359,9 +343,7 @@ const UserImportStep: React.FC<StepProps> = ({
                 ...prev,
                 googleAuthConfig: {
                   ...prev.googleAuthConfig!,
-                  domain: text,
-                },
-              }))}
+                  domain: text } }))}
               placeholder="@example.com"
             />
           </View>
@@ -374,9 +356,7 @@ const UserImportStep: React.FC<StepProps> = ({
                 ...prev,
                 googleAuthConfig: {
                   ...prev.googleAuthConfig!,
-                  autoCreateUsers: value,
-                },
-              }))}
+                  autoCreateUsers: value } }))}
               trackColor={{ false: colors.gray300, true: colors.primary }}
             />
           </View>
@@ -389,9 +369,7 @@ const UserImportStep: React.FC<StepProps> = ({
                 ...prev,
                 googleAuthConfig: {
                   ...prev.googleAuthConfig!,
-                  syncGroups: value,
-                },
-              }))}
+                  syncGroups: value } }))}
               trackColor={{ false: colors.gray300, true: colors.primary }}
             />
           </View>
@@ -551,9 +529,7 @@ const UserImportStep: React.FC<StepProps> = ({
               ...prev,
               googleAuthConfig: {
                 ...prev.googleAuthConfig!,
-                enabled: value,
-              },
-            }))}
+                enabled: value } }))}
             trackColor={{ false: colors.gray300, true: colors.primary }}
           />
         </View>
@@ -569,9 +545,7 @@ const UserImportStep: React.FC<StepProps> = ({
                   ...prev,
                   googleAuthConfig: {
                     ...prev.googleAuthConfig!,
-                    domain: text,
-                  },
-                }))}
+                    domain: text } }))}
                 placeholder="@example.com"
               />
               <Text style={styles.inputHint}>
@@ -612,9 +586,7 @@ const UserImportStep: React.FC<StepProps> = ({
                 ...prev,
                 passwordStrategy: {
                   ...prev.passwordStrategy,
-                  type: strategy.value as any,
-                },
-              }))}
+                  type: strategy.value as any } }))}
             >
               <Icon name={strategy.icon}
                 size={20}
@@ -643,9 +615,7 @@ const UserImportStep: React.FC<StepProps> = ({
                 ...prev,
                 passwordStrategy: {
                   ...prev.passwordStrategy,
-                  value: text,
-                },
-              }))}
+                  value: text } }))}
               placeholder="請輸入至少 8 個字元"
               secureTextEntry
             />
@@ -661,9 +631,7 @@ const UserImportStep: React.FC<StepProps> = ({
                 ...prev,
                 passwordStrategy: {
                   ...prev.passwordStrategy,
-                  requireChange: value,
-                },
-              }))}
+                  requireChange: value } }))}
               trackColor={{ false: colors.gray300, true: colors.primary }}
             />
           </View>
@@ -685,8 +653,7 @@ const UserImportStep: React.FC<StepProps> = ({
             value={formData.sendWelcomeEmail}
             onValueChange={(value) => setFormData(prev => ({
               ...prev,
-              sendWelcomeEmail: value,
-            }))}
+              sendWelcomeEmail: value }))}
             trackColor={{ false: colors.gray300, true: colors.primary }}
           />
         </View>
@@ -733,28 +700,23 @@ const UserImportStep: React.FC<StepProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   section: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
-    gap: 8,
-  },
+    gap: 8 },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   methodSelector: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 12,
-    marginTop: 12,
-  },
+    marginTop: 12 },
   methodCard: {
     flex: 1,
     minWidth: 120,
@@ -765,24 +727,19 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: DesignSystem.colors.gray300,
-    backgroundColor: DesignSystem.colors.background.surface,
-  },
+    backgroundColor: DesignSystem.colors.background.surface },
   methodCardActive: {
     borderColor: DesignSystem.colors.primary,
-    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
-  },
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063) },
   methodLabel: {
     fontSize: 12,
     color: DesignSystem.colors.gray700,
     marginTop: 8,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   methodLabelActive: {
-    color: DesignSystem.colors.primary,
-  },
+    color: DesignSystem.colors.primary },
   uploadContainer: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   uploadBox: {
     borderWidth: 2,
     borderColor: DesignSystem.colors.gray300,
@@ -791,41 +748,33 @@ const styles = StyleSheet.create({
     paddingVertical: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: DesignSystem.colors.gray50,
-  },
+    backgroundColor: DesignSystem.colors.gray50 },
   uploadText: {
     fontSize: 14,
     color: DesignSystem.colors.gray700,
     marginTop: 12,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   uploadHint: {
     fontSize: 12,
     color: DesignSystem.colors.gray500,
-    marginTop: 4,
-  },
+    marginTop: 4 },
   csvExample: {
-    marginTop: 16,
-  },
+    marginTop: 16 },
   exampleTitle: {
     fontSize: 13,
     color: DesignSystem.colors.gray700,
     marginBottom: 8,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   codeBlock: {
     backgroundColor: DesignSystem.colors.gray100,
     borderRadius: 6,
-    padding: 12,
-  },
+    padding: 12 },
   codeText: {
     fontSize: 12,
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    color: DesignSystem.colors.gray800,
-  },
+    color: DesignSystem.colors.gray800 },
   jsonContainer: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   jsonInput: {
     borderWidth: 1,
     borderColor: DesignSystem.colors.gray300,
@@ -837,37 +786,31 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.primary,
     backgroundColor: DesignSystem.colors.background.surface,
     minHeight: 200,
-    lineHeight: 20,
-  },
+    lineHeight: 20 },
   submitButton: {
     backgroundColor: DesignSystem.colors.primary,
     borderRadius: 8,
     paddingVertical: 12,
     alignItems: 'center',
-    marginTop: 12,
-  },
+    marginTop: 12 },
   submitButtonText: {
     color: DesignSystem.colors.background.surface,
     fontSize: 14,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   googleContainer: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   googleNotice: {
     flexDirection: 'row',
     backgroundColor: withAlpha(DesignSystem.colors.status.info, 0.063),
     borderRadius: 8,
     padding: 12,
     marginBottom: 16,
-    gap: 8,
-  },
+    gap: 8 },
   googleNoticeText: {
     flex: 1,
     fontSize: 13,
     color: DesignSystem.colors.status.info,
-    lineHeight: 18,
-  },
+    lineHeight: 18 },
   googleButton: {
     flexDirection: 'row',
     backgroundColor: DesignSystem.colors.primary,
@@ -875,32 +818,25 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
-  },
+    gap: 8 },
   googleButtonText: {
     color: DesignSystem.colors.background.surface,
     fontSize: 14,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   googleSettings: {
-    marginTop: 16,
-  },
+    marginTop: 16 },
   googleOptions: {
     marginTop: 12,
-    paddingLeft: 20,
-  },
+    paddingLeft: 20 },
   manualContainer: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   inputGroup: {
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   inputLabel: {
     fontSize: 14,
     color: DesignSystem.colors.gray700,
     marginBottom: 8,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   input: {
     borderWidth: 1,
     borderColor: DesignSystem.colors.gray300,
@@ -911,17 +847,14 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.primary,
     backgroundColor: DesignSystem.colors.background.surface,
     minHeight: 48,
-    lineHeight: 20,
-  },
+    lineHeight: 20 },
   inputHint: {
     fontSize: 12,
     color: DesignSystem.colors.gray500,
-    marginTop: 4,
-  },
+    marginTop: 4 },
   roleSelector: {
     flexDirection: 'row',
-    gap: 8,
-  },
+    gap: 8 },
   roleOption: {
     flex: 1,
     paddingVertical: 8,
@@ -929,20 +862,16 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     borderWidth: 1,
     borderColor: DesignSystem.colors.gray300,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   roleOptionActive: {
     borderColor: DesignSystem.colors.primary,
-    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
-  },
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063) },
   roleText: {
     fontSize: 13,
-    color: DesignSystem.colors.gray700,
-  },
+    color: DesignSystem.colors.gray700 },
   roleTextActive: {
     color: DesignSystem.colors.primary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   addButton: {
     flexDirection: 'row',
     backgroundColor: DesignSystem.colors.primary,
@@ -950,35 +879,28 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
-  },
+    gap: 8 },
   addButtonText: {
     color: DesignSystem.colors.background.surface,
     fontSize: 14,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   userList: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   listHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   listTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   clearLink: {
     fontSize: 13,
     color: DesignSystem.colors.status.error,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   listScroll: {
-    maxHeight: 300,
-  },
+    maxHeight: 300 },
   userItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -987,8 +909,7 @@ const styles = StyleSheet.create({
     padding: 12,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray200,
-  },
+    borderColor: DesignSystem.colors.gray200 },
   userAvatar: {
     width: 36,
     height: 36,
@@ -996,34 +917,27 @@ const styles = StyleSheet.create({
     backgroundColor: withAlpha(DesignSystem.colors.primary, 0.125),
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
-  },
+    marginRight: 12 },
   avatarText: {
     fontSize: 16,
     fontWeight: '600',
-    color: DesignSystem.colors.primary,
-  },
+    color: DesignSystem.colors.primary },
   userInfo: {
-    flex: 1,
-  },
+    flex: 1 },
   userName: {
     fontSize: 14,
     fontWeight: '500',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   userEmail: {
     fontSize: 12,
     color: DesignSystem.colors.gray600,
-    marginTop: 2,
-  },
+    marginTop: 2 },
   userDepartment: {
     fontSize: 12,
     color: DesignSystem.colors.gray500,
-    marginTop: 2,
-  },
+    marginTop: 2 },
   userRole: {
-    marginRight: 8,
-  },
+    marginRight: 8 },
   roleTag: {
     fontSize: 11,
     color: DesignSystem.colors.primary,
@@ -1031,63 +945,50 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 4,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   removeButton: {
-    padding: 4,
-  },
+    padding: 4 },
   emptyList: {
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 40,
     backgroundColor: DesignSystem.colors.gray50,
     borderRadius: 8,
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   emptyText: {
     fontSize: 14,
     color: DesignSystem.colors.gray700,
     marginTop: 12,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   emptyHint: {
     fontSize: 12,
     color: DesignSystem.colors.gray500,
-    marginTop: 4,
-  },
+    marginTop: 4 },
   authSection: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   passwordSection: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   emailSection: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   switchRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 12,
-  },
+    paddingVertical: 12 },
   switchContent: {
     flex: 1,
-    marginRight: 12,
-  },
+    marginRight: 12 },
   switchLabel: {
     fontSize: 14,
     fontWeight: '500',
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   switchHint: {
     fontSize: 12,
     color: DesignSystem.colors.gray600,
-    marginTop: 2,
-  },
+    marginTop: 2 },
   strategyOptions: {
     gap: 8,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   strategyOption: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1097,21 +998,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: DesignSystem.colors.gray300,
     backgroundColor: DesignSystem.colors.background.surface,
-    gap: 12,
-  },
+    gap: 12 },
   strategyOptionActive: {
     borderColor: DesignSystem.colors.primary,
-    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
-  },
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063) },
   strategyText: {
     flex: 1,
     fontSize: 14,
-    color: DesignSystem.colors.gray700,
-  },
+    color: DesignSystem.colors.gray700 },
   strategyTextActive: {
     color: DesignSystem.colors.primary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   processingOverlay: {
     position: 'absolute',
     top: 0,
@@ -1120,13 +1017,10 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   processingText: {
     marginTop: 12,
     fontSize: 14,
-    color: DesignSystem.colors.gray600,
-  },
-});
+    color: DesignSystem.colors.gray600 } });
 
 export default UserImportStep;

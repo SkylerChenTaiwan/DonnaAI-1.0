@@ -10,8 +10,7 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { DesignSystem } from '@/theme/designSystem';
 import { FormInput } from '../common/FormInput';
@@ -19,8 +18,7 @@ import { FormSelect } from '../common/FormSelect';
 import { SectionHeader } from '../common/SectionHeader';
 import {
   StepProps,
-  BasicInfoData,
-} from '@/types/onboarding';
+  BasicInfoData } from '@/types/onboarding';
 import { withAlpha } from '@/utils/colorUtils';
 
 // 時區選項
@@ -62,8 +60,7 @@ const BasicInfoStep: React.FC<StepProps> = ({
   data,
   onChange,
   onValidate,
-  isActive,
-}) => {
+  isActive }) => {
   // 初始化資料
   const [formData, setFormData] = useState<BasicInfoData>({
     organizationName: '',
@@ -71,21 +68,17 @@ const BasicInfoStep: React.FC<StepProps> = ({
       businessType: 'tech',
       industry: '',
       size: 'small',
-      website: '',
-    },
+      website: '' },
     contactPerson: {
       name: '',
       email: '',
       phone: '',
-      title: '',
-    },
+      title: '' },
     settings: {
       timezone: 'Asia/Taipei',
       language: 'zh-TW',
-      currency: 'TWD',
-    },
-    ...data,
-  });
+      currency: 'TWD' },
+    ...data });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -281,11 +274,9 @@ const BasicInfoStep: React.FC<StepProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   section: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   infoBox: {
     flexDirection: 'row',
     backgroundColor: withAlpha(DesignSystem.colors.status.info, 0.063),
@@ -293,14 +284,11 @@ const styles = StyleSheet.create({
     padding: 12,
     marginTop: 8,
     marginBottom: 24,
-    gap: 8,
-  },
+    gap: 8 },
   infoText: {
     flex: 1,
     fontSize: 13,
     color: DesignSystem.colors.status.info,
-    lineHeight: 18,
-  },
-});
+    lineHeight: 18 } });
 
 export default BasicInfoStep;

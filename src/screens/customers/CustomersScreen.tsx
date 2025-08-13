@@ -3,7 +3,7 @@
  */
 
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator , Platform } from 'react-native';
 import { Layout } from '@/components/common/Layout';
 import { useCustomerStore } from '@/stores/customerStore';
 import { useAuthStore } from '@/stores/authStore';
@@ -146,14 +146,12 @@ export const CustomersScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F2F2F7',
-  },
+    backgroundColor: '#F2F2F7' },
   centerContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 24,
-  },
+    padding: 24 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -161,131 +159,103 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
-  },
+    borderBottomColor: '#E5E5EA' },
   title: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#1C1C1E',
-  },
+    color: '#1C1C1E' },
   customerCount: {
     fontSize: 14,
-    color: '#8E8E93',
-  },
+    color: '#8E8E93' },
   listContent: {
-    padding: 16,
-  },
+    padding: 16 },
   customerCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
     shadowOpacity: 0.1,
     shadowRadius: 3,
-    elevation: 3,
-  },
+    elevation: 3 },
   customerHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   customerName: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1C1C1E',
-  },
+    color: '#1C1C1E' },
   assignedBadge: {
     backgroundColor: '#007AFF',
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 4,
-  },
+    borderRadius: 4 },
   assignedText: {
     fontSize: 12,
     color: '#FFFFFF',
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   companyName: {
     fontSize: 16,
     color: '#3C3C43',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   customerInfo: {
-    marginTop: 8,
-  },
+    marginTop: 8 },
   infoItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   infoText: {
     fontSize: 14,
     color: '#8E8E93',
-    marginLeft: 6,
-  },
+    marginLeft: 6 },
   tagsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: 12,
-  },
+    marginTop: 12 },
   tag: {
     backgroundColor: '#F2F2F7',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
     marginRight: 8,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   tagText: {
     fontSize: 12,
-    color: '#3C3C43',
-  },
+    color: '#3C3C43' },
   separator: {
-    height: 12,
-  },
+    height: 12 },
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 24,
-  },
+    padding: 24 },
   emptyText: {
     fontSize: 18,
     fontWeight: '600',
     color: '#3C3C43',
     marginTop: 16,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   emptySubtext: {
     fontSize: 14,
-    color: '#8E8E93',
-  },
+    color: '#8E8E93' },
   loadingText: {
     marginTop: 12,
     fontSize: 16,
-    color: '#8E8E93',
-  },
+    color: '#8E8E93' },
   errorText: {
     fontSize: 16,
     color: '#FF3B30',
     marginTop: 12,
     marginBottom: 16,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   retryButton: {
     backgroundColor: '#007AFF',
     paddingHorizontal: 24,
     paddingVertical: 12,
-    borderRadius: 8,
-  },
+    borderRadius: 8 },
   retryText: {
     color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600' } });

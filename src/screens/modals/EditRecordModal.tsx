@@ -11,8 +11,7 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { Layout } from '@/components/common/Layout';
 import { WebModal } from '@/components/web/WebModal';
@@ -40,8 +39,7 @@ export const EditRecordModal: React.FC = () => {
     type: 'meeting' as 'meeting' | 'call' | 'note' | 'other',
     content: '',
     location: '',
-    aiSummary: '',
-  });
+    aiSummary: '' });
   
   const [isSaving, setIsSaving] = useState(false);
 
@@ -52,8 +50,7 @@ export const EditRecordModal: React.FC = () => {
         type: record.type || 'meeting',
         content: record.content || '',
         location: record.location || '',
-        aiSummary: record.aiSummary || '',
-      });
+        aiSummary: record.aiSummary || '' });
     }
   }, [record]);
 
@@ -73,8 +70,7 @@ export const EditRecordModal: React.FC = () => {
         type: formData.type,
         content: formData.content.trim(),
         location: formData.location.trim(),
-        aiSummary: formData.aiSummary.trim(),
-      };
+        aiSummary: formData.aiSummary.trim() };
       
       await updateRecord(recordId, updates, user.id);
       navigation.goBack();
@@ -217,18 +213,15 @@ export const EditRecordModal: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
-  },
+    backgroundColor: '#F8F9FA' },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   loadingText: {
     marginTop: 12,
     fontSize: 16,
-    color: '#8E8E93',
-  },
+    color: '#8E8E93' },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -237,36 +230,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
-  },
+    borderBottomColor: '#E5E5EA' },
   headerButton: {
-    padding: 4,
-  },
+    padding: 4 },
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1C1C1E',
-  },
+    color: '#1C1C1E' },
   saveButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#007AFF',
-  },
+    color: '#007AFF' },
   scrollView: {
-    flex: 1,
-  },
+    flex: 1 },
   form: {
-    padding: 16,
-  },
+    padding: 16 },
   formGroup: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   label: {
     fontSize: 14,
     fontWeight: '600',
     color: '#1C1C1E',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   input: {
     backgroundColor: '#FFFFFF',
     borderRadius: 8,
@@ -275,16 +260,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#1C1C1E',
     borderWidth: 1,
-    borderColor: '#E5E5EA',
-  },
+    borderColor: '#E5E5EA' },
   textArea: {
     minHeight: 100,
-    paddingTop: 12,
-  },
+    paddingTop: 12 },
   typeContainer: {
     flexDirection: 'row',
-    gap: 8,
-  },
+    gap: 8 },
   typeButton: {
     flex: 1,
     backgroundColor: '#FFFFFF',
@@ -292,18 +274,13 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#E5E5EA',
-  },
+    borderColor: '#E5E5EA' },
   typeButtonActive: {
     backgroundColor: '#007AFF',
-    borderColor: '#007AFF',
-  },
+    borderColor: '#007AFF' },
   typeButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#8E8E93',
-  },
+    color: '#8E8E93' },
   typeButtonTextActive: {
-    color: '#FFFFFF',
-  },
-});
+    color: '#FFFFFF' } });

@@ -12,8 +12,7 @@ import {
   ScrollView,
   Alert,
   Modal,
-  TextInput as RNTextInput,
-} from 'react-native';
+  TextInput as RNTextInput } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import DocumentPicker from 'expo-document-picker';
 import ImportWizard from '@/components/import/ImportWizard';
@@ -22,8 +21,7 @@ import {
   setupCustomFields,
   getCustomFieldConfig,
   SUPPORTED_FORMATS,
-  CustomFieldConfig,
-} from '@/services/firebase/admin/userAssistService';
+  CustomFieldConfig } from '@/services/firebase/admin/userAssistService';
 import { Organization, ImportResult, FieldMapping } from '@/types/entities';
 import { DesignSystem } from '@/theme/designSystem';
 import { toast } from '@/utils/toast';
@@ -49,20 +47,17 @@ interface CustomFieldWizardState {
 
 export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
   organization,
-  onUpdate,
-}) => {
+  onUpdate }) => {
   const [activeAssistance, setActiveAssistance] = useState<'import' | 'fields' | null>(null);
   const [importWizard, setImportWizard] = useState<ImportWizardState>({
     step: 'select',
     selectedFile: null,
     dataType: 'users',
     fieldMappings: [],
-    previewData: [],
-  });
+    previewData: [] });
   const [customFieldWizard, setCustomFieldWizard] = useState<CustomFieldWizardState>({
     fields: [],
-    entityType: 'users',
-  });
+    entityType: 'users' });
   const [isProcessing, setIsProcessing] = useState(false);
   const [importHistory, setImportHistory] = useState<ImportResult[]>([]);
 
@@ -81,16 +76,14 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
     try {
       const result = await DocumentPicker.getDocumentAsync({
         type: ['text/csv', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
-        copyToCacheDirectory: true,
-      });
+        copyToCacheDirectory: true });
 
       if (!result.canceled && result.assets[0]) {
         const file = result.assets[0];
         setImportWizard(prev => ({
           ...prev,
           selectedFile: file,
-          step: 'mapping',
-        }));
+          step: 'mapping' }));
         
         // 這裡應該解析檔案並獲取欄位列表
         // 暫時使用示例資料
@@ -100,8 +93,7 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
         ];
         setImportWizard(prev => ({
           ...prev,
-          fieldMappings: sampleMappings,
-        }));
+          fieldMappings: sampleMappings }));
       }
     } catch (error) {
       console.error('選擇檔案失敗:', error);
@@ -146,8 +138,7 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
   const handleStartCustomFields = (entityType: 'users' | 'customers' | 'tasks') => {
     setCustomFieldWizard({
       fields: [],
-      entityType,
-    });
+      entityType });
     setActiveAssistance('fields');
     loadExistingCustomFields(entityType);
   };
@@ -157,8 +148,7 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
       const existingFields = await getCustomFieldConfig(entityType as any);
       setCustomFieldWizard(prev => ({
         ...prev,
-        fields: existingFields,
-      }));
+        fields: existingFields }));
     } catch (error) {
       console.error('載入自訂欄位失敗:', error);
     }
@@ -169,12 +159,10 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
       id: `field_${Date.now()}`,
       name: '',
       type: 'text',
-      required: false,
-    };
+      required: false };
     setCustomFieldWizard(prev => ({
       ...prev,
-      fields: [...prev.fields, newField],
-    }));
+      fields: [...prev.fields, newField] }));
   };
 
   const handleUpdateCustomField = (index: number, updates: Partial<CustomFieldConfig>) => {
@@ -182,15 +170,13 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
       ...prev,
       fields: prev.fields.map((field, i) => 
         i === index ? { ...field, ...updates } : field
-      ),
-    }));
+      ) }));
   };
 
   const handleRemoveCustomField = (index: number) => {
     setCustomFieldWizard(prev => ({
       ...prev,
-      fields: prev.fields.filter((_, i) => i !== index),
-    }));
+      fields: prev.fields.filter((_, i) => i !== index) }));
   };
 
   const handleSaveCustomFields = async () => {
@@ -378,113 +364,92 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   assistanceCard: {
     backgroundColor: DesignSystem.colors.background.surface,
     padding: DesignSystem.spacing.lg,
     borderRadius: DesignSystem.borderRadius.md,
     marginBottom: DesignSystem.spacing.md,
-    ...DesignSystem.shadows.sm,
-  },
+    ...DesignSystem.shadows.sm },
   cardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   cardInfo: {
     flex: 1,
-    marginLeft: DesignSystem.spacing.md,
-  },
+    marginLeft: DesignSystem.spacing.md },
   cardTitle: {
     ...DesignSystem.typography.h4,
     color: DesignSystem.colors.text.primary,
-    marginBottom: DesignSystem.spacing.xs,
-  },
+    marginBottom: DesignSystem.spacing.xs },
   cardDesc: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   actionButtons: {
     flexDirection: 'row',
     gap: DesignSystem.spacing.sm,
-    flexWrap: 'wrap',
-  },
+    flexWrap: 'wrap' },
   actionButton: {
     backgroundColor: withAlpha(DesignSystem.colors.primary, 0.125),
     paddingHorizontal: DesignSystem.spacing.md,
     paddingVertical: DesignSystem.spacing.sm,
     borderRadius: DesignSystem.borderRadius.sm,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.primary,
-  },
+    borderColor: DesignSystem.colors.primary },
   actionButtonText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.primary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   resourcesCard: {
     backgroundColor: DesignSystem.colors.background.surface,
     padding: DesignSystem.spacing.lg,
     borderRadius: DesignSystem.borderRadius.md,
-    ...DesignSystem.shadows.sm,
-  },
+    ...DesignSystem.shadows.sm },
   resourcesTitle: {
     ...DesignSystem.typography.h4,
     color: DesignSystem.colors.text.primary,
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   resourceItem: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: DesignSystem.spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   resourceText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
     flex: 1,
-    marginLeft: DesignSystem.spacing.sm,
-  },
+    marginLeft: DesignSystem.spacing.sm },
   modalContainer: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: DesignSystem.spacing.lg,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   modalTitle: {
     ...DesignSystem.typography.h3,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   closeButton: {
-    padding: DesignSystem.spacing.sm,
-  },
+    padding: DesignSystem.spacing.sm },
   modalContent: {
     flex: 1,
-    padding: DesignSystem.spacing.lg,
-  },
+    padding: DesignSystem.spacing.lg },
   wizardStep: {
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   stepTitle: {
     ...DesignSystem.typography.h4,
     color: DesignSystem.colors.text.primary,
     marginBottom: DesignSystem.spacing.sm,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   stepDesc: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.secondary,
     marginBottom: DesignSystem.spacing.xl,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   fileSelectButton: {
     alignItems: 'center',
     padding: DesignSystem.spacing.xl,
@@ -492,52 +457,44 @@ const styles = StyleSheet.create({
     borderColor: DesignSystem.colors.primary,
     borderStyle: 'dashed',
     borderRadius: DesignSystem.borderRadius.md,
-    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
-  },
+    backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063) },
   fileSelectText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.primary,
     marginTop: DesignSystem.spacing.sm,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   mappingRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: DesignSystem.spacing.md,
     paddingVertical: DesignSystem.spacing.sm,
-    width: '100%',
-  },
+    width: '100%' },
   sourceField: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
     flex: 1,
-    textAlign: 'right',
-  },
+    textAlign: 'right' },
   targetField: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
-    flex: 1,
-  },
+    flex: 1 },
   primaryButton: {
     backgroundColor: DesignSystem.colors.primary,
     paddingVertical: DesignSystem.spacing.md,
     paddingHorizontal: DesignSystem.spacing.xl,
     borderRadius: DesignSystem.borderRadius.sm,
-    marginTop: DesignSystem.spacing.xl,
-  },
+    marginTop: DesignSystem.spacing.xl },
   primaryButtonText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.inverse,
     fontWeight: '500',
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   fieldRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: DesignSystem.spacing.sm,
     marginBottom: DesignSystem.spacing.md,
-    width: '100%',
-  },
+    width: '100%' },
   fieldInput: {
     flex: 1,
     borderWidth: 1,
@@ -545,23 +502,19 @@ const styles = StyleSheet.create({
     borderRadius: DesignSystem.borderRadius.sm,
     paddingHorizontal: DesignSystem.spacing.md,
     paddingVertical: DesignSystem.spacing.sm,
-    ...DesignSystem.typography.body,
-  },
+    ...DesignSystem.typography.body },
   removeFieldButton: {
-    padding: DesignSystem.spacing.sm,
-  },
+    padding: DesignSystem.spacing.sm },
   addFieldButton: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: DesignSystem.spacing.xs,
     paddingVertical: DesignSystem.spacing.md,
-    marginBottom: DesignSystem.spacing.lg,
-  },
+    marginBottom: DesignSystem.spacing.lg },
   addFieldText: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.primary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   primaryButton: {
     flexDirection: 'row',
     backgroundColor: DesignSystem.colors.primary,
@@ -570,11 +523,8 @@ const styles = StyleSheet.create({
     borderRadius: DesignSystem.borderRadius.md,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: DesignSystem.spacing.sm,
-  },
+    gap: DesignSystem.spacing.sm },
   primaryButtonText: {
     ...DesignSystem.typography.button,
     color: DesignSystem.colors.background.primary,
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600' } });

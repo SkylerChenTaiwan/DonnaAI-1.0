@@ -10,8 +10,7 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { WebLayout } from '@/components/layout/WebLayout';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -215,18 +214,15 @@ export const CustomerDetailScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
-  },
+    backgroundColor: '#F5F5F5' },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   loadingText: {
     marginTop: 12,
     fontSize: 16,
-    color: '#8E8E93',
-  },
+    color: '#8E8E93' },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -234,142 +230,112 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
-  },
+    borderBottomColor: '#E5E5EA' },
   backButton: {
-    padding: 4,
-  },
+    padding: 4 },
   headerTitle: {
     flex: 1,
     fontSize: 18,
     fontWeight: '600',
     color: '#1C1C1E',
     marginHorizontal: 16,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   editButton: {
-    padding: 4,
-  },
+    padding: 4 },
   scrollView: {
-    flex: 1,
-  },
+    flex: 1 },
   section: {
     backgroundColor: '#FFFFFF',
     marginTop: 16,
     paddingVertical: 16,
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: '#E5E5EA',
-  },
+    borderColor: '#E5E5EA' },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: '#1C1C1E',
-    paddingHorizontal: 16,
-  },
+    paddingHorizontal: 16 },
   sectionCount: {
     fontSize: 16,
-    color: '#8E8E93',
-  },
+    color: '#8E8E93' },
   infoRow: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
-  },
+    borderBottomColor: '#F2F2F7' },
   label: {
     fontSize: 16,
     color: '#8E8E93',
-    width: 100,
-  },
+    width: 100 },
   value: {
     flex: 1,
     fontSize: 16,
-    color: '#1C1C1E',
-  },
+    color: '#1C1C1E' },
   statusBadge: {
     backgroundColor: '#E5E5EA',
     borderRadius: 4,
     paddingHorizontal: 8,
     paddingVertical: 4,
-    alignSelf: 'flex-start',
-  },
+    alignSelf: 'flex-start' },
   statusActive: {
-    backgroundColor: '#E3F2E6',
-  },
+    backgroundColor: '#E3F2E6' },
   statusText: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#1C1C1E',
-  },
+    color: '#1C1C1E' },
   relatedItem: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
-  },
+    borderBottomColor: '#F2F2F7' },
   relatedItemContent: {
-    flex: 1,
-  },
+    flex: 1 },
   relatedItemTitle: {
     fontSize: 16,
     fontWeight: '500',
     color: '#1C1C1E',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   relatedItemSubtitle: {
     fontSize: 14,
-    color: '#8E8E93',
-  },
+    color: '#8E8E93' },
   relatedItemDate: {
     fontSize: 14,
-    color: '#8E8E93',
-  },
+    color: '#8E8E93' },
   taskStatusBadge: {
     borderRadius: 4,
     paddingHorizontal: 8,
-    paddingVertical: 4,
-  },
+    paddingVertical: 4 },
   taskStatustodo: {
-    backgroundColor: '#FEF3E2',
-  },
+    backgroundColor: '#FEF3E2' },
   taskStatusinProgress: {
-    backgroundColor: '#E8F0FF',
-  },
+    backgroundColor: '#E8F0FF' },
   taskStatuscompleted: {
-    backgroundColor: '#E3F2E6',
-  },
+    backgroundColor: '#E3F2E6' },
   taskStatuscancelled: {
-    backgroundColor: '#FFE5E5',
-  },
+    backgroundColor: '#FFE5E5' },
   taskStatusText: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#1C1C1E',
-  },
+    color: '#1C1C1E' },
   emptyText: {
     fontSize: 16,
     color: '#8E8E93',
     textAlign: 'center',
-    paddingVertical: 24,
-  },
+    paddingVertical: 24 },
   viewMoreButton: {
     paddingVertical: 12,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   viewMoreText: {
     fontSize: 16,
     color: '#007AFF',
-    fontWeight: '500',
-  },
-});
+    fontWeight: '500' } });

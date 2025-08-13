@@ -49,8 +49,7 @@ export const FormInput: React.FC<FormInputProps> = ({
   'aria-label': ariaLabel,
   'aria-describedby': ariaDescribedBy,
   'aria-invalid': ariaInvalid,
-  testID,
-}) => {
+  testID }) => {
   const [isFocused, setIsFocused] = React.useState(false);
   const [isHovered, setIsHovered] = React.useState(false);
   
@@ -71,8 +70,7 @@ export const FormInput: React.FC<FormInputProps> = ({
     fontFamily: 'inherit',
     transition: 'all 0.2s ease',
     cursor: isDisabled ? 'not-allowed' : 'text',
-    ...style,
-  };
+    ...style };
 
   // 動態樣式調整
   if (!isDisabled) {

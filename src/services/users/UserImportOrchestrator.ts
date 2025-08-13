@@ -9,8 +9,7 @@ import {
   UserImportConfigExtended,
   UserImportProgress,
   UserImportResult,
-  ImportError,
-} from '@/types/userImport';
+  ImportError } from '@/types/userImport';
 // import { importUsersInBatches } from '@/services/firebase/admin/userAssistService'; // 此函數不存在
 import { UserDataValidator } from './UserDataValidator';
 import { UserCreationService } from './UserCreationService';
@@ -24,8 +23,7 @@ import {
   where,
   getDocs,
   writeBatch,
-  serverTimestamp,
-} from 'firebase/firestore';
+  serverTimestamp } from 'firebase/firestore';
 import { getFirebaseDb } from '@/services/firebase/config';
 import { updateOrganizationStats } from '@/services/firebase/updateOrgStats';
 
@@ -60,8 +58,7 @@ export class UserImportOrchestrator {
         validationErrors: [],
         isDuplicate: false,
         isEdited: false,
-        isSelected: true,
-      };
+        isSelected: true };
 
       // 應用映射
       for (const mapping of mappings) {
@@ -122,8 +119,7 @@ export class UserImportOrchestrator {
         failed: 0,
         skipped: users.length,
         errors: [{ row: 0, email: '', error: '沒有有效的用戶資料可匯入' }],
-        warnings: [],
-      };
+        warnings: [] };
     }
 
     const progress: UserImportProgress = {
@@ -133,8 +129,7 @@ export class UserImportOrchestrator {
       successCount: 0,
       errorCount: 0,
       currentUser: '',
-      errors: [],
-    };
+      errors: [] };
 
     onProgress?.(progress);
 
@@ -198,8 +193,7 @@ export class UserImportOrchestrator {
           errors.push({
             row: 0,
             email: user.email,
-            error: `批次處理失敗: ${error instanceof Error ? error.message : '未知錯誤'}`,
-          });
+            error: `批次處理失敗: ${error instanceof Error ? error.message : '未知錯誤'}` });
         }
       }
     }
@@ -227,8 +221,7 @@ export class UserImportOrchestrator {
       failed: failedCount,
       skipped: skippedCount,
       errors,
-      warnings,
-    };
+      warnings };
   }
 
   /**
@@ -309,8 +302,7 @@ export class UserImportOrchestrator {
         phoneNumber: user.phoneNumber || '',
         organizationId: config.organizationId,
         generatePassword: config.generatePasswords,
-        sendWelcomeEmail: config.sendWelcomeEmail,
-      }));
+        sendWelcomeEmail: config.sendWelcomeEmail }));
 
       // 調用批量建立用戶服務
       const userCreationService = UserCreationService.getInstance();
@@ -320,8 +312,7 @@ export class UserImportOrchestrator {
             email: user.email,
             name: user.name,
             role: user.role || 'user',
-            organizationId: config.organizationId,
-          };
+            organizationId: config.organizationId };
           
           // 只加入非空字串的可選欄位
           if (user.department && user.department.trim()) {
@@ -338,8 +329,7 @@ export class UserImportOrchestrator {
         }),
         {
           skipExisting: config.skipExisting,
-          generatePasswords: true,
-        }
+          generatePasswords: true }
       );
       
       // 處理批量建立結果
@@ -354,8 +344,7 @@ export class UserImportOrchestrator {
         errors.push({
           row: index + 1,
           email: result.email,
-          error: result.error || '建立失敗',
-        });
+          error: result.error || '建立失敗' });
       });
     } catch (error) {
       console.error('批量建立用戶失敗:', error);
@@ -365,16 +354,14 @@ export class UserImportOrchestrator {
         errors.push({
           row: 0,
           email: user.email,
-          error: error instanceof Error ? error.message : '建立用戶失敗',
-        });
+          error: error instanceof Error ? error.message : '建立用戶失敗' });
       }
     }
 
     return {
       success: successCount,
       failed: failedCount,
-      errors,
-    };
+      errors };
   }
 
   /**
@@ -443,7 +430,6 @@ export class UserImportOrchestrator {
 
     return {
       isValid: errors.length === 0,
-      errors,
-    };
+      errors };
   }
 }

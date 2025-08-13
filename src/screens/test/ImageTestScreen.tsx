@@ -134,25 +134,21 @@ export function ImageTestScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-  },
+    padding: 16 },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 24,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   testSection: {
     marginBottom: 32,
     padding: 16,
     backgroundColor: '#f8f9fa',
-    borderRadius: 8,
-  },
+    borderRadius: 8 },
   testTitle: {
     fontSize: 18,
     fontWeight: '600',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   imageContainer: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -161,41 +157,32 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#e0e0e0',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   testImage: {
     width: 120,
-    height: 120,
-  },
+    height: 120 },
   info: {
     fontSize: 14,
     color: '#666',
-    marginTop: 4,
-  },
+    marginTop: 4 },
   styleTestContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: 12,
-  },
+    marginTop: 12 },
   subTitle: {
     fontSize: 12,
     marginBottom: 4,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   diagnosticSection: {
     backgroundColor: '#fff3cd',
     padding: 16,
     borderRadius: 8,
-    marginBottom: 32,
-  },
+    marginBottom: 32 },
   diagnosticTitle: {
     fontSize: 16,
     fontWeight: '600',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   diagnosticText: {
     fontSize: 14,
     marginBottom: 4,
-    paddingLeft: 8,
-  },
-});
+    paddingLeft: 8 } });

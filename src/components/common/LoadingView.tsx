@@ -28,11 +28,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F9FAFB',
-    padding: 20,
-  },
+    padding: 20 },
   message: {
     marginTop: 12,
     fontSize: 16,
-    color: '#6B7280',
-  },
-});
+    color: '#6B7280' } });

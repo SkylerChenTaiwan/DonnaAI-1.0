@@ -211,8 +211,7 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
         padding: size === 'fullscreen' ? 0 : DesignSystem.spacing.md,
         opacity: visible ? 1 : 0,
         visibility: visible ? 'visible' : 'hidden',
-        transition: animationType === 'fade' ? 'opacity 200ms ease-in-out' : 'none',
-      };
+        transition: animationType === 'fade' ? 'opacity 200ms ease-in-out' : 'none' };
       
       if (overlayStyle) {
         const convertedStyle = styleAdapter.adaptStyle(overlayStyle as any);
@@ -237,8 +236,7 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
         position: 'relative',
         transform: visible ? 'scale(1)' : 'scale(0.9)',
         transition: animationType === 'fade' ? 'transform 200ms ease-in-out' : 'none',
-        ...dimensions,
-      };
+        ...dimensions };
       
       if (style) {
         const convertedStyle = styleAdapter.adaptStyle(style as any, webStyle);
@@ -264,8 +262,7 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
         borderBottom: `1px solid ${DesignSystem.colors.border.light}`,
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center',
-      };
+        alignItems: 'center' };
       
       if (headerStyle) {
         const convertedStyle = styleAdapter.adaptStyle(headerStyle as any);
@@ -292,8 +289,7 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
           borderTop: `1px solid ${DesignSystem.colors.border.light}`,
           display: 'flex',
           gap: DesignSystem.spacing.md,
-          justifyContent: 'flex-end',
-        }}>
+          justifyContent: 'flex-end' }}>
           {secondaryButton && (
             <AdaptiveButton
               variant={secondaryButton.variant || 'outline'}
@@ -354,8 +350,7 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
                     fontSize: '20px',
                     cursor: 'pointer',
                     color: DesignSystem.colors.text.secondary,
-                    padding: '4px',
-                  }}
+                    padding: '4px' }}
                   aria-label="關閉"
                 >
                   ×
@@ -367,8 +362,7 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
           <div style={{
             flex: 1,
             overflow: 'auto',
-            padding: DesignSystem.spacing.lg,
-          }}>
+            padding: DesignSystem.spacing.lg }}>
             {children}
           </div>
           
@@ -428,8 +422,7 @@ const NativeModal = forwardRef<any, AdaptiveModalProps>(
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         justifyContent: 'center' as const,
         alignItems: 'center' as const,
-        padding: size === 'fullscreen' ? 0 : DesignSystem.spacing.md,
-      };
+        padding: size === 'fullscreen' ? 0 : DesignSystem.spacing.md };
       
       if (overlayStyle) {
         const convertedStyle = styleAdapter.adaptStyle(overlayStyle);
@@ -448,8 +441,7 @@ const NativeModal = forwardRef<any, AdaptiveModalProps>(
         borderRadius: size === 'fullscreen' ? 0 : DesignSystem.borderRadius.lg,
         maxHeight: size === 'fullscreen' ? '100%' : '90%',
         overflow: 'hidden' as const,
-        ...dimensions,
-      };
+        ...dimensions };
       
       if (style) {
         finalStyle = { ...finalStyle, ...style };
@@ -475,8 +467,7 @@ const NativeModal = forwardRef<any, AdaptiveModalProps>(
         borderBottomColor: DesignSystem.colors.border.light,
         flexDirection: 'row' as const,
         justifyContent: 'space-between' as const,
-        alignItems: 'center' as const,
-      };
+        alignItems: 'center' as const };
       
       if (headerStyle) {
         const convertedStyle = styleAdapter.adaptStyle(headerStyle);
@@ -504,8 +495,7 @@ const NativeModal = forwardRef<any, AdaptiveModalProps>(
           borderTopColor: DesignSystem.colors.border.light,
           flexDirection: 'row',
           justifyContent: 'flex-end',
-          gap: DesignSystem.spacing.md,
-        }}>
+          gap: DesignSystem.spacing.md }}>
           {secondaryButton && (
             <AdaptiveButton
               variant={secondaryButton.variant || 'outline'}
@@ -574,8 +564,7 @@ const NativeModal = forwardRef<any, AdaptiveModalProps>(
                         >
                           <AdaptiveText style={{
                             fontSize: 20,
-                            color: DesignSystem.colors.text.secondary,
-                          }}>
+                            color: DesignSystem.colors.text.secondary }}>
                             ×
                           </AdaptiveText>
                         </TouchableOpacity>
@@ -657,13 +646,11 @@ export const ConfirmModal = forwardRef<any, AdaptiveModalProps & {
       primaryButton={{
         title: confirmText,
         onPress: handleConfirm,
-        variant: 'primary',
-      }}
+        variant: 'primary' }}
       secondaryButton={{
         title: cancelText,
         onPress: handleCancel,
-        variant: 'outline',
-      }}
+        variant: 'outline' }}
     />
   );
 });
@@ -687,8 +674,7 @@ export const AlertModal = forwardRef<any, AdaptiveModalProps & {
       primaryButton={{
         title: okText,
         onPress: handleOK,
-        variant: 'primary',
-      }}
+        variant: 'primary' }}
       showCloseButton={false}
     />
   );

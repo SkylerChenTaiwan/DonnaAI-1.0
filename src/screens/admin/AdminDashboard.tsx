@@ -12,8 +12,7 @@ import {
   TouchableOpacity,
   RefreshControl,
   Alert,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -110,40 +109,35 @@ export const AdminDashboard: React.FC = () => {
       icon: 'people-outline',
       color: DesignSystem.colors.primary,
       route: 'UserManagementScreen',
-      permission: 'manage_users',
-    },
+      permission: 'manage_users' },
     {
       id: 'tools',
       title: '工具管理',
       icon: 'construct-outline',
       color: '#34C759',
       route: 'ToolManagementScreen',
-      permission: 'manage_tools',
-    },
+      permission: 'manage_tools' },
     {
       id: 'import',
       title: '資料匯入',
       icon: 'cloud-upload-outline',
       color: '#FF9500',
       route: 'DataImportScreen',
-      permission: 'import_data',
-    },
+      permission: 'import_data' },
     {
       id: 'legacy-import',
       title: '舊系統導入',
       icon: 'git-pull-request-outline',
       color: '#FF3B30',
       route: 'LegacyDataImportScreen',
-      permission: 'import_data',
-    },
+      permission: 'import_data' },
     {
       id: 'reports',
       title: '使用報表',
       icon: 'bar-chart-outline',
       color: '#5856D6',
       route: 'UsageReportsScreen',
-      permission: 'view_reports',
-    },
+      permission: 'view_reports' },
   ];
 
   const handleQuickAction = (action: QuickAction) => {
@@ -291,27 +285,21 @@ export const AdminDashboard: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background.primary,
-  },
+    backgroundColor: DesignSystem.colors.background.primary },
   settingsButton: {
-    padding: DesignSystem.spacing.sm,
-  },
+    padding: DesignSystem.spacing.sm },
   scrollContent: {
-    paddingBottom: DesignSystem.spacing.xxl,
-  },
+    paddingBottom: DesignSystem.spacing.xxl },
   section: {
-    padding: DesignSystem.spacing.lg,
-  },
+    padding: DesignSystem.spacing.lg },
   sectionTitle: {
     ...DesignSystem.typography.h2,
     color: DesignSystem.colors.text.primary,
-    marginBottom: DesignSystem.spacing.md,
-  },
+    marginBottom: DesignSystem.spacing.md },
   statsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: DesignSystem.spacing.md,
-  },
+    gap: DesignSystem.spacing.md },
   statCard: {
     flex: 1,
     minWidth: '45%',
@@ -319,22 +307,18 @@ const styles = StyleSheet.create({
     borderRadius: DesignSystem.borderRadius.md,
     padding: DesignSystem.spacing.md,
     alignItems: 'center',
-    ...DesignSystem.shadows.sm,
-  },
+    ...DesignSystem.shadows.sm },
   statValue: {
     ...DesignSystem.typography.h1,
-    color: DesignSystem.colors.text.primary,
-  },
+    color: DesignSystem.colors.text.primary },
   statLabel: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
-    marginTop: DesignSystem.spacing.xs,
-  },
+    marginTop: DesignSystem.spacing.xs },
   quickActionsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: DesignSystem.spacing.md,
-  },
+    gap: DesignSystem.spacing.md },
   quickActionCard: {
     flex: 1,
     minWidth: '45%',
@@ -342,44 +326,35 @@ const styles = StyleSheet.create({
     borderRadius: DesignSystem.borderRadius.md,
     padding: DesignSystem.spacing.lg,
     alignItems: 'center',
-    ...DesignSystem.shadows.sm,
-  },
+    ...DesignSystem.shadows.sm },
   disabledCard: {
-    opacity: 0.5,
-  },
+    opacity: 0.5 },
   iconContainer: {
     width: 48,
     height: 48,
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: DesignSystem.spacing.sm,
-  },
+    marginBottom: DesignSystem.spacing.sm },
   actionTitle: {
     ...DesignSystem.typography.body,
     color: DesignSystem.colors.text.primary,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   activityCard: {
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: DesignSystem.borderRadius.md,
     padding: DesignSystem.spacing.md,
-    ...DesignSystem.shadows.sm,
-  },
+    ...DesignSystem.shadows.sm },
   activityRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: DesignSystem.spacing.sm,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.border.light,
-  },
+    borderBottomColor: DesignSystem.colors.border.light },
   activityLabel: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.text.secondary,
-  },
+    color: DesignSystem.colors.text.secondary },
   activityValue: {
     ...DesignSystem.typography.h3,
-    color: DesignSystem.colors.text.primary,
-  },
-});
+    color: DesignSystem.colors.text.primary } });

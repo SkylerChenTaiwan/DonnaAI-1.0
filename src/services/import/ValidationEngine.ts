@@ -7,8 +7,7 @@ import {
   IValidationEngine,
   ValidationRule,
   ValidationResult,
-  ValidationError,
-} from '@/types/intelligentImport';
+  ValidationError } from '@/types/intelligentImport';
 import { getFirebaseDb } from '@/services/firebase/config';
 const db = getFirebaseDb();
 import { collection, query, where, getDocs } from 'firebase/firestore';
@@ -32,37 +31,30 @@ export class ValidationEngine implements IValidationEngine {
         type: 'required',
         config: {},
         errorMessage: '客戶名稱為必填欄位',
-        severity: 'error',
-      },
+        severity: 'error' },
       {
         field: 'email',
         type: 'format',
         config: {
-          pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$',
-        },
+          pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$' },
         errorMessage: '電子郵件格式不正確',
-        severity: 'error',
-      },
+        severity: 'error' },
       {
         field: 'phone',
         type: 'format',
         config: {
           pattern: '^[\\d\\s\\-\\+\\(\\)]+$',
           minLength: 7,
-          maxLength: 20,
-        },
+          maxLength: 20 },
         errorMessage: '電話號碼格式不正確',
-        severity: 'warning',
-      },
+        severity: 'warning' },
       {
         field: 'email',
         type: 'unique',
         config: {
-          allowNull: true,
-        },
+          allowNull: true },
         errorMessage: '此電子郵件已存在',
-        severity: 'error',
-      },
+        severity: 'error' },
     ]);
 
     // 用戶資料規則
@@ -72,15 +64,13 @@ export class ValidationEngine implements IValidationEngine {
         type: 'required',
         config: {},
         errorMessage: '電子郵件為必填欄位',
-        severity: 'error',
-      },
+        severity: 'error' },
       {
         field: 'email',
         type: 'unique',
         config: {},
         errorMessage: '此電子郵件已被使用',
-        severity: 'error',
-      },
+        severity: 'error' },
       {
         field: 'role',
         type: 'custom',
@@ -88,11 +78,9 @@ export class ValidationEngine implements IValidationEngine {
           customValidator: async (value: any) => {
             const validRoles = ['admin', 'manager', 'user', 'viewer'];
             return validRoles.includes(value);
-          },
-        },
+          } },
         errorMessage: '無效的用戶角色',
-        severity: 'error',
-      },
+        severity: 'error' },
     ]);
 
     // 記錄資料規則
@@ -102,8 +90,7 @@ export class ValidationEngine implements IValidationEngine {
         type: 'required',
         config: {},
         errorMessage: '記錄標題為必填欄位',
-        severity: 'error',
-      },
+        severity: 'error' },
       {
         field: 'date',
         type: 'format',
@@ -111,21 +98,17 @@ export class ValidationEngine implements IValidationEngine {
           customValidator: async (value: any) => {
             const date = new Date(value);
             return !isNaN(date.getTime());
-          },
-        },
+          } },
         errorMessage: '日期格式不正確',
-        severity: 'error',
-      },
+        severity: 'error' },
       {
         field: 'amount',
         type: 'range',
         config: {
           min: 0,
-          max: 999999999,
-        },
+          max: 999999999 },
         errorMessage: '金額必須在有效範圍內',
-        severity: 'warning',
-      },
+        severity: 'warning' },
     ]);
 
     // 任務資料規則
@@ -135,8 +118,7 @@ export class ValidationEngine implements IValidationEngine {
         type: 'required',
         config: {},
         errorMessage: '任務標題為必填欄位',
-        severity: 'error',
-      },
+        severity: 'error' },
       {
         field: 'priority',
         type: 'custom',
@@ -144,11 +126,9 @@ export class ValidationEngine implements IValidationEngine {
           customValidator: async (value: any) => {
             const validPriorities = ['low', 'medium', 'high', 'urgent'];
             return !value || validPriorities.includes(value);
-          },
-        },
+          } },
         errorMessage: '無效的優先級',
-        severity: 'warning',
-      },
+        severity: 'warning' },
       {
         field: 'dueDate',
         type: 'custom',
@@ -157,11 +137,9 @@ export class ValidationEngine implements IValidationEngine {
             if (!value) return true;
             const date = new Date(value);
             return !isNaN(date.getTime()) && date > new Date();
-          },
-        },
+          } },
         errorMessage: '到期日必須是未來的日期',
-        severity: 'info',
-      },
+        severity: 'info' },
     ]);
   }
 
@@ -254,8 +232,7 @@ export class ValidationEngine implements IValidationEngine {
               rule: rule.type,
               message: rule.errorMessage,
               severity: rule.severity,
-              suggestion: this.getSuggestion(rule, row[rule.field]),
-            };
+              suggestion: this.getSuggestion(rule, row[rule.field]) };
 
             if (rule.severity === 'error') {
               errors.push(error);
@@ -277,8 +254,7 @@ export class ValidationEngine implements IValidationEngine {
             value: row[rule.field],
             rule: rule.type,
             message: `驗證失敗: ${error.message}`,
-            severity: 'error',
-          });
+            severity: 'error' });
         }
       }
     }
@@ -289,8 +265,7 @@ export class ValidationEngine implements IValidationEngine {
       warnings,
       validRows: data.length - errors.length,
       totalRows: data.length,
-      fieldStatistics,
-    };
+      fieldStatistics };
   }
 
   /**
@@ -552,8 +527,7 @@ export class ValidationEngine implements IValidationEngine {
       '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$': 'example@email.com',
       '^[\\d\\s\\-\\+\\(\\)]+$': '+886-912-345-678',
       '^\\d{4}-\\d{2}-\\d{2}$': '2024-01-01',
-      '^https?://[^\\s]+$': 'https://example.com',
-    };
+      '^https?://[^\\s]+$': 'https://example.com' };
 
     return examples[pattern] || pattern;
   }

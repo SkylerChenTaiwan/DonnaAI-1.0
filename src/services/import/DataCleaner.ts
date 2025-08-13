@@ -6,8 +6,7 @@
 import {
   IDataCleaner,
   CleaningRule,
-  DataType,
-} from '@/types/intelligentImport';
+  DataType } from '@/types/intelligentImport';
 
 export class DataCleaner implements IDataCleaner {
   private readonly phoneCountryCode: string = '886'; // 台灣國碼
@@ -255,7 +254,7 @@ export class DataCleaner implements IDataCleaner {
       .replace(/,/g, '.')  // 逗號改為點
       .replace(/＠/g, '@')  // 全形@改為半形
       .replace(/。/g, '.')  // 全形句號改為點
-      .replace(/\.{2,}/g, '.'); // 多個點改為單個
+      .replace(/\.{2 }/g, '.'); // 多個點改為單個
     
     // 驗證格式
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -304,8 +303,7 @@ export class DataCleaner implements IDataCleaner {
       'f': '樓',
       'No.': '',
       'no.': '',
-      '#': '',
-    };
+      '#': '' };
     
     for (const [from, to] of Object.entries(replacements)) {
       address = address.replace(new RegExp(from, 'gi'), to);
@@ -366,40 +364,35 @@ export class DataCleaner implements IDataCleaner {
       if (this.needsTrim(values)) {
         rules.push({
           field,
-          type: 'trim',
-        });
+          type: 'trim' });
       }
       
       // 檢查是否為電話號碼
       if (this.isPhoneField(field, values)) {
         rules.push({
           field,
-          type: 'normalize_phone',
-        });
+          type: 'normalize_phone' });
       }
       
       // 檢查是否為電子郵件
       if (this.isEmailField(field, values)) {
         rules.push({
           field,
-          type: 'normalize_email',
-        });
+          type: 'normalize_email' });
       }
       
       // 檢查是否為日期
       if (this.isDateField(field, values)) {
         rules.push({
           field,
-          type: 'normalize_date',
-        });
+          type: 'normalize_date' });
       }
       
       // 檢查是否為地址
       if (this.isAddressField(field, values)) {
         rules.push({
           field,
-          type: 'standardize_address',
-        });
+          type: 'standardize_address' });
       }
       
       // 檢查是否有空值需要預設值
@@ -408,9 +401,7 @@ export class DataCleaner implements IDataCleaner {
           field,
           type: 'default_value',
           config: {
-            default: this.suggestDefaultValue(field, values),
-          },
-        });
+            default: this.suggestDefaultValue(field, values) } });
       }
     }
     
@@ -594,8 +585,7 @@ export class DataCleaner implements IDataCleaner {
             examples.push({
               field,
               original: originalRow[field],
-              cleaned: cleanedRow[field],
-            });
+              cleaned: cleanedRow[field] });
           }
         }
       }
@@ -604,7 +594,6 @@ export class DataCleaner implements IDataCleaner {
     return {
       totalChanges,
       changedFields,
-      examples,
-    };
+      examples };
   }
 }

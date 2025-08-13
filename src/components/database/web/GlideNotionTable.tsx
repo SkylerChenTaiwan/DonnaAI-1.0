@@ -14,8 +14,7 @@ import {
   Rectangle,
   Item,
   DataEditorRef,
-  CustomCell,
-} from '@glideapps/glide-data-grid';
+  CustomCell } from '@glideapps/glide-data-grid';
 import '@glideapps/glide-data-grid/dist/index.css';
 import { TableColumn } from '@/types/table';
 import { Icon } from '@/components/common/Icon';
@@ -60,8 +59,7 @@ const notionTheme: Partial<Theme> = {
   textGroupHeader: NotionColors.gray,
   textHeader: NotionColors.gray,
   textLight: NotionColors.lightGray,
-  textMedium: NotionColors.gray,
-};
+  textMedium: NotionColors.gray };
 
 export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
   data,
@@ -73,8 +71,7 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
   selectedItems = [],
   onSelect,
   onAddColumn,
-  getValidationError,
-}) => {
+  getValidationError }) => {
   const gridRef = useRef<DataEditorRef>(null);
   const [selection, setSelection] = useState<CompactSelection>(() => {
     // 初始化選擇狀態
@@ -89,8 +86,7 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
     }
     return {
       columns: CompactSelection.empty(),
-      rows,
-    };
+      rows };
   });
 
   // 轉換欄位定義為 Glide Grid 格式
@@ -116,8 +112,7 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
         kind: GridCellKind.Text,
         data: '',
         displayData: '',
-        allowOverlay: false,
-      };
+        allowOverlay: false };
     }
 
     const value = rowData[column.key] || '';
@@ -130,16 +125,14 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
           data: Number(value) || 0,
           displayData: String(value),
           allowOverlay: true,
-          readonly: false,
-        };
+          readonly: false };
       
       case 'boolean':
         return {
           kind: GridCellKind.Boolean,
           data: Boolean(value),
           allowOverlay: true,
-          readonly: false,
-        };
+          readonly: false };
       
       case 'date':
         return {
@@ -147,8 +140,7 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
           data: value,
           displayData: value ? new Date(value).toLocaleDateString('zh-TW') : '',
           allowOverlay: true,
-          readonly: false,
-        };
+          readonly: false };
       
       case 'select':
         // 將選項值轉換為顯示文字
@@ -158,8 +150,7 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
           data: displayValue || '',
           displayData: displayValue || '',
           allowOverlay: true,
-          readonly: false,
-        };
+          readonly: false };
       
       case 'tags':
       case 'multiselect':
@@ -168,8 +159,7 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
           data: Array.isArray(value) ? value.join(', ') : value || '',
           displayData: Array.isArray(value) ? value.join(', ') : value || '',
           allowOverlay: true,
-          readonly: false,
-        };
+          readonly: false };
       
       default:
         return {
@@ -177,8 +167,7 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
           data: String(value),
           displayData: String(value),
           allowOverlay: true,
-          readonly: false,
-        };
+          readonly: false };
     }
   }, [columns, data, onUpdateCell]);
 
@@ -349,14 +338,12 @@ export const GlideNotionTable: React.FC<GlideNotionTableProps> = ({
             paste: true,
             selectAll: true,
             selectRow: true,
-            selectColumn: true,
-          }}
+            selectColumn: true }}
           onRowAppended={onAddRow ? handleAddRow : undefined}
           trailingRowOptions={{
             hint: '新增列...',
             tint: NotionColors.lightGray,
-            targetColumn: 0,
-          }}
+            targetColumn: 0 }}
         />
       </div>
       

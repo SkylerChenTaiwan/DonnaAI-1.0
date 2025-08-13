@@ -71,31 +71,25 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
     padding: 20,
-    paddingTop: 60,
-  },
+    paddingTop: 60 },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   test: {
     marginBottom: 30,
     alignItems: 'center',
     padding: 10,
     backgroundColor: 'white',
-    borderRadius: 8,
-  },
+    borderRadius: 8 },
   image: {
     width: 150,
     height: 150,
     backgroundColor: '#e0e0e0',
-    marginTop: 10,
-  },
+    marginTop: 10 },
   debug: {
     fontSize: 12,
     color: '#666',
     marginTop: 10,
-    fontFamily: 'monospace',
-  },
-});
+    fontFamily: 'monospace' } });

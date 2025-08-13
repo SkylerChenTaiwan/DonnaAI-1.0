@@ -24,8 +24,7 @@ export const Text: React.FC<TextProps> = ({
   ellipsizeMode = 'tail',
   selectable = false,
   accessibilityRole = 'text',
-  testID,
-}) => {
+  testID }) => {
   // 轉換 React Native 樣式為 CSS
   const convertStyleToCSS = (rnStyle: any): React.CSSProperties => {
     if (!rnStyle) return {};

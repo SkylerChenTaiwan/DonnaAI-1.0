@@ -56,8 +56,7 @@ export const EditorFactory = {
       status: 'select',
       priority: 'select',
       person: 'select',
-      relation: 'select',
-    };
+      relation: 'select' };
     
     return typeMap[columnType] || 'text';
   }

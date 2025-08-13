@@ -9,8 +9,7 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  ViewStyle,
-} from 'react-native';
+  ViewStyle } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { colors } from '@/theme/colors';
 
@@ -31,8 +30,7 @@ export const AddRowButton: React.FC<AddRowButtonProps> = ({
   buttonText = '新增記錄',
   disabled = false,
   alignment = 'center',
-  showGuideIcon = false,
-}) => {
+  showGuideIcon = false }) => {
   if (!isVisible) return null;
 
   return (
@@ -80,11 +78,9 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 8,
     paddingHorizontal: 16,
-    backgroundColor: colors.background,
-  },
+    backgroundColor: colors.background },
   leftAligned: {
-    alignItems: 'flex-start',
-  },
+    alignItems: 'flex-start' },
   addButton: {
     backgroundColor: colors.backgroundSecondary,
     borderRadius: 8,
@@ -93,13 +89,11 @@ const styles = StyleSheet.create({
     borderStyle: 'dashed',
     minHeight: 22, // 高度減半
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   addButtonDisabled: {
     backgroundColor: colors.backgroundSecondary,
     borderColor: colors.border,
-    opacity: 0.6,
-  },
+    opacity: 0.6 },
   buttonContent: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -110,9 +104,6 @@ const styles = StyleSheet.create({
   addButtonText: {
     fontSize: 16,
     fontWeight: '500',
-    color: colors.textSecondary,
-  },
+    color: colors.textSecondary },
   addButtonTextDisabled: {
-    color: colors.textTertiary,
-  },
-});
+    color: colors.textTertiary } });

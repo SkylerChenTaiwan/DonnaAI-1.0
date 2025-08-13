@@ -113,31 +113,27 @@ const createSelectStyles = (state: SelectState, size: SelectSize, hasError: bool
              size === 'large' ? DesignSystem.typography.body.fontSize + 2 : 
              DesignSystem.typography.body.fontSize,
     color: DesignSystem.colors.text.primary,
-    minHeight: size === 'small' ? 32 : size === 'large' ? 48 : 40,
-  };
+    minHeight: size === 'small' ? 32 : size === 'large' ? 48 : 40 };
   
   let stateStyle = {};
   
   if (hasError) {
     stateStyle = {
-      borderColor: DesignSystem.colors.status.error,
-    };
+      borderColor: DesignSystem.colors.status.error };
   } else {
     switch (state) {
       case 'focused':
       case 'open':
         stateStyle = {
           borderColor: DesignSystem.colors.primary,
-          borderWidth: 2,
-        };
+          borderWidth: 2 };
         break;
       case 'disabled':
         stateStyle = {
           backgroundColor: DesignSystem.colors.gray100,
           borderColor: DesignSystem.colors.border.light,
           color: DesignSystem.colors.text.disabled,
-          opacity: 0.6,
-        };
+          opacity: 0.6 };
         break;
     }
   }
@@ -249,8 +245,7 @@ const WebSelect = forwardRef<HTMLDivElement, AdaptiveSelectProps>(
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
-        gap: DesignSystem.spacing.xs,
-      };
+        gap: DesignSystem.spacing.xs };
       
       if (style) {
         const convertedStyle = styleAdapter.adaptStyle(style as any);
@@ -282,8 +277,7 @@ const WebSelect = forwardRef<HTMLDivElement, AdaptiveSelectProps>(
           `${finalStyle.borderWidth}px solid ${finalStyle.borderColor}` : 
           'none',
         outline: 'none',
-        transition: 'border-color 150ms ease, box-shadow 150ms ease',
-      };
+        transition: 'border-color 150ms ease, box-shadow 150ms ease' };
       
       // 聚焦陰影
       if (currentState === 'focused' || currentState === 'open') {
@@ -307,8 +301,7 @@ const WebSelect = forwardRef<HTMLDivElement, AdaptiveSelectProps>(
         maxHeight: maxDropdownHeight,
         overflowY: 'auto',
         zIndex: 1000,
-        marginTop: 4,
-      };
+        marginTop: 4 };
       
       if (dropdownStyle) {
         const convertedStyle = styleAdapter.adaptStyle(dropdownStyle as any);
@@ -326,8 +319,7 @@ const WebSelect = forwardRef<HTMLDivElement, AdaptiveSelectProps>(
         color: option.disabled ? DesignSystem.colors.text.disabled : DesignSystem.colors.text.primary,
         backgroundColor: isSelected ? withAlpha(DesignSystem.colors.primary, 0.125) : 
                         isHovered ? DesignSystem.colors.gray50 : 'transparent',
-        transition: 'background-color 150ms ease',
-      };
+        transition: 'background-color 150ms ease' };
       
       if (optionStyle) {
         const convertedStyle = styleAdapter.adaptStyle(optionStyle as any);
@@ -492,8 +484,7 @@ const WebSelect = forwardRef<HTMLDivElement, AdaptiveSelectProps>(
                 style={{
                   cursor: 'pointer',
                   color: DesignSystem.colors.text.secondary,
-                  fontSize: '14px',
-                }}
+                  fontSize: '14px' }}
               >
                 ×
               </span>
@@ -504,8 +495,7 @@ const WebSelect = forwardRef<HTMLDivElement, AdaptiveSelectProps>(
                 style={{
                   color: DesignSystem.colors.text.secondary,
                   transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                  transition: 'transform 150ms ease',
-                }}
+                  transition: 'transform 150ms ease' }}
               >
                 ▼
               </span>
@@ -528,8 +518,7 @@ const WebSelect = forwardRef<HTMLDivElement, AdaptiveSelectProps>(
                     border: `1px solid ${DesignSystem.colors.border.default}`,
                     borderRadius: DesignSystem.borderRadius.sm,
                     fontSize: DesignSystem.typography.bodySmall.fontSize,
-                    outline: 'none',
-                  }}
+                    outline: 'none' }}
                   autoFocus
                 />
               </div>
@@ -539,8 +528,7 @@ const WebSelect = forwardRef<HTMLDivElement, AdaptiveSelectProps>(
               <div style={{ 
                 padding: DesignSystem.spacing.md,
                 color: DesignSystem.colors.text.tertiary,
-                textAlign: 'center' as const,
-              }}>
+                textAlign: 'center' as const }}>
                 {searchText ? '找不到匹配的選項' : '沒有可用選項'}
               </div>
             ) : (
@@ -668,8 +656,7 @@ const NativeSelect = forwardRef<any, AdaptiveSelectProps>(
         ...baseStyle,
         flexDirection: 'row' as const,
         alignItems: 'center' as const,
-        justifyContent: 'space-between' as const,
-      };
+        justifyContent: 'space-between' as const };
       
       return styleAdapter.adaptStyle(finalStyle);
     }, [disabled, hasError, size, styleAdapter]);
@@ -745,8 +732,7 @@ const NativeSelect = forwardRef<any, AdaptiveSelectProps>(
             style={{
               flex: 1,
               color: (!internalValue || (Array.isArray(internalValue) && internalValue.length === 0)) ? 
-                DesignSystem.colors.text.tertiary : DesignSystem.colors.text.primary,
-            }}
+                DesignSystem.colors.text.tertiary : DesignSystem.colors.text.primary }}
             numberOfLines={1}
           >
             {getDisplayText()}
@@ -763,23 +749,20 @@ const NativeSelect = forwardRef<any, AdaptiveSelectProps>(
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
             justifyContent: 'center',
             alignItems: 'center',
-            padding: DesignSystem.spacing.lg,
-          }}>
+            padding: DesignSystem.spacing.lg }}>
             <AdaptiveView style={{
               backgroundColor: DesignSystem.colors.background.card,
               borderRadius: DesignSystem.borderRadius.lg,
               maxHeight: '70%',
               width: '90%',
-              maxWidth: 400,
-            }}>
+              maxWidth: 400 }}>
               <AdaptiveView style={{
                 padding: DesignSystem.spacing.md,
                 borderBottomWidth: 1,
                 borderBottomColor: DesignSystem.colors.border.light,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
+                alignItems: 'center' }}>
                 <AdaptiveText variant="h4">選擇選項</AdaptiveText>
                 <TouchableOpacity onPress={handleClose}>
                   <AdaptiveText style={{ fontSize: 20, color: DesignSystem.colors.text.secondary }}>
@@ -797,8 +780,7 @@ const NativeSelect = forwardRef<any, AdaptiveSelectProps>(
                       borderBottomWidth: index < processedOptions.length - 1 ? 1 : 0,
                       borderBottomColor: DesignSystem.colors.border.light,
                       backgroundColor: isOptionSelected(option) ? 
-                        withAlpha(DesignSystem.colors.primary, 0.125) : 'transparent',
-                    }}
+                        withAlpha(DesignSystem.colors.primary, 0.125) : 'transparent' }}
                     onPress={() => handleOptionSelect(option)}
                     disabled={option.disabled}
                   >
@@ -815,14 +797,12 @@ const NativeSelect = forwardRef<any, AdaptiveSelectProps>(
                             DesignSystem.colors.primary : 'transparent',
                           marginRight: DesignSystem.spacing.sm,
                           justifyContent: 'center',
-                          alignItems: 'center',
-                        }}>
+                          alignItems: 'center' }}>
                           {isOptionSelected(option) && (
                             <AdaptiveText style={{ 
                               color: DesignSystem.colors.text.inverse,
                               fontSize: 12,
-                              fontWeight: 'bold',
-                            }}>
+                              fontWeight: 'bold' }}>
                               ✓
                             </AdaptiveText>
                           )}
@@ -834,8 +814,7 @@ const NativeSelect = forwardRef<any, AdaptiveSelectProps>(
                           color: option.disabled ? 
                             DesignSystem.colors.text.disabled : 
                             DesignSystem.colors.text.primary,
-                          fontWeight: isOptionSelected(option) ? '600' : 'normal',
-                        }}
+                          fontWeight: isOptionSelected(option) ? '600' : 'normal' }}
                       >
                         {option.label}
                       </AdaptiveText>
@@ -848,15 +827,13 @@ const NativeSelect = forwardRef<any, AdaptiveSelectProps>(
                 <AdaptiveView style={{
                   padding: DesignSystem.spacing.md,
                   borderTopWidth: 1,
-                  borderTopColor: DesignSystem.colors.border.light,
-                }}>
+                  borderTopColor: DesignSystem.colors.border.light }}>
                   <TouchableOpacity
                     style={{
                       padding: DesignSystem.spacing.sm,
                       backgroundColor: DesignSystem.colors.gray100,
                       borderRadius: DesignSystem.borderRadius.md,
-                      alignItems: 'center',
-                    }}
+                      alignItems: 'center' }}
                     onPress={handleClose}
                   >
                     <AdaptiveText>完成</AdaptiveText>

@@ -16,8 +16,7 @@ export const NotionColors = {
     blue: '#0B6E99',
     purple: '#6940A5',
     pink: '#AD1A72',
-    red: '#E03E3E',
-  },
+    red: '#E03E3E' },
   
   // Background colors
   background: {
@@ -30,8 +29,7 @@ export const NotionColors = {
     blue: '#E7F3F8',
     purple: '#F6F3F9',
     pink: '#FAF1F5',
-    red: '#FDEBEC',
-  },
+    red: '#FDEBEC' },
   
   // Interactive states
   interactive: {
@@ -39,8 +37,7 @@ export const NotionColors = {
     selected: '#E9E9E7',
     selectedBorder: '#0A84FF',
     focus: '#0A84FF',
-    disabled: '#E1E1DB',
-  },
+    disabled: '#E1E1DB' },
   
   // UI elements
   ui: {
@@ -48,9 +45,7 @@ export const NotionColors = {
     divider: '#F0F0F0',
     shadow: 'rgba(15, 15, 15, 0.1)',
     scrollbar: '#D3D1CB',
-    link: '#0B6E99',
-  },
-} as const;
+    link: '#0B6E99' } } as const;
 
 export const NotionSpacing = {
   xs: 4,
@@ -63,19 +58,15 @@ export const NotionSpacing = {
   cell: {
     paddingHorizontal: 8,
     paddingVertical: 4,
-    minHeight: 32,
-  },
+    minHeight: 32 },
   
   header: {
     height: 37,
-    paddingHorizontal: 8,
-  },
+    paddingHorizontal: 8 },
   
   row: {
     height: 37,
-    gap: 0,
-  },
-} as const;
+    gap: 0 } } as const;
 
 export const NotionTypography = {
   fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif",
@@ -86,66 +77,54 @@ export const NotionTypography = {
     body: 14,
     md: 16,
     lg: 18,
-    xl: 20,
-  },
+    xl: 20 },
   
   fontWeight: {
     normal: '400',
     medium: '500',
     semibold: '600',
-    bold: '700',
-  },
+    bold: '700' },
   
   lineHeight: {
     tight: 1.2,
     body: 1.5,
-    relaxed: 1.75,
-  },
-} as const;
+    relaxed: 1.75 } } as const;
 
 export const NotionAnimations = {
   duration: {
     instant: 0,
     fast: 100,
     normal: 150,
-    slow: 300,
-  },
+    slow: 300 },
   
   easing: {
     default: 'cubic-bezier(0.4, 0, 0.2, 1)',
     ease: 'ease',
     easeIn: 'ease-in',
     easeOut: 'ease-out',
-    easeInOut: 'ease-in-out',
-  },
+    easeInOut: 'ease-in-out' },
   
   transitions: {
     background: `background-color 150ms ease`,
     border: `border-color 150ms ease`,
     opacity: `opacity 150ms ease`,
-    transform: `transform 150ms ease`,
-  },
-} as const;
+    transform: `transform 150ms ease` } } as const;
 
 export const NotionInteractive = {
   borderRadius: {
     sm: 3,
     md: 4,
     lg: 6,
-    full: 9999,
-  },
+    full: 9999 },
   
   focusRing: {
     width: 2,
     color: '#0A84FF',
-    offset: 0,
-  },
+    offset: 0 },
   
   hover: {
     opacity: 0.8,
-    scale: 1.0,
-  },
-} as const;
+    scale: 1.0 } } as const;
 
 export const NotionTable = {
   header: {
@@ -154,8 +133,7 @@ export const NotionTable = {
     fontWeight: '400',
     fontSize: 14,
     color: 'rgba(55, 53, 47, 0.65)',
-    textTransform: 'none' as const,
-  },
+    textTransform: 'none' as const },
   
   cell: {
     background: '#FFFFFF',
@@ -164,28 +142,23 @@ export const NotionTable = {
     border: '1px solid rgba(55, 53, 47, 0.04)',
     padding: '4px 8px',
     fontSize: 14,
-    color: '#37352F',
-  },
+    color: '#37352F' },
   
   row: {
     backgroundEven: 'transparent',
     backgroundOdd: 'transparent',
     backgroundHover: 'rgba(251, 251, 250, 0.5)',
-    height: 37,
-  },
-} as const;
+    height: 37 } } as const;
 
 export const NotionEditor = {
   outline: {
     width: 2,
     color: '#0A84FF',
-    style: 'solid' as const,
-  },
+    style: 'solid' as const },
   background: '#FFFFFF',
   fontSize: 14,
   padding: '2px 4px',
-  borderRadius: 0,
-} as const;
+  borderRadius: 0 } as const;
 
 // Default configuration values
 export const NOTION_DEFAULTS = {
@@ -195,8 +168,7 @@ export const NOTION_DEFAULTS = {
   DEBOUNCE_DELAY: 500,
   MIN_COLUMN_WIDTH: 50,
   DEFAULT_COLUMN_WIDTH: 180,
-  MAX_COLUMN_WIDTH: 600,
-} as const;
+  MAX_COLUMN_WIDTH: 600 } as const;
 
 // Keyboard shortcuts
 export const KEYBOARD_SHORTCUTS = {
@@ -216,5 +188,4 @@ export const KEYBOARD_SHORTCUTS = {
   HOME: 'Home',
   END: 'End',
   PAGE_UP: 'PageUp',
-  PAGE_DOWN: 'PageDown',
-} as const;
+  PAGE_DOWN: 'PageDown' } as const;

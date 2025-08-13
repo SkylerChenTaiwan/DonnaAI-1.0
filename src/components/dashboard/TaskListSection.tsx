@@ -9,8 +9,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-  SectionList,
-} from 'react-native';
+  SectionList } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -75,8 +74,7 @@ interface TaskSection {
 export const TaskListSection: React.FC<TaskListSectionProps> = ({
   userId,
   organizationId,
-  teamId,
-}) => {
+  teamId }) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const { tasks, fetchTasks, updateTask } = useTaskStore();
   const [loading, setLoading] = useState(false);
@@ -122,8 +120,7 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
       const newStatus = task.status === 'completed' ? 'todo' : 'completed';
       await updateTask(task.id!, { 
         status: newStatus,
-        completedAt: newStatus === 'completed' ? new Date() : null,
-      }, userId);
+        completedAt: newStatus === 'completed' ? new Date() : null }, userId);
       
       showToast('success', `任務已標記為${newStatus === 'completed' ? '完成' : '待辦'}`);
       await fetchTasks(userId, { teamId }); // 重新載入以更新列表
@@ -202,8 +199,7 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
         type: 'overdue',
         data: overdueTasks.sort((a, b) => 
           new Date(a.dueDate!).getTime() - new Date(b.dueDate!).getTime()
-        ),
-      });
+        ) });
     }
 
     if (todayTasks.length > 0) {
@@ -212,8 +208,7 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
         type: 'today',
         data: todayTasks.sort((a, b) => 
           new Date(a.dueDate!).getTime() - new Date(b.dueDate!).getTime()
-        ),
-      });
+        ) });
     }
 
     // 新增：顯示所有其他待辦任務
@@ -224,8 +219,7 @@ export const TaskListSection: React.FC<TaskListSectionProps> = ({
         data: otherTasks.sort((a, b) => {
           // 按建立時間排序，新的在前面
           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-        }),
-      });
+        }) });
     }
 
     return sections;
@@ -344,33 +338,26 @@ const getPriorityColor = (priority: 'low' | 'medium' | 'high' | 'urgent'): strin
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 40,
-  },
+    paddingVertical: 40 },
   listContent: {
-    flexGrow: 1,
-  },
+    flexGrow: 1 },
   sectionHeader: {
     paddingHorizontal: 20,
     paddingVertical: 12,
-    backgroundColor: '#F8F9FA',
-  },
+    backgroundColor: '#F8F9FA' },
   overdueHeader: {
-    backgroundColor: '#FEF2F2',
-  },
+    backgroundColor: '#FEF2F2' },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   overdueTitle: {
-    color: '#DC2626',
-  },
+    color: '#DC2626' },
   taskItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -378,11 +365,9 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-  },
+    borderBottomColor: '#E5E7EB' },
   checkboxContainer: {
-    marginRight: 12,
-  },
+    marginRight: 12 },
   checkbox: {
     width: 24,
     height: 24,
@@ -390,58 +375,45 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#D1D5DB',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   checkboxChecked: {
     backgroundColor: '#10B981',
-    borderColor: '#10B981',
-  },
+    borderColor: '#10B981' },
   taskContent: {
-    flex: 1,
-  },
+    flex: 1 },
   taskTitle: {
     fontSize: 16,
     color: '#1A1A1A',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   taskTitleCompleted: {
     textDecorationLine: 'line-through',
-    color: '#9CA3AF',
-  },
+    color: '#9CA3AF' },
   taskMeta: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-  },
+    gap: 8 },
   taskDue: {
     fontSize: 14,
-    color: '#6B7280',
-  },
+    color: '#6B7280' },
   priorityBadge: {
     paddingHorizontal: 8,
     paddingVertical: 2,
-    borderRadius: 12,
-  },
+    borderRadius: 12 },
   priorityText: {
     fontSize: 12,
     color: '#FFFFFF',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   emptyState: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 60,
-  },
+    paddingVertical: 60 },
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: '#1A1A1A',
     marginTop: 16,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   emptyDescription: {
     fontSize: 14,
-    color: '#6B7280',
-  },
-});
+    color: '#6B7280' } });

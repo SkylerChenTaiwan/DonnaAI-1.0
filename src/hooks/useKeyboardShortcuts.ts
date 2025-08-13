@@ -32,33 +32,28 @@ export const useKeyboardShortcuts = () => {
       key: 'h',
       ctrl: true,
       description: '回到首頁',
-      action: () => navigation.navigate('Home'),
-    },
+      action: () => navigation.navigate('Home') },
     {
       key: 'd',
       ctrl: true,
       description: '開啟客戶資料庫',
-      action: () => navigation.navigate('Database'),
-    },
+      action: () => navigation.navigate('Database') },
     {
       key: 'n',
       ctrl: true,
       description: '新增客戶',
-      action: () => navigation.navigate('CustomerAdd'),
-    },
+      action: () => navigation.navigate('CustomerAdd') },
     {
       key: 't',
       ctrl: true,
       description: '開啟任務列表',
-      action: () => navigation.navigate('Tasks'),
-    },
+      action: () => navigation.navigate('Tasks') },
     {
       key: 'a',
       ctrl: true,
       shift: true,
       description: '新增任務',
-      action: () => navigation.navigate('TaskAdd'),
-    },
+      action: () => navigation.navigate('TaskAdd') },
     {
       key: 'm',
       ctrl: true,
@@ -66,14 +61,12 @@ export const useKeyboardShortcuts = () => {
       action: () => {
         toggleMode();
         showToast('success', `已切換至${mode === 'business' ? '主管' : '業務'}模式`);
-      },
-    },
+      } },
     {
       key: '/',
       ctrl: true,
       description: '顯示快捷鍵說明',
-      action: () => showKeyboardShortcutsHelp(),
-    },
+      action: () => showKeyboardShortcutsHelp() },
     {
       key: 'Escape',
       description: '返回上一頁',
@@ -81,8 +74,7 @@ export const useKeyboardShortcuts = () => {
         if (navigation.canGoBack()) {
           navigation.goBack();
         }
-      },
-    },
+      } },
   ];
   
   // 顯示快捷鍵說明
@@ -140,8 +132,7 @@ export const useKeyboardShortcuts = () => {
   
   return {
     shortcuts,
-    showKeyboardShortcutsHelp,
-  };
+    showKeyboardShortcutsHelp };
 };
 
 // 匯出快捷鍵列表供其他元件使用
@@ -150,48 +141,40 @@ export const getKeyboardShortcuts = (): ShortcutConfig[] => [
     key: 'h',
     ctrl: true,
     description: '回到首頁',
-    action: () => {},
-  },
+    action: () => {} },
   {
     key: 'd',
     ctrl: true,
     description: '開啟客戶資料庫',
-    action: () => {},
-  },
+    action: () => {} },
   {
     key: 'n',
     ctrl: true,
     description: '新增客戶',
-    action: () => {},
-  },
+    action: () => {} },
   {
     key: 't',
     ctrl: true,
     description: '開啟任務列表',
-    action: () => {},
-  },
+    action: () => {} },
   {
     key: 'a',
     ctrl: true,
     shift: true,
     description: '新增任務',
-    action: () => {},
-  },
+    action: () => {} },
   {
     key: 'm',
     ctrl: true,
     description: '切換主管/業務模式',
-    action: () => {},
-  },
+    action: () => {} },
   {
     key: '/',
     ctrl: true,
     description: '顯示快捷鍵說明',
-    action: () => {},
-  },
+    action: () => {} },
   {
     key: 'Escape',
     description: '返回上一頁',
-    action: () => {},
-  },
+    action: () => {} },
 ];

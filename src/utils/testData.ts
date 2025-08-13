@@ -41,8 +41,7 @@ export const generateTestCustomers = (): Partial<CustomerDoc>[] => {
     createdAt: generateRandomDate(60),
     updatedAt: generateRandomDate(30),
     organizationId: 'test-org-id',
-    teamId: 'test-team-id',
-  }));
+    teamId: 'test-team-id' }));
 };
 
 // 紀錄測試資料
@@ -77,14 +76,12 @@ export const generateTestRecords = (customerIds: string[]): Partial<RecordDoc>[]
       sentiment: Math.random() > 0.3 ? 'positive' : Math.random() > 0.5 ? 'neutral' : 'negative',
       keyTopics: ['產品討論', '價格協商', '技術方案'],
       actionItems: ['準備提案', '安排下次會議', '技術驗證'],
-      nextSteps: '一週內提供正式報價單',
-    },
+      nextSteps: '一週內提供正式報價單' },
     createdBy: 'test-user-id',
     createdAt: generateRandomDate(45),
     updatedAt: generateRandomDate(15),
     organizationId: 'test-org-id',
-    teamId: 'test-team-id',
-  }));
+    teamId: 'test-team-id' }));
 };
 
 // 任務測試資料
@@ -123,8 +120,7 @@ export const generateTestTasks = (customerIds: string[], recordIds: string[]): P
     createdAt: generateRandomDate(30),
     updatedAt: generateRandomDate(10),
     organizationId: 'test-org-id',
-    teamId: 'test-team-id',
-  }));
+    teamId: 'test-team-id' }));
 };
 
 // CSV 測試資料
@@ -137,8 +133,7 @@ export const generateTestCSVData = () => {
 林靜香,生技醫療,lin@biotech.com,0956789012,桃園市中壢區500號,潛在客戶,需要追蹤`;
 
   return {
-    customers: csvCustomers,
-  };
+    customers: csvCustomers };
 };
 
 // 音頻測試資料結構
@@ -173,21 +168,17 @@ export const generateMockAudioData = (): MockAudioData[] => [
       {
         title: '準備 ABC 科技的技術提案',
         priority: 'high',
-        dueDate: '2024-02-15',
-      },
+        dueDate: '2024-02-15' },
       {
         title: '完成 ABC 科技的價格評估',
         priority: 'medium',
-        dueDate: '2024-02-28',
-      },
+        dueDate: '2024-02-28' },
     ],
     extractedCustomerInfo: {
       name: '張經理',
       company: 'ABC 科技公司',
       phone: '0912-345-678',
-      email: 'zhang@abc-tech.com',
-    },
-  },
+      email: 'zhang@abc-tech.com' } },
   {
     id: 'audio_002',
     filename: 'client_call_002.m4a',
@@ -197,18 +188,14 @@ export const generateMockAudioData = (): MockAudioData[] => [
     extractedTasks: [
       {
         title: '處理 XYZ 公司系統異常',
-        priority: 'urgent',
-      },
+        priority: 'urgent' },
       {
         title: '與 XYZ 公司 IT 主管開會',
         priority: 'high',
-        dueDate: '2024-02-10',
-      },
+        dueDate: '2024-02-10' },
     ],
     extractedCustomerInfo: {
-      company: 'XYZ 公司',
-    },
-  },
+      company: 'XYZ 公司' } },
   {
     id: 'audio_003',
     filename: 'project_notes_003.m4a',
@@ -219,20 +206,16 @@ export const generateMockAudioData = (): MockAudioData[] => [
       {
         title: '開始專案測試階段',
         priority: 'high',
-        dueDate: '2024-02-12',
-      },
+        dueDate: '2024-02-12' },
       {
         title: '準備用戶使用手冊',
         priority: 'medium',
-        dueDate: '2024-02-25',
-      },
+        dueDate: '2024-02-25' },
       {
         title: '規劃用戶培訓',
         priority: 'medium',
-        dueDate: '2024-02-28',
-      },
-    ],
-  },
+        dueDate: '2024-02-28' },
+    ] },
 ];
 
 // 驗證資料完整性
@@ -258,16 +241,13 @@ export const validateTestData = () => {
       records,
       tasks,
       audioData,
-      csvData,
-    },
+      csvData },
     validation: {
       customersHaveValidEmails: customers.every(c => c.email?.includes('@')),
       customersHaveValidPhones: customers.every(c => c.phone?.match(/^09\d{8}$/)),
       recordsHaveCustomers: records.every(r => r.customerIds && r.customerIds.length > 0),
       tasksHaveValidPriorities: tasks.every(t => ['low', 'medium', 'high', 'urgent'].includes(t.priority!)),
-      audioHasTranscriptions: audioData.every(a => a.transcription.length > 0),
-    },
-  };
+      audioHasTranscriptions: audioData.every(a => a.transcription.length > 0) } };
 };
 
 // 生成完整測試資料集

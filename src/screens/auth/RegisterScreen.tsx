@@ -9,8 +9,7 @@ import {
   StyleSheet,
   Alert,
   Image,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 import { Layout } from '@/components/common/Layout';
 import { TextInput } from '@/components/common/TextInput';
 import { Button } from '@/components/common/Button';
@@ -21,15 +20,13 @@ interface RegisterScreenProps {
 }
 
 export const RegisterScreen: React.FC<RegisterScreenProps> = ({
-  onNavigateToLogin,
-}) => {
+  onNavigateToLogin }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     confirmPassword: '',
     name: '',
-    organizationName: '',
-  });
+    organizationName: '' });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{
     email?: string;
@@ -201,47 +198,36 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   header: {
     alignItems: 'center',
-    marginBottom: 32,
-  },
+    marginBottom: 32 },
   logo: {
     width: 120,
     height: 60,
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   title: {
     fontSize: 32,
     fontWeight: '700',
     color: '#1C1C1E',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   subtitle: {
     fontSize: 18,
-    color: '#8E8E93',
-  },
+    color: '#8E8E93' },
   form: {
-    width: '100%',
-  },
+    width: '100%' },
   registerButton: {
     marginTop: 8,
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   footer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   footerText: {
     fontSize: 16,
-    color: '#8E8E93',
-  },
+    color: '#8E8E93' },
   errorText: {
     fontSize: 14,
     color: '#FF3B30',
     textAlign: 'center',
-    marginBottom: 16,
-  },
-});
+    marginBottom: 16 } });

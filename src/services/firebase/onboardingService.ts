@@ -16,8 +16,7 @@ import {
   orderBy,
   serverTimestamp,
   Timestamp,
-  writeBatch,
-} from 'firebase/firestore';
+  writeBatch } from 'firebase/firestore';
 import { getFirebaseDb } from './config';
 import {
   OnboardingSession,
@@ -27,8 +26,7 @@ import {
   WelcomeSetupData,
   ValidationResult,
   ValidationError,
-  UserData,
-} from '@/types/onboarding';
+  UserData } from '@/types/onboarding';
 import { createOrganization, updateOrganization } from './organizations';
 import { Organization } from '@/types/entities/organization';
 
@@ -51,15 +49,13 @@ export async function createOnboardingSession(
       currentStep: 0,
       completedSteps: [],
       stepData: {},
-      status: 'draft',
-    };
+      status: 'draft' };
 
     await setDoc(sessionRef, session);
 
     return {
       ...session,
-      startedAt: Timestamp.now(),
-    };
+      startedAt: Timestamp.now() };
   } catch (error) {
     console.error('建立入職會話失敗:', error);
     throw error;
@@ -82,8 +78,7 @@ export async function getOnboardingSession(
 
     return {
       id: sessionDoc.id,
-      ...sessionDoc.data(),
-    } as OnboardingSession;
+      ...sessionDoc.data() } as OnboardingSession;
   } catch (error) {
     console.error('取得入職會話失敗:', error);
     throw error;
@@ -109,8 +104,7 @@ export async function getInProgressSessions(
     
     return snapshot.docs.map(doc => ({
       id: doc.id,
-      ...doc.data(),
-    } as OnboardingSession));
+      ...doc.data() } as OnboardingSession));
   } catch (error) {
     console.error('取得進行中會話失敗:', error);
     throw error;
@@ -131,8 +125,7 @@ export async function saveOnboardingProgress(
     await updateDoc(sessionRef, {
       ...updates,
       status: 'in_progress',
-      lastUpdated: serverTimestamp(),
-    });
+      lastUpdated: serverTimestamp() });
   } catch (error) {
     console.error('儲存入職進度失敗:', error);
     throw error;
@@ -156,8 +149,7 @@ export async function saveStepData(
     
     const updates: any = {
       [`stepData.${step}`]: cleanData,
-      lastUpdated: serverTimestamp(),
-    };
+      lastUpdated: serverTimestamp() };
     
     await updateDoc(sessionRef, updates);
   } catch (error) {
@@ -207,8 +199,7 @@ export async function markStepCompleted(
     completedSteps.add(stepId);
     
     await saveOnboardingProgress(sessionId, {
-      completedSteps: Array.from(completedSteps),
-    });
+      completedSteps: Array.from(completedSteps) });
   } catch (error) {
     console.error(`標記步驟完成失敗 (${stepId}):`, error);
     throw error;
@@ -228,8 +219,7 @@ export async function validateBasicInfo(
     errors.push({
       field: 'organizationName',
       message: '組織名稱至少需要 2 個字元',
-      severity: 'error',
-    });
+      severity: 'error' });
   }
   
   // 檢查組織名稱是否重複
@@ -244,8 +234,7 @@ export async function validateBasicInfo(
     errors.push({
       field: 'organizationName',
       message: '組織名稱已存在',
-      severity: 'critical',
-    });
+      severity: 'critical' });
   }
   
   // 驗證聯絡人資訊
@@ -253,8 +242,7 @@ export async function validateBasicInfo(
     errors.push({
       field: 'contactPerson.name',
       message: '請輸入聯絡人姓名',
-      severity: 'error',
-    });
+      severity: 'error' });
   }
   
   // 驗證 Email
@@ -263,8 +251,7 @@ export async function validateBasicInfo(
     errors.push({
       field: 'contactPerson.email',
       message: '請輸入有效的 Email',
-      severity: 'error',
-    });
+      severity: 'error' });
   }
   
   // 驗證電話（選填但如果有值要驗證格式）
@@ -274,15 +261,13 @@ export async function validateBasicInfo(
       errors.push({
         field: 'contactPerson.phone',
         message: '電話號碼格式不正確',
-        severity: 'error',
-      });
+        severity: 'error' });
     }
   }
   
   return {
     isValid: errors.length === 0,
-    errors,
-  };
+    errors };
 }
 
 /**
@@ -297,16 +282,14 @@ export async function validateBillingPlan(
     errors.push({
       field: 'planId',
       message: '請選擇計費方案',
-      severity: 'error',
-    });
+      severity: 'error' });
   }
   
   if (data.seats < 1) {
     errors.push({
       field: 'seats',
       message: '用戶數必須至少為 1',
-      severity: 'error',
-    });
+      severity: 'error' });
   }
   
   // 驗證計費 Email（選填但如果有值要驗證格式）
@@ -316,15 +299,13 @@ export async function validateBillingPlan(
       errors.push({
         field: 'billingEmail',
         message: '計費 Email 格式不正確',
-        severity: 'error',
-      });
+        severity: 'error' });
     }
   }
   
   return {
     isValid: errors.length === 0,
-    errors,
-  };
+    errors };
 }
 
 /**
@@ -341,8 +322,7 @@ export async function validateUserImport(
     warnings.push({
       field: 'users',
       message: '未匯入任何用戶，可以稍後再新增',
-      canProceed: true,
-    });
+      canProceed: true });
   }
   
   // 檢查重複 Email
@@ -356,8 +336,7 @@ export async function validateUserImport(
     errors.push({
       field: 'users',
       message: `發現 ${duplicates.length} 個重複的 Email: ${[...new Set(duplicates)].join(', ')}`,
-      severity: 'error',
-    });
+      severity: 'error' });
   }
   
   // 驗證每個用戶的資料
@@ -368,8 +347,7 @@ export async function validateUserImport(
       errors.push({
         field: `users[${index}].email`,
         message: `用戶 ${index + 1} 的 Email 格式不正確`,
-        severity: 'error',
-      });
+        severity: 'error' });
     }
     
     // 驗證名稱
@@ -377,8 +355,7 @@ export async function validateUserImport(
       errors.push({
         field: `users[${index}].name`,
         message: `用戶 ${index + 1} 缺少姓名`,
-        severity: 'error',
-      });
+        severity: 'error' });
     }
   });
   
@@ -388,8 +365,7 @@ export async function validateUserImport(
       warnings.push({
         field: 'googleDomain',
         message: '未設定網域限制，所有 Google 用戶都可登入',
-        canProceed: true,
-      });
+        canProceed: true });
     }
   }
   
@@ -399,16 +375,14 @@ export async function validateUserImport(
       errors.push({
         field: 'password',
         message: '密碼至少需要 8 個字元',
-        severity: 'error',
-      });
+        severity: 'error' });
     }
   }
   
   return {
     isValid: errors.length === 0,
     errors,
-    warnings: warnings.length > 0 ? warnings : undefined,
-  };
+    warnings: warnings.length > 0 ? warnings : undefined };
 }
 
 /**
@@ -424,8 +398,7 @@ export async function validateWelcomeSetup(
     errors.push({
       field: 'emailTemplate.subject',
       message: '請輸入郵件主旨',
-      severity: 'error',
-    });
+      severity: 'error' });
   }
   
   // 驗證郵件內容
@@ -433,8 +406,7 @@ export async function validateWelcomeSetup(
     errors.push({
       field: 'emailTemplate.body',
       message: '郵件內容至少需要 10 個字元',
-      severity: 'error',
-    });
+      severity: 'error' });
   }
   
   // 驗證排程發送時間
@@ -444,15 +416,13 @@ export async function validateWelcomeSetup(
       errors.push({
         field: 'scheduledSend.sendAt',
         message: '排程時間不能是過去的時間',
-        severity: 'error',
-      });
+        severity: 'error' });
     }
   }
   
   return {
     isValid: errors.length === 0,
-    errors,
-  };
+    errors };
 }
 
 /**
@@ -482,12 +452,10 @@ export async function executeOnboarding(
       domain: basicInfo.companyInfo.website,
       settings: {
         timezone: basicInfo.settings.timezone,
-        defaultLanguage: basicInfo.settings.language,
-      },
+        defaultLanguage: basicInfo.settings.language },
       status: 'active' as const,
       aiMinutesQuota: getAiMinutesQuota(billingPlan.planId),
-      aiMinutesUsed: 0,
-    };
+      aiMinutesUsed: 0 };
     
     const organization = await createOrganization(
       organizationData,
@@ -521,13 +489,11 @@ export async function executeOnboarding(
     await saveOnboardingProgress(session.id, {
       organizationId: organization.id,
       status: 'completed',
-      completedAt: serverTimestamp() as Timestamp,
-    });
+      completedAt: serverTimestamp() as Timestamp });
     
     return {
       success: true,
-      organizationId: organization.id,
-    };
+      organizationId: organization.id };
   } catch (error) {
     console.error('執行入職流程失敗:', error);
     
@@ -539,15 +505,12 @@ export async function executeOnboarding(
         {
           step: 'execute',
           error: error instanceof Error ? error.message : String(error),
-          timestamp: Timestamp.now(),
-        },
-      ],
-    });
+          timestamp: Timestamp.now() },
+      ] });
     
     return {
       success: false,
-      error: error instanceof Error ? error.message : '未知錯誤',
-    };
+      error: error instanceof Error ? error.message : '未知錯誤' };
   }
 }
 
@@ -621,8 +584,7 @@ function getAiMinutesQuota(planId: string): number {
     trial: 100,
     basic: 500,
     professional: 2000,
-    enterprise: 10000,
-  };
+    enterprise: 10000 };
   
   return quotaMap[planId] || 100;
 }

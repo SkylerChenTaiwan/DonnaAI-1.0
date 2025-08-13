@@ -30,8 +30,7 @@ const initialState: CellStateMachineState = {
   hoveredCell: null,
   selectedCell: null,
   editingCell: null,
-  cellStates: new Map(),
-};
+  cellStates: new Map() };
 
 function getCellKey(position: CellPosition): string {
   return `${position.row}-${position.col}`;
@@ -74,8 +73,7 @@ function cellStateReducer(
       return {
         ...state,
         hoveredCell: action.position,
-        cellStates: newCellStates,
-      };
+        cellStates: newCellStates };
     }
     
     case 'MOUSE_LEAVE': {
@@ -89,8 +87,7 @@ function cellStateReducer(
       return {
         ...state,
         hoveredCell: null,
-        cellStates: newCellStates,
-      };
+        cellStates: newCellStates };
     }
     
     case 'CLICK': {
@@ -119,8 +116,7 @@ function cellStateReducer(
         selectedCell: action.position,
         editingCell: null,
         hoveredCell: null,
-        cellStates: newCellStates,
-      };
+        cellStates: newCellStates };
     }
     
     case 'DOUBLE_CLICK':
@@ -134,8 +130,7 @@ function cellStateReducer(
       return {
         ...state,
         editingCell: state.selectedCell,
-        cellStates: newCellStates,
-      };
+        cellStates: newCellStates };
     }
     
     case 'KEY_ESCAPE':
@@ -148,8 +143,7 @@ function cellStateReducer(
       return {
         ...state,
         editingCell: null,
-        cellStates: newCellStates,
-      };
+        cellStates: newCellStates };
     }
     
     case 'TAB': {
@@ -162,16 +156,14 @@ function cellStateReducer(
         ...state,
         editingCell: null,
         selectedCell: null,
-        cellStates: newCellStates,
-      };
+        cellStates: newCellStates };
     }
     
     case 'RESET': {
       clearStates();
       return {
         ...initialState,
-        cellStates: newCellStates,
-      };
+        cellStates: newCellStates };
     }
     
     case 'SET_SELECTED': {
@@ -187,8 +179,7 @@ function cellStateReducer(
         selectedCell: action.position,
         editingCell: null,
         hoveredCell: null,
-        cellStates: newCellStates,
-      };
+        cellStates: newCellStates };
     }
     
     case 'SET_EDITING': {
@@ -202,8 +193,7 @@ function cellStateReducer(
         return {
           ...state,
           editingCell: null,
-          cellStates: newCellStates,
-        };
+          cellStates: newCellStates };
       }
       
       const key = getCellKey(action.position);
@@ -213,8 +203,7 @@ function cellStateReducer(
         ...state,
         selectedCell: action.position,
         editingCell: action.position,
-        cellStates: newCellStates,
-      };
+        cellStates: newCellStates };
     }
     
     default:
@@ -346,6 +335,5 @@ export const useCellStateMachine = () => {
     // State setters
     setSelectedCell,
     setEditingCell,
-    reset,
-  };
+    reset };
 };

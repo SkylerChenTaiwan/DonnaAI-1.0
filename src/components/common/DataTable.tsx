@@ -8,8 +8,7 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  RefreshControl,
-} from 'react-native';
+  RefreshControl } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { Icon } from '@/components/common/Icon';
 import { SearchBar } from './SearchBar';
@@ -27,8 +26,7 @@ export const DataTable = ({
   refreshing = false,
   onRefresh,
   filters = [],
-  sortConfig: externalSortConfig,
-}: TableProps) => {
+  sortConfig: externalSortConfig }: TableProps) => {
   const {
     data: processedData,
     searchQuery,
@@ -38,12 +36,10 @@ export const DataTable = ({
     handleSort,
     toggleSelection,
     selectAll,
-    clearSelection,
-  } = useTableData(data, React.useMemo(() => ({ 
+    clearSelection } = useTableData(data, React.useMemo(() => ({ 
     filters,
     initialSortKey: externalSortConfig?.key,
-    initialSortDirection: externalSortConfig?.direction,
-  }), [JSON.stringify(filters), externalSortConfig?.key, externalSortConfig?.direction]));
+    initialSortDirection: externalSortConfig?.direction }), [JSON.stringify(filters), externalSortConfig?.key, externalSortConfig?.direction]));
 
   // 處理選擇變更 - 使用 useRef 避免 onSelect 依賴
   const onSelectRef = React.useRef(onSelect);
@@ -217,33 +213,28 @@ export const DataTable = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
-  },
+    backgroundColor: '#F5F5F5' },
   searchContainer: {
     padding: 16,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
-  },
+    borderBottomColor: '#E3E1DC' },
   header: {
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
     borderBottomColor: '#E3E1DC',
     paddingVertical: 12,
-    paddingHorizontal: 16,
-  },
+    paddingHorizontal: 16 },
   headerCell: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    paddingVertical: 4,
-  },
+    paddingVertical: 4 },
   headerText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   row: {
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
@@ -252,33 +243,25 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     minHeight: 60,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   selectedRow: {
-    backgroundColor: '#F0F0F0',
-  },
+    backgroundColor: '#F0F0F0' },
   cell: {
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   cellText: {
     fontSize: 16,
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   checkboxContainer: {
     width: 40,
     minWidth: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
-  },
+    marginRight: 12 },
   emptyContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 40,
-  },
+    paddingVertical: 40 },
   emptyText: {
     fontSize: 16,
-    color: '#7A7A7A',
-  },
-});
+    color: '#7A7A7A' } });

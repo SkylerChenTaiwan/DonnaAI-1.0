@@ -11,8 +11,7 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -45,8 +44,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
   onSubmit,
   onCancel,
   initialData = {},
-  loading = false,
-}) => {
+  loading = false }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -96,11 +94,9 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
     formState: { errors },
     trigger,
     getValues,
-    reset,
-  } = useForm({
+    reset } = useForm({
     resolver: zodResolver(fullSchema),
-    defaultValues: initialData,
-  });
+    defaultValues: initialData });
 
   const currentStepData = steps[currentStep];
 
@@ -326,19 +322,16 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F0F0F0',
-  },
+    backgroundColor: '#F0F0F0' },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F0F0F0',
-  },
+    backgroundColor: '#F0F0F0' },
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -347,56 +340,47 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
-  },
+    borderBottomColor: '#E3E1DC' },
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   closeButton: {
     width: 32,
     height: 32,
     borderRadius: 16,
     backgroundColor: '#F0F0F0',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   progressContainer: {
     paddingHorizontal: 20,
     paddingVertical: 16,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
-  },
+    borderBottomColor: '#E3E1DC' },
   progressBar: {
     height: 4,
     backgroundColor: '#E3E1DC',
     borderRadius: 2,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   progressFill: {
     height: '100%',
     backgroundColor: '#1A1A1A',
-    borderRadius: 2,
-  },
+    borderRadius: 2 },
   progressText: {
     fontSize: 14,
     color: '#7A7A7A',
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   stepIndicator: {
     flexDirection: 'row',
     paddingHorizontal: 20,
     paddingVertical: 16,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
-  },
+    borderBottomColor: '#E3E1DC' },
   stepItem: {
     flex: 1,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   stepCircle: {
     width: 32,
     height: 32,
@@ -406,66 +390,50 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 8,
-    backgroundColor: '#FFFFFF',
-  },
+    backgroundColor: '#FFFFFF' },
   currentStepCircle: {
     borderColor: '#1A1A1A',
-    backgroundColor: '#1A1A1A',
-  },
+    backgroundColor: '#1A1A1A' },
   completedStepCircle: {
     borderColor: '#1A1A1A',
-    backgroundColor: '#1A1A1A',
-  },
+    backgroundColor: '#1A1A1A' },
   stepNumber: {
     fontSize: 14,
     color: '#7A7A7A',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   currentStepNumber: {
-    color: '#FFFFFF',
-  },
+    color: '#FFFFFF' },
   stepTitle: {
     fontSize: 12,
     color: '#7A7A7A',
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   currentStepTitle: {
     color: '#1A1A1A',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   stepContent: {
-    padding: 20,
-  },
+    padding: 20 },
   stepTitle: {
     fontSize: 24,
     fontWeight: '700',
     color: '#1A1A1A',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   stepDescription: {
     fontSize: 16,
     color: '#7A7A7A',
     lineHeight: 24,
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   fields: {
-    gap: 16,
-  },
+    gap: 16 },
   footer: {
     backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
     borderTopColor: '#E3E1DC',
     paddingHorizontal: 20,
-    paddingVertical: 16,
-  },
+    paddingVertical: 16 },
   buttonContainer: {
     flexDirection: 'row',
-    gap: 12,
-  },
+    gap: 12 },
   button: {
-    flex: 1,
-  },
-});
+    flex: 1 } });

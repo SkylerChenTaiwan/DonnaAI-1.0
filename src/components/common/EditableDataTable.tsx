@@ -11,8 +11,7 @@ import {
   StyleSheet,
   RefreshControl,
   ScrollView,
-  Alert,
-} from 'react-native';
+  Alert } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { Icon } from '@/components/common/Icon';
 import { EditableCell } from './EditableCell';
@@ -67,8 +66,7 @@ export const EditableDataTable: React.FC<EditableTableProps> = ({
   showSaveButton = true,
   showAddButton = true,
   addButtonText = '新增記錄',
-  readOnly = false,
-}) => {
+  readOnly = false }) => {
   const [editingCell, setEditingCell] = useState<string | null>(null); // "id:field"
   const [pendingChanges, setPendingChanges] = useState<Map<string, CellEdit>>(new Map());
   const [isSaving, setIsSaving] = useState(false);
@@ -82,12 +80,10 @@ export const EditableDataTable: React.FC<EditableTableProps> = ({
     handleSort,
     toggleSelection,
     selectAll,
-    clearSelection,
-  } = useTableData(data, useMemo(() => ({ 
+    clearSelection } = useTableData(data, useMemo(() => ({ 
     filters,
     initialSortKey: externalSortConfig?.key,
-    initialSortDirection: externalSortConfig?.direction,
-  }), [JSON.stringify(filters), externalSortConfig?.key, externalSortConfig?.direction]));
+    initialSortDirection: externalSortConfig?.direction }), [JSON.stringify(filters), externalSortConfig?.key, externalSortConfig?.direction]));
 
   // 處理選擇變更
   const onSelectRef = useRef(onSelect);
@@ -147,8 +143,7 @@ export const EditableDataTable: React.FC<EditableTableProps> = ({
       value: formattedValue,
       originalValue,
       isValid,
-      error,
-    };
+      error };
 
     // 更新待儲存變更
     const newChanges = new Map(pendingChanges);
@@ -203,8 +198,7 @@ export const EditableDataTable: React.FC<EditableTableProps> = ({
       const changes = Array.from(pendingChanges.values()).map(change => ({
         id: change.id,
         field: change.field,
-        value: change.value,
-      }));
+        value: change.value }));
 
       await onSave(changes);
       setPendingChanges(new Map()); // 清除所有待儲存變更
@@ -515,8 +509,7 @@ export const EditableDataTable: React.FC<EditableTableProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
-  },
+    backgroundColor: '#F5F5F5' },
   saveBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -525,74 +518,60 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#FFEAA7',
-  },
+    borderBottomColor: '#FFEAA7' },
   saveBarText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#856404',
-  },
+    color: '#856404' },
   saveBarButtons: {
     flexDirection: 'row',
-    gap: 8,
-  },
+    gap: 8 },
   saveBarButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 6,
     minWidth: 60,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   discardButton: {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: '#DC3545',
-  },
+    borderColor: '#DC3545' },
   discardButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#DC3545',
-  },
+    color: '#DC3545' },
   saveButton: {
-    backgroundColor: '#28A745',
-  },
+    backgroundColor: '#28A745' },
   saveButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFFFFF',
-  },
+    color: '#FFFFFF' },
   searchContainer: {
     padding: 16,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E3E1DC',
-  },
+    borderBottomColor: '#E3E1DC' },
   tableContainer: {
-    minWidth: '100%',
-  },
+    minWidth: '100%' },
   header: {
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
     borderBottomColor: '#E3E1DC',
     paddingVertical: 12,
-    paddingHorizontal: 16,
-  },
+    paddingHorizontal: 16 },
   headerCell: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
     paddingVertical: 4,
-    minWidth: 120,
-  },
+    minWidth: 120 },
   headerText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   editableHeaderText: {
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   row: {
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
@@ -601,47 +580,37 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 16,
     minHeight: 60,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   selectedRow: {
-    backgroundColor: '#F0F0F0',
-  },
+    backgroundColor: '#F0F0F0' },
   cell: {
     justifyContent: 'center',
     minWidth: 120,
-    paddingVertical: 8,
-  },
+    paddingVertical: 8 },
   changedCell: {
-    backgroundColor: '#E8F4FD',
-  },
+    backgroundColor: '#E8F4FD' },
   errorCell: {
-    backgroundColor: '#FFE5E5',
-  },
+    backgroundColor: '#FFE5E5' },
   cellContent: {
     flex: 1,
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   cellText: {
     fontSize: 16,
-    color: '#1A1A1A',
-  },
+    color: '#1A1A1A' },
   checkboxContainer: {
     width: 40,
     minWidth: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
-  },
+    marginRight: 12 },
   emptyContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 40,
-  },
+    paddingVertical: 40 },
   emptyText: {
     fontSize: 16,
-    color: '#7A7A7A',
-  },
+    color: '#7A7A7A' },
   savingIndicator: {
     position: 'absolute',
     top: 100,
@@ -649,17 +618,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#1A1A1A',
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 6,
-  },
+    borderRadius: 6 },
   savingText: {
     fontSize: 12,
-    color: '#FFFFFF',
-  },
+    color: '#FFFFFF' },
   addButtonContainer: {
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
-  },
+    borderBottomColor: '#F0F0F0' },
   emptyAddButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -668,11 +634,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 8,
-    marginTop: 16,
-  },
+    marginTop: 16 },
   emptyAddButtonText: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#FF5C00',
-  },
-});
+    color: '#FF5C00' } });

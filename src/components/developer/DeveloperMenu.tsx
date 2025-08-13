@@ -407,7 +407,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
@@ -429,7 +429,7 @@ const styles = StyleSheet.create({
     maxWidth: 320,
     backgroundColor: '#FFFFFF',
     shadowColor: '#000',
-    shadowOffset: { width: -2, height: 0 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: -2, height: 0 } }),
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5

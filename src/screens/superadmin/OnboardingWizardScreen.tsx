@@ -59,6 +59,4 @@ export const OnboardingWizardScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
-});
+    flex: 1 } });

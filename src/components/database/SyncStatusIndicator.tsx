@@ -92,37 +92,29 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'flex-end',
     paddingHorizontal: 16,
-    paddingVertical: 8,
-  },
+    paddingVertical: 8 },
   statusBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
-    gap: 6,
-  },
+    gap: 6 },
   statusText: {
     fontSize: 14,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   spinner: {
-    marginLeft: 4,
-  },
+    marginLeft: 4 },
   lastSyncText: {
     fontSize: 12,
     color: '#999',
-    marginTop: 4,
-  },
+    marginTop: 4 },
   errorContainer: {
     backgroundColor: '#ff444420',
     padding: 8,
     borderRadius: 4,
     marginTop: 4,
-    maxWidth: 200,
-  },
+    maxWidth: 200 },
   errorText: {
     fontSize: 12,
-    color: '#ff4444',
-  },
-});
+    color: '#ff4444' } });

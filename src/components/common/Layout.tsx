@@ -11,8 +11,7 @@ import {
   ViewStyle,
   StatusBar,
   KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
+  Platform } from 'react-native';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -29,8 +28,7 @@ export const Layout = ({
   style,
   contentStyle,
   keyboardAvoidingEnabled = false,
-  keyboardVerticalOffset = 0,
-}: LayoutProps) => {
+  keyboardVerticalOffset = 0 }: LayoutProps) => {
   const content = scrollable ? (
     <ScrollView
       style={styles.scrollView}
@@ -73,15 +71,10 @@ export const Layout = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
-  },
+    backgroundColor: '#ffffff' },
   scrollView: {
-    flex: 1,
-  },
+    flex: 1 },
   scrollContent: {
-    flexGrow: 1,
-  },
+    flexGrow: 1 },
   content: {
-    flex: 1,
-  },
-});
+    flex: 1 } });

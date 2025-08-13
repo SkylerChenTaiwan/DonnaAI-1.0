@@ -28,16 +28,14 @@ export function convertToTanStackColumns(
         id: col.key,
         header: col.title,
         cell: info => col.render!(info.getValue()),
-        enableSorting: col.sortable || false,
-      });
+        enableSorting: col.sortable || false });
     }
 
     return columnHelper.accessor(col.key, {
       id: col.key,
       header: col.title,
       cell: info => info.getValue() || '-',
-      enableSorting: col.sortable || false,
-    });
+      enableSorting: col.sortable || false });
   });
 }
 
@@ -60,8 +58,7 @@ export function createSelectColumn(): ColumnDef<TableRowData, any> {
         checked={row.getIsSelected()}
         onChange={row.getToggleSelectedHandler()}
       />
-    ),
-  });
+    ) });
 }
 
 /**
@@ -93,6 +90,5 @@ export function createActionsColumn(
           </button>
         )}
       </div>
-    ),
-  });
+    ) });
 }

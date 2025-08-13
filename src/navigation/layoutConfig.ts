@@ -97,8 +97,7 @@ export const LAYOUT_CONFIG = {
    */
   customLayout: [
     'MainTabs', // 使用 WebNavigator 或 MainTabNavigator
-  ],
-};
+  ] };
 
 /**
  * 檢查頁面是否需要側邊欄

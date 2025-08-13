@@ -26,8 +26,7 @@ export const TouchableOpacity: React.FC<TouchableOpacityProps> = ({
   children,
   accessibilityRole = 'button',
   accessibilityLabel,
-  testID,
-}) => {
+  testID }) => {
   const [isPressed, setIsPressed] = React.useState(false);
 
   // 轉換 React Native 樣式為 CSS
@@ -105,8 +104,7 @@ export const TouchableOpacity: React.FC<TouchableOpacityProps> = ({
     userSelect: 'none',
     WebkitTapHighlightColor: 'transparent',
     display: 'flex',
-    outline: 'none',
-  };
+    outline: 'none' };
 
   return (
     <button

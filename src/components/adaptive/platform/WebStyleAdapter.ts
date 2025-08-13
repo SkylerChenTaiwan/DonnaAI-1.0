@@ -68,8 +68,7 @@ export class WebStyleAdapter implements StyleAdapter {
       borderWidth: 'borderWidth',
       borderColor: 'borderColor',
       borderStyle: 'borderStyle',
-      zIndex: 'zIndex',
-    };
+      zIndex: 'zIndex' };
 
     // 直接映射
     if (directMappings[key]) {
@@ -112,13 +111,11 @@ export class WebStyleAdapter implements StyleAdapter {
       case 'marginHorizontal':
         return {
           marginLeft: this.convertSpacing(value),
-          marginRight: this.convertSpacing(value),
-        };
+          marginRight: this.convertSpacing(value) };
       case 'marginVertical':
         return {
           marginTop: this.convertSpacing(value),
-          marginBottom: this.convertSpacing(value),
-        };
+          marginBottom: this.convertSpacing(value) };
       case 'padding':
         return { padding: this.convertSpacing(value) };
       case 'paddingTop':
@@ -132,13 +129,11 @@ export class WebStyleAdapter implements StyleAdapter {
       case 'paddingHorizontal':
         return {
           paddingLeft: this.convertSpacing(value),
-          paddingRight: this.convertSpacing(value),
-        };
+          paddingRight: this.convertSpacing(value) };
       case 'paddingVertical':
         return {
           paddingTop: this.convertSpacing(value),
-          paddingBottom: this.convertSpacing(value),
-        };
+          paddingBottom: this.convertSpacing(value) };
 
       // 定位
       case 'position':
@@ -244,8 +239,7 @@ export class WebStyleAdapter implements StyleAdapter {
       2: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
       3: '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)',
       4: '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',
-      5: '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)',
-    };
+      5: '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)' };
     
     return elevationMap[elevation] || elevationMap[Math.min(5, Math.max(1, Math.round(elevation)))];
   }
@@ -263,8 +257,7 @@ export class WebStyleAdapter implements StyleAdapter {
       shadowOffset,
       shadowOpacity,
       shadowRadius,
-      elevation,
-    } = style as any;
+      elevation } = style as any;
 
     // 處理 iOS 樣式陰影
     if (shadowColor || shadowOffset || shadowOpacity || shadowRadius) {

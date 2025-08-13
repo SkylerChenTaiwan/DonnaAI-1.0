@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions , Platform } from 'react-native';
 import { PolarChart, Pie } from 'victory-native';
 import { DesignSystem } from '@/theme/designSystem';
 import { PieDataPoint, toVictoryPolar, formatPercentage } from '@/types/charts';
@@ -38,14 +38,12 @@ export const PieChart: React.FC<PieChartProps> = ({
     '#1ABC9C',
     '#F39C12',
   ],
-  showPercentage = true,
-}) => {
+  showPercentage = true }) => {
   const total = data.reduce((sum, item) => sum + item.value, 0);
   const pieData = data.map((item, index) => ({
     ...item,
     percentage: formatPercentage(item.value / total),
-    color: item.color || colorScale[index % colorScale.length],
-  }));
+    color: item.color || colorScale[index % colorScale.length] }));
   
   // 轉換為 Victory Native 格式
   const victoryData = toVictoryPolar(pieData);
@@ -94,39 +92,31 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    ...(Platform.OS === 'web' ? {} : { shadowOffset: { width: 0, height: 2 } }),
     shadowOpacity: 0.05,
     shadowRadius: 4,
-    elevation: 2,
-  },
+    elevation: 2 },
   title: {
     ...DesignSystem.typography.h3,
     color: DesignSystem.colors.text.primary,
     marginBottom: 16,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   chartContainer: {
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   legend: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
     marginTop: 16,
-    gap: 12,
-  },
+    gap: 12 },
   legendItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-  },
+    gap: 6 },
   legendColor: {
     width: 12,
     height: 12,
-    borderRadius: 6,
-  },
+    borderRadius: 6 },
   legendText: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.text.secondary,
-  },
-});
+    color: DesignSystem.colors.text.secondary } });

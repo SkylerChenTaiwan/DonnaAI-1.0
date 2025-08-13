@@ -11,8 +11,7 @@ import {
   ColumnDef,
   SortingState,
   RowSelectionState,
-  ColumnFiltersState,
-} from '@tanstack/react-table';
+  ColumnFiltersState } from '@tanstack/react-table';
 import { TanStackTableColumn, TableData, UseNotionTableReturn } from '../../shared/tableTypes';
 
 interface UseNotionTableProps<T extends TableData> {
@@ -30,8 +29,7 @@ export const useNotionTable = <T extends TableData>({
   enableRowSelection = true,
   enableMultiRowSelection = true,
   enableSorting = true,
-  enableFiltering = true,
-}: UseNotionTableProps<T>): UseNotionTableReturn<T> => {
+  enableFiltering = true }: UseNotionTableProps<T>): UseNotionTableReturn<T> => {
   // 狀態管理
   const [selectedRows, setSelectedRows] = useState<RowSelectionState>({});
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -46,8 +44,7 @@ export const useNotionTable = <T extends TableData>({
       cell: col.cell,
       size: col.size,
       enableSorting: col.enableSorting !== false && enableSorting,
-      enableResizing: col.enableResizing !== false,
-    }));
+      enableResizing: col.enableResizing !== false }));
   }, [columns, enableSorting]);
 
   // 建立 TanStack Table 實例
@@ -57,8 +54,7 @@ export const useNotionTable = <T extends TableData>({
     state: {
       rowSelection: selectedRows,
       sorting,
-      columnFilters,
-    },
+      columnFilters },
     onRowSelectionChange: setSelectedRows,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -67,14 +63,12 @@ export const useNotionTable = <T extends TableData>({
     getFilteredRowModel: enableFiltering ? getFilteredRowModel() : undefined,
     enableRowSelection,
     enableMultiRowSelection,
-    getRowId: (row) => row.id,
-  });
+    getRowId: (row) => row.id });
 
   return {
     table,
     selectedRows,
     setSelectedRows,
     sorting,
-    setSorting,
-  };
+    setSorting };
 };
