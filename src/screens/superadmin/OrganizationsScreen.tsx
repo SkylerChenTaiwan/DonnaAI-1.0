@@ -163,7 +163,9 @@ export const OrganizationsScreen: React.FC = () => {
     <TouchableOpacity
       style={[
         styles.orgCard,
-        // 運行時添加平台特定樣式
+        // 運行時強制添加白色背景（確保覆蓋任何其他樣式）
+        { backgroundColor: '#FFFFFF' },
+        // Web 平台特定樣式
         Platform.OS === 'web' && styles.orgCardWeb
       ]}
       onPress={() => handleOrganizationPress(item)}

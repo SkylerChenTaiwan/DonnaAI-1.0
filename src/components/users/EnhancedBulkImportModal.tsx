@@ -829,7 +829,7 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DesignSystem.colors.background.primary },
+    backgroundColor: '#FFFFFF' },  // 直接使用白色，避免 DesignSystem 問題
   header: {
     flexDirection: 'row',
     alignItems: 'center',
