@@ -114,6 +114,10 @@ const iconMap: Record<string, React.ComponentType<any>> = {
   'person-circle': IoniconsWeb.PersonCircleIcon,
   'person-outline': IoniconsWeb.PersonOutlineIcon,
   
+  // Media
+  'play-circle-outline': IoniconsWeb.PlayCircleOutlineIcon || IoniconsWeb.PlayIcon,
+  'pause-circle-outline': IoniconsWeb.PauseCircleOutlineIcon || IoniconsWeb.PauseIcon,
+  
   // Misc
   'flag': IoniconsWeb.FlagIcon,
   'git-branch-outline': IoniconsWeb.GitBranchOutlineIcon,

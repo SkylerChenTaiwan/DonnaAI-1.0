@@ -689,6 +689,7 @@ export const OrganizationDetailScreen: React.FC = () => {
         animationType="slide"
         size="fullscreen"
         presentationStyle="fullScreen"
+        onClose={() => setShowImportWizard(false)}
       >
         <ImportWizard
           organizationId={organizationId}

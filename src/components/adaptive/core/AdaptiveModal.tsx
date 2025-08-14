@@ -388,7 +388,6 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
         aria-modal="true"
         aria-label={accessibilityLabel}
         data-testid={testID}
-        {...props}
       >
         <div ref={ref} style={contentStyleFinal}>
           {(title || subtitle || showCloseButton) && (

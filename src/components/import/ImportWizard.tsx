@@ -725,25 +725,6 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
             style={styles.closeButton}
           />
         )}
-        
-        {/* 資料清理按鈕 */}
-        <AdaptiveButton
-          variant="outline"
-          style={StyleSheet.flatten([styles.cleanupButton, {
-            backgroundColor: withAlpha(colors.status.warning, 0.125),
-            borderColor: colors.status.warning,
-            opacity: cleanupState.isCleaningUp ? 0.6 : 1
-          }])}
-          onPress={handleCleanupDuplicates}
-          disabled={cleanupState.isCleaningUp || wizardState.importProgress.isImporting}
-          icon={<MaterialIcon 
-            name={cleanupState.isCleaningUp ? "hourglass-empty" : "cleaning-services"} 
-            size={16} 
-            color={colors.status.warning} 
-          />}
-          iconPosition="left"
-          title={cleanupState.isCleaningUp ? '清理中...' : '清理重複資料'}
-        />
       </View>
 
       {/* 進度指示器 */}
@@ -834,7 +815,9 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF'  // 確保有背景色
+    backgroundColor: '#FFFFFF',  // 確保有背景色
+    maxHeight: '95vh',
+    overflow: 'hidden'
   },
   header: {
     paddingHorizontal: 20,
@@ -900,8 +883,10 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   content: {
-    flex: 1,
-    paddingHorizontal: 20
+    minHeight: 400,
+    maxHeight: '70vh',
+    paddingHorizontal: 20,
+    paddingBottom: 20
   },
   footer: {
     borderTopWidth: 1,

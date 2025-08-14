@@ -278,7 +278,6 @@ const WebButton = forwardRef<HTMLButtonElement, AdaptiveButtonProps>(
         data-testid={testID}
         aria-label={accessibilityLabel}
         aria-disabled={disabled || loading}
-        {...props}
       >
         {renderContent()}
       </button>
