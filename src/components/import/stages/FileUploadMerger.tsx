@@ -797,17 +797,18 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 12
+    paddingTop: 8,
+    paddingBottom: 8
   },
   uploadArea: {
     borderWidth: 2,
     borderStyle: 'dashed',
     borderRadius: 12,
-    paddingVertical: 20,
+    paddingVertical: 16,
     paddingHorizontal: 24,
     alignItems: 'center',
-    marginBottom: 16,
-    height: 100,
+    marginBottom: 12,
+    height: 80,
     justifyContent: 'center'
   },
   uploadText: {
@@ -945,12 +946,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
     borderRadius: 8,
     gap: 8,
-    marginBottom: 12,
-    height: 40
+    marginBottom: 8,
+    height: 36
   },
   mergeButtonText: {
     fontSize: 14,

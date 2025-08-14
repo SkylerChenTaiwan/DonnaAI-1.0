@@ -882,12 +882,12 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: 20,
-    paddingBottom: 20
+    paddingBottom: 0
   },
   footer: {
     borderTopWidth: 1,
     paddingHorizontal: 20,
-    paddingVertical: 12
+    paddingVertical: 10
   },
   footerButtons: {
     flexDirection: 'row',
