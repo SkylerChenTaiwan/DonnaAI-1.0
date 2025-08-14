@@ -157,7 +157,8 @@ export const NotionEditor = {
     style: 'solid' as const },
   background: '#FFFFFF',
   fontSize: 14,
-  padding: '2px 4px',
+  paddingVertical: 2,
+  paddingHorizontal: 4,
   borderRadius: 0 } as const;
 
 // Default configuration values

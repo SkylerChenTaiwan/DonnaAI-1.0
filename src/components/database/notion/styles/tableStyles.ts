@@ -113,13 +113,13 @@ export const tableStyles = StyleSheet.create({
     fontSize: NotionEditor.fontSize,
     fontFamily: NotionTypography.fontFamily,
     color: NotionColors.text.default,
-    padding: NotionEditor.padding,
+    paddingVertical: NotionEditor.paddingVertical,
+    paddingHorizontal: NotionEditor.paddingHorizontal,
     margin: 0,
     borderWidth: NotionEditor.outline.width,
     borderColor: NotionEditor.outline.color,
     borderRadius: NotionEditor.borderRadius,
-    outlineWidth: 0,
-    outlineStyle: 'none' as any,
+    // outline 在 React Native 中不支援，只在 Web 中使用
     backgroundColor: NotionEditor.background },
   
   // Select/Tag styles

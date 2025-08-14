@@ -1308,7 +1308,7 @@ const styles = StyleSheet.create({
   // syncStatusContainer 已移除 - 唯讀模式不需要
   databaseContainer: {
     flex: 1,
-    padding: '0 96px' },
+    paddingHorizontal: 96 },
   pageHeader: {
     paddingTop: 40,
     paddingBottom: 16 },
