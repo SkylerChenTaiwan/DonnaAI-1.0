@@ -8,6 +8,8 @@ import type { ViewStyle } from 'react-native';
 import type { CSSProperties } from 'react';
 import { PlatformAdapter } from '../platform/PlatformAdapter';
 import { DesignSystem } from '../../../theme/designSystem';
+import { StylePriority } from '../styles/types';
+import type { StyleConfig } from '../styles/types';
 import AdaptiveView from './AdaptiveView';
 import AdaptiveText from './AdaptiveText';
 import AdaptiveButton from './AdaptiveButton';
@@ -156,6 +158,7 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
   }, ref) => {
     const platformAdapter = PlatformAdapter.getInstance();
     const styleAdapter = platformAdapter.getStyleAdapter();
+    const styleProcessor = platformAdapter.getStyleProcessor();
     
     // 處理 ESC 鍵關閉
     useEffect(() => {
@@ -225,7 +228,8 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
     const contentStyleFinal = useMemo(() => {
       const dimensions = getModalDimensions(size);
       
-      let finalStyle: CSSProperties = {
+      // 預設樣式
+      const defaultStyle: CSSProperties = {
         backgroundColor: '#FFFFFF',  // 強制使用白色背景
         borderRadius: size === 'fullscreen' ? 8 : DesignSystem.borderRadius.lg,
         boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)',
@@ -236,25 +240,58 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
         position: 'relative',
         transform: visible ? 'scale(1)' : 'scale(0.9)',
         transition: animationType === 'fade' ? 'transform 200ms ease-in-out' : 'none',
-        margin: size === 'fullscreen' ? '20px auto' : '0',
-        ...dimensions };
+        margin: size === 'fullscreen' ? '20px auto' : '0'
+      };
       
+      // 使用 StylePriorityManager 處理樣式優先級
+      const styleConfigs: StyleConfig[] = [
+        { 
+          priority: StylePriority.DEFAULT, 
+          style: defaultStyle,
+          source: 'modal-defaults'
+        },
+        { 
+          priority: StylePriority.SIZE_PRESET, 
+          style: dimensions,
+          source: `size-${size}`
+        }
+      ];
+      
+      // 添加用戶樣式
       if (style) {
-        const convertedStyle = styleAdapter.adaptStyle(style as any, webStyle);
-        finalStyle = { ...finalStyle, ...convertedStyle };
+        styleConfigs.push({
+          priority: StylePriority.USER_STYLE,
+          style: style as any,
+          source: 'user-style'
+        });
       }
       
+      // 添加 Web 特定樣式
       if (webStyle) {
-        finalStyle = { ...finalStyle, ...webStyle };
+        styleConfigs.push({
+          priority: StylePriority.PLATFORM_STYLE,
+          style: webStyle,
+          source: 'web-style'
+        });
       }
       
+      // 添加內容樣式
       if (contentStyle) {
-        const convertedContentStyle = styleAdapter.adaptStyle(contentStyle as any);
-        finalStyle = { ...finalStyle, ...convertedContentStyle };
+        styleConfigs.push({
+          priority: StylePriority.CONTENT_STYLE,
+          style: contentStyle as any,
+          source: 'content-style'
+        });
       }
       
-      return finalStyle;
-    }, [style, webStyle, contentStyle, styleAdapter, size, visible, animationType]);
+      // 合併樣式
+      const result = styleProcessor.mergeStyles(styleConfigs, {
+        platform: 'web',
+        debug: (typeof __DEV__ !== 'undefined' && __DEV__) || false
+      });
+      
+      return result.style;
+    }, [style, webStyle, contentStyle, styleProcessor, size, visible, animationType]);
     
     // 標題區域樣式
     const headerStyleFinal = useMemo(() => {
@@ -415,6 +452,7 @@ const NativeModal = forwardRef<any, AdaptiveModalProps>(
     const { Modal, ScrollView, TouchableOpacity, SafeAreaView } = require('react-native');
     const platformAdapter = PlatformAdapter.getInstance();
     const styleAdapter = platformAdapter.getStyleAdapter();
+    const styleProcessor = platformAdapter.getStyleProcessor();
     
     // 覆蓋層樣式
     const overlayStyleFinal = useMemo(() => {
@@ -437,28 +475,63 @@ const NativeModal = forwardRef<any, AdaptiveModalProps>(
     const contentStyleFinal = useMemo(() => {
       const dimensions = getModalDimensions(size);
       
-      let finalStyle = {
+      // 預設樣式
+      const defaultStyle = {
         backgroundColor: DesignSystem.colors.background.card,
         borderRadius: size === 'fullscreen' ? 0 : DesignSystem.borderRadius.lg,
         maxHeight: size === 'fullscreen' ? '100%' : '90%',
-        overflow: 'hidden' as const,
-        ...dimensions };
+        overflow: 'hidden' as const
+      };
       
+      // 使用 StylePriorityManager 處理樣式優先級
+      const styleConfigs: StyleConfig[] = [
+        { 
+          priority: StylePriority.DEFAULT, 
+          style: defaultStyle,
+          source: 'modal-defaults'
+        },
+        { 
+          priority: StylePriority.SIZE_PRESET, 
+          style: dimensions,
+          source: `size-${size}`
+        }
+      ];
+      
+      // 添加用戶樣式
       if (style) {
-        finalStyle = { ...finalStyle, ...style };
+        styleConfigs.push({
+          priority: StylePriority.USER_STYLE,
+          style: style,
+          source: 'user-style'
+        });
       }
       
+      // 添加 Native 特定樣式
       if (nativeStyle) {
-        finalStyle = { ...finalStyle, ...nativeStyle };
+        styleConfigs.push({
+          priority: StylePriority.PLATFORM_STYLE,
+          style: nativeStyle,
+          source: 'native-style'
+        });
       }
       
+      // 添加內容樣式
       if (contentStyle) {
-        const convertedStyle = styleAdapter.adaptStyle(contentStyle);
-        finalStyle = { ...finalStyle, ...convertedStyle };
+        styleConfigs.push({
+          priority: StylePriority.CONTENT_STYLE,
+          style: contentStyle,
+          source: 'content-style'
+        });
       }
       
-      return styleAdapter.adaptStyle(finalStyle);
-    }, [style, nativeStyle, contentStyle, styleAdapter, size]);
+      // 合併樣式
+      const result = styleProcessor.mergeStyles(styleConfigs, {
+        platform: 'native',
+        debug: (typeof __DEV__ !== 'undefined' && __DEV__) || false
+      });
+      
+      return result.style;
+    }, [style, nativeStyle, contentStyle, styleProcessor, size]);
     
     // 標題區域樣式
     const headerStyleFinal = useMemo(() => {

@@ -119,6 +119,7 @@
 | 113v | complete-adaptive-components.md | ✅ 已完成 | 完成剩餘 Adaptive 元件 - 12 個核心元件、達到 20+ 目標、覆蓋 80% 場景 | 2025-08-13 |
 | 114v | complete-adaptive-component-migration.md | ✅ 已完成 | 全面 Adaptive 元件遷移 - 批量替換 88 個檔案、解決 Web UI 問題 | 2025-08-13 |
 | 115v | fix-adaptive-button-and-css-conflicts.md | ✅ 已完成 | 修復 AdaptiveButton 崩潰和 CSS 破版問題 - getButtonStyle 錯誤、NotionDatabaseV4.css 衝突 | 2025-08-14 |
+| 116  | style-system-conflict-resolution.md | 📋 待執行 | 解決 Adaptive 元件樣式系統衝突問題 - 統一樣式優先級、重構樣式處理邏輯 | - |
 
 ## 命名規則
 

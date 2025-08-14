@@ -4,6 +4,8 @@
  */
 
 import { Platform } from 'react-native';
+import { StylePriorityManager } from '../styles/StylePriorityManager';
+import type { StyleProcessor } from '../styles/types';
 
 export interface StyleAdapter {
   adaptStyle(style: any, platformSpecificStyle?: any): any;
@@ -29,6 +31,7 @@ export class PlatformAdapter {
   private static instance: PlatformAdapter;
   private _platformInfo: PlatformInfo;
   private _styleAdapter: StyleAdapter | null = null;
+  private _styleProcessor: StyleProcessor | null = null;
 
   private constructor() {
     this._platformInfo = this.detectPlatform();
@@ -217,5 +220,23 @@ export class PlatformAdapter {
     if (this.isDesktop) return '(min-width: 1024px)';
     
     return '';
+  }
+
+  /**
+   * 取得樣式處理器
+   * 使用統一的 StylePriorityManager 來處理樣式優先級
+   */
+  getStyleProcessor(): StyleProcessor {
+    if (!this._styleProcessor) {
+      this._styleProcessor = StylePriorityManager.getInstance();
+    }
+    return this._styleProcessor;
+  }
+
+  /**
+   * 設定樣式處理器（用於測試或自定義實現）
+   */
+  setStyleProcessor(processor: StyleProcessor): void {
+    this._styleProcessor = processor;
   }
 }

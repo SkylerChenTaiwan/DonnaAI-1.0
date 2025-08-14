@@ -211,7 +211,7 @@ export class WebStyleAdapter implements StyleAdapter {
 
       default:
         // 未知屬性，記錄但不轉換
-        if (__DEV__) {
+        if ((typeof __DEV__ !== 'undefined' && __DEV__) || process.env.NODE_ENV === 'development') {
           console.warn(`WebStyleAdapter: Unknown style property '${key}'`);
         }
         return null;
