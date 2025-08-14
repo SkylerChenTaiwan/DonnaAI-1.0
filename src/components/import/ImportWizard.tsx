@@ -815,7 +815,9 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#FFFFFF',  // 確保有背景色
-    height: '100%'
+    height: '100%',
+    flex: 1,
+    flexDirection: 'column'
   },
   header: {
     paddingHorizontal: 20,
@@ -881,7 +883,9 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   content: {
+    flex: 1,
     paddingHorizontal: 20,
+    paddingTop: 0,
     paddingBottom: 0
   },
   footer: {
