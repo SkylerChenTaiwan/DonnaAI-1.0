@@ -6,7 +6,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { View,
   TouchableOpacity,
   StyleSheet,
-  TextInputProps  } from 'react-native';
+  TextInputProps,
+  Platform  } from 'react-native';
 import {
   AdaptiveInput
 } from '@/components/adaptive';
@@ -97,10 +98,10 @@ export const SearchBar = ({
         value={localValue}
         onChangeText={handleChangeText}
         placeholder={placeholder}
-        placeholderTextColor="#7A7A7A"
-        returnKeyType="search"
+        {...(Platform.OS !== 'web' && { placeholderTextColor: "#7A7A7A" })}
+        {...(Platform.OS !== 'web' && { returnKeyType: "search" })}
         autoCapitalize="none"
-        autoCorrect={false}
+        autoCorrect={Platform.OS === 'web' ? "false" : false}
         {...props}
       />
       {localValue.length > 0 && (

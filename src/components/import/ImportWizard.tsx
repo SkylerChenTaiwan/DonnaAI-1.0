@@ -731,9 +731,9 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
       {renderProgressIndicator()}
 
       {/* 階段內容 */}
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <View style={styles.content}>
         {renderStageContent()}
-      </ScrollView>
+      </View>
 
       {/* 底部按鈕 */}
       <View style={StyleSheet.flatten([styles.footer, { borderTopColor: colors.gray200 }])}>
