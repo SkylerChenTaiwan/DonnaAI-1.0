@@ -3,9 +3,8 @@
  */
 
 import React, { useCallback, useMemo, useState, useRef, useEffect } from 'react';
-// CSS 現在只在 Notion 元件內引入
-import '../web/styles/NotionWrapper.css';
-import '../web/styles/NotionDatabaseV4.css';
+// CSS 已移至動態載入，避免全域污染
+import { loadNotionStyles } from './loadNotionStyles';
 import { View, Text, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 import { 
   NotionTableProps, 
@@ -66,6 +65,18 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
   onRowEdit,
   onRowDelete }) => {
   // 除錯日誌（移到元件內部）
+  
+  // 在 Web 平台動態載入 Notion 樣式
+  useEffect(() => {
+    if (Platform.OS === 'web') {
+      loadNotionStyles();
+    }
+    
+    return () => {
+      // 元件卸載時可選擇性清理樣式
+      // unloadNotionStyles();
+    };
+  }, []);
   
   // 表格 ID
   const tableId = useMemo(() => `notion-table-${Math.random().toString(36).substr(2, 9)}`, []);
@@ -658,7 +669,7 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
     const dbInfo = getDatabaseInfo(activeTab);
     
     return React.createElement('div', 
-      { className: 'notion-database-wrapper' },
+      { className: 'notion-view notion-database-wrapper' },
       
       React.createElement('div', 
         { className: 'notion-database-container' },

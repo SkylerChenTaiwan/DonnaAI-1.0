@@ -17,9 +17,7 @@ import { SortPanel } from './components/SortPanel';
 import { GroupPanel } from './components/GroupPanel';
 import { ColumnManager } from './components/ColumnManager';
 import { SearchBar } from './components/SearchBar';
-// CSS 現在只在 Notion 元件內引入
-import '../web/styles/NotionWrapper.css';
-import '../web/styles/NotionDatabaseV4.css';
+// CSS 已移至動態載入，避免全域污染
 
 interface NotionTableV5Props {
   data: any[];
