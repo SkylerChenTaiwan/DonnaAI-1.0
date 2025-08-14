@@ -148,12 +148,12 @@ export const OrganizationsScreen: React.FC = () => {
   const getStatusColor = (status?: string) => {
     switch (status) {
       case 'active':
-        return DesignSystem.colors.success;
+        return DesignSystem.colors.gray600;  // 深灰色代替綠色
       case 'suspended':
-        return DesignSystem.colors.warning;
+        return DesignSystem.colors.gray500;  // 中灰色代替橙色
       case 'cancelled':
       case 'expired':
-        return DesignSystem.colors.error;
+        return DesignSystem.colors.gray400;  // 淺灰色代替紅色
       default:
         return DesignSystem.colors.gray500;
     }
@@ -214,7 +214,7 @@ export const OrganizationsScreen: React.FC = () => {
           <Icon
             name={item.status === 'active' ? 'pause-circle-outline' : 'play-circle-outline'}
             size={20}
-            color={item.status === 'active' ? DesignSystem.colors.warning : DesignSystem.colors.success}
+            color={DesignSystem.colors.gray600}  // 統一使用灰色
           />
           <Text style={StyleSheet.flatten([
             styles.actionLabel,
@@ -438,18 +438,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: DesignSystem.colors.border.light },
   suspendButton: {
-    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.063),
-    borderColor: withAlpha(DesignSystem.colors.warning, 0.188) },
+    backgroundColor: withAlpha(DesignSystem.colors.gray500, 0.063),
+    borderColor: withAlpha(DesignSystem.colors.gray500, 0.188) },
   activateButton: {
-    backgroundColor: withAlpha(DesignSystem.colors.success, 0.063),
-    borderColor: withAlpha(DesignSystem.colors.success, 0.188) },
+    backgroundColor: withAlpha(DesignSystem.colors.gray600, 0.063),
+    borderColor: withAlpha(DesignSystem.colors.gray600, 0.188) },
   actionLabel: {
     ...DesignSystem.typography.caption,
     fontWeight: '500' },
   suspendLabel: {
-    color: DesignSystem.colors.warning },
+    color: DesignSystem.colors.gray600 },
   activateLabel: {
-    color: DesignSystem.colors.success },
+    color: DesignSystem.colors.gray600 },
   separator: {
     height: DesignSystem.spacing.md },
   emptyContainer: {

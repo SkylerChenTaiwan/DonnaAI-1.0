@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
   orgRevenue: {
     fontSize: 16,
     fontWeight: '700',
-    color: DesignSystem.colors.success },
+    color: DesignSystem.colors.gray700 },  // 深灰色代替綠色
   orgPlan: {
     fontSize: 14,
     color: DesignSystem.colors.text.secondary },
