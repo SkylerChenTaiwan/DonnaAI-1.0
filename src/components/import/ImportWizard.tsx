@@ -883,8 +883,6 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   content: {
-    minHeight: 400,
-    maxHeight: '70vh',
     paddingHorizontal: 20,
     paddingBottom: 20
   },
