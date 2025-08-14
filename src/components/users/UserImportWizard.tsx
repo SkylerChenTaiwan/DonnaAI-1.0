@@ -444,8 +444,15 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
     <AdaptiveModal
       visible={visible}
       animationType="slide"
-      presentationStyle="pageSheet"
+      presentationStyle={Platform.OS === 'web' ? 'fullScreen' : 'pageSheet'}
       onRequestClose={handleClose}
+      webStyle={{
+        width: '90%',
+        maxWidth: '1200px',
+        height: '90%',
+        maxHeight: '800px',
+        margin: 'auto'
+      }}
     >
       <View style={styles.container}>
         {/* Header */}
@@ -670,6 +677,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     gap: DesignSystem.spacing.md },
   footerButton: {
-    minWidth: 100 } });
+    minWidth: 100,
+    height: 40,
+    paddingVertical: 10 } });
 
 export default UserImportWizard;
