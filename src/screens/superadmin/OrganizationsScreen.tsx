@@ -159,31 +159,13 @@ export const OrganizationsScreen: React.FC = () => {
     }
   };
 
-  const renderOrganizationItem = ({ item }: { item: Organization }) => {
-    if (Platform.OS === 'web') {
-      // Web 平台使用原生 div 和內聯樣式
-      return (
-        <div
-          onClick={() => handleOrganizationPress(item)}
-          style={{
-            backgroundColor: '#FFFFFF',
-            borderRadius: '8px',
-            padding: '16px',
-            marginBottom: '12px',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-            border: '1px solid #E3E3E2',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.15)';
-            e.currentTarget.style.transform = 'translateY(-2px)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
-            e.currentTarget.style.transform = 'translateY(0)';
-          }}
-        >
+  const renderOrganizationItem = ({ item }: { item: Organization }) => (
+    <TouchableOpacity
+      style={styles.orgCard}
+      onPress={() => handleOrganizationPress(item)}
+      activeOpacity={0.7}
+      disabled={false}
+    >
       <View style={styles.orgHeader}>
         <View style={styles.orgInfo}>
           <Text style={styles.orgName}>{item.name}</Text>
@@ -238,73 +220,8 @@ export const OrganizationsScreen: React.FC = () => {
           </Text>
         </TouchableOpacity>
       </View>
-        </div>
-      );
-    }
-    
-    // Native 平台使用原有的 TouchableOpacity
-    return (
-      <TouchableOpacity
-        style={styles.orgCard}
-        onPress={() => handleOrganizationPress(item)}
-        activeOpacity={0.7}
-        disabled={false}
-      >
-        <View style={styles.orgHeader}>
-          <View style={styles.orgInfo}>
-            <Text style={styles.orgName}>{item.name}</Text>
-            <Text style={styles.orgPlan}>{(item.subscriptionPlan || 'basic').toUpperCase()}</Text>
-          </View>
-          <View style={StyleSheet.flatten([styles.statusBadge, { backgroundColor: getStatusColor(item.status) }])}>
-            <Text style={styles.statusText}>{item.status || 'active'}</Text>
-          </View>
-        </View>
-
-        <View style={styles.orgDetails}>
-          <View style={styles.detailRow}>
-            <Icon name="people-outline" size={16} color={DesignSystem.colors.gray600} />
-            <Text style={styles.detailText}>
-              {item.maxUsers || 0} 用戶
-            </Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Icon name="time-outline" size={16} color={DesignSystem.colors.gray600} />
-            <Text style={styles.detailText}>
-              {formatDate(item.createdAt || new Date())}
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.orgActions}>
-          <TouchableOpacity
-            style={StyleSheet.flatten([
-              styles.actionButton,
-              item.status === 'active' ? styles.suspendButton : styles.activateButton
-            ])}
-            onPress={(e) => {
-              if (Platform.OS !== 'web') {
-                e.stopPropagation();
-              }
-              handleToggleStatus(item);
-            }}
-            activeOpacity={0.7}
-          >
-            <Icon
-              name={item.status === 'active' ? 'pause-circle-outline' : 'play-circle-outline'}
-              size={18}
-              color={DesignSystem.colors.text.inverse}
-            />
-            <Text style={StyleSheet.flatten([
-              styles.actionLabel,
-              item.status === 'active' ? styles.suspendLabel : styles.activateLabel
-            ])}>
-              {item.status === 'active' ? '停用' : '啟用'}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
-    );
-  };
+    </TouchableOpacity>
+  );
 
   if (isLoading) {
     const loadingContent = <LoadingSpinner message="載入組織列表..." />;
@@ -446,10 +363,24 @@ const styles = StyleSheet.create({
   listContent: {
     padding: DesignSystem.spacing.md },
   orgCard: {
-    backgroundColor: DesignSystem.colors.background.surface,
-    borderRadius: DesignSystem.borderRadius.md,
-    padding: DesignSystem.spacing.md,
-    ...DesignSystem.shadows.sm },
+    backgroundColor: '#FFFFFF',  // 明確設定白色背景
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 12,
+    // Web 平台的陰影
+    ...(Platform.OS === 'web' ? {
+      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+      border: '1px solid #E3E3E2',
+    } : {
+      // Native 平台的陰影
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 2,
+      borderWidth: 1,
+      borderColor: '#E3E3E2',
+    }) },
   orgHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
