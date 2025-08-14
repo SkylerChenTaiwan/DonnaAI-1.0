@@ -4,7 +4,6 @@
  */
 
 import React, { forwardRef, useMemo, useState, useCallback } from 'react';
-import { Platform } from 'react-native';
 import type { TextStyle, ViewStyle } from 'react-native';
 import type { CSSProperties } from 'react';
 import { PlatformAdapter } from '../platform/PlatformAdapter';
@@ -512,9 +511,9 @@ const NativeInput = forwardRef<any, AdaptiveInputProps>(
             autoFocus={autoFocus}
             secureTextEntry={secureTextEntry}
             autoCapitalize={autoCapitalize || 'none'}
-            autoCorrect={Platform.OS === 'web' ? autoCorrect?.toString() : autoCorrect}
+            autoCorrect={platformAdapter.isWeb ? autoCorrect?.toString() : autoCorrect}
             keyboardType={getKeyboardType() as any}
-            {...(Platform.OS !== 'web' && { returnKeyType })}
+            {...(!platformAdapter.isWeb && { returnKeyType })}
             onChangeText={onChangeText}
             onFocus={handleFocus}
             onBlur={handleBlur}
@@ -523,7 +522,7 @@ const NativeInput = forwardRef<any, AdaptiveInputProps>(
             accessible={accessible !== false}
             accessibilityLabel={accessibilityLabel}
             accessibilityHint={accessibilityHint}
-            {...(Platform.OS !== 'web' && { placeholderTextColor: DesignSystem.colors.text.tertiary })}
+            {...(!platformAdapter.isWeb && { placeholderTextColor: DesignSystem.colors.text.tertiary })}
           />
           
           {rightIcon && (

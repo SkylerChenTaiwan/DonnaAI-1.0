@@ -797,7 +797,6 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     paddingVertical: 20
   },
   uploadArea: {
