@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: DesignSystem.colors.text.secondary },
   required: {
-    color: DesignSystem.colors.status.error,
+    color: DesignSystem.colors.error,
     fontWeight: '600' },
   selectContainer: {
     position: 'relative',
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     minHeight: 48,
     justifyContent: 'center' },
   selectError: {
-    borderColor: DesignSystem.colors.status.error },
+    borderColor: DesignSystem.colors.error },
   picker: {
     height: 48,
     color: DesignSystem.colors.text.primary },
@@ -155,5 +155,5 @@ const styles = StyleSheet.create({
     pointerEvents: 'none' },
   error: {
     fontSize: 12,
-    color: DesignSystem.colors.status.error,
+    color: DesignSystem.colors.error,
     marginTop: 4 } });

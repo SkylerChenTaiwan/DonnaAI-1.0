@@ -29,9 +29,9 @@ export const StatCard: React.FC<StatCardProps> = ({
   const getChangeColor = () => {
     switch (changeType) {
       case 'positive':
-        return DesignSystem.colors.status.success;
+        return DesignSystem.colors.success;
       case 'negative':
-        return DesignSystem.colors.status.error;
+        return DesignSystem.colors.error;
       default:
         return DesignSystem.colors.text.secondary;
     }

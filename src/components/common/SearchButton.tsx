@@ -76,5 +76,5 @@ const styles = StyleSheet.create({
     // 無陰影 - 扁平化設計
     ...DesignSystem.shadows.none },
   disabled: {
-    backgroundColor: DesignSystem.colors.gray[400], // #A3A3A3
+    backgroundColor: DesignSystem.colors.gray400, // #A3A3A3
     opacity: 0.5 } });

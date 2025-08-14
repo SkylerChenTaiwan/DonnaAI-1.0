@@ -165,6 +165,6 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.secondary },
   errorText: {
     ...DesignSystem.typography.bodySmall,
-    color: DesignSystem.colors.status.error,
+    color: DesignSystem.colors.error,
     textAlign: 'center',
     marginBottom: 16 } });

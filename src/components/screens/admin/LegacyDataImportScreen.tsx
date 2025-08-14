@@ -560,7 +560,7 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
               <TouchableOpacity
                 onPress={() => setFiles(prev => ({ ...prev, [fileType.key]: undefined }))}
               >
-                <Icon name="close-circle" size={24} color={DesignSystem.colors.status.error} />
+                <Icon name="close-circle" size={24} color={DesignSystem.colors.error} />
               </TouchableOpacity>
             </View>
           ) : (
@@ -670,7 +670,7 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
       <Icon 
         name={importResult?.success ? "checkmark-circle" : "alert-circle"} 
         size={64} 
-        color={importResult?.success ? DesignSystem.colors.status.success : DesignSystem.colors.status.warning} 
+        color={importResult?.success ? DesignSystem.colors.success : DesignSystem.colors.warning} 
       />
       
       <Text style={styles.completeTitle}>
@@ -771,7 +771,7 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
       <View style={styles.switchContainer}>
         <Text style={styles.switchLabel}>使用舊版匯入</Text>
         <TouchableOpacity
-          style={StyleSheet.flatten([styles.switchButton, { backgroundColor: DesignSystem.colors.gray[500] }])}
+          style={StyleSheet.flatten([styles.switchButton, { backgroundColor: DesignSystem.colors.gray500 }])}
           onPress={() => setUseNewWizard(true)}
         >
           <Text style={styles.switchButtonText}>切換到新版</Text>
@@ -856,7 +856,7 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: DesignSystem.colors.background.secondary,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.gray[200] },
+    borderBottomColor: DesignSystem.colors.gray200 },
   switchLabel: {
     fontSize: 14,
     color: DesignSystem.colors.text.secondary },
@@ -881,7 +881,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: DesignSystem.colors.gray[200],
+    backgroundColor: DesignSystem.colors.gray200,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 8 },
@@ -889,7 +889,7 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.primary },
   stepLabel: {
     fontSize: 12,
-    color: DesignSystem.colors.gray[500] },
+    color: DesignSystem.colors.gray500 },
   stepLabelActive: {
     color: DesignSystem.colors.text.primary,
     fontWeight: '500' },
@@ -899,7 +899,7 @@ const styles = StyleSheet.create({
     left: '50%',
     right: '-50%',
     height: 2,
-    backgroundColor: DesignSystem.colors.gray[200] },
+    backgroundColor: DesignSystem.colors.gray200 },
   stepLineActive: {
     backgroundColor: DesignSystem.colors.primary },
   stepContent: {
@@ -920,10 +920,10 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.primary,
     marginBottom: 4 },
   required: {
-    color: DesignSystem.colors.status.error },
+    color: DesignSystem.colors.error },
   fileDescription: {
     fontSize: 14,
-    color: DesignSystem.colors.gray[500] },
+    color: DesignSystem.colors.gray500 },
   uploadButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -954,7 +954,7 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.primary },
   fileSize: {
     fontSize: 12,
-    color: DesignSystem.colors.gray[500],
+    color: DesignSystem.colors.gray500,
     marginTop: 2 },
   fileRows: {
     fontSize: 12,
@@ -969,7 +969,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 59, 48, 0.125)' },
   errorText: {
     fontSize: 14,
-    color: DesignSystem.colors.status.error,
+    color: DesignSystem.colors.error,
     marginBottom: 4 },
   actionButton: {
     backgroundColor: DesignSystem.colors.primary,
@@ -983,7 +983,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600' },
   disabledButton: {
-    backgroundColor: DesignSystem.colors.gray[500],
+    backgroundColor: DesignSystem.colors.gray500,
     opacity: 0.5 },
   secondaryButton: {
     backgroundColor: 'transparent',
@@ -1005,7 +1005,7 @@ const styles = StyleSheet.create({
   progressBar: {
     width: '100%',
     height: 8,
-    backgroundColor: DesignSystem.colors.gray[200],
+    backgroundColor: DesignSystem.colors.gray200,
     borderRadius: 4,
     overflow: 'hidden',
     marginBottom: 12 },
@@ -1014,7 +1014,7 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.primary },
   progressText: {
     fontSize: 14,
-    color: DesignSystem.colors.gray[500],
+    color: DesignSystem.colors.gray500,
     marginBottom: 8 },
   currentItem: {
     fontSize: 14,
@@ -1022,16 +1022,16 @@ const styles = StyleSheet.create({
     marginTop: 8 },
   timeRemaining: {
     fontSize: 14,
-    color: DesignSystem.colors.gray[500],
+    color: DesignSystem.colors.gray500,
     marginTop: 4 },
   issuesSummary: {
     flexDirection: 'row',
     marginTop: 16 },
   errorCount: {
-    color: DesignSystem.colors.status.error,
+    color: DesignSystem.colors.error,
     marginRight: 16 },
   warningCount: {
-    color: DesignSystem.colors.status.warning },
+    color: DesignSystem.colors.warning },
   completeTitle: {
     fontSize: 20,
     fontWeight: '600',
@@ -1050,15 +1050,15 @@ const styles = StyleSheet.create({
     marginBottom: 8 },
   summaryLabel: {
     fontSize: 14,
-    color: DesignSystem.colors.gray[500] },
+    color: DesignSystem.colors.gray500 },
   summaryValue: {
     fontSize: 14,
     fontWeight: '600',
     color: DesignSystem.colors.text.primary },
   successText: {
-    color: DesignSystem.colors.status.success },
+    color: DesignSystem.colors.success },
   warningText: {
-    color: DesignSystem.colors.status.warning },
+    color: DesignSystem.colors.warning },
   completeActions: {
     width: '100%' } });
 

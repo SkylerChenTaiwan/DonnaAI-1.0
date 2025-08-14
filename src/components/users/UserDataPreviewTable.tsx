@@ -420,11 +420,11 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.primary,
     fontWeight: '600' },
   statNumberValid: {
-    color: DesignSystem.colors.status.success },
+    color: DesignSystem.colors.success },
   statNumberInvalid: {
-    color: DesignSystem.colors.status.error },
+    color: DesignSystem.colors.error },
   statNumberDuplicate: {
-    color: DesignSystem.colors.status.warning },
+    color: DesignSystem.colors.warning },
   statNumberSelected: {
     color: DesignSystem.colors.primary },
   statLabel: {

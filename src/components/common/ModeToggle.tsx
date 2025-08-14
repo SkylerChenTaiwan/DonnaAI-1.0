@@ -34,7 +34,7 @@ export const ModeToggle = ({
         onValueChange={handleToggle}
         trackColor={{
           false: DesignSystem.colors.border.light,
-          true: DesignSystem.colors.gray[700], // 使用較深的灰色以保持辨識度
+          true: DesignSystem.colors.gray700, // 使用較深的灰色以保持辨識度
         }}
         thumbColor={DesignSystem.colors.background.surface}
         ios_backgroundColor={DesignSystem.colors.border.light}

@@ -488,7 +488,7 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
               
               {error && (
                 <View style={styles.errorContainer}>
-                  <Icon name="alert-circle-outline" size={20} color={DesignSystem.colors.status.error} />
+                  <Icon name="alert-circle-outline" size={20} color={DesignSystem.colors.error} />
                   <Text style={styles.errorText}>{error}</Text>
                 </View>
               )}
@@ -719,7 +719,7 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
               <Icon
                 name={importResult?.success ? "checkmark-circle-outline" : "alert-circle-outline"}
                 size={64}
-                color={importResult?.success ? DesignSystem.colors.status.success : DesignSystem.colors.status.warning}
+                color={importResult?.success ? DesignSystem.colors.success : DesignSystem.colors.warning}
               />
               
               <Text style={styles.resultTitle}>
@@ -880,14 +880,14 @@ const styles = StyleSheet.create({
   errorContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: `${DesignSystem.colors.status.error}10`,
+    backgroundColor: `${DesignSystem.colors.error}10`,
     paddingHorizontal: DesignSystem.spacing.md,
     paddingVertical: DesignSystem.spacing.sm,
     borderRadius: DesignSystem.borderRadius.sm,
     marginBottom: DesignSystem.spacing.lg },
   errorText: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.status.error,
+    color: DesignSystem.colors.error,
     marginLeft: DesignSystem.spacing.xs,
     flex: 1 },
   uploadButton: {
@@ -994,12 +994,12 @@ const styles = StyleSheet.create({
     maxWidth: 300 },
   importErrorsTitle: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.status.error,
+    color: DesignSystem.colors.error,
     fontWeight: '600',
     marginBottom: DesignSystem.spacing.xs },
   importErrorItem: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.status.error,
+    color: DesignSystem.colors.error,
     marginBottom: 2 },
 
   // Complete Stage
@@ -1022,12 +1022,12 @@ const styles = StyleSheet.create({
     alignItems: 'center' },
   resultStatNumber: {
     ...DesignSystem.typography.h3,
-    color: DesignSystem.colors.status.success,
+    color: DesignSystem.colors.success,
     fontWeight: '600' },
   resultStatNumberError: {
-    color: DesignSystem.colors.status.error },
+    color: DesignSystem.colors.error },
   resultStatNumberSkipped: {
-    color: DesignSystem.colors.status.warning },
+    color: DesignSystem.colors.warning },
   resultStatLabel: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
@@ -1038,14 +1038,14 @@ const styles = StyleSheet.create({
     marginBottom: DesignSystem.spacing.lg },
   resultErrorsTitle: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.status.error,
+    color: DesignSystem.colors.error,
     fontWeight: '600',
     marginBottom: DesignSystem.spacing.sm },
   resultErrorsList: {
     maxHeight: 150 },
   resultErrorItem: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.status.error,
+    color: DesignSystem.colors.error,
     marginBottom: DesignSystem.spacing.xxs },
   resultWarnings: {
     width: '100%',
@@ -1053,12 +1053,12 @@ const styles = StyleSheet.create({
     marginBottom: DesignSystem.spacing.lg },
   resultWarningsTitle: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.status.warning,
+    color: DesignSystem.colors.warning,
     fontWeight: '600',
     marginBottom: DesignSystem.spacing.sm },
   resultWarningItem: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.status.warning,
+    color: DesignSystem.colors.warning,
     marginBottom: DesignSystem.spacing.xxs },
   completeButton: {
     minWidth: 120 },

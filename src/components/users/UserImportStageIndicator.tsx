@@ -216,8 +216,8 @@ const styles = StyleSheet.create({
     borderColor: DesignSystem.colors.primary,
     backgroundColor: DesignSystem.colors.primary },
   stageCircleCompleted: {
-    borderColor: DesignSystem.colors.status.success,
-    backgroundColor: DesignSystem.colors.status.success },
+    borderColor: DesignSystem.colors.success,
+    backgroundColor: DesignSystem.colors.success },
   stageCircleDisabled: {
     borderColor: DesignSystem.colors.border.light,
     backgroundColor: DesignSystem.colors.background.secondary },
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.primary,
     fontWeight: '600' },
   stageTitleCompleted: {
-    color: DesignSystem.colors.status.success },
+    color: DesignSystem.colors.success },
   stageTitleDisabled: {
     color: DesignSystem.colors.text.disabled },
   stageDescription: {
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.border.light,
     zIndex: 1 },
   stageLineCompleted: {
-    backgroundColor: DesignSystem.colors.status.success },
+    backgroundColor: DesignSystem.colors.success },
   stageLineCompact: {
     top: 17, // 調整緊湊模式下的位置
   } });

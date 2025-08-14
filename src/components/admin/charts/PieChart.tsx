@@ -30,9 +30,9 @@ export const PieChart: React.FC<PieChartProps> = ({
   innerRadius = 0,
   colorScale = [
     DesignSystem.colors.primary,
-    DesignSystem.colors.status.success,
-    DesignSystem.colors.status.warning,
-    DesignSystem.colors.status.error,
+    DesignSystem.colors.success,
+    DesignSystem.colors.warning,
+    DesignSystem.colors.error,
     '#9B59B6',
     '#3498DB',
     '#1ABC9C',

@@ -81,7 +81,7 @@ const DefaultPlaceholder: React.FC<{ width?: number | string; height?: number | 
     style={{
       width,
       height,
-      backgroundColor: DesignSystem.colors.gray[100],
+      backgroundColor: DesignSystem.colors.gray100,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -104,7 +104,7 @@ const DefaultErrorComponent: React.FC<{ width?: number | string; height?: number
     style={{
       width,
       height,
-      backgroundColor: DesignSystem.colors.gray[100],
+      backgroundColor: DesignSystem.colors.gray100,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -132,7 +132,7 @@ const DefaultLoadingComponent: React.FC<{ width?: number | string; height?: numb
     style={{
       width,
       height,
-      backgroundColor: DesignSystem.colors.gray[50],
+      backgroundColor: DesignSystem.colors.gray50,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',

@@ -208,11 +208,11 @@ export const UsageReportsScreen: React.FC = () => {
                 <Icon
                   name={stat.isPositive ? "trending-up" : "trending-down"}
                   size={16}
-                  color={stat.isPositive ? DesignSystem.colors.status.success : DesignSystem.colors.status.error}
+                  color={stat.isPositive ? DesignSystem.colors.success : DesignSystem.colors.error}
                 />
                 <Text style={StyleSheet.flatten([
                   styles.statChange,
-                  { color: stat.isPositive ? DesignSystem.colors.status.success : DesignSystem.colors.status.error }
+                  { color: stat.isPositive ? DesignSystem.colors.success : DesignSystem.colors.error }
                 ])}>
                   {stat.change}
                 </Text>

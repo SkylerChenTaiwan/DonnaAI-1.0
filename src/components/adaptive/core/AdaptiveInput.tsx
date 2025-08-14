@@ -112,7 +112,7 @@ const createInputStyles = (state: InputState, hasError: boolean) => {
   
   if (hasError) {
     stateStyle = {
-      borderColor: DesignSystem.colors.status.error };
+      borderColor: DesignSystem.colors.error };
   } else {
     switch (state) {
       case 'focused':
@@ -122,7 +122,7 @@ const createInputStyles = (state: InputState, hasError: boolean) => {
         break;
       case 'disabled':
         stateStyle = {
-          backgroundColor: DesignSystem.colors.gray[100],
+          backgroundColor: DesignSystem.colors.gray100,
           borderColor: DesignSystem.colors.border.light,
           color: DesignSystem.colors.text.disabled,
           opacity: 0.6 };
@@ -338,7 +338,7 @@ const WebInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, AdaptiveInpu
             style={{ fontWeight: '500' }}
           >
             {label}
-            {required && <span style={{ color: DesignSystem.colors.status.error }}> *</span>}
+            {required && <span style={{ color: DesignSystem.colors.error }}> *</span>}
           </AdaptiveText>
         )}
         

@@ -106,10 +106,10 @@ const WebText = forwardRef<HTMLElement, AdaptiveTextProps>(
         tertiary: DesignSystem.colors.text.tertiary,
         disabled: DesignSystem.colors.text.disabled,
         inverse: DesignSystem.colors.text.inverse,
-        success: DesignSystem.colors.status.success,
-        warning: DesignSystem.colors.status.warning,
-        error: DesignSystem.colors.status.error,
-        info: DesignSystem.colors.status.info };
+        success: DesignSystem.colors.success,
+        warning: DesignSystem.colors.warning,
+        error: DesignSystem.colors.error,
+        info: DesignSystem.colors.info };
       
       return colorMap[color as keyof typeof colorMap] || color;
     }, [color]);
@@ -243,10 +243,10 @@ const NativeText = forwardRef<any, AdaptiveTextProps>(
         tertiary: DesignSystem.colors.text.tertiary,
         disabled: DesignSystem.colors.text.disabled,
         inverse: DesignSystem.colors.text.inverse,
-        success: DesignSystem.colors.status.success,
-        warning: DesignSystem.colors.status.warning,
-        error: DesignSystem.colors.status.error,
-        info: DesignSystem.colors.status.info };
+        success: DesignSystem.colors.success,
+        warning: DesignSystem.colors.warning,
+        error: DesignSystem.colors.error,
+        info: DesignSystem.colors.info };
       
       return colorMap[color as keyof typeof colorMap] || color;
     }, [color]);

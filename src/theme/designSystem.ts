@@ -83,7 +83,25 @@ export const DesignSystem = {
       600: '#525252',
       700: '#404040',
       800: '#262626',
-      900: '#171717' } },
+      900: '#171717' },
+    
+    // 灰階簡寫（為了向後相容）
+    gray50: '#FAFAFA',
+    gray100: '#F8F8F8',
+    gray200: '#E5E5E5',
+    gray300: '#D4D4D4',
+    gray400: '#A3A3A3',
+    gray500: '#737373',
+    gray600: '#525252',
+    gray700: '#404040',
+    gray800: '#262626',
+    gray900: '#171717',
+    
+    // 狀態色簡寫（為了向後相容）
+    success: '#34C759',
+    warning: '#FF9500',
+    error: '#FF3B30',
+    info: '#5856D6' },
   
   // 間距系統
   spacing: {
@@ -276,9 +294,9 @@ export const webTokens: Partial<WebTokens> = {
     '--color-text-secondary': DesignSystem.colors.text.secondary,
     '--color-border-default': DesignSystem.colors.border.default,
     '--color-border-light': DesignSystem.colors.border.light,
-    '--color-success': DesignSystem.colors.status.success,
-    '--color-warning': DesignSystem.colors.status.warning,
-    '--color-error': DesignSystem.colors.status.error,
+    '--color-success': DesignSystem.colors.success,
+    '--color-warning': DesignSystem.colors.warning,
+    '--color-error': DesignSystem.colors.error,
     
     // 間距
     '--spacing-xs': `${DesignSystem.spacing.xs}px`,

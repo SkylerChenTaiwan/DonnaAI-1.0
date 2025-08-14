@@ -112,6 +112,10 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 14,
-    color: '#1A1A1A' },
+    color: '#1A1A1A',
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    padding: 0,
+    margin: 0 },
   clearButton: {
     padding: 4 } });

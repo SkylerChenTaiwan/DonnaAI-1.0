@@ -148,14 +148,14 @@ export const OrganizationsScreen: React.FC = () => {
   const getStatusColor = (status?: string) => {
     switch (status) {
       case 'active':
-        return DesignSystem.colors.status.success;
+        return DesignSystem.colors.success;
       case 'suspended':
-        return DesignSystem.colors.status.warning;
+        return DesignSystem.colors.warning;
       case 'cancelled':
       case 'expired':
-        return DesignSystem.colors.status.error;
+        return DesignSystem.colors.error;
       default:
-        return DesignSystem.colors.gray[500];
+        return DesignSystem.colors.gray500;
     }
   };
 
@@ -182,13 +182,13 @@ export const OrganizationsScreen: React.FC = () => {
 
       <View style={styles.orgDetails}>
         <View style={styles.detailRow}>
-          <Icon name="people-outline" size={16} color={DesignSystem.colors.gray[600]} />
+          <Icon name="people-outline" size={16} color={DesignSystem.colors.gray600} />
           <Text style={styles.detailText}>
             {item.maxUsers || 0} 用戶
           </Text>
         </View>
         <View style={styles.detailRow}>
-          <Icon name="time-outline" size={16} color={DesignSystem.colors.gray[600]} />
+          <Icon name="time-outline" size={16} color={DesignSystem.colors.gray600} />
           <Text style={styles.detailText}>
             {item.aiMinutesUsed || 0} / {item.aiMinutesQuota || 0} AI 分鐘
           </Text>
@@ -214,7 +214,7 @@ export const OrganizationsScreen: React.FC = () => {
           <Icon
             name={item.status === 'active' ? 'pause-circle-outline' : 'play-circle-outline'}
             size={20}
-            color={item.status === 'active' ? DesignSystem.colors.status.warning : DesignSystem.colors.status.success}
+            color={item.status === 'active' ? DesignSystem.colors.warning : DesignSystem.colors.success}
           />
           <Text style={StyleSheet.flatten([
             styles.actionLabel,
@@ -290,7 +290,7 @@ export const OrganizationsScreen: React.FC = () => {
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Icon name="business-outline" size={48} color={DesignSystem.colors.gray[400]} />
+            <Icon name="business-outline" size={48} color={DesignSystem.colors.gray400} />
             <Text style={styles.emptyText}>
               {searchQuery ? '沒有符合的組織' : '尚無組織'}
             </Text>
@@ -438,18 +438,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: DesignSystem.colors.border.light },
   suspendButton: {
-    backgroundColor: withAlpha(DesignSystem.colors.status.warning, 0.063),
-    borderColor: withAlpha(DesignSystem.colors.status.warning, 0.188) },
+    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.063),
+    borderColor: withAlpha(DesignSystem.colors.warning, 0.188) },
   activateButton: {
-    backgroundColor: withAlpha(DesignSystem.colors.status.success, 0.063),
-    borderColor: withAlpha(DesignSystem.colors.status.success, 0.188) },
+    backgroundColor: withAlpha(DesignSystem.colors.success, 0.063),
+    borderColor: withAlpha(DesignSystem.colors.success, 0.188) },
   actionLabel: {
     ...DesignSystem.typography.caption,
     fontWeight: '500' },
   suspendLabel: {
-    color: DesignSystem.colors.status.warning },
+    color: DesignSystem.colors.warning },
   activateLabel: {
-    color: DesignSystem.colors.status.success },
+    color: DesignSystem.colors.success },
   separator: {
     height: DesignSystem.spacing.md },
   emptyContainer: {

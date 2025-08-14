@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@/types/navigation';
@@ -59,4 +59,13 @@ export const OnboardingWizardScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1 } });
+    flex: 1,
+    ...(Platform.OS === 'web' ? { 
+      height: '100vh',
+      width: '100vw',
+      position: 'fixed' as any,
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0
+    } : {}) } });

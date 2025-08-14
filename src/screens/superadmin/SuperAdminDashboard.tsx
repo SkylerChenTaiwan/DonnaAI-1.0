@@ -77,7 +77,7 @@ export const SuperAdminDashboard: React.FC = () => {
       value: totalUsers.toString(),
       subtitle: `${stats?.activeUsers || 0} 個活躍`,
       icon: 'people-outline',
-      color: DesignSystem.colors.status.success
+      color: DesignSystem.colors.success
     },
     {
       id: 'revenue',
@@ -85,7 +85,7 @@ export const SuperAdminDashboard: React.FC = () => {
       value: `NT$${totalRevenue.toLocaleString('zh-TW')}`,
       subtitle: '預估收入',
       icon: 'cash-outline',
-      color: DesignSystem.colors.status.warning
+      color: DesignSystem.colors.warning
     },
     {
       id: 'growth',
@@ -93,7 +93,7 @@ export const SuperAdminDashboard: React.FC = () => {
       value: growthRate > 0 ? `+${growthRate}%` : `${growthRate}%`,
       subtitle: '本月 vs 上月',
       icon: growthRate >= 0 ? 'trending-up-outline' : 'trending-down-outline',
-      color: growthRate >= 0 ? DesignSystem.colors.status.success : DesignSystem.colors.status.error
+      color: growthRate >= 0 ? DesignSystem.colors.success : DesignSystem.colors.error
     }
   ];
 
@@ -412,7 +412,7 @@ const styles = StyleSheet.create({
   orgRevenue: {
     fontSize: 16,
     fontWeight: '700',
-    color: DesignSystem.colors.status.success },
+    color: DesignSystem.colors.success },
   orgPlan: {
     fontSize: 14,
     color: DesignSystem.colors.text.secondary },

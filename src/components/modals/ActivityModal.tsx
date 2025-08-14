@@ -111,15 +111,15 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({
   const getActionColor = (action: string): string => {
     switch (action) {
       case 'login':
-        return DesignSystem.colors.status.success;
+        return DesignSystem.colors.success;
       case 'logout':
-        return DesignSystem.colors.gray[500];
+        return DesignSystem.colors.gray500;
       case 'create':
-        return DesignSystem.colors.status.info;
+        return DesignSystem.colors.info;
       case 'update':
-        return DesignSystem.colors.status.warning;
+        return DesignSystem.colors.warning;
       case 'delete':
-        return DesignSystem.colors.status.error;
+        return DesignSystem.colors.error;
       default:
         return DesignSystem.colors.text.secondary;
     }
@@ -346,9 +346,9 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4 },
   onlineDot: {
-    backgroundColor: DesignSystem.colors.status.success },
+    backgroundColor: DesignSystem.colors.success },
   offlineDot: {
-    backgroundColor: DesignSystem.colors.gray[400] },
+    backgroundColor: DesignSystem.colors.gray400 },
   statusLabel: {
     fontSize: DesignSystem.typography.body.fontSize,
     color: DesignSystem.colors.text.secondary },

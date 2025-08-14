@@ -451,7 +451,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
               onPress={handleBack}
               disabled={state.isSaving}
             >
-              <Icon name="arrow-back" size={20} color={DesignSystem.colors.gray[600]}  />
+              <Icon name="arrow-back" size={20} color={DesignSystem.colors.gray600}  />
               <Text style={styles.secondaryButtonText}>上一步</Text>
             </TouchableOpacity>
           )}
@@ -461,7 +461,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
             onPress={handleSaveDraft}
             disabled={state.isSaving}
           >
-            <Icon name="save" size={20} color={DesignSystem.colors.gray[600]}  />
+            <Icon name="save" size={20} color={DesignSystem.colors.gray600}  />
             <Text style={styles.ghostButtonText}>儲存草稿</Text>
           </TouchableOpacity>
         </View>
@@ -518,7 +518,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
           style={styles.closeButton}
           onPress={onCancel}
         >
-          <Icon name="close" size={24} color={DesignSystem.colors.gray[600]}  />
+          <Icon name="close" size={24} color={DesignSystem.colors.gray600}  />
         </TouchableOpacity>
       </View>
       
@@ -546,7 +546,8 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1 },
+    flex: 1,
+    ...(Platform.OS === 'web' ? { height: '100vh' } : {}) },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -554,7 +555,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.gray[200] },
+    borderBottomColor: DesignSystem.colors.gray200 },
   headerContent: {
     flex: 1 },
   headerTitle: {
@@ -571,10 +572,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.gray[200] },
+    borderBottomColor: DesignSystem.colors.gray200 },
   progressBar: {
     height: 4,
-    backgroundColor: DesignSystem.colors.gray[200],
+    backgroundColor: DesignSystem.colors.gray200,
     borderRadius: 2,
     overflow: 'hidden',
     marginBottom: 16 },
@@ -591,12 +592,12 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: DesignSystem.colors.gray[200],
+    backgroundColor: DesignSystem.colors.gray200,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8 },
   stepCompleted: {
-    backgroundColor: DesignSystem.colors.status.success },
+    backgroundColor: DesignSystem.colors.success },
   stepCurrent: {
     backgroundColor: DesignSystem.colors.primary },
   stepPast: {
@@ -605,12 +606,12 @@ const styles = StyleSheet.create({
   stepNumber: {
     fontSize: 14,
     fontWeight: '600',
-    color: DesignSystem.colors.gray[600] },
+    color: DesignSystem.colors.gray600 },
   stepNumberActive: {
     color: DesignSystem.colors.background.surface },
   stepLabel: {
     fontSize: 12,
-    color: DesignSystem.colors.gray[500],
+    color: DesignSystem.colors.gray500,
     textAlign: 'center' },
   stepLabelCurrent: {
     color: DesignSystem.colors.text.primary,
@@ -637,15 +638,15 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: DesignSystem.colors.gray[600] },
+    color: DesignSystem.colors.gray600 },
   errorContainer: {
-    backgroundColor: withAlpha(DesignSystem.colors.status.error, 0.063),
+    backgroundColor: withAlpha(DesignSystem.colors.error, 0.063),
     borderRadius: 8,
     padding: 12,
     marginTop: 16 },
   errorText: {
     fontSize: 14,
-    color: DesignSystem.colors.status.error,
+    color: DesignSystem.colors.error,
     marginBottom: 4 },
   footer: {
     flexDirection: 'row',
@@ -654,7 +655,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderTopWidth: 1,
-    borderTopColor: DesignSystem.colors.gray[200] },
+    borderTopColor: DesignSystem.colors.gray200 },
   footerLeft: {
     flexDirection: 'row',
     gap: 12 },
@@ -664,10 +665,11 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 16,
+    paddingVertical: Platform.OS === 'web' ? 12 : 10,
+    paddingHorizontal: Platform.OS === 'web' ? 20 : 16,
     borderRadius: 8,
-    gap: 8 },
+    gap: 8,
+    minHeight: Platform.OS === 'web' ? 44 : 40 },
   primaryButton: {
     backgroundColor: DesignSystem.colors.primary },
   primaryButtonText: {
@@ -706,6 +708,6 @@ const styles = StyleSheet.create({
     gap: 8 },
   savingText: {
     fontSize: 12,
-    color: DesignSystem.colors.gray[600] } });
+    color: DesignSystem.colors.gray600 } });
 
 export default OnboardingWizard;
