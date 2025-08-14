@@ -89,7 +89,10 @@ export const SearchBar = ({
           outline: 'none',
           padding: 0,
           margin: 0,
-          width: '100%'
+          width: '100%',
+          height: '20px',
+          lineHeight: '20px',
+          fontSize: '14px'
         }}
         value={localValue}
         onChangeText={handleChangeText}
@@ -124,7 +127,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderWidth: 0,
     padding: 0,
-    margin: 0 },
+    margin: 0,
+    height: 20 },
   inputInner: {
     fontSize: 14,
     color: '#1A1A1A',
