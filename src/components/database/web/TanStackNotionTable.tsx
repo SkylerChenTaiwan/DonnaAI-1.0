@@ -17,7 +17,7 @@ import { NotionTableCell } from './NotionTableCell';
 import { NotionCheckbox } from './NotionCheckbox';
 import { generateColumnsByType } from '../shared/tableUtils';
 import { TableColumn } from '@/types/table';
-import './styles/NotionDatabaseV2.css';
+// import './styles/NotionDatabaseV2.css'; // 已移除，避免全域樣式污染
 
 export const TanStackNotionTable: React.FC<TanStackTableProps> = ({
   data,
