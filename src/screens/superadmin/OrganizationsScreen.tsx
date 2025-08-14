@@ -159,23 +159,31 @@ export const OrganizationsScreen: React.FC = () => {
     }
   };
 
-  const renderOrganizationItem = ({ item }: { item: Organization }) => (
-    <TouchableOpacity
-      style={[
-        styles.orgCard,
-        Platform.OS === 'web' && {
-          backgroundColor: '#FFFFFF',
-          borderRadius: 8,
-          padding: 16,
-          marginBottom: 12,
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-          border: '1px solid #E3E3E2'
-        }
-      ]}
-      onPress={() => handleOrganizationPress(item)}
-      activeOpacity={0.7}
-      disabled={false}  // 確保卡片可點擊
-    >
+  const renderOrganizationItem = ({ item }: { item: Organization }) => {
+    if (Platform.OS === 'web') {
+      // Web 平台使用原生 div 和內聯樣式
+      return (
+        <div
+          onClick={() => handleOrganizationPress(item)}
+          style={{
+            backgroundColor: '#FFFFFF',
+            borderRadius: '8px',
+            padding: '16px',
+            marginBottom: '12px',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+            border: '1px solid #E3E3E2',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.15)';
+            e.currentTarget.style.transform = 'translateY(-2px)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+            e.currentTarget.style.transform = 'translateY(0)';
+          }}
+        >
       <View style={styles.orgHeader}>
         <View style={styles.orgInfo}>
           <Text style={styles.orgName}>{item.name}</Text>
@@ -230,8 +238,73 @@ export const OrganizationsScreen: React.FC = () => {
           </Text>
         </TouchableOpacity>
       </View>
-    </TouchableOpacity>
-  );
+        </div>
+      );
+    }
+    
+    // Native 平台使用原有的 TouchableOpacity
+    return (
+      <TouchableOpacity
+        style={styles.orgCard}
+        onPress={() => handleOrganizationPress(item)}
+        activeOpacity={0.7}
+        disabled={false}
+      >
+        <View style={styles.orgHeader}>
+          <View style={styles.orgInfo}>
+            <Text style={styles.orgName}>{item.name}</Text>
+            <Text style={styles.orgPlan}>{(item.subscriptionPlan || 'basic').toUpperCase()}</Text>
+          </View>
+          <View style={StyleSheet.flatten([styles.statusBadge, { backgroundColor: getStatusColor(item.status) }])}>
+            <Text style={styles.statusText}>{item.status || 'active'}</Text>
+          </View>
+        </View>
+
+        <View style={styles.orgDetails}>
+          <View style={styles.detailRow}>
+            <Icon name="people-outline" size={16} color={DesignSystem.colors.gray600} />
+            <Text style={styles.detailText}>
+              {item.maxUsers || 0} 用戶
+            </Text>
+          </View>
+          <View style={styles.detailRow}>
+            <Icon name="time-outline" size={16} color={DesignSystem.colors.gray600} />
+            <Text style={styles.detailText}>
+              {formatDate(item.createdAt || new Date())}
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.orgActions}>
+          <TouchableOpacity
+            style={StyleSheet.flatten([
+              styles.actionButton,
+              item.status === 'active' ? styles.suspendButton : styles.activateButton
+            ])}
+            onPress={(e) => {
+              if (Platform.OS !== 'web') {
+                e.stopPropagation();
+              }
+              handleToggleStatus(item);
+            }}
+            activeOpacity={0.7}
+          >
+            <Icon
+              name={item.status === 'active' ? 'pause-circle-outline' : 'play-circle-outline'}
+              size={18}
+              color={DesignSystem.colors.text.inverse}
+            />
+            <Text style={StyleSheet.flatten([
+              styles.actionLabel,
+              item.status === 'active' ? styles.suspendLabel : styles.activateLabel
+            ])}>
+              {item.status === 'active' ? '停用' : '啟用'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   if (isLoading) {
     const loadingContent = <LoadingSpinner message="載入組織列表..." />;
