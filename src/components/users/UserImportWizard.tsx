@@ -444,15 +444,9 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
     <AdaptiveModal
       visible={visible}
       animationType="slide"
+      size="fullscreen"
       presentationStyle={Platform.OS === 'web' ? 'fullScreen' : 'pageSheet'}
       onRequestClose={handleClose}
-      webStyle={{
-        width: '90%',
-        maxWidth: '1200px',
-        height: '90%',
-        maxHeight: '800px',
-        margin: 'auto'
-      }}
     >
       <View style={styles.container}>
         {/* Header */}
