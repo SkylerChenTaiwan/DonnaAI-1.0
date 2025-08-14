@@ -818,6 +818,7 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
+    height: '100%',
     minHeight: 0  // 重要：讓 flex 子元素可以正確縮放
   },
   header: {

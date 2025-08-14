@@ -426,7 +426,10 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
           <div style={{
             flex: 1,
             overflow: 'auto',
-            padding: DesignSystem.spacing.lg }}>
+            padding: size === 'fullscreen' ? 0 : DesignSystem.spacing.lg,
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: 0 }}>
             {children}
           </div>
           
