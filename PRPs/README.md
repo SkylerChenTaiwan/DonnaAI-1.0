@@ -120,7 +120,7 @@
 | 114v | complete-adaptive-component-migration.md | ✅ 已完成 | 全面 Adaptive 元件遷移 - 批量替換 88 個檔案、解決 Web UI 問題 | 2025-08-13 |
 | 115v | fix-adaptive-button-and-css-conflicts.md | ✅ 已完成 | 修復 AdaptiveButton 崩潰和 CSS 破版問題 - getButtonStyle 錯誤、NotionDatabaseV4.css 衝突 | 2025-08-14 |
 | 116v | style-system-conflict-resolution.md | ✅ 已完成 | 解決 Adaptive 元件樣式系統衝突問題 - 統一樣式優先級、重構樣式處理邏輯 | 2025-08-14 |
-| 117  | fix-adaptive-modal-style-priority-system.md | 📋 待執行 | 修復 AdaptiveModal 樣式優先級系統 - 保護 size 屬性、改進 StylePriorityManager | - |
+| 117v | fix-adaptive-modal-style-priority-system.md | ✅ 已完成 | 修復 AdaptiveModal 樣式優先級系統 - 保護 size 屬性、改進 StylePriorityManager | 2025-08-14 |
 
 ## 命名規則
 
