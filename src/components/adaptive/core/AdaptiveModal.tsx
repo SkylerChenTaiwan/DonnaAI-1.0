@@ -228,6 +228,9 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
     const contentStyleFinal = useMemo(() => {
       const dimensions = getModalDimensions(size);
       
+      console.log('📐 Computing contentStyleFinal for size:', size);
+      console.log('📐 dimensions:', dimensions);
+      
       // 預設樣式
       const defaultStyle: CSSProperties = {
         backgroundColor: '#FFFFFF',  // 強制使用白色背景
@@ -316,6 +319,9 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
         debug: false
       });
       
+      console.log('📐 Final merged style:', result.style);
+      console.log('📐 Style configs count:', styleConfigs.length);
+      
       return result.style;
     }, [style, webStyle, contentStyle, styleProcessor, size, visible, animationType]);
     
@@ -377,6 +383,15 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
         </div>
       );
     };
+    
+    // 除錯輸出
+    if (size === 'fullscreen' && visible) {
+      console.log('🚨 AdaptiveModal Render Debug:');
+      console.log('- size:', size);
+      console.log('- overlayStyleFinal:', overlayStyleFinal);
+      console.log('- contentStyleFinal:', contentStyleFinal);
+      console.log('- dimensions from getModalDimensions:', getModalDimensions(size));
+    }
     
     const modalContent = (
       <div

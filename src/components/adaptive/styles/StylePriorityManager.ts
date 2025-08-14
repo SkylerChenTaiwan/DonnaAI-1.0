@@ -214,6 +214,11 @@ export class StylePriorityManager implements StyleProcessor {
    */
   private convertToWebStyle(style: any): any {
     const webStyle: any = {};
+    
+    // 除錯：檢查輸入
+    if (style.width === '95vw' || style.height === '95vh') {
+      console.log('🔍 convertToWebStyle input:', style);
+    }
 
     for (const [key, value] of Object.entries(style)) {
       if (value === undefined || value === null) continue;
@@ -285,6 +290,10 @@ export class StylePriorityManager implements StyleProcessor {
         case 'lineHeight':
         case 'letterSpacing':
           webStyle[key] = this.convertSpacing(value);
+          // 除錯
+          if (key === 'width' || key === 'height') {
+            console.log(`🔍 convertSpacing for ${key}: ${value} -> ${webStyle[key]}`);
+          }
           break;
 
         // 直接傳遞的屬性
@@ -293,6 +302,11 @@ export class StylePriorityManager implements StyleProcessor {
       }
     }
 
+    // 除錯：檢查輸出
+    if (webStyle.width === '95vw' || webStyle.height === '95vh') {
+      console.log('🔍 convertToWebStyle output:', webStyle);
+    }
+    
     return webStyle;
   }
 
