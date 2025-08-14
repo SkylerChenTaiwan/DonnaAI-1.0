@@ -511,10 +511,10 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
         {/* 錯誤提示 */}
         {error && (
           <View style={styles.errorBanner}>
-            <Icon name="alert-circle-outline" size={20} color={DesignSystem.colors.error} />
+            <Icon name="alert-circle-outline" size={20} color={DesignSystem.colors.gray500} />
             <Text style={styles.errorText}>{error}</Text>
             <TouchableOpacity onPress={() => setError(null)}>
-              <Icon name="close" size={20} color={DesignSystem.colors.error} />
+              <Icon name="close" size={20} color={DesignSystem.colors.gray500} />
             </TouchableOpacity>
           </View>
         )}
@@ -615,7 +615,7 @@ const styles = StyleSheet.create({
     borderColor: DesignSystem.colors.primary },
   stageCircleCompleted: {
     backgroundColor: DesignSystem.colors.primary,
-    borderColor: DesignSystem.colors.success },
+    borderColor: DesignSystem.colors.gray700 },
   stageLabel: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
@@ -636,7 +636,7 @@ const styles = StyleSheet.create({
   errorBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: `${DesignSystem.colors.error}10`,
+    backgroundColor: `${DesignSystem.colors.gray500}10`,
     paddingHorizontal: DesignSystem.spacing.md,
     paddingVertical: DesignSystem.spacing.sm,
     marginHorizontal: DesignSystem.spacing.lg,
@@ -644,7 +644,7 @@ const styles = StyleSheet.create({
     borderRadius: DesignSystem.borderRadius.sm },
   errorText: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.error,
+    color: DesignSystem.colors.gray500,
     flex: 1,
     marginLeft: DesignSystem.spacing.sm },
   content: {

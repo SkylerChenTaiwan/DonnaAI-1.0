@@ -279,7 +279,7 @@ export const CreateUserModal: React.FC = () => {
           </View>
 
           <View style={styles.infoBox}>
-            <Icon name="information-circle" size={20} color={DesignSystem.colors.info} />
+            <Icon name="information-circle" size={20} color={DesignSystem.colors.gray600} />
             <Text style={styles.infoText}>
               新用戶將會收到一封包含登入資訊的電子郵件
             </Text>
@@ -323,7 +323,7 @@ const styles = StyleSheet.create({
   infoBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: withAlpha(DesignSystem.colors.info, 0.125),
+    backgroundColor: withAlpha(DesignSystem.colors.gray600, 0.125),
     padding: 16,
     borderRadius: 8,
     marginTop: 24 },

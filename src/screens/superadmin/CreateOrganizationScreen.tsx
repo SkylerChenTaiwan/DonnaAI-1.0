@@ -380,7 +380,7 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.secondary,
     marginBottom: DesignSystem.spacing.sm },
   required: {
-    color: DesignSystem.colors.error },
+    color: DesignSystem.colors.gray500 },
   planGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -425,7 +425,7 @@ const styles = StyleSheet.create({
     marginBottom: DesignSystem.spacing.xs },
   featureItem: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.success,
+    color: DesignSystem.colors.gray700,
     marginBottom: DesignSystem.spacing.xs / 2 },
   planLimitations: {
     marginTop: DesignSystem.spacing.sm },
@@ -466,7 +466,7 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.secondary },
   cycleDiscount: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.success,
+    color: DesignSystem.colors.gray700,
     fontWeight: '600',
     marginTop: DesignSystem.spacing.xs / 2 },
   actions: {

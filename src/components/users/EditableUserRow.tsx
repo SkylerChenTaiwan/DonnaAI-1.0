@@ -299,7 +299,7 @@ export const EditableUserRow: React.FC<EditableUserRowProps> = ({
             <Icon
               name="alert-circle-outline"
               size={16}
-              color={DesignSystem.colors.error}
+              color={DesignSystem.colors.gray500}
             />
             <Text style={styles.statusText}>
               {user.validationErrors[0]}
@@ -313,7 +313,7 @@ export const EditableUserRow: React.FC<EditableUserRowProps> = ({
             <Icon
               name="copy-outline"
               size={16}
-              color={DesignSystem.colors.warning}
+              color={DesignSystem.colors.gray600}
             />
             <Text style={StyleSheet.flatten([styles.statusText, styles.statusTextWarning])}>
               重複資料
@@ -327,7 +327,7 @@ export const EditableUserRow: React.FC<EditableUserRowProps> = ({
             <Icon
               name="create-outline"
               size={16}
-              color={DesignSystem.colors.info}
+              color={DesignSystem.colors.gray600}
             />
             <Text style={StyleSheet.flatten([styles.statusText, styles.statusTextInfo])}>
               已編輯
@@ -352,13 +352,13 @@ const styles = StyleSheet.create({
   containerCompact: {
     padding: DesignSystem.spacing.sm },
   containerInvalid: {
-    borderColor: DesignSystem.colors.error,
-    backgroundColor: `${DesignSystem.colors.error}10` },
+    borderColor: DesignSystem.colors.gray500,
+    backgroundColor: `${DesignSystem.colors.gray500}10` },
   containerDuplicate: {
-    borderColor: DesignSystem.colors.warning,
-    backgroundColor: `${DesignSystem.colors.warning}08` },
+    borderColor: DesignSystem.colors.gray600,
+    backgroundColor: `${DesignSystem.colors.gray600}08` },
   containerEdited: {
-    borderColor: DesignSystem.colors.info },
+    borderColor: DesignSystem.colors.gray600 },
   selectionContainer: {
     paddingRight: DesignSystem.spacing.sm,
     paddingTop: DesignSystem.spacing.xs },
@@ -408,7 +408,7 @@ const styles = StyleSheet.create({
     minHeight: 28,
     fontSize: 12 },
   fieldInputError: {
-    borderColor: DesignSystem.colors.error },
+    borderColor: DesignSystem.colors.gray500 },
   fieldValue: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -422,7 +422,7 @@ const styles = StyleSheet.create({
   fieldValueCompact: {
     minHeight: 28 },
   fieldValueError: {
-    backgroundColor: `${DesignSystem.colors.error}08` },
+    backgroundColor: `${DesignSystem.colors.gray500}08` },
   fieldValueDisabled: {
     opacity: 0.6 },
   fieldValueText: {
@@ -432,7 +432,7 @@ const styles = StyleSheet.create({
   fieldValueTextCompact: {
     fontSize: 12 },
   fieldValueTextError: {
-    color: DesignSystem.colors.error },
+    color: DesignSystem.colors.gray500 },
   fieldValueTextDisabled: {
     color: DesignSystem.colors.text.disabled },
   editIcon: {
@@ -446,12 +446,12 @@ const styles = StyleSheet.create({
     marginBottom: DesignSystem.spacing.xxs },
   statusText: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.error,
+    color: DesignSystem.colors.gray500,
     marginLeft: DesignSystem.spacing.xxs,
     fontSize: 10 },
   statusTextWarning: {
-    color: DesignSystem.colors.warning },
+    color: DesignSystem.colors.gray600 },
   statusTextInfo: {
-    color: DesignSystem.colors.info } });
+    color: DesignSystem.colors.gray600 } });
 
 export default EditableUserRow;

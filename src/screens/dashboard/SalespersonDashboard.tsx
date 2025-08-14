@@ -34,7 +34,7 @@ export const SalespersonDashboard: React.FC = () => {
       title: 'AI 錄音',
       subtitle: '會議錄音轉文字',
       icon: 'mic' as string,
-      color: DesignSystem.colors.status.error,
+      color: DesignSystem.colors.gray500,
       onPress: () => {
         // TODO: 開始錄音功能
         console.log('開始錄音');
@@ -65,7 +65,7 @@ export const SalespersonDashboard: React.FC = () => {
     { label: '本月會議', value: '12', color: '#2C2C2C' },
     { label: '活躍客戶', value: '8', color: DesignSystem.colors.primary },
     { label: 'AI 分析', value: '5', color: '#FF9500' },
-    { label: '待跟進', value: '3', color: DesignSystem.colors.status.error },
+    { label: '待跟進', value: '3', color: DesignSystem.colors.gray500 },
   ];
 
   return (

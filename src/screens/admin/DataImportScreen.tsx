@@ -457,7 +457,7 @@ export const DataImportScreen: React.FC = () => {
                     { 
                       width: `${(importProgress.current / importProgress.total) * 100}%`,
                       backgroundColor: importProgress.status === 'error' 
-                        ? DesignSystem.colors.error 
+                        ? DesignSystem.colors.gray500 
                         : DesignSystem.colors.primary 
                     }
                   ])} 
@@ -617,9 +617,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: DesignSystem.colors.text.primary },
   successText: {
-    color: DesignSystem.colors.success },
+    color: DesignSystem.colors.gray700 },
   errorText: {
-    color: DesignSystem.colors.error },
+    color: DesignSystem.colors.gray500 },
   errorContainer: {
     marginTop: 16,
     paddingTop: 16,
@@ -628,7 +628,7 @@ const styles = StyleSheet.create({
   errorTitle: {
     ...DesignSystem.typography.caption,
     fontWeight: '600',
-    color: DesignSystem.colors.error,
+    color: DesignSystem.colors.gray500,
     marginBottom: 8 },
   errorItem: {
     ...DesignSystem.typography.caption,

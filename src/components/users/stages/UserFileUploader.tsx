@@ -568,7 +568,7 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
                           paddingTop: '8px',
                           paddingBottom: '8px',
                           borderRadius: '8px',
-                          border: `1px solid ${!selectedKeyFields[file.id] && !file.keyField ? DesignSystem.colors.warning : DesignSystem.colors.border.light}`,
+                          border: `1px solid ${!selectedKeyFields[file.id] && !file.keyField ? DesignSystem.colors.gray600 : DesignSystem.colors.border.light}`,
                           cursor: 'pointer' }}
                         onClick={() => setSelectedFileId(
                           selectedFileId === file.id ? null : file.id
@@ -576,7 +576,7 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
                       >
                         <span style={{
                           fontSize: '12px',
-                          color: !selectedKeyFields[file.id] && !file.keyField ? DesignSystem.colors.warning : DesignSystem.colors.text.primary,
+                          color: !selectedKeyFields[file.id] && !file.keyField ? DesignSystem.colors.gray600 : DesignSystem.colors.text.primary,
                           marginRight: '8px' }}>
                           {selectedKeyFields[file.id] || file.keyField || '請選擇關鍵欄位'}
                         </span>
@@ -686,7 +686,7 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
               onPress={() => handleRemoveFile(file.id)}
               style={styles.removeButton}
             >
-              <Icon name="close-circle" size={20} color={DesignSystem.colors.error} />
+              <Icon name="close-circle" size={20} color={DesignSystem.colors.gray500} />
             </TouchableOpacity>
           </View>
         ))}
@@ -788,7 +788,7 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
           </Text>
           {!mergedTable && (
             <View style={styles.mergeWarning}>
-              <Icon name="alert-circle-outline" size={16} color={DesignSystem.colors.warning} />
+              <Icon name="alert-circle-outline" size={16} color={DesignSystem.colors.gray600} />
               <Text style={styles.mergeWarningText}>
                 需要先合併檔案才能進入下一步
               </Text>
@@ -1011,14 +1011,14 @@ const styles = StyleSheet.create({
   mergeWarning: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.094),
+    backgroundColor: withAlpha(DesignSystem.colors.gray600, 0.094),
     padding: DesignSystem.spacing.sm,
     borderRadius: DesignSystem.borderRadius.sm,
     marginTop: DesignSystem.spacing.sm,
     marginBottom: DesignSystem.spacing.sm },
   mergeWarningText: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.warning,
+    color: DesignSystem.colors.gray600,
     marginLeft: DesignSystem.spacing.xs,
     fontWeight: '500' },
   button: {
@@ -1117,9 +1117,9 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.secondary,
     marginBottom: DesignSystem.spacing.md },
   keyFieldDropdownWarning: {
-    borderColor: DesignSystem.colors.warning },
+    borderColor: DesignSystem.colors.gray600 },
   keyFieldValueWarning: {
-    color: DesignSystem.colors.warning },
+    color: DesignSystem.colors.gray600 },
   mergeButton: {
     backgroundColor: DesignSystem.colors.primary,
     paddingVertical: DesignSystem.spacing.md,
@@ -1247,11 +1247,11 @@ const styles = StyleSheet.create({
     marginLeft: DesignSystem.spacing.sm,
     paddingHorizontal: DesignSystem.spacing.xs,
     paddingVertical: 2,
-    backgroundColor: `${DesignSystem.colors.info}20`,
+    backgroundColor: `${DesignSystem.colors.gray600}20`,
     borderRadius: DesignSystem.borderRadius.xs },
   fieldTypeBadgeText: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.info,
+    color: DesignSystem.colors.gray600,
     fontSize: 10 },
   applyButton: {
     backgroundColor: DesignSystem.colors.primary,

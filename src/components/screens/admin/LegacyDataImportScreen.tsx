@@ -560,7 +560,7 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
               <TouchableOpacity
                 onPress={() => setFiles(prev => ({ ...prev, [fileType.key]: undefined }))}
               >
-                <Icon name="close-circle" size={24} color={DesignSystem.colors.error} />
+                <Icon name="close-circle" size={24} color={DesignSystem.colors.gray500} />
               </TouchableOpacity>
             </View>
           ) : (
@@ -670,7 +670,7 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
       <Icon 
         name={importResult?.success ? "checkmark-circle" : "alert-circle"} 
         size={64} 
-        color={importResult?.success ? DesignSystem.colors.success : DesignSystem.colors.warning} 
+        color={importResult?.success ? DesignSystem.colors.gray700 : DesignSystem.colors.gray600} 
       />
       
       <Text style={styles.completeTitle}>
@@ -920,7 +920,7 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.primary,
     marginBottom: 4 },
   required: {
-    color: DesignSystem.colors.error },
+    color: DesignSystem.colors.gray500 },
   fileDescription: {
     fontSize: 14,
     color: DesignSystem.colors.gray500 },
@@ -969,7 +969,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 59, 48, 0.125)' },
   errorText: {
     fontSize: 14,
-    color: DesignSystem.colors.error,
+    color: DesignSystem.colors.gray500,
     marginBottom: 4 },
   actionButton: {
     backgroundColor: DesignSystem.colors.primary,
@@ -1028,10 +1028,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 16 },
   errorCount: {
-    color: DesignSystem.colors.error,
+    color: DesignSystem.colors.gray500,
     marginRight: 16 },
   warningCount: {
-    color: DesignSystem.colors.warning },
+    color: DesignSystem.colors.gray600 },
   completeTitle: {
     fontSize: 20,
     fontWeight: '600',
@@ -1056,9 +1056,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: DesignSystem.colors.text.primary },
   successText: {
-    color: DesignSystem.colors.success },
+    color: DesignSystem.colors.gray700 },
   warningText: {
-    color: DesignSystem.colors.warning },
+    color: DesignSystem.colors.gray600 },
   completeActions: {
     width: '100%' } });
 

@@ -802,7 +802,7 @@ const styles = StyleSheet.create({
     marginBottom: 24 },
   googleNotice: {
     flexDirection: 'row',
-    backgroundColor: withAlpha(DesignSystem.colors.info, 0.063),
+    backgroundColor: withAlpha(DesignSystem.colors.gray600, 0.063),
     borderRadius: 8,
     padding: 12,
     marginBottom: 16,
@@ -810,7 +810,7 @@ const styles = StyleSheet.create({
   googleNoticeText: {
     flex: 1,
     fontSize: 13,
-    color: DesignSystem.colors.info,
+    color: DesignSystem.colors.gray600,
     lineHeight: 18 },
   googleButton: {
     flexDirection: 'row',
@@ -898,7 +898,7 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.primary },
   clearLink: {
     fontSize: 13,
-    color: DesignSystem.colors.error,
+    color: DesignSystem.colors.gray500,
     fontWeight: '500' },
   listScroll: {
     maxHeight: 300 },

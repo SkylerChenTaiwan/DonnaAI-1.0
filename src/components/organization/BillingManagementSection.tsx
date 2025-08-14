@@ -118,11 +118,11 @@ export const BillingManagementSection: React.FC<BillingManagementSectionProps> =
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'paid':
-        return DesignSystem.colors.success;
+        return DesignSystem.colors.gray700;
       case 'pending':
-        return DesignSystem.colors.warning;
+        return DesignSystem.colors.gray600;
       case 'overdue':
-        return DesignSystem.colors.error;
+        return DesignSystem.colors.gray500;
       case 'cancelled':
         return DesignSystem.colors.gray500;
       default:
@@ -388,14 +388,14 @@ const styles = StyleSheet.create({
   trialInfo: {
     marginTop: DesignSystem.spacing.md,
     padding: DesignSystem.spacing.md,
-    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.125),
+    backgroundColor: withAlpha(DesignSystem.colors.gray600, 0.125),
     borderRadius: DesignSystem.borderRadius.sm,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center' },
   trialText: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.warning,
+    color: DesignSystem.colors.gray600,
     fontWeight: '500' },
   upgradeButton: {
     backgroundColor: DesignSystem.colors.primary,
@@ -522,16 +522,16 @@ const styles = StyleSheet.create({
     flex: 1,
     lineHeight: 18 },
   developmentNotice: {
-    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.125),
+    backgroundColor: withAlpha(DesignSystem.colors.gray600, 0.125),
     padding: DesignSystem.spacing.lg,
     borderRadius: DesignSystem.borderRadius.md,
     borderWidth: 1,
-    borderColor: withAlpha(DesignSystem.colors.warning, 0.25),
+    borderColor: withAlpha(DesignSystem.colors.gray600, 0.25),
     alignItems: 'center',
     marginBottom: DesignSystem.spacing.lg },
   developmentTitle: {
     ...DesignSystem.typography.h4,
-    color: DesignSystem.colors.warning,
+    color: DesignSystem.colors.gray600,
     marginBottom: DesignSystem.spacing.sm },
   developmentText: {
     ...DesignSystem.typography.body,

@@ -576,7 +576,7 @@ const styles = StyleSheet.create({
   voiceInputButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'DesignSystem.colors.status.error',
+    backgroundColor: 'DesignSystem.colors.gray500',
     borderRadius: 20,
     paddingHorizontal: 12,
     paddingVertical: 6,

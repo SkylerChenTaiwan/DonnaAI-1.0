@@ -403,7 +403,7 @@ const styles = StyleSheet.create({
     marginTop: 2 },
   tipCard: {
     flexDirection: 'row',
-    backgroundColor: `${DesignSystem.colors.info}10`,
+    backgroundColor: `${DesignSystem.colors.gray600}10`,
     borderRadius: 8,
     padding: 12,
     marginTop: 24,
@@ -411,7 +411,7 @@ const styles = StyleSheet.create({
   tipText: {
     flex: 1,
     fontSize: 13,
-    color: DesignSystem.colors.info,
+    color: DesignSystem.colors.gray600,
     lineHeight: 18 } });
 
 export default UserImportStepV2;

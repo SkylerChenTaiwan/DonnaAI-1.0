@@ -393,7 +393,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     marginBottom: 4 },
   voiceInputButton: {
-    backgroundColor: 'DesignSystem.colors.status.error',
+    backgroundColor: 'DesignSystem.colors.gray500',
     marginBottom: 16 },
   voiceResultBanner: {
     flexDirection: 'row',

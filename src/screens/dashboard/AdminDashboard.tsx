@@ -49,7 +49,7 @@ export const AdminDashboard: React.FC = () => {
       title: '計費管理',
       subtitle: '訂閱與帳單',
       icon: 'card' as string,
-      color: DesignSystem.colors.status.error,
+      color: DesignSystem.colors.gray500,
       onPress: () => {
         console.log('計費管理');
       } },
@@ -59,7 +59,7 @@ export const AdminDashboard: React.FC = () => {
     { label: '總使用者', value: '24', color: '#2C2C2C' },
     { label: 'AI 配額', value: '1440min', color: DesignSystem.colors.primary },
     { label: '已使用', value: '856min', color: '#FF9500' },
-    { label: '剩餘配額', value: '584min', color: DesignSystem.colors.status.error },
+    { label: '剩餘配額', value: '584min', color: DesignSystem.colors.gray500 },
   ];
 
   return (

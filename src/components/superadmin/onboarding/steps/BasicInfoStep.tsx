@@ -262,7 +262,7 @@ const BasicInfoStep: React.FC<StepProps> = ({
       {/* 提示訊息 */}
       <View style={styles.infoBox}>
         <Icon name="information-circle-outline" size={16}
-          color={DesignSystem.colors.info}
+          color={DesignSystem.colors.gray600}
          />
         <Text style={styles.infoText}>
           這些資訊將用於建立組織和發送通知。請確保聯絡資訊正確。
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     marginBottom: 24 },
   infoBox: {
     flexDirection: 'row',
-    backgroundColor: withAlpha(DesignSystem.colors.info, 0.063),
+    backgroundColor: withAlpha(DesignSystem.colors.gray600, 0.063),
     borderRadius: DesignSystem.borderRadius.md,
     padding: 12,
     marginTop: 8,
@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
   infoText: {
     flex: 1,
     fontSize: 13,
-    color: DesignSystem.colors.info,
+    color: DesignSystem.colors.gray600,
     lineHeight: 18 } });
 
 export default BasicInfoStep;

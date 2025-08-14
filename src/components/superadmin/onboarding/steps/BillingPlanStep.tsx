@@ -623,7 +623,7 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.primary,
     fontWeight: '500' },
   discountValue: {
-    color: DesignSystem.colors.success },
+    color: DesignSystem.colors.gray700 },
   summaryTotal: {
     borderTopWidth: 1,
     borderTopColor: DesignSystem.colors.gray200,

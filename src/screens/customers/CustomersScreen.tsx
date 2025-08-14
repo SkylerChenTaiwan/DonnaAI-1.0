@@ -101,7 +101,7 @@ export const CustomersScreen: React.FC = () => {
     return (
       <Layout>
         <View style={styles.centerContainer}>
-          <Icon name="alert-circle-outline" size={48} color={DesignSystem.colors.status.error} />
+          <Icon name="alert-circle-outline" size={48} color={DesignSystem.colors.gray500} />
           <Text style={styles.errorText}>{error}</Text>
           <TouchableOpacity 
             style={styles.retryButton}
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     color: '#8E8E93' },
   errorText: {
     fontSize: 16,
-    color: DesignSystem.colors.status.error,
+    color: DesignSystem.colors.gray500,
     marginTop: 12,
     marginBottom: 16,
     textAlign: 'center' },

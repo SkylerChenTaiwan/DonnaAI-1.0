@@ -235,6 +235,6 @@ const styles = StyleSheet.create({
     padding: 16,
     marginTop: 'auto' },
   logoutButton: {
-    borderColor: DesignSystem.colors.status.error },
+    borderColor: DesignSystem.colors.gray500 },
   logoutButtonText: {
-    color: DesignSystem.colors.status.error } });
+    color: DesignSystem.colors.gray500 } });

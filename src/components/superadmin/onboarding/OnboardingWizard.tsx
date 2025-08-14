@@ -640,13 +640,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: DesignSystem.colors.gray600 },
   errorContainer: {
-    backgroundColor: withAlpha(DesignSystem.colors.error, 0.063),
+    backgroundColor: withAlpha(DesignSystem.colors.gray500, 0.063),
     borderRadius: 8,
     padding: 12,
     marginTop: 16 },
   errorText: {
     fontSize: 14,
-    color: DesignSystem.colors.error,
+    color: DesignSystem.colors.gray500,
     marginBottom: 4 },
   footer: {
     flexDirection: 'row',

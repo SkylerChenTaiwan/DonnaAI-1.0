@@ -111,15 +111,15 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({
   const getActionColor = (action: string): string => {
     switch (action) {
       case 'login':
-        return DesignSystem.colors.success;
+        return DesignSystem.colors.gray700;
       case 'logout':
         return DesignSystem.colors.gray500;
       case 'create':
-        return DesignSystem.colors.info;
+        return DesignSystem.colors.gray600;
       case 'update':
-        return DesignSystem.colors.warning;
+        return DesignSystem.colors.gray600;
       case 'delete':
-        return DesignSystem.colors.error;
+        return DesignSystem.colors.gray500;
       default:
         return DesignSystem.colors.text.secondary;
     }

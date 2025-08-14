@@ -601,7 +601,7 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.primary },
   infoBox: {
     flexDirection: 'row',
-    backgroundColor: withAlpha(DesignSystem.colors.info, 0.063),
+    backgroundColor: withAlpha(DesignSystem.colors.gray600, 0.063),
     borderRadius: 8,
     padding: 12,
     marginTop: 12,
@@ -609,7 +609,7 @@ const styles = StyleSheet.create({
   infoText: {
     flex: 1,
     fontSize: 13,
-    color: DesignSystem.colors.info,
+    color: DesignSystem.colors.gray600,
     lineHeight: 18 },
   summarySection: {
     backgroundColor: DesignSystem.colors.gray50,
@@ -636,7 +636,7 @@ const styles = StyleSheet.create({
     fontWeight: '500' },
   tipBox: {
     flexDirection: 'row',
-    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.063),
+    backgroundColor: withAlpha(DesignSystem.colors.gray600, 0.063),
     borderRadius: 8,
     padding: 16,
     marginBottom: 24,
@@ -646,7 +646,7 @@ const styles = StyleSheet.create({
   tipTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: DesignSystem.colors.warning,
+    color: DesignSystem.colors.gray600,
     marginBottom: 8 },
   tipText: {
     fontSize: 13,

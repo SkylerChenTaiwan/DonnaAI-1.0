@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: DesignSystem.colors.text.primary },
   freeText: {
-    color: DesignSystem.colors.success },
+    color: DesignSystem.colors.gray700 },
   divider: {
     height: 1,
     backgroundColor: DesignSystem.colors.gray300,

@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
     color: '#7A7A7A' },
   confirmButton: {
     fontSize: 16,
-    color: 'DesignSystem.colors.status.error',
+    color: 'DesignSystem.colors.gray500',
     fontWeight: '600' },
   // 下拉選單樣式
   selectInput: {

@@ -34,7 +34,7 @@ export const FormInput: React.FC<FormInputProps> = ({
     const webInputStyle = {
       width: '100%',
       padding: '12px 16px',
-      border: `1px solid ${error ? DesignSystem.colors.error : DesignSystem.colors.border.light}`,
+      border: `1px solid ${error ? DesignSystem.colors.gray500 : DesignSystem.colors.border.light}`,
       borderRadius: '8px',
       fontSize: '14px',
       lineHeight: '20px',
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: DesignSystem.colors.text.secondary },
   required: {
-    color: DesignSystem.colors.error,
+    color: DesignSystem.colors.gray500,
     fontWeight: '600' },
   input: {
     borderWidth: 1,
@@ -135,12 +135,12 @@ const styles = StyleSheet.create({
         outlineStyle: 'none',
         outlineWidth: 0 } as any }) },
   inputError: {
-    borderColor: DesignSystem.colors.error },
+    borderColor: DesignSystem.colors.gray500 },
   hint: {
     fontSize: 12,
     color: DesignSystem.colors.text.tertiary,
     marginTop: 4 },
   error: {
     fontSize: 12,
-    color: DesignSystem.colors.error,
+    color: DesignSystem.colors.gray500,
     marginTop: 4 } });

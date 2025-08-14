@@ -411,7 +411,7 @@ export const AudioRecorder = ({
 // 輔助函數
 const getStatusColor = (status: RecordingStatus): string => {
   switch (status) {
-    case 'recording': return 'DesignSystem.colors.status.error';
+    case 'recording': return 'DesignSystem.colors.gray500';
     case 'paused': return '#f59e0b';
     case 'stopped': return '#6b7280';
     case 'loading': return '#3b82f6';
@@ -504,7 +504,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600' },
   stopButton: {
-    backgroundColor: 'DesignSystem.colors.status.error',
+    backgroundColor: 'DesignSystem.colors.gray500',
     paddingHorizontal: 24,
     paddingVertical: 16 },
   stopButtonText: {

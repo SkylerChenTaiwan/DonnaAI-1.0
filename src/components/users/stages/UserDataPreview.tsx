@@ -267,11 +267,11 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
         {/* 狀態指示器 */}
         <View style={styles.statusIndicator}>
           {!user.isValid ? (
-            <Icon name="alert-circle" size={16} color={DesignSystem.colors.error} />
+            <Icon name="alert-circle" size={16} color={DesignSystem.colors.gray500} />
           ) : user.isDuplicate ? (
-            <Icon name="copy-outline" size={16} color={DesignSystem.colors.warning} />
+            <Icon name="copy-outline" size={16} color={DesignSystem.colors.gray600} />
           ) : (
-            <Icon name="checkmark-circle" size={16} color={DesignSystem.colors.success} />
+            <Icon name="checkmark-circle" size={16} color={DesignSystem.colors.gray700} />
           )}
         </View>
 
@@ -315,7 +315,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
             onDataEdit(updatedData);
           }}
         >
-          <Icon name="trash-outline" size={16} color={DesignSystem.colors.error} />
+          <Icon name="trash-outline" size={16} color={DesignSystem.colors.gray500} />
         </TouchableOpacity>
       </View>
     );
@@ -417,15 +417,15 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
           <Text style={styles.statText}>總計: {stats.total}</Text>
         </View>
         <View style={styles.statItem}>
-          <Icon name="checkmark-circle-outline" size={16} color={DesignSystem.colors.success} />
+          <Icon name="checkmark-circle-outline" size={16} color={DesignSystem.colors.gray700} />
           <Text style={styles.statText}>有效: {stats.valid}</Text>
         </View>
         <View style={styles.statItem}>
-          <Icon name="alert-circle-outline" size={16} color={DesignSystem.colors.error} />
+          <Icon name="alert-circle-outline" size={16} color={DesignSystem.colors.gray500} />
           <Text style={styles.statText}>無效: {stats.invalid}</Text>
         </View>
         <View style={styles.statItem}>
-          <Icon name="copy-outline" size={16} color={DesignSystem.colors.warning} />
+          <Icon name="copy-outline" size={16} color={DesignSystem.colors.gray600} />
           <Text style={styles.statText}>重複: {stats.duplicates}</Text>
         </View>
       </View>
@@ -583,9 +583,9 @@ const styles = StyleSheet.create({
     paddingVertical: DesignSystem.spacing.xs,
     backgroundColor: DesignSystem.colors.background.primary },
   dataRowInvalid: {
-    backgroundColor: `${DesignSystem.colors.error}10` },
+    backgroundColor: `${DesignSystem.colors.gray500}10` },
   dataRowDuplicate: {
-    backgroundColor: `${DesignSystem.colors.warning}10` },
+    backgroundColor: `${DesignSystem.colors.gray600}10` },
   checkbox: {
     width: 40,
     justifyContent: 'center',

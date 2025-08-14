@@ -290,10 +290,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: DesignSystem.colors.border.light },
   inputError: {
-    borderColor: DesignSystem.colors.error },
+    borderColor: DesignSystem.colors.gray500 },
   errorText: {
     fontSize: 12,
-    color: DesignSystem.colors.error,
+    color: DesignSystem.colors.gray500,
     marginTop: 4 },
   helperText: {
     fontSize: 12,

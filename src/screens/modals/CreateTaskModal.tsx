@@ -160,9 +160,9 @@ export const CreateTaskModal: React.FC = () => {
             onPress={switchToVoice}
             activeOpacity={0.7}
           >
-            <Icon name="mic" size={20} color={DesignSystem.colors.status.error} />
+            <Icon name="mic" size={20} color={DesignSystem.colors.gray500} />
             <Text style={styles.voiceLinkText}>改用語音輸入</Text>
-            <Icon name="arrow-forward" size={16} color={DesignSystem.colors.status.error} />
+            <Icon name="arrow-forward" size={16} color={DesignSystem.colors.gray500} />
           </TouchableOpacity>
           
           <TaskForm 
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
     marginBottom: 16 },
   voiceLinkText: {
     fontSize: 16,
-    color: DesignSystem.colors.status.error,
+    color: DesignSystem.colors.gray500,
     fontWeight: '500',
     flex: 1 },
   headerButton: {

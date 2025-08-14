@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     borderColor: DesignSystem.colors.primary,
     backgroundColor: DesignSystem.colors.primary },
   stageCircleCompleted: {
-    borderColor: DesignSystem.colors.success,
+    borderColor: DesignSystem.colors.gray700,
     backgroundColor: DesignSystem.colors.primary },
   stageCircleDisabled: {
     borderColor: DesignSystem.colors.border.light,
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.primary,
     fontWeight: '600' },
   stageTitleCompleted: {
-    color: DesignSystem.colors.success },
+    color: DesignSystem.colors.gray700 },
   stageTitleDisabled: {
     color: DesignSystem.colors.text.disabled },
   stageDescription: {

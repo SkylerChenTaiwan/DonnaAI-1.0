@@ -1410,7 +1410,7 @@ const styles = StyleSheet.create({
     gap: 8 },
   activeTab: {
     borderBottomWidth: 2,
-    borderBottomColor: DesignSystem.colors.status.error },
+    borderBottomColor: DesignSystem.colors.gray500 },
   tabText: {
     fontSize: 16,
     fontWeight: '500',
@@ -1427,7 +1427,7 @@ const styles = StyleSheet.create({
     borderRadius: 10 },
   activeTabCount: {
     backgroundColor: 'rgba(255, 107, 107, 0.1)',
-    color: DesignSystem.colors.status.error },
+    color: DesignSystem.colors.gray500 },
   
   
   // 批量操作工具列
@@ -1506,7 +1506,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#757575' },
   saveButton: {
-    backgroundColor: DesignSystem.colors.status.error,
+    backgroundColor: DesignSystem.colors.gray500,
     paddingHorizontal: 12,
     paddingVertical: 5,
     borderRadius: 4 },
