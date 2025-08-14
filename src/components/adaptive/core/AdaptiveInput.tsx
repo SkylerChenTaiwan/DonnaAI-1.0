@@ -122,7 +122,7 @@ const createInputStyles = (state: InputState, hasError: boolean) => {
         break;
       case 'disabled':
         stateStyle = {
-          backgroundColor: DesignSystem.colors.gray100,
+          backgroundColor: DesignSystem.colors.gray[100],
           borderColor: DesignSystem.colors.border.light,
           color: DesignSystem.colors.text.disabled,
           opacity: 0.6 };

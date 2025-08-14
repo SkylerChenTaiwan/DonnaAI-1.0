@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
   refreshButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: DesignSystem.colors.white },
+    color: DesignSystem.colors.text.inverse },
   addButton: {
     paddingHorizontal: 20,
     paddingVertical: 10,

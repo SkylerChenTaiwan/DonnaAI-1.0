@@ -511,10 +511,10 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
         {/* 錯誤提示 */}
         {error && (
           <View style={styles.errorBanner}>
-            <Icon name="alert-circle-outline" size={20} color={DesignSystem.colors.error} />
+            <Icon name="alert-circle-outline" size={20} color={DesignSystem.colors.status.error} />
             <Text style={styles.errorText}>{error}</Text>
             <TouchableOpacity onPress={() => setError(null)}>
-              <Icon name="close" size={20} color={DesignSystem.colors.error} />
+              <Icon name="close" size={20} color={DesignSystem.colors.status.error} />
             </TouchableOpacity>
           </View>
         )}
@@ -614,8 +614,8 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.primary,
     borderColor: DesignSystem.colors.primary },
   stageCircleCompleted: {
-    backgroundColor: DesignSystem.colors.success,
-    borderColor: DesignSystem.colors.success },
+    backgroundColor: DesignSystem.colors.status.success,
+    borderColor: DesignSystem.colors.status.success },
   stageLabel: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary,
@@ -632,11 +632,11 @@ const styles = StyleSheet.create({
     top: 17,
     zIndex: -1 },
   stageConnectorCompleted: {
-    backgroundColor: DesignSystem.colors.success },
+    backgroundColor: DesignSystem.colors.status.success },
   errorBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: `${DesignSystem.colors.error}10`,
+    backgroundColor: `${DesignSystem.colors.status.error}10`,
     paddingHorizontal: DesignSystem.spacing.md,
     paddingVertical: DesignSystem.spacing.sm,
     marginHorizontal: DesignSystem.spacing.lg,
@@ -644,7 +644,7 @@ const styles = StyleSheet.create({
     borderRadius: DesignSystem.borderRadius.sm },
   errorText: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.error,
+    color: DesignSystem.colors.status.error,
     flex: 1,
     marginLeft: DesignSystem.spacing.sm },
   content: {

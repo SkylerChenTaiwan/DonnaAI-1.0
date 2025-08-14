@@ -253,7 +253,7 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
                   style={styles.removeFieldButton}
                   onPress={() => handleRemoveCustomField(index)}
                 >
-                  <Icon name="trash-outline" size={16} color={DesignSystem.colors.error} />
+                  <Icon name="trash-outline" size={16} color={DesignSystem.colors.status.error} />
                 </TouchableOpacity>
               </View>
             ))}

@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.secondary,
     marginBottom: DesignSystem.spacing.sm },
   required: {
-    color: DesignSystem.colors.error },
+    color: DesignSystem.colors.status.error },
   roleOptions: {
     flexDirection: 'row',
     gap: DesignSystem.spacing.sm },

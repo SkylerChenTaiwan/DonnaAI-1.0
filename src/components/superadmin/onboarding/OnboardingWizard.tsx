@@ -451,7 +451,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
               onPress={handleBack}
               disabled={state.isSaving}
             >
-              <Icon name="arrow-back" size={20} color={DesignSystem.colors.gray600}  />
+              <Icon name="arrow-back" size={20} color={DesignSystem.colors.gray[600]}  />
               <Text style={styles.secondaryButtonText}>上一步</Text>
             </TouchableOpacity>
           )}
@@ -461,7 +461,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
             onPress={handleSaveDraft}
             disabled={state.isSaving}
           >
-            <Icon name="save" size={20} color={DesignSystem.colors.gray600}  />
+            <Icon name="save" size={20} color={DesignSystem.colors.gray[600]}  />
             <Text style={styles.ghostButtonText}>儲存草稿</Text>
           </TouchableOpacity>
         </View>
@@ -518,7 +518,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
           style={styles.closeButton}
           onPress={onCancel}
         >
-          <Icon name="close" size={24} color={DesignSystem.colors.gray600}  />
+          <Icon name="close" size={24} color={DesignSystem.colors.gray[600]}  />
         </TouchableOpacity>
       </View>
       
@@ -554,7 +554,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.gray200 },
+    borderBottomColor: DesignSystem.colors.gray[200] },
   headerContent: {
     flex: 1 },
   headerTitle: {
@@ -571,10 +571,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.gray200 },
+    borderBottomColor: DesignSystem.colors.gray[200] },
   progressBar: {
     height: 4,
-    backgroundColor: DesignSystem.colors.gray200,
+    backgroundColor: DesignSystem.colors.gray[200],
     borderRadius: 2,
     overflow: 'hidden',
     marginBottom: 16 },
@@ -591,7 +591,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: DesignSystem.colors.gray200,
+    backgroundColor: DesignSystem.colors.gray[200],
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8 },
@@ -605,12 +605,12 @@ const styles = StyleSheet.create({
   stepNumber: {
     fontSize: 14,
     fontWeight: '600',
-    color: DesignSystem.colors.gray600 },
+    color: DesignSystem.colors.gray[600] },
   stepNumberActive: {
     color: DesignSystem.colors.background.surface },
   stepLabel: {
     fontSize: 12,
-    color: DesignSystem.colors.gray500,
+    color: DesignSystem.colors.gray[500],
     textAlign: 'center' },
   stepLabelCurrent: {
     color: DesignSystem.colors.text.primary,
@@ -637,7 +637,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: DesignSystem.colors.gray600 },
+    color: DesignSystem.colors.gray[600] },
   errorContainer: {
     backgroundColor: withAlpha(DesignSystem.colors.status.error, 0.063),
     borderRadius: 8,
@@ -654,7 +654,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderTopWidth: 1,
-    borderTopColor: DesignSystem.colors.gray200 },
+    borderTopColor: DesignSystem.colors.gray[200] },
   footerLeft: {
     flexDirection: 'row',
     gap: 12 },
@@ -706,6 +706,6 @@ const styles = StyleSheet.create({
     gap: 8 },
   savingText: {
     fontSize: 12,
-    color: DesignSystem.colors.gray600 } });
+    color: DesignSystem.colors.gray[600] } });
 
 export default OnboardingWizard;

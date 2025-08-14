@@ -771,7 +771,7 @@ export function LegacyDataImportScreen({ navigation, route }: any) {
       <View style={styles.switchContainer}>
         <Text style={styles.switchLabel}>使用舊版匯入</Text>
         <TouchableOpacity
-          style={StyleSheet.flatten([styles.switchButton, { backgroundColor: DesignSystem.colors.gray500 }])}
+          style={StyleSheet.flatten([styles.switchButton, { backgroundColor: DesignSystem.colors.gray[500] }])}
           onPress={() => setUseNewWizard(true)}
         >
           <Text style={styles.switchButtonText}>切換到新版</Text>
@@ -856,7 +856,7 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: DesignSystem.colors.background.secondary,
     borderBottomWidth: 1,
-    borderBottomColor: DesignSystem.colors.gray200 },
+    borderBottomColor: DesignSystem.colors.gray[200] },
   switchLabel: {
     fontSize: 14,
     color: DesignSystem.colors.text.secondary },
@@ -881,7 +881,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: DesignSystem.colors.gray200,
+    backgroundColor: DesignSystem.colors.gray[200],
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 8 },
@@ -889,7 +889,7 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.primary },
   stepLabel: {
     fontSize: 12,
-    color: DesignSystem.colors.gray500 },
+    color: DesignSystem.colors.gray[500] },
   stepLabelActive: {
     color: DesignSystem.colors.text.primary,
     fontWeight: '500' },
@@ -899,7 +899,7 @@ const styles = StyleSheet.create({
     left: '50%',
     right: '-50%',
     height: 2,
-    backgroundColor: DesignSystem.colors.gray200 },
+    backgroundColor: DesignSystem.colors.gray[200] },
   stepLineActive: {
     backgroundColor: DesignSystem.colors.primary },
   stepContent: {
@@ -923,7 +923,7 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.status.error },
   fileDescription: {
     fontSize: 14,
-    color: DesignSystem.colors.gray500 },
+    color: DesignSystem.colors.gray[500] },
   uploadButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -954,7 +954,7 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.primary },
   fileSize: {
     fontSize: 12,
-    color: DesignSystem.colors.gray500,
+    color: DesignSystem.colors.gray[500],
     marginTop: 2 },
   fileRows: {
     fontSize: 12,
@@ -983,7 +983,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600' },
   disabledButton: {
-    backgroundColor: DesignSystem.colors.gray500,
+    backgroundColor: DesignSystem.colors.gray[500],
     opacity: 0.5 },
   secondaryButton: {
     backgroundColor: 'transparent',
@@ -1005,7 +1005,7 @@ const styles = StyleSheet.create({
   progressBar: {
     width: '100%',
     height: 8,
-    backgroundColor: DesignSystem.colors.gray200,
+    backgroundColor: DesignSystem.colors.gray[200],
     borderRadius: 4,
     overflow: 'hidden',
     marginBottom: 12 },
@@ -1014,7 +1014,7 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.primary },
   progressText: {
     fontSize: 14,
-    color: DesignSystem.colors.gray500,
+    color: DesignSystem.colors.gray[500],
     marginBottom: 8 },
   currentItem: {
     fontSize: 14,
@@ -1022,7 +1022,7 @@ const styles = StyleSheet.create({
     marginTop: 8 },
   timeRemaining: {
     fontSize: 14,
-    color: DesignSystem.colors.gray500,
+    color: DesignSystem.colors.gray[500],
     marginTop: 4 },
   issuesSummary: {
     flexDirection: 'row',
@@ -1050,7 +1050,7 @@ const styles = StyleSheet.create({
     marginBottom: 8 },
   summaryLabel: {
     fontSize: 14,
-    color: DesignSystem.colors.gray500 },
+    color: DesignSystem.colors.gray[500] },
   summaryValue: {
     fontSize: 14,
     fontWeight: '600',

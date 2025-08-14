@@ -311,7 +311,7 @@ const UserFieldMapper: React.FC<UserFieldMapperProps> = ({
         <Icon
           name="arrow-forward"
           size={20}
-          color={mapping.sourceField ? DesignSystem.colors.success : DesignSystem.colors.text.tertiary}
+          color={mapping.sourceField ? DesignSystem.colors.status.success : DesignSystem.colors.text.tertiary}
         />
 
         {Platform.OS === 'web' ? (
@@ -368,13 +368,13 @@ const UserFieldMapper: React.FC<UserFieldMapperProps> = ({
                 padding: '2px 6px',
                 borderRadius: 4,
                 backgroundColor: mapping.confidence > 0.8 
-                  ? `${DesignSystem.colors.success}20`
-                  : `${DesignSystem.colors.warning}20`,
+                  ? `${DesignSystem.colors.status.success}20`
+                  : `${DesignSystem.colors.status.warning}20`,
                 fontSize: 10,
                 fontWeight: 600,
                 color: mapping.confidence > 0.8 
-                  ? DesignSystem.colors.success
-                  : DesignSystem.colors.warning }}>
+                  ? DesignSystem.colors.status.success
+                  : DesignSystem.colors.status.warning }}>
                 {Math.round(mapping.confidence * 100)}%
               </span>
             )}
@@ -519,13 +519,13 @@ const UserFieldMapper: React.FC<UserFieldMapperProps> = ({
       {/* 統計資訊 */}
       <View style={styles.stats}>
         <View style={styles.statItem}>
-          <Icon name="checkmark-circle" size={16} color={DesignSystem.colors.success} />
+          <Icon name="checkmark-circle" size={16} color={DesignSystem.colors.status.success} />
           <Text style={styles.statText}>
             已映射: {localMappings.filter(m => m.sourceField).length}/{localMappings.length}
           </Text>
         </View>
         <View style={styles.statItem}>
-          <Icon name="alert-circle" size={16} color={DesignSystem.colors.warning} />
+          <Icon name="alert-circle" size={16} color={DesignSystem.colors.status.warning} />
           <Text style={styles.statText}>
             必填: {localMappings.filter(m => m.isRequired && !m.sourceField).length} 個未映射
           </Text>
@@ -587,7 +587,7 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.tertiary,
     marginTop: DesignSystem.spacing.xxs },
   required: {
-    color: DesignSystem.colors.error },
+    color: DesignSystem.colors.status.error },
   sourceField: {
     flex: 1,
     flexDirection: 'row',
@@ -616,11 +616,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: DesignSystem.spacing.xs,
     paddingVertical: 2,
     borderRadius: DesignSystem.borderRadius.xs,
-    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.125) },
+    backgroundColor: withAlpha(DesignSystem.colors.status.warning, 0.125) },
   confidenceBadgeHigh: {
-    backgroundColor: withAlpha(DesignSystem.colors.success, 0.125) },
+    backgroundColor: withAlpha(DesignSystem.colors.status.success, 0.125) },
   confidenceBadgeMedium: {
-    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.125) },
+    backgroundColor: withAlpha(DesignSystem.colors.status.warning, 0.125) },
   confidenceText: {
     ...DesignSystem.typography.caption,
     fontSize: 10,

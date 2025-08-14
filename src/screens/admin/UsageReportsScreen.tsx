@@ -208,11 +208,11 @@ export const UsageReportsScreen: React.FC = () => {
                 <Icon
                   name={stat.isPositive ? "trending-up" : "trending-down"}
                   size={16}
-                  color={stat.isPositive ? DesignSystem.colors.success : DesignSystem.colors.error}
+                  color={stat.isPositive ? DesignSystem.colors.status.success : DesignSystem.colors.status.error}
                 />
                 <Text style={StyleSheet.flatten([
                   styles.statChange,
-                  { color: stat.isPositive ? DesignSystem.colors.success : DesignSystem.colors.error }
+                  { color: stat.isPositive ? DesignSystem.colors.status.success : DesignSystem.colors.status.error }
                 ])}>
                   {stat.change}
                 </Text>
@@ -386,10 +386,10 @@ export const UsageReportsScreen: React.FC = () => {
                 disabled={isExporting}
               >
                 {isExporting ? (
-                  <ActivityIndicator color={DesignSystem.colors.white} size="small" />
+                  <ActivityIndicator color={DesignSystem.colors.text.inverse} size="small" />
                 ) : (
                   <>
-                    <Icon name="download" size={20} color={DesignSystem.colors.white} />
+                    <Icon name="download" size={20} color={DesignSystem.colors.text.inverse} />
                     <Text style={styles.exportButtonText}>匯出</Text>
                   </>
                 )}
@@ -446,7 +446,7 @@ const styles = StyleSheet.create({
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.text.secondary },
   periodButtonTextActive: {
-    color: DesignSystem.colors.white,
+    color: DesignSystem.colors.text.inverse,
     fontWeight: '600' },
   statsContainer: {
     paddingHorizontal: 20,
@@ -604,5 +604,5 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.primary },
   exportButtonText: {
     ...DesignSystem.typography.button,
-    color: DesignSystem.colors.white,
+    color: DesignSystem.colors.text.inverse,
     fontWeight: '600' } });

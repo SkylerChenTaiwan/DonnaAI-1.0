@@ -252,13 +252,13 @@ export const OrganizationDetailScreen: React.FC = () => {
   const getStatusColor = (status?: string) => {
     switch (status) {
       case 'active':
-        return DesignSystem.colors.success;
+        return DesignSystem.colors.status.success;
       case 'suspended':
-        return DesignSystem.colors.warning;
+        return DesignSystem.colors.status.warning;
       case 'cancelled':
-        return DesignSystem.colors.error;
+        return DesignSystem.colors.status.error;
       default:
-        return DesignSystem.colors.gray500;
+        return DesignSystem.colors.gray[500];
     }
   };
 
@@ -496,7 +496,7 @@ export const OrganizationDetailScreen: React.FC = () => {
                     setShowImportWizard(true);
                   }}
                 >
-                  <Icon name="cloud-upload-outline" size={16} color={DesignSystem.colors.success} />
+                  <Icon name="cloud-upload-outline" size={16} color={DesignSystem.colors.status.success} />
                   <Text style={styles.bulkImportButtonText}>批量匯入</Text>
                 </TouchableOpacity>
               </View>
@@ -650,7 +650,7 @@ export const OrganizationDetailScreen: React.FC = () => {
               style={styles.dangerButton}
               onPress={handleDeleteOrganization}
             >
-              <Icon name="trash-outline" size={20} color={DesignSystem.colors.error} />
+              <Icon name="trash-outline" size={20} color={DesignSystem.colors.status.error} />
               <Text style={styles.dangerButtonText}>刪除組織</Text>
             </TouchableOpacity>
           </View>
@@ -822,7 +822,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: DesignSystem.spacing.sm },
   upgradeButton: {
-    backgroundColor: DesignSystem.colors.success,
+    backgroundColor: DesignSystem.colors.status.success,
     paddingHorizontal: DesignSystem.spacing.sm,
     paddingVertical: DesignSystem.spacing.xs,
     borderRadius: DesignSystem.borderRadius.sm },
@@ -886,11 +886,11 @@ const styles = StyleSheet.create({
   trialInfo: {
     marginTop: DesignSystem.spacing.md,
     padding: DesignSystem.spacing.md,
-    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.125),
+    backgroundColor: withAlpha(DesignSystem.colors.status.warning, 0.125),
     borderRadius: DesignSystem.borderRadius.sm },
   trialText: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.warning,
+    color: DesignSystem.colors.status.warning,
     fontWeight: '500',
     textAlign: 'center' },
   historySection: {
@@ -953,15 +953,15 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.inverse,
     fontWeight: '500' },
   developmentNotice: {
-    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.125),
+    backgroundColor: withAlpha(DesignSystem.colors.status.warning, 0.125),
     padding: DesignSystem.spacing.lg,
     borderRadius: DesignSystem.borderRadius.md,
     borderWidth: 1,
-    borderColor: withAlpha(DesignSystem.colors.warning, 0.25),
+    borderColor: withAlpha(DesignSystem.colors.status.warning, 0.25),
     alignItems: 'center' },
   developmentTitle: {
     ...DesignSystem.typography.h4,
-    color: DesignSystem.colors.warning,
+    color: DesignSystem.colors.status.warning,
     marginBottom: DesignSystem.spacing.sm },
   developmentText: {
     ...DesignSystem.typography.body,
@@ -994,11 +994,11 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.secondary },
   dangerSection: {
     borderWidth: 1,
-    borderColor: withAlpha(DesignSystem.colors.error, 0.188),
-    backgroundColor: withAlpha(DesignSystem.colors.error, 0.063) },
+    borderColor: withAlpha(DesignSystem.colors.status.error, 0.188),
+    backgroundColor: withAlpha(DesignSystem.colors.status.error, 0.063) },
   dangerTitle: {
     ...DesignSystem.typography.h4,
-    color: DesignSystem.colors.error,
+    color: DesignSystem.colors.status.error,
     marginBottom: DesignSystem.spacing.md },
   dangerButton: {
     flexDirection: 'row',
@@ -1006,12 +1006,12 @@ const styles = StyleSheet.create({
     gap: DesignSystem.spacing.sm,
     padding: DesignSystem.spacing.md,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.error,
+    borderColor: DesignSystem.colors.status.error,
     borderRadius: DesignSystem.borderRadius.sm,
     justifyContent: 'center' },
   dangerButtonText: {
     ...DesignSystem.typography.body,
-    color: DesignSystem.colors.error,
+    color: DesignSystem.colors.status.error,
     fontWeight: '500' },
   userActionButtons: {
     flexDirection: 'row',
@@ -1037,12 +1037,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: DesignSystem.spacing.md,
     paddingVertical: DesignSystem.spacing.sm,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.success,
+    borderColor: DesignSystem.colors.status.success,
     borderRadius: DesignSystem.borderRadius.sm,
     backgroundColor: DesignSystem.colors.background.surface },
   bulkImportButtonText: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.success,
+    color: DesignSystem.colors.status.success,
     fontWeight: '500' },
   userInfoCard: {
     backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063),
@@ -1064,6 +1064,6 @@ const styles = StyleSheet.create({
   disabledTitle: {
     color: DesignSystem.colors.text.secondary },
   disabledButton: {
-    backgroundColor: DesignSystem.colors.gray300 },
+    backgroundColor: DesignSystem.colors.gray[300] },
   disabledButtonText: {
     color: DesignSystem.colors.text.secondary } });

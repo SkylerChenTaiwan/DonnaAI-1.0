@@ -533,7 +533,7 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.secondary },
   proLabel: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.warning,
+    color: DesignSystem.colors.status.warning,
     fontWeight: '600',
     marginTop: DesignSystem.spacing.xs },
   toolItem: {

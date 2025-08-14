@@ -17,7 +17,7 @@ import '@expo/metro-runtime';
 
 // 導入 Web 平台專用樣式
 // NotionDatabaseV4.css 現在只在 Notion 元件內引入，避免影響全域
-import './src/styles/buttonOverrides.css';
+// buttonOverrides.css 已移除，避免全域樣式污染
 
 // 導入 Web 字體 polyfill
 import './src/utils/webFontPolyfill';

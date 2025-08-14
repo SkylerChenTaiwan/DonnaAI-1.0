@@ -407,7 +407,7 @@ const styles = StyleSheet.create({
     flex: 1 },
   billingCycleContainer: {
     flexDirection: 'row',
-    backgroundColor: DesignSystem.colors.gray100,
+    backgroundColor: DesignSystem.colors.gray[100],
     borderRadius: 8,
     padding: 4,
     marginBottom: 20 },
@@ -428,7 +428,7 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? {} : { elevation: 1 }) },
   cycleText: {
     fontSize: 14,
-    color: DesignSystem.colors.gray600,
+    color: DesignSystem.colors.gray[600],
     fontWeight: '500' },
   cycleTextActive: {
     color: DesignSystem.colors.text.primary },
@@ -453,7 +453,7 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.background.surface,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray200,
+    borderColor: DesignSystem.colors.gray[200],
     padding: 20,
     position: 'relative' },
   planCardSelected: {
@@ -490,7 +490,7 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.primary },
   planPriceUnit: {
     fontSize: 14,
-    color: DesignSystem.colors.gray600,
+    color: DesignSystem.colors.gray[600],
     marginTop: 4 },
   planPriceUnitSelected: {
     color: DesignSystem.colors.primary },
@@ -503,7 +503,7 @@ const styles = StyleSheet.create({
   featureText: {
     flex: 1,
     fontSize: 14,
-    color: DesignSystem.colors.gray700,
+    color: DesignSystem.colors.gray[700],
     lineHeight: 20 },
   featureTextSelected: {
     color: DesignSystem.colors.text.primary },
@@ -526,14 +526,14 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: DesignSystem.colors.gray100,
+    backgroundColor: DesignSystem.colors.gray[100],
     justifyContent: 'center',
     alignItems: 'center' },
   seatsInput: {
     flex: 1,
     maxWidth: 100,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray300,
+    borderColor: DesignSystem.colors.gray[300],
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 8,
@@ -543,7 +543,7 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.background.surface },
   seatsHint: {
     fontSize: 13,
-    color: DesignSystem.colors.gray600,
+    color: DesignSystem.colors.gray[600],
     marginTop: 8 },
   paymentContainer: {
     marginBottom: 24 },
@@ -562,7 +562,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray300,
+    borderColor: DesignSystem.colors.gray[300],
     backgroundColor: DesignSystem.colors.background.surface,
     gap: 8 },
   paymentOptionActive: {
@@ -570,7 +570,7 @@ const styles = StyleSheet.create({
     backgroundColor: withAlpha(DesignSystem.colors.primary, 0.063) },
   paymentText: {
     fontSize: 12,
-    color: DesignSystem.colors.gray700,
+    color: DesignSystem.colors.gray[700],
     fontWeight: '500' },
   paymentTextActive: {
     color: DesignSystem.colors.primary },
@@ -585,12 +585,12 @@ const styles = StyleSheet.create({
     marginBottom: 16 },
   inputLabel: {
     fontSize: 14,
-    color: DesignSystem.colors.gray700,
+    color: DesignSystem.colors.gray[700],
     marginBottom: 8,
     fontWeight: '500' },
   input: {
     borderWidth: 1,
-    borderColor: DesignSystem.colors.gray300,
+    borderColor: DesignSystem.colors.gray[300],
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
@@ -601,7 +601,7 @@ const styles = StyleSheet.create({
     minHeight: 80,
     textAlignVertical: 'top' },
   priceSummary: {
-    backgroundColor: DesignSystem.colors.gray50,
+    backgroundColor: DesignSystem.colors.gray[50],
     borderRadius: 12,
     padding: 20,
     marginBottom: 24 },
@@ -617,7 +617,7 @@ const styles = StyleSheet.create({
     marginBottom: 8 },
   summaryLabel: {
     fontSize: 14,
-    color: DesignSystem.colors.gray600 },
+    color: DesignSystem.colors.gray[600] },
   summaryValue: {
     fontSize: 14,
     color: DesignSystem.colors.text.primary,
@@ -626,7 +626,7 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.status.success },
   summaryTotal: {
     borderTopWidth: 1,
-    borderTopColor: DesignSystem.colors.gray200,
+    borderTopColor: DesignSystem.colors.gray[200],
     paddingTop: 12,
     marginTop: 12,
     marginBottom: 0 },

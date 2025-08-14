@@ -113,7 +113,7 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({
       case 'login':
         return DesignSystem.colors.status.success;
       case 'logout':
-        return DesignSystem.colors.gray500;
+        return DesignSystem.colors.gray[500];
       case 'create':
         return DesignSystem.colors.status.info;
       case 'update':
@@ -348,7 +348,7 @@ const styles = StyleSheet.create({
   onlineDot: {
     backgroundColor: DesignSystem.colors.status.success },
   offlineDot: {
-    backgroundColor: DesignSystem.colors.gray400 },
+    backgroundColor: DesignSystem.colors.gray[400] },
   statusLabel: {
     fontSize: DesignSystem.typography.body.fontSize,
     color: DesignSystem.colors.text.secondary },

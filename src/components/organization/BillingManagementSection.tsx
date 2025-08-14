@@ -118,15 +118,15 @@ export const BillingManagementSection: React.FC<BillingManagementSectionProps> =
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'paid':
-        return DesignSystem.colors.success;
+        return DesignSystem.colors.status.success;
       case 'pending':
-        return DesignSystem.colors.warning;
+        return DesignSystem.colors.status.warning;
       case 'overdue':
-        return DesignSystem.colors.error;
+        return DesignSystem.colors.status.error;
       case 'cancelled':
-        return DesignSystem.colors.gray500;
+        return DesignSystem.colors.gray[500];
       default:
-        return DesignSystem.colors.gray500;
+        return DesignSystem.colors.gray[500];
     }
   };
 
@@ -388,17 +388,17 @@ const styles = StyleSheet.create({
   trialInfo: {
     marginTop: DesignSystem.spacing.md,
     padding: DesignSystem.spacing.md,
-    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.125),
+    backgroundColor: withAlpha(DesignSystem.colors.status.warning, 0.125),
     borderRadius: DesignSystem.borderRadius.sm,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center' },
   trialText: {
     ...DesignSystem.typography.caption,
-    color: DesignSystem.colors.warning,
+    color: DesignSystem.colors.status.warning,
     fontWeight: '500' },
   upgradeButton: {
-    backgroundColor: DesignSystem.colors.success,
+    backgroundColor: DesignSystem.colors.status.success,
     paddingHorizontal: DesignSystem.spacing.sm,
     paddingVertical: DesignSystem.spacing.xs,
     borderRadius: DesignSystem.borderRadius.sm },
@@ -522,16 +522,16 @@ const styles = StyleSheet.create({
     flex: 1,
     lineHeight: 18 },
   developmentNotice: {
-    backgroundColor: withAlpha(DesignSystem.colors.warning, 0.125),
+    backgroundColor: withAlpha(DesignSystem.colors.status.warning, 0.125),
     padding: DesignSystem.spacing.lg,
     borderRadius: DesignSystem.borderRadius.md,
     borderWidth: 1,
-    borderColor: withAlpha(DesignSystem.colors.warning, 0.25),
+    borderColor: withAlpha(DesignSystem.colors.status.warning, 0.25),
     alignItems: 'center',
     marginBottom: DesignSystem.spacing.lg },
   developmentTitle: {
     ...DesignSystem.typography.h4,
-    color: DesignSystem.colors.warning,
+    color: DesignSystem.colors.status.warning,
     marginBottom: DesignSystem.spacing.sm },
   developmentText: {
     ...DesignSystem.typography.body,

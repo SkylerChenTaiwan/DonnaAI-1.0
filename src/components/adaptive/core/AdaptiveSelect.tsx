@@ -130,7 +130,7 @@ const createSelectStyles = (state: SelectState, size: SelectSize, hasError: bool
         break;
       case 'disabled':
         stateStyle = {
-          backgroundColor: DesignSystem.colors.gray100,
+          backgroundColor: DesignSystem.colors.gray[100],
           borderColor: DesignSystem.colors.border.light,
           color: DesignSystem.colors.text.disabled,
           opacity: 0.6 };
@@ -318,7 +318,7 @@ const WebSelect = forwardRef<HTMLDivElement, AdaptiveSelectProps>(
         cursor: option.disabled ? 'not-allowed' : 'pointer',
         color: option.disabled ? DesignSystem.colors.text.disabled : DesignSystem.colors.text.primary,
         backgroundColor: isSelected ? withAlpha(DesignSystem.colors.primary, 0.125) : 
-                        isHovered ? DesignSystem.colors.gray50 : 'transparent',
+                        isHovered ? DesignSystem.colors.gray[50] : 'transparent',
         transition: 'background-color 150ms ease' };
       
       if (optionStyle) {
@@ -493,18 +493,10 @@ const WebSelect = forwardRef<HTMLDivElement, AdaptiveSelectProps>(
             {rightIcon || (
               <span
                 style={{
-            ...(Platform.OS === 'web' ? {
-              
-                  color: DesignSystem.colors.text.secondary,
-                  // transform: `rotate(${isOpen ? 180 : 0}deg)`,
-                  transition: 'transform 150ms ease' 
-            } : {
-              
                   color: DesignSystem.colors.text.secondary,
                   transform: `rotate(${isOpen ? 180 : 0}deg)`,
-                  transition: 'transform 150ms ease' 
-            })
-          }}
+                  transition: 'transform 150ms ease'
+                }}
               >
                 ▼
               </span>
@@ -840,7 +832,7 @@ const NativeSelect = forwardRef<any, AdaptiveSelectProps>(
                   <TouchableOpacity
                     style={{
                       padding: DesignSystem.spacing.sm,
-                      backgroundColor: DesignSystem.colors.gray100,
+                      backgroundColor: DesignSystem.colors.gray[100],
                       borderRadius: DesignSystem.borderRadius.md,
                       alignItems: 'center' }}
                     onPress={handleClose}

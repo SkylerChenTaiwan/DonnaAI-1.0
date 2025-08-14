@@ -457,7 +457,7 @@ export const DataImportScreen: React.FC = () => {
                     { 
                       width: `${(importProgress.current / importProgress.total) * 100}%`,
                       backgroundColor: importProgress.status === 'error' 
-                        ? DesignSystem.colors.error 
+                        ? DesignSystem.colors.status.error 
                         : DesignSystem.colors.primary 
                     }
                   ])} 
@@ -480,10 +480,10 @@ export const DataImportScreen: React.FC = () => {
           disabled={selectedFiles.length === 0 || importing}
         >
           {importing ? (
-            <ActivityIndicator color={DesignSystem.colors.white} />
+            <ActivityIndicator color={DesignSystem.colors.text.inverse} />
           ) : (
             <>
-              <Icon name="cloud-upload" size={20} color={DesignSystem.colors.white} />
+              <Icon name="cloud-upload" size={20} color={DesignSystem.colors.text.inverse} />
               <Text style={styles.importButtonText}>開始匯入</Text>
             </>
           )}
@@ -617,9 +617,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: DesignSystem.colors.text.primary },
   successText: {
-    color: DesignSystem.colors.success },
+    color: DesignSystem.colors.status.success },
   errorText: {
-    color: DesignSystem.colors.error },
+    color: DesignSystem.colors.status.error },
   errorContainer: {
     marginTop: 16,
     paddingTop: 16,
@@ -628,7 +628,7 @@ const styles = StyleSheet.create({
   errorTitle: {
     ...DesignSystem.typography.caption,
     fontWeight: '600',
-    color: DesignSystem.colors.error,
+    color: DesignSystem.colors.status.error,
     marginBottom: 8 },
   errorItem: {
     ...DesignSystem.typography.caption,
@@ -644,10 +644,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     gap: 8 },
   importButtonDisabled: {
-    backgroundColor: DesignSystem.colors.gray400 },
+    backgroundColor: DesignSystem.colors.gray[400] },
   importButtonText: {
     ...DesignSystem.typography.button,
-    color: DesignSystem.colors.white,
+    color: DesignSystem.colors.text.inverse,
     fontWeight: '600' },
   progressContainer: {
     gap: 12 },

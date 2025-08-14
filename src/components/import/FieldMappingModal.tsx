@@ -504,7 +504,7 @@ export const FieldMappingModal: React.FC<Props> = ({
             <View style={styles.relationHeader}>
               <Text style={styles.relationTitle}>關聯 {index + 1}</Text>
               <TouchableOpacity onPress={() => removeRelation(index)}>
-                <Icon name="close-circle-outline" size={20} color={DesignSystem.colors.error} />
+                <Icon name="close-circle-outline" size={20} color={DesignSystem.colors.status.error} />
               </TouchableOpacity>
             </View>
             

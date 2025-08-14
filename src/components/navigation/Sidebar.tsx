@@ -449,7 +449,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...transitions.default },
   actionButtonManager: {
-    backgroundColor: DesignSystem.colors.gray700 },
+    backgroundColor: DesignSystem.colors.gray[700] },
   actionButtonHover: {
     transform: Platform.OS === 'web' ? `scale(${1.05})` : [{ scale: 1.05 }] },
   actionButtonPressed: {

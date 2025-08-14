@@ -221,10 +221,10 @@ export const ToolManagementScreen: React.FC = () => {
                         value={tool.enabled}
                         onValueChange={() => handleToggleTool(tool.id, tool.enabled)}
                         trackColor={{ 
-                          false: DesignSystem.colors.gray300, 
+                          false: DesignSystem.colors.gray[300], 
                           true: DesignSystem.colors.primary 
                         }}
-                        thumbColor={DesignSystem.colors.white}
+                        thumbColor={DesignSystem.colors.text.inverse}
                       />
                     </View>
                   ))}
@@ -263,10 +263,10 @@ export const ToolManagementScreen: React.FC = () => {
                       showToast('info', '此功能尚未完成');
                     }}
                     trackColor={{ 
-                      false: DesignSystem.colors.gray300, 
+                      false: DesignSystem.colors.gray[300], 
                       true: DesignSystem.colors.primary 
                     }}
-                    thumbColor={DesignSystem.colors.white}
+                    thumbColor={DesignSystem.colors.text.inverse}
                   />
                 </View>
                 
@@ -279,10 +279,10 @@ export const ToolManagementScreen: React.FC = () => {
                       showToast('info', '此功能尚未完成');
                     }}
                     trackColor={{ 
-                      false: DesignSystem.colors.gray300, 
+                      false: DesignSystem.colors.gray[300], 
                       true: DesignSystem.colors.primary 
                     }}
-                    thumbColor={DesignSystem.colors.white}
+                    thumbColor={DesignSystem.colors.text.inverse}
                   />
                 </View>
                 
@@ -295,10 +295,10 @@ export const ToolManagementScreen: React.FC = () => {
                       showToast('info', '此功能尚未完成');
                     }}
                     trackColor={{ 
-                      false: DesignSystem.colors.gray300, 
+                      false: DesignSystem.colors.gray[300], 
                       true: DesignSystem.colors.primary 
                     }}
-                    thumbColor={DesignSystem.colors.white}
+                    thumbColor={DesignSystem.colors.text.inverse}
                   />
                 </View>
               </View>

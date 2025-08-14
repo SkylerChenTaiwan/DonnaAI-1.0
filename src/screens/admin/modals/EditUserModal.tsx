@@ -242,10 +242,10 @@ export const EditUserModal: React.FC = () => {
                 value={formData.isActive}
                 onValueChange={(value) => handleFieldChange('isActive', value)}
                 trackColor={{ 
-                  false: DesignSystem.colors.gray300, 
+                  false: DesignSystem.colors.gray[300], 
                   true: DesignSystem.colors.primary 
                 }}
-                thumbColor={DesignSystem.colors.white}
+                thumbColor={DesignSystem.colors.text.inverse}
               />
             </View>
             <Text style={styles.switchHint}>
