@@ -702,59 +702,58 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
             // 過濾按鈕
             React.createElement('button', 
               { 
-                className: `notion-button ${statsInfo.activeFilters > 0 ? 'notion-button-active' : ''}`,
+                // className removed to avoid global style pollution
                 onClick: handleFilterButtonClick,
                 title: `過濾 ${statsInfo.activeFilters > 0 ? `(${statsInfo.activeFilters} 個條件)` : ''}`
               },
-              React.createElement('span', { className: 'notion-button-icon' }, NotionIcons.filter()),
+              React.createElement('span', {  }, NotionIcons.filter()),
               '過濾',
               statsInfo.activeFilters > 0 && React.createElement('span', {
-                className: 'notion-button-badge'
+                
               }, statsInfo.activeFilters.toString())
             ),
             // 排序按鈕
             React.createElement('button', 
               { 
-                className: `notion-button ${statsInfo.activeSorts > 0 ? 'notion-button-active' : ''}`,
+                // className removed to avoid global style pollution
                 onClick: handleSortButtonClick,
                 title: `排序 ${statsInfo.activeSorts > 0 ? `(${statsInfo.activeSorts} 個規則)` : ''}`
               },
-              React.createElement('span', { className: 'notion-button-icon' }, NotionIcons.sort()),
+              React.createElement('span', {  }, NotionIcons.sort()),
               '排序',
               statsInfo.activeSorts > 0 && React.createElement('span', {
-                className: 'notion-button-badge'
+                
               }, statsInfo.activeSorts.toString())
             ),
             // 群組按鈕
             React.createElement('button', 
               { 
-                className: `notion-button ${groupConfig ? 'notion-button-active' : ''}`,
+                // className removed to avoid global style pollution
                 onClick: handleGroupButtonClick,
                 title: `群組 ${groupConfig ? `(按 ${columnsWithActions.find(c => c.key === groupConfig.columnKey)?.title})` : ''}`
               },
-              React.createElement('span', { className: 'notion-button-icon' }, NotionIcons.group()),
+              React.createElement('span', {  }, NotionIcons.group()),
               '群組',
               groupConfig && React.createElement('span', {
-                className: 'notion-button-badge'
+                
               }, '1')
             ),
             // 搜尋按鈕
             React.createElement('button', 
               { 
-                className: `notion-button ${statsInfo.isSearching ? 'notion-button-active' : ''}`,
+                // className removed to avoid global style pollution
                 onClick: handleSearchButtonClick,
                 title: statsInfo.isSearching ? `搜尋中: "${searchConfig.query}"` : '搜尋'
               },
-              React.createElement('span', { className: 'notion-button-icon' }, NotionIcons.search()),
+              React.createElement('span', {  }, NotionIcons.search()),
               '搜尋',
               statsInfo.isSearching && React.createElement('span', {
-                className: 'notion-button-badge'
+                
               }, '✓')
             ),
             React.createElement('button', 
               { 
                 ref: (el) => setColumnManagerButtonRef(el),
-                className: 'notion-button',
                 onClick: () => setIsColumnManagerOpen(!isColumnManagerOpen),
                 title: '自訂屬性'
               },
@@ -762,7 +761,6 @@ export const NotionTable: React.FC<Omit<NotionTableProps, 'onCellUpdate'> & {
             ),
             React.createElement('button', 
               { 
-                className: 'notion-button notion-button-primary',
                 onClick: handleAddRow
               },
               '新建'

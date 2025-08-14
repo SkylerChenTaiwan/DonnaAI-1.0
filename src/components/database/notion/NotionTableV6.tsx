@@ -158,7 +158,6 @@ export const NotionTableV6: React.FC<NotionTableV6Props> = ({
             </button>
             
             <button
-              className="notion-text-button notion-button-primary"
               onClick={onRowAdd}
             >
               新建

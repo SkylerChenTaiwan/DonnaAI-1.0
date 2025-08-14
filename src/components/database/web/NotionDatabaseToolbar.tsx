@@ -24,7 +24,7 @@ export const NotionDatabaseToolbar: React.FC<NotionDatabaseToolbarProps> = ({
       
       <div className="notion-toolbar-right">
         <button 
-          className="notion-button" 
+           
           onClick={onViewSettings}
           title="檢視設定"
         >
@@ -33,7 +33,7 @@ export const NotionDatabaseToolbar: React.FC<NotionDatabaseToolbarProps> = ({
         </button>
         
         <button 
-          className="notion-button notion-button-primary" 
+           
           onClick={onAddRow}
           title="新增列"
         >

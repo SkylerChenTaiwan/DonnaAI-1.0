@@ -133,28 +133,28 @@ export const NotionTableV5: React.FC<NotionTableV5Props> = ({
         <div className="notion-toolbar-left">
           <button
             ref={(el) => setFilterButtonRef(el)}
-            className="notion-button"
+            
             onClick={() => setIsFilterPanelOpen(true)}
           >
-            <span className="notion-button-icon">{NotionIcons.filter()}</span>
+            <span >{NotionIcons.filter()}</span>
             過濾
           </button>
           
           <button
             ref={(el) => setSortButtonRef(el)}
-            className="notion-button"
+            
             onClick={() => setIsSortPanelOpen(true)}
           >
-            <span className="notion-button-icon">{NotionIcons.sort()}</span>
+            <span >{NotionIcons.sort()}</span>
             排序
           </button>
           
           <button
             ref={(el) => setGroupButtonRef(el)}
-            className="notion-button"
+            
             onClick={() => setIsGroupPanelOpen(true)}
           >
-            <span className="notion-button-icon">{NotionIcons.group()}</span>
+            <span >{NotionIcons.group()}</span>
             群組
           </button>
         </div>
@@ -169,17 +169,17 @@ export const NotionTableV5: React.FC<NotionTableV5Props> = ({
             />
           ) : (
             <button
-              className="notion-button"
+              
               onClick={() => setShowSearchBar(true)}
             >
-              <span className="notion-button-icon">{NotionIcons.search()}</span>
+              <span >{NotionIcons.search()}</span>
               搜尋
             </button>
           )}
           
           <button
             ref={(el) => setColumnManagerButtonRef(el)}
-            className="notion-button"
+            
             onClick={() => setIsColumnManagerOpen(true)}
             title="自訂屬性"
           >
@@ -187,7 +187,7 @@ export const NotionTableV5: React.FC<NotionTableV5Props> = ({
           </button>
           
           <button
-            className="notion-button notion-button-primary"
+            
             onClick={onRowAdd}
           >
             新建

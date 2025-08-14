@@ -220,11 +220,9 @@ function renderFilterGroup(
       className: 'notion-filter-group-actions'
     },
       React.createElement('button', {
-        className: 'notion-button-text',
         onClick: () => onAddFilter(group.id)
       }, '+ 新增條件'),
       nestingLevel < 1 && React.createElement('button', {
-        className: 'notion-button-text',
         onClick: () => onAddGroup(group.id)
       }, '+ 新增群組')
     )

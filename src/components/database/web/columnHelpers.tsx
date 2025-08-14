@@ -76,7 +76,7 @@ export function createActionsColumn(
         {onEdit && (
           <button
             onClick={() => onEdit(row.original)}
-            className="notion-button-small"
+            
           >
             編輯
           </button>
@@ -84,7 +84,7 @@ export function createActionsColumn(
         {onDelete && (
           <button
             onClick={() => onDelete(row.original)}
-            className="notion-button-small notion-button-danger"
+            
           >
             刪除
           </button>

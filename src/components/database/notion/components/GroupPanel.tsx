@@ -122,7 +122,6 @@ export const GroupPanel: React.FC<GroupPanelProps> = ({
           className: 'notion-group-panel-footer'
         },
           React.createElement('button', {
-            className: 'notion-button-text notion-button-destructive',
             onClick: handleClearGroup
           }, '清除群組')
         )

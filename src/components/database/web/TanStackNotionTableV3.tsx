@@ -152,14 +152,14 @@ export const TanStackNotionTableV3: React.FC<TanStackTableProps> = ({
               <td className="notion-cell">
                 <div className="notion-row-actions">
                   <button 
-                    className="notion-button notion-button-primary"
+                    
                     onClick={handleSaveNewRow}
                     disabled={Object.keys(newRowData).length === 0}
                   >
                     儲存
                   </button>
                   <button 
-                    className="notion-button"
+                    
                     onClick={handleCancelNewRow}
                   >
                     取消

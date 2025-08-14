@@ -182,13 +182,11 @@ export const ColumnManager: React.FC<ColumnManagerProps> = ({
         className: 'notion-column-manager-footer'
       },
         React.createElement('button', {
-          className: 'notion-button-text',
           onClick: () => {
             onVisibilityChange(columns.map(col => col.id));
           }
         }, '顯示全部'),
         React.createElement('button', {
-          className: 'notion-button-text',
           onClick: () => {
             onVisibilityChange([]);
           }

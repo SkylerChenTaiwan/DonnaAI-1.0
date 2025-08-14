@@ -188,7 +188,6 @@ export const SortPanel: React.FC<SortPanelProps> = ({
         className: 'notion-sort-panel-footer'
       },
         React.createElement('button', {
-          className: 'notion-button',
           onClick: handleAddSort,
           disabled: availableColumns.length === 0
         }, 
@@ -196,7 +195,6 @@ export const SortPanel: React.FC<SortPanelProps> = ({
           ' 新增排序'
         ),
         currentSorts.length > 0 && React.createElement('button', {
-          className: 'notion-button-text',
           onClick: () => onSortsChange([])
         }, '清除全部')
       )
