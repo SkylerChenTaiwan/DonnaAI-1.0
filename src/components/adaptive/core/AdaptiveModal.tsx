@@ -287,7 +287,7 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
       // 合併樣式
       const result = styleProcessor.mergeStyles(styleConfigs, {
         platform: 'web',
-        debug: (typeof __DEV__ !== 'undefined' && __DEV__) || false
+        debug: false
       });
       
       return result.style;

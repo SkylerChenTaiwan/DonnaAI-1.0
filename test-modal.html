@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Modal Size</title>
+    <style>
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        
+        .modal-content-fullscreen {
+            background-color: #FFFFFF;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            width: 95vw;
+            height: 95vh;
+            max-width: 95vw;
+            max-height: 95vh;
+            min-height: 90vh;
+            margin: 20px auto;
+        }
+        
+        .modal-inner {
+            flex: 1;
+            overflow: auto;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>測試 Modal 尺寸</h1>
+    <button onclick="showModal()">開啟 Modal</button>
+    
+    <div id="modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content-fullscreen">
+            <div class="modal-inner">
+                <h2>這是全螢幕 Modal</h2>
+                <p>寬度應該是 95vw</p>
+                <p>高度應該是 95vh</p>
+                <button onclick="hideModal()">關閉</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showModal() {
+            document.getElementById('modal').style.display = 'flex';
+        }
+        
+        function hideModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
