@@ -163,8 +163,6 @@ export const OrganizationsScreen: React.FC = () => {
     <TouchableOpacity
       style={[
         styles.orgCard,
-        // 運行時強制添加白色背景（確保覆蓋任何其他樣式）
-        { backgroundColor: '#FFFFFF' },
         // Web 平台特定樣式
         Platform.OS === 'web' && styles.orgCardWeb
       ]}
@@ -369,7 +367,7 @@ const styles = StyleSheet.create({
   listContent: {
     padding: DesignSystem.spacing.md },
   orgCard: {
-    backgroundColor: '#FFFFFF',  // 明確設定白色背景
+    backgroundColor: DesignSystem.colors.background.surface,  // 使用 DesignSystem 的顏色
     borderRadius: 8,
     padding: 16,
     marginBottom: 12,
@@ -380,12 +378,12 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
     borderWidth: 1,
-    borderColor: '#E3E3E2',
+    borderColor: DesignSystem.colors.border.light,
   },
   // Web 平台的額外樣式
   orgCardWeb: {
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-    border: '1px solid #E3E3E2',
+    border: `1px solid ${DesignSystem.colors.border.light}`,
     borderWidth: 0,  // Web 使用 border 而非 borderWidth
   },
   orgHeader: {
