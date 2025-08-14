@@ -440,8 +440,6 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
     }
   };
 
-  console.log('🚀 UserImportWizard rendering:', { visible, size: 'fullscreen' });
-  
   return (
     <AdaptiveModal
       visible={visible}

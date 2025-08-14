@@ -215,10 +215,6 @@ export class StylePriorityManager implements StyleProcessor {
   private convertToWebStyle(style: any): any {
     const webStyle: any = {};
     
-    // 除錯：檢查輸入
-    if (style.width === '95vw' || style.height === '95vh') {
-      console.log('🔍 convertToWebStyle input:', style);
-    }
 
     for (const [key, value] of Object.entries(style)) {
       if (value === undefined || value === null) continue;
@@ -290,10 +286,6 @@ export class StylePriorityManager implements StyleProcessor {
         case 'lineHeight':
         case 'letterSpacing':
           webStyle[key] = this.convertSpacing(value);
-          // 除錯
-          if (key === 'width' || key === 'height') {
-            console.log(`🔍 convertSpacing for ${key}: ${value} -> ${webStyle[key]}`);
-          }
           break;
 
         // 直接傳遞的屬性
@@ -302,10 +294,6 @@ export class StylePriorityManager implements StyleProcessor {
       }
     }
 
-    // 除錯：檢查輸出
-    if (webStyle.width === '95vw' || webStyle.height === '95vh') {
-      console.log('🔍 convertToWebStyle output:', webStyle);
-    }
     
     return webStyle;
   }
@@ -316,6 +304,17 @@ export class StylePriorityManager implements StyleProcessor {
   private convertSpacing(value: string | number): string {
     if (typeof value === 'number') {
       return `${value}px`;
+    }
+    // 如果字串已經包含單位，直接返回
+    if (typeof value === 'string') {
+      // 檢查是否已經有單位（px, %, vw, vh, em, rem 等）
+      if (/\d+(px|%|vw|vh|em|rem|pt|cm|mm|in|pc|ex|ch|vmin|vmax)$/i.test(value)) {
+        return value;
+      }
+      // 如果是純數字字串，加上 px
+      if (/^\d+$/.test(value)) {
+        return `${value}px`;
+      }
     }
     return value;
   }

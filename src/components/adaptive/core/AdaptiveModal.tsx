@@ -228,8 +228,6 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
     const contentStyleFinal = useMemo(() => {
       const dimensions = getModalDimensions(size);
       
-      console.log('📐 Computing contentStyleFinal for size:', size);
-      console.log('📐 dimensions:', dimensions);
       
       // 預設樣式
       const defaultStyle: CSSProperties = {
@@ -305,15 +303,11 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
       // 如果是 fullscreen，保護尺寸屬性
       if (size === 'fullscreen') {
         const protectedProps = ['width', 'height', 'maxWidth', 'maxHeight', 'minHeight'];
-        console.log('🛡️ Protecting fullscreen properties:', protectedProps);
-        console.log('🛡️ Dimensions to protect:', dimensions);
-        
         const protectedConfig = styleProcessor.protectProperties(
           dimensions,
           protectedProps,
           StylePriority.PROTECTED_SIZE
         );
-        console.log('🛡️ Protected config:', protectedConfig);
         styleConfigs.push(protectedConfig);
       }
       
@@ -322,9 +316,6 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
         platform: 'web',
         debug: false
       });
-      
-      console.log('📐 Final merged style:', result.style);
-      console.log('📐 Style configs count:', styleConfigs.length);
       
       return result.style;
     }, [style, webStyle, contentStyle, styleProcessor, size, visible, animationType]);
@@ -387,15 +378,6 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
         </div>
       );
     };
-    
-    // 除錯輸出
-    if (size === 'fullscreen' && visible) {
-      console.log('🚨 AdaptiveModal Render Debug:');
-      console.log('- size:', size);
-      console.log('- overlayStyleFinal:', overlayStyleFinal);
-      console.log('- contentStyleFinal:', contentStyleFinal);
-      console.log('- dimensions from getModalDimensions:', getModalDimensions(size));
-    }
     
     const modalContent = (
       <div
