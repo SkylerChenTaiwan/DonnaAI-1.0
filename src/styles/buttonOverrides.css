@@ -75,8 +75,3 @@ button[style*="#2C2C2C"] {
   background-color: #2C2C2C !important;
 }
 
-/* 確保 Notion 風格一致 */
-.notion-button {
-  color: inherit !important;
-  background: inherit !important;
-}
