@@ -698,9 +698,17 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
   };
 
   return (
-    <View style={StyleSheet.flatten([styles.container, { backgroundColor: colors.background }])}>
+    <View 
+      style={StyleSheet.flatten([styles.container, { 
+        backgroundColor: Platform.OS === 'web' ? '#FFFFFF' : colors.background 
+      }])}
+      {...(Platform.OS === 'web' ? { className: 'import-wizard' } : {})}
+    >
       {/* 頂部標題欄 */}
-      <View style={StyleSheet.flatten([styles.header, { borderBottomColor: colors.gray200 }])}>
+      <View style={StyleSheet.flatten([styles.header, { 
+        borderBottomColor: colors.gray200,
+        backgroundColor: Platform.OS === 'web' ? '#FFFFFF' : undefined 
+      }])}>
         <View style={styles.headerContent}>
           <Text style={StyleSheet.flatten([styles.title, { color: colors.text }])}>
             資料匯入精靈
@@ -825,7 +833,8 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#FFFFFF'  // 確保有背景色
   },
   header: {
     paddingHorizontal: 20,

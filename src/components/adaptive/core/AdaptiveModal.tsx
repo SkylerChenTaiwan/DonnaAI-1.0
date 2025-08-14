@@ -226,7 +226,7 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
       const dimensions = getModalDimensions(size);
       
       let finalStyle: CSSProperties = {
-        backgroundColor: DesignSystem.colors.background.card,
+        backgroundColor: '#FFFFFF',  // 強制使用白色背景
         borderRadius: size === 'fullscreen' ? 0 : DesignSystem.borderRadius.lg,
         boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)',
         display: 'flex',

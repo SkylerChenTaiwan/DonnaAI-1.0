@@ -202,6 +202,8 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
       visible={activeAssistance === 'import'}
       animationType="slide"
       presentationStyle="fullScreen"
+      size="fullscreen"  // Web 需要 size 屬性來實現全螢幕
+      contentStyle={{ backgroundColor: '#FFFFFF' }}  // 確保白色背景
     >
       <ImportWizard
         organizationId={organization.id}

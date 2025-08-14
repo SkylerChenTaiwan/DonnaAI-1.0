@@ -165,6 +165,7 @@ export const OrganizationsScreen: React.FC = () => {
       onPress={() => handleOrganizationPress(item)}
       activeOpacity={0.7}
       disabled={false}  // 確保卡片可點擊
+      {...(Platform.OS === 'web' ? { className: 'org-card' } : {})}
     >
       <View style={styles.orgHeader}>
         <View style={styles.orgInfo}>

@@ -10,6 +10,13 @@ body:not(.notion-view-active) .notion-database-wrapper {
   padding: 0 !important;
 }
 
+/* 阻止 notion-database-wrapper 在非 Notion 區域的影響 */
+:not(.notion-table-container) > .notion-database-wrapper,
+:not([data-notion-view]) > .notion-database-wrapper {
+  padding: 0 !important;
+  background-color: transparent !important;
+}
+
 /* 保護 Web Layout 的側邊欄結構 - 更精確的選擇器 */
 .layout-web-container > .sidebar-navigation,
 .layout-web-container > .navigation-sidebar,
@@ -44,6 +51,24 @@ body:not(.notion-view-active) .notion-database-wrapper {
   padding: 0 !important;
 }
 
+/* 強制保護非 Notion 頁面的元件 */
+body:not(.notion-view-active) {
+  /* 重置可能被 Notion 影響的全域樣式 */
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* 強制保護 FlatList 和 ScrollView 容器 */
+[data-testid="flat-list"],
+[data-testid="scroll-view"],
+.flat-list-container,
+.scroll-view-container {
+  display: block !important;
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
 /* 保護按鈕樣式 - 但不破壞背景色 */
 button:not(.notion-button):not(.notion-text-button):not(.notion-icon-button) {
   /* 只保護字體，不動背景色 */
@@ -73,16 +98,45 @@ button:not(.notion-button):not(.notion-text-button):not(.notion-icon-button) {
 
 /* 保護 Modal 內容區域 */
 .modal-content,
-[data-testid="modal-content"] {
+[data-testid="modal-content"],
+.modal-container {
   background-color: white !important; /* 確保模態框內容有白色背景 */
   opacity: 1 !important; /* 確保不透明 */
+  border-radius: 12px !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+  overflow: hidden !important;
+}
+
+/* 確保 Modal 內的 ImportWizard 正常顯示 */
+.modal-content .import-wizard,
+.modal-container .import-wizard {
+  height: 100% !important;
+  min-height: 600px !important;
 }
 
 /* 特別保護 ImportWizard 不被影響 */
 .import-wizard-container,
-[data-testid="import-wizard"] {
+[data-testid="import-wizard"],
+.import-wizard {
   background-color: white !important;
   opacity: 1 !important;
+  min-height: 600px !important; /* 確保最小高度 */
+  width: 100% !important;
+  max-width: 900px !important; /* 限制最大寬度 */
+  margin: 0 auto !important; /* 居中顯示 */
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 0 !important; /* 阻止繼承 Notion padding */
+}
+
+/* 保護 ImportWizard 內容區域 */
+.import-wizard-container .content,
+.import-wizard .content,
+[data-testid="import-wizard"] .content {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  padding: 20px !important;
+  background-color: white !important;
 }
 
 /* 確保 Adaptive 元件不被影響 */
@@ -116,11 +170,48 @@ body {
   padding: 0 !important;
 }
 
+/* 特別保護數據庫列表卡片不被影響 */
+.database-list-container,
+[data-testid="database-list"] {
+  padding: 16px !important;
+  background-color: transparent !important;
+}
+
+.database-list-container .org-card,
+[data-testid="database-list"] .org-card {
+  margin-bottom: 12px !important;
+  background-color: white !important;
+  border-radius: 8px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
 /* 針對組織管理頁面的特別修復 */
 .organization-management-layout,
 [data-page="organization-management"] {
   display: flex !important;
   flex-direction: row !important;
+}
+
+/* 保護組織卡片佈局不被破壞 */
+.org-card,
+[data-testid="org-card"],
+.organization-card {
+  display: block !important;
+  position: relative !important;
+  background-color: white !important;
+  border-radius: 8px !important;
+  padding: 16px !important;
+  margin-bottom: 12px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 保護卡片內的 flex 佈局 */
+.org-card > div:first-child,
+.organization-card > div:first-child {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: flex-start !important;
 }
 
 /* 防止 !important 規則污染全域 */
