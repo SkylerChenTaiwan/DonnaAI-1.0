@@ -142,11 +142,17 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.primary,
     backgroundColor: 'transparent',
     border: 'none',
-    outline: 'none',
     appearance: 'none',
     WebkitAppearance: 'none',
     MozAppearance: 'none',
-    cursor: 'pointer' } as any,
+    cursor: 'pointer',
+    ...Platform.select({
+      web: {
+        outline: 'none'
+      },
+      default: {}
+    })
+  } as any,
   selectIcon: {
     position: 'absolute',
     right: 12,
