@@ -161,11 +161,20 @@ export const OrganizationsScreen: React.FC = () => {
 
   const renderOrganizationItem = ({ item }: { item: Organization }) => (
     <TouchableOpacity
-      style={styles.orgCard}
+      style={[
+        styles.orgCard,
+        Platform.OS === 'web' && {
+          backgroundColor: '#FFFFFF',
+          borderRadius: 8,
+          padding: 16,
+          marginBottom: 12,
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+          border: '1px solid #E3E3E2'
+        }
+      ]}
       onPress={() => handleOrganizationPress(item)}
       activeOpacity={0.7}
       disabled={false}  // 確保卡片可點擊
-      {...(Platform.OS === 'web' ? { className: 'org-card' } : {})}
     >
       <View style={styles.orgHeader}>
         <View style={styles.orgInfo}>
