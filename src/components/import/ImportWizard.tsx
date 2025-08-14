@@ -814,10 +814,8 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#FFFFFF',  // 確保有背景色
-    maxHeight: '95vh',
-    overflow: 'hidden'
+    height: '100%'
   },
   header: {
     paddingHorizontal: 20,

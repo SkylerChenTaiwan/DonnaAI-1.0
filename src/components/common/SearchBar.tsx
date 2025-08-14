@@ -136,7 +136,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderWidth: 0,
     padding: 0,
-    margin: 0,
-    outline: 'none' },
+    margin: 0 },
   clearButton: {
     padding: 4 } });
