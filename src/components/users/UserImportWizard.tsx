@@ -447,19 +447,6 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
       size="fullscreen"
       presentationStyle={Platform.OS === 'web' ? 'fullScreen' : 'pageSheet'}
       onRequestClose={handleClose}
-      webStyle={{
-        width: '95vw',
-        height: '95vh',
-        maxWidth: '95vw',
-        maxHeight: '95vh',
-        minHeight: '90vh'
-      }}
-      contentStyle={{
-        width: '100%',
-        height: '100%',
-        maxWidth: '100%',
-        maxHeight: '100%'
-      }}
     >
       <View style={styles.container}>
         {/* Header */}
