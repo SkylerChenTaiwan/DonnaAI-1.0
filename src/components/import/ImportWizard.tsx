@@ -895,7 +895,8 @@ const styles = StyleSheet.create({
   footer: {
     borderTopWidth: 1,
     paddingHorizontal: 20,
-    paddingVertical: 10
+    paddingVertical: 8,
+    height: 56  // 固定高度
   },
   footerButtons: {
     flexDirection: 'row',
