@@ -145,13 +145,7 @@ const styles = StyleSheet.create({
     appearance: 'none',
     WebkitAppearance: 'none',
     MozAppearance: 'none',
-    cursor: 'pointer',
-    ...Platform.select({
-      web: {
-        outline: 'none'
-      },
-      default: {}
-    })
+    cursor: 'pointer'
   } as any,
   selectIcon: {
     position: 'absolute',

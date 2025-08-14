@@ -887,9 +887,7 @@ const styles = StyleSheet.create({
   footer: {
     borderTopWidth: 1,
     paddingHorizontal: 20,
-    paddingVertical: 12,
-    minHeight: 60,
-    maxHeight: 80
+    paddingVertical: 12
   },
   footerButtons: {
     flexDirection: 'row',
