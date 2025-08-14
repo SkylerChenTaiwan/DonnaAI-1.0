@@ -77,7 +77,7 @@ export const SuperAdminDashboard: React.FC = () => {
       value: totalUsers.toString(),
       subtitle: `${stats?.activeUsers || 0} 個活躍`,
       icon: 'people-outline',
-      color: DesignSystem.colors.success
+      color: DesignSystem.colors.primary
     },
     {
       id: 'revenue',
@@ -85,7 +85,7 @@ export const SuperAdminDashboard: React.FC = () => {
       value: `NT$${totalRevenue.toLocaleString('zh-TW')}`,
       subtitle: '預估收入',
       icon: 'cash-outline',
-      color: DesignSystem.colors.warning
+      color: DesignSystem.colors.primary
     },
     {
       id: 'growth',
@@ -93,7 +93,7 @@ export const SuperAdminDashboard: React.FC = () => {
       value: growthRate > 0 ? `+${growthRate}%` : `${growthRate}%`,
       subtitle: '本月 vs 上月',
       icon: growthRate >= 0 ? 'trending-up-outline' : 'trending-down-outline',
-      color: growthRate >= 0 ? DesignSystem.colors.success : DesignSystem.colors.error
+      color: DesignSystem.colors.primary
     }
   ];
 
@@ -170,8 +170,8 @@ export const SuperAdminDashboard: React.FC = () => {
       <View style={StyleSheet.flatten([styles.statsGrid, shouldUseWebLayout && styles.webStatsGrid])}>
         {quickStats.map((stat) => (
           <View key={stat.id} style={StyleSheet.flatten([styles.statCard, useResponsiveLayout && styles.webStatCard])}>
-            <View style={StyleSheet.flatten([styles.statIconContainer, { backgroundColor: `${stat.color}15` }])}>
-              <Icon name={stat.icon as any} size={24} color={stat.color} />
+            <View style={StyleSheet.flatten([styles.statIconContainer])}>
+              <Icon name={stat.icon as any} size={24} color={DesignSystem.colors.primary} />
             </View>
             <Text style={styles.statValue}>{stat.value}</Text>
             <Text style={styles.statTitle}>{stat.title}</Text>
@@ -325,6 +325,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 12,
+    backgroundColor: DesignSystem.colors.gray100,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12 },
