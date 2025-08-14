@@ -305,11 +305,15 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
       // 如果是 fullscreen，保護尺寸屬性
       if (size === 'fullscreen') {
         const protectedProps = ['width', 'height', 'maxWidth', 'maxHeight', 'minHeight'];
+        console.log('🛡️ Protecting fullscreen properties:', protectedProps);
+        console.log('🛡️ Dimensions to protect:', dimensions);
+        
         const protectedConfig = styleProcessor.protectProperties(
           dimensions,
           protectedProps,
           StylePriority.PROTECTED_SIZE
         );
+        console.log('🛡️ Protected config:', protectedConfig);
         styleConfigs.push(protectedConfig);
       }
       
