@@ -59,6 +59,29 @@ export class StylePriorityManager implements StyleProcessor {
   }
 
   /**
+   * 保護特定屬性不被覆蓋
+   * @param style 樣式物件
+   * @param properties 要保護的屬性列表
+   * @param priority 優先級
+   */
+  protectProperties(style: any, properties: string[], priority: number): StyleConfig {
+    const protectedStyle: any = {};
+    
+    for (const prop of properties) {
+      if (style[prop] !== undefined) {
+        protectedStyle[prop] = style[prop];
+      }
+    }
+    
+    return {
+      priority,
+      style: protectedStyle,
+      source: 'protected-properties',
+      protected: true
+    };
+  }
+
+  /**
    * 合併多個樣式配置
    * @param configs 樣式配置陣列
    * @param options 合併選項
@@ -75,15 +98,19 @@ export class StylePriorityManager implements StyleProcessor {
       return cached;
     }
 
-    // 按優先級排序
-    const sortedConfigs = [...configs].sort((a, b) => a.priority - b.priority);
+    // 分離保護和非保護的樣式配置
+    const protectedConfigs = configs.filter(c => c.protected);
+    const regularConfigs = configs.filter(c => !c.protected);
+
+    // 按優先級排序常規配置
+    const sortedConfigs = [...regularConfigs].sort((a, b) => a.priority - b.priority);
 
     // 追蹤樣式來源和衝突
     const sources: string[] = [];
     const conflicts: Map<string, StyleConflict> = new Map();
     let mergedStyle: any = {};
 
-    // 逐個合併樣式
+    // 逐個合併常規樣式
     for (const config of sortedConfigs) {
       if (!config.style) continue;
 
@@ -109,6 +136,31 @@ export class StylePriorityManager implements StyleProcessor {
         } else {
           mergedStyle[prop] = value;
         }
+      }
+    }
+
+    // 最後應用保護的樣式（最高優先級）
+    for (const config of protectedConfigs) {
+      if (!config.style) continue;
+
+      // 記錄來源
+      if (config.source) {
+        sources.push(`${config.source} (priority: ${config.priority}, protected)`);
+      }
+
+      // 適配平台樣式
+      const adaptedStyle = this.adaptStyle(config.style, platform);
+
+      // 直接覆蓋，不管之前的值
+      for (const [prop, value] of Object.entries(adaptedStyle)) {
+        // 在 debug 模式下警告被保護屬性覆蓋的情況
+        if (debug && mergedStyle[prop] !== undefined && mergedStyle[prop] !== value) {
+          console.warn(
+            `🔒 StylePriorityManager: 保護屬性 "${prop}" 覆蓋了原值`,
+            { 原值: mergedStyle[prop], 新值: value, 來源: config.source }
+          );
+        }
+        mergedStyle[prop] = value;
       }
     }
 
@@ -308,7 +360,7 @@ export class StylePriorityManager implements StyleProcessor {
    */
   private generateCacheKey(configs: StyleConfig[], options?: StyleMergeOptions): string {
     const configKey = configs
-      .map(c => `${c.priority}:${JSON.stringify(c.style)}`)
+      .map(c => `${c.priority}:${c.protected ? 'p' : ''}:${JSON.stringify(c.style)}`)
       .join('|');
     const optionsKey = JSON.stringify(options || {});
     return `${configKey}::${optionsKey}`;

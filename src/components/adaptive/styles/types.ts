@@ -34,6 +34,7 @@ export enum StylePriority {
   
   // 覆蓋層級 (51-60)
   INLINE_OVERRIDE = 51, // 內聯樣式覆蓋
+  PROTECTED_SIZE = 52,  // 保護的尺寸屬性
   IMPORTANT = 60        // !important 樣式
 }
 
@@ -43,6 +44,14 @@ export interface StyleConfig {
   style: CrossPlatformStyle;
   source?: string;  // 用於除錯：樣式來源
   important?: boolean;  // 是否添加 !important
+  protected?: boolean;  // 是否為保護的樣式
+}
+
+// 保護樣式配置介面
+export interface ProtectedStyleConfig {
+  properties: string[];  // 受保護的屬性列表
+  source: string;        // 保護來源
+  reason: string;        // 保護原因
 }
 
 // 樣式合併選項
@@ -96,6 +105,7 @@ export interface AdaptiveStyleProps {
 export interface StyleProcessor {
   mergeStyles(configs: StyleConfig[], options?: StyleMergeOptions): StyleProcessResult;
   adaptStyle(style: CrossPlatformStyle, platform?: 'web' | 'native'): any;
+  protectProperties(style: any, properties: string[], priority: number): StyleConfig;
 }
 
 // 樣式快取介面

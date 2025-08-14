@@ -277,11 +277,37 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
       
       // 添加內容樣式
       if (contentStyle) {
+        // 開發模式下檢查衝突
+        if (typeof __DEV__ !== 'undefined' && __DEV__ && size === 'fullscreen') {
+          const protectedProps = ['width', 'height', 'maxWidth', 'maxHeight', 'minHeight'];
+          const conflictingProps = protectedProps.filter(
+            prop => (contentStyle as any)[prop] !== undefined
+          );
+          
+          if (conflictingProps.length > 0) {
+            console.warn(
+              `⚠️ AdaptiveModal: contentStyle 嘗試覆蓋 size="fullscreen" 的屬性: ${conflictingProps.join(', ')}。`,
+              `這些屬性將被忽略以保持 fullscreen 效果。`
+            );
+          }
+        }
+        
         styleConfigs.push({
           priority: StylePriority.CONTENT_STYLE,
           style: contentStyle as any,
           source: 'content-style'
         });
+      }
+      
+      // 如果是 fullscreen，保護尺寸屬性
+      if (size === 'fullscreen') {
+        const protectedProps = ['width', 'height', 'maxWidth', 'maxHeight', 'minHeight'];
+        const protectedConfig = styleProcessor.protectProperties(
+          dimensions,
+          protectedProps,
+          StylePriority.PROTECTED_SIZE
+        );
+        styleConfigs.push(protectedConfig);
       }
       
       // 合併樣式
@@ -517,11 +543,37 @@ const NativeModal = forwardRef<any, AdaptiveModalProps>(
       
       // 添加內容樣式
       if (contentStyle) {
+        // 開發模式下檢查衝突
+        if ((typeof __DEV__ !== 'undefined' && __DEV__) && size === 'fullscreen') {
+          const protectedProps = ['width', 'height', 'maxWidth', 'maxHeight', 'minHeight'];
+          const conflictingProps = protectedProps.filter(
+            prop => (contentStyle as any)[prop] !== undefined
+          );
+          
+          if (conflictingProps.length > 0) {
+            console.warn(
+              `⚠️ AdaptiveModal: contentStyle 嘗試覆蓋 size="fullscreen" 的屬性: ${conflictingProps.join(', ')}。`,
+              `這些屬性將被忽略以保持 fullscreen 效果。`
+            );
+          }
+        }
+        
         styleConfigs.push({
           priority: StylePriority.CONTENT_STYLE,
           style: contentStyle,
           source: 'content-style'
         });
+      }
+      
+      // 如果是 fullscreen，保護尺寸屬性
+      if (size === 'fullscreen') {
+        const protectedProps = ['width', 'height', 'maxWidth', 'maxHeight', 'minHeight'];
+        const protectedConfig = styleProcessor.protectProperties(
+          dimensions,
+          protectedProps,
+          StylePriority.PROTECTED_SIZE
+        );
+        styleConfigs.push(protectedConfig);
       }
       
       // 合併樣式
