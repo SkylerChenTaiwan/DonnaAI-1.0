@@ -32,18 +32,44 @@ export function loadNotionStyles() {
       isolation: isolate;
     }
     
-    /* 只在 notion-view 內的元素才套用 Notion 樣式 */
+    /* 重要：以下樣式只影響 .notion-view 內的元素 */
     .notion-view .notion-database-wrapper {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      padding: 0 96px;
-      overflow: auto;
-      box-sizing: border-box;
-      background-color: #fbfbfa;
+      flex: 1 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      padding: 0 96px !important;
+      overflow: auto !important;
+      box-sizing: border-box !important;
+      background-color: #fbfbfa !important;
     }
     
-    /* 這裡可以添加其他 Notion 特定樣式 */
+    .notion-view .notion-database-container {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+      font-size: 13px !important;
+      line-height: 1.2 !important;
+      color: rgb(55, 53, 47) !important;
+      width: 100% !important;
+      height: 100% !important;
+      display: flex !important;
+      flex-direction: column !important;
+      background: #fbfbfa !important;
+    }
+    
+    .notion-view .notion-database-header {
+      padding: 40px 0 0 0;
+      margin-bottom: 8px;
+    }
+    
+    .notion-view .notion-database-title {
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: rgb(55, 53, 47);
+      margin: 0;
+      padding: 3px 2px;
+    }
+    
+    /* 其他 Notion 特定樣式... */
   `;
   
   document.head.appendChild(styleElement);
