@@ -806,7 +806,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 32,
     alignItems: 'center',
-    marginBottom: 24
+    marginBottom: 24,
+    minHeight: 120,
+    maxHeight: 200,
+    justifyContent: 'center'
   },
   uploadText: {
     fontSize: 16,

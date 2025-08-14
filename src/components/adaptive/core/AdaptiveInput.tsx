@@ -514,7 +514,7 @@ const NativeInput = forwardRef<any, AdaptiveInputProps>(
             autoCapitalize={autoCapitalize || 'none'}
             autoCorrect={Platform.OS === 'web' ? autoCorrect?.toString() : autoCorrect}
             keyboardType={getKeyboardType() as any}
-            returnKeyType={returnKeyType}
+            {...(Platform.OS !== 'web' && { returnKeyType })}
             onChangeText={onChangeText}
             onFocus={handleFocus}
             onBlur={handleBlur}
@@ -523,8 +523,7 @@ const NativeInput = forwardRef<any, AdaptiveInputProps>(
             accessible={accessible !== false}
             accessibilityLabel={accessibilityLabel}
             accessibilityHint={accessibilityHint}
-            placeholderTextColor={DesignSystem.colors.text.tertiary}
-            {...props}
+            {...(Platform.OS !== 'web' && { placeholderTextColor: DesignSystem.colors.text.tertiary })}
           />
           
           {rightIcon && (
