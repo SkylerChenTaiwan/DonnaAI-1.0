@@ -80,7 +80,17 @@ export const SearchBar = ({
     >
       <Icon name="search" size={16} color="#7A7A7A" style={styles.icon} />
       <AdaptiveInput
-        style={styles.input}
+        containerStyle={styles.inputContainer}
+        inputStyle={styles.inputInner}
+        webStyle={{
+          backgroundColor: 'transparent',
+          border: 'none',
+          boxShadow: 'none',
+          outline: 'none',
+          padding: 0,
+          margin: 0,
+          width: '100%'
+        }}
         value={localValue}
         onChangeText={handleChangeText}
         placeholder={placeholder}
@@ -109,13 +119,19 @@ const styles = StyleSheet.create({
     height: 32 },
   icon: {
     marginRight: 8 },
-  input: {
+  inputContainer: {
     flex: 1,
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    padding: 0,
+    margin: 0 },
+  inputInner: {
     fontSize: 14,
     color: '#1A1A1A',
     backgroundColor: 'transparent',
     borderWidth: 0,
     padding: 0,
-    margin: 0 },
+    margin: 0,
+    outline: 'none' },
   clearButton: {
     padding: 4 } });
