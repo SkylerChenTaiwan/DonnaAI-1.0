@@ -151,10 +151,9 @@ export const NotionTable = {
     height: 37 } } as const;
 
 export const NotionEditor = {
-  outline: {
-    width: 2,
-    color: '#0A84FF',
-    style: 'solid' as const },
+  outlineWidth: 2,
+  outlineColor: '#0A84FF',
+  outlineStyle: 'solid' as const,
   background: '#FFFFFF',
   fontSize: 14,
   paddingVertical: 2,

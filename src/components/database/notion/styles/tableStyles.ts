@@ -116,8 +116,8 @@ export const tableStyles = StyleSheet.create({
     paddingVertical: NotionEditor.paddingVertical,
     paddingHorizontal: NotionEditor.paddingHorizontal,
     margin: 0,
-    borderWidth: NotionEditor.outline.width,
-    borderColor: NotionEditor.outline.color,
+    borderWidth: NotionEditor.outlineWidth,
+    borderColor: NotionEditor.outlineColor,
     borderRadius: NotionEditor.borderRadius,
     // outline 在 React Native 中不支援，只在 Web 中使用
     backgroundColor: NotionEditor.background },
