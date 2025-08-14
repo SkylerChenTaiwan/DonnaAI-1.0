@@ -6,8 +6,9 @@
 import React, { useState, useMemo } from 'react';
 import { Platform, View, Text } from 'react-native';
 import { NotionIcons } from './NotionIcons';
+// CSS 現在只在 Notion 元件內引入
+import '../web/styles/NotionWrapper.css';
 import '../web/styles/NotionDatabaseV4.css';
-import '@/styles/cssIsolation.css';  // 保護全域佈局不被 Notion CSS 破壞
 
 interface NotionTableSimpleProps {
   data: any[];

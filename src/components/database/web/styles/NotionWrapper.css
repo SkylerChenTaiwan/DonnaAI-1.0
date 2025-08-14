@@ -1,0 +1,32 @@
+/**
+ * NotionWrapper.css
+ * 
+ * 這個檔案為 Notion 元件提供適當的包裝和隔離
+ * 確保 NotionDatabaseV4.css 的樣式只在 Notion 元件內生效
+ */
+
+/* Notion 容器的基礎樣式 */
+.notion-view {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  /* 創建一個新的 stacking context，避免影響外部元素 */
+  isolation: isolate;
+}
+
+/* 確保 notion-database-wrapper 只在 notion-view 內才有 padding */
+.notion-view .notion-database-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 96px;
+  overflow: auto;
+  box-sizing: border-box;
+  background-color: #fbfbfa;
+}
+
+/* 預設情況下，notion-database-wrapper 不應該有 padding */
+.notion-database-wrapper:not(.notion-view .notion-database-wrapper) {
+  padding: 0 !important;
+  background-color: transparent !important;
+}

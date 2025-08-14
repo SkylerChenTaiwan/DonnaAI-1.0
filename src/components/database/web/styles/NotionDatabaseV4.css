@@ -1,10 +1,7 @@
 /* === Notion 設計系統 V4 - 精確還原 === */
 
-/* 全域重置 - 僅在 Notion 元件內生效 */
-.notion-database-wrapper {
-  /* 移動背景色到這裡，避免影響全域 */
-  background-color: #fbfbfa;
-}
+/* 重要：所有樣式只在 .notion-view 容器內生效 */
+/* 這樣可以確保不影響其他頁面 */
 
 :root {
   /* 基礎色彩系統 */
@@ -55,25 +52,23 @@
 }
 
 /* === 外層容器與留白 === */
-.notion-database-wrapper {
+/* 只在 notion-view 容器內的 wrapper 才套用樣式 */
+.notion-view .notion-database-wrapper,
+.notion-table-container .notion-database-wrapper,
+[data-notion-view] .notion-database-wrapper {
   flex: 1 !important;
   display: flex !important;
   flex-direction: column !important;
-  /* 移除全域 padding，改用更具體的選擇器 */
+  padding: 0 96px !important;
   overflow: auto !important;
   box-sizing: border-box !important;
   background-color: #fbfbfa !important;
 }
 
-/* 只在 Notion 表格內部套用 padding */
-.notion-table-container .notion-database-wrapper,
-.notion-view-active .notion-database-wrapper,
-[data-notion-view] .notion-database-wrapper {
-  padding: 0 96px !important;
-}
-
 /* === 資料庫容器 === */
-.notion-database-container {
+.notion-view .notion-database-container,
+.notion-table-container .notion-database-container,
+[data-notion-view] .notion-database-container {
   font-family: var(--notion-font-family) !important;
   font-size: var(--notion-font-size-body) !important;
   line-height: var(--notion-line-height) !important;
@@ -86,12 +81,16 @@
 }
 
 /* === 資料庫標題 === */
-.notion-database-header {
+.notion-view .notion-database-header,
+.notion-table-container .notion-database-header,
+[data-notion-view] .notion-database-header {
   padding: 40px 0 0 0;
   margin-bottom: 8px;
 }
 
-.notion-database-title {
+.notion-view .notion-database-title,
+.notion-table-container .notion-database-title,
+[data-notion-view] .notion-database-title {
   font-size: 40px;
   font-weight: 700;
   line-height: 1.2;
@@ -101,7 +100,9 @@
 }
 
 /* === 工具列容器 === */
-.notion-toolbar-container {
+.notion-view .notion-toolbar-container,
+.notion-table-container .notion-toolbar-container,
+[data-notion-view] .notion-toolbar-container {
   display: flex;
   align-items: center;
   gap: 8px;

@@ -16,7 +16,7 @@ import './src/utils/globalErrorHandler';
 import '@expo/metro-runtime';
 
 // 導入 Web 平台專用樣式
-import './src/components/database/web/styles/NotionDatabaseV4.css';
+// NotionDatabaseV4.css 現在只在 Notion 元件內引入，避免影響全域
 import './src/styles/buttonOverrides.css';
 
 // 導入 Web 字體 polyfill

@@ -10,8 +10,9 @@ import { SortPanel } from './components/SortPanel';
 import { GroupPanel } from './components/GroupPanel';
 import { ColumnManager } from './components/ColumnManager';
 import { SearchBar } from './components/SearchBar';
+// CSS 現在只在 Notion 元件內引入
+import '../web/styles/NotionWrapper.css';
 import '../web/styles/NotionDatabaseV4.css';
-import '@/styles/cssIsolation.css';  // 保護全域佈局不被 Notion CSS 破壞
 
 interface NotionTableV6Props {
   data: any[];
