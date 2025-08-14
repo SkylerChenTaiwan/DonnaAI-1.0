@@ -25,6 +25,33 @@
       display: flex;
       flex-direction: column;
     }
+    
+    /* 緊急修復：強制覆蓋 NotionDatabaseV4.css 的破壞性規則 */
+    .notion-database-wrapper {
+      padding: 0 !important;
+    }
+    
+    /* 只在 Notion 區域內才有 padding */
+    .notion-table-container .notion-database-wrapper {
+      padding: 0 96px !important;
+    }
+    
+    /* 修復 ImportWizard Modal 尺寸 */
+    .import-wizard,
+    [data-testid="import-wizard"] {
+      min-height: 85vh !important;
+      width: 95% !important;
+      max-width: 1200px !important;
+      margin: 20px auto !important;
+      background-color: white !important;
+    }
+    
+    /* 修復 Modal 容器 */
+    .modal-content {
+      min-width: 90vw !important;
+      min-height: 85vh !important;
+      background-color: white !important;
+    }
   </style>
 </head>
 <body>

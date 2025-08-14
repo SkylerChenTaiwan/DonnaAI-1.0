@@ -59,10 +59,17 @@
   flex: 1 !important;
   display: flex !important;
   flex-direction: column !important;
-  padding: 0 96px !important;
+  /* 移除全域 padding，改用更具體的選擇器 */
   overflow: auto !important;
   box-sizing: border-box !important;
   background-color: #fbfbfa !important;
+}
+
+/* 只在 Notion 表格內部套用 padding */
+.notion-table-container .notion-database-wrapper,
+.notion-view-active .notion-database-wrapper,
+[data-notion-view] .notion-database-wrapper {
+  padding: 0 96px !important;
 }
 
 /* === 資料庫容器 === */

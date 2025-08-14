@@ -5,14 +5,20 @@
  * 重要：只針對 NotionDatabaseV4.css 的具體問題，避免影響其他元件
  */
 
-/* 只在非 Notion 頁面時，覆蓋 notion-database-wrapper 的破壞性規則 */
-body:not(.notion-view-active) .notion-database-wrapper {
-  padding: 0 !important;
+/* 強制覆蓋所有非 Notion 區域的 notion-database-wrapper */
+.notion-database-wrapper {
+  padding: 0 !important; /* 預設移除所有 padding */
 }
 
-/* 阻止 notion-database-wrapper 在非 Notion 區域的影響 */
-:not(.notion-table-container) > .notion-database-wrapper,
-:not([data-notion-view]) > .notion-database-wrapper {
+/* 只在 Notion 表格內才允許 padding */
+.notion-table-container .notion-database-wrapper,
+.notion-view-active .notion-database-wrapper,
+[data-notion-view] .notion-database-wrapper {
+  padding: 0 96px !important; /* 只在這些區域才有 padding */
+}
+
+/* 確保非 Notion 頁面完全不受影響 */
+body:not(.notion-view-active) .notion-database-wrapper {
   padding: 0 !important;
   background-color: transparent !important;
 }
@@ -22,6 +28,11 @@ body:not(.notion-active) * {
   /* 重置可能被影響的屬性 */
   padding-left: initial;
   padding-right: initial;
+}
+
+/* 特別針對組織管理頁面和匯入精靈 */
+#root > div > div {
+  padding: 0 !important; /* 移除可能繼承的 padding */
 }
 
 /* 特別保護組織管理頁面 */
