@@ -687,6 +687,7 @@ export const OrganizationDetailScreen: React.FC = () => {
       <AdaptiveModal
         visible={showImportWizard}
         animationType="slide"
+        size="fullscreen"
         presentationStyle="fullScreen"
       >
         <ImportWizard
