@@ -17,6 +17,20 @@ body:not(.notion-view-active) .notion-database-wrapper {
   background-color: transparent !important;
 }
 
+/* 強制覆蓋 Notion CSS 對非 Notion 元件的影響 */
+body:not(.notion-active) * {
+  /* 重置可能被影響的屬性 */
+  padding-left: initial;
+  padding-right: initial;
+}
+
+/* 特別保護組織管理頁面 */
+[data-page="organizations"],
+.organizations-screen {
+  padding: 0 !important;
+  background-color: #f5f5f5 !important;
+}
+
 /* 保護 Web Layout 的側邊欄結構 - 更精確的選擇器 */
 .layout-web-container > .sidebar-navigation,
 .layout-web-container > .navigation-sidebar,
@@ -104,14 +118,17 @@ button:not(.notion-button):not(.notion-text-button):not(.notion-icon-button) {
   opacity: 1 !important; /* 確保不透明 */
   border-radius: 12px !important;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
-  overflow: hidden !important;
+  overflow: visible !important; /* 改為 visible 避免內容被截斷 */
+  min-width: 90vw !important; /* 確保 Modal 有足夠寬度 */
+  min-height: 85vh !important; /* 確保 Modal 有足夠高度 */
 }
 
 /* 確保 Modal 內的 ImportWizard 正常顯示 */
 .modal-content .import-wizard,
 .modal-container .import-wizard {
   height: 100% !important;
-  min-height: 600px !important;
+  min-height: 80vh !important;
+  width: 100% !important;
 }
 
 /* 特別保護 ImportWizard 不被影響 */
@@ -120,13 +137,14 @@ button:not(.notion-button):not(.notion-text-button):not(.notion-icon-button) {
 .import-wizard {
   background-color: white !important;
   opacity: 1 !important;
-  min-height: 600px !important; /* 確保最小高度 */
-  width: 100% !important;
-  max-width: 900px !important; /* 限制最大寬度 */
-  margin: 0 auto !important; /* 居中顯示 */
+  min-height: 80vh !important; /* 增加最小高度到視窗的 80% */
+  width: 95% !important; /* 寬度佔 95% */
+  max-width: 1200px !important; /* 增加最大寬度到 1200px */
+  margin: 20px auto !important; /* 居中顯示並增加上下邊距 */
   display: flex !important;
   flex-direction: column !important;
   padding: 0 !important; /* 阻止繼承 Notion padding */
+  box-sizing: border-box !important;
 }
 
 /* 保護 ImportWizard 內容區域 */
@@ -203,6 +221,8 @@ body {
   padding: 16px !important;
   margin-bottom: 12px !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  width: calc(100% - 32px) !important; /* 確保卡片不會太寬 */
+  box-sizing: border-box !important;
 }
 
 /* 保護卡片內的 flex 佈局 */
@@ -212,6 +232,21 @@ body {
   flex-direction: row !important;
   justify-content: space-between !important;
   align-items: flex-start !important;
+  width: 100% !important;
+}
+
+/* 保護 FlatList 容器的正常顯示 */
+.organizations-flatlist,
+[data-testid="organizations-list"] {
+  padding: 16px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* 避免卡片重疊 */
+.organizations-flatlist > div,
+[data-testid="organizations-list"] > div {
+  margin-bottom: 0 !important; /* FlatList 自己管理間距 */
 }
 
 /* 防止 !important 規則污染全域 */

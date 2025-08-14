@@ -95,9 +95,9 @@ const getModalDimensions = (size: ModalSize) => {
     case 'medium':
       return { maxWidth: 600, width: '90%' };
     case 'large':
-      return { maxWidth: 800, width: '95%' };
+      return { maxWidth: 900, width: '95%', minHeight: '70vh' };
     case 'fullscreen':
-      return { width: '100%', height: '100%' };
+      return { width: '95%', height: '90vh', maxWidth: 1200, minHeight: '85vh' };
     default:
       return { maxWidth: 600, width: '90%' };
   }
@@ -208,7 +208,7 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
         justifyContent: position === 'left' ? 'flex-start' : 
                        position === 'right' ? 'flex-end' : 'center',
         zIndex: 1000,
-        padding: size === 'fullscreen' ? 0 : DesignSystem.spacing.md,
+        padding: size === 'fullscreen' ? '20px' : DesignSystem.spacing.md,
         opacity: visible ? 1 : 0,
         visibility: visible ? 'visible' : 'hidden',
         transition: animationType === 'fade' ? 'opacity 200ms ease-in-out' : 'none' };
@@ -227,15 +227,16 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
       
       let finalStyle: CSSProperties = {
         backgroundColor: '#FFFFFF',  // 強制使用白色背景
-        borderRadius: size === 'fullscreen' ? 0 : DesignSystem.borderRadius.lg,
+        borderRadius: size === 'fullscreen' ? 8 : DesignSystem.borderRadius.lg,
         boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)',
         display: 'flex',
         flexDirection: 'column',
-        maxHeight: size === 'fullscreen' ? '100%' : '90vh',
+        maxHeight: size === 'fullscreen' ? '90vh' : '85vh',
         overflow: 'hidden',
         position: 'relative',
         transform: visible ? 'scale(1)' : 'scale(0.9)',
         transition: animationType === 'fade' ? 'transform 200ms ease-in-out' : 'none',
+        margin: size === 'fullscreen' ? '20px auto' : '0',
         ...dimensions };
       
       if (style) {
