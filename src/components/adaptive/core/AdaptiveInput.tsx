@@ -233,9 +233,9 @@ const WebInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, AdaptiveInpu
         resize: multiline ? 'vertical' : 'none',
         minHeight: multiline && numberOfLines ? `${numberOfLines * 1.5}em` : undefined };
       
-      // 聚焦陰影
+      // 聚焦陰影 - 使用灰色避免彩色背景
       if (currentState === 'focused') {
-        finalStyle.boxShadow = `0 0 0 3px ${DesignSystem.colors.primary}20`;
+        finalStyle.boxShadow = `0 0 0 2px ${DesignSystem.colors.gray300}40`;
       }
       
       return finalStyle;

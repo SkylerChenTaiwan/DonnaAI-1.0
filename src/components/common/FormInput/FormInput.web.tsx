@@ -77,11 +77,11 @@ export const FormInput: React.FC<FormInputProps> = ({
     if (ariaInvalid) {
       inputStyle.borderColor = webColorOverrides.status.error;
       if (isFocused) {
-        inputStyle.boxShadow = `0 0 0 2px ${webColorOverrides.status.error}20`;
+        inputStyle.boxShadow = `0 0 0 2px ${webColorOverrides.border.light}40`;
       }
     } else if (isFocused) {
       inputStyle.borderColor = webColorOverrides.button.primary.default;
-      inputStyle.boxShadow = `0 0 0 2px ${webColorOverrides.button.primary.default}20`;
+      inputStyle.boxShadow = `0 0 0 2px ${webColorOverrides.border.light}40`;
     } else if (isHovered) {
       inputStyle.borderColor = webColorOverrides.border.medium;
     }

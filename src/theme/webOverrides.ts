@@ -83,7 +83,7 @@ export const webStyleOverrides = {
     fontFamily: 'inherit',
     '&:focus': {
       borderColor: webColorOverrides.button.primary.default,
-      boxShadow: `0 0 0 2px ${webColorOverrides.button.primary.default}20` },
+      boxShadow: `0 0 0 2px ${webColorOverrides.border.light}40` },
     '&::placeholder': {
       color: webColorOverrides.text.tertiary } },
   
@@ -109,7 +109,7 @@ export const webStyleOverrides = {
     backgroundSize: '20px',
     '&:focus': {
       borderColor: webColorOverrides.button.primary.default,
-      boxShadow: `0 0 0 2px ${webColorOverrides.button.primary.default}20` },
+      boxShadow: `0 0 0 2px ${webColorOverrides.border.light}40` },
     '&:disabled': {
       backgroundColor: webColorOverrides.background.primary,
       color: webColorOverrides.text.disabled,

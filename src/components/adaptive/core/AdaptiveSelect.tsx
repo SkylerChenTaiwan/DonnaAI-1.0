@@ -279,9 +279,9 @@ const WebSelect = forwardRef<HTMLDivElement, AdaptiveSelectProps>(
         outline: 'none',
         transition: 'border-color 150ms ease, box-shadow 150ms ease' };
       
-      // 聚焦陰影
+      // 聚焦陰影 - 使用灰色避免彩色背景
       if (currentState === 'focused' || currentState === 'open') {
-        finalStyle.boxShadow = `0 0 0 3px ${DesignSystem.colors.primary}20`;
+        finalStyle.boxShadow = `0 0 0 2px ${DesignSystem.colors.gray300}40`;
       }
       
       return finalStyle;

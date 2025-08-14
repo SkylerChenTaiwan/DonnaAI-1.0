@@ -71,7 +71,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
   if (!disabled) {
     if (isFocused) {
       selectStyle.borderColor = webColorOverrides.button.primary.default;
-      selectStyle.boxShadow = `0 0 0 2px ${webColorOverrides.button.primary.default}20`;
+      selectStyle.boxShadow = `0 0 0 2px ${webColorOverrides.border.light}40`;
     } else if (isHovered) {
       selectStyle.borderColor = webColorOverrides.border.medium;
     }
