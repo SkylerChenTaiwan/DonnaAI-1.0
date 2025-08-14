@@ -211,7 +211,7 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
         justifyContent: position === 'left' ? 'flex-start' : 
                        position === 'right' ? 'flex-end' : 'center',
         zIndex: 1000,
-        padding: size === 'fullscreen' ? '20px' : DesignSystem.spacing.md,
+        padding: size === 'fullscreen' ? 0 : DesignSystem.spacing.md,
         opacity: visible ? 1 : 0,
         visibility: visible ? 'visible' : 'hidden',
         transition: animationType === 'fade' ? 'opacity 200ms ease-in-out' : 'none' };
@@ -240,7 +240,7 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
         position: 'relative',
         transform: visible ? 'scale(1)' : 'scale(0.9)',
         transition: animationType === 'fade' ? 'transform 200ms ease-in-out' : 'none',
-        margin: size === 'fullscreen' ? '20px auto' : '0'
+        margin: size === 'fullscreen' ? '0' : '0'
       };
       
       // 使用 StylePriorityManager 處理樣式優先級
@@ -313,15 +313,8 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
       // 合併樣式
       const result = styleProcessor.mergeStyles(styleConfigs, {
         platform: 'web',
-        debug: true  // 開啟除錯
+        debug: false
       });
-      
-      // 除錯：輸出最終樣式
-      if (size === 'fullscreen') {
-        console.log('🔍 AdaptiveModal fullscreen 最終樣式:', result.style);
-        console.log('🔍 dimensions:', dimensions);
-        console.log('🔍 styleConfigs:', styleConfigs);
-      }
       
       return result.style;
     }, [style, webStyle, contentStyle, styleProcessor, size, visible, animationType]);

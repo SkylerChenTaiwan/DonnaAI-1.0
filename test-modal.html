@@ -3,7 +3,14 @@
 <head>
     <title>Test Modal Size</title>
     <style>
-        .modal-overlay {
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        /* 模擬 overlay 樣式 */
+        .overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -17,52 +24,111 @@
             padding: 20px;
         }
         
-        .modal-content-fullscreen {
-            background-color: #FFFFFF;
+        /* 測試不同的 content 樣式 */
+        .content-test1 {
+            width: 95vw;
+            height: 95vh;
+            max-width: 95vw;
+            max-height: 95vh;
+            min-height: 90vh;
+            background-color: white;
             border-radius: 8px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
             display: flex;
             flex-direction: column;
             overflow: hidden;
             position: relative;
-            width: 95vw;
-            height: 95vh;
-            max-width: 95vw;
-            max-height: 95vh;
-            min-height: 90vh;
             margin: 20px auto;
         }
         
-        .modal-inner {
-            flex: 1;
-            overflow: auto;
-            padding: 20px;
+        /* 測試2：沒有尺寸設定 */
+        .content-test2 {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            margin: 20px auto;
+        }
+        
+        /* 測試3：使用 maxWidth 而非 width */
+        .content-test3 {
+            max-width: 95vw;
+            max-height: 95vh;
+            min-height: 90vh;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            margin: 20px auto;
         }
     </style>
 </head>
 <body>
-    <h1>測試 Modal 尺寸</h1>
-    <button onclick="showModal()">開啟 Modal</button>
+    <h1>Modal 尺寸測試</h1>
     
-    <div id="modal" class="modal-overlay" style="display: none;">
-        <div class="modal-content-fullscreen">
-            <div class="modal-inner">
-                <h2>這是全螢幕 Modal</h2>
-                <p>寬度應該是 95vw</p>
-                <p>高度應該是 95vh</p>
-                <button onclick="hideModal()">關閉</button>
-            </div>
+    <button onclick="showTest1()">測試1: 完整尺寸設定</button>
+    <button onclick="showTest2()">測試2: 無尺寸設定</button>
+    <button onclick="showTest3()">測試3: 只有 max 尺寸</button>
+    
+    <div id="modal" class="overlay" style="display: none;">
+        <div id="content" class="content-test1">
+            <h2>Modal 內容</h2>
+            <p>這是一個測試 Modal</p>
+            <div id="style-info"></div>
         </div>
     </div>
     
     <script>
-        function showModal() {
-            document.getElementById('modal').style.display = 'flex';
+        function showTest1() {
+            const modal = document.getElementById('modal');
+            const content = document.getElementById('content');
+            content.className = 'content-test1';
+            modal.style.display = 'flex';
+            showStyleInfo();
         }
         
-        function hideModal() {
-            document.getElementById('modal').style.display = 'none';
+        function showTest2() {
+            const modal = document.getElementById('modal');
+            const content = document.getElementById('content');
+            content.className = 'content-test2';
+            modal.style.display = 'flex';
+            showStyleInfo();
         }
+        
+        function showTest3() {
+            const modal = document.getElementById('modal');
+            const content = document.getElementById('content');
+            content.className = 'content-test3';
+            modal.style.display = 'flex';
+            showStyleInfo();
+        }
+        
+        function showStyleInfo() {
+            const content = document.getElementById('content');
+            const computed = window.getComputedStyle(content);
+            const info = document.getElementById('style-info');
+            info.innerHTML = `
+                <h3>計算後的樣式：</h3>
+                <p>Width: ${computed.width}</p>
+                <p>Height: ${computed.height}</p>
+                <p>Max-Width: ${computed.maxWidth}</p>
+                <p>Max-Height: ${computed.maxHeight}</p>
+                <p>Min-Height: ${computed.minHeight}</p>
+            `;
+        }
+        
+        // 點擊 overlay 關閉
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>
