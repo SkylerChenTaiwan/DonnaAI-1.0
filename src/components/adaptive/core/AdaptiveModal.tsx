@@ -313,8 +313,15 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
       // 合併樣式
       const result = styleProcessor.mergeStyles(styleConfigs, {
         platform: 'web',
-        debug: false
+        debug: true  // 開啟除錯
       });
+      
+      // 除錯：輸出最終樣式
+      if (size === 'fullscreen') {
+        console.log('🔍 AdaptiveModal fullscreen 最終樣式:', result.style);
+        console.log('🔍 dimensions:', dimensions);
+        console.log('🔍 styleConfigs:', styleConfigs);
+      }
       
       return result.style;
     }, [style, webStyle, contentStyle, styleProcessor, size, visible, animationType]);
