@@ -97,7 +97,7 @@ const getModalDimensions = (size: ModalSize) => {
     case 'large':
       return { maxWidth: 900, width: '95%', minHeight: '70vh' };
     case 'fullscreen':
-      return { width: '95%', height: '90vh', maxWidth: 1200, minHeight: '85vh' };
+      return { width: '95vw', height: '95vh', maxWidth: '95vw', maxHeight: '95vh', minHeight: '90vh' };
     default:
       return { maxWidth: 600, width: '90%' };
   }
@@ -231,7 +231,7 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
         boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)',
         display: 'flex',
         flexDirection: 'column',
-        maxHeight: size === 'fullscreen' ? '90vh' : '85vh',
+        maxHeight: size === 'fullscreen' ? '95vh' : '85vh',
         overflow: 'hidden',
         position: 'relative',
         transform: visible ? 'scale(1)' : 'scale(0.9)',
