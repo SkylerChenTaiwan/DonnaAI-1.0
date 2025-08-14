@@ -791,6 +791,9 @@ export const EnhancedBulkImportModal: React.FC<EnhancedBulkImportModalProps> = (
       animationType="slide"
       presentationStyle="pageSheet"
       onRequestClose={handleClose}
+      size="large"  // 設定為大尺寸
+      position="center"  // 確保居中
+      style={{ maxHeight: '90vh' }}  // 限制最大高度
     >
       <View style={styles.container}>
         {/* Header */}

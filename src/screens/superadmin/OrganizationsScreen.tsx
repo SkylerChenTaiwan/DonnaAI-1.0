@@ -161,7 +161,11 @@ export const OrganizationsScreen: React.FC = () => {
 
   const renderOrganizationItem = ({ item }: { item: Organization }) => (
     <TouchableOpacity
-      style={styles.orgCard}
+      style={[
+        styles.orgCard,
+        // 運行時添加平台特定樣式
+        Platform.OS === 'web' && styles.orgCardWeb
+      ]}
       onPress={() => handleOrganizationPress(item)}
       activeOpacity={0.7}
       disabled={false}
@@ -367,20 +371,21 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 16,
     marginBottom: 12,
-    // Web 平台的陰影
-    ...(Platform.OS === 'web' ? {
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-      border: '1px solid #E3E3E2',
-    } : {
-      // Native 平台的陰影
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 4,
-      elevation: 2,
-      borderWidth: 1,
-      borderColor: '#E3E3E2',
-    }) },
+    // Native 平台的基本樣式
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: '#E3E3E2',
+  },
+  // Web 平台的額外樣式
+  orgCardWeb: {
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    border: '1px solid #E3E3E2',
+    borderWidth: 0,  // Web 使用 border 而非 borderWidth
+  },
   orgHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
