@@ -1,0 +1,888 @@
+{
+  "timestamp": "2025-08-14T05:51:28.732Z",
+  "mode": "fixed",
+  "filesFixed": 47,
+  "files": [
+    "src/theme/webOverrides.ts",
+    "src/theme/designSystem.ts",
+    "src/services/error/ErrorReporter.tsx",
+    "src/services/error/ErrorBoundary.tsx",
+    "src/screens/superadmin/OrganizationDetailScreen.tsx",
+    "src/screens/settings/PrivacyPolicyScreen.tsx",
+    "src/screens/profile/ProfileScreen.tsx",
+    "src/screens/modals/CreateTaskModal.tsx",
+    "src/screens/modals/CreateCustomerModal.tsx",
+    "src/screens/meetings/RecordingScreen.tsx",
+    "src/screens/meetings/MeetingsScreen.tsx",
+    "src/screens/manager/TaskAssignmentModal.tsx",
+    "src/screens/manager/AnnouncementModal.tsx",
+    "src/screens/developer/ErrorLogsScreen.tsx",
+    "src/screens/database/DatabaseScreen.tsx",
+    "src/screens/database/DatabaseScreen.backup.tsx",
+    "src/screens/dashboard/SalespersonDashboard.tsx",
+    "src/screens/dashboard/AdminDashboard.tsx",
+    "src/screens/customers/CustomersScreen.tsx",
+    "src/screens/admin/UserManagementScreen.tsx",
+    "src/components/users/UserImportWizard.tsx",
+    "src/components/users/UserImportStageIndicator.tsx",
+    "src/components/superadmin/onboarding/OnboardingWizard.tsx",
+    "src/components/superadmin/onboarding/steps/BillingPlanStep.tsx",
+    "src/components/organization/BillingManagementSection.tsx",
+    "src/components/modals/ActivityModal.tsx",
+    "src/components/meetings/MakeupRecording.tsx",
+    "src/components/forms/TaskForm.tsx",
+    "src/components/forms/RecordForm.tsx",
+    "src/components/forms/FormField.tsx",
+    "src/components/developer/StateInspector.tsx",
+    "src/components/developer/ErrorDisplay.tsx",
+    "src/components/database/SortPopover.tsx",
+    "src/components/database/NotionStyleTableDebug.tsx",
+    "src/components/database/FilterPopover.tsx",
+    "src/components/database/EmptyState.tsx",
+    "src/components/database/AddColumnDialog.tsx",
+    "src/components/database/styles/notionStyles.ts",
+    "src/components/audit/AuditReportInterface.tsx",
+    "src/components/audit/AuditLogViewer.tsx",
+    "src/components/audit/AuditDashboard.tsx",
+    "src/components/audio/AudioRecorder.tsx",
+    "src/components/audio/AudioEditor.tsx",
+    "src/components/analytics/QueryChat.tsx",
+    "src/components/ai/ConfirmationInterface.tsx",
+    "src/components/admin/TeamDataSyncTool.tsx",
+    "src/components/DataVisualization/ClarificationForm.tsx"
+  ],
+  "changes": [
+    {
+      "file": "src/theme/webOverrides.ts",
+      "changes": [
+        {
+          "from": "#e0e0e0",
+          "to": "DesignSystem.colors.gray300",
+          "line": 44
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/theme/designSystem.ts",
+      "changes": [
+        {
+          "from": "#e0e0e0",
+          "to": "DesignSystem.colors.gray300",
+          "line": 34
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/services/error/ErrorReporter.tsx",
+      "changes": [
+        {
+          "from": "#3182CE",
+          "to": "DesignSystem.colors.primary",
+          "line": 445
+        },
+        {
+          "from": "#E2E8F0",
+          "to": "DesignSystem.colors.gray200",
+          "line": 432
+        },
+        {
+          "from": "#E2E8F0",
+          "to": "DesignSystem.colors.gray200",
+          "line": 442
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/services/error/ErrorBoundary.tsx",
+      "changes": [
+        {
+          "from": "#3182CE",
+          "to": "DesignSystem.colors.primary",
+          "line": 320
+        },
+        {
+          "from": "#E2E8F0",
+          "to": "DesignSystem.colors.gray200",
+          "line": 333
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/screens/superadmin/OrganizationDetailScreen.tsx",
+      "changes": [
+        {
+          "from": "backgroundColor: DesignSystem.colors.success",
+          "to": "backgroundColor: DesignSystem.colors.primary",
+          "type": "pattern"
+        }
+      ]
+    },
+    {
+      "file": "src/screens/settings/PrivacyPolicyScreen.tsx",
+      "changes": [
+        {
+          "from": "#e3f2fd",
+          "to": "DesignSystem.colors.gray50",
+          "line": 200
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/screens/profile/ProfileScreen.tsx",
+      "changes": [
+        {
+          "from": "borderColor: '#FF3B30'",
+          "to": "borderColor: DesignSystem.colors.status.error"
+        },
+        {
+          "from": "color: '#FF3B30'",
+          "to": "color: DesignSystem.colors.status.error"
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/screens/modals/CreateTaskModal.tsx",
+      "changes": [
+        {
+          "from": "#FF6B6B",
+          "to": "DesignSystem.colors.status.error",
+          "line": 162
+        },
+        {
+          "from": "#FF6B6B",
+          "to": "DesignSystem.colors.status.error",
+          "line": 219
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/screens/modals/CreateCustomerModal.tsx",
+      "changes": [
+        {
+          "from": "#F8F9FA",
+          "to": "DesignSystem.colors.gray50",
+          "line": 348
+        },
+        {
+          "from": "#e0e0e0",
+          "to": "DesignSystem.colors.gray300",
+          "line": 399
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/screens/meetings/RecordingScreen.tsx",
+      "changes": [
+        {
+          "from": "#3b82f6",
+          "to": "DesignSystem.colors.primary",
+          "line": 410
+        },
+        {
+          "from": "#22c55e",
+          "to": "DesignSystem.colors.primary",
+          "line": 415
+        },
+        {
+          "from": "#e5e7eb",
+          "to": "DesignSystem.colors.gray200",
+          "line": 426
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/screens/meetings/MeetingsScreen.tsx",
+      "changes": [
+        {
+          "from": "#3b82f6",
+          "to": "DesignSystem.colors.primary",
+          "line": 460
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/screens/manager/TaskAssignmentModal.tsx",
+      "changes": [
+        {
+          "from": "#F8F9FA",
+          "to": "DesignSystem.colors.gray50",
+          "line": 385
+        },
+        {
+          "from": "#e5e7eb",
+          "to": "DesignSystem.colors.gray200",
+          "line": 402
+        }
+      ]
+    },
+    {
+      "file": "src/screens/manager/AnnouncementModal.tsx",
+      "changes": [
+        {
+          "from": "#e5e7eb",
+          "to": "DesignSystem.colors.gray200",
+          "line": 335
+        }
+      ]
+    },
+    {
+      "file": "src/screens/developer/ErrorLogsScreen.tsx",
+      "changes": [
+        {
+          "from": "#F7FAFC",
+          "to": "DesignSystem.colors.gray50",
+          "line": 242
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/screens/database/DatabaseScreen.tsx",
+      "changes": [
+        {
+          "from": "backgroundColor: '#2383e2'",
+          "to": "backgroundColor: DesignSystem.colors.primary"
+        },
+        {
+          "from": "#FF6B6B",
+          "to": "DesignSystem.colors.status.error",
+          "line": 1508
+        },
+        {
+          "from": "#f5f5f5",
+          "to": "DesignSystem.colors.gray50",
+          "line": 1567
+        },
+        {
+          "from": "#e0e0e0",
+          "to": "DesignSystem.colors.gray300",
+          "line": 1559
+        },
+        {
+          "from": "#e3f2fd",
+          "to": "DesignSystem.colors.gray50",
+          "line": 1570
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/screens/database/DatabaseScreen.backup.tsx",
+      "changes": [
+        {
+          "from": "#FFF5E6",
+          "to": "DesignSystem.colors.gray50",
+          "line": 91
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/screens/dashboard/SalespersonDashboard.tsx",
+      "changes": [
+        {
+          "from": "#34C759",
+          "to": "DesignSystem.colors.primary",
+          "line": 46
+        },
+        {
+          "from": "#FF3B30",
+          "to": "DesignSystem.colors.status.error",
+          "line": 36
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/screens/dashboard/AdminDashboard.tsx",
+      "changes": [
+        {
+          "from": "#34C759",
+          "to": "DesignSystem.colors.primary",
+          "line": 33
+        },
+        {
+          "from": "#FF3B30",
+          "to": "DesignSystem.colors.status.error",
+          "line": 51
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/screens/customers/CustomersScreen.tsx",
+      "changes": [
+        {
+          "from": "#FF3B30",
+          "to": "DesignSystem.colors.status.error",
+          "line": 103
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/screens/admin/UserManagementScreen.tsx",
+      "changes": [
+        {
+          "from": "backgroundColor: DesignSystem.colors.success",
+          "to": "backgroundColor: DesignSystem.colors.primary",
+          "type": "pattern"
+        },
+        {
+          "from": "backgroundColor: DesignSystem.colors.error",
+          "to": "backgroundColor: DesignSystem.colors.primary",
+          "type": "pattern"
+        },
+        {
+          "from": "backgroundColor: DesignSystem.colors.warning",
+          "to": "backgroundColor: DesignSystem.colors.primary",
+          "type": "pattern"
+        }
+      ]
+    },
+    {
+      "file": "src/components/users/UserImportWizard.tsx",
+      "changes": [
+        {
+          "from": "backgroundColor: DesignSystem.colors.success",
+          "to": "backgroundColor: DesignSystem.colors.primary",
+          "type": "pattern"
+        }
+      ]
+    },
+    {
+      "file": "src/components/users/UserImportStageIndicator.tsx",
+      "changes": [
+        {
+          "from": "backgroundColor: DesignSystem.colors.success",
+          "to": "backgroundColor: DesignSystem.colors.primary",
+          "type": "pattern"
+        }
+      ]
+    },
+    {
+      "file": "src/components/superadmin/onboarding/OnboardingWizard.tsx",
+      "changes": [
+        {
+          "from": "backgroundColor: DesignSystem.colors.success",
+          "to": "backgroundColor: DesignSystem.colors.primary",
+          "type": "pattern"
+        }
+      ]
+    },
+    {
+      "file": "src/components/superadmin/onboarding/steps/BillingPlanStep.tsx",
+      "changes": [
+        {
+          "from": "backgroundColor: DesignSystem.colors.success",
+          "to": "backgroundColor: DesignSystem.colors.primary",
+          "type": "pattern"
+        }
+      ]
+    },
+    {
+      "file": "src/components/organization/BillingManagementSection.tsx",
+      "changes": [
+        {
+          "from": "backgroundColor: DesignSystem.colors.success",
+          "to": "backgroundColor: DesignSystem.colors.primary",
+          "type": "pattern"
+        }
+      ]
+    },
+    {
+      "file": "src/components/modals/ActivityModal.tsx",
+      "changes": [
+        {
+          "from": "backgroundColor: DesignSystem.colors.success",
+          "to": "backgroundColor: DesignSystem.colors.primary",
+          "type": "pattern"
+        }
+      ]
+    },
+    {
+      "file": "src/components/meetings/MakeupRecording.tsx",
+      "changes": [
+        {
+          "from": "#3b82f6",
+          "to": "DesignSystem.colors.primary",
+          "line": 466
+        },
+        {
+          "from": "#3b82f6",
+          "to": "DesignSystem.colors.primary",
+          "line": 476
+        },
+        {
+          "from": "#22c55e",
+          "to": "DesignSystem.colors.primary",
+          "line": 471
+        },
+        {
+          "from": "#e5e7eb",
+          "to": "DesignSystem.colors.gray200",
+          "line": 484
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/components/forms/TaskForm.tsx",
+      "changes": [
+        {
+          "from": "#ef4444",
+          "to": "DesignSystem.colors.status.error",
+          "line": 395
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/components/forms/RecordForm.tsx",
+      "changes": [
+        {
+          "from": "#ef4444",
+          "to": "DesignSystem.colors.status.error",
+          "line": 578
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/components/forms/FormField.tsx",
+      "changes": [
+        {
+          "from": "#FF6B6B",
+          "to": "DesignSystem.colors.status.error",
+          "line": 362
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/components/developer/StateInspector.tsx",
+      "changes": [
+        {
+          "from": "#E2E8F0",
+          "to": "DesignSystem.colors.gray200",
+          "line": 537
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/components/developer/ErrorDisplay.tsx",
+      "changes": [
+        {
+          "from": "#3182CE",
+          "to": "DesignSystem.colors.primary",
+          "line": 360
+        },
+        {
+          "from": "#E2E8F0",
+          "to": "DesignSystem.colors.gray200",
+          "line": 373
+        },
+        {
+          "from": "#E2E8F0",
+          "to": "DesignSystem.colors.gray200",
+          "line": 426
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/components/database/SortPopover.tsx",
+      "changes": [
+        {
+          "from": "backgroundColor: '#2383e2'",
+          "to": "backgroundColor: DesignSystem.colors.primary"
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/components/database/NotionStyleTableDebug.tsx",
+      "changes": [
+        {
+          "from": "#FF6B6B",
+          "to": "DesignSystem.colors.status.error",
+          "line": 52
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/components/database/FilterPopover.tsx",
+      "changes": [
+        {
+          "from": "backgroundColor: '#2383e2'",
+          "to": "backgroundColor: DesignSystem.colors.primary"
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/components/database/EmptyState.tsx",
+      "changes": [
+        {
+          "from": "#FF6B6B",
+          "to": "DesignSystem.colors.status.error",
+          "line": 88
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/components/database/AddColumnDialog.tsx",
+      "changes": [
+        {
+          "from": "#FF6B6B",
+          "to": "DesignSystem.colors.status.error",
+          "line": 372
+        },
+        {
+          "from": "#FF6B6B",
+          "to": "DesignSystem.colors.status.error",
+          "line": 427
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/components/database/styles/notionStyles.ts",
+      "changes": [
+        {
+          "from": "backgroundColor: '#2383e2'",
+          "to": "backgroundColor: DesignSystem.colors.primary"
+        },
+        {
+          "from": "borderColor: '#2383e2'",
+          "to": "borderColor: DesignSystem.colors.primary"
+        }
+      ]
+    },
+    {
+      "file": "src/components/audit/AuditReportInterface.tsx",
+      "changes": [
+        {
+          "from": "#f5f5f5",
+          "to": "DesignSystem.colors.gray50",
+          "line": 830
+        },
+        {
+          "from": "#e0e0e0",
+          "to": "DesignSystem.colors.gray300",
+          "line": 762
+        },
+        {
+          "from": "#e0e0e0",
+          "to": "DesignSystem.colors.gray300",
+          "line": 790
+        },
+        {
+          "from": "#e0e0e0",
+          "to": "DesignSystem.colors.gray300",
+          "line": 904
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/components/audit/AuditLogViewer.tsx",
+      "changes": [
+        {
+          "from": "#e0e0e0",
+          "to": "DesignSystem.colors.gray300",
+          "line": 717
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/components/audit/AuditDashboard.tsx",
+      "changes": [
+        {
+          "from": "#f5f5f5",
+          "to": "DesignSystem.colors.gray50",
+          "line": 668
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/components/audio/AudioRecorder.tsx",
+      "changes": [
+        {
+          "from": "#22c55e",
+          "to": "DesignSystem.colors.primary",
+          "line": 482
+        },
+        {
+          "from": "#22c55e",
+          "to": "DesignSystem.colors.primary",
+          "line": 498
+        },
+        {
+          "from": "#ef4444",
+          "to": "DesignSystem.colors.status.error",
+          "line": 506
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/components/audio/AudioEditor.tsx",
+      "changes": [
+        {
+          "from": "#3b82f6",
+          "to": "DesignSystem.colors.primary",
+          "line": 504
+        },
+        {
+          "from": "#22c55e",
+          "to": "DesignSystem.colors.primary",
+          "line": 532
+        },
+        {
+          "from": "#e5e7eb",
+          "to": "DesignSystem.colors.gray200",
+          "line": 493
+        },
+        {
+          "from": "#e5e7eb",
+          "to": "DesignSystem.colors.gray200",
+          "line": 526
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/components/analytics/QueryChat.tsx",
+      "changes": [
+        {
+          "from": "#f5f5f5",
+          "to": "DesignSystem.colors.gray50",
+          "line": 244
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/components/ai/ConfirmationInterface.tsx",
+      "changes": [
+        {
+          "from": "#3b82f6",
+          "to": "DesignSystem.colors.primary",
+          "line": 557
+        },
+        {
+          "from": "#3b82f6",
+          "to": "DesignSystem.colors.primary",
+          "line": 575
+        },
+        {
+          "from": "#22c55e",
+          "to": "DesignSystem.colors.primary",
+          "line": 569
+        },
+        {
+          "from": "#e5e7eb",
+          "to": "DesignSystem.colors.gray200",
+          "line": 551
+        },
+        {
+          "from": "#e5e7eb",
+          "to": "DesignSystem.colors.gray200",
+          "line": 581
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/components/admin/TeamDataSyncTool.tsx",
+      "changes": [
+        {
+          "from": "#1976d2",
+          "to": "DesignSystem.colors.primary",
+          "line": 186
+        },
+        {
+          "from": "#1976d2",
+          "to": "DesignSystem.colors.primary",
+          "line": 235
+        },
+        {
+          "from": "#1976d2",
+          "to": "DesignSystem.colors.primary",
+          "line": 321
+        },
+        {
+          "from": "#1976d2",
+          "to": "DesignSystem.colors.primary",
+          "line": 324
+        },
+        {
+          "from": "#1976d2",
+          "to": "DesignSystem.colors.primary",
+          "line": 328
+        },
+        {
+          "from": "#1976d2",
+          "to": "DesignSystem.colors.primary",
+          "line": 385
+        },
+        {
+          "from": "#1976d2",
+          "to": "DesignSystem.colors.primary",
+          "line": 388
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    },
+    {
+      "file": "src/components/DataVisualization/ClarificationForm.tsx",
+      "changes": [
+        {
+          "from": "#f5f5f5",
+          "to": "DesignSystem.colors.gray50",
+          "line": 282
+        },
+        {
+          "from": "#e0e0e0",
+          "to": "DesignSystem.colors.gray300",
+          "line": 254
+        },
+        {
+          "from": "#e0e0e0",
+          "to": "DesignSystem.colors.gray300",
+          "line": 272
+        },
+        {
+          "from": "#e0e0e0",
+          "to": "DesignSystem.colors.gray300",
+          "line": 284
+        },
+        {
+          "type": "import",
+          "added": "import { DesignSystem } from '@/theme/designSystem';"
+        }
+      ]
+    }
+  ]
+}

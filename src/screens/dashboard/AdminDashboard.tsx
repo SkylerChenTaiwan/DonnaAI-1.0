@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import {
   View,
   Text,
@@ -30,7 +31,7 @@ export const AdminDashboard: React.FC = () => {
       title: '使用者管理',
       subtitle: '新增/編輯使用者',
       icon: 'people' as string,
-      color: '#34C759',
+      color: DesignSystem.colors.primary,
       onPress: () => {
         console.log('使用者管理');
       } },
@@ -48,7 +49,7 @@ export const AdminDashboard: React.FC = () => {
       title: '計費管理',
       subtitle: '訂閱與帳單',
       icon: 'card' as string,
-      color: '#FF3B30',
+      color: DesignSystem.colors.status.error,
       onPress: () => {
         console.log('計費管理');
       } },
@@ -56,9 +57,9 @@ export const AdminDashboard: React.FC = () => {
 
   const organizationStats = [
     { label: '總使用者', value: '24', color: '#2C2C2C' },
-    { label: 'AI 配額', value: '1440min', color: '#34C759' },
+    { label: 'AI 配額', value: '1440min', color: DesignSystem.colors.primary },
     { label: '已使用', value: '856min', color: '#FF9500' },
-    { label: '剩餘配額', value: '584min', color: '#FF3B30' },
+    { label: '剩餘配額', value: '584min', color: DesignSystem.colors.status.error },
   ];
 
   return (
@@ -117,7 +118,7 @@ export const AdminDashboard: React.FC = () => {
           <View style={styles.statusCard}>
             <View style={styles.statusItem}>
               <View style={styles.statusIndicator}>
-                <View style={StyleSheet.flatten([styles.statusDot, { backgroundColor: '#34C759' }])} />
+                <View style={StyleSheet.flatten([styles.statusDot, { backgroundColor: DesignSystem.colors.primary }])} />
                 <Text style={styles.statusTitle}>Firebase 連線</Text>
               </View>
               <Text style={styles.statusValue}>正常</Text>
@@ -125,7 +126,7 @@ export const AdminDashboard: React.FC = () => {
             
             <View style={styles.statusItem}>
               <View style={styles.statusIndicator}>
-                <View style={StyleSheet.flatten([styles.statusDot, { backgroundColor: '#34C759' }])} />
+                <View style={StyleSheet.flatten([styles.statusDot, { backgroundColor: DesignSystem.colors.primary }])} />
                 <Text style={styles.statusTitle}>AI 服務</Text>
               </View>
               <Text style={styles.statusValue}>運行中</Text>
@@ -147,7 +148,7 @@ export const AdminDashboard: React.FC = () => {
           <View style={styles.activityCard}>
             <View style={styles.activityItem}>
               <View style={styles.activityIcon}>
-                <Icon name="person-add" size={16} color="#34C759" />
+                <Icon name="person-add" size={16} color={DesignSystem.colors.primary} />
               </View>
               <View style={styles.activityContent}>
                 <Text style={styles.activityTitle}>新使用者註冊</Text>

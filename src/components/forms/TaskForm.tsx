@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useCallback, forwardRef, useImperativeHandle } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import {
   View,
   Text,
@@ -392,7 +393,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     marginBottom: 4 },
   voiceInputButton: {
-    backgroundColor: '#ef4444',
+    backgroundColor: 'DesignSystem.colors.status.error',
     marginBottom: 16 },
   voiceResultBanner: {
     flexDirection: 'row',

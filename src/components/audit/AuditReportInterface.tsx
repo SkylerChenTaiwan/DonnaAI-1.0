@@ -1,4 +1,5 @@
 import { Icon } from '../../components/common/Icon';
+import { DesignSystem } from '@/theme/designSystem';
 /**
  * 審計報告介面元件
  * 提供報告生成、排程和匯出功能
@@ -709,12 +710,12 @@ const formatReportPeriod = (period: ReportPeriod): string => {
 const styles: any = {
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5' },
+    backgroundColor: 'DesignSystem.colors.gray50' },
   tabBar: {
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0' },
+    borderBottomColor: 'DesignSystem.colors.gray300' },
   tab: {
     flex: 1,
     flexDirection: 'row',
@@ -759,7 +760,7 @@ const styles: any = {
     margin: 4,
     borderRadius: 8,
     borderWidth: 2,
-    borderColor: '#E0E0E0',
+    borderColor: 'DesignSystem.colors.gray300',
     alignItems: 'center' },
   reportTypeButtonActive: {
     backgroundColor: '#2C2C2C',
@@ -787,7 +788,7 @@ const styles: any = {
     marginHorizontal: 4,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: '#E0E0E0',
+    borderColor: 'DesignSystem.colors.gray300',
     alignItems: 'center' },
   periodTypeButtonActive: {
     backgroundColor: '#2C2C2C',
@@ -809,15 +810,15 @@ const styles: any = {
     marginBottom: 4 },
   picker: {
     height: 44,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: 'DesignSystem.colors.gray50',
     borderRadius: 4 },
   webSelect: {
     height: 44,
     padding: 8,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: 'DesignSystem.colors.gray50',
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: '#E0E0E0',
+    borderColor: 'DesignSystem.colors.gray300',
     fontSize: 14 },
   dateRangeSelector: {
     flexDirection: Platform.OS === 'web' ? 'row' : 'column' },
@@ -827,7 +828,7 @@ const styles: any = {
     alignItems: 'center',
     padding: 12,
     margin: 4,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: 'DesignSystem.colors.gray50',
     borderRadius: 8 },
   dateButtonText: {
     marginLeft: 8,
@@ -897,11 +898,11 @@ const styles: any = {
     color: '#666666',
     marginBottom: 8 },
   emailInput: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: 'DesignSystem.colors.gray50',
     padding: 12,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: '#E0E0E0',
+    borderColor: 'DesignSystem.colors.gray300',
     fontSize: 14,
     minHeight: 80 },
   scheduleButton: {
@@ -928,7 +929,7 @@ const styles: any = {
     alignItems: 'center',
     padding: 12,
     marginBottom: 8,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: 'DesignSystem.colors.gray50',
     borderRadius: 8 },
   historyItemIcon: {
     marginRight: 12 },

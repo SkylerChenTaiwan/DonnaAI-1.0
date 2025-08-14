@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import {
   View,
   Text,
@@ -239,7 +240,7 @@ const styles = StyleSheet.create({
     color: '#666',
     fontWeight: '500' },
   applyButton: {
-    backgroundColor: '#2383e2',
+    backgroundColor: DesignSystem.colors.primary,
     borderRadius: 6,
     paddingHorizontal: 20,
     paddingVertical: 8 },

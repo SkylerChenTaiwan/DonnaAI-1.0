@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import {
   AdaptiveButton,
   AdaptiveInput
@@ -377,7 +378,7 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#e5e7eb' },
+    borderColor: 'DesignSystem.colors.gray200' },
   optionTitle: {
     fontSize: 18,
     fontWeight: '600',
@@ -463,17 +464,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     gap: 12 },
   primaryButton: {
-    backgroundColor: '#3b82f6' },
+    backgroundColor: 'DesignSystem.colors.primary' },
   primaryButtonText: {
     color: '#ffffff',
     fontWeight: '600' },
   secondaryButton: {
-    backgroundColor: '#22c55e' },
+    backgroundColor: 'DesignSystem.colors.primary' },
   secondaryButtonText: {
     color: '#ffffff',
     fontWeight: '600' },
   submitButton: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: 'DesignSystem.colors.primary',
     flex: 1 },
   submitButtonText: {
     color: '#ffffff',
@@ -481,7 +482,7 @@ const styles = StyleSheet.create({
   disabledButton: {
     backgroundColor: '#d1d5db' },
   cancelButton: {
-    backgroundColor: '#e5e7eb',
+    backgroundColor: 'DesignSystem.colors.gray200',
     flex: 1 },
   cancelButtonText: {
     color: '#374151',

@@ -614,7 +614,7 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.primary,
     borderColor: DesignSystem.colors.primary },
   stageCircleCompleted: {
-    backgroundColor: DesignSystem.colors.success,
+    backgroundColor: DesignSystem.colors.primary,
     borderColor: DesignSystem.colors.success },
   stageLabel: {
     ...DesignSystem.typography.caption,
@@ -632,7 +632,7 @@ const styles = StyleSheet.create({
     top: 17,
     zIndex: -1 },
   stageConnectorCompleted: {
-    backgroundColor: DesignSystem.colors.success },
+    backgroundColor: DesignSystem.colors.primary },
   errorBanner: {
     flexDirection: 'row',
     alignItems: 'center',

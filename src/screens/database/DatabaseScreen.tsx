@@ -3,6 +3,7 @@
  */
 
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 // 在開發模式下載入測試工具
 if (__DEV__) {
   import('@/utils/create-test-task').catch(console.error);
@@ -1357,7 +1358,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#787774' },
   primaryButton: {
-    backgroundColor: '#2383e2' },
+    backgroundColor: DesignSystem.colors.primary },
   primaryButtonText: {
     fontSize: 14,
     color: '#ffffff',
@@ -1409,7 +1410,7 @@ const styles = StyleSheet.create({
     gap: 8 },
   activeTab: {
     borderBottomWidth: 2,
-    borderBottomColor: '#FF6B6B' },
+    borderBottomColor: DesignSystem.colors.status.error },
   tabText: {
     fontSize: 16,
     fontWeight: '500',
@@ -1426,7 +1427,7 @@ const styles = StyleSheet.create({
     borderRadius: 10 },
   activeTabCount: {
     backgroundColor: 'rgba(255, 107, 107, 0.1)',
-    color: '#FF6B6B' },
+    color: DesignSystem.colors.status.error },
   
   
   // 批量操作工具列
@@ -1505,7 +1506,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#757575' },
   saveButton: {
-    backgroundColor: '#FF6B6B',
+    backgroundColor: DesignSystem.colors.status.error,
     paddingHorizontal: 12,
     paddingVertical: 5,
     borderRadius: 4 },
@@ -1539,7 +1540,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0' },
+    borderBottomColor: DesignSystem.colors.gray300 },
   modalTitle: {
     fontSize: 18,
     fontWeight: '600',
@@ -1556,7 +1557,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: DesignSystem.colors.gray300,
     gap: 15 },
   modeSwitchButton: {
     flexDirection: 'row',
@@ -1564,10 +1565,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: DesignSystem.colors.gray50,
     gap: 8 },
   modeSwitchButtonActive: {
-    backgroundColor: '#e3f2fd' },
+    backgroundColor: DesignSystem.colors.gray50 },
   modeSwitchText: {
     fontSize: 14,
     color: '#666',

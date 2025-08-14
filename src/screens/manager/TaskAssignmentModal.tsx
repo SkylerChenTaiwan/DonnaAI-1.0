@@ -326,7 +326,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB' },
+    borderBottomColor: DesignSystem.colors.gray200 },
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
@@ -344,22 +344,22 @@ const styles = StyleSheet.create({
     color: '#1A1A1A',
     marginBottom: 8 },
   input: {
-    backgroundColor: '#F8F9FA',
+    backgroundColor: DesignSystem.colors.gray50,
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 16,
     color: '#1A1A1A',
     borderWidth: 1,
-    borderColor: '#E5E7EB' },
+    borderColor: DesignSystem.colors.gray200 },
   textArea: {
     minHeight: 80,
     paddingTop: 12 },
   pickerContainer: {
-    backgroundColor: '#F8F9FA',
+    backgroundColor: DesignSystem.colors.gray50,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: DesignSystem.colors.gray200,
     overflow: 'hidden' },
   picker: {
     height: 50 },
@@ -371,7 +371,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: DesignSystem.colors.gray200,
     alignItems: 'center' },
   priorityText: {
     fontSize: 14,
@@ -382,12 +382,12 @@ const styles = StyleSheet.create({
   dateButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F8F9FA',
+    backgroundColor: DesignSystem.colors.gray50,
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: DesignSystem.colors.gray200,
     gap: 8 },
   dateText: {
     fontSize: 16,
@@ -399,7 +399,7 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     gap: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB' },
+    borderTopColor: DesignSystem.colors.gray200 },
   button: {
     flex: 1,
     paddingVertical: 14,

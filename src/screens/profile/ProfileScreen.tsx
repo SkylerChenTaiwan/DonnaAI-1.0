@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 // Icon import removed - using platform-specific Icon component;
 import { Icon } from '@/components/common/Icon';
@@ -234,6 +235,6 @@ const styles = StyleSheet.create({
     padding: 16,
     marginTop: 'auto' },
   logoutButton: {
-    borderColor: '#FF3B30' },
+    borderColor: DesignSystem.colors.status.error },
   logoutButtonText: {
-    color: '#FF3B30' } });
+    color: DesignSystem.colors.status.error } });

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import { View,
   TouchableOpacity,
   ScrollView,
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
   exampleContainer: {
     width: '100%' },
   exampleButton: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: 'DesignSystem.colors.gray50',
     padding: 12,
     borderRadius: 8,
     marginBottom: 8 },
@@ -294,7 +295,7 @@ const styles = StyleSheet.create({
     borderTopColor: '#E0E0E0' },
   input: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: 'DesignSystem.colors.gray50',
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingTop: 10,
@@ -306,7 +307,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: 'DesignSystem.colors.gray50',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 2 },

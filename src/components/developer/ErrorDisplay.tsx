@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import { View,
   Text,
   StyleSheet,
@@ -285,7 +286,7 @@ const styles = StyleSheet.create({
   },
   toggleIcon: {
     fontSize: 14,
-    color: '#3182CE'
+    color: 'DesignSystem.colors.primary'
   },
   errorInfo: {
     backgroundColor: '#FEF2F2',
@@ -357,7 +358,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   primaryButton: {
-    backgroundColor: '#3182CE',
+    backgroundColor: 'DesignSystem.colors.primary',
     marginBottom: 10
   },
   primaryButtonText: {
@@ -370,7 +371,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   secondaryButton: {
-    backgroundColor: '#E2E8F0',
+    backgroundColor: 'DesignSystem.colors.gray200',
     flex: 1,
     marginHorizontal: 5
   },
@@ -387,7 +388,7 @@ const styles = StyleSheet.create({
     padding: 12,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: '#E2E8F0'
+    borderColor: 'DesignSystem.colors.gray200'
   },
   compactHeader: {
     flexDirection: 'row',
@@ -423,7 +424,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E2E8F0'
+    borderTopColor: 'DesignSystem.colors.gray200'
   },
   compactButton: {
     paddingVertical: 6,

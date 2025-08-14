@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect, useMemo } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import { View,
   Text,
   StyleSheet,
@@ -375,7 +376,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0'
+    borderBottomColor: 'DesignSystem.colors.gray200'
   },
   title: {
     fontSize: 20,
@@ -402,7 +403,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E2E8F0'
+    borderColor: 'DesignSystem.colors.gray200'
   },
   searchIcon: {
     fontSize: 16,
@@ -429,7 +430,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: 'DesignSystem.colors.gray200',
     overflow: 'hidden'
   },
   storeHeader: {
@@ -464,7 +465,7 @@ const styles = StyleSheet.create({
   storeContent: {
     backgroundColor: '#F7FAFC',
     borderTopWidth: 1,
-    borderTopColor: '#E2E8F0'
+    borderTopColor: 'DesignSystem.colors.gray200'
   },
   jsonContainer: {
     padding: 16
@@ -534,7 +535,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderTopWidth: 1,
-    borderTopColor: '#E2E8F0'
+    borderTopColor: 'DesignSystem.colors.gray200'
   },
   toolbarButton: {
     alignItems: 'center',
@@ -567,7 +568,7 @@ const styles = StyleSheet.create({
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
   },
   closePathIcon: {
-    color: '#E2E8F0',
+    color: 'DesignSystem.colors.gray200',
     fontSize: 14,
     marginLeft: 12
   }

@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import { View, Text, StyleSheet, Alert, ScrollView, TouchableOpacity, Platform  } from 'react-native';
 import {
   AdaptiveModal
@@ -345,7 +346,7 @@ export const CreateCustomerModal: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA' },
+    backgroundColor: 'DesignSystem.colors.gray50' },
   content: {
     flex: 1 },
   headerButton: {
@@ -381,7 +382,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0' },
+    borderBottomColor: 'DesignSystem.colors.gray300' },
   modalTitle: {
     fontSize: 20,
     fontWeight: '600',
@@ -396,7 +397,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     padding: 20,
     borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
+    borderTopColor: 'DesignSystem.colors.gray300',
     gap: 12 },
   modalButton: {
     paddingHorizontal: 20,

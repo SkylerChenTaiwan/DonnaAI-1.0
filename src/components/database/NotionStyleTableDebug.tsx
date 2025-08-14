@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import {
   View,
   Text,
@@ -49,7 +50,7 @@ export const NotionStyleTableDebug: React.FC<NotionStyleTableDebugProps> = ({
         {data.length === 0 ? (
           /* 空資料時顯示新增按鈕 */
           <TouchableOpacity style={styles.addFirstRow} onPress={onAddRow}>
-            <Icon name="add" size={20} color="#FF6B6B" />
+            <Icon name="add" size={20} color="DesignSystem.colors.status.error" />
             <Text style={styles.addFirstRowText}>新增第一筆資料</Text>
           </TouchableOpacity>
         ) : (

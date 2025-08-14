@@ -398,7 +398,7 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.warning,
     fontWeight: '500' },
   upgradeButton: {
-    backgroundColor: DesignSystem.colors.success,
+    backgroundColor: DesignSystem.colors.primary,
     paddingHorizontal: DesignSystem.spacing.sm,
     paddingVertical: DesignSystem.spacing.xs,
     borderRadius: DesignSystem.borderRadius.sm },

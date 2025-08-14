@@ -506,11 +506,11 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 8 },
   enableButton: {
-    backgroundColor: DesignSystem.colors.success },
+    backgroundColor: DesignSystem.colors.primary },
   disableButton: {
-    backgroundColor: DesignSystem.colors.warning },
+    backgroundColor: DesignSystem.colors.primary },
   deleteButton: {
-    backgroundColor: DesignSystem.colors.error },
+    backgroundColor: DesignSystem.colors.primary },
   actionButtonText: {
     fontSize: 14,
     fontWeight: '500',

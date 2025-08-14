@@ -1,4 +1,5 @@
 import { Icon } from '../../components/common/Icon';
+import { DesignSystem } from '@/theme/designSystem';
 /**
  * 審計日誌檢視器元件
  * 提供審計日誌的搜尋、檢視和過濾功能
@@ -662,7 +663,7 @@ const styles: any = {
     backgroundColor: '#FFFFFF',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0' },
+    borderBottomColor: 'DesignSystem.colors.gray300' },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -693,7 +694,7 @@ const styles: any = {
     marginRight: 8,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: '#E0E0E0',
+    borderColor: 'DesignSystem.colors.gray300',
     backgroundColor: '#FFFFFF' },
   picker: {
     width: 120,
@@ -714,7 +715,7 @@ const styles: any = {
   resetButton: {
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#E0E0E0' },
+    borderColor: 'DesignSystem.colors.gray300' },
   resetButtonText: {
     color: '#666666',
     fontSize: 14,
@@ -728,7 +729,7 @@ const styles: any = {
     marginHorizontal: 8,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E0E0E0' },
+    borderColor: 'DesignSystem.colors.gray300' },
   selectedLogItem: {
     borderColor: '#2C2C2C',
     borderWidth: 2 },
@@ -814,7 +815,7 @@ const styles: any = {
     width: Platform.OS === 'web' ? 400 : '100%',
     backgroundColor: '#FFFFFF',
     borderLeftWidth: 1,
-    borderLeftColor: '#E0E0E0',
+    borderLeftColor: 'DesignSystem.colors.gray300',
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -829,7 +830,7 @@ const styles: any = {
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0' },
+    borderBottomColor: 'DesignSystem.colors.gray300' },
   detailsTitle: {
     fontSize: 18,
     fontWeight: '600',

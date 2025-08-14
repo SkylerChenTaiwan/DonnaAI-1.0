@@ -4,6 +4,7 @@
  */
 
 import { Platform } from 'react-native';
+import { DesignSystem } from '@/theme/designSystem';
 
 // Web 平台的顏色調整
 export const webColorOverrides = {
@@ -41,7 +42,7 @@ export const webColorOverrides = {
     },
     secondary: {
       default: '#F0F0F0',    // 次要按鈕背景
-      hover: '#E0E0E0',      // 懸停時稍深
+      hover: 'DesignSystem.colors.gray300',      // 懸停時稍深
       pressed: '#D0D0D0',    // 按下時更深
       text: '#000000',       // 按鈕文字純黑
     },

@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.primary },
   stageCircleCompleted: {
     borderColor: DesignSystem.colors.success,
-    backgroundColor: DesignSystem.colors.success },
+    backgroundColor: DesignSystem.colors.primary },
   stageCircleDisabled: {
     borderColor: DesignSystem.colors.border.light,
     backgroundColor: DesignSystem.colors.background.secondary },
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     backgroundColor: DesignSystem.colors.border.light,
     zIndex: 1 },
   stageLineCompleted: {
-    backgroundColor: DesignSystem.colors.success },
+    backgroundColor: DesignSystem.colors.primary },
   stageLineCompact: {
     top: 17, // 調整緊湊模式下的位置
   } });

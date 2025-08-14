@@ -1,4 +1,5 @@
 import { Icon } from '../../components/common/Icon';
+import { DesignSystem } from '@/theme/designSystem';
 import { withAlpha } from '@/utils/colorUtils';
 /**
  * 團隊資料同步工具元件
@@ -183,7 +184,7 @@ export const TeamDataSyncTool: React.FC = () => {
               onPress={handleCheckConsistency}
               disabled={loading || syncing}
             >
-              <Icon name="sync" size={20} color="#1976d2" style={{ marginRight: 8 }}  />
+              <Icon name="sync" size={20} color="DesignSystem.colors.primary" style={{ marginRight: 8 }}  />
               <Text style={styles.outlineButtonText}>檢查一致性</Text>
             </TouchableOpacity>
             
@@ -199,7 +200,7 @@ export const TeamDataSyncTool: React.FC = () => {
 
           {(loading || syncing) && (
             <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color="#1976d2" />
+              <ActivityIndicator size="large" color="DesignSystem.colors.primary" />
             </View>
           )}
 
@@ -232,7 +233,7 @@ export const TeamDataSyncTool: React.FC = () => {
                         onPress={() => handleSyncItem(item)}
                         disabled={syncing}
                       >
-                        <Icon name="sync" size={16} color="#1976d2" style={{ marginRight: 4 }}  />
+                        <Icon name="sync" size={16} color="DesignSystem.colors.primary" style={{ marginRight: 4 }}  />
                         <Text style={styles.syncButtonText}>同步</Text>
                       </TouchableOpacity>
                     </View>
@@ -318,14 +319,14 @@ const styles = StyleSheet.create({
     flex: 1 },
   outlineButton: {
     borderWidth: 1,
-    borderColor: '#1976d2',
+    borderColor: 'DesignSystem.colors.primary',
     backgroundColor: 'transparent' },
   primaryButton: {
-    backgroundColor: '#1976d2' },
+    backgroundColor: 'DesignSystem.colors.primary' },
   buttonDisabled: {
     opacity: 0.5 },
   outlineButtonText: {
-    color: '#1976d2',
+    color: 'DesignSystem.colors.primary',
     fontSize: 14,
     fontWeight: '500' },
   primaryButtonText: {
@@ -382,10 +383,10 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: '#1976d2' },
+    borderColor: 'DesignSystem.colors.primary' },
   syncButtonText: {
     fontSize: 12,
-    color: '#1976d2' },
+    color: 'DesignSystem.colors.primary' },
   successContainer: {
     alignItems: 'center',
     paddingVertical: 32 },

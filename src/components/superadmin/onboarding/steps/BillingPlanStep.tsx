@@ -433,7 +433,7 @@ const styles = StyleSheet.create({
   cycleTextActive: {
     color: DesignSystem.colors.text.primary },
   discountBadge: {
-    backgroundColor: DesignSystem.colors.success,
+    backgroundColor: DesignSystem.colors.primary,
     borderRadius: 10,
     paddingHorizontal: 6,
     paddingVertical: 2,

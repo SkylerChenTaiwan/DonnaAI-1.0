@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import {
   View,
   Text,
@@ -33,7 +34,7 @@ export const SalespersonDashboard: React.FC = () => {
       title: 'AI 錄音',
       subtitle: '會議錄音轉文字',
       icon: 'mic' as string,
-      color: '#FF3B30',
+      color: DesignSystem.colors.status.error,
       onPress: () => {
         // TODO: 開始錄音功能
         console.log('開始錄音');
@@ -43,7 +44,7 @@ export const SalespersonDashboard: React.FC = () => {
       title: '我的客戶',
       subtitle: '查看客戶列表',
       icon: 'people' as string,
-      color: '#34C759',
+      color: DesignSystem.colors.primary,
       onPress: () => {
         // TODO: 導航到客戶列表
         console.log('查看客戶');
@@ -62,9 +63,9 @@ export const SalespersonDashboard: React.FC = () => {
 
   const stats = [
     { label: '本月會議', value: '12', color: '#2C2C2C' },
-    { label: '活躍客戶', value: '8', color: '#34C759' },
+    { label: '活躍客戶', value: '8', color: DesignSystem.colors.primary },
     { label: 'AI 分析', value: '5', color: '#FF9500' },
-    { label: '待跟進', value: '3', color: '#FF3B30' },
+    { label: '待跟進', value: '3', color: DesignSystem.colors.status.error },
   ];
 
   return (
@@ -133,7 +134,7 @@ export const SalespersonDashboard: React.FC = () => {
             
             <View style={styles.activityItem}>
               <View style={styles.activityIcon}>
-                <Icon name="person-add" size={16} color="#34C759" />
+                <Icon name="person-add" size={16} color={DesignSystem.colors.primary} />
               </View>
               <View style={styles.activityContent}>
                 <Text style={styles.activityTitle}>新增客戶：李小姐</Text>

@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import {
   AdaptiveModal,
   AdaptiveButton
@@ -575,7 +576,7 @@ const styles = StyleSheet.create({
   voiceInputButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#ef4444',
+    backgroundColor: 'DesignSystem.colors.status.error',
     borderRadius: 20,
     paddingHorizontal: 12,
     paddingVertical: 6,

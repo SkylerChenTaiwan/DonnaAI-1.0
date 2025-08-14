@@ -3,6 +3,7 @@
  */
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Button } from '@/components/adaptive';
 import { Layout } from '@/components/common/Layout';
@@ -159,9 +160,9 @@ export const CreateTaskModal: React.FC = () => {
             onPress={switchToVoice}
             activeOpacity={0.7}
           >
-            <Icon name="mic" size={20} color="#FF6B6B" />
+            <Icon name="mic" size={20} color={DesignSystem.colors.status.error} />
             <Text style={styles.voiceLinkText}>改用語音輸入</Text>
-            <Icon name="arrow-forward" size={16} color="#FF6B6B" />
+            <Icon name="arrow-forward" size={16} color={DesignSystem.colors.status.error} />
           </TouchableOpacity>
           
           <TaskForm 
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
     marginBottom: 16 },
   voiceLinkText: {
     fontSize: 16,
-    color: '#FF6B6B',
+    color: DesignSystem.colors.status.error,
     fontWeight: '500',
     flex: 1 },
   headerButton: {

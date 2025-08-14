@@ -3,6 +3,7 @@
  */
 
 import React, { useState } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import {
   AdaptiveModal,
   AdaptiveButton,
@@ -359,7 +360,7 @@ const styles = StyleSheet.create({
     color: '#7A7A7A' },
   confirmButton: {
     fontSize: 16,
-    color: '#FF6B6B',
+    color: 'DesignSystem.colors.status.error',
     fontWeight: '600' },
   // 下拉選單樣式
   selectInput: {

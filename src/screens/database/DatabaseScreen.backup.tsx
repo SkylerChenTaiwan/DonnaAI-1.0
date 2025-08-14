@@ -3,6 +3,7 @@
  */
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import { View,
   Text,
   TouchableOpacity,
@@ -88,7 +89,7 @@ const createStyles = () => StyleSheet.create({
     padding: 8,
     borderRadius: 6 },
   iconButtonActive: {
-    backgroundColor: '#FFF5E6', // 橘色背景，與多選模式保持一致
+    backgroundColor: DesignSystem.colors.gray50, // 橘色背景，與多選模式保持一致
     borderColor: '#FFE4B5',
     borderWidth: 1 },
   tabContainer: {

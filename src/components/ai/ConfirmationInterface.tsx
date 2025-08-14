@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import {
   AdaptiveButton,
   AdaptiveInput
@@ -385,7 +386,7 @@ export const ConfirmationInterface = ({
 
   // 獲取信心分數顏色
   const getConfidenceColor = (confidence: number): string => {
-    if (confidence >= 0.8) return '#22c55e';
+    if (confidence >= 0.8) return 'DesignSystem.colors.primary';
     if (confidence >= 0.6) return '#f59e0b';
     return '#ef4444';
   };
@@ -488,11 +489,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     backgroundColor: '#ffffff' },
   modifiedInput: {
-    borderColor: '#3b82f6',
+    borderColor: 'DesignSystem.colors.primary',
     backgroundColor: '#eff6ff' },
   modifiedIndicator: {
     fontSize: 12,
-    color: '#3b82f6',
+    color: 'DesignSystem.colors.primary',
     fontWeight: '500',
     marginTop: 4 },
   taskContainer: {
@@ -501,7 +502,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#e5e7eb' },
+    borderColor: 'DesignSystem.colors.gray200' },
   taskHeader: {
     marginBottom: 12 },
   taskCheckbox: {
@@ -516,8 +517,8 @@ const styles = StyleSheet.create({
     borderColor: '#d1d5db',
     borderRadius: 6 },
   checkedBox: {
-    backgroundColor: '#3b82f6',
-    borderColor: '#3b82f6' },
+    backgroundColor: 'DesignSystem.colors.primary',
+    borderColor: 'DesignSystem.colors.primary' },
   checkboxText: {
     color: '#ffffff',
     fontSize: 16,
@@ -548,13 +549,13 @@ const styles = StyleSheet.create({
     marginRight: 12,
     fontWeight: '500' },
   priorityButton: {
-    backgroundColor: '#e5e7eb',
+    backgroundColor: 'DesignSystem.colors.gray200',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
     marginRight: 8 },
   selectedPriorityButton: {
-    backgroundColor: '#3b82f6' },
+    backgroundColor: 'DesignSystem.colors.primary' },
   priorityButtonText: {
     fontSize: 12,
     color: '#374151',
@@ -566,19 +567,19 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 20 },
   confirmButton: {
-    backgroundColor: '#22c55e',
+    backgroundColor: 'DesignSystem.colors.primary',
     marginBottom: 12 },
   confirmButtonText: {
     color: '#ffffff',
     fontWeight: '600' },
   selectiveButton: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: 'DesignSystem.colors.primary',
     marginBottom: 12 },
   selectiveButtonText: {
     color: '#ffffff',
     fontWeight: '600' },
   cancelButton: {
-    backgroundColor: '#e5e7eb' },
+    backgroundColor: 'DesignSystem.colors.gray200' },
   cancelButtonText: {
     color: '#374151',
     fontWeight: '600' },

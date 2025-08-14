@@ -24,8 +24,8 @@ export const notionStyles = {
     boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
   },
   buttonPrimary: {
-    backgroundColor: '#2383e2',
-    borderColor: '#2383e2',
+    backgroundColor: DesignSystem.colors.primary,
+    borderColor: DesignSystem.colors.primary,
     color: '#ffffff',
     boxShadow: '0 1px 3px rgba(35, 131, 226, 0.3)',
   },

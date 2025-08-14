@@ -597,7 +597,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 8 },
   stepCompleted: {
-    backgroundColor: DesignSystem.colors.success },
+    backgroundColor: DesignSystem.colors.primary },
   stepCurrent: {
     backgroundColor: DesignSystem.colors.primary },
   stepPast: {

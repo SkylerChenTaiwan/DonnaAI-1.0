@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import {
   View,
   Text,
@@ -214,7 +215,7 @@ const styles = StyleSheet.create({
   header: {
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0'
+    borderBottomColor: 'DesignSystem.colors.gray300'
   },
   title: {
     fontSize: 18,
@@ -249,9 +250,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: 'DesignSystem.colors.gray50',
     borderWidth: 1,
-    borderColor: '#e0e0e0'
+    borderColor: 'DesignSystem.colors.gray300'
   },
   optionButtonSelected: {
     backgroundColor: colors.primary,
@@ -269,7 +270,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 20,
     borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
+    borderTopColor: 'DesignSystem.colors.gray300',
     gap: 10
   },
   button: {
@@ -279,9 +280,9 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   cancelButton: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: 'DesignSystem.colors.gray50',
     borderWidth: 1,
-    borderColor: '#e0e0e0'
+    borderColor: 'DesignSystem.colors.gray300'
   },
   cancelButtonText: {
     fontSize: 16,

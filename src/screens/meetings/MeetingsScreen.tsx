@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import {
   AdaptiveModal,
   AdaptiveButton
@@ -175,7 +176,7 @@ export const MeetingsScreen: React.FC = () => {
       title: '補救錄音',
       description: '為已結束的會議建立記錄',
       action: handleStartMakeupRecording,
-      color: '#3b82f6',
+      color: DesignSystem.colors.primary,
       icon: '📝'
     },
     {
@@ -199,7 +200,7 @@ export const MeetingsScreen: React.FC = () => {
   // 獲取記錄狀態顏色
   const getRecordStatusColor = (record: RecordDoc): string => {
     if (record.audioRecordingState?.status === 'processing') return '#f59e0b';
-    if (record.aiConfirmationStatus === 'pending') return '#3b82f6';
+    if (record.aiConfirmationStatus === 'pending') return DesignSystem.colors.primary;
     if (record.status === 'completed') return '#22c55e';
     return '#6b7280';
   };
@@ -457,7 +458,7 @@ const styles = StyleSheet.create({
     color: '#374151',
     marginBottom: 12 },
   recordActionButton: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: DesignSystem.colors.primary,
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 8 },

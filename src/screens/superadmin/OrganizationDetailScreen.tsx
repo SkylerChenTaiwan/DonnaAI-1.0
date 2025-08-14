@@ -822,7 +822,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: DesignSystem.spacing.sm },
   upgradeButton: {
-    backgroundColor: DesignSystem.colors.success,
+    backgroundColor: DesignSystem.colors.primary,
     paddingHorizontal: DesignSystem.spacing.sm,
     paddingVertical: DesignSystem.spacing.xs,
     borderRadius: DesignSystem.borderRadius.sm },

@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { PanGestureHandler, GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Audio } from 'expo-av';
@@ -247,7 +248,7 @@ export const AudioEditor = ({
                     styles.waveformBar,
                     {
                       height: amplitude,
-                      backgroundColor: isInRange ? '#3b82f6' : '#d1d5db',
+                      backgroundColor: isInRange ? 'DesignSystem.colors.primary' : '#d1d5db',
                       left: (index / waveformData.length) * waveformWidth }
                   ])}
                 />
@@ -443,7 +444,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: 3 },
   trimStart: {
-    backgroundColor: '#22c55e' },
+    backgroundColor: 'DesignSystem.colors.primary' },
   trimEnd: {
     backgroundColor: '#ef4444' },
   playbackIndicator: {
@@ -490,7 +491,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     gap: 12 },
   quickTrimButton: {
-    backgroundColor: '#e5e7eb',
+    backgroundColor: 'DesignSystem.colors.gray200',
     flex: 1 },
   quickTrimButtonText: {
     color: '#374151',
@@ -501,7 +502,7 @@ const styles = StyleSheet.create({
     marginBottom: 32,
     gap: 12 },
   playButton: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: 'DesignSystem.colors.primary',
     paddingHorizontal: 24 },
   playButtonText: {
     color: '#ffffff',
@@ -523,13 +524,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     gap: 16 },
   cancelButton: {
-    backgroundColor: '#e5e7eb',
+    backgroundColor: 'DesignSystem.colors.gray200',
     flex: 1 },
   cancelButtonText: {
     color: '#374151',
     fontWeight: '600' },
   saveButton: {
-    backgroundColor: '#22c55e',
+    backgroundColor: 'DesignSystem.colors.primary',
     flex: 1 },
   saveButtonText: {
     color: '#ffffff',

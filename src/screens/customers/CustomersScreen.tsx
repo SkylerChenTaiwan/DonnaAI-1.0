@@ -3,6 +3,7 @@
  */
 
 import React, { useEffect } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator , Platform } from 'react-native';
 import { Layout } from '@/components/common/Layout';
 import { useCustomerStore } from '@/stores/customerStore';
@@ -100,7 +101,7 @@ export const CustomersScreen: React.FC = () => {
     return (
       <Layout>
         <View style={styles.centerContainer}>
-          <Icon name="alert-circle-outline" size={48} color="#FF3B30" />
+          <Icon name="alert-circle-outline" size={48} color={DesignSystem.colors.status.error} />
           <Text style={styles.errorText}>{error}</Text>
           <TouchableOpacity 
             style={styles.retryButton}
@@ -246,7 +247,7 @@ const styles = StyleSheet.create({
     color: '#8E8E93' },
   errorText: {
     fontSize: 16,
-    color: '#FF3B30',
+    color: DesignSystem.colors.status.error,
     marginTop: 12,
     marginBottom: 16,
     textAlign: 'center' },

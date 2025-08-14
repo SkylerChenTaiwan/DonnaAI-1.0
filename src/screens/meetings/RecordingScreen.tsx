@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import { View, Text, StyleSheet, Alert, ScrollView , Platform } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -391,7 +392,7 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#e5e7eb' },
+    borderColor: 'DesignSystem.colors.gray200' },
   choiceTitle: {
     fontSize: 18,
     fontWeight: '600',
@@ -407,12 +408,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     gap: 12 },
   primaryButton: {
-    backgroundColor: '#3b82f6' },
+    backgroundColor: 'DesignSystem.colors.primary' },
   primaryButtonText: {
     color: '#ffffff',
     fontWeight: '600' },
   secondaryButton: {
-    backgroundColor: '#22c55e' },
+    backgroundColor: 'DesignSystem.colors.primary' },
   secondaryButtonText: {
     color: '#ffffff',
     fontWeight: '600' },
@@ -423,7 +424,7 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontWeight: '600' },
   cancelButton: {
-    backgroundColor: '#e5e7eb',
+    backgroundColor: 'DesignSystem.colors.gray200',
     flex: 1 },
   cancelButtonText: {
     color: '#374151',
@@ -434,13 +435,13 @@ const styles = StyleSheet.create({
   progressBar: {
     width: '100%',
     height: 8,
-    backgroundColor: '#e5e7eb',
+    backgroundColor: 'DesignSystem.colors.gray200',
     borderRadius: 4,
     overflow: 'hidden',
     marginBottom: 8 },
   progressFill: {
     height: '100%',
-    backgroundColor: '#3b82f6',
+    backgroundColor: 'DesignSystem.colors.primary',
     borderRadius: 4 },
   progressText: {
     fontSize: 14,

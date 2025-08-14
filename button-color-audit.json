@@ -1,0 +1,2215 @@
+{
+  "timestamp": "2025-08-14T05:55:44.194Z",
+  "filesScanned": 696,
+  "filesWithButtons": 180,
+  "issues": {
+    "hardcodedColors": [],
+    "wrongDesignSystem": [
+      {
+        "file": "src/services/error/ErrorReporter.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F7FAFC",
+        "line": 364,
+        "context": "    362:     flexDirection: 'row',\n    363:     alignItems: 'center',\n>>> 364:     backgroundColor: '#F7FAFC',\n    365:     borderRadius: 12,\n    366:     padding: 16,"
+      },
+      {
+        "file": "src/services/error/ErrorBoundary.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F8F9FA",
+        "line": 243,
+        "context": "    241:   container: {\n    242:     flex: 1,\n>>> 243:     backgroundColor: '#F8F9FA'\n    244:   },\n    245:   scrollContent: {"
+      },
+      {
+        "file": "src/screens/tools/AIRolePlayScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f5f5f5",
+        "line": 36,
+        "context": "    34:   container: {\n    35:     flex: 1,\n>>> 36:     backgroundColor: '#f5f5f5' },\n    37:   content: {\n    38:     flex: 1,"
+      },
+      {
+        "file": "src/screens/test/FirebaseTestScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f5f5f5",
+        "line": 216,
+        "context": "    214:   container: {\n    215:     flex: 1,\n>>> 216:     backgroundColor: '#f5f5f5' },\n    217:   header: {\n    218:     backgroundColor: 'white',"
+      },
+      {
+        "file": "src/screens/test/FirebaseTestScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f8f8f8",
+        "line": 269,
+        "context": "    267:     fontWeight: '500' },\n    268:   results: {\n>>> 269:     backgroundColor: '#f8f8f8',\n    270:     padding: 15,\n    271:     borderRadius: 5,"
+      },
+      {
+        "file": "src/screens/superadmin/OrganizationDetailScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 745,
+        "context": "    743:     paddingVertical: 6,\n    744:     borderRadius: 6,\n>>> 745:     backgroundColor: '#F0F0F0',\n    746:     gap: 4 },\n    747:   updateStatsText: {"
+      },
+      {
+        "file": "src/screens/settings/SettingsScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F5F5F5",
+        "line": 293,
+        "context": "    291:   container: {\n    292:     flex: 1,\n>>> 293:     backgroundColor: '#F5F5F5' },\n    294:   userInfo: {\n    295:     backgroundColor: '#FFFFFF',"
+      },
+      {
+        "file": "src/screens/settings/SettingsScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 308,
+        "context": "    306:     padding: 8,\n    307:     borderRadius: 20,\n>>> 308:     backgroundColor: '#F0F0F0',\n    309:     marginLeft: 12 },\n    310:   userName: {"
+      },
+      {
+        "file": "src/screens/settings/SettingsScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E3F2FD",
+        "line": 323,
+        "context": "    321:     fontWeight: '500',\n    322:     color: '#2C2C2C',\n>>> 323:     backgroundColor: '#E3F2FD',\n    324:     paddingHorizontal: 8,\n    325:     paddingVertical: 2,"
+      },
+      {
+        "file": "src/screens/settings/SettingsScreen.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "Button: {\n    backgroundColor: '#FFFFFF",
+        "line": 328,
+        "context": "    326:     borderRadius: 4,\n    327:     alignSelf: 'flex-start' },\n>>> 328:   signOutButton: {\n    329:     backgroundColor: '#FFFFFF',\n    330:     marginHorizontal: 16,"
+      },
+      {
+        "file": "src/screens/settings/PrivacyPolicyScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F5F5F5",
+        "line": 166,
+        "context": "    164:   container: {\n    165:     flex: 1,\n>>> 166:     backgroundColor: '#F5F5F5' },\n    167:   content: {\n    168:     padding: 20 },"
+      },
+      {
+        "file": "src/screens/profile/ProfileScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F8F9FA",
+        "line": 138,
+        "context": "    136:   container: {\n    137:     flex: 1,\n>>> 138:     backgroundColor: '#F8F9FA' },\n    139:   userCard: {\n    140:     backgroundColor: '#FFFFFF',"
+      },
+      {
+        "file": "src/screens/profile/ProfileScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F2F2F7",
+        "line": 204,
+        "context": "    202:     height: 40,\n    203:     borderRadius: 20,\n>>> 204:     backgroundColor: '#F2F2F7',\n    205:     alignItems: 'center',\n    206:     justifyContent: 'center',"
+      },
+      {
+        "file": "src/screens/profile/ProfileScreen.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "ButtonText}\n          />\n        </View>\n      </View>\n    </Layout>\n  );\n};\n\nconst styles = StyleSheet.create({\n  container: {\n    flex: 1,\n    backgroundColor: '#F8F9FA' },\n  userCard: {\n    backgroundColor: '#FFFFFF",
+        "line": 127,
+        "context": "    125:             variant=\"outline\"\n    126:             style={styles.logoutButton}\n>>> 127:             textStyle={styles.logoutButtonText}\n    128:           />\n    129:         </View>"
+      },
+      {
+        "file": "src/screens/modals/EditTaskModal.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F8F9FA",
+        "line": 249,
+        "context": "    247:   container: {\n    248:     flex: 1,\n>>> 249:     backgroundColor: '#F8F9FA' },\n    250:   loadingContainer: {\n    251:     flex: 1,"
+      },
+      {
+        "file": "src/screens/modals/EditTaskModal.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "Button: {\n    backgroundColor: '#FFFFFF",
+        "line": 304,
+        "context": "    302:     flexWrap: 'wrap',\n    303:     gap: 8 },\n>>> 304:   optionButton: {\n    305:     backgroundColor: '#FFFFFF',\n    306:     borderRadius: 8,"
+      },
+      {
+        "file": "src/screens/modals/EditRecordModal.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F8F9FA",
+        "line": 217,
+        "context": "    215:   container: {\n    216:     flex: 1,\n>>> 217:     backgroundColor: '#F8F9FA' },\n    218:   loadingContainer: {\n    219:     flex: 1,"
+      },
+      {
+        "file": "src/screens/modals/EditRecordModal.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "Button: {\n    flex: 1,\n    backgroundColor: '#FFFFFF",
+        "line": 271,
+        "context": "    269:     flexDirection: 'row',\n    270:     gap: 8 },\n>>> 271:   typeButton: {\n    272:     flex: 1,\n    273:     backgroundColor: '#FFFFFF',"
+      },
+      {
+        "file": "src/screens/modals/EditCustomerModal.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F8F9FA",
+        "line": 174,
+        "context": "    172:   container: {\n    173:     flex: 1,\n>>> 174:     backgroundColor: '#F8F9FA' },\n    175:   loadingContainer: {\n    176:     flex: 1,"
+      },
+      {
+        "file": "src/screens/modals/EditCustomerModal.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E5E5EA",
+        "line": 249,
+        "context": "    247:     flexDirection: 'row',\n    248:     alignItems: 'center',\n>>> 249:     backgroundColor: '#E5E5EA',\n    250:     borderRadius: 16,\n    251:     paddingHorizontal: 12,"
+      },
+      {
+        "file": "src/screens/modals/CreateTaskModal.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F8F9FA",
+        "line": 190,
+        "context": "    188:   container: {\n    189:     flex: 1,\n>>> 190:     backgroundColor: '#F8F9FA' },\n    191:   content: {\n    192:     flex: 1 },"
+      },
+      {
+        "file": "src/screens/modals/CreateTaskModal.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F8F9FA",
+        "line": 190,
+        "context": "    188:   container: {\n    189:     flex: 1,\n>>> 190:     backgroundColor: '#F8F9FA' },\n    191:   content: {\n    192:     flex: 1 },"
+      },
+      {
+        "file": "src/screens/modals/CreateTaskModal.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FFF5F5",
+        "line": 214,
+        "context": "    212:     paddingHorizontal: 20,\n    213:     paddingVertical: 16,\n>>> 214:     backgroundColor: '#FFF5F5',\n    215:     borderBottomWidth: 1,\n    216:     borderBottomColor: '#FFE0E0',"
+      },
+      {
+        "file": "src/screens/modals/CreateCustomerModal.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 369,
+        "context": "    367:     alignItems: 'center' },\n    368:   modalContainer: {\n>>> 369:     backgroundColor: '#ffffff',\n    370:     borderRadius: 12,\n    371:     width: '90%',"
+      },
+      {
+        "file": "src/screens/modals/CreateCustomerModal.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f0f0f0",
+        "line": 407,
+        "context": "    405:     borderRadius: 8 },\n    406:   cancelButton: {\n>>> 407:     backgroundColor: '#f0f0f0' },\n    408:   cancelButtonText: {\n    409:     color: '#666',"
+      },
+      {
+        "file": "src/screens/meetings/RecordingScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f9fafb",
+        "line": 356,
+        "context": "    354:   container: {\n    355:     flex: 1,\n>>> 356:     backgroundColor: '#f9fafb' },\n    357:   contentContainer: {\n    358:     padding: 16 },"
+      },
+      {
+        "file": "src/screens/meetings/RecordingScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 368,
+        "context": "    366:     color: '#6b7280' },\n    367:   stepContainer: {\n>>> 368:     backgroundColor: '#ffffff',\n    369:     borderRadius: 16,\n    370:     padding: 24,"
+      },
+      {
+        "file": "src/screens/meetings/RecordingScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f9fafb",
+        "line": 356,
+        "context": "    354:   container: {\n    355:     flex: 1,\n>>> 356:     backgroundColor: '#f9fafb' },\n    357:   contentContainer: {\n    358:     padding: 16 },"
+      },
+      {
+        "file": "src/screens/meetings/RecordingScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f59e0b",
+        "line": 421,
+        "context": "    419:     fontWeight: '600' },\n    420:   tertiaryButton: {\n>>> 421:     backgroundColor: '#f59e0b',\n    422:     flex: 1 },\n    423:   tertiaryButtonText: {"
+      },
+      {
+        "file": "src/screens/meetings/MeetingsScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F5F5F5",
+        "line": 341,
+        "context": "    339:   container: {\n    340:     flex: 1,\n>>> 341:     backgroundColor: '#F5F5F5' },\n    342:   contentContainer: {\n    343:     padding: 16 },"
+      },
+      {
+        "file": "src/screens/meetings/MeetingsScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F5F5F5",
+        "line": 341,
+        "context": "    339:   container: {\n    340:     flex: 1,\n>>> 341:     backgroundColor: '#F5F5F5' },\n    342:   contentContainer: {\n    343:     padding: 16 },"
+      },
+      {
+        "file": "src/screens/meetings/MeetingsScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f59e0b",
+        "line": 466,
+        "context": "    464:     borderRadius: 8 },\n    465:   pendingActionButton: {\n>>> 466:     backgroundColor: '#f59e0b' },\n    467:   recordActionText: {\n    468:     color: '#ffffff',"
+      },
+      {
+        "file": "src/screens/manager/TaskAssignmentModal.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F3F4F6",
+        "line": 412,
+        "context": "    410:     gap: 8 },\n    411:   cancelButton: {\n>>> 412:     backgroundColor: '#F3F4F6' },\n    413:   cancelButtonText: {\n    414:     fontSize: 16,"
+      },
+      {
+        "file": "src/screens/developer/TestScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F5F5F5",
+        "line": 249,
+        "context": "    247:   container: {\n    248:     flex: 1,\n>>> 249:     backgroundColor: '#F5F5F5' },\n    250:   header: {\n    251:     padding: 20,"
+      },
+      {
+        "file": "src/screens/developer/TestScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#1A1A1A",
+        "line": 280,
+        "context": "    278:     gap: 8 },\n    279:   primaryButton: {\n>>> 280:     backgroundColor: '#1A1A1A' },\n    281:   primaryButtonText: {\n    282:     fontSize: 16,"
+      },
+      {
+        "file": "src/screens/developer/TestScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 286,
+        "context": "    284:     color: '#FFFFFF' },\n    285:   secondaryButton: {\n>>> 286:     backgroundColor: '#F0F0F0',\n    287:     borderWidth: 1,\n    288:     borderColor: '#E3E1DC' },"
+      },
+      {
+        "file": "src/screens/developer/TestScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F8F9FA",
+        "line": 370,
+        "context": "    368:     gap: 12 },\n    369:   testResult: {\n>>> 370:     backgroundColor: '#F8F9FA',\n    371:     padding: 12,\n    372:     borderRadius: 8,"
+      },
+      {
+        "file": "src/screens/developer/TestScreen.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "ButtonText: {\n    fontSize: 16,\n    fontWeight: '600',\n    color: '#1A1A1A' },\n  results: {\n    flex: 1 },\n  summary: {\n    backgroundColor: '#FFFFFF",
+        "line": 289,
+        "context": "    287:     borderWidth: 1,\n    288:     borderColor: '#E3E1DC' },\n>>> 289:   secondaryButtonText: {\n    290:     fontSize: 16,\n    291:     fontWeight: '600',"
+      },
+      {
+        "file": "src/screens/developer/ErrorLogsScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E2E8F0",
+        "line": 331,
+        "context": "    329:   separator: {\n    330:     height: 1,\n>>> 331:     backgroundColor: '#E2E8F0',\n    332:     marginLeft: 32\n    333:   },"
+      },
+      {
+        "file": "src/screens/database/TaskDetailScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F5F5F5",
+        "line": 230,
+        "context": "    228:   container: {\n    229:     flex: 1,\n>>> 230:     backgroundColor: '#F5F5F5' },\n    231:   loadingContainer: {\n    232:     flex: 1,"
+      },
+      {
+        "file": "src/screens/database/TaskDetailScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FEF3E2",
+        "line": 307,
+        "context": "    305:     alignSelf: 'flex-start' },\n    306:   statusTodo: {\n>>> 307:     backgroundColor: '#FEF3E2' },\n    308:   statusCompleted: {\n    309:     backgroundColor: '#E3F2E6' },"
+      },
+      {
+        "file": "src/screens/database/TaskDetailScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E3F2E6",
+        "line": 309,
+        "context": "    307:     backgroundColor: '#FEF3E2' },\n    308:   statusCompleted: {\n>>> 309:     backgroundColor: '#E3F2E6' },\n    310:   statusText: {\n    311:     fontSize: 14,"
+      },
+      {
+        "file": "src/screens/database/TaskDetailScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E5E5EA",
+        "line": 333,
+        "context": "    331:     gap: 8 },\n    332:   tag: {\n>>> 333:     backgroundColor: '#E5E5EA',\n    334:     borderRadius: 16,\n    335:     paddingHorizontal: 12,"
+      },
+      {
+        "file": "src/screens/database/TaskDetailScreen.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "Button: {\n    padding: 4 },\n  scrollView: {\n    flex: 1 },\n  titleSection: {\n    backgroundColor: '#FFFFFF",
+        "line": 256,
+        "context": "    254:     marginHorizontal: 16,\n    255:     textAlign: 'center' },\n>>> 256:   editButton: {\n    257:     padding: 4 },\n    258:   scrollView: {"
+      },
+      {
+        "file": "src/screens/database/RecordDetailScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F5F5F5",
+        "line": 198,
+        "context": "    196:   container: {\n    197:     flex: 1,\n>>> 198:     backgroundColor: '#F5F5F5' },\n    199:   loadingContainer: {\n    200:     flex: 1,"
+      },
+      {
+        "file": "src/screens/database/RecordDetailScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E5E5EA",
+        "line": 262,
+        "context": "    260:     flexDirection: 'row',\n    261:     alignItems: 'center',\n>>> 262:     backgroundColor: '#E5E5EA',\n    263:     borderRadius: 4,\n    264:     paddingHorizontal: 8,"
+      },
+      {
+        "file": "src/screens/database/RecordDetailScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E8F0FF",
+        "line": 269,
+        "context": "    267:     alignSelf: 'flex-start' },\n    268:   typeMeeting: {\n>>> 269:     backgroundColor: '#E8F0FF' },\n    270:   typeText: {\n    271:     fontSize: 14,"
+      },
+      {
+        "file": "src/screens/database/RecordDetailScreen.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "Button: {\n    padding: 4 },\n  scrollView: {\n    flex: 1 },\n  section: {\n    backgroundColor: '#FFFFFF",
+        "line": 224,
+        "context": "    222:     marginHorizontal: 16,\n    223:     textAlign: 'center' },\n>>> 224:   editButton: {\n    225:     padding: 4 },\n    226:   scrollView: {"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E3F2E6",
+        "line": 516,
+        "context": "    514:               switch (value) {\n    515:                 case 'completed':\n>>> 516:                   return { backgroundColor: '#E3F2E6' };\n    517:                 case 'in_progress':\n    518:                   return { backgroundColor: '#E8F0FF' };"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E8F0FF",
+        "line": 518,
+        "context": "    516:                   return { backgroundColor: '#E3F2E6' };\n    517:                 case 'in_progress':\n>>> 518:                   return { backgroundColor: '#E8F0FF' };\n    519:                 case 'cancelled':\n    520:                   return { backgroundColor: '#FFE5E5' };"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FFE5E5",
+        "line": 520,
+        "context": "    518:                   return { backgroundColor: '#E8F0FF' };\n    519:                 case 'cancelled':\n>>> 520:                   return { backgroundColor: '#FFE5E5' };\n    521:                 default:\n    522:                   return { backgroundColor: '#FEF3E2' };"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FEF3E2",
+        "line": 522,
+        "context": "    520:                   return { backgroundColor: '#FFE5E5' };\n    521:                 default:\n>>> 522:                   return { backgroundColor: '#FEF3E2' };\n    523:               }\n    524:             })();"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 1303,
+        "context": "    1301:     width: '100%',\n    1302:     height: '100vh',\n>>> 1303:     backgroundColor: '#ffffff',\n    1304:     ...Platform.select({\n    1305:       web: {"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#fbfbfa",
+        "line": 1306,
+        "context": "    1304:     ...Platform.select({\n    1305:       web: {\n>>> 1306:         backgroundColor: '#fbfbfa', // Notion 背景色\n    1307:       } }) },\n    1308:   // syncStatusContainer 已移除 - 唯讀模式不需要"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 1303,
+        "context": "    1301:     width: '100%',\n    1302:     height: '100vh',\n>>> 1303:     backgroundColor: '#ffffff',\n    1304:     ...Platform.select({\n    1305:       web: {"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#fbfbfa",
+        "line": 1306,
+        "context": "    1304:     ...Platform.select({\n    1305:       web: {\n>>> 1306:         backgroundColor: '#fbfbfa', // Notion 背景色\n    1307:       } }) },\n    1308:   // syncStatusContainer 已移除 - 唯讀模式不需要"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f9f8f7",
+        "line": 1389,
+        "context": "    1387:   searchBar: {\n    1388:     width: 200,\n>>> 1389:     backgroundColor: '#f9f8f7',\n    1390:     borderWidth: 0 },\n    1391:   tableContainer: {"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f9f8f7",
+        "line": 1389,
+        "context": "    1387:   searchBar: {\n    1388:     width: 200,\n>>> 1389:     backgroundColor: '#f9f8f7',\n    1390:     borderWidth: 0 },\n    1391:   tableContainer: {"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#37352f",
+        "line": 1439,
+        "context": "    1437:     left: 0,\n    1438:     right: 0,\n>>> 1439:     backgroundColor: '#37352f',\n    1440:     flexDirection: 'row',\n    1441:     alignItems: 'center',"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FFF4E6",
+        "line": 1481,
+        "context": "    1479:   // 未儲存變更提示列\n    1480:   unsavedChangesBar: {\n>>> 1481:     backgroundColor: '#FFF4E6',\n    1482:     borderBottomWidth: 1,\n    1483:     borderBottomColor: '#FFE0B2',"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 1303,
+        "context": "    1301:     width: '100%',\n    1302:     height: '100vh',\n>>> 1303:     backgroundColor: '#ffffff',\n    1304:     ...Platform.select({\n    1305:       web: {"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "Button: {\n    backgroundColor: 'rgba(255, 255, 255, 0.2)' },\n  cancelButtonText: {\n    fontSize: 14,\n    fontWeight: '500',\n    color: '#F7F6F3' },\n  \n  // 未儲存變更提示列\n  unsavedChangesBar: {\n    backgroundColor: '#FFF4E6",
+        "line": 1472,
+        "context": "    1470:     fontWeight: '500',\n    1471:     color: '#F7F6F3' },\n>>> 1472:   cancelButton: {\n    1473:     backgroundColor: 'rgba(255, 255, 255, 0.2)' },\n    1474:   cancelButtonText: {"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.backup.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F5F5F5",
+        "line": 62,
+        "context": "    60:   mainContainer: {\n    61:     flex: 1,\n>>> 62:     backgroundColor: '#F5F5F5' },\n    63:   container: {\n    64:     flex: 1,"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.backup.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F5F5F5",
+        "line": 62,
+        "context": "    60:   mainContainer: {\n    61:     flex: 1,\n>>> 62:     backgroundColor: '#F5F5F5' },\n    63:   container: {\n    64:     flex: 1,"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.backup.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E3E1DC",
+        "line": 119,
+        "context": "    117:     fontWeight: '700' },\n    118:   statusBadge: {\n>>> 119:     backgroundColor: '#E3E1DC',\n    120:     borderRadius: 4,\n    121:     paddingHorizontal: 8,"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.backup.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E3F2E6",
+        "line": 125,
+        "context": "    123:     alignSelf: 'flex-start' },\n    124:   statusActive: {\n>>> 125:     backgroundColor: '#E3F2E6' },\n    126:   statusCompleted: {\n    127:     backgroundColor: '#E3F2E6' },"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.backup.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E3F2E6",
+        "line": 125,
+        "context": "    123:     alignSelf: 'flex-start' },\n    124:   statusActive: {\n>>> 125:     backgroundColor: '#E3F2E6' },\n    126:   statusCompleted: {\n    127:     backgroundColor: '#E3F2E6' },"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.backup.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FEF3E2",
+        "line": 129,
+        "context": "    127:     backgroundColor: '#E3F2E6' },\n    128:   statusTodo: {\n>>> 129:     backgroundColor: '#FEF3E2' },\n    130:   statusInProgress: {\n    131:     backgroundColor: '#E8F0FF' },"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.backup.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E8F0FF",
+        "line": 131,
+        "context": "    129:     backgroundColor: '#FEF3E2' },\n    130:   statusInProgress: {\n>>> 131:     backgroundColor: '#E8F0FF' },\n    132:   statusCancelled: {\n    133:     backgroundColor: '#FFE5E5' },"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.backup.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FFE5E5",
+        "line": 133,
+        "context": "    131:     backgroundColor: '#E8F0FF' },\n    132:   statusCancelled: {\n>>> 133:     backgroundColor: '#FFE5E5' },\n    134:   statusText: {\n    135:     fontSize: 12,"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.backup.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#1A1A1A",
+        "line": 147,
+        "context": "    145:     left: 0,\n    146:     right: 0,\n>>> 147:     backgroundColor: '#1A1A1A',\n    148:     flexDirection: 'row',\n    149:     alignItems: 'center',"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.backup.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E3F2E6",
+        "line": 125,
+        "context": "    123:     alignSelf: 'flex-start' },\n    124:   statusActive: {\n>>> 125:     backgroundColor: '#E3F2E6' },\n    126:   statusCompleted: {\n    127:     backgroundColor: '#E3F2E6' },"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.backup.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E8F0FF",
+        "line": 131,
+        "context": "    129:     backgroundColor: '#FEF3E2' },\n    130:   statusInProgress: {\n>>> 131:     backgroundColor: '#E8F0FF' },\n    132:   statusCancelled: {\n    133:     backgroundColor: '#FFE5E5' },"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.backup.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FFE5E5",
+        "line": 133,
+        "context": "    131:     backgroundColor: '#E8F0FF' },\n    132:   statusCancelled: {\n>>> 133:     backgroundColor: '#FFE5E5' },\n    134:   statusText: {\n    135:     fontSize: 12,"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.backup.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FEF3E2",
+        "line": 129,
+        "context": "    127:     backgroundColor: '#E3F2E6' },\n    128:   statusTodo: {\n>>> 129:     backgroundColor: '#FEF3E2' },\n    130:   statusInProgress: {\n    131:     backgroundColor: '#E8F0FF' },"
+      },
+      {
+        "file": "src/screens/database/DatabaseScreen.backup.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "ButtonActive: {\n    backgroundColor: DesignSystem.colors.gray50, // 橘色背景，與多選模式保持一致\n    borderColor: '#FFE4B5',\n    borderWidth: 1 },\n  tabContainer: {\n    flexDirection: 'row',\n    backgroundColor: '#FFFFFF",
+        "line": 91,
+        "context": "    89:     padding: 8,\n    90:     borderRadius: 6 },\n>>> 91:   iconButtonActive: {\n    92:     backgroundColor: DesignSystem.colors.gray50, // 橘色背景，與多選模式保持一致\n    93:     borderColor: '#FFE4B5',"
+      },
+      {
+        "file": "src/screens/database/CustomerDetailScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F5F5F5",
+        "line": 217,
+        "context": "    215:   container: {\n    216:     flex: 1,\n>>> 217:     backgroundColor: '#F5F5F5' },\n    218:   loadingContainer: {\n    219:     flex: 1,"
+      },
+      {
+        "file": "src/screens/database/CustomerDetailScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E5E5EA",
+        "line": 283,
+        "context": "    281:     color: '#1C1C1E' },\n    282:   statusBadge: {\n>>> 283:     backgroundColor: '#E5E5EA',\n    284:     borderRadius: 4,\n    285:     paddingHorizontal: 8,"
+      },
+      {
+        "file": "src/screens/database/CustomerDetailScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E3F2E6",
+        "line": 289,
+        "context": "    287:     alignSelf: 'flex-start' },\n    288:   statusActive: {\n>>> 289:     backgroundColor: '#E3F2E6' },\n    290:   statusText: {\n    291:     fontSize: 12,"
+      },
+      {
+        "file": "src/screens/database/CustomerDetailScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FEF3E2",
+        "line": 319,
+        "context": "    317:     paddingVertical: 4 },\n    318:   taskStatustodo: {\n>>> 319:     backgroundColor: '#FEF3E2' },\n    320:   taskStatusinProgress: {\n    321:     backgroundColor: '#E8F0FF' },"
+      },
+      {
+        "file": "src/screens/database/CustomerDetailScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E8F0FF",
+        "line": 321,
+        "context": "    319:     backgroundColor: '#FEF3E2' },\n    320:   taskStatusinProgress: {\n>>> 321:     backgroundColor: '#E8F0FF' },\n    322:   taskStatuscompleted: {\n    323:     backgroundColor: '#E3F2E6' },"
+      },
+      {
+        "file": "src/screens/database/CustomerDetailScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E3F2E6",
+        "line": 289,
+        "context": "    287:     alignSelf: 'flex-start' },\n    288:   statusActive: {\n>>> 289:     backgroundColor: '#E3F2E6' },\n    290:   statusText: {\n    291:     fontSize: 12,"
+      },
+      {
+        "file": "src/screens/database/CustomerDetailScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FFE5E5",
+        "line": 325,
+        "context": "    323:     backgroundColor: '#E3F2E6' },\n    324:   taskStatuscancelled: {\n>>> 325:     backgroundColor: '#FFE5E5' },\n    326:   taskStatusText: {\n    327:     fontSize: 12,"
+      },
+      {
+        "file": "src/screens/database/CustomerDetailScreen.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "Button: {\n    padding: 4 },\n  scrollView: {\n    flex: 1 },\n  section: {\n    backgroundColor: '#FFFFFF",
+        "line": 243,
+        "context": "    241:     marginHorizontal: 16,\n    242:     textAlign: 'center' },\n>>> 243:   editButton: {\n    244:     padding: 4 },\n    245:   scrollView: {"
+      },
+      {
+        "file": "src/screens/customers/CustomersScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F2F2F7",
+        "line": 150,
+        "context": "    148:   container: {\n    149:     flex: 1,\n>>> 150:     backgroundColor: '#F2F2F7' },\n    151:   centerContainer: {\n    152:     flex: 1,"
+      },
+      {
+        "file": "src/screens/customers/CustomersScreen.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F2F2F7",
+        "line": 150,
+        "context": "    148:   container: {\n    149:     flex: 1,\n>>> 150:     backgroundColor: '#F2F2F7' },\n    151:   centerContainer: {\n    152:     flex: 1,"
+      },
+      {
+        "file": "src/examples/IntelligentImportExample.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f5f5f5",
+        "line": 202,
+        "context": "    200:   container: {\n    201:     flex: 1,\n>>> 202:     backgroundColor: '#f5f5f5',\n    203:     padding: 20 },\n    204:   header: {"
+      },
+      {
+        "file": "src/examples/IntelligentImportExample.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f8f8f8",
+        "line": 251,
+        "context": "    249:     marginBottom: 20 },\n    250:   codeBlock: {\n>>> 251:     backgroundColor: '#f8f8f8',\n    252:     borderRadius: 8,\n    253:     padding: 12,"
+      },
+      {
+        "file": "src/examples/IntelligentImportExample.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f0f0f0",
+        "line": 274,
+        "context": "    272:     gap: 12 },\n    273:   formatItem: {\n>>> 274:     backgroundColor: '#f0f0f0',\n    275:     borderRadius: 8,\n    276:     paddingHorizontal: 16,"
+      },
+      {
+        "file": "src/examples/IntelligentImportExample.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E8F5E9",
+        "line": 301,
+        "context": "    299:     color: '#fff' },\n    300:   result: {\n>>> 301:     backgroundColor: '#E8F5E9',\n    302:     borderRadius: 12,\n    303:     padding: 16,"
+      },
+      {
+        "file": "src/components/web/WebModal.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "Button: {\n    position: 'absolute',\n    top: 16,\n    right: 16,\n    zIndex: 1000,\n    width: 40,\n    height: 40,\n    borderRadius: 20,\n    backgroundColor: '#FFFFFF",
+        "line": 75,
+        "context": "    73:     flex: 1,\n    74:     position: 'relative' },\n>>> 75:   closeButton: {\n    76:     position: 'absolute',\n    77:     top: 16,"
+      },
+      {
+        "file": "src/components/navigation/Sidebar.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 382,
+        "context": "    380:     width: 220,\n    381:     height: '100%',\n>>> 382:     backgroundColor: '#ffffff',\n    383:     borderRightWidth: 1,\n    384:     borderRightColor: '#e9e9e7',"
+      },
+      {
+        "file": "src/components/modals/RecordPurposeSelector.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#000000",
+        "line": 159,
+        "context": "    157:     right: 0,\n    158:     bottom: 0,\n>>> 159:     backgroundColor: '#000000' },\n    160:   panel: {\n    161:     position: 'absolute',"
+      },
+      {
+        "file": "src/components/modals/RecordPurposeSelector.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E5E5EA",
+        "line": 181,
+        "context": "    179:     width: 36,\n    180:     height: 4,\n>>> 181:     backgroundColor: '#E5E5EA',\n    182:     borderRadius: 2,\n    183:     marginBottom: 20 },"
+      },
+      {
+        "file": "src/components/modals/RecordPurposeSelector.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F2F2F7",
+        "line": 204,
+        "context": "    202:     height: 44,\n    203:     borderRadius: 22,\n>>> 204:     backgroundColor: '#F2F2F7',\n    205:     alignItems: 'center',\n    206:     justifyContent: 'center',"
+      },
+      {
+        "file": "src/components/meetings/MakeupRecording.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f9fafb",
+        "line": 348,
+        "context": "    346:   scrollContainer: {\n    347:     flex: 1,\n>>> 348:     backgroundColor: '#f9fafb' },\n    349:   scrollContent: {\n    350:     padding: 16 },"
+      },
+      {
+        "file": "src/components/meetings/MakeupRecording.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 352,
+        "context": "    350:     padding: 16 },\n    351:   container: {\n>>> 352:     backgroundColor: '#ffffff',\n    353:     borderRadius: 16,\n    354:     padding: 24 },"
+      },
+      {
+        "file": "src/components/meetings/MakeupRecording.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f9fafb",
+        "line": 348,
+        "context": "    346:   scrollContainer: {\n    347:     flex: 1,\n>>> 348:     backgroundColor: '#f9fafb' },\n    349:   scrollContent: {\n    350:     padding: 16 },"
+      },
+      {
+        "file": "src/components/meetings/MakeupRecording.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#eff6ff",
+        "line": 399,
+        "context": "    397:     marginBottom: 4 },\n    398:   instructionsContainer: {\n>>> 399:     backgroundColor: '#eff6ff',\n    400:     borderRadius: 12,\n    401:     padding: 16,"
+      },
+      {
+        "file": "src/components/meetings/MakeupRecording.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 352,
+        "context": "    350:     padding: 16 },\n    351:   container: {\n>>> 352:     backgroundColor: '#ffffff',\n    353:     borderRadius: 16,\n    354:     padding: 24 },"
+      },
+      {
+        "file": "src/components/meetings/MakeupRecording.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f3f4f6",
+        "line": 434,
+        "context": "    432:     textAlign: 'right' },\n    433:   templateContainer: {\n>>> 434:     backgroundColor: '#f3f4f6',\n    435:     borderRadius: 8,\n    436:     padding: 12,"
+      },
+      {
+        "file": "src/components/meetings/MakeupRecording.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#d1d5db",
+        "line": 483,
+        "context": "    481:     fontWeight: '600' },\n    482:   disabledButton: {\n>>> 483:     backgroundColor: '#d1d5db' },\n    484:   cancelButton: {\n    485:     backgroundColor: 'DesignSystem.colors.gray200',"
+      },
+      {
+        "file": "src/components/input/SimplifiedVoiceTaskInput.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FF6B6B",
+        "line": 481,
+        "context": "    479:     height: 120,\n    480:     borderRadius: 60,\n>>> 481:     backgroundColor: '#FF6B6B',\n    482:     justifyContent: 'center',\n    483:     alignItems: 'center',"
+      },
+      {
+        "file": "src/components/input/SimplifiedVoiceTaskInput.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FFF5F5",
+        "line": 504,
+        "context": "    502:     color: '#7A7A7A' },\n    503:   tipsSection: {\n>>> 504:     backgroundColor: '#FFF5F5',\n    505:     borderRadius: 12,\n    506:     padding: 16,"
+      },
+      {
+        "file": "src/components/input/SimplifiedVoiceTaskInput.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E3E1DC",
+        "line": 539,
+        "context": "    537:   progressBar: {\n    538:     height: 4,\n>>> 539:     backgroundColor: '#E3E1DC',\n    540:     borderRadius: 2,\n    541:     overflow: 'hidden' },"
+      },
+      {
+        "file": "src/components/input/SimplifiedVoiceTaskInput.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FF6B6B",
+        "line": 481,
+        "context": "    479:     height: 120,\n    480:     borderRadius: 60,\n>>> 481:     backgroundColor: '#FF6B6B',\n    482:     justifyContent: 'center',\n    483:     alignItems: 'center',"
+      },
+      {
+        "file": "src/components/input/SimplifiedVoiceTaskInput.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "ButtonContainer: {\n    marginBottom: 24 },\n  recordButton: {\n    width: 120,\n    height: 120,\n    borderRadius: 60,\n    backgroundColor: '#FF6B6B",
+        "line": 475,
+        "context": "    473:     color: '#1A1A1A',\n    474:     marginBottom: 40 },\n>>> 475:   recordButtonContainer: {\n    476:     marginBottom: 24 },\n    477:   recordButton: {"
+      },
+      {
+        "file": "src/components/input/SimplifiedAudioInput.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#C7C7CC",
+        "line": 483,
+        "context": "    481:   waveformBar: {\n    482:     width: 4,\n>>> 483:     backgroundColor: '#C7C7CC',\n    484:     borderRadius: 2 },\n    485:   timer: {"
+      },
+      {
+        "file": "src/components/input/SimplifiedAudioInput.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#B91C1C",
+        "line": 513,
+        "context": "    511:     height: 88,\n    512:     borderRadius: 44,\n>>> 513:     backgroundColor: '#B91C1C',\n    514:     alignItems: 'center',\n    515:     justifyContent: 'center',"
+      },
+      {
+        "file": "src/components/input/SimplifiedAudioInput.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#991B1B",
+        "line": 522,
+        "context": "    520:     ...(Platform.OS === 'web' ? {} : { elevation: 8 }) },\n    521:   recordingButton: {\n>>> 522:     backgroundColor: '#991B1B' },\n    523:   pausedButton: {\n    524:     backgroundColor: '#F59E0B' },"
+      },
+      {
+        "file": "src/components/input/SimplifiedAudioInput.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F59E0B",
+        "line": 524,
+        "context": "    522:     backgroundColor: '#991B1B' },\n    523:   pausedButton: {\n>>> 524:     backgroundColor: '#F59E0B' },\n    525:   hint: {\n    526:     fontSize: 16,"
+      },
+      {
+        "file": "src/components/input/CSVUploader.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 471,
+        "context": "    469:   container: {\n    470:     flex: 1,\n>>> 471:     backgroundColor: '#F0F0F0' },\n    472:   content: {\n    473:     flex: 1 },"
+      },
+      {
+        "file": "src/components/input/CSVUploader.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 471,
+        "context": "    469:   container: {\n    470:     flex: 1,\n>>> 471:     backgroundColor: '#F0F0F0' },\n    472:   content: {\n    473:     flex: 1 },"
+      },
+      {
+        "file": "src/components/input/CSVUploader.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E3E1DC",
+        "line": 578,
+        "context": "    576:   progressBar: {\n    577:     height: 8,\n>>> 578:     backgroundColor: '#E3E1DC',\n    579:     borderRadius: 4,\n    580:     marginBottom: 8,"
+      },
+      {
+        "file": "src/components/input/CSVUploader.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#1A1A1A",
+        "line": 584,
+        "context": "    582:   progressFill: {\n    583:     height: '100%',\n>>> 584:     backgroundColor: '#1A1A1A',\n    585:     borderRadius: 4 },\n    586:   progressText: {"
+      },
+      {
+        "file": "src/components/input/AudioInput.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 587,
+        "context": "    585:   container: {\n    586:     flex: 1,\n>>> 587:     backgroundColor: '#F0F0F0' },\n    588:   header: {\n    589:     flexDirection: 'row',"
+      },
+      {
+        "file": "src/components/input/AudioInput.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 587,
+        "context": "    585:   container: {\n    586:     flex: 1,\n>>> 587:     backgroundColor: '#F0F0F0' },\n    588:   header: {\n    589:     flexDirection: 'row',"
+      },
+      {
+        "file": "src/components/input/AudioInput.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E3E1DC",
+        "line": 619,
+        "context": "    617:     flex: 1,\n    618:     height: 4,\n>>> 619:     backgroundColor: '#E3E1DC',\n    620:     borderRadius: 2 },\n    621:   progressStepActive: {"
+      },
+      {
+        "file": "src/components/input/AudioInput.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#1A1A1A",
+        "line": 622,
+        "context": "    620:     borderRadius: 2 },\n    621:   progressStepActive: {\n>>> 622:     backgroundColor: '#1A1A1A' },\n    623:   progressStepCompleted: {\n    624:     backgroundColor: '#22c55e' },"
+      },
+      {
+        "file": "src/components/input/AudioInput.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#22c55e",
+        "line": 624,
+        "context": "    622:     backgroundColor: '#1A1A1A' },\n    623:   progressStepCompleted: {\n>>> 624:     backgroundColor: '#22c55e' },\n    625:   content: {\n    626:     flex: 1 },"
+      },
+      {
+        "file": "src/components/input/AudioInput.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 587,
+        "context": "    585:   container: {\n    586:     flex: 1,\n>>> 587:     backgroundColor: '#F0F0F0' },\n    588:   header: {\n    589:     flexDirection: 'row',"
+      },
+      {
+        "file": "src/components/input/AudioInput.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 587,
+        "context": "    585:   container: {\n    586:     flex: 1,\n>>> 587:     backgroundColor: '#F0F0F0' },\n    588:   header: {\n    589:     flexDirection: 'row',"
+      },
+      {
+        "file": "src/components/input/AudioInput.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E3E1DC",
+        "line": 619,
+        "context": "    617:     flex: 1,\n    618:     height: 4,\n>>> 619:     backgroundColor: '#E3E1DC',\n    620:     borderRadius: 2 },\n    621:   progressStepActive: {"
+      },
+      {
+        "file": "src/components/input/AudioInput.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#1A1A1A",
+        "line": 622,
+        "context": "    620:     borderRadius: 2 },\n    621:   progressStepActive: {\n>>> 622:     backgroundColor: '#1A1A1A' },\n    623:   progressStepCompleted: {\n    624:     backgroundColor: '#22c55e' },"
+      },
+      {
+        "file": "src/components/input/AudioInput.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#fef3c7",
+        "line": 768,
+        "context": "    766:     marginTop: 12,\n    767:     padding: 12,\n>>> 768:     backgroundColor: '#fef3c7',\n    769:     borderRadius: 8 },\n    770:   issuesTitle: {"
+      },
+      {
+        "file": "src/components/input/AudioInput.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#dbeafe",
+        "line": 782,
+        "context": "    780:     marginTop: 8,\n    781:     padding: 12,\n>>> 782:     backgroundColor: '#dbeafe',\n    783:     borderRadius: 8 },\n    784:   suggestionsTitle: {"
+      },
+      {
+        "file": "src/components/input/AudioInput.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F9FAFB",
+        "line": 799,
+        "context": "    797:     marginBottom: 16 },\n    798:   transcriptionBox: {\n>>> 799:     backgroundColor: '#F9FAFB',\n    800:     borderRadius: 8,\n    801:     padding: 16,"
+      },
+      {
+        "file": "src/components/input/AudioInput.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F9FAFB",
+        "line": 799,
+        "context": "    797:     marginBottom: 16 },\n    798:   transcriptionBox: {\n>>> 799:     backgroundColor: '#F9FAFB',\n    800:     borderRadius: 8,\n    801:     padding: 16,"
+      },
+      {
+        "file": "src/components/import/RelationshipVisualizer.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F5F5F5",
+        "line": 394,
+        "context": "    392:   container: {\n    393:     flex: 1,\n>>> 394:     backgroundColor: '#F5F5F5',\n    395:     borderRadius: 8,\n    396:     padding: 16"
+      },
+      {
+        "file": "src/components/import/ImportWizard.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E5E5E5",
+        "line": 969,
+        "context": "    967:     width: 200,\n    968:     height: 4,\n>>> 969:     backgroundColor: '#E5E5E5',\n    970:     borderRadius: 2,\n    971:     overflow: 'hidden',"
+      },
+      {
+        "file": "src/components/import/styles/IntelligentFieldMapperStyles.ts",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F7F6F3",
+        "line": 50,
+        "context": "    48:     borderRadius: 8 },\n    49:   secondaryButton: {\n>>> 50:     backgroundColor: '#F7F6F3' },\n    51:   actionButtonText: {\n    52:     fontSize: 14,"
+      },
+      {
+        "file": "src/components/import/styles/IntelligentFieldMapperStyles.ts",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F7F6F3",
+        "line": 50,
+        "context": "    48:     borderRadius: 8 },\n    49:   secondaryButton: {\n>>> 50:     backgroundColor: '#F7F6F3' },\n    51:   actionButtonText: {\n    52:     fontSize: 14,"
+      },
+      {
+        "file": "src/components/import/styles/IntelligentFieldMapperStyles.ts",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F7F6F3",
+        "line": 50,
+        "context": "    48:     borderRadius: 8 },\n    49:   secondaryButton: {\n>>> 50:     backgroundColor: '#F7F6F3' },\n    51:   actionButtonText: {\n    52:     fontSize: 14,"
+      },
+      {
+        "file": "src/components/import/styles/IntelligentFieldMapperStyles.ts",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F7F6F3",
+        "line": 50,
+        "context": "    48:     borderRadius: 8 },\n    49:   secondaryButton: {\n>>> 50:     backgroundColor: '#F7F6F3' },\n    51:   actionButtonText: {\n    52:     fontSize: 14,"
+      },
+      {
+        "file": "src/components/import/styles/IntelligentFieldMapperStyles.ts",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F7F6F3",
+        "line": 50,
+        "context": "    48:     borderRadius: 8 },\n    49:   secondaryButton: {\n>>> 50:     backgroundColor: '#F7F6F3' },\n    51:   actionButtonText: {\n    52:     fontSize: 14,"
+      },
+      {
+        "file": "src/components/import/styles/IntelligentFieldMapperStyles.ts",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E8F5E9",
+        "line": 122,
+        "context": "    120:     paddingHorizontal: 12,\n    121:     paddingVertical: 6,\n>>> 122:     backgroundColor: '#E8F5E9',\n    123:     borderRadius: 16,\n    124:     marginTop: 4 },"
+      },
+      {
+        "file": "src/components/import/styles/IntelligentFieldMapperStyles.ts",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FFF3E0",
+        "line": 177,
+        "context": "    175:     margin: 16,\n    176:     padding: 16,\n>>> 177:     backgroundColor: '#FFF3E0',\n    178:     borderRadius: 8,\n    179:     borderWidth: 1,"
+      },
+      {
+        "file": "src/components/import/styles/IntelligentFieldMapperStyles.ts",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F7F6F3",
+        "line": 50,
+        "context": "    48:     borderRadius: 8 },\n    49:   secondaryButton: {\n>>> 50:     backgroundColor: '#F7F6F3' },\n    51:   actionButtonText: {\n    52:     fontSize: 14,"
+      },
+      {
+        "file": "src/components/import/styles/IntelligentFieldMapperStyles.ts",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FAFAF9",
+        "line": 240,
+        "context": "    238:     borderTopWidth: 1,\n    239:     borderTopColor: '#E3E1DC',\n>>> 240:     backgroundColor: '#FAFAF9' },\n    241:   summaryTitle: {\n    242:     fontSize: 14,"
+      },
+      {
+        "file": "src/components/forms/TaskForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 320,
+        "context": "    318:   container: {\n    319:     flex: 1,\n>>> 320:     backgroundColor: '#F0F0F0' },\n    321:   form: {\n    322:     flex: 1,"
+      },
+      {
+        "file": "src/components/forms/TaskForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#1A1A1A",
+        "line": 350,
+        "context": "    348:     gap: 6 },\n    349:   modeButtonActive: {\n>>> 350:     backgroundColor: '#1A1A1A' },\n    351:   modeButtonText: {\n    352:     fontSize: 14,"
+      },
+      {
+        "file": "src/components/forms/TaskForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F9FAFB",
+        "line": 381,
+        "context": "    379:     marginBottom: 16 },\n    380:   voiceInputTips: {\n>>> 381:     backgroundColor: '#F9FAFB',\n    382:     borderRadius: 8,\n    383:     padding: 12,"
+      },
+      {
+        "file": "src/components/forms/TaskForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#dcfce7",
+        "line": 401,
+        "context": "    399:     flexDirection: 'row',\n    400:     alignItems: 'center',\n>>> 401:     backgroundColor: '#dcfce7',\n    402:     borderRadius: 8,\n    403:     padding: 12,"
+      },
+      {
+        "file": "src/components/forms/TaskForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 320,
+        "context": "    318:   container: {\n    319:     flex: 1,\n>>> 320:     backgroundColor: '#F0F0F0' },\n    321:   form: {\n    322:     flex: 1,"
+      },
+      {
+        "file": "src/components/forms/TaskForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#1C1C1E",
+        "line": 438,
+        "context": "    436:     gap: 6 },\n    437:   tabButtonActive: {\n>>> 438:     backgroundColor: '#1C1C1E' },\n    439:   tabText: {\n    440:     fontSize: 14,"
+      },
+      {
+        "file": "src/components/forms/TaskForm.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "ButtonText: {\n    fontSize: 14,\n    fontWeight: '500',\n    color: '#7A7A7A' },\n  modeButtonTextActive: {\n    color: '#FFFFFF' },\n\n  // 語音輸入區域\n  voiceInputSection: {\n    backgroundColor: '#FFFFFF",
+        "line": 351,
+        "context": "    349:   modeButtonActive: {\n    350:     backgroundColor: '#1A1A1A' },\n>>> 351:   modeButtonText: {\n    352:     fontSize: 14,\n    353:     fontWeight: '500',"
+      },
+      {
+        "file": "src/components/forms/RecordForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 523,
+        "context": "    521:   container: {\n    522:     flex: 1,\n>>> 523:     backgroundColor: '#F0F0F0' },\n    524:   form: {\n    525:     flex: 1,"
+      },
+      {
+        "file": "src/components/forms/RecordForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#1A1A1A",
+        "line": 553,
+        "context": "    551:     gap: 6 },\n    552:   modeButtonActive: {\n>>> 553:     backgroundColor: '#1A1A1A' },\n    554:   modeButtonText: {\n    555:     fontSize: 14,"
+      },
+      {
+        "file": "src/components/forms/RecordForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 523,
+        "context": "    521:   container: {\n    522:     flex: 1,\n>>> 523:     backgroundColor: '#F0F0F0' },\n    524:   form: {\n    525:     flex: 1,"
+      },
+      {
+        "file": "src/components/forms/RecordForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 523,
+        "context": "    521:   container: {\n    522:     flex: 1,\n>>> 523:     backgroundColor: '#F0F0F0' },\n    524:   form: {\n    525:     flex: 1,"
+      },
+      {
+        "file": "src/components/forms/RecordForm.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "ButtonText: {\n    fontSize: 12,\n    fontWeight: '600',\n    color: '#FFFFFF' },\n\n  // 客戶選擇器\n  customerSelector: {\n    backgroundColor: '#FFFFFF",
+        "line": 584,
+        "context": "    582:     paddingVertical: 6,\n    583:     gap: 4 },\n>>> 584:   voiceInputButtonText: {\n    585:     fontSize: 12,\n    586:     fontWeight: '600',"
+      },
+      {
+        "file": "src/components/forms/MultiStepForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 327,
+        "context": "    325:   container: {\n    326:     flex: 1,\n>>> 327:     backgroundColor: '#F0F0F0' },\n    328:   loadingContainer: {\n    329:     flex: 1,"
+      },
+      {
+        "file": "src/components/forms/MultiStepForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 327,
+        "context": "    325:   container: {\n    326:     flex: 1,\n>>> 327:     backgroundColor: '#F0F0F0' },\n    328:   loadingContainer: {\n    329:     flex: 1,"
+      },
+      {
+        "file": "src/components/forms/MultiStepForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 327,
+        "context": "    325:   container: {\n    326:     flex: 1,\n>>> 327:     backgroundColor: '#F0F0F0' },\n    328:   loadingContainer: {\n    329:     flex: 1,"
+      },
+      {
+        "file": "src/components/forms/MultiStepForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E3E1DC",
+        "line": 365,
+        "context": "    363:   progressBar: {\n    364:     height: 4,\n>>> 365:     backgroundColor: '#E3E1DC',\n    366:     borderRadius: 2,\n    367:     marginBottom: 8 },"
+      },
+      {
+        "file": "src/components/forms/MultiStepForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#1A1A1A",
+        "line": 370,
+        "context": "    368:   progressFill: {\n    369:     height: '100%',\n>>> 370:     backgroundColor: '#1A1A1A',\n    371:     borderRadius: 2 },\n    372:   progressText: {"
+      },
+      {
+        "file": "src/components/forms/MultiStepForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#1A1A1A",
+        "line": 370,
+        "context": "    368:   progressFill: {\n    369:     height: '100%',\n>>> 370:     backgroundColor: '#1A1A1A',\n    371:     borderRadius: 2 },\n    372:   progressText: {"
+      },
+      {
+        "file": "src/components/forms/MultiStepForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#1A1A1A",
+        "line": 370,
+        "context": "    368:   progressFill: {\n    369:     height: '100%',\n>>> 370:     backgroundColor: '#1A1A1A',\n    371:     borderRadius: 2 },\n    372:   progressText: {"
+      },
+      {
+        "file": "src/components/forms/CustomerForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 248,
+        "context": "    246:   container: {\n    247:     flex: 1,\n>>> 248:     backgroundColor: '#F0F0F0' },\n    249:   loadingContainer: {\n    250:     flex: 1,"
+      },
+      {
+        "file": "src/components/forms/CustomerForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 248,
+        "context": "    246:   container: {\n    247:     flex: 1,\n>>> 248:     backgroundColor: '#F0F0F0' },\n    249:   loadingContainer: {\n    250:     flex: 1,"
+      },
+      {
+        "file": "src/components/forms/CustomerForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F8F9FA",
+        "line": 259,
+        "context": "    257:     color: '#7A7A7A' },\n    258:   formInfo: {\n>>> 259:     backgroundColor: '#F8F9FA',\n    260:     paddingHorizontal: 20,\n    261:     paddingVertical: 12,"
+      },
+      {
+        "file": "src/components/developer/StateInspector.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F7FAFC",
+        "line": 369,
+        "context": "    367:   container: {\n    368:     flex: 1,\n>>> 369:     backgroundColor: '#F7FAFC'\n    370:   },\n    371:   header: {"
+      },
+      {
+        "file": "src/components/developer/StateInspector.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F7FAFC",
+        "line": 369,
+        "context": "    367:   container: {\n    368:     flex: 1,\n>>> 369:     backgroundColor: '#F7FAFC'\n    370:   },\n    371:   header: {"
+      },
+      {
+        "file": "src/components/developer/StateInspector.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#2D3748",
+        "line": 557,
+        "context": "    555:     left: 20,\n    556:     right: 20,\n>>> 557:     backgroundColor: '#2D3748',\n    558:     borderRadius: 8,\n    559:     paddingVertical: 12,"
+      },
+      {
+        "file": "src/components/developer/StateInspector.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "Button: {\n    padding: 4\n  },\n  clearIcon: {\n    fontSize: 16,\n    color: '#A0AEC0'\n  },\n  storeList: {\n    flex: 1\n  },\n  storeContainer: {\n    backgroundColor: '#FFFFFF",
+        "line": 417,
+        "context": "    415:     color: '#2D3748'\n    416:   },\n>>> 417:   clearButton: {\n    418:     padding: 4\n    419:   },"
+      },
+      {
+        "file": "src/components/developer/ErrorDisplay.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FEF2F2",
+        "line": 292,
+        "context": "    290:   },\n    291:   errorInfo: {\n>>> 292:     backgroundColor: '#FEF2F2',\n    293:     borderRadius: 8,\n    294:     padding: 16,"
+      },
+      {
+        "file": "src/components/developer/ErrorDisplay.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F7FAFC",
+        "line": 316,
+        "context": "    314:   },\n    315:   stackContainer: {\n>>> 316:     backgroundColor: '#F7FAFC',\n    317:     borderRadius: 8,\n    318:     maxHeight: 200"
+      },
+      {
+        "file": "src/components/developer/ErrorDisplay.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E6F2FF",
+        "line": 333,
+        "context": "    331:     color: '#2B6CB0',\n    332:     fontWeight: '600',\n>>> 333:     backgroundColor: '#E6F2FF',\n    334:     paddingHorizontal: 4,\n    335:     paddingVertical: 2,"
+      },
+      {
+        "file": "src/components/developer/ErrorDisplay.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F7FAFC",
+        "line": 316,
+        "context": "    314:   },\n    315:   stackContainer: {\n>>> 316:     backgroundColor: '#F7FAFC',\n    317:     borderRadius: 8,\n    318:     maxHeight: 200"
+      },
+      {
+        "file": "src/components/developer/ErrorDisplay.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#EDF2F7",
+        "line": 433,
+        "context": "    431:     paddingHorizontal: 12,\n    432:     marginRight: 8,\n>>> 433:     backgroundColor: '#EDF2F7',\n    434:     borderRadius: 6\n    435:   },"
+      },
+      {
+        "file": "src/components/developer/ErrorDisplay.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "ButtonText}>📤 分享</Text>\n            </TouchableOpacity>\n          )}\n        </View>\n      </View>\n    </View>\n  );\n};\n\nconst styles = StyleSheet.create({\n  // 詳細版樣式\n  container: {\n    backgroundColor: '#FFFFFF",
+        "line": 248,
+        "context": "    246:               activeOpacity={0.8}\n    247:             >\n>>> 248:               <Text style={styles.secondaryButtonText}>📤 分享</Text>\n    249:             </TouchableOpacity>\n    250:           )}"
+      },
+      {
+        "file": "src/components/developer/ErrorDisplay.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "ButtonText: {\n    color: '#2D3748',\n    fontSize: 14,\n    fontWeight: '500'\n  },\n  \n  // 簡潔版樣式\n  compactContainer: {\n    backgroundColor: '#FFFFFF",
+        "line": 378,
+        "context": "    376:     marginHorizontal: 5\n    377:   },\n>>> 378:   secondaryButtonText: {\n    379:     color: '#2D3748',\n    380:     fontSize: 14,"
+      },
+      {
+        "file": "src/components/developer/DeveloperMenu.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#3182CE",
+        "line": 407,
+        "context": "    405:     height: 50,\n    406:     borderRadius: 25,\n>>> 407:     backgroundColor: '#3182CE',\n    408:     justifyContent: 'center',\n    409:     alignItems: 'center',"
+      },
+      {
+        "file": "src/components/developer/DeveloperMenu.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#BEE3F8",
+        "line": 459,
+        "context": "    457:   },\n    458:   shakeIndicator: {\n>>> 459:     backgroundColor: '#BEE3F8',\n    460:     paddingVertical: 8,\n    461:     paddingHorizontal: 20"
+      },
+      {
+        "file": "src/components/developer/DeveloperMenu.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FFF5F5",
+        "line": 480,
+        "context": "    478:   },\n    479:   destructiveItem: {\n>>> 480:     backgroundColor: '#FFF5F5'\n    481:   },\n    482:   menuIcon: {"
+      },
+      {
+        "file": "src/components/database/SortPopover.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#e3f2fd",
+        "line": 213,
+        "context": "    211:     gap: 8 },\n    212:   sortOptionSelected: {\n>>> 213:     backgroundColor: '#e3f2fd' },\n    214:   sortOptionText: {\n    215:     flex: 1,"
+      },
+      {
+        "file": "src/components/database/NotionStyleTableV2.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 521,
+        "context": "    519:     borderBottomWidth: 1,\n    520:     borderBottomColor: '#E9E9E7',\n>>> 521:     backgroundColor: '#ffffff',\n    522:     minHeight: 36,\n    523:     alignItems: 'center' },"
+      },
+      {
+        "file": "src/components/database/NotionStyleTableV2.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 521,
+        "context": "    519:     borderBottomWidth: 1,\n    520:     borderBottomColor: '#E9E9E7',\n>>> 521:     backgroundColor: '#ffffff',\n    522:     minHeight: 36,\n    523:     alignItems: 'center' },"
+      },
+      {
+        "file": "src/components/database/NotionStyleTableV2.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#2383e2",
+        "line": 566,
+        "context": "    564:   \n    565:   checkboxChecked: {\n>>> 566:     backgroundColor: '#2383e2',\n    567:     borderColor: '#2383e2' },\n    568:   "
+      },
+      {
+        "file": "src/components/database/NotionStyleTableV2.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#2383e2",
+        "line": 566,
+        "context": "    564:   \n    565:   checkboxChecked: {\n>>> 566:     backgroundColor: '#2383e2',\n    567:     borderColor: '#2383e2' },\n    568:   "
+      },
+      {
+        "file": "src/components/database/NotionStyleTableV2.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 521,
+        "context": "    519:     borderBottomWidth: 1,\n    520:     borderBottomColor: '#E9E9E7',\n>>> 521:     backgroundColor: '#ffffff',\n    522:     minHeight: 36,\n    523:     alignItems: 'center' },"
+      },
+      {
+        "file": "src/components/database/NotionStyleTableV2.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f7f6f3",
+        "line": 612,
+        "context": "    610:   \n    611:   addNewButtonHovered: {\n>>> 612:     backgroundColor: '#f7f6f3' },\n    613:   \n    614:   addNewText: {"
+      },
+      {
+        "file": "src/components/database/NotionStyleTableV2.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 521,
+        "context": "    519:     borderBottomWidth: 1,\n    520:     borderBottomColor: '#E9E9E7',\n>>> 521:     backgroundColor: '#ffffff',\n    522:     minHeight: 36,\n    523:     alignItems: 'center' },"
+      },
+      {
+        "file": "src/components/database/NotionStyleTableV2.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F7F6F3",
+        "line": 641,
+        "context": "    639:   \n    640:   tableRowHovered: {\n>>> 641:     backgroundColor: '#F7F6F3' },\n    642:   \n    643:   tableRowSelected: {"
+      },
+      {
+        "file": "src/components/database/NotionStyleTableV2.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#e3f2fd",
+        "line": 644,
+        "context": "    642:   \n    643:   tableRowSelected: {\n>>> 644:     backgroundColor: '#e3f2fd' },\n    645:   \n    646:   tableCell: {"
+      },
+      {
+        "file": "src/components/database/InlineEditToggle.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 170,
+        "context": "    168:     paddingVertical: 8,\n    169:     borderRadius: 8,\n>>> 170:     backgroundColor: '#F0F0F0',\n    171:     gap: 4 },\n    172:   editToggleButtonActive: {"
+      },
+      {
+        "file": "src/components/database/FilterPopover.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f7f6f3",
+        "line": 231,
+        "context": "    229:     flexDirection: 'row',\n    230:     alignItems: 'center',\n>>> 231:     backgroundColor: '#f7f6f3',\n    232:     borderRadius: 6,\n    233:     paddingHorizontal: 12,"
+      },
+      {
+        "file": "src/components/database/FilterPopover.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f7f6f3",
+        "line": 231,
+        "context": "    229:     flexDirection: 'row',\n    230:     alignItems: 'center',\n>>> 231:     backgroundColor: '#f7f6f3',\n    232:     borderRadius: 6,\n    233:     paddingHorizontal: 12,"
+      },
+      {
+        "file": "src/components/database/FilterPopover.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f7f6f3",
+        "line": 231,
+        "context": "    229:     flexDirection: 'row',\n    230:     alignItems: 'center',\n>>> 231:     backgroundColor: '#f7f6f3',\n    232:     borderRadius: 6,\n    233:     paddingHorizontal: 12,"
+      },
+      {
+        "file": "src/components/database/FilterFormV2.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 254,
+        "context": "    252:     marginBottom: 8 },\n    253:   selectButton: {\n>>> 254:     backgroundColor: '#F0F0F0',\n    255:     borderRadius: 8,\n    256:     paddingHorizontal: 12,"
+      },
+      {
+        "file": "src/components/database/FilterFormV2.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 254,
+        "context": "    252:     marginBottom: 8 },\n    253:   selectButton: {\n>>> 254:     backgroundColor: '#F0F0F0',\n    255:     borderRadius: 8,\n    256:     paddingHorizontal: 12,"
+      },
+      {
+        "file": "src/components/database/FilterFormV2.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 254,
+        "context": "    252:     marginBottom: 8 },\n    253:   selectButton: {\n>>> 254:     backgroundColor: '#F0F0F0',\n    255:     borderRadius: 8,\n    256:     paddingHorizontal: 12,"
+      },
+      {
+        "file": "src/components/database/FilterFormV2.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "ButtonText: {\n    fontSize: 16,\n    color: '#1A1A1A' },\n  pickerOptions: {\n    backgroundColor: '#FFFFFF",
+        "line": 261,
+        "context": "    259:     alignItems: 'center',\n    260:     justifyContent: 'space-between' },\n>>> 261:   selectButtonText: {\n    262:     fontSize: 16,\n    263:     color: '#1A1A1A' },"
+      },
+      {
+        "file": "src/components/database/FilterForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 204,
+        "context": "    202:     marginBottom: 8 },\n    203:   pickerWrapper: {\n>>> 204:     backgroundColor: '#F0F0F0',\n    205:     borderRadius: 8,\n    206:     overflow: 'hidden' },"
+      },
+      {
+        "file": "src/components/database/FilterForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 204,
+        "context": "    202:     marginBottom: 8 },\n    203:   pickerWrapper: {\n>>> 204:     backgroundColor: '#F0F0F0',\n    205:     borderRadius: 8,\n    206:     overflow: 'hidden' },"
+      },
+      {
+        "file": "src/components/database/ExportOptions.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 221,
+        "context": "    219:   container: {\n    220:     flex: 1,\n>>> 221:     backgroundColor: '#F0F0F0' },\n    222:   header: {\n    223:     backgroundColor: '#FFFFFF',"
+      },
+      {
+        "file": "src/components/database/ExportOptions.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FFF5F0",
+        "line": 268,
+        "context": "    266:   formatOptionActive: {\n    267:     borderColor: '#1A1A1A',\n>>> 268:     backgroundColor: '#FFF5F0' },\n    269:   formatOptionText: {\n    270:     fontSize: 16,"
+      },
+      {
+        "file": "src/components/database/ExportOptions.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 221,
+        "context": "    219:   container: {\n    220:     flex: 1,\n>>> 221:     backgroundColor: '#F0F0F0' },\n    222:   header: {\n    223:     backgroundColor: '#FFFFFF',"
+      },
+      {
+        "file": "src/components/database/ExportOptions.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#1A1A1A",
+        "line": 334,
+        "context": "    332:     color: '#1A1A1A' },\n    333:   exportButton: {\n>>> 334:     backgroundColor: '#1A1A1A' },\n    335:   exportButtonText: {\n    336:     fontSize: 16,"
+      },
+      {
+        "file": "src/components/database/ExportOptions.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "ButtonText}>匯出</Text>\n        </TouchableOpacity>\n      </View>\n    </View>\n  );\n};\n\nconst styles = StyleSheet.create({\n  container: {\n    flex: 1,\n    backgroundColor: '#F0F0F0' },\n  header: {\n    backgroundColor: '#FFFFFF",
+        "line": 211,
+        "context": "    209:         >\n    210:           <Icon name=\"download-outline\" size={20} color=\"#F7F6F3\" />\n>>> 211:           <Text style={styles.exportButtonText}>匯出</Text>\n    212:         </TouchableOpacity>\n    213:       </View>"
+      },
+      {
+        "file": "src/components/database/DraggableTableHeader.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 233,
+        "context": "    231:     borderBottomWidth: 1,\n    232:     borderBottomColor: '#E9E9E7',\n>>> 233:     backgroundColor: '#ffffff',\n    234:     minHeight: 36,\n    235:     alignItems: 'center' },"
+      },
+      {
+        "file": "src/components/database/DraggableTableHeader.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 233,
+        "context": "    231:     borderBottomWidth: 1,\n    232:     borderBottomColor: '#E9E9E7',\n>>> 233:     backgroundColor: '#ffffff',\n    234:     minHeight: 36,\n    235:     alignItems: 'center' },"
+      },
+      {
+        "file": "src/components/database/DatabaseToolbar.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f9f8f7",
+        "line": 237,
+        "context": "    235:     paddingVertical: 4,\n    236:     borderRadius: 4,\n>>> 237:     backgroundColor: '#f9f8f7',\n    238:     ...webOnly({\n    239:       cursor: 'pointer',"
+      },
+      {
+        "file": "src/components/database/DatabaseToolbar.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#eeeeec",
+        "line": 242,
+        "context": "    240:       transition: 'all 0.2s ease',\n    241:       ':hover': {\n>>> 242:         backgroundColor: '#eeeeec' } }) },\n    243:   toolButton: {\n    244:     flexDirection: 'row',"
+      },
+      {
+        "file": "src/components/database/DatabaseToolbar.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f7f7f7",
+        "line": 255,
+        "context": "    253:       transition: 'all 0.2s ease',\n    254:       ':hover': {\n>>> 255:         backgroundColor: '#f7f7f7' } }) },\n    256:   activeToolButton: {\n    257:     backgroundColor: '#f0f0f0' },"
+      },
+      {
+        "file": "src/components/database/DatabaseToolbar.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f0f0f0",
+        "line": 257,
+        "context": "    255:         backgroundColor: '#f7f7f7' } }) },\n    256:   activeToolButton: {\n>>> 257:     backgroundColor: '#f0f0f0' },\n    258:   toolbarText: {\n    259:     fontSize: 13,"
+      },
+      {
+        "file": "src/components/database/BatchEditForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 247,
+        "context": "    245:   container: {\n    246:     flex: 1,\n>>> 247:     backgroundColor: '#F0F0F0' },\n    248:   header: {\n    249:     backgroundColor: '#FFFFFF',"
+      },
+      {
+        "file": "src/components/database/BatchEditForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#1A1A1A",
+        "line": 269,
+        "context": "    267:     paddingHorizontal: 16,\n    268:     paddingVertical: 8,\n>>> 269:     backgroundColor: '#1A1A1A',\n    270:     borderRadius: 18 },\n    271:   saveButtonText: {"
+      },
+      {
+        "file": "src/components/database/BatchEditForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 247,
+        "context": "    245:   container: {\n    246:     flex: 1,\n>>> 247:     backgroundColor: '#F0F0F0' },\n    248:   header: {\n    249:     backgroundColor: '#FFFFFF',"
+      },
+      {
+        "file": "src/components/database/BatchEditForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 247,
+        "context": "    245:   container: {\n    246:     flex: 1,\n>>> 247:     backgroundColor: '#F0F0F0' },\n    248:   header: {\n    249:     backgroundColor: '#FFFFFF',"
+      },
+      {
+        "file": "src/components/database/BatchEditForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 247,
+        "context": "    245:   container: {\n    246:     flex: 1,\n>>> 247:     backgroundColor: '#F0F0F0' },\n    248:   header: {\n    249:     backgroundColor: '#FFFFFF',"
+      },
+      {
+        "file": "src/components/database/BatchEditForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 247,
+        "context": "    245:   container: {\n    246:     flex: 1,\n>>> 247:     backgroundColor: '#F0F0F0' },\n    248:   header: {\n    249:     backgroundColor: '#FFFFFF',"
+      },
+      {
+        "file": "src/components/database/BatchEditForm.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#1A1A1A",
+        "line": 269,
+        "context": "    267:     paddingHorizontal: 16,\n    268:     paddingVertical: 8,\n>>> 269:     backgroundColor: '#1A1A1A',\n    270:     borderRadius: 18 },\n    271:   saveButtonText: {"
+      },
+      {
+        "file": "src/components/database/AddColumnDialog.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f9f8f7",
+        "line": 371,
+        "context": "    369:     borderColor: '#eeeeec',\n    370:     alignItems: 'center',\n>>> 371:     backgroundColor: '#f9f8f7' },\n    372:   typeButtonActive: {\n    373:     borderColor: 'DesignSystem.colors.status.error',"
+      },
+      {
+        "file": "src/components/database/AddColumnDialog.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f9f8f7",
+        "line": 371,
+        "context": "    369:     borderColor: '#eeeeec',\n    370:     alignItems: 'center',\n>>> 371:     backgroundColor: '#f9f8f7' },\n    372:   typeButtonActive: {\n    373:     borderColor: 'DesignSystem.colors.status.error',"
+      },
+      {
+        "file": "src/components/database/AddColumnDialog.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffb3b3",
+        "line": 430,
+        "context": "    428:     backgroundColor: 'DesignSystem.colors.status.error' },\n    429:   confirmButtonDisabled: {\n>>> 430:     backgroundColor: '#ffb3b3' },\n    431:   confirmText: {\n    432:     fontSize: responsive({ mobile: 14, tablet: 15, desktop: 16 }),"
+      },
+      {
+        "file": "src/components/database/styles/notionStyles.ts",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 15,
+        "context": "    13:     border: '1px solid #e3e3e2',\n    14:     borderRadius: '3px',\n>>> 15:     backgroundColor: '#ffffff',\n    16:     color: '#37352f',\n    17:     fontSize: '14px',"
+      },
+      {
+        "file": "src/components/database/styles/notionStyles.ts",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f7f7f7",
+        "line": 33,
+        "context": "    31:   },\n    32:   buttonHover: {\n>>> 33:     backgroundColor: '#f7f7f7',\n    34:     borderColor: '#d3d3d2',\n    35:     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.08)',"
+      },
+      {
+        "file": "src/components/database/styles/notionStyles.ts",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#0b7bc7",
+        "line": 38,
+        "context": "    36:   },\n    37:   buttonPrimaryHover: {\n>>> 38:     backgroundColor: '#0b7bc7',\n    39:     borderColor: '#0b7bc7',\n    40:     boxShadow: '0 3px 6px rgba(35, 131, 226, 0.4)',"
+      },
+      {
+        "file": "src/components/database/styles/notionStyles.ts",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 15,
+        "context": "    13:     border: '1px solid #e3e3e2',\n    14:     borderRadius: '3px',\n>>> 15:     backgroundColor: '#ffffff',\n    16:     color: '#37352f',\n    17:     fontSize: '14px',"
+      },
+      {
+        "file": "src/components/database/styles/notionStyles.ts",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 15,
+        "context": "    13:     border: '1px solid #e3e3e2',\n    14:     borderRadius: '3px',\n>>> 15:     backgroundColor: '#ffffff',\n    16:     color: '#37352f',\n    17:     fontSize: '14px',"
+      },
+      {
+        "file": "src/components/database/notion/FieldEditPopover.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FAFAFA",
+        "line": 419,
+        "context": "    417:     fontSize: 14,\n    418:     color: DesignSystem.colors.text.primary,\n>>> 419:     backgroundColor: '#FAFAFA' },\n    420:   inputDisabled: {\n    421:     backgroundColor: '#F5F5F5',"
+      },
+      {
+        "file": "src/components/database/notion/FieldEditPopover.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F5F5F5",
+        "line": 421,
+        "context": "    419:     backgroundColor: '#FAFAFA' },\n    420:   inputDisabled: {\n>>> 421:     backgroundColor: '#F5F5F5',\n    422:     color: DesignSystem.colors.text.secondary },\n    423:   textArea: {"
+      },
+      {
+        "file": "src/components/database/notion/FieldEditPopover.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F8F8F8",
+        "line": 449,
+        "context": "    447:     marginTop: 12,\n    448:     padding: 12,\n>>> 449:     backgroundColor: '#F8F8F8',\n    450:     borderRadius: 4,\n    451:     borderWidth: 1,"
+      },
+      {
+        "file": "src/components/database/notion/FieldEditPopover.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FAFAFA",
+        "line": 419,
+        "context": "    417:     fontSize: 14,\n    418:     color: DesignSystem.colors.text.primary,\n>>> 419:     backgroundColor: '#FAFAFA' },\n    420:   inputDisabled: {\n    421:     backgroundColor: '#F5F5F5',"
+      },
+      {
+        "file": "src/components/database/notion/FieldEditPopover.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F5F5F5",
+        "line": 421,
+        "context": "    419:     backgroundColor: '#FAFAFA' },\n    420:   inputDisabled: {\n>>> 421:     backgroundColor: '#F5F5F5',\n    422:     color: DesignSystem.colors.text.secondary },\n    423:   textArea: {"
+      },
+      {
+        "file": "src/components/database/forms/DynamicFormBuilder.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 484,
+        "context": "    482:     paddingVertical: 10,\n    483:     fontSize: 16,\n>>> 484:     backgroundColor: '#ffffff' },\n    485:   inputError: {\n    486:     borderColor: '#FF3B30' },"
+      },
+      {
+        "file": "src/components/database/forms/DynamicFormBuilder.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 484,
+        "context": "    482:     paddingVertical: 10,\n    483:     fontSize: 16,\n>>> 484:     backgroundColor: '#ffffff' },\n    485:   inputError: {\n    486:     borderColor: '#FF3B30' },"
+      },
+      {
+        "file": "src/components/database/forms/DynamicFormBuilder.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 484,
+        "context": "    482:     paddingVertical: 10,\n    483:     fontSize: 16,\n>>> 484:     backgroundColor: '#ffffff' },\n    485:   inputError: {\n    486:     borderColor: '#FF3B30' },"
+      },
+      {
+        "file": "src/components/database/forms/DynamicFormBuilder.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 484,
+        "context": "    482:     paddingVertical: 10,\n    483:     fontSize: 16,\n>>> 484:     backgroundColor: '#ffffff' },\n    485:   inputError: {\n    486:     borderColor: '#FF3B30' },"
+      },
+      {
+        "file": "src/components/database/forms/DynamicFormBuilder.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 532,
+        "context": "    530:     flexDirection: 'row',\n    531:     alignItems: 'center',\n>>> 532:     backgroundColor: '#F0F0F0',\n    533:     paddingHorizontal: 12,\n    534:     paddingVertical: 6,"
+      },
+      {
+        "file": "src/components/database/forms/DynamicFormBuilder.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 484,
+        "context": "    482:     paddingVertical: 10,\n    483:     fontSize: 16,\n>>> 484:     backgroundColor: '#ffffff' },\n    485:   inputError: {\n    486:     borderColor: '#FF3B30' },"
+      },
+      {
+        "file": "src/components/database/forms/DynamicFormBuilder.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#2EAADC",
+        "line": 556,
+        "context": "    554:     paddingHorizontal: 16,\n    555:     paddingVertical: 8,\n>>> 556:     backgroundColor: '#2EAADC',\n    557:     borderRadius: 8,\n    558:     justifyContent: 'center' },"
+      },
+      {
+        "file": "src/components/common/SortModal.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 215,
+        "context": "    213:   modalContent: {\n    214:     flex: 1,\n>>> 215:     backgroundColor: '#F0F0F0' },\n    216:   content: {\n    217:     flex: 1 },"
+      },
+      {
+        "file": "src/components/common/SortModal.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 215,
+        "context": "    213:   modalContent: {\n    214:     flex: 1,\n>>> 215:     backgroundColor: '#F0F0F0' },\n    216:   content: {\n    217:     flex: 1 },"
+      },
+      {
+        "file": "src/components/common/SortModal.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 215,
+        "context": "    213:   modalContent: {\n    214:     flex: 1,\n>>> 215:     backgroundColor: '#F0F0F0' },\n    216:   content: {\n    217:     flex: 1 },"
+      },
+      {
+        "file": "src/components/common/SortModal.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#A94438",
+        "line": 277,
+        "context": "    275:     alignItems: 'center',\n    276:     justifyContent: 'center',\n>>> 277:     backgroundColor: '#A94438',\n    278:     borderRadius: 12,\n    279:     padding: 16,"
+      },
+      {
+        "file": "src/components/common/SearchBar.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 106,
+        "context": "    104:     flexDirection: 'row',\n    105:     alignItems: 'center',\n>>> 106:     backgroundColor: '#F0F0F0',\n    107:     borderRadius: 6,\n    108:     paddingHorizontal: 10,"
+      },
+      {
+        "file": "src/components/common/RetryButton.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FFF5F0",
+        "line": 34,
+        "context": "    32: const styles = StyleSheet.create({\n    33:   container: {\n>>> 34:     backgroundColor: '#FFF5F0',\n    35:     paddingHorizontal: 20,\n    36:     paddingVertical: 12,"
+      },
+      {
+        "file": "src/components/common/FilterModal.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 136,
+        "context": "    134:   modalContent: {\n    135:     flex: 1,\n>>> 136:     backgroundColor: '#F0F0F0' },\n    137:   content: {\n    138:     flex: 1,"
+      },
+      {
+        "file": "src/components/common/FilterModal.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#A94438",
+        "line": 156,
+        "context": "    154:     alignItems: 'center',\n    155:     justifyContent: 'center',\n>>> 156:     backgroundColor: '#A94438',\n    157:     borderRadius: 12,\n    158:     padding: 16,"
+      },
+      {
+        "file": "src/components/common/FilterModal.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "Button: {\n    flexDirection: 'row',\n    alignItems: 'center',\n    justifyContent: 'center',\n    backgroundColor: '#FFFFFF",
+        "line": 140,
+        "context": "    138:     flex: 1,\n    139:     padding: 16 },\n>>> 140:   addButton: {\n    141:     flexDirection: 'row',\n    142:     alignItems: 'center',"
+      },
+      {
+        "file": "src/components/common/FilterBadge.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 102,
+        "context": "    100:     flexDirection: 'row',\n    101:     alignItems: 'center',\n>>> 102:     backgroundColor: '#F0F0F0',\n    103:     borderRadius: 16,\n    104:     paddingLeft: 12,"
+      },
+      {
+        "file": "src/components/common/FilterBadge.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#A94438",
+        "line": 116,
+        "context": "    114:     paddingVertical: 6,\n    115:     borderRadius: 16,\n>>> 116:     backgroundColor: '#A94438' },\n    117:   clearAllText: {\n    118:     fontSize: 14,"
+      },
+      {
+        "file": "src/components/common/ErrorMessage.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F9FAFB",
+        "line": 78,
+        "context": "    76:     alignItems: 'center',\n    77:     padding: 20,\n>>> 78:     backgroundColor: '#F9FAFB' },\n    79:   iconContainer: {\n    80:     marginBottom: 16 },"
+      },
+      {
+        "file": "src/components/common/ErrorMessage.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FEF3C7",
+        "line": 99,
+        "context": "    97:     lineHeight: 20,\n    98:     paddingHorizontal: 20,\n>>> 99:     backgroundColor: '#FEF3C7',\n    100:     paddingVertical: 12,\n    101:     borderRadius: 8 },"
+      },
+      {
+        "file": "src/components/common/EditableDataTable.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F5F5F5",
+        "line": 512,
+        "context": "    510:   container: {\n    511:     flex: 1,\n>>> 512:     backgroundColor: '#F5F5F5' },\n    513:   saveBar: {\n    514:     flexDirection: 'row',"
+      },
+      {
+        "file": "src/components/common/EditableDataTable.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FFF3CD",
+        "line": 517,
+        "context": "    515:     justifyContent: 'space-between',\n    516:     alignItems: 'center',\n>>> 517:     backgroundColor: '#FFF3CD',\n    518:     paddingHorizontal: 16,\n    519:     paddingVertical: 8,"
+      },
+      {
+        "file": "src/components/common/EditableDataTable.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#28A745",
+        "line": 544,
+        "context": "    542:     color: '#DC3545' },\n    543:   saveButton: {\n>>> 544:     backgroundColor: '#28A745' },\n    545:   saveButtonText: {\n    546:     fontSize: 14,"
+      },
+      {
+        "file": "src/components/common/EditableDataTable.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 585,
+        "context": "    583:     alignItems: 'center' },\n    584:   selectedRow: {\n>>> 585:     backgroundColor: '#F0F0F0' },\n    586:   cell: {\n    587:     justifyContent: 'center',"
+      },
+      {
+        "file": "src/components/common/EditableDataTable.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E8F4FD",
+        "line": 591,
+        "context": "    589:     paddingVertical: 8 },\n    590:   changedCell: {\n>>> 591:     backgroundColor: '#E8F4FD' },\n    592:   errorCell: {\n    593:     backgroundColor: '#FFE5E5' },"
+      },
+      {
+        "file": "src/components/common/EditableDataTable.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FFE5E5",
+        "line": 593,
+        "context": "    591:     backgroundColor: '#E8F4FD' },\n    592:   errorCell: {\n>>> 593:     backgroundColor: '#FFE5E5' },\n    594:   cellContent: {\n    595:     flex: 1,"
+      },
+      {
+        "file": "src/components/common/EditableDataTable.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#1A1A1A",
+        "line": 618,
+        "context": "    616:     top: 100,\n    617:     right: 20,\n>>> 618:     backgroundColor: '#1A1A1A',\n    619:     paddingHorizontal: 12,\n    620:     paddingVertical: 6,"
+      },
+      {
+        "file": "src/components/common/EditableDataTable.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "Button: {\n    backgroundColor: '#28A745' },\n  saveButtonText: {\n    fontSize: 14,\n    fontWeight: '500',\n    color: '#FFFFFF' },\n  searchContainer: {\n    padding: 16,\n    backgroundColor: '#FFFFFF",
+        "line": 543,
+        "context": "    541:     fontWeight: '500',\n    542:     color: '#DC3545' },\n>>> 543:   saveButton: {\n    544:     backgroundColor: '#28A745' },\n    545:   saveButtonText: {"
+      },
+      {
+        "file": "src/components/common/EditableDataTable.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "ButtonContainer: {\n    backgroundColor: '#FFFFFF",
+        "line": 625,
+        "context": "    623:     fontSize: 12,\n    624:     color: '#FFFFFF' },\n>>> 625:   addButtonContainer: {\n    626:     backgroundColor: '#FFFFFF',\n    627:     borderBottomWidth: 1,"
+      },
+      {
+        "file": "src/components/common/ColumnSettingsModal.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 192,
+        "context": "    190:   modalContent: {\n    191:     flex: 1,\n>>> 192:     backgroundColor: '#F0F0F0' },\n    193:   content: {\n    194:     flex: 1 },"
+      },
+      {
+        "file": "src/components/common/ColumnSettingsModal.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 192,
+        "context": "    190:   modalContent: {\n    191:     flex: 1,\n>>> 192:     backgroundColor: '#F0F0F0' },\n    193:   content: {\n    194:     flex: 1 },"
+      },
+      {
+        "file": "src/components/common/BatchActionsModal.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 148,
+        "context": "    146:     height: 44,\n    147:     borderRadius: 22,\n>>> 148:     backgroundColor: '#F0F0F0',\n    149:     alignItems: 'center',\n    150:     justifyContent: 'center',"
+      },
+      {
+        "file": "src/components/common/BatchActionsModal.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FFE5E5",
+        "line": 153,
+        "context": "    151:     marginRight: 12 },\n    152:   deleteIconContainer: {\n>>> 153:     backgroundColor: '#FFE5E5' },\n    154:   actionTextContainer: {\n    155:     flex: 1 },"
+      },
+      {
+        "file": "src/components/common/ActionPopover.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#000000",
+        "line": 166,
+        "context": "    164:     left: 0,\n    165:     right: 0,\n>>> 166:     backgroundColor: '#000000' },\n    167:   actionPanel: {\n    168:     position: 'absolute',"
+      },
+      {
+        "file": "src/components/common/ActionPopover.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F5F5F5",
+        "line": 191,
+        "context": "    189:     height: 48,\n    190:     borderRadius: 24,\n>>> 191:     backgroundColor: '#F5F5F5',\n    192:     alignItems: 'center',\n    193:     justifyContent: 'center',"
+      },
+      {
+        "file": "src/components/common/ActionModal.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 145,
+        "context": "    143:     height: 40,\n    144:     borderRadius: 20,\n>>> 145:     backgroundColor: '#F0F0F0',\n    146:     alignItems: 'center',\n    147:     justifyContent: 'center',"
+      },
+      {
+        "file": "src/components/audit/AuditReportInterface.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#D32F2F",
+        "line": 881,
+        "context": "    879:     alignItems: 'center',\n    880:     justifyContent: 'center',\n>>> 881:     backgroundColor: '#D32F2F',\n    882:     margin: 4,\n    883:     padding: 12,"
+      },
+      {
+        "file": "src/components/audit/AuditReportInterface.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#388E3C",
+        "line": 886,
+        "context": "    884:     borderRadius: 4 },\n    885:   exportButtonExcel: {\n>>> 886:     backgroundColor: '#388E3C' },\n    887:   exportButtonDisabled: {\n    888:     opacity: 0.6 },"
+      },
+      {
+        "file": "src/components/audit/AuditReportInterface.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FFEBEE",
+        "line": 953,
+        "context": "    951:     padding: 8 },\n    952:   errorBanner: {\n>>> 953:     backgroundColor: '#FFEBEE',\n    954:     padding: 12,\n    955:     marginHorizontal: 8,"
+      },
+      {
+        "file": "src/components/audit/AuditReportInterface.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "ButtonDisabled: {\n    opacity: 0.6 },\n  generateButtonText: {\n    marginLeft: 8,\n    fontSize: 16,\n    fontWeight: '600',\n    color: '#FFFFFF' },\n  generatedReportContainer: {\n    backgroundColor: '#FFFFFF",
+        "line": 845,
+        "context": "    843:     padding: 16,\n    844:     borderRadius: 8 },\n>>> 845:   generateButtonDisabled: {\n    846:     opacity: 0.6 },\n    847:   generateButtonText: {"
+      },
+      {
+        "file": "src/components/audit/AuditLogViewer.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F5F5F5",
+        "line": 661,
+        "context": "    659:   container: {\n    660:     flex: 1,\n>>> 661:     backgroundColor: '#F5F5F5' },\n    662:   filtersContainer: {\n    663:     backgroundColor: '#FFFFFF',"
+      },
+      {
+        "file": "src/components/audit/AuditLogViewer.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F5F5F5",
+        "line": 661,
+        "context": "    659:   container: {\n    660:     flex: 1,\n>>> 661:     backgroundColor: '#F5F5F5' },\n    662:   filtersContainer: {\n    663:     backgroundColor: '#FFFFFF',"
+      },
+      {
+        "file": "src/components/audit/AuditLogViewer.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E3F2FD",
+        "line": 683,
+        "context": "    681:     marginBottom: 12 },\n    682:   filterChip: {\n>>> 683:     backgroundColor: '#E3F2FD',\n    684:     paddingHorizontal: 12,\n    685:     paddingVertical: 8,"
+      },
+      {
+        "file": "src/components/audit/AuditLogViewer.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FFEBEE",
+        "line": 779,
+        "context": "    777:     marginTop: 8,\n    778:     padding: 8,\n>>> 779:     backgroundColor: '#FFEBEE',\n    780:     borderRadius: 4 },\n    781:   errorText: {"
+      },
+      {
+        "file": "src/components/audit/AuditLogViewer.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FFEBEE",
+        "line": 779,
+        "context": "    777:     marginTop: 8,\n    778:     padding: 8,\n>>> 779:     backgroundColor: '#FFEBEE',\n    780:     borderRadius: 4 },\n    781:   errorText: {"
+      },
+      {
+        "file": "src/components/audit/AuditLogViewer.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F5F5F5",
+        "line": 661,
+        "context": "    659:   container: {\n    660:     flex: 1,\n>>> 661:     backgroundColor: '#F5F5F5' },\n    662:   filtersContainer: {\n    663:     backgroundColor: '#FFFFFF',"
+      },
+      {
+        "file": "src/components/audit/AuditLogViewer.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E3F2FD",
+        "line": 683,
+        "context": "    681:     marginBottom: 12 },\n    682:   filterChip: {\n>>> 683:     backgroundColor: '#E3F2FD',\n    684:     paddingHorizontal: 12,\n    685:     paddingVertical: 8,"
+      },
+      {
+        "file": "src/components/audit/AuditLogViewer.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "ButtonText: {\n    color: '#FFFFFF',\n    fontSize: 14,\n    fontWeight: '600' },\n  resetButton: {\n    backgroundColor: '#FFFFFF",
+        "line": 711,
+        "context": "    709:     borderRadius: 4,\n    710:     marginLeft: 8 },\n>>> 711:   filterButtonText: {\n    712:     color: '#FFFFFF',\n    713:     fontSize: 14,"
+      },
+      {
+        "file": "src/components/audit/AuditLogViewer.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "ButtonText: {\n    color: '#666666',\n    fontSize: 14,\n    fontWeight: '600' },\n  logsContainer: {\n    flex: 1 },\n  logItem: {\n    backgroundColor: '#FFFFFF",
+        "line": 719,
+        "context": "    717:     borderWidth: 1,\n    718:     borderColor: 'DesignSystem.colors.gray300' },\n>>> 719:   resetButtonText: {\n    720:     color: '#666666',\n    721:     fontSize: 14,"
+      },
+      {
+        "file": "src/components/audit/AuditDashboard.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F44336",
+        "line": 367,
+        "context": "    365:         <View style={styles.sectionHeader}>\n    366:           <Text style={styles.sectionTitle}>未解決事件</Text>\n>>> 367:           <View style={StyleSheet.flatten([styles.alertBadge, { backgroundColor: '#F44336' }])}>\n    368:             <Text style={styles.alertBadgeText}>{incidents.length}</Text>\n    369:           </View>"
+      },
+      {
+        "file": "src/components/audit/AuditDashboard.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FFEBEE",
+        "line": 698,
+        "context": "    696:     fontWeight: '600' },\n    697:   errorBanner: {\n>>> 698:     backgroundColor: '#FFEBEE',\n    699:     padding: 12,\n    700:     marginHorizontal: 8,"
+      },
+      {
+        "file": "src/components/audit/AuditDashboard.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FF9800",
+        "line": 826,
+        "context": "    824:     marginBottom: 12 },\n    825:   alertBadge: {\n>>> 826:     backgroundColor: '#FF9800',\n    827:     paddingHorizontal: 8,\n    828:     paddingVertical: 2,"
+      },
+      {
+        "file": "src/components/audit/AuditDashboard.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FFF9F0",
+        "line": 840,
+        "context": "    838:     marginBottom: 12,\n    839:     padding: 12,\n>>> 840:     backgroundColor: '#FFF9F0',\n    841:     borderRadius: 8,\n    842:     borderWidth: 1,"
+      },
+      {
+        "file": "src/components/audit/AuditDashboard.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FFEBEE",
+        "line": 698,
+        "context": "    696:     fontWeight: '600' },\n    697:   errorBanner: {\n>>> 698:     backgroundColor: '#FFEBEE',\n    699:     padding: 12,\n    700:     marginHorizontal: 8,"
+      },
+      {
+        "file": "src/components/audit/AuditDashboard.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#E3F2FD",
+        "line": 907,
+        "context": "    905:     height: 28,\n    906:     borderRadius: 14,\n>>> 907:     backgroundColor: '#E3F2FD',\n    908:     justifyContent: 'center',\n    909:     alignItems: 'center',"
+      },
+      {
+        "file": "src/components/audit/AuditDashboard.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FFEBEE",
+        "line": 698,
+        "context": "    696:     fontWeight: '600' },\n    697:   errorBanner: {\n>>> 698:     backgroundColor: '#FFEBEE',\n    699:     padding: 12,\n    700:     marginHorizontal: 8,"
+      },
+      {
+        "file": "src/components/audit/AuditDashboard.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F44336",
+        "line": 367,
+        "context": "    365:         <View style={styles.sectionHeader}>\n    366:           <Text style={styles.sectionTitle}>未解決事件</Text>\n>>> 367:           <View style={StyleSheet.flatten([styles.alertBadge, { backgroundColor: '#F44336' }])}>\n    368:             <Text style={styles.alertBadgeText}>{incidents.length}</Text>\n    369:           </View>"
+      },
+      {
+        "file": "src/components/audit/AuditDashboard.tsx",
+        "pattern": "按鈕附近有鮮豔顏色",
+        "match": "ButtonText: {\n    color: '#FFFFFF',\n    fontSize: 14,\n    fontWeight: '600' },\n  errorBanner: {\n    backgroundColor: '#FFEBEE",
+        "line": 693,
+        "context": "    691:     backgroundColor: '#2C2C2C',\n    692:     borderRadius: 4 },\n>>> 693:   viewDetailsButtonText: {\n    694:     color: '#FFFFFF',\n    695:     fontSize: 14,"
+      },
+      {
+        "file": "src/components/audio/AudioRecorder.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 435,
+        "context": "    433:   container: {\n    434:     padding: 24,\n>>> 435:     backgroundColor: '#ffffff',\n    436:     borderRadius: 12,\n    437:     shadowColor: '#000000',"
+      },
+      {
+        "file": "src/components/audio/AudioRecorder.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f3f4f6",
+        "line": 471,
+        "context": "    469:     justifyContent: 'center',\n    470:     height: 60,\n>>> 471:     backgroundColor: '#f3f4f6',\n    472:     borderRadius: 8,\n    473:     paddingHorizontal: 8 },"
+      },
+      {
+        "file": "src/components/audio/AudioRecorder.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f59e0b",
+        "line": 491,
+        "context": "    489:     fontWeight: '600' },\n    490:   pauseButton: {\n>>> 491:     backgroundColor: '#f59e0b',\n    492:     paddingHorizontal: 24,\n    493:     paddingVertical: 16 },"
+      },
+      {
+        "file": "src/components/audio/AudioRecorder.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#6b7280",
+        "line": 515,
+        "context": "    513:     fontWeight: '600' },\n    514:   resetButton: {\n>>> 515:     backgroundColor: '#6b7280',\n    516:     paddingHorizontal: 32,\n    517:     paddingVertical: 16 },"
+      },
+      {
+        "file": "src/components/audio/AudioEditor.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 404,
+        "context": "    402:   container: {\n    403:     flex: 1,\n>>> 404:     backgroundColor: '#ffffff',\n    405:     padding: 16 },\n    406:   loadingContainer: {"
+      },
+      {
+        "file": "src/components/audio/AudioEditor.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 404,
+        "context": "    402:   container: {\n    403:     flex: 1,\n>>> 404:     backgroundColor: '#ffffff',\n    405:     padding: 16 },\n    406:   loadingContainer: {"
+      },
+      {
+        "file": "src/components/audio/AudioEditor.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f9fafb",
+        "line": 428,
+        "context": "    426:   waveformContainer: {\n    427:     marginBottom: 24,\n>>> 428:     backgroundColor: '#f9fafb',\n    429:     borderRadius: 12,\n    430:     padding: 16 },"
+      },
+      {
+        "file": "src/components/audio/AudioEditor.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 404,
+        "context": "    402:   container: {\n    403:     flex: 1,\n>>> 404:     backgroundColor: '#ffffff',\n    405:     padding: 16 },\n    406:   loadingContainer: {"
+      },
+      {
+        "file": "src/components/audio/AudioEditor.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ef4444",
+        "line": 449,
+        "context": "    447:     backgroundColor: 'DesignSystem.colors.primary' },\n    448:   trimEnd: {\n>>> 449:     backgroundColor: '#ef4444' },\n    450:   playbackIndicator: {\n    451:     position: 'absolute',"
+      },
+      {
+        "file": "src/components/audio/AudioEditor.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f59e0b",
+        "line": 455,
+        "context": "    453:     bottom: 0,\n    454:     width: 2,\n>>> 455:     backgroundColor: '#f59e0b' },\n    456:   timeLabels: {\n    457:     flexDirection: 'row',"
+      },
+      {
+        "file": "src/components/audio/AudioEditor.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f3f4f6",
+        "line": 475,
+        "context": "    473:   trimInput: {\n    474:     alignItems: 'center',\n>>> 475:     backgroundColor: '#f3f4f6',\n    476:     borderRadius: 8,\n    477:     padding: 12,"
+      },
+      {
+        "file": "src/components/audio/AudioEditor.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#6b7280",
+        "line": 511,
+        "context": "    509:     fontWeight: '600' },\n    510:   stopButton: {\n>>> 511:     backgroundColor: '#6b7280',\n    512:     paddingHorizontal: 24 },\n    513:   stopButtonText: {"
+      },
+      {
+        "file": "src/components/audio/AudioEditor.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f59e0b",
+        "line": 455,
+        "context": "    453:     bottom: 0,\n    454:     width: 2,\n>>> 455:     backgroundColor: '#f59e0b' },\n    456:   timeLabels: {\n    457:     flexDirection: 'row',"
+      },
+      {
+        "file": "src/components/analytics/QueryChat.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#F0F0F0",
+        "line": 270,
+        "context": "    268:     backgroundColor: '#2C2C2C' },\n    269:   assistantBubble: {\n>>> 270:     backgroundColor: '#F0F0F0' },\n    271:   errorBubble: {\n    272:     backgroundColor: '#FFE5E5' },"
+      },
+      {
+        "file": "src/components/analytics/QueryChat.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#FFE5E5",
+        "line": 272,
+        "context": "    270:     backgroundColor: '#F0F0F0' },\n    271:   errorBubble: {\n>>> 272:     backgroundColor: '#FFE5E5' },\n    273:   messageText: {\n    274:     fontSize: 15,"
+      },
+      {
+        "file": "src/components/ai/ConfirmationInterface.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f9fafb",
+        "line": 422,
+        "context": "    420:   container: {\n    421:     flex: 1,\n>>> 422:     backgroundColor: '#f9fafb' },\n    423:   contentContainer: {\n    424:     padding: 16 },"
+      },
+      {
+        "file": "src/components/ai/ConfirmationInterface.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 429,
+        "context": "    427:     justifyContent: 'center',\n    428:     alignItems: 'center',\n>>> 429:     backgroundColor: '#ffffff' },\n    430:   loadingText: {\n    431:     marginTop: 16,"
+      },
+      {
+        "file": "src/components/ai/ConfirmationInterface.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 429,
+        "context": "    427:     justifyContent: 'center',\n    428:     alignItems: 'center',\n>>> 429:     backgroundColor: '#ffffff' },\n    430:   loadingText: {\n    431:     marginTop: 16,"
+      },
+      {
+        "file": "src/components/ai/ConfirmationInterface.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 429,
+        "context": "    427:     justifyContent: 'center',\n    428:     alignItems: 'center',\n>>> 429:     backgroundColor: '#ffffff' },\n    430:   loadingText: {\n    431:     marginTop: 16,"
+      },
+      {
+        "file": "src/components/ai/ConfirmationInterface.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 429,
+        "context": "    427:     justifyContent: 'center',\n    428:     alignItems: 'center',\n>>> 429:     backgroundColor: '#ffffff' },\n    430:   loadingText: {\n    431:     marginTop: 16,"
+      },
+      {
+        "file": "src/components/ai/ConfirmationInterface.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#eff6ff",
+        "line": 493,
+        "context": "    491:   modifiedInput: {\n    492:     borderColor: 'DesignSystem.colors.primary',\n>>> 493:     backgroundColor: '#eff6ff' },\n    494:   modifiedIndicator: {\n    495:     fontSize: 12,"
+      },
+      {
+        "file": "src/components/ai/ConfirmationInterface.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#f9fafb",
+        "line": 422,
+        "context": "    420:   container: {\n    421:     flex: 1,\n>>> 422:     backgroundColor: '#f9fafb' },\n    423:   contentContainer: {\n    424:     padding: 16 },"
+      },
+      {
+        "file": "src/components/ai/ConfirmationInterface.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 429,
+        "context": "    427:     justifyContent: 'center',\n    428:     alignItems: 'center',\n>>> 429:     backgroundColor: '#ffffff' },\n    430:   loadingText: {\n    431:     marginTop: 16,"
+      },
+      {
+        "file": "src/components/ai/ConfirmationInterface.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 429,
+        "context": "    427:     justifyContent: 'center',\n    428:     alignItems: 'center',\n>>> 429:     backgroundColor: '#ffffff' },\n    430:   loadingText: {\n    431:     marginTop: 16,"
+      },
+      {
+        "file": "src/components/ai/ConfirmationInterface.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 429,
+        "context": "    427:     justifyContent: 'center',\n    428:     alignItems: 'center',\n>>> 429:     backgroundColor: '#ffffff' },\n    430:   loadingText: {\n    431:     marginTop: 16,"
+      },
+      {
+        "file": "src/components/ai/ConfirmationInterface.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffffff",
+        "line": 429,
+        "context": "    427:     justifyContent: 'center',\n    428:     alignItems: 'center',\n>>> 429:     backgroundColor: '#ffffff' },\n    430:   loadingText: {\n    431:     marginTop: 16,"
+      },
+      {
+        "file": "src/components/admin/TeamDataSyncTool.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#e8f5e9",
+        "line": 297,
+        "context": "    295:     justifyContent: 'space-between' },\n    296:   alertsuccess: {\n>>> 297:     backgroundColor: '#e8f5e9' },\n    298:   alerterror: {\n    299:     backgroundColor: '#ffebee' },"
+      },
+      {
+        "file": "src/components/admin/TeamDataSyncTool.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#ffebee",
+        "line": 299,
+        "context": "    297:     backgroundColor: '#e8f5e9' },\n    298:   alerterror: {\n>>> 299:     backgroundColor: '#ffebee' },\n    300:   alertinfo: {\n    301:     backgroundColor: '#e3f2fd' },"
+      },
+      {
+        "file": "src/components/admin/TeamDataSyncTool.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#e3f2fd",
+        "line": 301,
+        "context": "    299:     backgroundColor: '#ffebee' },\n    300:   alertinfo: {\n>>> 301:     backgroundColor: '#e3f2fd' },\n    302:   alertText: {\n    303:     flex: 1,"
+      },
+      {
+        "file": "src/components/admin/TeamDataSyncTool.tsx",
+        "pattern": "按鈕使用了非灰階顏色",
+        "match": "backgroundColor: '#e0e0e0",
+        "line": 341,
+        "context": "    339:   divider: {\n    340:     height: 1,\n>>> 341:     backgroundColor: '#e0e0e0',\n    342:     marginVertical: 16 },\n    343:   subtitle: {"
+      }
+    ],
+    "suspiciousPatterns": []
+  },
+  "summary": {
+    "hardcodedColors": 0,
+    "wrongDesignSystem": 314,
+    "suspiciousPatterns": 0,
+    "total": 314
+  }
+}

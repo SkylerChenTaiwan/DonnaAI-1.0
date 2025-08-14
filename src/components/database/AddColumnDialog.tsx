@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import {
   AdaptiveModal,
   AdaptiveInput
@@ -195,7 +196,7 @@ export const AddColumnDialog: React.FC<AddColumnDialogProps> = ({
                     <Icon 
                       name={icon as any} 
                       size={24} 
-                      color={columnType === type ? '#FF6B6B' : '#666'} 
+                      color={columnType === type ? 'DesignSystem.colors.status.error' : '#666'} 
                     />
                     <Text style={StyleSheet.flatten([
                       styles.typeLabel,
@@ -250,7 +251,7 @@ export const AddColumnDialog: React.FC<AddColumnDialogProps> = ({
                   <Icon 
                     name={required ? 'checkbox' : 'square-outline'} 
                     size={20} 
-                    color="#FF6B6B" 
+                    color="DesignSystem.colors.status.error" 
                   />
                   <Text style={styles.checkboxLabel}>必填欄位</Text>
                 </TouchableOpacity>
@@ -369,7 +370,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#f9f8f7' },
   typeButtonActive: {
-    borderColor: '#FF6B6B',
+    borderColor: 'DesignSystem.colors.status.error',
     backgroundColor: 'rgba(255, 107, 107, 0.1)' },
   typeLabel: {
     fontSize: responsive({ mobile: 12, tablet: 13, desktop: 14 }),
@@ -377,7 +378,7 @@ const styles = StyleSheet.create({
     color: '#666',
     marginTop: responsive({ mobile: 4, tablet: 5, desktop: 6 }) },
   typeLabelActive: {
-    color: '#FF6B6B' },
+    color: 'DesignSystem.colors.status.error' },
   typeDescription: {
     fontSize: responsive({ mobile: 10, tablet: 11, desktop: 12 }),
     color: '#999',
@@ -424,7 +425,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: responsive({ mobile: 20, tablet: 24, desktop: 28 }),
     paddingVertical: responsive({ mobile: 10, tablet: 12, desktop: 14 }),
     borderRadius: responsive({ mobile: 6, tablet: 8, desktop: 8 }),
-    backgroundColor: '#FF6B6B' },
+    backgroundColor: 'DesignSystem.colors.status.error' },
   confirmButtonDisabled: {
     backgroundColor: '#ffb3b3' },
   confirmText: {

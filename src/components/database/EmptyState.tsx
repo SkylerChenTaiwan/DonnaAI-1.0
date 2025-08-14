@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import {
   View,
   Text,
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: responsive({ mobile: 20, tablet: 40, desktop: 60 }),
     lineHeight: responsive({ mobile: 20, tablet: 22, desktop: 24 }) },
   emptyButton: {
-    backgroundColor: '#FF6B6B',
+    backgroundColor: 'DesignSystem.colors.status.error',
     paddingHorizontal: responsive({ mobile: 20, tablet: 24, desktop: 28 }),
     paddingVertical: responsive({ mobile: 10, tablet: 12, desktop: 14 }),
     borderRadius: responsive({ mobile: 6, tablet: 8, desktop: 8 }),

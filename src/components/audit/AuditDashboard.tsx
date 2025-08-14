@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import {
   View,
   Text,
@@ -610,7 +611,7 @@ const getRiskBackgroundColor = (risk: string): string => {
     high: '#FFF3E0',
     medium: '#FFFDE7',
     low: '#E8F5E9' };
-  return colors[risk] || '#F5F5F5';
+  return colors[risk] || 'DesignSystem.colors.gray50';
 };
 
 const getStatusColor = (status: string): string => {
@@ -638,12 +639,12 @@ const getActionIcon = (actionType: string): string => {
 const styles: any = {
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5' },
+    backgroundColor: 'DesignSystem.colors.gray50' },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5F5F5' },
+    backgroundColor: 'DesignSystem.colors.gray50' },
   loadingText: {
     marginTop: 16,
     fontSize: 16,
@@ -665,7 +666,7 @@ const styles: any = {
     alignItems: 'center' },
   periodSelector: {
     flexDirection: 'row',
-    backgroundColor: '#F5F5F5',
+    backgroundColor: 'DesignSystem.colors.gray50',
     borderRadius: 8,
     padding: 2 },
   periodButton: {
@@ -931,7 +932,7 @@ const styles: any = {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: 'DesignSystem.colors.gray50',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12 },

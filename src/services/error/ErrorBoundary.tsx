@@ -4,6 +4,7 @@
  */
 
 import React, { Component, ReactNode } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, Platform } from 'react-native';
 import { errorLogger } from './ErrorLogger';
 import { ErrorBoundaryState, ErrorInfo } from '../../types/error';
@@ -317,7 +318,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   primaryButton: {
-    backgroundColor: '#3182CE',
+    backgroundColor: 'DesignSystem.colors.primary',
     marginBottom: 10
   },
   primaryButtonText: {
@@ -330,7 +331,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   secondaryButton: {
-    backgroundColor: '#E2E8F0',
+    backgroundColor: 'DesignSystem.colors.gray200',
     flex: 1,
     marginHorizontal: 5
   },

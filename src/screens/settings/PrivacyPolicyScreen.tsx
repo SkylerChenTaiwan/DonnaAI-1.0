@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import {
   ScrollView,
   View,
@@ -197,7 +198,7 @@ const styles = StyleSheet.create({
   contactButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E3F2FD',
+    backgroundColor: DesignSystem.colors.gray50,
     padding: 12,
     borderRadius: 8,
     marginTop: 8 },

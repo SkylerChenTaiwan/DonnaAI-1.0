@@ -346,7 +346,7 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4 },
   onlineDot: {
-    backgroundColor: DesignSystem.colors.success },
+    backgroundColor: DesignSystem.colors.primary },
   offlineDot: {
     backgroundColor: DesignSystem.colors.gray400 },
   statusLabel: {

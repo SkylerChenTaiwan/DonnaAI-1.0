@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     gap: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB' },
+    borderTopColor: DesignSystem.colors.gray200 },
   button: {
     flex: 1,
     paddingVertical: 14,

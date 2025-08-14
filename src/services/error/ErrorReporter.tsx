@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useCallback } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import { View,
   Text,
   StyleSheet,
@@ -408,7 +409,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0'
+    borderBottomColor: 'DesignSystem.colors.gray200'
   },
   previewTitle: {
     fontSize: 18,
@@ -429,7 +430,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 15,
     borderTopWidth: 1,
-    borderTopColor: '#E2E8F0'
+    borderTopColor: 'DesignSystem.colors.gray200'
   },
   actionButton: {
     flex: 1,
@@ -439,10 +440,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 5
   },
   copyButton: {
-    backgroundColor: '#E2E8F0'
+    backgroundColor: 'DesignSystem.colors.gray200'
   },
   shareButton: {
-    backgroundColor: '#3182CE'
+    backgroundColor: 'DesignSystem.colors.primary'
   },
   actionButtonText: {
     fontSize: 15,

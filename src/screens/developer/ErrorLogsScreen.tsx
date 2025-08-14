@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import {
   View,
   Text,
@@ -239,7 +240,7 @@ export const ErrorLogsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F7FAFC'
+    backgroundColor: DesignSystem.colors.gray50
   },
   headerButton: {
     paddingHorizontal: 16,

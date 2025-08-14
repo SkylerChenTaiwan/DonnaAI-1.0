@@ -5,6 +5,7 @@
  */
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { DesignSystem } from '@/theme/designSystem';
 import { View, Text, StyleSheet, Alert, Platform } from 'react-native';
 import { Audio, InterruptionModeIOS, InterruptionModeAndroid } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
@@ -316,7 +317,7 @@ export const AudioRecorder = ({
                 styles.waveformBar,
                 {
                   height: Math.max(2, amplitude / 2),
-                  backgroundColor: recordingStatus === 'recording' ? '#22c55e' : '#6b7280'
+                  backgroundColor: recordingStatus === 'recording' ? 'DesignSystem.colors.primary' : '#6b7280'
                 }
               ])}
             />
@@ -410,7 +411,7 @@ export const AudioRecorder = ({
 // 輔助函數
 const getStatusColor = (status: RecordingStatus): string => {
   switch (status) {
-    case 'recording': return '#ef4444';
+    case 'recording': return 'DesignSystem.colors.status.error';
     case 'paused': return '#f59e0b';
     case 'stopped': return '#6b7280';
     case 'loading': return '#3b82f6';
@@ -479,7 +480,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 12 },
   startButton: {
-    backgroundColor: '#22c55e',
+    backgroundColor: 'DesignSystem.colors.primary',
     paddingHorizontal: 32,
     paddingVertical: 16 },
   startButtonText: {
@@ -495,7 +496,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600' },
   resumeButton: {
-    backgroundColor: '#22c55e',
+    backgroundColor: 'DesignSystem.colors.primary',
     paddingHorizontal: 24,
     paddingVertical: 16 },
   resumeButtonText: {
@@ -503,7 +504,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600' },
   stopButton: {
-    backgroundColor: '#ef4444',
+    backgroundColor: 'DesignSystem.colors.status.error',
     paddingHorizontal: 24,
     paddingVertical: 16 },
   stopButtonText: {
