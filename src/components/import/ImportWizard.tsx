@@ -895,13 +895,14 @@ const styles = StyleSheet.create({
   footer: {
     borderTopWidth: 1,
     paddingHorizontal: 20,
-    paddingVertical: 8,
-    height: 56  // 固定高度
+    paddingVertical: 8
   },
   footerButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    gap: 12
+    alignItems: 'center',
+    gap: 12,
+    height: 36  // 按鈕高度
   },
   button: {
     flexDirection: 'row',
