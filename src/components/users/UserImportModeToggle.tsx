@@ -73,16 +73,9 @@ const UserImportModeToggle: React.FC<UserImportModeToggleProps> = ({
     }
   };
 
-  return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        style={StyleSheet.flatten([
-          styles.toggle,
-          disabled && styles.toggleDisabled,
-        ])}
-        onPress={handleToggle}
-        disabled={disabled}
-      >
+  const renderToggleButton = () => {
+    const toggleContent = (
+      <>
         <View style={StyleSheet.flatten([
           styles.option,
           mode === 'simple' && styles.optionActive,
@@ -121,7 +114,47 @@ const UserImportModeToggle: React.FC<UserImportModeToggleProps> = ({
             進階
           </Text>
         </View>
+      </>
+    );
+
+    if (Platform.OS === 'web') {
+      return (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            backgroundColor: DesignSystem.colors.background.surface,
+            borderRadius: '999px',
+            padding: '2px',
+            border: `1px solid ${DesignSystem.colors.border.light}`,
+            position: 'relative',
+            cursor: disabled ? 'not-allowed' : 'pointer',
+            opacity: disabled ? 0.5 : 1,
+          }}
+          onClick={disabled ? undefined : handleToggle}
+        >
+          {toggleContent}
+        </div>
+      );
+    }
+
+    return (
+      <TouchableOpacity
+        style={StyleSheet.flatten([
+          styles.toggle,
+          disabled && styles.toggleDisabled,
+        ])}
+        onPress={handleToggle}
+        disabled={disabled}
+      >
+        {toggleContent}
       </TouchableOpacity>
+    );
+  };
+
+  return (
+    <View style={styles.container}>
+      {renderToggleButton()}
       
       {/* 模式說明提示 */}
       <View style={styles.tooltip}>

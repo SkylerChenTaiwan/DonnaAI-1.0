@@ -777,6 +777,7 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
       {renderFileList()}
 
       {/* 合併選項（進階模式且有多個檔案時顯示） */}
+      {console.log('Merge section render check:', { mode, filesLength: files.length, showSection: mode === 'advanced' && files.length > 1 })}
       {mode === 'advanced' && files.length > 1 && (
         <View style={styles.mergeSection}>
           <Text style={styles.mergeSectionTitle}>合併選項</Text>
@@ -819,7 +820,10 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
           </View>
           {Platform.OS === 'web' ? (
             <button
-              onClick={handleMerge}
+              onClick={() => {
+                console.log('Button clicked!', { files: files.length, loading });
+                handleMerge();
+              }}
               disabled={loading || files.length < 2}
               style={{
                 backgroundColor: (loading || files.length < 2) 
