@@ -241,24 +241,36 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
    */
   const handleFilesUploaded = useCallback((newFiles: UploadedFile[]) => {
     setWizardState(prev => {
-      // 建立一個 Map 來去重，使用檔案名和大小作為 key
+      // 使用檔案 ID 來去重（ID 是唯一的）
       const fileMap = new Map<string, UploadedFile>();
       
       // 先加入現有檔案
       prev.files.forEach(file => {
-        const key = `${file.name}_${file.rowCount}`;
-        fileMap.set(key, file);
+        fileMap.set(file.id, file);
       });
       
-      // 加入新檔案，相同的會覆蓋
+      // 檢查新檔案是否重複
+      let hasSkipped = false;
       newFiles.forEach(file => {
-        const key = `${file.name}_${file.rowCount}`;
-        if (fileMap.has(key)) {
-          console.log(`檔案 ${file.name} 已存在，跳過重複檔案`);
+        // 檢查是否已存在相同名稱和行數的檔案
+        const isDuplicate = Array.from(fileMap.values()).some(
+          existingFile => 
+            existingFile.name === file.name && 
+            existingFile.rowCount === file.rowCount &&
+            existingFile.id !== file.id
+        );
+        
+        if (isDuplicate) {
+          console.log(`檔案 ${file.name} 可能重複，已跳過`);
+          hasSkipped = true;
         } else {
-          fileMap.set(key, file);
+          fileMap.set(file.id, file);
         }
       });
+      
+      if (hasSkipped) {
+        showSuccessToast('已自動過濾重複檔案');
+      }
       
       // 轉回陣列
       const uniqueFiles = Array.from(fileMap.values());

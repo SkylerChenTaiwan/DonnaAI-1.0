@@ -213,6 +213,42 @@ const UserImportModeToggle: React.FC<UserImportModeToggleProps> = ({
     );
   };
 
+  // Web 平台需要特殊處理容器
+  if (Platform.OS === 'web') {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        flexDirection: 'column',
+        alignItems: 'flex-end',
+        gap: '4px'
+      }}>
+        {renderToggleButton()}
+        
+        {/* 模式說明提示 */}
+        <div style={{ 
+          display: 'flex', 
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginTop: '4px',
+          paddingLeft: '8px',
+          paddingRight: '8px'
+        }}>
+          <span style={{ 
+            fontSize: '14px',
+            color: DesignSystem.colors.text.tertiary,
+            marginLeft: '4px',
+            maxWidth: '200px'
+          }}>
+            {mode === 'simple' 
+              ? '簡易模式：快速匯入，自動映射欄位'
+              : '進階模式：多檔案合併、手動調整映射、批量編輯'
+            }
+          </span>
+        </div>
+      </div>
+    );
+  }
+  
   return (
     <View style={styles.container}>
       {renderToggleButton()}
