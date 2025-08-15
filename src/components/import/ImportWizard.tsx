@@ -1,6 +1,10 @@
 /**
+ * @deprecated 請使用 UserImportWizard 替代
  * 三階段資料匯入精靈
  * 主要元件，管理整個匯入流程
+ * 
+ * 注意：此元件已棄用，僅保留給 LegacyDataImportScreen 使用
+ * 新功能請使用 /components/users/UserImportWizard
  */
 
 import React, { useState, useCallback, useEffect } from 'react';

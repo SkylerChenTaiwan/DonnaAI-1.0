@@ -61,66 +61,6 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
   };
 
 
-  const handleFileSelection = async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync({
-        type: ['text/csv', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
-        copyToCacheDirectory: true });
-
-      if (!result.canceled && result.assets[0]) {
-        const file = result.assets[0];
-        setImportWizard(prev => ({
-          ...prev,
-          selectedFile: file,
-          step: 'mapping' }));
-        
-        // 這裡應該解析檔案並獲取欄位列表
-        // 暫時使用示例資料
-        const sampleMappings: FieldMapping[] = [
-          { sourceField: '姓名', targetField: 'name', transform: 'none' },
-          { sourceField: '電子郵件', targetField: 'email', transform: 'lowercase' },
-        ];
-        setImportWizard(prev => ({
-          ...prev,
-          fieldMappings: sampleMappings }));
-      }
-    } catch (error) {
-      console.error('選擇檔案失敗:', error);
-      toast.error('選擇檔案失敗');
-    }
-  };
-
-  const handleImportData = async () => {
-    setIsProcessing(true);
-    try {
-      setImportWizard(prev => ({ ...prev, step: 'importing' }));
-      
-      // 這裡應該解析檔案內容
-      const mockData = [
-        { '姓名': '張三', '電子郵件': 'zhang@example.com' },
-        { '姓名': '李四', '電子郵件': 'li@example.com' },
-      ];
-
-      const result = await importUserData(
-        mockData,
-        importWizard.dataType,
-        importWizard.fieldMappings
-      );
-
-      if (result.success) {
-        toast.success(`成功匯入 ${result.imported} 筆資料`);
-        setActiveAssistance(null);
-        onUpdate?.();
-      } else {
-        toast.error(`匯入失敗，錯誤: ${result.errors.join(', ')}`);
-      }
-    } catch (error) {
-      console.error('匯入資料失敗:', error);
-      toast.error('匯入失敗');
-    } finally {
-      setIsProcessing(false);
-    }
-  };
 
   // === 自訂欄位助手 ===
 

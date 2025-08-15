@@ -43,7 +43,7 @@ import { toast } from '@/utils/toast';
 import { withAlpha } from '@/utils/colorUtils';
 import { AddUserToOrganizationModal } from '@/components/organization/AddUserToOrganizationModal';
 import { EnhancedBulkImportModal } from '@/components/users/EnhancedBulkImportModal';
-import ImportWizard from '@/components/import/ImportWizard';
+import UserImportWizard from '@/components/users/UserImportWizard';
 import { Platform  } from 'react-native';
 import { updateOrganizationStats } from '@/services/firebase/updateOrgStats';
 
@@ -684,29 +684,23 @@ export const OrganizationDetailScreen: React.FC = () => {
       
       
       {/* 新的三階段匯入精靈 */}
-      <AdaptiveModal
-        visible={showImportWizard}
-        animationType="slide"
-        size="fullscreen"
-        presentationStyle="fullScreen"
-        onClose={() => setShowImportWizard(false)}
-      >
-        <ImportWizard
-          organizationId={organizationId}
-          teamId={organization?.defaultTeamId}
-          initialTargetDatabase={importTargetType} // 傳遞預設的資料庫類型
-          onComplete={(result) => {
-            toast.success(`成功匯入 ${result.importedCount} 筆資料到 ${result.targetDatabase}`);
+      {organization && (
+        <UserImportWizard
+          visible={showImportWizard}
+          organization={organization}
+          onClose={() => {
+            setShowImportWizard(false);
+            setImportTargetType('customers'); // 重置為預設值
+          }}
+          onImportComplete={(result) => {
+            toast.success(`成功匯入 ${result.successCount} 位用戶`);
             setShowImportWizard(false);
             setImportTargetType('customers'); // 重置為預設值
             loadOrganizationData(); // 重新載入組織資料
           }}
-          onCancel={() => {
-            setShowImportWizard(false);
-            setImportTargetType('customers'); // 重置為預設值
-          }}
+          useIntelligentMapping={true}
         />
-      </AdaptiveModal>
+      )}
     </>
   );
 
