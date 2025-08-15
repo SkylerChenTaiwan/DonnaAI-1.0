@@ -701,7 +701,7 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
                           )}
                         </TouchableOpacity>
                       ))}
-                    </View>
+                    </ScrollView>
                   )
                 )}
               </View>
