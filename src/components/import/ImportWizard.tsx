@@ -745,7 +745,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
               icon={<MaterialIcon name="arrow-back" size={20} color={colors.gray600} />}
               iconPosition="left"
               title="上一步"
-              style={{ maxHeight: 36 }}
+              style={{ height: 40 }}
             />
           )}
 
@@ -754,7 +754,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
               variant="secondary"
               onPress={onCancel}
               title="取消"
-              style={{ maxHeight: 36 }}
+              style={{ height: 40 }}
             />
           )}
 
@@ -766,7 +766,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
               title="下一步"
               icon={<MaterialIcon name="arrow-forward" size={20} color="#FFFFFF" />}
               iconPosition="right"
-              style={{ maxHeight: 36 }}
+              style={{ height: 40 }}
             />
           ) : (
             <AdaptiveButton
@@ -777,7 +777,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
               title="開始匯入"
               icon={<MaterialIcon name="file-upload" size={20} color="#FFFFFF" />}
               iconPosition="left"
-              style={{ maxHeight: 36 }}
+              style={{ height: 40 }}
             />
           )}
         </View>
@@ -896,16 +896,14 @@ const styles = StyleSheet.create({
   footer: {
     borderTopWidth: 1,
     paddingHorizontal: 20,
-    paddingVertical: 12,
-    maxHeight: 60,
+    paddingVertical: 10,
     flexShrink: 0  // 防止被壓縮
   },
   footerButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 12,
-    maxHeight: 40  // 限制按鈕容器高度
+    gap: 12
   },
   button: {
     flexDirection: 'row',
