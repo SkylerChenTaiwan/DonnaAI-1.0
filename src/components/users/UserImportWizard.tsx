@@ -473,6 +473,7 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
     >
       <View style={styles.container}>
         {/* Header with Mode Toggle */}
+        {console.log('Rendering header, mode:', wizardState.mode)}
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
@@ -480,6 +481,7 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
             </TouchableOpacity>
             <Text style={styles.headerTitle}>資料匯入精靈</Text>
           </View>
+          {console.log('About to render UserImportModeToggle')}
           <UserImportModeToggle
             mode={wizardState.mode}
             onChange={handleModeChange}

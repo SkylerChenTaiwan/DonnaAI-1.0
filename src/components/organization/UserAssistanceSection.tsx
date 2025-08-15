@@ -17,7 +17,7 @@ import { View,
   TextInput as RNTextInput } from 'react-native';
 import { Icon } from '@/components/common/Icon';
 import DocumentPicker from 'expo-document-picker';
-import ImportWizard from '@/components/import/ImportWizard';
+import UserImportWizard from '@/components/users/UserImportWizard';
 import {
   importUserData,
   setupCustomFields,
@@ -34,13 +34,6 @@ interface UserAssistanceSectionProps {
   onUpdate?: () => void;
 }
 
-interface ImportWizardState {
-  step: 'select' | 'mapping' | 'preview' | 'importing';
-  selectedFile: any;
-  dataType: 'users' | 'customers' | 'tasks';
-  fieldMappings: FieldMapping[];
-  previewData: any[];
-}
 
 interface CustomFieldWizardState {
   fields: CustomFieldConfig[];
@@ -51,12 +44,6 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
   organization,
   onUpdate }) => {
   const [activeAssistance, setActiveAssistance] = useState<'import' | 'fields' | null>(null);
-  const [importWizard, setImportWizard] = useState<ImportWizardState>({
-    step: 'select',
-    selectedFile: null,
-    dataType: 'users',
-    fieldMappings: [],
-    previewData: [] });
   const [customFieldWizard, setCustomFieldWizard] = useState<CustomFieldWizardState>({
     fields: [],
     entityType: 'users' });
@@ -198,24 +185,18 @@ export const UserAssistanceSection: React.FC<UserAssistanceSectionProps> = ({
 
 
   const renderImportWizard = () => (
-    <AdaptiveModal
+    <UserImportWizard
       visible={activeAssistance === 'import'}
-      animationType="slide"
-      presentationStyle="fullScreen"
-      size="fullscreen"  // Web 需要 size 屬性來實現全螢幕
-    >
-      <ImportWizard
-        organizationId={organization.id}
-        teamId={organization.defaultTeamId}
-        onComplete={(result) => {
-          toast.success(`成功匯入 ${result.importedCount} 筆資料到 ${result.targetDatabase}`);
-          setActiveAssistance(null);
-          onUpdate?.();
-          loadImportHistory();
-        }}
-        onCancel={() => setActiveAssistance(null)}
-      />
-    </AdaptiveModal>
+      organization={organization}
+      onClose={() => setActiveAssistance(null)}
+      onImportComplete={(result) => {
+        toast.success(`成功匯入 ${result.successCount} 位用戶`);
+        setActiveAssistance(null);
+        onUpdate?.();
+        loadImportHistory();
+      }}
+      useIntelligentMapping={true}
+    />
   );
 
   const renderCustomFieldWizard = () => (
