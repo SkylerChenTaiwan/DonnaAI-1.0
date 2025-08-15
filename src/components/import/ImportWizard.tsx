@@ -742,10 +742,8 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
             <AdaptiveButton
               variant="secondary"
               onPress={goToPreviousStage}
-              icon={<MaterialIcon name="arrow-back" size={20} color={colors.gray600} />}
-              iconPosition="left"
+              leftIcon={<MaterialIcon name="arrow-back" size={20} color={colors.gray600} />}
               title="上一步"
-              style={{ height: 40 }}
             />
           )}
 
@@ -754,7 +752,6 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
               variant="secondary"
               onPress={onCancel}
               title="取消"
-              style={{ height: 40 }}
             />
           )}
 
@@ -764,9 +761,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
               onPress={goToNextStage}
               disabled={!canGoNext()}
               title="下一步"
-              icon={<MaterialIcon name="arrow-forward" size={20} color="#FFFFFF" />}
-              iconPosition="right"
-              style={{ height: 40 }}
+              rightIcon={<MaterialIcon name="arrow-forward" size={20} color="#FFFFFF" />}
             />
           ) : (
             <AdaptiveButton
@@ -775,9 +770,7 @@ const ImportWizard: React.FC<ImportWizardProps> = ({
               disabled={!canGoNext() || wizardState.importProgress.isImporting}
               loading={wizardState.importProgress.isImporting}
               title="開始匯入"
-              icon={<MaterialIcon name="file-upload" size={20} color="#FFFFFF" />}
-              iconPosition="left"
-              style={{ height: 40 }}
+              leftIcon={<MaterialIcon name="file-upload" size={20} color="#FFFFFF" />}
             />
           )}
         </View>
