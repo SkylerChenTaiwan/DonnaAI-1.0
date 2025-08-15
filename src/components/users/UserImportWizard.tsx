@@ -120,47 +120,69 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
    * 檢查是否可以進入下一階段
    */
   const canProceed = useCallback(() => {
-    switch (wizardState.stage) {
-      case 'upload':
-        // 簡易模式：只允許單一檔案
-        // 進階模式：可以多個檔案，但需要合併
-        if (wizardState.mode === 'simple') {
-          return wizardState.files.length === 1;
-        } else {
-          // 進階模式
-          if (wizardState.files.length > 1) {
-            return wizardState.mergedTable !== null;
+    const result = (() => {
+      switch (wizardState.stage) {
+        case 'upload':
+          // 簡易模式：只允許單一檔案
+          // 進階模式：可以多個檔案，但需要合併
+          if (wizardState.mode === 'simple') {
+            return wizardState.files.length === 1;
+          } else {
+            // 進階模式
+            if (wizardState.files.length > 1) {
+              return wizardState.mergedTable !== null;
+            }
+            return wizardState.files.length > 0;
           }
-          return wizardState.files.length > 0;
-        }
-      case 'mapping':
-        // 至少需要有一個欄位被映射
-        return wizardState.mappings.some(m => m.sourceField && m.targetField);
-      case 'preview':
-        return wizardState.importData.length > 0 && wizardState.importData.some(u => u.isValid);
-      default:
-        return false;
-    }
+        case 'mapping':
+          // 至少需要有一個欄位被映射
+          return wizardState.mappings.some(m => m.sourceField && m.targetField);
+        case 'preview':
+          return wizardState.importData.length > 0 && wizardState.importData.some(u => u.isValid);
+        default:
+          return false;
+      }
+    })();
+    
+    console.log('canProceed check:', {
+      stage: wizardState.stage,
+      mode: wizardState.mode,
+      filesCount: wizardState.files.length,
+      hasMergedTable: wizardState.mergedTable !== null,
+      mergedTableData: wizardState.mergedTable?.data?.length || 0,
+      result
+    });
+    
+    return result;
   }, [wizardState]);
 
   /**
    * 進入下一階段
    */
   const goToNextStage = useCallback(async () => {
+    console.log('goToNextStage called');
     const currentIndex = getCurrentStageIndex();
+    console.log('Current stage index:', currentIndex, 'Total stages:', STAGES.length);
+    
     if (currentIndex < STAGES.length - 1) {
       const nextStage = STAGES[currentIndex + 1].key;
+      console.log('Next stage will be:', nextStage);
       
       // 階段轉換前的準備工作
       if (nextStage === 'mapping' && wizardState.files.length > 0) {
+        console.log('Generating mapping suggestions...');
         // 生成智能映射建議
         await generateMappingSuggestions();
       } else if (nextStage === 'preview') {
+        console.log('Preparing preview data...');
         // 準備預覽資料
         await preparePreviewData();
       }
       
+      console.log('Setting wizard state to next stage:', nextStage);
       setWizardState(prev => ({ ...prev, stage: nextStage }));
+    } else {
+      console.log('Already at last stage');
     }
   }, [getCurrentStageIndex, wizardState.files]);
 
@@ -594,7 +616,16 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
             ) : (
               <AdaptiveButton
                 title="下一步"
-                onPress={goToNextStage}
+                onPress={() => {
+                  console.log('Next button clicked!');
+                  console.log('canProceed:', canProceed());
+                  console.log('isProcessing:', isProcessing);
+                  if (canProceed() && !isProcessing) {
+                    goToNextStage();
+                  } else {
+                    console.log('Cannot proceed - conditions not met');
+                  }
+                }}
                 style={styles.footerButton}
                 disabled={!canProceed() || isProcessing}
               />
