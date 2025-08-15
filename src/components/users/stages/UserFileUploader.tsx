@@ -862,6 +862,15 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
               ))}
             </View>
           </View>
+          {/* 顯示關鍵欄位未選擇的警告 */}
+          {mode === 'advanced' && files.length >= 2 && files.some(f => !selectedKeyFields[f.id] && !f.keyField) && (
+            <View style={styles.warningBanner}>
+              <Icon name="alert-circle-outline" size={16} color={DesignSystem.colors.error} />
+              <Text style={styles.warningText}>
+                請為所有檔案選擇關鍵欄位後才能進行合併
+              </Text>
+            </View>
+          )}
           {Platform.OS === 'web' ? (
             <button
               onClick={() => {
@@ -1207,9 +1216,24 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.secondary,
     marginBottom: DesignSystem.spacing.md },
   keyFieldDropdownWarning: {
-    borderColor: DesignSystem.colors.gray600 },
+    borderColor: DesignSystem.colors.error,
+    borderWidth: 1.5 },
   keyFieldValueWarning: {
-    color: DesignSystem.colors.gray600 },
+    color: DesignSystem.colors.error,
+    fontStyle: 'italic' },
+  warningBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: `${DesignSystem.colors.error}10`,
+    padding: DesignSystem.spacing.sm,
+    borderRadius: DesignSystem.borderRadius.sm,
+    marginTop: DesignSystem.spacing.md,
+    marginBottom: DesignSystem.spacing.xs },
+  warningText: {
+    ...DesignSystem.typography.caption,
+    color: DesignSystem.colors.error,
+    marginLeft: DesignSystem.spacing.xs,
+    flex: 1 },
   mergeButton: {
     backgroundColor: DesignSystem.colors.primary,
     paddingVertical: DesignSystem.spacing.md,
