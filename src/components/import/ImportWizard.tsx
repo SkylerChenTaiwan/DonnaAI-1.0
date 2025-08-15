@@ -817,9 +817,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',  // 確保有背景色
     flex: 1,
     display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-    minHeight: 0  // 重要：讓 flex 子元素可以正確縮放
+    flexDirection: 'column'
   },
   header: {
     paddingHorizontal: 20,
@@ -887,10 +885,9 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingTop: 0,
-    paddingBottom: 0,
-    overflow: 'auto',
-    minHeight: 0  // 重要：讓 flex 子元素可以正確縮放
+    paddingTop: 20,
+    paddingBottom: 20,
+    overflow: 'auto'
   },
   footer: {
     borderTopWidth: 1,
