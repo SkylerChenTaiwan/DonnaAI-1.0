@@ -94,22 +94,8 @@ const UserImportModeToggle: React.FC<UserImportModeToggleProps> = ({
     );
   };
 
-  // 簡單測試版本
-  return (
-    <TouchableOpacity
-      onPress={handleToggle}
-      style={{
-        backgroundColor: DesignSystem.colors.primary,
-        padding: 10,
-        borderRadius: 8,
-        marginRight: 16
-      }}
-    >
-      <Text style={{ color: 'white', fontSize: 14, fontWeight: '600' }}>
-        {mode === 'simple' ? '簡易模式' : '進階模式'}
-      </Text>
-    </TouchableOpacity>
-  );
+  // 返回完整的切換元件
+  return renderToggleButton();
 };
 
 const styles = StyleSheet.create({

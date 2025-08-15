@@ -616,9 +616,18 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
                 )}
                 {/* 顯示欄位選項下拉選單 */}
                 {selectedFileId === file.id && (
-                  <View style={styles.keyFieldOptions}>
-                    {file.headers.map((header) => (
-                      Platform.OS === 'web' ? (
+                  Platform.OS === 'web' ? (
+                    <div style={{
+                      backgroundColor: DesignSystem.colors.background.primary,
+                      border: `1px solid ${DesignSystem.colors.border.medium}`,
+                      borderRadius: DesignSystem.borderRadius.sm,
+                      marginTop: DesignSystem.spacing.xs,
+                      maxHeight: '200px',
+                      overflowY: 'auto',
+                      overflowX: 'hidden',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                    }}>
+                      {file.headers.map((header) => (
                         <div
                           key={header}
                           style={{
@@ -663,7 +672,11 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
                             </span>
                           )}
                         </div>
-                      ) : (
+                      ))}
+                    </div>
+                  ) : (
+                    <ScrollView style={styles.keyFieldOptions} nestedScrollEnabled={true}>
+                      {file.headers.map((header) => (
                         <TouchableOpacity
                           key={header}
                           style={styles.keyFieldOption}
@@ -687,9 +700,9 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
                             </Text>
                           )}
                         </TouchableOpacity>
-                      )
-                    ))}
-                  </View>
+                      ))}
+                    </View>
+                  )
                 )}
               </View>
             </View>
