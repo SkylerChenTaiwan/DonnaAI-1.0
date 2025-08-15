@@ -817,18 +817,43 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
               ))}
             </View>
           </View>
-          <TouchableOpacity
-            onPress={handleMerge}
-            disabled={loading || files.length < 2}
-            style={StyleSheet.flatten([
-              styles.mergeButton,
-              (loading || files.length < 2) && styles.mergeButtonDisabled
-            ])}
-          >
-            <Text style={styles.mergeButtonText}>
+          {Platform.OS === 'web' ? (
+            <button
+              onClick={handleMerge}
+              disabled={loading || files.length < 2}
+              style={{
+                backgroundColor: (loading || files.length < 2) 
+                  ? DesignSystem.colors.border.medium 
+                  : DesignSystem.colors.primary,
+                color: DesignSystem.colors.text.inverse,
+                padding: '12px 24px',
+                borderRadius: '8px',
+                border: 'none',
+                fontSize: '14px',
+                fontWeight: '600',
+                cursor: (loading || files.length < 2) ? 'not-allowed' : 'pointer',
+                opacity: (loading || files.length < 2) ? 0.5 : 1,
+                marginTop: '16px',
+                width: '100%',
+                transition: 'background-color 0.2s'
+              }}
+            >
               {showMergePreview ? "重新合併" : "預覽及合併"}
-            </Text>
-          </TouchableOpacity>
+            </button>
+          ) : (
+            <TouchableOpacity
+              onPress={handleMerge}
+              disabled={loading || files.length < 2}
+              style={StyleSheet.flatten([
+                styles.mergeButton,
+                (loading || files.length < 2) && styles.mergeButtonDisabled
+              ])}
+            >
+              <Text style={styles.mergeButtonText}>
+                {showMergePreview ? "重新合併" : "預覽及合併"}
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       )}
 
