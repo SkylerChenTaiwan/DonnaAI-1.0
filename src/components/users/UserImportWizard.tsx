@@ -19,7 +19,7 @@ import { View,
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
-import { toast } from '@/utils/toast';
+import { toast, showSuccessToast, showErrorToast, showInfoToast } from '@/utils/toast';
 
 // 階段元件
 import UserFileUploader from './stages/UserFileUploader';
@@ -241,43 +241,29 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
    */
   const handleFilesUploaded = useCallback((newFiles: UploadedFile[]) => {
     setWizardState(prev => {
-      // 使用檔案 ID 來去重（ID 是唯一的）
-      const fileMap = new Map<string, UploadedFile>();
+      // 不過濾重複檔案，允許多個相同名稱的檔案（可能包含不同資料）
+      // 合併將在稍後的步驟中處理
+      const allFiles = [...prev.files, ...newFiles];
       
-      // 先加入現有檔案
-      prev.files.forEach(file => {
-        fileMap.set(file.id, file);
-      });
+      // 為每個檔案生成唯一 ID（如果還沒有的話）
+      const filesWithIds = allFiles.map(file => ({
+        ...file,
+        id: file.id || `file_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+      }));
       
-      // 檢查新檔案是否重複
-      let hasSkipped = false;
-      newFiles.forEach(file => {
-        // 檢查是否已存在相同名稱和行數的檔案
-        const isDuplicate = Array.from(fileMap.values()).some(
-          existingFile => 
-            existingFile.name === file.name && 
-            existingFile.rowCount === file.rowCount &&
-            existingFile.id !== file.id
-        );
-        
-        if (isDuplicate) {
-          console.log(`檔案 ${file.name} 可能重複，已跳過`);
-          hasSkipped = true;
-        } else {
-          fileMap.set(file.id, file);
-        }
-      });
+      console.log(`已載入 ${newFiles.length} 個新檔案，總共 ${filesWithIds.length} 個檔案`);
       
-      if (hasSkipped) {
-        showSuccessToast('已自動過濾重複檔案');
+      // 如果有多個相同名稱的檔案，提示用戶可以在進階模式下合併
+      const fileNames = filesWithIds.map(f => f.name);
+      const duplicateNames = fileNames.filter((name, index) => fileNames.indexOf(name) !== index);
+      
+      if (duplicateNames.length > 0 && prev.mode === 'simple') {
+        showInfoToast('檢測到相同名稱的檔案，建議切換到進階模式進行合併');
       }
-      
-      // 轉回陣列
-      const uniqueFiles = Array.from(fileMap.values());
       
       return {
         ...prev,
-        files: uniqueFiles
+        files: filesWithIds
       };
     });
   }, []);
@@ -486,18 +472,31 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
       onRequestClose={handleClose}
     >
       <View style={styles.container}>
-        {/* Header */}
+        {/* Header with Mode Toggle */}
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
               <Icon name="close" size={24} color={DesignSystem.colors.text.primary} />
             </TouchableOpacity>
-            <Text style={styles.headerTitle}>智能用戶匯入</Text>
+            <Text style={styles.headerTitle}>資料匯入精靈</Text>
           </View>
-          <UserImportModeToggle
-            mode={wizardState.mode}
-            onChange={handleModeChange}
-          />
+          {Platform.OS === 'web' ? (
+            <div style={{ 
+              display: 'flex',
+              alignItems: 'center',
+              marginRight: '16px'
+            }}>
+              <UserImportModeToggle
+                mode={wizardState.mode}
+                onChange={handleModeChange}
+              />
+            </div>
+          ) : (
+            <UserImportModeToggle
+              mode={wizardState.mode}
+              onChange={handleModeChange}
+            />
+          )}
         </View>
 
         {/* 階段指示器 */}
