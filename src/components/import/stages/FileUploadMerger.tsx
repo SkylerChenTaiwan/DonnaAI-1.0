@@ -15,6 +15,7 @@ import {
   Platform
 } from 'react-native';
 import { MaterialIcon } from '@/components/common/MaterialIcon';
+import { AdaptiveButton } from '@/components/adaptive';
 import Papa from 'papaparse';
 import { DesignSystem } from '@/theme/designSystem';
 import {
@@ -771,22 +772,14 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
 
       {/* 合併按鈕 */}
       {uploadedFiles.length > 0 && !mergedTable && (
-        <TouchableOpacity
-          style={StyleSheet.flatten([styles.mergeButton, { backgroundColor: colors.primary }])}
+        <AdaptiveButton
+          variant="primary"
           onPress={handleMerge}
           disabled={loading}
-        >
-          {loading ? (
-            <ActivityIndicator color={colors.white} />
-          ) : (
-            <>
-              <MaterialIcon name="merge-type" size={20} color={colors.white} />
-              <Text style={StyleSheet.flatten([styles.mergeButtonText, { color: colors.white }])}>
-                {uploadedFiles.length === 1 ? '確認檔案' : '合併檔案'}
-              </Text>
-            </>
-          )}
-        </TouchableOpacity>
+          loading={loading}
+          leftIcon={!loading ? <MaterialIcon name="merge-type" size={20} color="#FFFFFF" /> : undefined}
+          title={uploadedFiles.length === 1 ? '確認檔案' : '合併檔案'}
+        />
       )}
 
       {/* 合併預覽 */}
