@@ -473,61 +473,18 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
     >
       <View style={styles.container}>
         {/* Header with Mode Toggle */}
-        {Platform.OS === 'web' ? (
-          <div style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            paddingLeft: '24px',
-            paddingRight: '24px',
-            paddingTop: '16px',
-            paddingBottom: '16px',
-            borderBottom: `1px solid ${DesignSystem.colors.border.light}`
-          }}>
-            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-              <button
-                onClick={handleClose}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  padding: '8px',
-                  marginRight: '16px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                <Icon name="close" size={24} color={DesignSystem.colors.text.primary} />
-              </button>
-              <span style={{
-                fontSize: '18px',
-                fontWeight: '600',
-                color: DesignSystem.colors.text.primary
-              }}>
-                資料匯入精靈
-              </span>
-            </div>
-            <UserImportModeToggle
-              mode={wizardState.mode}
-              onChange={handleModeChange}
-            />
-          </div>
-        ) : (
-          <View style={styles.header}>
-            <View style={styles.headerLeft}>
-              <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
-                <Icon name="close" size={24} color={DesignSystem.colors.text.primary} />
-              </TouchableOpacity>
-              <Text style={styles.headerTitle}>資料匯入精靈</Text>
-            </View>
-            <UserImportModeToggle
-              mode={wizardState.mode}
-              onChange={handleModeChange}
-            />
+        <View style={styles.header}>
+          <View style={styles.headerLeft}>
+            <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
+              <Icon name="close" size={24} color={DesignSystem.colors.text.primary} />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>資料匯入精靈</Text>
           </View>
-        )}
+          <UserImportModeToggle
+            mode={wizardState.mode}
+            onChange={handleModeChange}
+          />
+        </View>
 
         {/* 階段指示器 */}
         <View style={styles.stageIndicator}>
