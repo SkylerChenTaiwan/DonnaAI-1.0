@@ -27,7 +27,7 @@ import {
   detectKeyFields,
   validateMerge,
   previewMergedData,
-  getFieldStatistics } from '@/components/import/utils/fileMerger';
+  getFieldStatistics } from '@/components/users/utils/userFileMerger';
 import { showErrorToast, showSuccessToast } from '@/utils/toast';
 import { pickDocument } from '@/utils/web-file-picker';
 import { withAlpha } from '@/utils/colorUtils';
