@@ -19,7 +19,7 @@ import { View,
 import { Icon } from '@/components/common/Icon';
 import { DesignSystem } from '@/theme/designSystem';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
-import { toast, showSuccessToast, showErrorToast, showInfoToast } from '@/utils/toast';
+import { toast, showSuccessToast, showErrorToast } from '@/utils/toast';
 
 // 階段元件
 import UserFileUploader from './stages/UserFileUploader';
@@ -237,12 +237,11 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
   }, [wizardState.mergedTable, wizardState.files, wizardState.mappings, importOrchestrator, validator]);
 
   /**
-   * 處理檔案上傳完成
+   * 處理新檔案上傳
    */
   const handleFilesUploaded = useCallback((newFiles: UploadedFile[]) => {
     setWizardState(prev => {
-      // 不過濾重複檔案，允許多個相同名稱的檔案（可能包含不同資料）
-      // 合併將在稍後的步驟中處理
+      // 將新檔案加到現有檔案列表
       const allFiles = [...prev.files, ...newFiles];
       
       // 為每個檔案生成唯一 ID（如果還沒有的話）
@@ -258,7 +257,7 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
       const duplicateNames = fileNames.filter((name, index) => fileNames.indexOf(name) !== index);
       
       if (duplicateNames.length > 0 && prev.mode === 'simple') {
-        showInfoToast('檢測到相同名稱的檔案，建議切換到進階模式進行合併');
+        toast.info('檢測到相同名稱的檔案，建議切換到進階模式進行合併');
       }
       
       return {
@@ -266,6 +265,16 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
         files: filesWithIds
       };
     });
+  }, []);
+
+  /**
+   * 處理檔案列表更新（用於刪除檔案）
+   */
+  const handleFilesUpdate = useCallback((updatedFiles: UploadedFile[]) => {
+    setWizardState(prev => ({
+      ...prev,
+      files: updatedFiles
+    }));
   }, []);
 
   /**
@@ -431,6 +440,7 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
             mergedTable={wizardState.mergedTable}
             mode={wizardState.mode}
             onFilesUploaded={handleFilesUploaded}
+            onFilesUpdate={handleFilesUpdate}
             onMergeCompleted={handleMergeCompleted}
           />
         );

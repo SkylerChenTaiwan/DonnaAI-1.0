@@ -38,6 +38,7 @@ interface UserFileUploaderProps {
   mergedTable: MergedTable | null;
   mode: 'simple' | 'advanced';
   onFilesUploaded: (files: UploadedFile[]) => void;
+  onFilesUpdate?: (files: UploadedFile[]) => void;
   onMergeCompleted: (config: MergeConfig, mergedTable: MergedTable) => void;
 }
 
@@ -47,6 +48,7 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
   mergedTable,
   mode,
   onFilesUploaded,
+  onFilesUpdate,
   onMergeCompleted }) => {
   const [loading, setLoading] = useState(false);
   const [selectedFileId, setSelectedFileId] = useState<string | null>(null);
@@ -96,8 +98,8 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
       }
 
       if (newFiles.length > 0) {
-        const updatedFiles = [...files, ...newFiles];
-        onFilesUploaded(updatedFiles);
+        // 只傳送新檔案，讓 parent 元件決定如何處理
+        onFilesUploaded(newFiles);
         
         // 偵測每個檔案的欄位類型
         const newFieldTypes = { ...fieldTypes };
@@ -447,8 +449,17 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
    * 移除檔案
    */
   const handleRemoveFile = (fileId: string) => {
+    console.log('Removing file:', fileId);
     const updatedFiles = files.filter(f => f.id !== fileId);
-    onFilesUploaded(updatedFiles);
+    console.log('Updated files after removal:', updatedFiles.map(f => ({ id: f.id, name: f.name })));
+    
+    // 使用 onFilesUpdate 來更新檔案列表（而非 onFilesUploaded）
+    if (onFilesUpdate) {
+      onFilesUpdate(updatedFiles);
+    } else {
+      // 如果沒有提供 onFilesUpdate，回退到舊行為
+      onFilesUploaded(updatedFiles);
+    }
     
     // 清理相關狀態
     const newKeyFields = { ...selectedKeyFields };
