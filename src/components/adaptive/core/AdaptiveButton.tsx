@@ -191,7 +191,12 @@ const WebButton = forwardRef<HTMLButtonElement, AdaptiveButtonProps>(
         outline: 'none',
         cursor: disabled || loading ? 'not-allowed' : 'pointer',
         transition: 'all 150ms ease',
-        userSelect: 'none' };
+        userSelect: 'none',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: size === 'small' ? '28px' : size === 'large' ? '44px' : '36px',
+        maxHeight: size === 'small' ? '32px' : size === 'large' ? '48px' : '40px' };
       
       return finalStyle;
     }, [variant, size, currentState, platformAdapter, styleAdapter, style, webStyle, disabled, loading]);
