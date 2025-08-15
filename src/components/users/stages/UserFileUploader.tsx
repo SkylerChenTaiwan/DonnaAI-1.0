@@ -743,7 +743,7 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
             欄位: {mergedTable.headers.length} 個
           </Text>
           <Text style={styles.mergeStat}>
-            匹配: {mergedTable.mergeInfo.matchedRows} 筆
+            匹配: {mergedTable.mergeInfo?.matchedRows || 0} 筆
           </Text>
         </View>
         

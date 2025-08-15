@@ -22,7 +22,12 @@ export const mergeFiles = (
     return {
       headers: [],
       data: [],
-      sourceFiles: []
+      mergeInfo: {
+        totalRows: 0,
+        matchedRows: 0,
+        unmatchedRows: 0,
+        duplicateColumns: []
+      }
     };
   }
 
@@ -31,15 +36,26 @@ export const mergeFiles = (
     return {
       headers: files[0].headers,
       data: files[0].data,
-      sourceFiles: [files[0].name],
-      keyColumn: config.keyField
+      mergeInfo: {
+        totalRows: files[0].data.length,
+        matchedRows: files[0].data.length,
+        unmatchedRows: 0,
+        duplicateColumns: []
+      }
     };
   }
 
   // 多檔案合併
   const baseFile = files[0];
   const mergedData: any[] = [...baseFile.data];
-  const sourceFiles = files.map(f => f.name);
+  let matchedRows = 0;
+  let unmatchedRows = 0;
+  
+  // 檢測重複欄位
+  const allHeaders = files.flatMap(f => f.headers);
+  const duplicateColumns = allHeaders.filter((header, index) => 
+    allHeaders.indexOf(header) !== index
+  );
   
   // 根據合併策略處理
   for (let i = 1; i < files.length; i++) {
@@ -48,6 +64,7 @@ export const mergeFiles = (
     if (config.strategy === 'append') {
       // 追加模式：直接添加所有資料
       mergedData.push(...file.data);
+      matchedRows += file.data.length;
     } else if (config.strategy === 'merge' && config.keyField) {
       // 合併模式：根據 key 欄位合併
       const existingKeys = new Set(
@@ -59,6 +76,7 @@ export const mergeFiles = (
         if (!existingKeys.has(key)) {
           mergedData.push(row);
           existingKeys.add(key);
+          unmatchedRows++;
         } else if (config.conflictResolution === 'overwrite') {
           // 覆蓋現有資料
           const index = mergedData.findIndex(
@@ -66,9 +84,12 @@ export const mergeFiles = (
           );
           if (index !== -1) {
             mergedData[index] = { ...mergedData[index], ...row };
+            matchedRows++;
           }
+        } else {
+          // skip 模式：計算匹配但跳過的資料
+          matchedRows++;
         }
-        // skip 模式：不處理重複資料
       }
     }
   }
@@ -76,8 +97,12 @@ export const mergeFiles = (
   return {
     headers: baseFile.headers,
     data: mergedData,
-    sourceFiles,
-    keyColumn: config.keyField
+    mergeInfo: {
+      totalRows: mergedData.length,
+      matchedRows: matchedRows,
+      unmatchedRows: unmatchedRows,
+      duplicateColumns: [...new Set(duplicateColumns)]
+    }
   };
 };
 
