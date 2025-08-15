@@ -24,9 +24,9 @@ export const DesignSystem = {
     button: {
       // 主要按鈕
       primary: {
-        default: '#2C2C2C',
-        hover: '#3C3C3C',
-        pressed: '#1C1C1C' },
+        default: '#2563EB',  // 品牌藍色
+        hover: '#1E40AF',    // 深一點的藍色
+        pressed: '#1E3A8A' }, // 更深的藍色
       // 次要按鈕
       secondary: {
         default: '#F7F7F7',
