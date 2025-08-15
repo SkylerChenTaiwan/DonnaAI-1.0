@@ -455,7 +455,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
                         styles.keyFieldOption,
                         {
                           backgroundColor: selectedKey === candidate.field 
-                            ? colors.primary 
+                            ? colors.button.primary.default 
                             : colors.gray100,
                           borderColor: colors.success
                         }
@@ -466,7 +466,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
                         styles.keyFieldText,
                         { 
                           color: selectedKey === candidate.field 
-                            ? colors.white 
+                            ? colors.text.inverse 
                             : colors.gray700 
                         }
                       ])}>
@@ -484,7 +484,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
                           styles.confidenceText,
                           {
                             color: selectedKey === candidate.field
-                              ? colors.white
+                              ? colors.text.inverse
                               : colors.success
                           }
                         ])}>
@@ -504,7 +504,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
                         styles.keyFieldOption,
                         {
                           backgroundColor: selectedKey === candidate.field 
-                            ? colors.primary 
+                            ? colors.button.primary.default 
                             : colors.gray100,
                           borderColor: colors.warning
                         }
@@ -515,7 +515,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
                         styles.keyFieldText,
                         { 
                           color: selectedKey === candidate.field 
-                            ? colors.white 
+                            ? colors.text.inverse 
                             : colors.gray700 
                         }
                       ])}>
@@ -533,7 +533,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
                           styles.confidenceText,
                           {
                             color: selectedKey === candidate.field
-                              ? colors.white
+                              ? colors.text.inverse
                               : colors.warning
                           }
                         ])}>
@@ -553,7 +553,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
                         styles.keyFieldOption,
                         {
                           backgroundColor: selectedKey === candidate.field 
-                            ? colors.primary 
+                            ? colors.button.primary.default 
                             : colors.gray100,
                           borderColor: colors.gray300
                         }
@@ -564,7 +564,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
                         styles.keyFieldText,
                         { 
                           color: selectedKey === candidate.field 
-                            ? colors.white 
+                            ? colors.text.inverse 
                             : colors.gray700 
                         }
                       ])}>
@@ -742,7 +742,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
                   styles.strategyOption,
                   {
                     backgroundColor: mergeStrategy === strategy 
-                      ? colors.primary 
+                      ? colors.button.primary.default 
                       : colors.gray100
                   }
                 ])}
@@ -752,7 +752,7 @@ const FileUploadMerger: React.FC<FileUploadMergerProps> = ({
                   styles.strategyText,
                   { 
                     color: mergeStrategy === strategy 
-                      ? colors.white 
+                      ? colors.text.inverse 
                       : colors.gray700 
                   }
                 ])}>
