@@ -898,8 +898,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 12,
-    height: 36  // 按鈕高度
+    gap: 12
   },
   button: {
     flexDirection: 'row',
