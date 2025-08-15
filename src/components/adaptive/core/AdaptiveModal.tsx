@@ -99,7 +99,8 @@ const getModalDimensions = (size: ModalSize) => {
     case 'large':
       return { maxWidth: 900, width: '95%', minHeight: '70vh' };
     case 'fullscreen':
-      return { width: '95vw', height: '95vh', maxWidth: '95vw', maxHeight: '95vh', minHeight: '90vh' };
+      // 修正：移除 minHeight，讓內容自適應高度
+      return { width: '95vw', height: 'auto', maxWidth: '95vw', maxHeight: '95vh' };
     default:
       return { maxWidth: 600, width: '90%' };
   }

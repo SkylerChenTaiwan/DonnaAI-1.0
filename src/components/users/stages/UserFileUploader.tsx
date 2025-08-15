@@ -683,10 +683,13 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
               </View>
             </View>
             <TouchableOpacity
-              onPress={() => handleRemoveFile(file.id)}
+              onPress={() => {
+                console.log('Remove button clicked for file:', file.id, file.name);
+                handleRemoveFile(file.id);
+              }}
               style={styles.removeButton}
             >
-              <Icon name="close-circle" size={20} color={DesignSystem.colors.gray500} />
+              <Icon name="close-circle" size={24} color={DesignSystem.colors.gray500} />
             </TouchableOpacity>
           </View>
         ))}
@@ -751,30 +754,47 @@ const UserFileUploader: React.FC<UserFileUploaderProps> = ({
 
   return (
     <View style={styles.container}>
-      {/* 上傳區域 */}
-      <TouchableOpacity
-        style={styles.uploadArea}
-        onPress={handleFileSelect}
-        disabled={loading}
-      >
-        {loading ? (
-          <ActivityIndicator size="large" color={DesignSystem.colors.primary} />
-        ) : (
-          <>
-            <Icon name="cloud-upload-outline" size={48} color={DesignSystem.colors.primary} />
-            <Text style={styles.uploadTitle}>
-              上傳用戶資料
-            </Text>
-            <Text style={styles.uploadHint}>
-              支援 CSV、Excel 格式
-              {mode === 'simple' ? '（簡易模式：單一檔案）' : '（進階模式：可選擇多個檔案合併）'}
-            </Text>
-          </>
-        )}
-      </TouchableOpacity>
+      {/* 只在沒有檔案時顯示上傳區域 */}
+      {files.length === 0 && (
+        <TouchableOpacity
+          style={styles.uploadArea}
+          onPress={handleFileSelect}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator size="large" color={DesignSystem.colors.primary} />
+          ) : (
+            <>
+              <Icon name="cloud-upload-outline" size={48} color={DesignSystem.colors.primary} />
+              <Text style={styles.uploadTitle}>
+                上傳用戶資料
+              </Text>
+              <Text style={styles.uploadHint}>
+                支援 CSV、Excel 格式
+                {mode === 'simple' ? '（簡易模式：單一檔案）' : '（進階模式：可選擇多個檔案合併）'}
+              </Text>
+            </>
+          )}
+        </TouchableOpacity>
+      )}
 
-      {/* 檔案列表 */}
-      {renderFileList()}
+      {/* 檔案列表 - 包含新增按鈕 */}
+      {files.length > 0 && (
+        <View style={styles.fileListContainer}>
+          {/* 在進階模式顯示新增檔案按鈕 */}
+          {mode === 'advanced' && (
+            <TouchableOpacity
+              style={styles.addFileButton}
+              onPress={handleFileSelect}
+              disabled={loading}
+            >
+              <Icon name="add-circle-outline" size={20} color={DesignSystem.colors.primary} />
+              <Text style={styles.addFileButtonText}>新增檔案</Text>
+            </TouchableOpacity>
+          )}
+          {renderFileList()}
+        </View>
+      )}
 
       {/* 合併選項（進階模式且有多個檔案時顯示） */}
       {console.log('Merge section render check:', { mode, filesLength: files.length, showSection: mode === 'advanced' && files.length > 1 })}
@@ -1048,6 +1068,23 @@ const styles = StyleSheet.create({
   mergeWarningText: {
     ...DesignSystem.typography.caption,
     color: DesignSystem.colors.gray600,
+    marginLeft: DesignSystem.spacing.xs,
+    fontWeight: '500' },
+  fileListContainer: {
+    flex: 1 },
+  addFileButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: DesignSystem.spacing.sm,
+    paddingHorizontal: DesignSystem.spacing.md,
+    borderWidth: 1,
+    borderColor: DesignSystem.colors.primary,
+    borderRadius: DesignSystem.borderRadius.sm,
+    marginBottom: DesignSystem.spacing.md },
+  addFileButtonText: {
+    ...DesignSystem.typography.body,
+    color: DesignSystem.colors.primary,
     marginLeft: DesignSystem.spacing.xs,
     fontWeight: '500' },
   button: {
