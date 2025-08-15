@@ -239,10 +239,35 @@ const UserImportWizard: React.FC<UserImportWizardProps> = ({
   /**
    * 處理檔案上傳完成
    */
-  const handleFilesUploaded = useCallback((files: UploadedFile[]) => {
-    setWizardState(prev => ({
-      ...prev,
-      files }));
+  const handleFilesUploaded = useCallback((newFiles: UploadedFile[]) => {
+    setWizardState(prev => {
+      // 建立一個 Map 來去重，使用檔案名和大小作為 key
+      const fileMap = new Map<string, UploadedFile>();
+      
+      // 先加入現有檔案
+      prev.files.forEach(file => {
+        const key = `${file.name}_${file.rowCount}`;
+        fileMap.set(key, file);
+      });
+      
+      // 加入新檔案，相同的會覆蓋
+      newFiles.forEach(file => {
+        const key = `${file.name}_${file.rowCount}`;
+        if (fileMap.has(key)) {
+          console.log(`檔案 ${file.name} 已存在，跳過重複檔案`);
+        } else {
+          fileMap.set(key, file);
+        }
+      });
+      
+      // 轉回陣列
+      const uniqueFiles = Array.from(fileMap.values());
+      
+      return {
+        ...prev,
+        files: uniqueFiles
+      };
+    });
   }, []);
 
   /**

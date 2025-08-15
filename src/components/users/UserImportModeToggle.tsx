@@ -118,6 +118,63 @@ const UserImportModeToggle: React.FC<UserImportModeToggleProps> = ({
     );
 
     if (Platform.OS === 'web') {
+      // 為簡易和進階選項分別創建內容
+      const webToggleContent = (
+        <>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingLeft: '16px',
+            paddingRight: '16px',
+            paddingTop: '4px',
+            paddingBottom: '4px',
+            zIndex: 2
+          }}>
+            <span style={{
+              fontSize: '14px',
+              color: mode === 'simple' ? DesignSystem.colors.primary : DesignSystem.colors.text.secondary,
+              fontWeight: mode === 'simple' ? '600' : 'normal',
+              marginRight: '4px'
+            }}>
+              ⚡ 簡易
+            </span>
+          </div>
+          
+          <div style={{
+            position: 'absolute',
+            top: '2px',
+            left: mode === 'simple' ? '2px' : 'calc(50% - 2px)',
+            width: '50%',
+            height: 'calc(100% - 4px)',
+            backgroundColor: DesignSystem.colors.background.primary,
+            borderRadius: '999px',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+            transition: 'left 0.2s ease'
+          }} />
+          
+          <div style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingLeft: '16px',
+            paddingRight: '16px',
+            paddingTop: '4px',
+            paddingBottom: '4px',
+            zIndex: 2
+          }}>
+            <span style={{
+              fontSize: '14px',
+              color: mode === 'advanced' ? DesignSystem.colors.primary : DesignSystem.colors.text.secondary,
+              fontWeight: mode === 'advanced' ? '600' : 'normal',
+              marginRight: '4px'
+            }}>
+              ⚙️ 進階
+            </span>
+          </div>
+        </>
+      );
+      
       return (
         <div
           style={{
@@ -130,10 +187,14 @@ const UserImportModeToggle: React.FC<UserImportModeToggleProps> = ({
             position: 'relative',
             cursor: disabled ? 'not-allowed' : 'pointer',
             opacity: disabled ? 0.5 : 1,
+            minWidth: '140px',
+            height: '32px',
+            alignItems: 'center',
+            justifyContent: 'space-between'
           }}
           onClick={disabled ? undefined : handleToggle}
         >
-          {toggleContent}
+          {webToggleContent}
         </div>
       );
     }
