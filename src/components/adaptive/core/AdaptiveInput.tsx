@@ -9,7 +9,6 @@ import type { CSSProperties } from 'react';
 import { PlatformAdapter } from '../platform/PlatformAdapter';
 import { DesignSystem } from '../../../theme/designSystem';
 import AdaptiveView from './AdaptiveView';
-import AdaptiveText from './AdaptiveText';
 
 // 輸入類型
 export type InputType = 
@@ -358,14 +357,16 @@ const WebInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, AdaptiveInpu
     return (
       <div className={className} style={containerStyleFinal}>
         {label && (
-          <AdaptiveText
-            variant="bodySmall"
-            color={hasError ? 'error' : 'secondary'}
-            style={{ fontWeight: '500' }}
-          >
+          <label style={{
+            display: 'block',
+            marginBottom: '4px',
+            fontSize: '14px',
+            fontWeight: '500',
+            color: hasError ? '#FF3B30' : '#8E8E93'
+          }}>
             {label}
-            {required && <span style={{ color: DesignSystem.colors.gray500 }}> *</span>}
-          </AdaptiveText>
+            {required && <span style={{ color: '#FF3B30' }}> *</span>}
+          </label>
         )}
         
         <div style={inputWrapperStyle}>
@@ -375,12 +376,13 @@ const WebInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, AdaptiveInpu
         </div>
         
         {(helperText || (typeof error === 'string' && error)) && (
-          <AdaptiveText
-            variant="caption"
-            color={hasError ? 'error' : 'tertiary'}
-          >
+          <div style={{
+            marginTop: '4px',
+            fontSize: '12px',
+            color: hasError ? '#FF3B30' : '#8E8E93'
+          }}>
             {hasError && typeof error === 'string' ? error : helperText}
-          </AdaptiveText>
+          </div>
         )}
       </div>
     );
@@ -495,17 +497,22 @@ const NativeInput = forwardRef<any, AdaptiveInputProps>(
       onBlur?.();
     }, [onBlur]);
     
+    const { Text } = require('react-native');
+    
     return (
       <AdaptiveView style={containerStyleFinal}>
         {label && (
-          <AdaptiveText
-            variant="bodySmall"
-            color={hasError ? 'error' : 'secondary'}
-            style={{ fontWeight: '500', marginBottom: DesignSystem.spacing.xs }}
+          <Text
+            style={{ 
+              fontSize: 14,
+              fontWeight: '500',
+              color: hasError ? DesignSystem.colors.gray500 : DesignSystem.colors.text.secondary,
+              marginBottom: DesignSystem.spacing.xs 
+            }}
           >
             {label}
-            {required && <AdaptiveText color="error"> *</AdaptiveText>}
-          </AdaptiveText>
+            {required && <Text style={{ color: DesignSystem.colors.gray500 }}> *</Text>}
+          </Text>
         )}
         
         <AdaptiveView style={{ position: 'relative' }}>
@@ -568,13 +575,15 @@ const NativeInput = forwardRef<any, AdaptiveInputProps>(
         </AdaptiveView>
         
         {(helperText || (typeof error === 'string' && error)) && (
-          <AdaptiveText
-            variant="caption"
-            color={hasError ? 'error' : 'tertiary'}
-            style={{ marginTop: DesignSystem.spacing.xs }}
+          <Text
+            style={{ 
+              fontSize: 12,
+              color: hasError ? DesignSystem.colors.gray500 : DesignSystem.colors.text.tertiary,
+              marginTop: DesignSystem.spacing.xs 
+            }}
           >
             {hasError && typeof error === 'string' ? error : helperText}
-          </AdaptiveText>
+          </Text>
         )}
       </AdaptiveView>
     );
