@@ -492,6 +492,165 @@ service cloud.firestore {
          request.auth.uid == resource.data.performedBy);
     }
     
+    // ========== 動態欄位系統規則 ==========
+    
+    // 欄位定義集合
+    match /fieldDefinitions/{orgId}/fields/{fieldId} {
+      // Super Admin 可以讀寫所有欄位定義
+      allow read, write, delete: if isSuperAdmin();
+      // 組織管理員可以管理組織內的欄位定義
+      allow read, write, delete: if isOrgAdmin(orgId);
+      // 組織成員可以讀取組織內的欄位定義
+      allow read: if isOrgMember(orgId);
+      // 允許建立新的欄位定義（需要是組織成員）
+      allow create: if request.auth != null && 
+        hasUserDoc() &&
+        getUserData().organizationId == orgId;
+    }
+    
+    // 分片元資料集合
+    match /shardMetadata/{metadataId} {
+      // Super Admin 可以讀寫所有分片元資料
+      allow read, write, delete: if isSuperAdmin();
+      // 檢查是否為該組織的成員（從 metadataId 中提取實體類型）
+      allow read, write: if request.auth != null && 
+        hasUserDoc();
+      // 系統可以建立分片元資料
+      allow create: if request.auth != null;
+    }
+    
+    // 分片資料集合
+    match /shards/{shardId} {
+      // Super Admin 可以讀寫所有分片資料
+      allow read, write, delete: if isSuperAdmin();
+      // 已登入用戶可以讀寫分片資料（具體權限由應用邏輯控制）
+      allow read, write: if request.auth != null && 
+        hasUserDoc();
+      // 系統可以建立分片
+      allow create: if request.auth != null;
+    }
+    
+    // 匯入會話集合
+    match /importSessions/{sessionId} {
+      // Super Admin 可以讀寫所有匯入會話
+      allow read, write, delete: if isSuperAdmin();
+      // 組織管理員可以讀寫組織內的匯入會話
+      allow read, write: if request.auth != null && 
+        hasUserDoc() &&
+        getUserData().role == 'admin' &&
+        resource.data.orgId == getUserData().organizationId;
+      // 會話建立者可以讀寫自己的匯入會話
+      allow read, write: if request.auth != null && 
+        request.auth.uid == resource.data.userId;
+      // 組織成員可以讀取組織內的匯入會話
+      allow read: if request.auth != null && 
+        hasUserDoc() &&
+        resource.data.orgId == getUserData().organizationId;
+      // 允許建立新的匯入會話
+      allow create: if request.auth != null && hasUserDoc();
+    }
+    
+    // 動態客戶資料集合（v2 版本使用分片儲存）
+    match /customers_v2/{orgId}/data/{customerId} {
+      // Super Admin 可以讀寫所有客戶資料
+      allow read, write, delete: if isSuperAdmin();
+      // 組織管理員可以管理組織內的客戶資料
+      allow read, write, delete: if isOrgAdmin(orgId);
+      // 組織成員可以讀寫組織內的客戶資料
+      allow read, write: if isOrgMember(orgId);
+      // 創建者可以讀寫自己建立的客戶資料
+      allow read, write: if request.auth != null && 
+        resource.data._metadata != null &&
+        request.auth.uid == resource.data._metadata.createdBy;
+      // 允許建立新的客戶資料
+      allow create: if request.auth != null && 
+        hasUserDoc() &&
+        getUserData().organizationId == orgId;
+    }
+    
+    // 動態記錄資料集合（v2 版本使用分片儲存）
+    match /records_v2/{orgId}/data/{recordId} {
+      // Super Admin 可以讀寫所有記錄資料
+      allow read, write, delete: if isSuperAdmin();
+      // 組織管理員可以管理組織內的記錄資料
+      allow read, write, delete: if isOrgAdmin(orgId);
+      // 組織成員可以讀寫組織內的記錄資料
+      allow read, write: if isOrgMember(orgId);
+      // 創建者可以讀寫自己建立的記錄資料
+      allow read, write: if request.auth != null && 
+        resource.data._metadata != null &&
+        request.auth.uid == resource.data._metadata.createdBy;
+      // 允許建立新的記錄資料
+      allow create: if request.auth != null && 
+        hasUserDoc() &&
+        getUserData().organizationId == orgId;
+    }
+    
+    // 動態產品資料集合（v2 版本使用分片儲存）
+    match /products_v2/{orgId}/data/{productId} {
+      // Super Admin 可以讀寫所有產品資料
+      allow read, write, delete: if isSuperAdmin();
+      // 組織管理員可以管理組織內的產品資料
+      allow read, write, delete: if isOrgAdmin(orgId);
+      // 組織成員可以讀寫組織內的產品資料
+      allow read, write: if isOrgMember(orgId);
+      // 創建者可以讀寫自己建立的產品資料
+      allow read, write: if request.auth != null && 
+        resource.data._metadata != null &&
+        request.auth.uid == resource.data._metadata.createdBy;
+      // 允許建立新的產品資料
+      allow create: if request.auth != null && 
+        hasUserDoc() &&
+        getUserData().organizationId == orgId;
+    }
+    
+    // 自訂實體資料集合（v2 版本使用分片儲存）
+    match /custom_v2/{orgId}/data/{entityId} {
+      // Super Admin 可以讀寫所有自訂實體資料
+      allow read, write, delete: if isSuperAdmin();
+      // 組織管理員可以管理組織內的自訂實體資料
+      allow read, write, delete: if isOrgAdmin(orgId);
+      // 組織成員可以讀寫組織內的自訂實體資料
+      allow read, write: if isOrgMember(orgId);
+      // 創建者可以讀寫自己建立的自訂實體資料
+      allow read, write: if request.auth != null && 
+        resource.data._metadata != null &&
+        request.auth.uid == resource.data._metadata.createdBy;
+      // 允許建立新的自訂實體資料
+      allow create: if request.auth != null && 
+        hasUserDoc() &&
+        getUserData().organizationId == orgId;
+    }
+    
+    // 欄位使用統計集合
+    match /fieldUsageStats/{orgId}/stats/{fieldId} {
+      // Super Admin 可以讀寫所有統計資料
+      allow read, write: if isSuperAdmin();
+      // 組織管理員可以讀寫組織內的統計資料
+      allow read, write: if isOrgAdmin(orgId);
+      // 組織成員可以讀取組織內的統計資料
+      allow read: if isOrgMember(orgId);
+      // 系統可以更新統計資料
+      allow write: if request.auth != null;
+    }
+    
+    // 資料品質報告集合
+    match /dataQualityReports/{orgId}/reports/{reportId} {
+      // Super Admin 可以讀寫所有品質報告
+      allow read, write, delete: if isSuperAdmin();
+      // 組織管理員可以管理組織內的品質報告
+      allow read, write, delete: if isOrgAdmin(orgId);
+      // 組織成員可以讀取組織內的品質報告
+      allow read: if isOrgMember(orgId);
+      // 報告建立者可以讀寫自己的報告
+      allow read, write: if request.auth != null && 
+        request.auth.uid == resource.data.createdBy;
+      // 允許建立新的品質報告
+      allow create: if request.auth != null && 
+        hasUserDoc() &&
+        getUserData().organizationId == orgId;
+    }
+    
     // 預設拒絕所有其他存取
     match /{document=**} {
       allow read, write: if false;

@@ -252,9 +252,7 @@ export class ShardingService {
       const metadata = metadataDoc.data() as ShardMetadata;
       
       // 使用批次刪除
-      const db = getFirebaseDb();
-      const db = getFirebaseDb();
-    const batch = writeBatch(db);
+      const batch = writeBatch(db);
       
       // 刪除所有分片
       for (let i = 0; i < metadata.totalShards; i++) {
@@ -495,7 +493,8 @@ export class ShardingService {
           const match = key.match(/^(.+)_part_(\d+)$/);
           if (match) {
             const baseKey = match[1];
-            result[baseKey] = (result[baseKey] || '') + value;
+            const currentValue = result[baseKey] ? String(result[baseKey]) : '';
+            result[baseKey] = currentValue + String(value);
           }
         }
       }

@@ -6,11 +6,11 @@
 import {
   DynamicFieldConfig,
   FieldDataType,
-  SecurityLevel,
+  FieldSecurityLevel as SecurityLevel,
   CSVAnalysisResult,
   DetectedField,
   FieldUsageStats,
-  FieldValidationRule,
+  ValidationRule as FieldValidationRule,
   createSafeFieldKey,
   isValidFieldDataType,
   FIELD_TYPE_VALIDATION_RULES,
@@ -178,7 +178,7 @@ export class DynamicFieldService {
           } catch (error) {
             result.failed++;
             result.errors.push({
-              fieldId: field.originalName,
+              fieldId: (field as DetectedField).fieldKey || 'unknown',
               error: error instanceof Error ? error.message : '未知錯誤',
             });
           }
@@ -316,7 +316,7 @@ export class DynamicFieldService {
       }
 
       // 合併更新
-      const updated: DynamicFieldConfig = {
+      let updated: DynamicFieldConfig = {
         ...existing,
         ...updates,
         id: fieldId, // 確保 ID 不變
@@ -629,8 +629,9 @@ export class DynamicFieldService {
    * 錯誤處理
    */
   private handleServiceError(message: string, error: unknown): Error {
-    if (error instanceof FirestoreError) {
-      return new Error(`${message}: ${error.message} (${error.code})`);
+    if (error && typeof error === 'object' && 'code' in error && 'message' in error) {
+      const firestoreError = error as FirestoreError;
+      return new Error(`${message}: ${firestoreError.message} (${firestoreError.code})`);
     }
     if (error instanceof Error) {
       return new Error(`${message}: ${error.message}`);
