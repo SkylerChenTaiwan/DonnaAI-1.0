@@ -5,14 +5,14 @@
 import React, { useState } from 'react';
 import {
   AdaptiveButton,
-  AdaptiveInput
+  AdaptiveInput,
+  AdaptiveView,
+  AdaptiveText,
+  AdaptiveImage
 } from '@/components/adaptive';
 import {
-  View,
-  Text,
   StyleSheet,
-  Alert,
-  Image } from 'react-native';
+  Alert } from 'react-native';
 import { Layout } from '@/components/common/Layout';
 import { signIn } from '@/services/firebase/auth';
 import { DesignSystem } from '@/theme/designSystem';
@@ -71,18 +71,18 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
 
   return (
     <Layout>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Image 
+      <AdaptiveView style={styles.container}>
+        <AdaptiveView style={styles.header}>
+          <AdaptiveImage 
             source={require('../../../assets/donna-logo.png')}
             style={styles.logo}
             resizeMode="contain"
           />
-          <Text style={styles.title}>歡迎回到 DonnaAI</Text>
-          <Text style={styles.subtitle}>您的 AI 業務助理</Text>
-        </View>
+          <AdaptiveText style={styles.title}>歡迎回到 DonnaAI</AdaptiveText>
+          <AdaptiveText style={styles.subtitle}>您的 AI 業務助理</AdaptiveText>
+        </AdaptiveView>
 
-        <View style={styles.form}>
+        <AdaptiveView style={styles.form}>
           <AdaptiveInput
             label="電子郵件"
             value={email}
@@ -92,6 +92,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
             autoCapitalize="none"
             autoComplete="email"
             error={errors.email}
+            containerStyle={{ marginBottom: 16 }}
           />
 
           <AdaptiveInput
@@ -102,10 +103,11 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
             secureTextEntry
             autoComplete="password"
             error={errors.password}
+            containerStyle={{ marginBottom: 16 }}
           />
 
           {errors.general && (
-            <Text style={styles.errorText}>{errors.general}</Text>
+            <AdaptiveText style={styles.errorText}>{errors.general}</AdaptiveText>
           )}
 
           <AdaptiveButton
@@ -115,19 +117,19 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
             style={styles.loginButton}
           />
 
-          <View style={styles.footer}>
-            <Text style={styles.footerText}>
+          <AdaptiveView style={styles.footer}>
+            <AdaptiveText style={styles.footerText}>
               還沒有帳號？{' '}
-            </Text>
+            </AdaptiveText>
             <AdaptiveButton
               title="立即註冊"
               onPress={onNavigateToRegister}
               variant="outline"
               size="small"
             />
-          </View>
-        </View>
-      </View>
+          </AdaptiveView>
+        </AdaptiveView>
+      </AdaptiveView>
     </Layout>
   );
 };
@@ -157,9 +159,7 @@ const styles = StyleSheet.create({
     color: DesignSystem.colors.text.secondary },
   form: {
     width: '100%',
-    gap: 16,
-    display: 'flex',
-    flexDirection: 'column' },
+    marginTop: 16 },
   loginButton: {
     marginTop: 8,
     marginBottom: 24 },
