@@ -12,10 +12,15 @@ import {
   FieldStatistics,
   DataQualityIssue,
   DetectedField,
+  FieldFormatting,
   createSafeFieldKey,
   isValidFieldDataType,
   FIELD_TYPE_VALIDATION_RULES,
+  CSVData,
+  CSVRow,
+  CSVCellValue,
 } from '@/types/dynamic-field-mapping';
+import { Timestamp } from 'firebase/firestore';
 
 /**
  * 欄位模式定義
@@ -56,7 +61,7 @@ export class DynamicFieldAnalyzer {
    */
   async analyzeCSV(
     headers: string[],
-    data: any[][],
+    data: CSVData,
     options?: {
       maxRows?: number;
       detectPII?: boolean;
@@ -113,7 +118,7 @@ export class DynamicFieldAnalyzer {
         fieldStatistics,
       },
       dataQuality,
-      analyzedAt: new Date() as any,
+      analyzedAt: Timestamp.fromDate(new Date()),
       processingTime: Date.now() - startTime,
     };
 
@@ -125,7 +130,7 @@ export class DynamicFieldAnalyzer {
    */
   private async analyzeField(
     header: string,
-    samples: any[],
+    samples: CSVCellValue[],
     index: number
   ): Promise<DetectedField> {
     const cleanedName = createSafeFieldKey(header);
@@ -150,7 +155,7 @@ export class DynamicFieldAnalyzer {
   /**
    * 推測資料類型
    */
-  private inferDataType(samples: any[]): { type: FieldDataType; confidence: number } {
+  private inferDataType(samples: CSVCellValue[]): { type: FieldDataType; confidence: number } {
     if (samples.length === 0) {
       return { type: 'text', confidence: 0.5 };
     }
@@ -353,7 +358,7 @@ export class DynamicFieldAnalyzer {
   /**
    * 計算欄位指標
    */
-  private calculateFieldMetrics(samples: any[]): { nullCount: number; uniqueCount: number } {
+  private calculateFieldMetrics(samples: CSVCellValue[]): { nullCount: number; uniqueCount: number } {
     const nullCount = samples.filter(s => s == null || s === '').length;
     const uniqueValues = new Set(samples.filter(s => s != null && s !== ''));
     return { nullCount, uniqueCount: uniqueValues.size };
@@ -362,7 +367,7 @@ export class DynamicFieldAnalyzer {
   /**
    * 計算統計資料
    */
-  private calculateStatistics(samples: any[]): FieldStatistics {
+  private calculateStatistics(samples: CSVCellValue[]): FieldStatistics {
     const validSamples = samples.filter(s => s != null && s !== '');
     const stats: FieldStatistics = {
       nullRatio: (samples.length - validSamples.length) / samples.length,
@@ -415,7 +420,7 @@ export class DynamicFieldAnalyzer {
   /**
    * 評估資料品質
    */
-  private assessDataQuality(fields: DetectedField[], data: any[][]): {
+  private assessDataQuality(fields: DetectedField[], data: CSVData): {
     overallScore: number;
     issues: DataQualityIssue[];
     recommendations: string[];
@@ -491,24 +496,24 @@ export class DynamicFieldAnalyzer {
   /**
    * 檢查是否為有效列
    */
-  private isValidRow(row: any[]): boolean {
+  private isValidRow(row: CSVRow): boolean {
     // 至少有一個非空值
     return row.some(value => value != null && value !== '');
   }
 
   /**
-   * 計算重複記錄數
+   * 計算重複記錄數（優化版本）
    */
-  private countDuplicates(data: any[][]): number {
-    const seen = new Set<string>();
+  private countDuplicates(data: CSVData): number {
+    const seen = new Map<string, number>();
     let duplicates = 0;
 
-    for (const row of data) {
-      const key = JSON.stringify(row);
-      if (seen.has(key)) {
+    for (let i = 0; i < data.length; i++) {
+      const fingerprint = this.createRowFingerprint(data[i]);
+      if (seen.has(fingerprint)) {
         duplicates++;
       } else {
-        seen.add(key);
+        seen.set(fingerprint, i);
       }
     }
 
@@ -516,9 +521,24 @@ export class DynamicFieldAnalyzer {
   }
 
   /**
+   * 建立資料列指紋（更高效的 hash 方法）
+   */
+  private createRowFingerprint(row: CSVRow): string {
+    let hash = 0;
+    for (const value of row) {
+      const str = String(value ?? '');
+      for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 5) - hash) + str.charCodeAt(i);
+        hash |= 0; // Convert to 32bit integer
+      }
+    }
+    return hash.toString(36);
+  }
+
+  /**
    * 計算完整度
    */
-  private calculateCompleteness(data: any[][]): number {
+  private calculateCompleteness(data: CSVData): number {
     if (data.length === 0) return 0;
 
     let totalCells = 0;
@@ -602,9 +622,9 @@ export class DynamicFieldAnalyzer {
       },
       metadata: {
         createdBy: 'system',
-        createdAt: new Date() as any,
+        createdAt: Timestamp.fromDate(new Date()),
         updatedBy: 'system',
-        updatedAt: new Date() as any,
+        updatedAt: Timestamp.fromDate(new Date()),
         source: 'csv_import',
         originalName: field.originalName,
         tags: field.semanticType ? [field.semanticType] : [],
@@ -615,7 +635,7 @@ export class DynamicFieldAnalyzer {
   /**
    * 取得預設格式化設定
    */
-  private getDefaultFormatting(field: DetectedField): any {
+  private getDefaultFormatting(field: DetectedField): FieldFormatting | undefined {
     switch (field.inferredType) {
       case 'date':
         return { dateFormat: field.possibleFormats?.[0] || 'YYYY-MM-DD' };

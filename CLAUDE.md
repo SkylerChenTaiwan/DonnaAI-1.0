@@ -449,6 +449,54 @@ PRP 文件將自動包含所有 agents 的產出，形成完整的規劃文件�
 - `/docs/ux-flows/` - UX 流程設計文件
 - `/docs/test-reports/` - 測試報告
 
+### 🚀 PRP 執行時的 Agent 協作（強制執行）
+
+#### 執行 PRP 時的自動觸發規則
+當執行 `/execute-prp [prp-file]` 時，必須遵循以下 agent 協作流程：
+
+**Phase 完成檢查點**：
+每完成一個 Phase，自動執行對應的 agents：
+
+1. **Phase 1 完成後（類型定義與分析器）**：
+   - `typescript-type-guardian`: 檢查型別安全性
+   - `code-refactor-optimizer`: 程式碼品質分析
+
+2. **Phase 2 每個服務完成後（後端服務）**：
+   - `typescript-type-guardian`: 服務介面驗證
+   - `code-refactor-optimizer`: 效能和程式碼優化
+   - `interaction-tester`: 產生單元測試
+
+3. **Phase 3 每個元件完成後（前端元件）**：
+   - `ui-visual-tester`: 視覺驗證和截圖
+   - `interaction-tester`: 互動邏輯測試
+   - `ux-journey-analyzer`: UX 流程分析
+   - `code-refactor-optimizer`: 元件優化
+
+4. **Phase 4 完成後（整合）**：
+   - `typescript-type-guardian`: 前後端介面一致性
+   - `ux-journey-analyzer`: 端對端流程驗證
+   - `interaction-tester`: 整合測試
+
+5. **Phase 5 完成後（最終驗證）**：
+   - 全面執行所有相關 agents 進行最終檢查
+
+**強制執行規則**：
+- ❌ 不執行 agents 不能進入下一個 Phase
+- ❌ Critical 問題不修復不能繼續
+- ✅ 所有 agent 輸出必須保存到 `/docs/agent-reports/[date]-prp-[number]/`
+- ✅ TodoWrite 必須包含 agent 檢查任務
+
+**Agent 執行追蹤**：
+```yaml
+TodoWrite 格式:
+- "Phase X: [開發任務]" 
+- "Phase X Agent: Run [agent-name]"  # 必須緊跟在開發任務後
+- "Phase X Agent Fix: [修復項目]"    # 根據 agent 建議的修復
+```
+
+**詳細流程文件**：
+參考 `/workflows/commands/execute-prp-with-agents.md` 了解完整的 agent 協作流程。
+
 ## 🔧 錯誤報告產生器
   觸發關鍵字: `/error-report` 或 `/錯誤報告`
   自動執行:

@@ -1117,13 +1117,14 @@ export function isValidImportStatus(status: unknown): status is ImportStatus {
  * 檢查是否為驗證錯誤
  */
 export function isValidationError(error: unknown): error is ValidationError {
+  if (typeof error !== 'object' || error === null) {
+    return false;
+  }
+  
+  const obj = error as Record<string, unknown>;
   return (
-    typeof error === 'object' &&
-    error !== null &&
-    'code' in error &&
-    'message' in error &&
-    typeof (error as any).code === 'string' &&
-    typeof (error as any).message === 'string'
+    typeof obj.code === 'string' &&
+    typeof obj.message === 'string'
   );
 }
 
@@ -1174,7 +1175,7 @@ export function createSafeFieldKey(originalName: string): string {
 /**
  * 計算文檔大小（bytes）
  */
-export function calculateDocumentSize(doc: any): number {
+export function calculateDocumentSize(doc: Record<string, unknown>): number {
   return new Blob([JSON.stringify(doc)]).size;
 }
 
@@ -1246,6 +1247,25 @@ export type NonEmptyArray<T> = [T, ...T[]];
  * 字串字面值聯合類型
  */
 export type StringLiteral<T> = T extends string ? (string extends T ? never : T) : never;
+
+// ============================================================================
+// CSV 資料類型定義
+// ============================================================================
+
+/**
+ * CSV 單元格值類型
+ */
+export type CSVCellValue = string | number | boolean | null | undefined;
+
+/**
+ * CSV 資料列類型
+ */
+export type CSVRow = CSVCellValue[];
+
+/**
+ * CSV 資料集類型
+ */
+export type CSVData = CSVRow[];
 
 // ============================================================================
 // 常量定義
