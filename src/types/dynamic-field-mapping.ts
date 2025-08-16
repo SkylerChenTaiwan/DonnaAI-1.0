@@ -29,7 +29,11 @@ export type FieldDataType =
   | 'json'           // JSON 物件
   | 'array'          // 陣列
   | 'currency'       // 貨幣
-  | 'percentage';    // 百分比
+  | 'percentage'     // 百分比
+  | 'select'         // 單選
+  | 'multiselect'    // 多選
+  | 'longtext'       // 長文字
+  | 'address';       // 地址
 
 /**
  * 欄位驗證規則類型
@@ -52,6 +56,18 @@ export type FieldSecurityLevel =
   | 'internal'       // 內部使用
   | 'confidential'   // 機密
   | 'restricted';    // 受限（需特殊權限）
+
+/**
+ * PII (個人身份資訊) 類型
+ */
+export type PIIType = 
+  | 'email' 
+  | 'phone' 
+  | 'ssn' 
+  | 'creditCard' 
+  | 'idNumber' 
+  | 'passport' 
+  | 'bankAccount';
 
 /**
  * 匯入狀態
@@ -175,6 +191,15 @@ export interface FieldSecurity {
   
   /** PII（個人識別資訊）標記 */
   isPII: boolean;
+  
+  /** PII 類型（如果是 PII） */
+  piiType?: PIIType;
+  
+  /** 遮罩設定 */
+  masking?: {
+    enabled: boolean;
+    pattern: string; // e.g., "****-****-****-{last4}"
+  };
 }
 
 /**
@@ -1071,7 +1096,8 @@ export function isValidFieldDataType(type: unknown): type is FieldDataType {
   const validTypes: FieldDataType[] = [
     'text', 'number', 'date', 'datetime', 'email', 
     'phone', 'url', 'boolean', 'json', 'array', 
-    'currency', 'percentage'
+    'currency', 'percentage', 'select', 'multiselect',
+    'longtext', 'address'
   ];
   return typeof type === 'string' && validTypes.includes(type as FieldDataType);
 }
@@ -1131,6 +1157,51 @@ export function requiresSharding(data: unknown, config: ShardingConfig): boolean
   }
   
   return false;
+}
+
+/**
+ * 建立安全的欄位 key
+ */
+export function createSafeFieldKey(originalName: string): string {
+  return originalName
+    .toLowerCase()
+    .replace(/[^a-z0-9_]/g, '_')
+    .replace(/^_+|_+$/g, '')
+    .replace(/_+/g, '_')
+    .substring(0, 50); // Firestore 欄位名稱限制
+}
+
+/**
+ * 計算文檔大小（bytes）
+ */
+export function calculateDocumentSize(doc: any): number {
+  return new Blob([JSON.stringify(doc)]).size;
+}
+
+/**
+ * 檢查是否為 PII 欄位
+ */
+export function isPIIField(config: DynamicFieldConfig): boolean {
+  return config.security.isPII === true;
+}
+
+/**
+ * 檢查是否為加密欄位
+ */
+export function isEncryptedField(config: DynamicFieldConfig): boolean {
+  return config.security.encrypted === true;
+}
+
+/**
+ * 判斷欄位是否應該在核心分片
+ */
+export function isCoreField(config: DynamicFieldConfig): boolean {
+  return (
+    config.isSystem ||
+    config.isSearchable ||
+    config.isSortable ||
+    config.usage.usageCount > 100
+  );
 }
 
 // ============================================================================
@@ -1262,6 +1333,18 @@ export const FIELD_TYPE_VALIDATION_RULES: Record<FieldDataType, ValidationRule[]
   percentage: [
     { type: 'min', value: 0, message: '百分比不能小於 0', severity: 'error' },
     { type: 'max', value: 100, message: '百分比不能大於 100', severity: 'error' }
+  ],
+  select: [
+    { type: 'enum', value: [], message: '必須是有效的選項', severity: 'error' }
+  ],
+  multiselect: [
+    { type: 'custom', value: 'isValidMultiSelect', message: '必須是有效的多選值', severity: 'error' }
+  ],
+  longtext: [
+    { type: 'maxLength', value: 50000, message: '文字長度不能超過 50000 字元', severity: 'error' }
+  ],
+  address: [
+    { type: 'maxLength', value: 500, message: '地址長度不能超過 500 字元', severity: 'error' }
   ],
 } as const;
 
