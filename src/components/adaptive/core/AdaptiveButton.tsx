@@ -237,6 +237,8 @@ const WebButton = forwardRef<HTMLButtonElement, AdaptiveButtonProps>(
     
     const handleClick = () => {
       if (!disabled && !loading) {
+        // 支援 onPress (React Native 風格) 和 onClick (Web 風格)
+        onPress?.();
         onClick?.();
       }
     };
