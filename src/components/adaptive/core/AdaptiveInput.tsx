@@ -230,18 +230,22 @@ const WebInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, AdaptiveInpu
       }
       
       // Web 特有樣式
+      const borderWidth = finalStyle.borderWidth || 1;
+      const borderColor = finalStyle.borderColor || '#E3E1DC';
+      const backgroundColor = finalStyle.backgroundColor || '#FFFFFF';
+      
       finalStyle = {
         ...finalStyle,
-        border: finalStyle.borderWidth ? 
-          `${finalStyle.borderWidth}px solid ${finalStyle.borderColor || '#E3E1DC'}` : 
-          '1px solid #E3E1DC',
+        border: `${borderWidth}px solid ${borderColor}`,
+        backgroundColor: backgroundColor,
         outline: 'none',
         transition: 'border-color 150ms ease, box-shadow 150ms ease',
         fontFamily: 'inherit',
         resize: multiline ? 'vertical' : 'none',
         minHeight: multiline && numberOfLines ? `${numberOfLines * 1.5}em` : '40px',
         width: '100%',
-        boxSizing: 'border-box' };
+        boxSizing: 'border-box',
+        borderRadius: finalStyle.borderRadius || '8px' };
       
       // 聚焦陰影 - 使用灰色避免彩色背景
       if (currentState === 'focused') {

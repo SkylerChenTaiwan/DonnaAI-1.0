@@ -184,10 +184,15 @@ const WebButton = forwardRef<HTMLButtonElement, AdaptiveButtonProps>(
       }
       
       // 添加 Web 特有的樣式
+      const borderWidth = finalStyle.borderWidth || 0;
+      const borderColor = finalStyle.borderColor || 'transparent';
+      const backgroundColor = finalStyle.backgroundColor || (variant === 'primary' ? '#007AFF' : '#F2F2F7');
+      
       finalStyle = {
         ...finalStyle,
-        border: finalStyle.borderWidth ? 
-          `${finalStyle.borderWidth}px ${finalStyle.borderStyle || 'solid'} ${finalStyle.borderColor}` : 
+        backgroundColor: backgroundColor,
+        border: borderWidth ? 
+          `${borderWidth}px ${finalStyle.borderStyle || 'solid'} ${borderColor}` : 
           'none',
         outline: 'none',
         cursor: disabled || loading ? 'not-allowed' : 'pointer',
@@ -197,7 +202,11 @@ const WebButton = forwardRef<HTMLButtonElement, AdaptiveButtonProps>(
         alignItems: 'center',
         justifyContent: 'center',
         minHeight: size === 'small' ? '28px' : size === 'large' ? '44px' : '36px',
-        maxHeight: size === 'small' ? '32px' : size === 'large' ? '48px' : '40px' };
+        padding: finalStyle.padding || '8px 16px',
+        borderRadius: finalStyle.borderRadius || '8px',
+        fontSize: finalStyle.fontSize || '16px',
+        fontWeight: finalStyle.fontWeight || '600',
+        color: finalStyle.color || (variant === 'primary' ? '#FFFFFF' : '#1C1C1E') };
       
       return finalStyle;
     }, [variant, size, currentState, platformAdapter, styleAdapter, style, webStyle, disabled, loading]);
