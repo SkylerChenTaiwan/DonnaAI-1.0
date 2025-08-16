@@ -351,6 +351,104 @@ import {
 - 例如：`/agent bug-hunter` 來追蹤特定 bug 的來源
 - 可用 agents 列表請參考 [contains-studio/agents](https://github.com/contains-studio/agents)
 
+### 🤖 自訂 Agents 整合
+
+#### PRP 工作流程 Agents
+當執行 `/generate-prp` 或 `/execute-prp` 時，以下 agents 會自動參與協作：
+
+**📝 /generate-prp 規劃驗證 Agents**：
+規劃階段自動啟動的 agents 組合：
+- **spec-writer**: 撰寫技術規格（原有）
+- **ux-flow-designer**: 設計完整用戶操作流程
+  - 產出用戶流程圖和互動步驟定義
+  - 標記關鍵決策點和用戶目標
+- **ux-journey-analyzer**: 預先分析潛在 UX 問題
+  - 驗證流程邏輯完整性
+  - 識別可能的斷點和改進機會
+- **typescript-type-guardian**: 建立型別架構
+  - 根據需求定義介面和資料模型
+  - 確保型別一致性和安全性
+- **interaction-tester**: 規劃測試策略
+  - 定義需要測試的互動點
+  - 建立測試案例框架
+- **risk-assessor**: 評估風險（原有）
+
+PRP 文件將自動包含所有 agents 的產出，形成完整的規劃文件。
+
+**🚀 /execute-prp 開發驗證 Agents**：
+開發階段（第1-3天）持續協作：
+- **backend-architect**: 後端架構設計（原有）
+- **code-refactor-optimizer**: 持續程式碼優化
+  - 每完成一個元件後自動檢查
+  - 提供重構建議和最佳實踐
+- **interaction-tester**: 增量測試
+  - 為每個新功能產生測試
+  - 驗證按鈕、表單等互動邏輯
+- **typescript-type-guardian**: 型別安全保障
+  - 即時修復型別錯誤
+  - 維護型別定義完整性
+
+整合測試階段（第4天）全面驗證：
+- **interaction-tester**: 全面互動測試
+  - 測試所有用戶路徑
+  - 驗證錯誤處理和邊界條件
+- **ui-visual-tester**: 視覺驗證
+  - 截圖對比設計稿
+  - 檢查響應式顯示和各種狀態
+- **ux-journey-analyzer**: 流程完整性驗證
+  - 確認實作符合設計
+  - 驗證用戶可順利完成目標
+
+發布準備階段（第5天）最終檢查：
+- **typescript-type-guardian**: 最終型別檢查
+- **code-refactor-optimizer**: 效能優化和程式碼清理
+- **project-shipper**: 執行發布（原有）
+
+#### Trouble-shooting Agents
+當執行 `/trouble-shooting` 時，以下測試驗證 agents 會自動參與：
+
+**🔍 問題重現階段**：
+- **test-results-analyzer**: 分析測試結果（原有）
+- **interaction-tester**: 重現問題步驟
+  - 自動化重現用戶操作
+  - 記錄問題發生條件
+  - 產生最小重現案例
+- **ux-journey-analyzer**: 分析問題脈絡
+  - 追蹤用戶如何到達問題點
+  - 識別相關的前置條件
+  - 分析影響範圍
+
+**🎯 問題定位階段**：
+- **bug-hunter**: 追蹤 bug 來源（原有）
+- **typescript-type-guardian**: 型別錯誤檢查
+  - 檢查型別不匹配問題
+  - 識別 any 類型濫用
+  - 驗證資料流型別
+- **ui-visual-tester**: 視覺差異分析
+  - 對比正常與異常狀態
+  - 截圖記錄問題現象
+  - 檢查 CSS 覆蓋問題
+
+**✅ 修復驗證階段**：
+- **test-writer-fixer**: 修復測試（原有）
+- **code-refactor-optimizer**: 提供優雅修復方案
+  - 不只修復，還要優化
+  - 防止類似問題再發生
+  - 提供長期解決方案
+- **interaction-tester**: 驗證修復效果
+  - 確認問題已解決
+  - 測試沒有引入新問題
+  - 回歸測試相關功能
+- **ux-journey-analyzer**: 確認流程恢復正常
+  - 驗證用戶流程完整
+  - 確認沒有破壞其他路徑
+
+#### Agent 協作輸出
+所有 agents 的產出會自動整合並儲存至：
+- `/docs/agent-reports/` - Agent 分析報告
+- `/docs/ux-flows/` - UX 流程設計文件
+- `/docs/test-reports/` - 測試報告
+
 ## 🔧 錯誤報告產生器
   觸發關鍵字: `/error-report` 或 `/錯誤報告`
   自動執行:
