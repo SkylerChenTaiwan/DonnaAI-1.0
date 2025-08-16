@@ -15,7 +15,7 @@ import {
   AdaptiveSelect,
   type AdaptiveViewProps,
 } from '@/components/adaptive';
-import { withAlpha } from '@/utils/colors';
+import { withAlpha } from '@/utils/colorUtils';
 import { DynamicFieldConfig, FieldDataType } from '@/types/dynamic-field-mapping';
 
 interface DynamicFieldListProps {
@@ -23,9 +23,12 @@ interface DynamicFieldListProps {
   onFieldUpdate: (field: DynamicFieldConfig) => void;
   onBatchSelect: (fieldIds: string[]) => void;
   onFieldDelete?: (fieldId: string) => void;
+  onFieldSelect?: (field: DynamicFieldConfig) => void;
   loading?: boolean;
   searchable?: boolean;
   selectable?: boolean;
+  virtualScrolling?: boolean;
+  viewMode?: 'list' | 'grid';
   style?: AdaptiveViewProps['style'];
 }
 
@@ -63,9 +66,12 @@ export const DynamicFieldList: React.FC<DynamicFieldListProps> = ({
   onFieldUpdate,
   onBatchSelect,
   onFieldDelete,
+  onFieldSelect,
   loading = false,
   searchable = true,
   selectable = true,
+  virtualScrolling = true,
+  viewMode = 'list',
   style,
 }) => {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -117,7 +123,7 @@ export const DynamicFieldList: React.FC<DynamicFieldListProps> = ({
     // 加入選擇狀態
     return filtered.map(field => ({
       ...field,
-      isSelected: selectedIds.has(field.id),
+      isSelected: selectedIds.has(field.fieldId),
     }));
   }, [fields, filters, selectedIds]);
 
@@ -145,7 +151,7 @@ export const DynamicFieldList: React.FC<DynamicFieldListProps> = ({
    */
   const handleSelectAll = useCallback((selected: boolean) => {
     if (selected) {
-      const allIds = new Set(filteredFields.map(field => field.id));
+      const allIds = new Set(filteredFields.map(field => field.fieldId));
       setSelectedIds(allIds);
       onBatchSelect(Array.from(allIds));
     } else {
@@ -158,7 +164,7 @@ export const DynamicFieldList: React.FC<DynamicFieldListProps> = ({
    * 處理欄位類型變更
    */
   const handleFieldTypeChange = useCallback((fieldId: string, newType: FieldDataType) => {
-    const field = fields.find(f => f.id === fieldId);
+    const field = fields.find(f => f.fieldId === fieldId);
     if (field) {
       const updatedField = { ...field, dataType: newType };
       onFieldUpdate(updatedField);
@@ -169,7 +175,7 @@ export const DynamicFieldList: React.FC<DynamicFieldListProps> = ({
    * 處理欄位啟用/停用
    */
   const handleFieldToggle = useCallback((fieldId: string, isActive: boolean) => {
-    const field = fields.find(f => f.id === fieldId);
+    const field = fields.find(f => f.fieldId === fieldId);
     if (field) {
       const updatedField = { ...field, isActive };
       onFieldUpdate(updatedField);
@@ -180,7 +186,7 @@ export const DynamicFieldList: React.FC<DynamicFieldListProps> = ({
    * 處理欄位刪除
    */
   const handleFieldDelete = useCallback((fieldId: string) => {
-    const field = fields.find(f => f.id === fieldId);
+    const field = fields.find(f => f.fieldId === fieldId);
     if (!field) return;
 
     if (field.isSystem) {
@@ -219,7 +225,7 @@ export const DynamicFieldList: React.FC<DynamicFieldListProps> = ({
       return;
     }
 
-    const selectedFields = fields.filter(field => selectedIds.has(field.id));
+    const selectedFields = fields.filter(field => selectedIds.has(field.fieldId));
     
     switch (operation) {
       case 'activate':
@@ -249,7 +255,7 @@ export const DynamicFieldList: React.FC<DynamicFieldListProps> = ({
               style: 'destructive',
               onPress: () => {
                 selectedFields.forEach(field => {
-                  onFieldDelete?.(field.id);
+                  onFieldDelete?.(field.fieldId);
                 });
                 setSelectedIds(new Set());
               },
@@ -281,7 +287,7 @@ export const DynamicFieldList: React.FC<DynamicFieldListProps> = ({
           {selectable && (
             <AdaptiveCheckbox
               value={item.isSelected}
-              onValueChange={(selected) => handleFieldSelect(item.id, selected)}
+              onValueChange={(selected) => handleFieldSelect(item.fieldId, selected)}
               style={{ marginRight: 12 }}
             />
           )}
@@ -300,7 +306,7 @@ export const DynamicFieldList: React.FC<DynamicFieldListProps> = ({
           <AdaptiveView style={{ flex: 1, marginRight: 16 }}>
             <AdaptiveSelect
               value={item.dataType}
-              onValueChange={(value) => handleFieldTypeChange(item.id, value as FieldDataType)}
+              onValueChange={(value) => handleFieldTypeChange(item.fieldId, value as FieldDataType)}
               options={Object.entries(DATA_TYPE_LABELS).map(([key, label]) => ({
                 label,
                 value: key,
@@ -314,7 +320,7 @@ export const DynamicFieldList: React.FC<DynamicFieldListProps> = ({
           <AdaptiveView style={{ flex: 1, marginRight: 16, alignItems: 'center' }}>
             <AdaptiveCheckbox
               value={item.isActive}
-              onValueChange={(isActive) => handleFieldToggle(item.id, isActive)}
+              onValueChange={(isActive) => handleFieldToggle(item.fieldId, isActive)}
               disabled={item.isSystem}
             />
           </AdaptiveView>
@@ -332,7 +338,7 @@ export const DynamicFieldList: React.FC<DynamicFieldListProps> = ({
           <AdaptiveView style={{ flexDirection: 'row', gap: 8 }}>
             {!item.isSystem && onFieldDelete && (
               <AdaptiveButton
-                onPress={() => handleFieldDelete(item.id)}
+                onPress={() => handleFieldDelete(item.fieldId)}
                 style={{
                   backgroundColor: '#FF3B30',
                   paddingHorizontal: 12,
@@ -372,7 +378,7 @@ export const DynamicFieldList: React.FC<DynamicFieldListProps> = ({
             {selectable && (
               <AdaptiveCheckbox
                 value={item.isSelected}
-                onValueChange={(selected) => handleFieldSelect(item.id, selected)}
+                onValueChange={(selected) => handleFieldSelect(item.fieldId, selected)}
                 style={{ marginRight: 12 }}
               />
             )}
@@ -426,7 +432,7 @@ export const DynamicFieldList: React.FC<DynamicFieldListProps> = ({
           {/* 操作按鈕 */}
           <AdaptiveView style={{ flexDirection: 'row', gap: 8 }}>
             <AdaptiveButton
-              onPress={() => handleFieldToggle(item.id, !item.isActive)}
+              onPress={() => handleFieldToggle(item.fieldId, !item.isActive)}
               disabled={item.isSystem}
               style={{
                 backgroundColor: item.isActive ? '#FF9500' : '#34C759',
@@ -443,7 +449,7 @@ export const DynamicFieldList: React.FC<DynamicFieldListProps> = ({
             
             {!item.isSystem && onFieldDelete && (
               <AdaptiveButton
-                onPress={() => handleFieldDelete(item.id)}
+                onPress={() => handleFieldDelete(item.fieldId)}
                 style={{
                   backgroundColor: '#FF3B30',
                   paddingHorizontal: 16,
@@ -616,7 +622,7 @@ export const DynamicFieldList: React.FC<DynamicFieldListProps> = ({
           ref={flashListRef}
           data={filteredFields}
           renderItem={renderFieldItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.fieldId}
           estimatedItemSize={Platform.OS === 'web' ? 60 : 160}
           showsVerticalScrollIndicator={true}
           contentContainerStyle={Platform.OS !== 'web' ? { paddingBottom: 16 } : undefined}

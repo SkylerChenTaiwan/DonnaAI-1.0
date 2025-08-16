@@ -12,7 +12,7 @@ import {
   AdaptiveButton,
   type AdaptiveViewProps,
 } from '@/components/adaptive';
-import { withAlpha } from '@/utils/colors';
+import { withAlpha } from '@/utils/colorUtils';
 
 interface FileUploaderProps {
   onFileSelect: (file: File) => void;

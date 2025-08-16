@@ -14,7 +14,7 @@ import {
   AdaptiveSelect,
   type AdaptiveViewProps,
 } from '@/components/adaptive';
-import { withAlpha } from '@/utils/colors';
+import { withAlpha } from '@/utils/colorUtils';
 import { DynamicFieldConfig, ValidationError } from '@/types/dynamic-field-mapping';
 
 interface DataPreviewTableProps {

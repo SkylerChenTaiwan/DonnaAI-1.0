@@ -42,6 +42,7 @@ import { DesignSystem } from '@/theme/designSystem';
 import { toast } from '@/utils/toast';
 import { withAlpha } from '@/utils/colorUtils';
 import { AddUserToOrganizationModal } from '@/components/organization/AddUserToOrganizationModal';
+import { CustomFieldsModal } from '@/components/organization/CustomFieldsModal';
 import { EnhancedBulkImportModal } from '@/components/users/EnhancedBulkImportModal';
 import UserImportWizard from '@/components/users/UserImportWizard';
 import { Platform  } from 'react-native';
@@ -81,6 +82,7 @@ export const OrganizationDetailScreen: React.FC = () => {
   // 用戶協助 Modal 狀態
   const [showImportWizard, setShowImportWizard] = useState(false);
   const [importTargetType, setImportTargetType] = useState<'customers' | 'users'>('customers');
+  const [showCustomFieldsModal, setShowCustomFieldsModal] = useState(false);
 
   // 功能開關狀態
   const [features, setFeatures] = useState({
@@ -699,6 +701,19 @@ export const OrganizationDetailScreen: React.FC = () => {
             loadOrganizationData(); // 重新載入組織資料
           }}
           useIntelligentMapping={true}
+        />
+      )}
+      
+      {/* 自訂欄位管理 Modal */}
+      {organization && (
+        <CustomFieldsModal
+          visible={showCustomFieldsModal}
+          organization={organization}
+          onClose={() => setShowCustomFieldsModal(false)}
+          onFieldsUpdated={() => {
+            toast.success('欄位配置已更新');
+            loadOrganizationData();
+          }}
         />
       )}
     </>
