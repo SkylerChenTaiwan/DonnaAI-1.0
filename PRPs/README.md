@@ -134,9 +134,11 @@
 - 範例：`01v-donnaai-foundation-setup.md`
 - 在編號後加上 `v-` 表示已執行完成
 
+| 118v | dynamic-field-mapping-v3-complete.md | ✅ 已完成 | 動態欄位映射系統 v3 - 100+欄位支援、分片儲存、Agent 完整測試 | 2025-08-16 |
+
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：118**
+**下一個新建的 PRP 應使用編號：119**
 
 ## PRP 類型說明
 
@@ -147,9 +149,47 @@
 - **測試** - 測試相關功能
 - **部署** - 部署和 DevOps
 
+## 🤖 Agent 測試要求（v4 版本新增）
+
+**從 PRP v4 版本開始，所有 PRP 必須使用 Agent 進行測試驗證：**
+
+### 必要 Agent 測試流程
+1. **規劃階段** - 必須執行：
+   - `spec-writer` - 技術規格撰寫
+   - `ux-flow-designer` - UX 流程設計
+   - `typescript-type-guardian` - 型別架構定義
+   - `risk-assessor` - 風險評估
+
+2. **開發階段** - 持續執行：
+   - `code-refactor-optimizer` - 程式碼優化
+   - `typescript-type-guardian` - 型別檢查
+
+3. **測試階段** - 必須全部通過：
+   - `interaction-tester` - 互動功能測試
+   - `ui-visual-tester` - 視覺一致性測試
+   - `ux-journey-analyzer` - 用戶流程驗證
+   - `typescript-type-guardian` - 型別安全檢查
+   - `code-refactor-optimizer` - 程式碼品質審查
+
+4. **發布階段** - 最終驗證：
+   - `project-shipper` - 發布檢查清單
+
+### 測試報告要求
+- 所有 Agent 測試必須生成報告
+- 報告儲存至 `/docs/tests/` 目錄
+- 測試失敗必須修復後重新測試
+- 達到 100% 互動元素覆蓋率
+
+### PRP 模板選擇
+- **PRP v3 模板** - 適用於 PRP 117 及之前（可選用 Agent）
+- **PRP v4 模板** - 適用於 PRP 118 及之後（強制使用 Agent）
+- 模板位置：`/PRPs/PRP-v4-template-with-agents.md`
+
 ## 注意事項
 
 1. 每個 PRP 都應該是自包含的，包含完整的實作指南
 2. PRP 執行前應確認所有依賴已滿足
-3. 執行完成後立即更新檔名和此 README
-4. 保持 PRP 內容使用繁體中文，檔名使用英文
+3. **新增：PRP v4 版本必須完成所有 Agent 測試才能標記為完成**
+4. 執行完成後立即更新檔名和此 README
+5. 保持 PRP 內容使用繁體中文，檔名使用英文
+6. **新增：測試報告必須完整保存供日後查證**
