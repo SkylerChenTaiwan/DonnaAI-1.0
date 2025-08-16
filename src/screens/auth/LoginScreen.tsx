@@ -136,7 +136,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
-    justifyContent: 'center' },
+    justifyContent: 'center',
+    alignItems: 'center',
+    maxWidth: 400,
+    width: '100%',
+    alignSelf: 'center' },
   header: {
     alignItems: 'center',
     marginBottom: 48 },
@@ -152,7 +156,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: DesignSystem.colors.text.secondary },
   form: {
-    width: '100%' },
+    width: '100%',
+    gap: 16,
+    display: 'flex',
+    flexDirection: 'column' },
   loginButton: {
     marginTop: 8,
     marginBottom: 24 },
