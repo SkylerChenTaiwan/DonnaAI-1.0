@@ -98,15 +98,15 @@ export interface AdaptiveInputProps {
 // 輸入樣式生成器
 const createInputStyles = (state: InputState, hasError: boolean) => {
   const baseStyle = {
-    backgroundColor: DesignSystem.colors.background.input,
+    backgroundColor: DesignSystem.colors.background.input || '#FFFFFF',
     borderWidth: 1,
-    borderColor: DesignSystem.colors.border.default,
-    borderRadius: DesignSystem.borderRadius.md,
-    paddingHorizontal: DesignSystem.spacing.md,
-    paddingVertical: DesignSystem.spacing.sm,
-    fontSize: DesignSystem.typography.body.fontSize,
-    lineHeight: DesignSystem.typography.body.lineHeight,
-    color: DesignSystem.colors.text.primary };
+    borderColor: DesignSystem.colors.border.default || '#E3E1DC',
+    borderRadius: DesignSystem.borderRadius.md || 8,
+    paddingHorizontal: DesignSystem.spacing.md || 12,
+    paddingVertical: DesignSystem.spacing.sm || 8,
+    fontSize: DesignSystem.typography.body.fontSize || 16,
+    lineHeight: DesignSystem.typography.body.lineHeight || 24,
+    color: DesignSystem.colors.text.primary || '#1C1C1E' };
   
   let stateStyle = {};
   
@@ -205,7 +205,15 @@ const WebInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, AdaptiveInpu
     const inputStyleFinal = useMemo(() => {
       const baseInputStyle = createInputStyles(currentState, hasError);
       
-      let finalStyle = styleAdapter.adaptStyle(baseInputStyle, webStyle);
+      // 修正 padding 屬性轉換
+      const webBaseStyle = {
+        ...baseInputStyle,
+        padding: `${baseInputStyle.paddingVertical || 8}px ${baseInputStyle.paddingHorizontal || 12}px`
+      };
+      delete webBaseStyle.paddingVertical;
+      delete webBaseStyle.paddingHorizontal;
+      
+      let finalStyle = styleAdapter.adaptStyle(webBaseStyle, webStyle);
       
       if (style) {
         const convertedStyle = styleAdapter.adaptStyle(style as any, webStyle);
@@ -225,13 +233,15 @@ const WebInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, AdaptiveInpu
       finalStyle = {
         ...finalStyle,
         border: finalStyle.borderWidth ? 
-          `${finalStyle.borderWidth}px solid ${finalStyle.borderColor}` : 
-          'none',
+          `${finalStyle.borderWidth}px solid ${finalStyle.borderColor || '#E3E1DC'}` : 
+          '1px solid #E3E1DC',
         outline: 'none',
         transition: 'border-color 150ms ease, box-shadow 150ms ease',
         fontFamily: 'inherit',
         resize: multiline ? 'vertical' : 'none',
-        minHeight: multiline && numberOfLines ? `${numberOfLines * 1.5}em` : undefined };
+        minHeight: multiline && numberOfLines ? `${numberOfLines * 1.5}em` : '40px',
+        width: '100%',
+        boxSizing: 'border-box' };
       
       // 聚焦陰影 - 使用灰色避免彩色背景
       if (currentState === 'focused') {
