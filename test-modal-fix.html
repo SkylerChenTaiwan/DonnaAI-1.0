@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal 修復測試</title>
+    <style>
+        /* 模擬主應用程式的樣式 */
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background: #007AFF;
+            color: white;
+            padding: 16px;
+            margin: -20px -20px 20px -20px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .button {
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .button:hover {
+            background: #0056CC;
+        }
+
+        /* 匯入修復後的 Modal 樣式 */
+        .adaptive-modal-overlay {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            z-index: 10000 !important;
+            pointer-events: auto !important;
+            display: flex !important;
+            isolation: isolate !important;
+            background-color: rgba(0, 0, 0, 0.5) !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        .adaptive-modal-content {
+            position: relative !important;
+            pointer-events: auto !important;
+            isolation: isolate !important;
+            contain: layout style paint !important;
+            background-color: #FFFFFF !important;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2) !important;
+            border-radius: 8px !important;
+            overflow: hidden !important;
+            display: flex !important;
+            flex-direction: column !important;
+            max-width: 600px !important;
+            width: 90% !important;
+            max-height: 85vh !important;
+        }
+
+        body.modal-open {
+            overflow: hidden !important;
+            position: fixed !important;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .modal-header {
+            padding: 16px;
+            border-bottom: 1px solid #E3E1DC;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-content {
+            padding: 16px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #8E8E93;
+            padding: 4px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <div class="header">
+            <h1>OrganizationDetailScreen 測試頁面</h1>
+        </div>
+        
+        <h2>模擬組織詳情頁面</h2>
+        <p>這個頁面模擬 OrganizationDetailScreen 的佈局和內容。</p>
+        
+        <button class="button" onclick="openModal()">開啟自訂欄位管理 Modal</button>
+        
+        <div style="margin-top: 20px;">
+            <h3>組織資訊</h3>
+            <p>組織名稱：測試組織</p>
+            <p>組織狀態：啟用</p>
+            <p>用戶數量：25</p>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <h3>分頁內容</h3>
+            <div>
+                <button class="button" style="background: #34C759; margin-right: 10px;">概覽</button>
+                <button class="button" style="background: #FF9500; margin-right: 10px;">用戶</button>
+                <button class="button" style="background: #FF3B30; margin-right: 10px;">計費</button>
+                <button class="button" style="background: #5856D6;">協助</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模擬 CustomFieldsModal -->
+    <div id="modal" class="adaptive-modal-overlay hidden" onclick="closeModalIfOverlay(event)">
+        <div class="adaptive-modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2 style="margin: 0; font-size: 18px; font-weight: 600;">自訂欄位管理</h2>
+                <button class="close-button" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-content">
+                <div style="margin-bottom: 16px;">
+                    <h3>檢視欄位</h3>
+                    <p>這裡是 CustomFieldsModal 的內容。修復後，這個 Modal 應該：</p>
+                    <ul>
+                        <li>✅ 正確顯示在頁面中央</li>
+                        <li>✅ 有半透明的背景遮罩</li>
+                        <li>✅ 不會溢出到主頁面左側</li>
+                        <li>✅ z-index 正確，在最上層顯示</li>
+                        <li>✅ 點擊遮罩層可以關閉</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #F2F2F7; padding: 12px; border-radius: 8px; margin-bottom: 16px;">
+                    <p style="margin: 0; font-size: 14px; color: #8E8E93;">
+                        共 0 個欄位 • 0 個系統欄位 • 0 個自訂欄位
+                    </p>
+                </div>
+
+                <div style="padding: 32px; text-align: center;">
+                    <div style="font-size: 48px; color: #C7C7CC; margin-bottom: 16px;">📁</div>
+                    <p style="color: #8E8E93;">尚未建立自訂欄位</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.remove('hidden');
+            document.body.classList.add('modal-open');
+            
+            console.log('🔍 Modal opened - checking styles:');
+            console.log('Modal zIndex:', window.getComputedStyle(modal).zIndex);
+            console.log('Modal position:', window.getComputedStyle(modal).position);
+            console.log('Modal display:', window.getComputedStyle(modal).display);
+            console.log('Body overflow:', window.getComputedStyle(document.body).overflow);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.add('hidden');
+            document.body.classList.remove('modal-open');
+            
+            console.log('✅ Modal closed');
+        }
+
+        function closeModalIfOverlay(event) {
+            if (event.target.classList.contains('adaptive-modal-overlay')) {
+                closeModal();
+            }
+        }
+
+        // ESC 鍵關閉
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const modal = document.getElementById('modal');
+                if (!modal.classList.contains('hidden')) {
+                    closeModal();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

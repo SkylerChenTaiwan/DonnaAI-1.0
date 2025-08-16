@@ -4,6 +4,7 @@
  */
 
 import React, { forwardRef, useMemo, useCallback, useEffect } from 'react';
+import './AdaptiveModal.css'; // 匯入專用樣式以確保正確顯示
 import type { ViewStyle } from 'react-native';
 import type { CSSProperties } from 'react';
 import { PlatformAdapter } from '../platform/PlatformAdapter';
@@ -106,7 +107,7 @@ const getModalDimensions = (size: ModalSize) => {
   }
 };
 
-// Web Portal 實現
+// Web Portal 實現 - 強化版本以修復渲染問題
 const WebPortal: React.FC<{ children: React.ReactNode; target?: Element }> = ({ 
   children, 
   target 
@@ -120,8 +121,25 @@ const WebPortal: React.FC<{ children: React.ReactNode; target?: Element }> = ({
   
   if (!mounted) return null;
   
-  const portalTarget = target || document.body;
-  return (window as any).ReactDOM?.createPortal(children, portalTarget) || children;
+  // 確保總是渲染到 document.body，避免錯誤的容器
+  const portalTarget = document.body;
+  
+  // 除錯資訊（僅開發模式）
+  if (typeof __DEV__ !== 'undefined' && __DEV__) {
+    console.log('🔍 WebPortal rendering to:', portalTarget);
+  }
+  
+  // 使用強化的 Portal 實現
+  try {
+    if (typeof window !== 'undefined' && window.ReactDOM?.createPortal) {
+      return window.ReactDOM.createPortal(children, portalTarget);
+    }
+  } catch (error) {
+    console.error('⚠️ Portal creation failed:', error);
+  }
+  
+  // 降級方案：直接返回內容（非 Portal 模式）
+  return children;
 };
 
 // Web 實現
@@ -175,15 +193,31 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
       return () => document.removeEventListener('keydown', handleKeyDown);
     }, [visible, closeOnEscape, onClose]);
     
-    // 防止背景滾動
+    // 防止背景滾動 - 強化版本
     useEffect(() => {
       if (!visible || !preventScroll) return;
       
-      const originalStyle = window.getComputedStyle(document.body).overflow;
+      // 添加 modal-open 類別以便 CSS 控制
+      document.body.classList.add('modal-open');
+      
+      // 備用樣式設定
+      const originalOverflow = document.body.style.overflow;
+      const originalPosition = document.body.style.position;
+      const originalWidth = document.body.style.width;
+      const originalHeight = document.body.style.height;
+      
       document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.height = '100%';
       
       return () => {
-        document.body.style.overflow = originalStyle;
+        // 清理類別和樣式
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = originalOverflow;
+        document.body.style.position = originalPosition;
+        document.body.style.width = originalWidth;
+        document.body.style.height = originalHeight;
       };
     }, [visible, preventScroll]);
     
@@ -196,7 +230,7 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
       }
     }, [visible, onShow, onDismiss]);
     
-    // 覆蓋層樣式
+    // 覆蓋層樣式 - 強化版本以修復顯示問題
     const overlayStyleFinal = useMemo(() => {
       let finalStyle: CSSProperties = {
         position: 'fixed',
@@ -211,26 +245,45 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
                    position === 'bottom' ? 'flex-end' : 'center',
         justifyContent: position === 'left' ? 'flex-start' : 
                        position === 'right' ? 'flex-end' : 'center',
-        zIndex: 1000,
+        zIndex: 10000, // 提高 z-index 確保在最上層
         padding: size === 'fullscreen' ? 0 : DesignSystem.spacing.md,
         opacity: visible ? 1 : 0,
         visibility: visible ? 'visible' : 'hidden',
-        transition: animationType === 'fade' ? 'opacity 200ms ease-in-out' : 'none' };
+        transition: animationType === 'fade' ? 'opacity 200ms ease-in-out' : 'none',
+        // 強制樣式確保不被覆蓋
+        pointerEvents: 'auto' as const,
+        backdropFilter: 'blur(2px)', // 添加背景模糊效果
+        WebkitBackdropFilter: 'blur(2px)' // Safari 支援
+      };
       
       if (overlayStyle) {
         const convertedStyle = styleAdapter.adaptStyle(overlayStyle as any);
         finalStyle = { ...finalStyle, ...convertedStyle };
       }
       
+      // 開發模式除錯資訊
+      if (typeof __DEV__ !== 'undefined' && __DEV__ && visible) {
+        console.group('🔍 AdaptiveModal Debug Info');
+        console.log('Modal visible:', visible);
+        console.log('Portal enabled:', portal);
+        console.log('Style conflicts check:', {
+          zIndex: finalStyle.zIndex,
+          position: finalStyle.position,
+          backgroundColor: finalStyle.backgroundColor,
+          pointerEvents: finalStyle.pointerEvents
+        });
+        console.groupEnd();
+      }
+      
       return finalStyle;
-    }, [overlayStyle, styleAdapter, visible, position, size, animationType]);
+    }, [overlayStyle, styleAdapter, visible, position, size, animationType, portal]);
     
     // 內容樣式
     const contentStyleFinal = useMemo(() => {
       const dimensions = getModalDimensions(size);
       
       
-      // 預設樣式
+      // 預設樣式 - 強化版本以確保正確顯示
       const defaultStyle: CSSProperties = {
         backgroundColor: '#FFFFFF',  // 強制使用白色背景
         borderRadius: size === 'fullscreen' ? 8 : DesignSystem.borderRadius.lg,
@@ -242,7 +295,11 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
         position: 'relative',
         transform: visible ? 'scale(1)' : 'scale(0.9)',
         transition: animationType === 'fade' ? 'transform 200ms ease-in-out' : 'none',
-        margin: size === 'fullscreen' ? '0' : '0'
+        margin: size === 'fullscreen' ? '0' : '0',
+        // 強制樣式確保 Modal 內容正確顯示
+        pointerEvents: 'auto' as const,
+        isolation: 'isolate', // 創建新的 stacking context
+        contain: 'layout style paint' // 優化渲染性能
       };
       
       // 使用 StylePriorityManager 處理樣式優先級
@@ -382,7 +439,7 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
     
     const modalContent = (
       <div
-        className={className}
+        className={`adaptive-modal-overlay ${className || ''}`.trim()}
         style={overlayStyleFinal}
         onClick={handleOverlayClick}
         role="dialog"
@@ -390,7 +447,7 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
         aria-label={accessibilityLabel}
         data-testid={testID}
       >
-        <div ref={ref} style={contentStyleFinal}>
+        <div ref={ref} className="adaptive-modal-content" style={contentStyleFinal}>
           {(title || subtitle || showCloseButton) && (
             <div style={headerStyleFinal}>
               <div>
