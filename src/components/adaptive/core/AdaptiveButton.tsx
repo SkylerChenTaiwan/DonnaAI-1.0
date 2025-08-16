@@ -169,17 +169,22 @@ const WebButton = forwardRef<HTMLButtonElement, AdaptiveButtonProps>(
       return 'default';
     }, [disabled, loading, isPressed, isHovered]);
     
-    // 生成按鈕樣式
+    // 生成按鈕樣式 - 使用 DesignSystem
     const buttonStyle = useMemo(() => {
-      // 基礎樣式 - 直接定義，不使用 styleAdapter
+      // 基礎樣式 - 使用 DesignSystem 定義
       let finalStyle: CSSProperties = {
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: '8px',
-        fontSize: size === 'small' ? '14px' : size === 'large' ? '18px' : '16px',
-        fontWeight: '600',
-        padding: size === 'small' ? '6px 12px' : size === 'large' ? '12px 24px' : '8px 16px',
+        borderRadius: `${DesignSystem.borderRadius.button}px`,
+        fontSize: `${DesignSystem.typography[
+          size === 'small' ? 'buttonSmall' : 
+          size === 'large' ? 'buttonLarge' : 'button'
+        ].fontSize}px`,
+        fontWeight: DesignSystem.typography.button.fontWeight,
+        padding: size === 'small' ? `6px 12px` : 
+                 size === 'large' ? `12px 24px` : 
+                 `${DesignSystem.spacing.sm}px ${DesignSystem.spacing.md}px`,
         minHeight: size === 'small' ? '28px' : size === 'large' ? '44px' : '36px',
         transition: 'all 150ms ease',
         userSelect: 'none',
@@ -188,23 +193,35 @@ const WebButton = forwardRef<HTMLButtonElement, AdaptiveButtonProps>(
         border: 'none'
       };
       
-      // 根據變體設定顏色
+      // 根據變體設定顏色 - 使用 DesignSystem 顏色
       if (variant === 'primary') {
-        finalStyle.backgroundColor = isHovered ? '#0051D5' : '#007AFF';
-        finalStyle.color = '#FFFFFF';
+        finalStyle.backgroundColor = isHovered 
+          ? DesignSystem.colors.button.primary.hover 
+          : DesignSystem.colors.button.primary.default;
+        finalStyle.color = DesignSystem.colors.text.inverse;
       } else if (variant === 'secondary') {
-        finalStyle.backgroundColor = isHovered ? '#E5E5EA' : '#F2F2F7';
-        finalStyle.color = '#1C1C1E';
+        finalStyle.backgroundColor = isHovered 
+          ? DesignSystem.colors.button.secondary.hover 
+          : DesignSystem.colors.button.secondary.default;
+        finalStyle.color = DesignSystem.colors.text.primary;
       } else if (variant === 'outline') {
-        finalStyle.backgroundColor = isHovered ? 'rgba(0, 122, 255, 0.1)' : 'transparent';
-        finalStyle.color = '#007AFF';
-        finalStyle.border = '1px solid #007AFF';
+        finalStyle.backgroundColor = isHovered 
+          ? DesignSystem.colors.button.outline.backgroundHover 
+          : DesignSystem.colors.button.outline.background;
+        finalStyle.color = DesignSystem.colors.text.primary;
+        finalStyle.border = `1px solid ${
+          isHovered 
+            ? DesignSystem.colors.button.outline.borderHover 
+            : DesignSystem.colors.button.outline.border
+        }`;
       } else if (variant === 'ghost') {
-        finalStyle.backgroundColor = isHovered ? 'rgba(0, 0, 0, 0.05)' : 'transparent';
-        finalStyle.color = '#1C1C1E';
+        finalStyle.backgroundColor = isHovered 
+          ? DesignSystem.colors.button.ghost.backgroundHover 
+          : DesignSystem.colors.button.ghost.background;
+        finalStyle.color = DesignSystem.colors.text.primary;
       } else if (variant === 'text') {
         finalStyle.backgroundColor = 'transparent';
-        finalStyle.color = '#007AFF';
+        finalStyle.color = DesignSystem.colors.button.text.color;
         finalStyle.padding = '0';
         finalStyle.minHeight = 'auto';
       }

@@ -94,14 +94,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
             autoComplete="email"
             error={errors.email}
             containerStyle={{ marginBottom: 16 }}
-            webStyle={{
-              border: '1px solid #E3E1DC',
-              backgroundColor: '#FFFFFF',
-              borderRadius: '8px',
-              padding: '12px',
-              width: '100%',
-              fontSize: '16px'
-            }}
           />
 
           <AdaptiveInput
@@ -113,14 +105,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
             autoComplete="password"
             error={errors.password}
             containerStyle={{ marginBottom: 16 }}
-            webStyle={{
-              border: '1px solid #E3E1DC',
-              backgroundColor: '#FFFFFF',
-              borderRadius: '8px',
-              padding: '12px',
-              width: '100%',
-              fontSize: '16px'
-            }}
           />
 
           {errors.general && (
@@ -132,18 +116,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
             onPress={handleLogin}
             loading={loading}
             style={styles.loginButton}
-            webStyle={{
-              backgroundColor: '#007AFF',
-              color: '#FFFFFF',
-              border: 'none',
-              borderRadius: '8px',
-              padding: '12px 24px',
-              fontSize: '16px',
-              fontWeight: '600',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              width: '100%',
-              textAlign: 'center'
-            }}
           />
 
           <View style={styles.footer}>
@@ -155,16 +127,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
               onPress={onNavigateToRegister}
               variant="outline"
               size="small"
-              webStyle={{
-                backgroundColor: 'transparent',
-                color: '#007AFF',
-                border: '1px solid #007AFF',
-                borderRadius: '6px',
-                padding: '6px 12px',
-                fontSize: '14px',
-                fontWeight: '500',
-                cursor: 'pointer'
-              }}
             />
           </View>
         </View>

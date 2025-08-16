@@ -202,15 +202,15 @@ const WebInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, AdaptiveInpu
     
     // 輸入框樣式
     const inputStyleFinal = useMemo(() => {
-      // 基礎樣式 - 直接使用，不經過 styleAdapter
+      // 使用 DesignSystem 的樣式定義
       let finalStyle: CSSProperties = {
-        backgroundColor: '#FFFFFF',
-        border: '1px solid #E3E1DC',
-        borderRadius: '8px',
-        padding: '12px',
-        fontSize: '16px',
-        lineHeight: '24px',
-        color: '#1C1C1E',
+        backgroundColor: DesignSystem.colors.background.input,
+        border: `1px solid ${DesignSystem.colors.border.default}`,
+        borderRadius: `${DesignSystem.borderRadius.md}px`,
+        padding: `${DesignSystem.spacing.sm}px ${DesignSystem.spacing.md}px`,
+        fontSize: `${DesignSystem.typography.body.fontSize}px`,
+        lineHeight: `${DesignSystem.typography.body.lineHeight}px`,
+        color: DesignSystem.colors.text.primary,
         outline: 'none',
         transition: 'border-color 150ms ease, box-shadow 150ms ease',
         fontFamily: 'inherit',
@@ -220,15 +220,15 @@ const WebInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, AdaptiveInpu
         boxSizing: 'border-box'
       };
       
-      // 錯誤狀態
+      // 錯誤狀態 - 使用正確的錯誤色
       if (hasError) {
-        finalStyle.borderColor = '#FF3B30';
+        finalStyle.borderColor = DesignSystem.colors.status.error;
       }
       
-      // 禁用狀態
+      // 禁用狀態 - 使用設計系統的禁用色
       if (disabled) {
-        finalStyle.backgroundColor = '#F2F2F7';
-        finalStyle.color = '#8E8E93';
+        finalStyle.backgroundColor = DesignSystem.colors.gray[100];
+        finalStyle.color = DesignSystem.colors.text.disabled;
         finalStyle.cursor = 'not-allowed';
       }
       
@@ -246,9 +246,10 @@ const WebInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, AdaptiveInpu
         finalStyle = { ...finalStyle, ...webStyle };
       }
       
-      // 聚焦陰影 - 使用灰色避免彩色背景
+      // 聚焦狀態 - 使用主色調
       if (currentState === 'focused') {
-        finalStyle.boxShadow = `0 0 0 2px ${DesignSystem.colors.gray300}40`;
+        finalStyle.borderColor = DesignSystem.colors.primary;
+        finalStyle.boxShadow = `0 0 0 2px ${DesignSystem.colors.primary}20`;
       }
       
       return finalStyle;
@@ -359,13 +360,13 @@ const WebInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, AdaptiveInpu
         {label && (
           <label style={{
             display: 'block',
-            marginBottom: '4px',
-            fontSize: '14px',
-            fontWeight: '500',
-            color: hasError ? '#FF3B30' : '#8E8E93'
+            marginBottom: `${DesignSystem.spacing.xs}px`,
+            fontSize: `${DesignSystem.typography.bodySmall.fontSize}px`,
+            fontWeight: DesignSystem.typography.bodySmall.fontWeight,
+            color: hasError ? DesignSystem.colors.status.error : DesignSystem.colors.text.secondary
           }}>
             {label}
-            {required && <span style={{ color: '#FF3B30' }}> *</span>}
+            {required && <span style={{ color: DesignSystem.colors.status.error }}> *</span>}
           </label>
         )}
         
@@ -377,9 +378,9 @@ const WebInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, AdaptiveInpu
         
         {(helperText || (typeof error === 'string' && error)) && (
           <div style={{
-            marginTop: '4px',
-            fontSize: '12px',
-            color: hasError ? '#FF3B30' : '#8E8E93'
+            marginTop: `${DesignSystem.spacing.xs}px`,
+            fontSize: `${DesignSystem.typography.caption.fontSize}px`,
+            color: hasError ? DesignSystem.colors.status.error : DesignSystem.colors.text.tertiary
           }}>
             {hasError && typeof error === 'string' ? error : helperText}
           </div>
