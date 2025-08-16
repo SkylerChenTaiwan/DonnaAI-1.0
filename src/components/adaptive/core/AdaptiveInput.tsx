@@ -301,6 +301,14 @@ const WebInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, AdaptiveInpu
     
     // 渲染輸入框
     const renderInput = () => {
+      // 過濾掉 React Native 特有的屬性
+      const filteredProps = { ...props };
+      delete filteredProps.keyboardType;
+      delete filteredProps.secureTextEntry;
+      delete filteredProps.autoCapitalize;
+      delete filteredProps.autoCorrect;
+      delete filteredProps.returnKeyType;
+      
       const commonProps = {
         ref: ref as any,
         value,
@@ -325,14 +333,18 @@ const WebInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, AdaptiveInpu
         spellCheck,
         tabIndex,
         style: adjustedInputStyle,
-        ...props };
+        ...filteredProps };
       
       if (multiline) {
         return React.createElement('textarea', {
           ...commonProps,
           rows: numberOfLines });
       } else {
-        const htmlType = type === 'multiline' ? 'text' : type;
+        // 處理密碼輸入 - 將 secureTextEntry 轉換為 type="password"
+        let htmlType = type === 'multiline' ? 'text' : type;
+        if (props.secureTextEntry) {
+          htmlType = 'password';
+        }
         return React.createElement('input', {
           ...commonProps,
           type: htmlType });
