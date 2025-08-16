@@ -23,6 +23,18 @@
    - ✅ 實作實際的資料匯入邏輯整合 SmartDataImporter
    - **結果**：成功建立三階段匯入精靈，支援多檔案合併、欄位映射、跨資料庫關聯設定，並提供視覺化關聯圖表
 
+2. **建立動態欄位映射系統技術規格**
+   - ✅ 分析現有專案架構和類型定義
+   - ✅ 設計完整的資料模型和 TypeScript interfaces
+   - ✅ 定義 API endpoints 規格
+   - ✅ 設計後端服務架構 (CSVAnalysisService, DynamicFieldService, BatchImportService)
+   - ✅ 規劃 Firestore 資料庫 schema 設計
+   - ✅ 制定商業邏輯規則 (欄位命名、類型推斷、資料驗證)
+   - ✅ 設計效能優化策略 (大檔案處理、快取、索引優化)
+   - ✅ 制定安全性考量 (輸入驗證、權限控制、Security Rules)
+   - ✅ 建立完整技術規格文件 `/docs/specs/dynamic-field-mapping-system.md`
+   - **結果**：建立了支援 100+ 欄位的高效能動態欄位映射系統完整技術規格，包含 AI 輔助類型推斷、智能欄位映射建議、批次匯入處理、多層快取優化等功能
+
 ### ⏳ 待處理的任務
 1. **測試與驗證三階段匯入系統**
    - ⏳ 測試檔案上傳功能
@@ -30,6 +42,14 @@
    - ⏳ 測試關聯建立與視覺化
    - ⏳ 測試實際資料匯入到 Firebase
    - ⏳ 測試錯誤處理與回復機制
+
+2. **實作動態欄位映射系統核心服務**
+   - ⏳ 實作 CSVAnalysisService (CSV 解析和分析)
+   - ⏳ 實作 DynamicFieldService (欄位定義管理)
+   - ⏳ 實作 BatchImportService (批次匯入處理)
+   - ⏳ 實作 TypeInferenceEngine (智能類型推斷)
+   - ⏳ 實作 SecurityValidator (安全性驗證)
+   - ⏳ 建立前端動態欄位映射 UI 元件
 
 ---
 
