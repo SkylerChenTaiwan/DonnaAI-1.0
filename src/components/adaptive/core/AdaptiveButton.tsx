@@ -171,56 +171,72 @@ const WebButton = forwardRef<HTMLButtonElement, AdaptiveButtonProps>(
     
     // 生成按鈕樣式
     const buttonStyle = useMemo(() => {
-      const baseStyle = createButtonStyles(variant, size, currentState, platformAdapter);
-      let finalStyle = styleAdapter.adaptStyle(baseStyle, webStyle);
-      
-      if (style) {
-        const convertedStyle = styleAdapter.adaptStyle(style as any, webStyle);
-        finalStyle = { ...finalStyle, ...convertedStyle };
-      }
-      
-      if (webStyle) {
-        finalStyle = { ...finalStyle, ...webStyle };
-      }
-      
-      // 添加 Web 特有的樣式
-      const borderWidth = finalStyle.borderWidth || 0;
-      const borderColor = finalStyle.borderColor || 'transparent';
-      const backgroundColor = finalStyle.backgroundColor || (variant === 'primary' ? '#007AFF' : '#F2F2F7');
-      
-      finalStyle = {
-        ...finalStyle,
-        backgroundColor: backgroundColor,
-        border: borderWidth ? 
-          `${borderWidth}px ${finalStyle.borderStyle || 'solid'} ${borderColor}` : 
-          'none',
-        outline: 'none',
-        cursor: disabled || loading ? 'not-allowed' : 'pointer',
-        transition: 'all 150ms ease',
-        userSelect: 'none',
+      // 基礎樣式 - 直接定義，不使用 styleAdapter
+      let finalStyle: CSSProperties = {
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
+        borderRadius: '8px',
+        fontSize: size === 'small' ? '14px' : size === 'large' ? '18px' : '16px',
+        fontWeight: '600',
+        padding: size === 'small' ? '6px 12px' : size === 'large' ? '12px 24px' : '8px 16px',
         minHeight: size === 'small' ? '28px' : size === 'large' ? '44px' : '36px',
-        padding: finalStyle.padding || '8px 16px',
-        borderRadius: finalStyle.borderRadius || '8px',
-        fontSize: finalStyle.fontSize || '16px',
-        fontWeight: finalStyle.fontWeight || '600',
-        color: finalStyle.color || (variant === 'primary' ? '#FFFFFF' : '#1C1C1E') };
+        transition: 'all 150ms ease',
+        userSelect: 'none',
+        outline: 'none',
+        cursor: disabled || loading ? 'not-allowed' : 'pointer',
+        border: 'none'
+      };
+      
+      // 根據變體設定顏色
+      if (variant === 'primary') {
+        finalStyle.backgroundColor = isHovered ? '#0051D5' : '#007AFF';
+        finalStyle.color = '#FFFFFF';
+      } else if (variant === 'secondary') {
+        finalStyle.backgroundColor = isHovered ? '#E5E5EA' : '#F2F2F7';
+        finalStyle.color = '#1C1C1E';
+      } else if (variant === 'outline') {
+        finalStyle.backgroundColor = isHovered ? 'rgba(0, 122, 255, 0.1)' : 'transparent';
+        finalStyle.color = '#007AFF';
+        finalStyle.border = '1px solid #007AFF';
+      } else if (variant === 'ghost') {
+        finalStyle.backgroundColor = isHovered ? 'rgba(0, 0, 0, 0.05)' : 'transparent';
+        finalStyle.color = '#1C1C1E';
+      } else if (variant === 'text') {
+        finalStyle.backgroundColor = 'transparent';
+        finalStyle.color = '#007AFF';
+        finalStyle.padding = '0';
+        finalStyle.minHeight = 'auto';
+      }
+      
+      // 禁用或載入狀態
+      if (disabled || loading) {
+        finalStyle.opacity = '0.5';
+      }
+      
+      // 應用自訂樣式
+      if (style && typeof style === 'object') {
+        finalStyle = { ...finalStyle, ...style };
+      }
+      
+      // webStyle 優先級最高
+      if (webStyle && typeof webStyle === 'object') {
+        finalStyle = { ...finalStyle, ...webStyle };
+      }
       
       return finalStyle;
-    }, [variant, size, currentState, platformAdapter, styleAdapter, style, webStyle, disabled, loading]);
+    }, [variant, size, isHovered, style, webStyle, disabled, loading]);
     
     // 文字樣式
     const textStyleFinal = useMemo(() => {
       let style: CSSProperties = {};
       
-      if (textStyle) {
-        style = styleAdapter.adaptStyle(textStyle as any);
+      if (textStyle && typeof textStyle === 'object') {
+        style = { ...textStyle };
       }
       
       return style;
-    }, [textStyle, styleAdapter]);
+    }, [textStyle]);
     
     // 事件處理
     const handleMouseEnter = () => {

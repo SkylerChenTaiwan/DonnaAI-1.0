@@ -203,49 +203,49 @@ const WebInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, AdaptiveInpu
     
     // 輸入框樣式
     const inputStyleFinal = useMemo(() => {
-      const baseInputStyle = createInputStyles(currentState, hasError);
-      
-      // 修正 padding 屬性轉換
-      const webBaseStyle = {
-        ...baseInputStyle,
-        padding: `${baseInputStyle.paddingVertical || 8}px ${baseInputStyle.paddingHorizontal || 12}px`
-      };
-      delete webBaseStyle.paddingVertical;
-      delete webBaseStyle.paddingHorizontal;
-      
-      let finalStyle = styleAdapter.adaptStyle(webBaseStyle, webStyle);
-      
-      if (style) {
-        const convertedStyle = styleAdapter.adaptStyle(style as any, webStyle);
-        finalStyle = { ...finalStyle, ...convertedStyle };
-      }
-      
-      if (inputStyle) {
-        const convertedInputStyle = styleAdapter.adaptStyle(inputStyle as any);
-        finalStyle = { ...finalStyle, ...convertedInputStyle };
-      }
-      
-      if (webStyle) {
-        finalStyle = { ...finalStyle, ...webStyle };
-      }
-      
-      // Web 特有樣式
-      const borderWidth = finalStyle.borderWidth || 1;
-      const borderColor = finalStyle.borderColor || '#E3E1DC';
-      const backgroundColor = finalStyle.backgroundColor || '#FFFFFF';
-      
-      finalStyle = {
-        ...finalStyle,
-        border: `${borderWidth}px solid ${borderColor}`,
-        backgroundColor: backgroundColor,
+      // 基礎樣式 - 直接使用，不經過 styleAdapter
+      let finalStyle: CSSProperties = {
+        backgroundColor: '#FFFFFF',
+        border: '1px solid #E3E1DC',
+        borderRadius: '8px',
+        padding: '12px',
+        fontSize: '16px',
+        lineHeight: '24px',
+        color: '#1C1C1E',
         outline: 'none',
         transition: 'border-color 150ms ease, box-shadow 150ms ease',
         fontFamily: 'inherit',
         resize: multiline ? 'vertical' : 'none',
         minHeight: multiline && numberOfLines ? `${numberOfLines * 1.5}em` : '40px',
         width: '100%',
-        boxSizing: 'border-box',
-        borderRadius: finalStyle.borderRadius || '8px' };
+        boxSizing: 'border-box'
+      };
+      
+      // 錯誤狀態
+      if (hasError) {
+        finalStyle.borderColor = '#FF3B30';
+      }
+      
+      // 禁用狀態
+      if (disabled) {
+        finalStyle.backgroundColor = '#F2F2F7';
+        finalStyle.color = '#8E8E93';
+        finalStyle.cursor = 'not-allowed';
+      }
+      
+      // 應用自訂樣式
+      if (style && typeof style === 'object') {
+        finalStyle = { ...finalStyle, ...style };
+      }
+      
+      if (inputStyle && typeof inputStyle === 'object') {
+        finalStyle = { ...finalStyle, ...inputStyle };
+      }
+      
+      // webStyle 優先級最高
+      if (webStyle && typeof webStyle === 'object') {
+        finalStyle = { ...finalStyle, ...webStyle };
+      }
       
       // 聚焦陰影 - 使用灰色避免彩色背景
       if (currentState === 'focused') {
@@ -253,7 +253,7 @@ const WebInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, AdaptiveInpu
       }
       
       return finalStyle;
-    }, [currentState, hasError, styleAdapter, style, webStyle, inputStyle, multiline, numberOfLines]);
+    }, [currentState, hasError, disabled, style, webStyle, inputStyle, multiline, numberOfLines]);
     
     // 事件處理
     const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
