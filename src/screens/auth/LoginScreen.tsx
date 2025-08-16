@@ -5,14 +5,15 @@
 import React, { useState } from 'react';
 import {
   AdaptiveButton,
-  AdaptiveInput,
-  AdaptiveView,
-  AdaptiveText,
-  AdaptiveImage
+  AdaptiveInput
 } from '@/components/adaptive';
 import {
+  View,
+  Text,
   StyleSheet,
-  Alert } from 'react-native';
+  Alert,
+  Image,
+  Platform } from 'react-native';
 import { Layout } from '@/components/common/Layout';
 import { signIn } from '@/services/firebase/auth';
 import { DesignSystem } from '@/theme/designSystem';
@@ -71,18 +72,18 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
 
   return (
     <Layout>
-      <AdaptiveView style={styles.container}>
-        <AdaptiveView style={styles.header}>
-          <AdaptiveImage 
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Image 
             source={require('../../../assets/donna-logo.png')}
             style={styles.logo}
             resizeMode="contain"
           />
-          <AdaptiveText style={styles.title}>歡迎回到 DonnaAI</AdaptiveText>
-          <AdaptiveText style={styles.subtitle}>您的 AI 業務助理</AdaptiveText>
-        </AdaptiveView>
+          <Text style={styles.title}>歡迎回到 DonnaAI</Text>
+          <Text style={styles.subtitle}>您的 AI 業務助理</Text>
+        </View>
 
-        <AdaptiveView style={styles.form}>
+        <View style={styles.form}>
           <AdaptiveInput
             label="電子郵件"
             value={email}
@@ -107,7 +108,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
           />
 
           {errors.general && (
-            <AdaptiveText style={styles.errorText}>{errors.general}</AdaptiveText>
+            <Text style={styles.errorText}>{errors.general}</Text>
           )}
 
           <AdaptiveButton
@@ -117,19 +118,19 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
             style={styles.loginButton}
           />
 
-          <AdaptiveView style={styles.footer}>
-            <AdaptiveText style={styles.footerText}>
+          <View style={styles.footer}>
+            <Text style={styles.footerText}>
               還沒有帳號？{' '}
-            </AdaptiveText>
+            </Text>
             <AdaptiveButton
               title="立即註冊"
               onPress={onNavigateToRegister}
               variant="outline"
               size="small"
             />
-          </AdaptiveView>
-        </AdaptiveView>
-      </AdaptiveView>
+          </View>
+        </View>
+      </View>
     </Layout>
   );
 };
@@ -140,9 +141,12 @@ const styles = StyleSheet.create({
     padding: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    maxWidth: 400,
-    width: '100%',
-    alignSelf: 'center' },
+    ...(Platform.OS === 'web' ? {
+      maxWidth: 400,
+      width: '100%',
+      marginLeft: 'auto',
+      marginRight: 'auto'
+    } : {}) },
   header: {
     alignItems: 'center',
     marginBottom: 48 },
