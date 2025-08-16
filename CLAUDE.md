@@ -92,6 +92,29 @@
 - **Always confirm file paths and module names** exist before referencing them in code or tests.
 - **Never delete or overwrite existing code** unless explicitly instructed to or if part of a task from `TASK.md`.
 
+### 🤖 Agent 優先使用原則（重要！）
+- **生成程式碼前**：先檢查是否有適合的 Agent 可以協助
+  - `code-refactor-optimizer`: 程式碼品質和最佳實踐
+  - `typescript-type-guardian`: TypeScript 型別安全
+  - `ux-flow-designer`: UI/UX 流程設計
+- **遇到錯誤時**：優先使用 Agent 分析問題
+  - `test-results-analyzer`: 測試失敗分析
+  - `bug-hunter`: 追蹤 bug 來源
+  - `interaction-tester`: 互動測試和驗證
+- **修改 UI 元件時**：必須使用 Agent 驗證
+  - `ui-visual-tester`: 視覺驗證
+  - `code-refactor-optimizer`: 確保符合設計規範
+  - `ux-journey-analyzer`: 驗證用戶體驗
+- **Agent 自動觸發情境**：
+  - 發現硬編碼顏色或樣式 → 自動啟動 `code-refactor-optimizer`
+  - TypeScript 編譯錯誤 → 自動啟動 `typescript-type-guardian`
+  - UI 元件不符合設計規範 → 自動啟動 `code-refactor-optimizer`
+  - 測試失敗 → 自動啟動 `test-results-analyzer`
+- **使用 Agent 的優先順序**：
+  1. 先使用分析型 Agent 了解問題
+  2. 再使用修復型 Agent 解決問題
+  3. 最後使用驗證型 Agent 確認修復
+
 ### 🎨 UI/UX 開發原則
 - **避免重複的標題區塊** - 如果 Layout 元件已經提供 header 功能，不要在內容中再建立一個標題區塊
 - **善用 Layout headerProps** - 使用 `headerProps` 屬性設定標題、返回按鈕、右側元件等
