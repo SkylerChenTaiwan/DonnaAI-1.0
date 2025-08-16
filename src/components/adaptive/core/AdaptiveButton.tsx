@@ -141,6 +141,7 @@ const WebButton = forwardRef<HTMLButtonElement, AdaptiveButtonProps>(
     leftIcon,
     rightIcon,
     iconOnly = false,
+    onPress,  // 加入 onPress
     onClick,
     onMouseEnter,
     onMouseLeave,
