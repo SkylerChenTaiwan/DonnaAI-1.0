@@ -705,11 +705,14 @@ export const OrganizationDetailScreen: React.FC = () => {
       )}
       
       {/* 自訂欄位管理 Modal */}
-      {organization && (
+      {organization && showCustomFieldsModal && (
         <CustomFieldsModal
           visible={showCustomFieldsModal}
           organization={organization}
-          onClose={() => setShowCustomFieldsModal(false)}
+          onClose={() => {
+            console.log('Closing CustomFieldsModal');
+            setShowCustomFieldsModal(false);
+          }}
           onFieldsUpdated={() => {
             toast.success('欄位配置已更新');
             loadOrganizationData();

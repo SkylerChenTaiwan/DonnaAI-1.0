@@ -1,39 +1,6 @@
-/* AdaptiveModal 專用樣式 - 確保正確顯示 */
-/* 這些樣式使用高優先級選擇器和 !important 來覆蓋可能的衝突 */
+/* AdaptiveModal 專用樣式 - 防止外部 CSS 干擾 */
 
-/* Modal 遮罩層 */
-.adaptive-modal-overlay {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  z-index: 10000 !important;
-  pointer-events: auto !important;
-  display: flex !important;
-  isolation: isolate !important;
-}
-
-/* Modal 內容容器 */
-.adaptive-modal-content {
-  position: relative !important;
-  pointer-events: auto !important;
-  isolation: isolate !important;
-  contain: layout style paint !important;
-  background-color: #FFFFFF !important;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2) !important;
-  border-radius: 8px !important;
-  overflow: hidden !important;
-  display: flex !important;
-  flex-direction: column !important;
-}
-
-/* 確保 Modal 在所有情況下都正確顯示 */
-.adaptive-modal-overlay * {
-  box-sizing: border-box !important;
-}
-
-/* 防止背景滾動 */
+/* 防止頁面滾動 */
 body.modal-open {
   overflow: hidden !important;
   position: fixed !important;
@@ -41,26 +8,107 @@ body.modal-open {
   height: 100% !important;
 }
 
-/* 確保 Modal 內容不會被其他樣式影響 */
-.adaptive-modal-content > * {
-  position: relative !important;
-  z-index: 1 !important;
+/* Modal 覆蓋層 */
+.adaptive-modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 10000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  animation: fadeIn 0.2s ease-in-out;
 }
 
-/* 響應式支援 */
-@media (max-width: 768px) {
-  .adaptive-modal-content {
-    margin: 16px !important;
-    width: calc(100% - 32px) !important;
-    max-width: calc(100% - 32px) !important;
-    max-height: calc(100vh - 32px) !important;
+/* Modal 內容容器 */
+.adaptive-modal-content {
+  background-color: #ffffff !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2) !important;
+  max-height: 85vh !important;
+  overflow: hidden !important;
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  animation: slideUp 0.3s ease-out;
+  pointer-events: auto !important;
+  isolation: isolate !important;
+  contain: layout style paint;
+}
+
+/* 動畫 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
-/* 確保在所有容器中都能正確顯示 */
-#root .adaptive-modal-overlay,
-[data-reactroot] .adaptive-modal-overlay,
-.App .adaptive-modal-overlay {
-  position: fixed !important;
-  z-index: 10000 !important;
+@keyframes slideUp {
+  from {
+    transform: translateY(20px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* 響應式調整 */
+@media (max-width: 768px) {
+  .adaptive-modal-overlay {
+    padding: 16px !important;
+  }
+  
+  .adaptive-modal-content {
+    max-height: 90vh !important;
+    width: 100% !important;
+    max-width: calc(100vw - 32px) !important;
+  }
+}
+
+/* 全螢幕模式 */
+.adaptive-modal-fullscreen .adaptive-modal-content {
+  width: 95vw !important;
+  height: 95vh !important;
+  max-width: 95vw !important;
+  max-height: 95vh !important;
+  border-radius: 8px !important;
+}
+
+/* 防止內容溢出 */
+.adaptive-modal-content > * {
+  min-height: 0;
+  flex-shrink: 0;
+}
+
+/* 確保滾動區域正常工作 */
+.adaptive-modal-content > div:nth-child(2) {
+  overflow-y: auto !important;
+  flex: 1 !important;
+  min-height: 0 !important;
+}
+
+/* 防止外部樣式干擾 */
+.adaptive-modal-overlay * {
+  box-sizing: border-box !important;
+}
+
+/* 修復按鈕區域 */
+.adaptive-modal-content > div:last-child {
+  flex-shrink: 0;
+}
+
+/* 確保 Portal 根元素不被隱藏 */
+body > .adaptive-modal-overlay {
+  display: flex !important;
+  visibility: visible !important;
 }

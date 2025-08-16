@@ -4,6 +4,7 @@
  */
 
 import React, { forwardRef, useMemo, useCallback, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import './AdaptiveModal.css'; // 匯入專用樣式以確保正確顯示
 import type { ViewStyle } from 'react-native';
 import type { CSSProperties } from 'react';
@@ -122,24 +123,21 @@ const WebPortal: React.FC<{ children: React.ReactNode; target?: Element }> = ({
   if (!mounted) return null;
   
   // 確保總是渲染到 document.body，避免錯誤的容器
-  const portalTarget = document.body;
+  const portalTarget = target || document.body;
   
   // 除錯資訊（僅開發模式）
-  if (typeof __DEV__ !== 'undefined' && __DEV__) {
+  if (process.env.NODE_ENV === 'development') {
     console.log('🔍 WebPortal rendering to:', portalTarget);
   }
   
-  // 使用強化的 Portal 實現
-  try {
-    if (typeof window !== 'undefined' && window.ReactDOM?.createPortal) {
-      return window.ReactDOM.createPortal(children, portalTarget);
-    }
-  } catch (error) {
-    console.error('⚠️ Portal creation failed:', error);
+  // 使用正確的 ReactDOM.createPortal
+  if (typeof window !== 'undefined' && ReactDOM && ReactDOM.createPortal) {
+    return ReactDOM.createPortal(children, portalTarget);
   }
   
   // 降級方案：直接返回內容（非 Portal 模式）
-  return children;
+  console.warn('⚠️ ReactDOM.createPortal not available, falling back to direct render');
+  return <>{children}</>;
 };
 
 // Web 實現
