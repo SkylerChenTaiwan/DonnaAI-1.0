@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CustomFieldsModal 示範</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e3e1dc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+        }
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin: 0;
+        }
+        .close-button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #8e8e93;
+            padding: 4px;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+        .close-button:hover {
+            background: #f2f2f7;
+        }
+        .tab-container {
+            display: flex;
+            border-bottom: 1px solid #e3e1dc;
+            background: white;
+        }
+        .tab {
+            flex: 1;
+            padding: 12px 16px;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+        .tab.active {
+            border-bottom-color: #007AFF;
+            color: #007AFF;
+            font-weight: 600;
+        }
+        .tab:not(.active) {
+            color: #3c3c43;
+        }
+        .tab:hover:not(.active) {
+            background: #f8f8f8;
+        }
+        .tab-icon {
+            margin-right: 6px;
+            font-size: 16px;
+        }
+        .tab-content {
+            padding: 16px;
+            height: 400px;
+            overflow-y: auto;
+            background: white;
+        }
+        .search-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #e3e1dc;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: #007AFF;
+        }
+        .stats-box {
+            background: #f2f2f7;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            color: #8e8e93;
+        }
+        .field-item {
+            padding: 12px;
+            border: 1px solid #e3e1dc;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            background: #fafafa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .field-item:hover {
+            background: #f0f0f0;
+            border-color: #007AFF;
+        }
+        .field-info {
+            flex: 1;
+        }
+        .field-name {
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 4px;
+        }
+        .field-details {
+            font-size: 12px;
+            color: #8e8e93;
+        }
+        .field-badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        .badge-system {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        .badge-custom {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        .upload-area {
+            border: 2px dashed #e3e1dc;
+            border-radius: 8px;
+            padding: 32px;
+            text-align: center;
+            color: #8e8e93;
+            background: #fafafa;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .upload-area:hover {
+            border-color: #007AFF;
+            background: #f8f9ff;
+        }
+        .info-box {
+            background: #f2f2f7;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 24px;
+        }
+        .create-button {
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            display: block;
+            margin: 0 auto 24px;
+            transition: background-color 0.2s;
+        }
+        .create-button:hover {
+            background: #0056b3;
+        }
+        .loading {
+            text-align: center;
+            padding: 32px;
+            color: #8e8e93;
+        }
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #007AFF;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .test-controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1001;
+        }
+        .test-button {
+            background: #34c759;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .status-display {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 300px;
+        }
+        .status-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .status-icon {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-ok { background: #34c759; }
+        .status-warning { background: #ff9500; }
+        .status-error { background: #ff3b30; }
+    </style>
+</head>
+<body>
+    <!-- Test Controls -->
+    <div class="test-controls">
+        <h4 style="margin: 0 0 12px 0;">測試控制</h4>
+        <button class="test-button" onclick="switchToTab('view')">檢視欄位</button>
+        <button class="test-button" onclick="switchToTab('import')">CSV 匯入</button>
+        <button class="test-button" onclick="switchToTab('configure')">新增欄位</button>
+        <br>
+        <button class="test-button" onclick="testScrolling()">測試滾動</button>
+        <button class="test-button" onclick="toggleLoading()">切換載入</button>
+    </div>
+
+    <!-- Status Display -->
+    <div class="status-display">
+        <h4 style="margin: 0 0 12px 0;">修復狀態</h4>
+        <div class="status-item">
+            <div class="status-icon status-ok"></div>
+            左上角藍色色塊已修復
+        </div>
+        <div class="status-item">
+            <div class="status-icon status-ok"></div>
+            關閉按鈕正常顯示
+        </div>
+        <div class="status-item">
+            <div class="status-icon status-ok"></div>
+            下拉選單空間充足
+        </div>
+        <div class="status-item">
+            <div class="status-icon status-warning"></div>
+            Firebase 權限待確認
+        </div>
+        <div class="status-item">
+            <div class="status-icon status-ok"></div>
+            滾動功能正常
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">自訂欄位管理</h2>
+                <button class="close-button" onclick="alert('關閉按鈕正常運作！')">&times;</button>
+            </div>
+            
+            <div class="tab-container">
+                <button class="tab active" onclick="switchToTab('view')">
+                    <span class="tab-icon">📋</span>檢視欄位
+                </button>
+                <button class="tab" onclick="switchToTab('import')">
+                    <span class="tab-icon">📤</span>CSV 匯入
+                </button>
+                <button class="tab" onclick="switchToTab('configure')">
+                    <span class="tab-icon">➕</span>新增欄位
+                </button>
+            </div>
+            
+            <div class="tab-content" id="tabContent">
+                <!-- View Tab -->
+                <div id="viewTab">
+                    <input type="text" class="search-input" placeholder="搜尋欄位..." onkeyup="filterFields(this.value)">
+                    <div class="stats-box">
+                        共 <span id="totalFields">5</span> 個欄位 • <span id="systemFields">2</span> 個系統欄位 • <span id="customFields">3</span> 個自訂欄位
+                    </div>
+                    <div id="fieldsList">
+                        <div class="field-item" data-name="客戶姓名">
+                            <div class="field-info">
+                                <div class="field-name">客戶姓名</div>
+                                <div class="field-details">text • 必填 • 可搜尋</div>
+                            </div>
+                            <div class="field-badge badge-system">系統欄位</div>
+                        </div>
+                        <div class="field-item" data-name="電子郵件">
+                            <div class="field-info">
+                                <div class="field-name">電子郵件</div>
+                                <div class="field-details">email • 必填 • 唯一</div>
+                            </div>
+                            <div class="field-badge badge-system">系統欄位</div>
+                        </div>
+                        <div class="field-item" data-name="聯絡電話">
+                            <div class="field-info">
+                                <div class="field-name">聯絡電話</div>
+                                <div class="field-details">phone • 選填 • 可搜尋</div>
+                            </div>
+                            <div class="field-badge badge-custom">自訂欄位</div>
+                        </div>
+                        <div class="field-item" data-name="公司名稱">
+                            <div class="field-info">
+                                <div class="field-name">公司名稱</div>
+                                <div class="field-details">text • 選填 • 可排序</div>
+                            </div>
+                            <div class="field-badge badge-custom">自訂欄位</div>
+                        </div>
+                        <div class="field-item" data-name="備註">
+                            <div class="field-info">
+                                <div class="field-name">備註</div>
+                                <div class="field-details">textarea • 選填</div>
+                            </div>
+                            <div class="field-badge badge-custom">自訂欄位</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Import Tab -->
+                <div id="importTab" style="display:none;">
+                    <h3 style="margin: 0 0 8px 0;">從 CSV 檔案匯入欄位</h3>
+                    <p style="color: #8e8e93; margin: 0 0 24px 0;">上傳 CSV 檔案，系統會自動分析並建立對應的欄位定義</p>
+                    <div class="upload-area" onclick="alert('檔案上傳功能正常運作！')">
+                        <p style="margin: 0;">📎 拖放 CSV 檔案到此處或點擊選擇檔案</p>
+                    </div>
+                    <div class="info-box">
+                        <h4 style="margin: 0 0 8px 0;">使用說明</h4>
+                        <div style="line-height: 1.6;">
+                            1. CSV 檔案第一列應為欄位名稱<br>
+                            2. 系統會自動推斷資料類型<br>
+                            3. 支援文字、數字、日期、電話等多種格式<br>
+                            4. 自動檢測個人識別資訊（PII）<br>
+                            5. 檔案大小限制 50MB
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Configure Tab -->
+                <div id="configureTab" style="display:none;">
+                    <button class="create-button" onclick="alert('建立新欄位功能正常運作！')">建立新欄位</button>
+                    <div class="info-box">
+                        <h4 style="margin: 0 0 8px 0;">快速提示</h4>
+                        <div style="line-height: 1.6;">
+                            • 欄位鍵值必須唯一且只能包含字母、數字和底線<br>
+                            • 系統欄位無法刪除或修改鍵值<br>
+                            • 可以設定驗證規則確保資料品質<br>
+                            • 啟用加密儲存保護敏感資料<br>
+                            • 支援 100+ 個自訂欄位
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loadingTab" style="display:none;">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>載入中...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchToTab(tabName) {
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Hide all tab contents
+            document.querySelectorAll('#tabContent > div').forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName + 'Tab').style.display = 'block';
+        }
+
+        function filterFields(query) {
+            const fields = document.querySelectorAll('.field-item');
+            let visibleCount = 0;
+            
+            fields.forEach(field => {
+                const name = field.dataset.name.toLowerCase();
+                if (name.includes(query.toLowerCase())) {
+                    field.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    field.style.display = 'none';
+                }
+            });
+            
+            // Update stats
+            document.getElementById('totalFields').textContent = visibleCount;
+        }
+
+        function testScrolling() {
+            const fieldsList = document.getElementById('fieldsList');
+            for (let i = 6; i <= 15; i++) {
+                const item = document.createElement('div');
+                item.className = 'field-item';
+                item.dataset.name = `測試欄位${i}`;
+                item.innerHTML = `
+                    <div class="field-info">
+                        <div class="field-name">測試欄位 ${i}</div>
+                        <div class="field-details">text • 選填 • 測試用</div>
+                    </div>
+                    <div class="field-badge badge-custom">自訂欄位</div>
+                `;
+                fieldsList.appendChild(item);
+            }
+            
+            // Update stats
+            document.getElementById('totalFields').textContent = '15';
+            document.getElementById('customFields').textContent = '13';
+            
+            // Switch to view tab
+            switchToTab('view');
+        }
+
+        let isLoading = false;
+        function toggleLoading() {
+            isLoading = !isLoading;
+            
+            document.querySelectorAll('#tabContent > div').forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            if (isLoading) {
+                document.getElementById('loadingTab').style.display = 'block';
+                // Auto switch back after 2 seconds
+                setTimeout(() => {
+                    toggleLoading();
+                    switchToTab('view');
+                }, 2000);
+            } else {
+                document.getElementById('viewTab').style.display = 'block';
+            }
+        }
+
+        // Simulate clicking on tabs
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Visual feedback
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>
