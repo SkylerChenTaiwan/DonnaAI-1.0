@@ -716,13 +716,13 @@ export const OrganizationDetailScreen: React.FC = () => {
         />
       )}
       
-      {/* 自訂欄位管理 Modal - 使用安全的條件渲染 */}
-      {showCustomFieldsModal && organization ? (
+      {/* 自訂欄位管理 Modal - 修正條件渲染邏輯 */}
+      {showCustomFieldsModal && organization && (
         <CustomFieldsModal
           visible={showCustomFieldsModal}
           organization={organization}
           onClose={() => {
-            console.log('Closing CustomFieldsModal');
+            console.log('🔄 Closing CustomFieldsModal - User clicked close');
             setShowCustomFieldsModal(false);
           }}
           onFieldsUpdated={() => {
@@ -731,7 +731,7 @@ export const OrganizationDetailScreen: React.FC = () => {
             setShowCustomFieldsModal(false);
           }}
         />
-      ) : null}
+      )}
     </>
   );
 

@@ -440,7 +440,10 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
     };
     
     // 先檢查 visible，避免不必要的渲染
-    if (!visible) return null;
+    if (!visible) {
+      console.log('🔍 AdaptiveModal Web: visible is false, returning null');
+      return null;
+    }
     
     const modalContent = (
       <div
