@@ -171,6 +171,16 @@ service cloud.firestore {
       allow create: if request.auth != null;
     }
     
+    // 動態欄位集合（PRP-118）
+    match /organizations/{orgId}/dynamicFields/{fieldId} {
+      // Super Admin 可以讀寫所有動態欄位
+      allow read, write, delete: if isSuperAdmin();
+      // 組織管理員可以管理組織的動態欄位
+      allow read, write, delete: if isOrgAdmin(orgId);
+      // 組織成員可以讀取動態欄位配置
+      allow read: if isOrgMember(orgId);
+    }
+    
     // 組織內任務集合
     match /organizations/{orgId}/tasks/{taskId} {
       // Super Admin 可以讀寫所有任務（包括刪除）

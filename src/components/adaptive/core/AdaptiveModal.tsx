@@ -435,6 +435,9 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
       );
     };
     
+    // 先檢查 visible，避免不必要的渲染
+    if (!visible) return null;
+    
     const modalContent = (
       <div
         className={`adaptive-modal-overlay ${className || ''}`.trim()}
@@ -493,8 +496,6 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
         </div>
       </div>
     );
-    
-    if (!visible) return null;
     
     return portal ? (
       <WebPortal target={portalTarget}>
