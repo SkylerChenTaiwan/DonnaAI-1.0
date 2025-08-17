@@ -135,10 +135,11 @@
 - 在編號後加上 `v-` 表示已執行完成
 
 | 118v | dynamic-field-mapping-v3-complete.md | ✅ 已完成 | 動態欄位映射系統 v3 - 100+欄位支援、分片儲存、Agent 完整測試 | 2025-08-16 |
+| 119v | fix-adaptive-modal-portal.md | ✅ 已完成 | 修復 AdaptiveModal Web 平台 Portal 問題 - 移除 createPortal，統一使用 RN Modal | 2025-08-17 |
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：119**
+**下一個新建的 PRP 應使用編號：120**
 
 ## PRP 類型說明
 
