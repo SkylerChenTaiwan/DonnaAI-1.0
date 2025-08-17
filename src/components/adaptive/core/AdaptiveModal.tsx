@@ -4,7 +4,6 @@
  */
 
 import React, { forwardRef, useMemo, useCallback, useEffect } from 'react';
-import { createPortal } from 'react-dom';
 import './AdaptiveModal.css'; // 匯入專用樣式以確保正確顯示
 import type { ViewStyle } from 'react-native';
 import type { CSSProperties } from 'react';
@@ -108,44 +107,10 @@ const getModalDimensions = (size: ModalSize) => {
   }
 };
 
-// Web Portal 實現 - 強化版本以修復渲染問題
-const WebPortal: React.FC<{ children: React.ReactNode; target?: Element }> = ({ 
-  children, 
-  target 
-}) => {
-  const [mounted, setMounted] = React.useState(false);
-  
-  React.useEffect(() => {
-    setMounted(true);
-    return () => setMounted(false);
-  }, []);
-  
-  if (!mounted) return null;
-  
-  // 確保總是渲染到 document.body，避免錯誤的容器
-  const portalTarget = target || document.body;
-  
-  // 除錯資訊（僅開發模式）
-  if (process.env.NODE_ENV === 'development') {
-    console.log('🔍 WebPortal rendering to:', portalTarget);
-  }
-  
-  // 使用直接導入的 createPortal
-  try {
-    if (typeof window !== 'undefined' && createPortal) {
-      return createPortal(children, portalTarget);
-    }
-  } catch (error) {
-    console.error('❌ Portal creation failed:', error);
-  }
-  
-  // 降級方案：不渲染任何內容，避免破壞頁面
-  console.error('❌ createPortal not available, Modal cannot be rendered');
-  return null;
-};
+// 注意：已移除 WebPortal 實現，改用 React Native Modal
 
-// Web 實現
-const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
+// Web 實現 - 使用 React Native Modal
+const WebModal = forwardRef<any, AdaptiveModalProps>(
   ({
     visible = false,
     onClose,
@@ -168,8 +133,8 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
     preventScroll = true,
     primaryButton,
     secondaryButton,
-    portal = true,
-    portalTarget,
+    portal = true, // 保留參數但不使用
+    portalTarget, // 保留參數但不使用
     className = '',
     testID,
     accessible,
@@ -177,6 +142,7 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
     accessibilityRole,
     ...props
   }, ref) => {
+    const { Modal, View, TouchableOpacity, SafeAreaView } = require('react-native');
     const platformAdapter = PlatformAdapter.getInstance();
     const styleAdapter = platformAdapter.getStyleAdapter();
     const styleProcessor = platformAdapter.getStyleProcessor();
@@ -232,76 +198,47 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
       }
     }, [visible, onShow, onDismiss]);
     
-    // 覆蓋層樣式 - 強化版本以修復顯示問題
+    // 覆蓋層樣式 - 適配 React Native
     const overlayStyleFinal = useMemo(() => {
-      let finalStyle: CSSProperties = {
-        position: 'fixed',
+      let finalStyle = {
+        position: 'absolute' as const,
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        display: 'flex',
-        alignItems: position === 'center' ? 'center' : 
-                   position === 'top' ? 'flex-start' : 
-                   position === 'bottom' ? 'flex-end' : 'center',
-        justifyContent: position === 'left' ? 'flex-start' : 
-                       position === 'right' ? 'flex-end' : 'center',
-        zIndex: 10000, // 提高 z-index 確保在最上層
+        justifyContent: position === 'center' ? 'center' : 
+                       position === 'top' ? 'flex-start' : 
+                       position === 'bottom' ? 'flex-end' : 'center',
+        alignItems: position === 'left' ? 'flex-start' : 
+                   position === 'right' ? 'flex-end' : 'center',
         padding: size === 'fullscreen' ? 0 : DesignSystem.spacing.md,
-        opacity: visible ? 1 : 0,
-        visibility: visible ? 'visible' : 'hidden',
-        transition: animationType === 'fade' ? 'opacity 200ms ease-in-out' : 'none',
-        // 強制樣式確保不被覆蓋
-        pointerEvents: 'auto' as const,
-        backdropFilter: 'blur(2px)', // 添加背景模糊效果
-        WebkitBackdropFilter: 'blur(2px)' // Safari 支援
+        zIndex: 10000,
       };
       
       if (overlayStyle) {
-        const convertedStyle = styleAdapter.adaptStyle(overlayStyle as any);
+        const convertedStyle = styleAdapter.adaptStyle(overlayStyle);
         finalStyle = { ...finalStyle, ...convertedStyle };
       }
       
-      // 開發模式除錯資訊
-      if (typeof __DEV__ !== 'undefined' && __DEV__ && visible) {
-        console.group('🔍 AdaptiveModal Debug Info');
-        console.log('Modal visible:', visible);
-        console.log('Portal enabled:', portal);
-        console.log('Style conflicts check:', {
-          zIndex: finalStyle.zIndex,
-          position: finalStyle.position,
-          backgroundColor: finalStyle.backgroundColor,
-          pointerEvents: finalStyle.pointerEvents
-        });
-        console.groupEnd();
-      }
-      
       return finalStyle;
-    }, [overlayStyle, styleAdapter, visible, position, size, animationType, portal]);
+    }, [overlayStyle, styleAdapter, position, size]);
     
     // 內容樣式
     const contentStyleFinal = useMemo(() => {
       const dimensions = getModalDimensions(size);
       
-      
-      // 預設樣式 - 強化版本以確保正確顯示
-      const defaultStyle: CSSProperties = {
-        backgroundColor: '#FFFFFF',  // 強制使用白色背景
+      // 預設樣式 - 適配 React Native
+      const defaultStyle = {
+        backgroundColor: '#FFFFFF',
         borderRadius: size === 'fullscreen' ? 8 : DesignSystem.borderRadius.lg,
-        boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)',
-        display: 'flex',
-        flexDirection: 'column',
-        maxHeight: size === 'fullscreen' ? '95vh' : '85vh',
-        overflow: 'hidden',
-        position: 'relative',
-        transform: visible ? 'scale(1)' : 'scale(0.9)',
-        transition: animationType === 'fade' ? 'transform 200ms ease-in-out' : 'none',
-        margin: size === 'fullscreen' ? '0' : '0',
-        // 強制樣式確保 Modal 內容正確顯示
-        pointerEvents: 'auto' as const,
-        isolation: 'isolate', // 創建新的 stacking context
-        contain: 'layout style paint' // 優化渲染性能
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 10 },
+        shadowOpacity: 0.2,
+        shadowRadius: 20,
+        elevation: 10, // Android shadow
+        overflow: 'hidden' as const,
+        position: 'relative' as const,
       };
       
       // 使用 StylePriorityManager 處理樣式優先級
@@ -382,15 +319,17 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
     
     // 標題區域樣式
     const headerStyleFinal = useMemo(() => {
-      let finalStyle: CSSProperties = {
+      let finalStyle = {
         padding: DesignSystem.spacing.lg,
-        borderBottom: `1px solid ${DesignSystem.colors.border.light}`,
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center' };
+        borderBottomWidth: 1,
+        borderBottomColor: DesignSystem.colors.border.light,
+        flexDirection: 'row' as const,
+        justifyContent: 'space-between' as const,
+        alignItems: 'center' as const
+      };
       
       if (headerStyle) {
-        const convertedStyle = styleAdapter.adaptStyle(headerStyle as any);
+        const convertedStyle = styleAdapter.adaptStyle(headerStyle);
         finalStyle = { ...finalStyle, ...convertedStyle };
       }
       
@@ -398,8 +337,8 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
     }, [headerStyle, styleAdapter]);
     
     // 處理覆蓋層點擊
-    const handleOverlayClick = useCallback((event: React.MouseEvent) => {
-      if (closeOnOverlayClick && event.target === event.currentTarget) {
+    const handleOverlayPress = useCallback(() => {
+      if (closeOnOverlayClick) {
         onClose?.();
       }
     }, [closeOnOverlayClick, onClose]);
@@ -409,12 +348,14 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
       if (!primaryButton && !secondaryButton) return null;
       
       return (
-        <div style={{
+        <View style={{
           padding: DesignSystem.spacing.lg,
-          borderTop: `1px solid ${DesignSystem.colors.border.light}`,
-          display: 'flex',
-          gap: DesignSystem.spacing.md,
-          justifyContent: 'flex-end' }}>
+          borderTopWidth: 1,
+          borderTopColor: DesignSystem.colors.border.light,
+          flexDirection: 'row',
+          justifyContent: 'flex-end',
+          gap: DesignSystem.spacing.md
+        }}>
           {secondaryButton && (
             <AdaptiveButton
               variant={secondaryButton.variant || 'outline'}
@@ -435,80 +376,78 @@ const WebModal = forwardRef<HTMLDivElement, AdaptiveModalProps>(
               {primaryButton.title}
             </AdaptiveButton>
           )}
-        </div>
+        </View>
       );
     };
     
-    // 先檢查 visible，避免不必要的渲染
-    if (!visible) {
-      console.log('🔍 AdaptiveModal Web: visible is false, returning null');
-      return null;
-    }
-    
-    const modalContent = (
-      <div
-        className={`adaptive-modal-overlay ${className || ''}`.trim()}
-        style={overlayStyleFinal}
-        onClick={handleOverlayClick}
-        role="dialog"
-        aria-modal="true"
-        aria-label={accessibilityLabel}
-        data-testid={testID}
+    // 使用 React Native Modal
+    return (
+      <Modal
+        visible={visible}
+        transparent={true}
+        animationType={animationType}
+        onShow={onShow}
+        onDismiss={onDismiss}
+        onRequestClose={onClose}
+        {...props}
       >
-        <div ref={ref} className="adaptive-modal-content" style={contentStyleFinal}>
-          {(title || subtitle || showCloseButton) && (
-            <div style={headerStyleFinal}>
-              <div>
-                {title && (
-                  <AdaptiveText variant="h3" style={{ marginBottom: 4 }}>
-                    {title}
-                  </AdaptiveText>
+        <SafeAreaView style={{ flex: 1 }}>
+          <TouchableOpacity
+            style={overlayStyleFinal}
+            activeOpacity={1}
+            onPress={handleOverlayPress}
+          >
+            <TouchableOpacity 
+              activeOpacity={1}
+              style={contentStyleFinal}
+              onPress={(e) => e.stopPropagation()}
+            >
+              <View ref={ref}>
+                {(title || subtitle || showCloseButton) && (
+                  <View style={headerStyleFinal}>
+                    <View>
+                      {title && (
+                        <AdaptiveText variant="h3" style={{ marginBottom: 4 }}>
+                          {title}
+                        </AdaptiveText>
+                      )}
+                      {subtitle && (
+                        <AdaptiveText variant="bodySmall" color="secondary">
+                          {subtitle}
+                        </AdaptiveText>
+                      )}
+                    </View>
+                    
+                    {showCloseButton && (
+                      <TouchableOpacity
+                        onPress={onClose}
+                        style={{ padding: 4 }}
+                      >
+                        <AdaptiveText style={{
+                          fontSize: 20,
+                          color: DesignSystem.colors.text.secondary
+                        }}>
+                          ×
+                        </AdaptiveText>
+                      </TouchableOpacity>
+                    )}
+                  </View>
                 )}
-                {subtitle && (
-                  <AdaptiveText variant="bodySmall" color="secondary">
-                    {subtitle}
-                  </AdaptiveText>
-                )}
-              </div>
-              
-              {showCloseButton && (
-                <button
-                  onClick={onClose}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    fontSize: '20px',
-                    cursor: 'pointer',
-                    color: DesignSystem.colors.text.secondary,
-                    padding: '4px' }}
-                  aria-label="關閉"
-                >
-                  ×
-                </button>
-              )}
-            </div>
-          )}
-          
-          <div style={{
-            flex: 1,
-            overflow: 'auto',
-            padding: size === 'fullscreen' ? 0 : DesignSystem.spacing.lg,
-            display: 'flex',
-            flexDirection: 'column',
-            minHeight: 0 }}>
-            {children}
-          </div>
-          
-          {renderButtons()}
-        </div>
-      </div>
+                
+                <View style={{
+                  flex: 1,
+                  padding: size === 'fullscreen' ? 0 : DesignSystem.spacing.lg
+                }}>
+                  {children}
+                </View>
+                
+                {renderButtons()}
+              </View>
+            </TouchableOpacity>
+          </TouchableOpacity>
+        </SafeAreaView>
+      </Modal>
     );
-    
-    return portal ? (
-      <WebPortal target={portalTarget}>
-        {modalContent}
-      </WebPortal>
-    ) : modalContent;
   }
 );
 
