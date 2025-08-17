@@ -210,19 +210,19 @@ export const CustomFieldsModal: React.FC<CustomFieldsModalProps> = ({
   );
 
   // 確保 Modal 只在 visible 為 true 時渲染
+  // 這裡必須返回 null，避免內容渲染到頁面上
   if (!visible) {
     return null;
   }
   
   return (
     <AdaptiveModal
-      visible={visible}
+      visible={true}  // 因為上面已經檢查了 visible，這裡直接設為 true
       onClose={onClose}
       size="medium"
       animationType="fade"
       portal={true}
       preventScroll={true}
-    >
       <AdaptiveView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
         {/* 標題欄 */}
         <AdaptiveView style={{
