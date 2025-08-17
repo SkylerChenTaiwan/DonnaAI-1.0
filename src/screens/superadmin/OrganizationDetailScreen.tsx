@@ -715,10 +715,10 @@ export const OrganizationDetailScreen: React.FC = () => {
         />
       )}
       
-      {/* 自訂欄位管理 Modal - 只在明確點擊後顯示 */}
-      {showCustomFieldsModal === true && organization && (
+      {/* 自訂欄位管理 Modal - 使用安全的條件渲染 */}
+      {showCustomFieldsModal && organization ? (
         <CustomFieldsModal
-          visible={true}
+          visible={showCustomFieldsModal}
           organization={organization}
           onClose={() => {
             console.log('Closing CustomFieldsModal');
@@ -730,7 +730,7 @@ export const OrganizationDetailScreen: React.FC = () => {
             setShowCustomFieldsModal(false);
           }}
         />
-      )}
+      ) : null}
     </>
   );
 
