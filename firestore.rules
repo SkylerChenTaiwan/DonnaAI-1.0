@@ -255,6 +255,18 @@ service cloud.firestore {
       allow write: if isOrgAdmin(orgId) || isSuperAdmin();
     }
     
+    // 動態欄位配置集合
+    match /dynamicFieldConfigs/{configId} {
+      // Super Admin 可以讀寫所有配置
+      allow read, write: if isSuperAdmin();
+      // 組織成員可以讀取自己組織的配置
+      allow read: if request.auth != null && 
+        resource.data.organizationId == getUserData().organizationId;
+      // 組織管理員可以寫入自己組織的配置
+      allow write: if request.auth != null && 
+        isOrgAdmin(request.resource.data.organizationId);
+    }
+    
     // 組織入職會話集合
     match /onboardingSessions/{sessionId} {
       // Super Admin 可以創建和管理所有會話
