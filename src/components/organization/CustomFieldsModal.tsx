@@ -209,6 +209,15 @@ export const CustomFieldsModal: React.FC<CustomFieldsModalProps> = ({
     field.fieldKey.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // 除錯資訊
+  console.log('🔍 CustomFieldsModal render:', { visible, organization: organization?.id });
+  
+  // 確保只在 visible 為 true 時渲染
+  if (!visible) {
+    console.log('❌ CustomFieldsModal not visible, returning null');
+    return null;
+  }
+  
   return (
     <AdaptiveModal
       visible={visible}
