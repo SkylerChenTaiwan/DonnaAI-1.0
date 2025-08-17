@@ -4,7 +4,7 @@
  */
 
 import React, { forwardRef, useMemo, useCallback, useEffect } from 'react';
-import ReactDOM from 'react-dom';
+import { createPortal } from 'react-dom';
 import './AdaptiveModal.css'; // 匯入專用樣式以確保正確顯示
 import type { ViewStyle } from 'react-native';
 import type { CSSProperties } from 'react';
@@ -130,14 +130,18 @@ const WebPortal: React.FC<{ children: React.ReactNode; target?: Element }> = ({
     console.log('🔍 WebPortal rendering to:', portalTarget);
   }
   
-  // 使用正確的 ReactDOM.createPortal
-  if (typeof window !== 'undefined' && ReactDOM && ReactDOM.createPortal) {
-    return ReactDOM.createPortal(children, portalTarget);
+  // 使用直接導入的 createPortal
+  try {
+    if (typeof window !== 'undefined' && createPortal) {
+      return createPortal(children, portalTarget);
+    }
+  } catch (error) {
+    console.error('❌ Portal creation failed:', error);
   }
   
-  // 降級方案：直接返回內容（非 Portal 模式）
-  console.warn('⚠️ ReactDOM.createPortal not available, falling back to direct render');
-  return <>{children}</>;
+  // 降級方案：不渲染任何內容，避免破壞頁面
+  console.error('❌ createPortal not available, Modal cannot be rendered');
+  return null;
 };
 
 // Web 實現
