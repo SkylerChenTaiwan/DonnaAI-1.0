@@ -1,0 +1,332 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CustomFieldsModal 視覺測試報告</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #007AFF, #0056B3);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+        }
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .summary-card .number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .critical { color: #FF3B30; }
+        .major { color: #FF9500; }
+        .minor { color: #FFCC00; }
+        .success { color: #34C759; }
+        
+        .test-stage {
+            background: white;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .stage-header {
+            background: #F2F2F7;
+            padding: 20px;
+            border-bottom: 1px solid #E5E5EA;
+        }
+        .stage-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #1C1C1E;
+            margin: 0;
+        }
+        .stage-content {
+            padding: 20px;
+        }
+        .screenshots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .screenshot {
+            border: 1px solid #E5E5EA;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .screenshot img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .screenshot-caption {
+            padding: 10px;
+            background: #F9F9F9;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .issues {
+            margin-top: 20px;
+        }
+        .issue {
+            background: #FFF3CD;
+            border: 1px solid #FFE69C;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .issue.critical {
+            background: #F8D7DA;
+            border-color: #F5C6CB;
+        }
+        .issue.major {
+            background: #FFF3CD;
+            border-color: #FFE69C;
+        }
+        .issue.minor {
+            background: #D1ECF1;
+            border-color: #BEE5EB;
+        }
+        .issue-severity {
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            text-transform: uppercase;
+        }
+        .issue-severity.critical {
+            background: #FF3B30;
+            color: white;
+        }
+        .issue-severity.major {
+            background: #FF9500;
+            color: white;
+        }
+        .issue-severity.minor {
+            background: #007AFF;
+            color: white;
+        }
+        .no-issues {
+            color: #34C759;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            background: #D4EDDA;
+            border-radius: 8px;
+        }
+        .recommendations {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .recommendations h2 {
+            color: #007AFF;
+            margin-top: 0;
+        }
+        .recommendation {
+            background: #F2F2F7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #007AFF;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔍 CustomFieldsModal 視覺測試報告</h1>
+        <p>測試時間: 2025/8/17 下午5:28:05</p>
+        <p>測試目標: 驗證 CustomFieldsModal 修復效果和功能完整性</p>
+    </div>
+
+    <div class="summary">
+        <div class="summary-card">
+            <div class="number critical">4</div>
+            <div>嚴重問題</div>
+        </div>
+        <div class="summary-card">
+            <div class="number major">0</div>
+            <div>重要問題</div>
+        </div>
+        <div class="summary-card">
+            <div class="number minor">0</div>
+            <div>輕微問題</div>
+        </div>
+        <div class="summary-card">
+            <div class="number success">4</div>
+            <div>測試階段</div>
+        </div>
+    </div>
+
+    
+        <div class="test-stage">
+            <div class="stage-header">
+                <h2 class="stage-title">
+                    階段 1: 頁面初始狀態檢查
+                    ⚠️
+                </h2>
+            </div>
+            <div class="stage-content">
+                
+                
+                <div class="issues">
+                    
+                        <h3>發現的問題 (1)</h3>
+                        
+                            <div class="issue critical">
+                                <div class="issue-severity critical">critical</div>
+                                <h4>初始頁面載入失敗</h4>
+                                
+                                
+                                <p><strong>錯誤：</strong><code>page.waitForTimeout is not a function</code></p>
+                            </div>
+                        
+                    
+                </div>
+            </div>
+        </div>
+    
+        <div class="test-stage">
+            <div class="stage-header">
+                <h2 class="stage-title">
+                    階段 2: 導航到協助標籤
+                    ⚠️
+                </h2>
+            </div>
+            <div class="stage-content">
+                
+                
+                <div class="issues">
+                    
+                        <h3>發現的問題 (1)</h3>
+                        
+                            <div class="issue critical">
+                                <div class="issue-severity critical">critical</div>
+                                <h4>導航到協助標籤失敗</h4>
+                                
+                                
+                                <p><strong>錯誤：</strong><code>page.waitForTimeout is not a function</code></p>
+                            </div>
+                        
+                    
+                </div>
+            </div>
+        </div>
+    
+        <div class="test-stage">
+            <div class="stage-header">
+                <h2 class="stage-title">
+                    階段 3: Modal 觸發測試
+                    ⚠️
+                </h2>
+            </div>
+            <div class="stage-content">
+                
+                    <div class="screenshots">
+                        
+                            <div class="screenshot">
+                                <img src="modal-trigger-before-click.png" alt="測試截圖" />
+                                <div class="screenshot-caption">
+                                    modal-trigger-before-click.png
+                                </div>
+                            </div>
+                        
+                    </div>
+                
+                
+                <div class="issues">
+                    
+                        <h3>發現的問題 (1)</h3>
+                        
+                            <div class="issue critical">
+                                <div class="issue-severity critical">critical</div>
+                                <h4>未找到「查看欄位」按鈕</h4>
+                                <p><strong>預期：</strong>協助標籤中應該有「查看欄位」按鈕</p>
+                                <p><strong>實際：</strong>頁面中沒有找到相關按鈕</p>
+                                
+                            </div>
+                        
+                    
+                </div>
+            </div>
+        </div>
+    
+        <div class="test-stage">
+            <div class="stage-header">
+                <h2 class="stage-title">
+                    階段 4: Modal 功能驗證
+                    ⚠️
+                </h2>
+            </div>
+            <div class="stage-content">
+                
+                
+                <div class="issues">
+                    
+                        <h3>發現的問題 (1)</h3>
+                        
+                            <div class="issue critical">
+                                <div class="issue-severity critical">critical</div>
+                                <h4>Modal 不可見，無法測試功能</h4>
+                                <p><strong>預期：</strong>Modal 應該是可見狀態</p>
+                                <p><strong>實際：</strong>Modal 不可見</p>
+                                
+                            </div>
+                        
+                    
+                </div>
+            </div>
+        </div>
+    
+
+    <div class="recommendations">
+        <h2>📋 測試總結與建議</h2>
+        
+        
+        
+        
+            <div class="recommendation">
+                <h3>🚨 需要立即修復</h3>
+                <p>發現 4 個嚴重問題，這些問題會影響核心功能的使用，建議優先修復。</p>
+            </div>
+        
+        
+        
+        
+        <div class="recommendation">
+            <h3>🔄 後續改進建議</h3>
+            <ul>
+                <li>定期執行自動化視覺測試，確保修復不會引入新問題</li>
+                <li>增加更多邊界情況測試，如不同螢幕尺寸和瀏覽器</li>
+                <li>考慮增加鍵盤操作和無障礙功能測試</li>
+                <li>監控實際用戶使用情況，收集反饋進行持續優化</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
+    

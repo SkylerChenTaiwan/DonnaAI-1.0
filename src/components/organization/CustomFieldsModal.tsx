@@ -209,7 +209,7 @@ export const CustomFieldsModal: React.FC<CustomFieldsModalProps> = ({
     field.fieldKey.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // 只在 visible 為 false 或 falsy 時不渲染
+  // 確保 Modal 只在 visible 為 true 時渲染
   if (!visible) {
     return null;
   }
