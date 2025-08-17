@@ -219,68 +219,78 @@ export const CustomFieldsModal: React.FC<CustomFieldsModalProps> = ({
     <AdaptiveModal
       visible={true}  // 因為上面已經檢查了 visible，這裡直接設為 true
       onClose={onClose}
-      size="medium"
+      title="自訂欄位管理"
+      showCloseButton={true}
+      size="large"  // 改為 large 以容納更多內容
       animationType="fade"
       portal={true}
       preventScroll={true}
+      contentStyle={{
+        padding: 0,  // 移除內容區域的預設 padding
+      }}
     >
       <AdaptiveView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
-        {/* 標題欄 */}
-        <AdaptiveView style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: 16,
-          borderBottomWidth: 1,
-          borderBottomColor: '#E3E1DC',
-        }}>
-          <AdaptiveText style={{ fontSize: 18, fontWeight: '600' }}>
-            自訂欄位管理
-          </AdaptiveText>
-          <AdaptiveButton onPress={onClose}>
-            <AdaptiveText style={{ color: '#8E8E93', fontSize: 16 }}>✕</AdaptiveText>
-          </AdaptiveButton>
-        </AdaptiveView>
 
-        {/* 標籤頁 */}
+        {/* 標籤頁 - 使用底部邊框而非背景色 */}
         <AdaptiveView style={{ 
           flexDirection: 'row', 
           borderBottomWidth: 1, 
-          borderBottomColor: '#E3E1DC' 
+          borderBottomColor: '#E3E1DC',
+          backgroundColor: '#FFFFFF',
         }}>
           {[
             { key: 'view', label: '檢視欄位', icon: 'list-outline' },
             { key: 'import', label: 'CSV 匯入', icon: 'cloud-upload-outline' },
             { key: 'configure', label: '新增欄位', icon: 'add-circle-outline' },
           ].map((tab) => (
-            <AdaptiveButton
+            <AdaptiveView
               key={tab.key}
-              onPress={() => setActiveTab(tab.key as any)}
               style={{
                 flex: 1,
-                paddingVertical: 12,
-                backgroundColor: activeTab === tab.key ? '#007AFF' : 'transparent',
-                borderRadius: 0,
+                position: 'relative',
               }}
             >
-              <AdaptiveView style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                <Icon name={tab.icon} size={18} color={activeTab === tab.key ? '#FFFFFF' : '#1C1C1E'} />
-                <AdaptiveText
-                  style={{
-                    marginLeft: 8,
-                    fontWeight: activeTab === tab.key ? '600' : '400',
-                    color: activeTab === tab.key ? '#FFFFFF' : '#1C1C1E',
-                  }}
-                >
-                  {tab.label}
-                </AdaptiveText>
-              </AdaptiveView>
-            </AdaptiveButton>
+              <AdaptiveButton
+                onPress={() => setActiveTab(tab.key as any)}
+                style={{
+                  paddingVertical: 12,
+                  paddingHorizontal: 16,
+                  backgroundColor: 'transparent',
+                  borderRadius: 0,
+                  borderBottomWidth: 3,
+                  borderBottomColor: activeTab === tab.key ? '#007AFF' : 'transparent',
+                  marginBottom: -1,  // 覆蓋容器的底部邊框
+                }}
+              >
+                <AdaptiveView style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                  <Icon name={tab.icon} size={18} color={activeTab === tab.key ? '#007AFF' : '#8E8E93'} />
+                  <AdaptiveText
+                    style={{
+                      marginLeft: 8,
+                      fontWeight: activeTab === tab.key ? '600' : '400',
+                      color: activeTab === tab.key ? '#007AFF' : '#3C3C43',
+                      fontSize: 14,
+                    }}
+                  >
+                    {tab.label}
+                  </AdaptiveText>
+                </AdaptiveView>
+              </AdaptiveButton>
+            </AdaptiveView>
           ))}
         </AdaptiveView>
 
-        {/* 內容區域 */}
-        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+        {/* 內容區域 - 添加最大高度控制 */}
+        <ScrollView 
+          style={{ 
+            flex: 1,
+            maxHeight: Platform.OS === 'web' ? '60vh' : undefined,
+          }} 
+          contentContainerStyle={{
+            flexGrow: 1,
+          }}
+          showsVerticalScrollIndicator={false}
+        >
           {isLoading ? (
             <AdaptiveView style={{ padding: 32, alignItems: 'center' }}>
               <ActivityIndicator size="large" color="#007AFF" />
@@ -319,18 +329,23 @@ export const CustomFieldsModal: React.FC<CustomFieldsModalProps> = ({
                     </AdaptiveText>
                   </AdaptiveView>
 
-                  {/* 欄位列表 */}
-                  <DynamicFieldList
-                    fields={filteredFields}
-                    onFieldSelect={(field) => {
-                      setSelectedField(field);
-                      setShowFieldEditor(true);
-                    }}
-                    onFieldUpdate={(field) => handleSaveField(field)}
-                    onBatchSelect={() => {}}
-                    virtualScrolling={filteredFields.length > 50}
-                    viewMode="list"
-                  />
+                  {/* 欄位列表 - 添加容器控制高度 */}
+                  <AdaptiveView style={{ 
+                    maxHeight: Platform.OS === 'web' ? 400 : undefined,
+                    overflow: Platform.OS === 'web' ? 'auto' : 'visible',
+                  }}>
+                    <DynamicFieldList
+                      fields={filteredFields}
+                      onFieldSelect={(field) => {
+                        setSelectedField(field);
+                        setShowFieldEditor(true);
+                      }}
+                      onFieldUpdate={(field) => handleSaveField(field)}
+                      onBatchSelect={() => {}}
+                      virtualScrolling={filteredFields.length > 50}
+                      viewMode="list"
+                    />
+                  </AdaptiveView>
 
                   {filteredFields.length === 0 && (
                     <AdaptiveView style={{ padding: 32, alignItems: 'center' }}>
