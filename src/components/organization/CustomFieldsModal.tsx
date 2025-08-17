@@ -223,6 +223,7 @@ export const CustomFieldsModal: React.FC<CustomFieldsModalProps> = ({
       animationType="fade"
       portal={true}
       preventScroll={true}
+    >
       <AdaptiveView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
         {/* 標題欄 */}
         <AdaptiveView style={{
