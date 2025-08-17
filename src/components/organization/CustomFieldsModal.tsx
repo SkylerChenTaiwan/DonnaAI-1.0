@@ -210,10 +210,16 @@ export const CustomFieldsModal: React.FC<CustomFieldsModalProps> = ({
   );
 
   // 除錯資訊
-  console.log('🔍 CustomFieldsModal render:', { visible, organization: organization?.id });
+  console.log('🔍 CustomFieldsModal render:', { 
+    visible, 
+    organization: organization?.id,
+    typeofVisible: typeof visible,
+    visibleValue: visible 
+  });
+  console.trace('CustomFieldsModal render trace');
   
   // 確保只在 visible 為 true 時渲染
-  if (!visible) {
+  if (!visible || visible === false) {
     console.log('❌ CustomFieldsModal not visible, returning null');
     return null;
   }

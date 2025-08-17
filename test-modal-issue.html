@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal 問題診斷</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #007AFF;
+            padding-bottom: 10px;
+        }
+        .button {
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .button:hover {
+            background: #0056b3;
+        }
+        .log-section {
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+            background: white;
+            border-left: 3px solid #007AFF;
+            font-size: 14px;
+        }
+        .error {
+            border-left-color: #dc3545;
+            background: #fff5f5;
+        }
+        .success {
+            border-left-color: #28a745;
+            background: #f5fff5;
+        }
+        .warning {
+            border-left-color: #ffc107;
+            background: #fffdf5;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .status-ok {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Modal 問題診斷工具</h1>
+        
+        <h2>問題概述</h2>
+        <p>CustomFieldsModal 在頁面載入時自動顯示（visible: true），即使 showCustomFieldsModal 初始值是 false。</p>
+        
+        <h2>診斷結果</h2>
+        <div id="diagnostics">
+            <div class="log-section" id="logs">
+                <div class="log-entry">開始診斷...</div>
+            </div>
+        </div>
+        
+        <h2>測試 React State</h2>
+        <button class="button" onclick="testState()">測試 useState 行為</button>
+        <button class="button" onclick="testPortal()">測試 Portal 功能</button>
+        <button class="button" onclick="clearCache()">清除瀏覽器快取</button>
+        
+        <h2>可能的原因</h2>
+        <ul>
+            <li>❌ <strong>熱重載問題</strong>: Expo 的熱重載可能保留了舊的狀態</li>
+            <li>❌ <strong>瀏覽器快取</strong>: 舊的 JavaScript 代碼被快取</li>
+            <li>❌ <strong>條件渲染邏輯</strong>: 條件判斷可能有問題</li>
+            <li>❌ <strong>Portal 渲染失敗</strong>: ReactDOM.createPortal 無法正常工作</li>
+        </ul>
+        
+        <h2>解決方案</h2>
+        <ol>
+            <li>完全清除所有快取：<code>rm -rf .expo node_modules/.cache</code></li>
+            <li>重啟開發伺服器：<code>npx expo start --web --clear</code></li>
+            <li>清除瀏覽器快取：Ctrl+Shift+Del</li>
+            <li>使用無痕模式測試</li>
+        </ol>
+    </div>
+    
+    <script>
+        const log = (message, type = 'info') => {
+            const logs = document.getElementById('logs');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logs.appendChild(entry);
+            logs.scrollTop = logs.scrollHeight;
+        };
+        
+        function testState() {
+            log('測試 React useState...');
+            
+            // 模擬 React useState
+            let state = false;
+            log(`初始狀態: ${state}`, 'success');
+            
+            // 模擬條件渲染
+            if (state) {
+                log('Modal 應該顯示', 'error');
+            } else {
+                log('Modal 不應該顯示', 'success');
+            }
+            
+            // 檢查類型
+            log(`typeof state: ${typeof state}`);
+            log(`state === false: ${state === false}`);
+            log(`!state: ${!state}`);
+        }
+        
+        function testPortal() {
+            log('測試 React Portal...');
+            
+            if (typeof window !== 'undefined') {
+                log('window 物件存在', 'success');
+            }
+            
+            if (typeof document !== 'undefined' && document.body) {
+                log('document.body 存在', 'success');
+            }
+            
+            // 檢查 React 是否載入
+            if (typeof React !== 'undefined') {
+                log('React 已載入', 'success');
+            } else {
+                log('React 未載入', 'warning');
+            }
+            
+            // 檢查 ReactDOM
+            if (typeof ReactDOM !== 'undefined') {
+                log('ReactDOM 已載入', 'success');
+                if (ReactDOM.createPortal) {
+                    log('createPortal 可用', 'success');
+                } else {
+                    log('createPortal 不可用', 'error');
+                }
+            } else {
+                log('ReactDOM 未載入', 'warning');
+            }
+        }
+        
+        function clearCache() {
+            log('嘗試清除快取...');
+            
+            // 清除 localStorage
+            localStorage.clear();
+            log('localStorage 已清除', 'success');
+            
+            // 清除 sessionStorage
+            sessionStorage.clear();
+            log('sessionStorage 已清除', 'success');
+            
+            // 建議重新載入
+            log('建議使用 Ctrl+Shift+R 強制重新載入', 'warning');
+        }
+        
+        // 自動執行診斷
+        window.onload = () => {
+            log('頁面載入完成', 'success');
+            testState();
+            testPortal();
+        };
+    </script>
+</body>
+</html>

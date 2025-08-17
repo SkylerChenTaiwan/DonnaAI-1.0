@@ -90,8 +90,9 @@ export const OrganizationDetailScreen: React.FC = () => {
   // 調試：追蹤 Modal 狀態變化
   useEffect(() => {
     console.log('🔍 OrganizationDetailScreen - showCustomFieldsModal changed to:', showCustomFieldsModal);
+    console.trace('Stack trace for showCustomFieldsModal change');
     if (showCustomFieldsModal === true) {
-      console.warn('⚠️ Modal is being shown!');
+      console.warn('⚠️ Modal is being shown! This should only happen when button is clicked');
     }
   }, [showCustomFieldsModal]);
 
