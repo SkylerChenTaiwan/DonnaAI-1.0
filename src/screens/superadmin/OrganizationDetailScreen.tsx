@@ -82,7 +82,18 @@ export const OrganizationDetailScreen: React.FC = () => {
   // 用戶協助 Modal 狀態
   const [showImportWizard, setShowImportWizard] = useState(false);
   const [importTargetType, setImportTargetType] = useState<'customers' | 'users'>('customers');
-  const [showCustomFieldsModal, setShowCustomFieldsModal] = useState(false);
+  const [showCustomFieldsModal, setShowCustomFieldsModal] = useState(() => {
+    console.log('🔍 Initializing showCustomFieldsModal as false');
+    return false;
+  });
+  
+  // 調試：追蹤 Modal 狀態變化
+  useEffect(() => {
+    console.log('🔍 OrganizationDetailScreen - showCustomFieldsModal changed to:', showCustomFieldsModal);
+    if (showCustomFieldsModal === true) {
+      console.warn('⚠️ Modal is being shown!');
+    }
+  }, [showCustomFieldsModal]);
 
   // 功能開關狀態
   const [features, setFeatures] = useState({
@@ -704,10 +715,10 @@ export const OrganizationDetailScreen: React.FC = () => {
         />
       )}
       
-      {/* 自訂欄位管理 Modal */}
-      {organization && showCustomFieldsModal && (
+      {/* 自訂欄位管理 Modal - 只在明確點擊後顯示 */}
+      {showCustomFieldsModal === true && organization && (
         <CustomFieldsModal
-          visible={showCustomFieldsModal}
+          visible={true}
           organization={organization}
           onClose={() => {
             console.log('Closing CustomFieldsModal');
@@ -716,6 +727,7 @@ export const OrganizationDetailScreen: React.FC = () => {
           onFieldsUpdated={() => {
             toast.success('欄位配置已更新');
             loadOrganizationData();
+            setShowCustomFieldsModal(false);
           }}
         />
       )}
