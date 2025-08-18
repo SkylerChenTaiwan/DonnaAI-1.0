@@ -136,8 +136,8 @@
 
 | 118v | dynamic-field-mapping-v3-complete.md | ✅ 已完成 | 動態欄位映射系統 v3 - 100+欄位支援、分片儲存、Agent 完整測試 | 2025-08-16 |
 | 119v | fix-adaptive-modal-portal.md | ✅ 已完成 | 修復 AdaptiveModal Web 平台 Portal 問題 - 移除 createPortal，統一使用 RN Modal | 2025-08-17 |
-| 120  | next-js-web-platform-foundation.md | 📋 待執行 | Next.js Web 平台基礎架構 - 專案建立、路由系統、SSR/SSG 配置、效能最佳化 | - |
-| 121  | web-component-library-radix-tailwind.md | 📋 待執行 | Web 元件庫（Radix UI + Tailwind CSS）- 設計系統、元件庫、Storybook 整合 | - |
+| 120v | nextjs-web-platform-foundation.md | ✅ 已完成 | Next.js Web 平台基礎架構 - 專案建立、路由系統、SSR/SSG 配置、效能最佳化 | 2025-08-18 |
+| 121v | web-design-system-component-library.md | ✅ 已完成 | Web 元件庫（Radix UI + Tailwind CSS）- 設計系統、元件庫、Storybook 整合 | 2025-08-18 |
 | 122  | firebase-web-sdk-authentication-system.md | 📋 待執行 | Firebase Web SDK 整合與認證系統 - Web SDK v9、認證流程、Firestore 最佳化 | - |
 | 123  | dashboard-analytics-integration.md | 📋 待執行 | 儀表板頁面與分析整合 - 數據視覺化、即時更新、商業智能 | - |
 | 124  | ai-analytics-query-interface.md | 📋 待執行 | AI 驅動的分析查詢介面 - 自然語言查詢、智能圖表生成、對話式分析 | - |
