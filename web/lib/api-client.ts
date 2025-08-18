@@ -2,7 +2,7 @@
  * 統一的 API 呼叫工具 - 整合錯誤處理和載入狀態管理
  */
 
-import { AppError, createError, handleApiError, logError } from './errors';
+import { AppError, AppErrorClass, createError, handleApiError, logError } from './errors';
 
 // API 回應格式
 export interface ApiResponse<T = any> {
