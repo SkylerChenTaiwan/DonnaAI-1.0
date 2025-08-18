@@ -122,6 +122,7 @@
 - **Firebase 開發指南** → `/docs/development/FIREBASE-GUIDE.md`  
 - **Agent 工作流程** → `/docs/workflows/AGENT-WORKFLOWS.md`
 - **PRP 執行流程** → `/docs/workflows/PRP-EXECUTION.md`
+- **PRP 執行追蹤器** → `/docs/workflows/PRP-EXECUTION-TRACKER.md`
 
 ---
 
