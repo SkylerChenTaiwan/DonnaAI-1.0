@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/card';
 import { useRealTimeData } from '@/hooks/use-real-time-data';
+import { CompactConnectionStatus, useConnectionStatus } from '@/components/shared/connection-status';
 import { 
   Settings, 
   Grid3X3, 
@@ -376,25 +377,9 @@ export function DashboardLayout({
             
             <div className="flex items-center space-x-2">
               {/* 即時連線狀態指示器 */}
-              <div className={cn(
-                "flex items-center space-x-1 px-2 py-1 rounded-full text-xs border",
-                isConnected ? "bg-green-50 border-green-200 text-green-700" : "bg-red-50 border-red-200 text-red-700"
-              )}>
-                <div className={cn(
-                  "w-2 h-2 rounded-full",
-                  isConnected ? "bg-green-500 animate-pulse" : "bg-red-500"
-                )} />
-                <span>{isConnected ? '即時連線' : '已斷線'}</span>
-                {!isConnected && (
-                  <button 
-                    onClick={reconnect}
-                    className="ml-1 text-red-600 hover:text-red-700"
-                    title="重新連線"
-                  >
-                    <RefreshCw className="w-3 h-3" />
-                  </button>
-                )}
-              </div>
+              <CompactConnectionStatus
+                {...useConnectionStatus({ isConnected, reconnect, eventCount: 0 })}
+              />
               
               <Button variant="outline" size="sm">
                 <Settings className="w-4 h-4 mr-2" />

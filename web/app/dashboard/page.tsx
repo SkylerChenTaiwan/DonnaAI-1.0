@@ -14,7 +14,8 @@ import { DashboardLayout, LayoutConfig, WidgetConfig, LayoutMode, LayoutManager 
 import { WidgetSelector } from '@/components/dashboard/widget-selector';
 import { WidgetRegistry } from '@/components/dashboard/widget-registry';
 import { useRealTimeData } from '@/hooks/use-real-time-data';
-import { User, Settings, LogOut, Bell, Plus, Edit3, Eye, Save, Zap, Wifi, WifiOff } from 'lucide-react';
+import { DetailedConnectionStatus, useConnectionStatus } from '@/components/shared/connection-status';
+import { User, Settings, LogOut, Bell, Plus, Edit3, Eye, Save } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 function DashboardContent() {
@@ -293,41 +294,15 @@ function DashboardContent() {
             {/* 右側：用戶操作 */}
             <div className="flex items-center space-x-4">
               {/* 即時連線狀態指示器 */}
-              <div className={cn(
-                "flex items-center space-x-2 px-3 py-1 rounded-full text-sm border",
-                isConnected 
-                  ? "bg-green-50 border-green-200 text-green-700" 
-                  : "bg-red-50 border-red-200 text-red-700"
-              )}>
-                <div className={cn(
-                  "w-2 h-2 rounded-full",
-                  isConnected ? "bg-green-500 animate-pulse" : "bg-red-500"
-                )} />
-                <span className="hidden sm:inline">
-                  {isConnected ? '即時連線' : '已斷線'}
-                </span>
-                {isConnected ? <Wifi className="w-4 h-4" /> : <WifiOff className="w-4 h-4" />}
-                {!isConnected && (
-                  <button 
-                    onClick={reconnect}
-                    className="ml-1 text-red-600 hover:text-red-700 transition-colors"
-                    title="重新連線"
-                  >
-                    <Zap className="w-3 h-3" />
-                  </button>
-                )}
-              </div>
-
-              {/* 最後更新時間 */}
-              <div className="hidden md:flex items-center space-x-1 text-sm text-gray-500">
-                <span>更新:</span>
-                <span>{lastUpdate.toLocaleTimeString('zh-TW')}</span>
-                {eventCount > 0 && (
-                  <Badge variant="outline" className="text-xs ml-2">
-                    {eventCount} 事件
-                  </Badge>
-                )}
-              </div>
+              <DetailedConnectionStatus
+                {...useConnectionStatus({
+                  isConnected, 
+                  reconnect, 
+                  eventCount,
+                  lastEvent
+                })}
+                className="hidden md:flex"
+              />
 
               {/* 儀表板控制 */}
               <div className="flex items-center space-x-2">

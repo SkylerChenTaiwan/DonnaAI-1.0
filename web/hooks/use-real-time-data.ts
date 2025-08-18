@@ -204,18 +204,7 @@ export function useRealTimeData(options: UseRealTimeDataOptions = {}) {
       console.error('Connect WebSocket error:', error);
       updateStatus('error', 'Failed to create WebSocket connection');
     }
-  }, [
-    user, 
-    subscribeToEvents, 
-    autoReconnect, 
-    maxReconnectAttempts, 
-    reconnectInterval, 
-    heartbeatInterval,
-    sendHeartbeat,
-    handleEvent,
-    updateStatus,
-    state.reconnectAttempts
-  ]);
+  }, [user?.uid]); // 只依賴 user.uid，避免重複連線
 
   // 建立 Server-Sent Events 連線 (備用方案)
   const connectSSE = useCallback(() => {
@@ -264,16 +253,7 @@ export function useRealTimeData(options: UseRealTimeDataOptions = {}) {
       console.error('Connect SSE error:', error);
       updateStatus('error', 'Failed to create SSE connection');
     }
-  }, [
-    user, 
-    subscribeToEvents, 
-    autoReconnect, 
-    maxReconnectAttempts, 
-    reconnectInterval,
-    handleEvent,
-    updateStatus,
-    state.reconnectAttempts
-  ]);
+  }, [user?.uid]); // 只依賴 user.uid，避免重複連線
 
   // 建立連線
   const connect = useCallback(() => {
@@ -355,14 +335,14 @@ export function useRealTimeData(options: UseRealTimeDataOptions = {}) {
 
   // 初始化連線
   useEffect(() => {
-    if (user) {
-      connect();
-    }
+    if (!user) return;
+    
+    connect();
 
     return () => {
       disconnect();
     };
-  }, [user?.uid]); // 只在使用者變更時重新連線
+  }, [user?.uid, connect, disconnect]); // 穩定的依賴
 
   // 清理
   useEffect(() => {
