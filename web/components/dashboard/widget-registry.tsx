@@ -256,39 +256,200 @@ function getMetricColorClass(category: string): string {
  * 營收圖表小工具
  */
 const RevenueChartWidget: WidgetRenderer = ({ config, data, isLoading }) => {
+  // 延遲載入圖表組件以避免 SSR 問題
+  const [ChartContainer, setChartContainer] = React.useState<any>(null);
+  const [chartData, setChartData] = React.useState<any[]>([]);
+
+  React.useEffect(() => {
+    import('../charts/chart-container').then(module => {
+      setChartContainer(() => module.ChartContainer);
+    });
+  }, []);
+
+  React.useEffect(() => {
+    if (data?.metrics) {
+      // 轉換指標資料為圖表格式
+      const chartData = generateRevenueChartData(data.metrics);
+      setChartData(chartData);
+    }
+  }, [data]);
+
   if (isLoading) {
     return <div className="animate-pulse h-48 bg-gray-200 rounded"></div>;
   }
 
-  return (
-    <div className="h-full flex items-center justify-center">
-      <div className="text-center">
-        <TrendingUp className="w-12 h-12 text-blue-500 mx-auto mb-4" />
-        <p className="text-sm text-gray-500">營收圖表組件</p>
-        <p className="text-xs text-gray-400 mt-1">即將推出</p>
+  if (!ChartContainer) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
+    );
+  }
+
+  const chartConfig = {
+    id: 'revenue-chart',
+    type: 'line' as const,
+    title: '營收趨勢',
+    subtitle: '過去 30 天營收變化',
+    data: chartData,
+    animated: true,
+    interactive: true,
+    exportable: true,
+    colors: ['#3b82f6', '#10b981'],
+    timeRange: {
+      start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+      end: new Date(),
+      granularity: 'day' as const,
+    },
+  };
+
+  return (
+    <div className="h-full">
+      <ChartContainer 
+        config={chartConfig}
+        isLoading={isLoading}
+      />
     </div>
   );
 };
+
+// 輔助函數：生成營收圖表資料
+function generateRevenueChartData(metrics: any[]): any[] {
+  const revenueMetric = metrics.find(m => 
+    m.name.includes('營收') || m.name.includes('收入')
+  );
+
+  if (!revenueMetric) {
+    return generateDefaultLineData();
+  }
+
+  // 生成過去 30 天的模擬營收資料
+  const data = [];
+  const baseValue = parseFloat(revenueMetric.value.toString().replace(/[^\d.]/g, '')) || 100000;
+  const change = revenueMetric.change || 0;
+
+  for (let i = 29; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    
+    // 模擬資料波動
+    const variance = (Math.random() - 0.5) * 0.2; // ±10% 隨機變化
+    const trendEffect = (change / 100) * (29 - i) / 29; // 趨勢效果
+    const dailyValue = baseValue * (1 + variance + trendEffect) / 30;
+
+    data.push({
+      id: `revenue-${i}`,
+      name: date.toLocaleDateString('zh-TW', { month: 'short', day: 'numeric' }),
+      value: Math.floor(dailyValue),
+      date: date.toISOString(),
+      category: 'revenue',
+    });
+  }
+
+  return data;
+}
+
+function generateDefaultLineData(): any[] {
+  const data = [];
+  for (let i = 29; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    
+    data.push({
+      id: `default-${i}`,
+      name: date.toLocaleDateString('zh-TW', { month: 'short', day: 'numeric' }),
+      value: Math.floor(Math.random() * 5000) + 3000,
+      date: date.toISOString(),
+      category: 'default',
+    });
+  }
+  return data;
+}
 
 /**
  * 客戶成長小工具
  */
 const CustomerGrowthWidget: WidgetRenderer = ({ config, data, isLoading }) => {
+  // 延遲載入圖表組件
+  const [ChartContainer, setChartContainer] = React.useState<any>(null);
+  const [chartData, setChartData] = React.useState<any[]>([]);
+
+  React.useEffect(() => {
+    import('../charts/chart-container').then(module => {
+      setChartContainer(() => module.ChartContainer);
+    });
+  }, []);
+
+  React.useEffect(() => {
+    if (data?.metrics) {
+      const chartData = generateCustomerGrowthData(data.metrics);
+      setChartData(chartData);
+    }
+  }, [data]);
+
   if (isLoading) {
     return <div className="animate-pulse h-48 bg-gray-200 rounded"></div>;
   }
 
-  return (
-    <div className="h-full flex items-center justify-center">
-      <div className="text-center">
-        <Users className="w-12 h-12 text-green-500 mx-auto mb-4" />
-        <p className="text-sm text-gray-500">客戶成長圖表</p>
-        <p className="text-xs text-gray-400 mt-1">即將推出</p>
+  if (!ChartContainer) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
       </div>
+    );
+  }
+
+  const chartConfig = {
+    id: 'customer-growth',
+    type: 'bar' as const,
+    title: '客戶成長',
+    subtitle: '每月新增客戶數',
+    data: chartData,
+    animated: true,
+    interactive: true,
+    exportable: true,
+    colors: ['#10b981', '#059669'],
+    timeRange: {
+      start: new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000), // 6 個月
+      end: new Date(),
+      granularity: 'month' as const,
+    },
+  };
+
+  return (
+    <div className="h-full">
+      <ChartContainer 
+        config={chartConfig}
+        isLoading={isLoading}
+      />
     </div>
   );
 };
+
+// 生成客戶成長資料
+function generateCustomerGrowthData(metrics: any[]): any[] {
+  const customerMetric = metrics.find(m => 
+    m.name.includes('客戶') || m.name.includes('用戶')
+  );
+
+  const data = [];
+  const months = ['1月', '2月', '3月', '4月', '5月', '6月'];
+  const baseValue = customerMetric ? parseInt(customerMetric.value) || 30 : 30;
+  
+  months.forEach((month, index) => {
+    const variance = Math.floor(Math.random() * 20) - 10; // ±10 變化
+    const trend = customerMetric?.change > 0 ? index * 2 : -index * 1; // 趨勢效果
+    
+    data.push({
+      id: `customer-${index}`,
+      name: month,
+      value: Math.max(baseValue + variance + trend, 5), // 最少 5 個客戶
+      category: 'customer',
+    });
+  });
+
+  return data;
+}
 
 /**
  * 任務摘要小工具
@@ -404,18 +565,48 @@ const AIInsightsWidget: WidgetRenderer = ({ config, data, isLoading }) => {
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center space-x-2">
-        <Brain className="w-4 h-4 text-blue-500" />
-        <h4 className="text-sm font-medium text-gray-900">AI 洞察</h4>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <Brain className="w-4 h-4 text-blue-500" />
+          <h4 className="text-sm font-medium text-gray-900">AI 洞察</h4>
+        </div>
+        <Badge variant="outline" className="text-xs">
+          {insights.length} 項洞察
+        </Badge>
       </div>
       
       {insights.slice(0, 3).map((insight: any, index: number) => (
-        <div key={index} className="p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400">
-          <p className="text-sm text-gray-900 mb-1">{insight.title}</p>
-          <p className="text-xs text-gray-600">{insight.description}</p>
-          <div className="flex items-center justify-between mt-2">
-            <span className="text-xs text-blue-600 font-medium">可信度: {insight.confidence}%</span>
-            <span className="text-xs text-gray-500">{insight.category}</span>
+        <div key={index} className="p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400 hover:bg-blue-100 transition-colors">
+          <div className="flex items-start justify-between mb-1">
+            <p className="text-sm text-gray-900 font-medium">{insight.title}</p>
+            <Badge 
+              variant="outline" 
+              className={cn(
+                "text-xs ml-2",
+                insight.priority === 'high' ? 'text-red-600 border-red-200' :
+                insight.priority === 'medium' ? 'text-yellow-600 border-yellow-200' :
+                'text-green-600 border-green-200'
+              )}
+            >
+              {insight.priority}
+            </Badge>
+          </div>
+          <p className="text-xs text-gray-600 mb-2">{insight.description}</p>
+          
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <span className="text-xs text-blue-600 font-medium">
+                可信度: {insight.confidence}%
+              </span>
+              <span className="text-xs text-gray-500">•</span>
+              <span className="text-xs text-gray-500">{insight.category}</span>
+            </div>
+            
+            {insight.recommendations && insight.recommendations.length > 0 && (
+              <Button variant="ghost" size="sm" className="text-xs h-6 px-2">
+                查看建議
+              </Button>
+            )}
           </div>
         </div>
       ))}
@@ -423,9 +614,52 @@ const AIInsightsWidget: WidgetRenderer = ({ config, data, isLoading }) => {
       {insights.length === 0 && (
         <div className="text-center py-8">
           <Brain className="w-8 h-8 text-gray-300 mx-auto mb-2" />
-          <p className="text-sm text-gray-500">暂无洞察</p>
+          <p className="text-sm text-gray-500">暫無 AI 洞察</p>
+          <Button variant="outline" size="sm" className="mt-3">
+            生成新洞察
+          </Button>
         </div>
       )}
+
+      {insights.length > 3 && (
+        <div className="text-center pt-2 border-t">
+          <Button variant="ghost" size="sm" className="text-xs">
+            查看全部 {insights.length} 項洞察
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+/**
+ * AI 查詢小工具 (新增)
+ */
+const AIQueryWidget: WidgetRenderer = ({ config, data, isLoading }) => {
+  // 延遲載入 AI 查詢組件
+  const [AIQueryInterface, setAIQueryInterface] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    import('../ai/ai-query-interface').then(module => {
+      setAIQueryInterface(() => module.AIQueryInterface);
+    });
+  }, []);
+
+  if (isLoading) {
+    return <div className="animate-pulse h-48 bg-gray-200 rounded"></div>;
+  }
+
+  if (!AIQueryInterface) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="h-full overflow-hidden">
+      <AIQueryInterface />
     </div>
   );
 };
@@ -651,5 +885,18 @@ WidgetRegistry.register('custom-chart', {
   configurable: true,
   requiresData: false,
 }, CustomChartWidget);
+
+WidgetRegistry.register('ai-query', {
+  type: 'ai-query',
+  name: 'AI 智能查詢',
+  description: '使用自然語言查詢業務資料',
+  icon: Brain,
+  category: 'ai',
+  defaultSize: { width: 6, height: 5 },
+  minSize: { width: 4, height: 4 },
+  maxSize: { width: 8, height: 8 },
+  configurable: true,
+  requiresData: false,
+}, AIQueryWidget);
 
 export { WidgetRegistry };

@@ -64,6 +64,7 @@ export type WidgetType =
   | 'team-performance'
   | 'recent-activities'
   | 'ai-insights'
+  | 'ai-query'
   | 'notifications'
   | 'quick-actions'
   | 'custom-chart';
