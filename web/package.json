@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:foundation": "node test-nextjs-simple.js"
   },
   "dependencies": {
     "clsx": "^2.0.0",
@@ -26,8 +27,10 @@
     "@types/react-dom": "^19",
     "@typescript-eslint/eslint-plugin": "^8.39.1",
     "@typescript-eslint/parser": "^8.39.1",
+    "axios": "^1.11.0",
     "eslint": "^9",
     "eslint-config-next": "15.4.6",
+    "puppeteer": "^21.0.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

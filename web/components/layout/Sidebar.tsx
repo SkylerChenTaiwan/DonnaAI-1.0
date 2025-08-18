@@ -2,6 +2,7 @@
  * 側邊導航欄元件
  * 提供可摺疊的導航選單，支援響應式設計
  */
+"use client";
 
 import React, { ReactNode } from 'react';
 import Link from 'next/link';

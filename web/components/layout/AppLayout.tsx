@@ -2,6 +2,7 @@
  * 應用程式主佈局元件
  * 提供響應式導航、側邊欄和主內容區域
  */
+"use client";
 
 import React, { ReactNode, useState } from 'react';
 import { Header } from './Header';
