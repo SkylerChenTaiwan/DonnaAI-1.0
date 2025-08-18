@@ -17,6 +17,7 @@ const TEST_CONFIG = {
 // 測試結果收集器
 class TestResults {
   constructor() {
+    this.tests = [];  // 初始化 tests 陣列
     this.results = {
       passed: 0,
       failed: 0,
