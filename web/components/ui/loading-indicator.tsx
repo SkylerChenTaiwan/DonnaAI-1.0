@@ -380,3 +380,27 @@ export function PageLoading({
     </div>
   );
 }
+
+// 預設載入指示器（為了向後相容）
+export interface LoadingIndicatorProps extends BaseLoadingProps {
+  size?: number | 'sm' | 'md' | 'lg' | 'xl';
+}
+
+export function LoadingIndicator({ 
+  className, 
+  size = 'md', 
+  color = 'primary'
+}: LoadingIndicatorProps) {
+  // 如果 size 是數字，轉換為自訂樣式
+  if (typeof size === 'number') {
+    return (
+      <Loader2 
+        className={cn('animate-spin', className)}
+        style={{ width: size, height: size }}
+      />
+    );
+  }
+
+  // 使用預設的 SpinnerLoading
+  return <SpinnerLoading className={className} size={size} color={color} />;
+}

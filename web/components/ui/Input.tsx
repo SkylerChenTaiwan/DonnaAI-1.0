@@ -8,7 +8,7 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
-import { EyeIcon, EyeSlashIcon } from "@radix-ui/react-icons";
+import { Eye, EyeOff } from "lucide-react";
 
 // 輸入框變體樣式定義
 const inputVariants = cva(
@@ -202,9 +202,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 aria-label={shouldShowPassword ? "隱藏密碼" : "顯示密碼"}
               >
                 {shouldShowPassword ? (
-                  <EyeSlashIcon className="h-4 w-4" />
+                  <EyeOff className="h-4 w-4" />
                 ) : (
-                  <EyeIcon className="h-4 w-4" />
+                  <Eye className="h-4 w-4" />
                 )}
               </button>
             )}
