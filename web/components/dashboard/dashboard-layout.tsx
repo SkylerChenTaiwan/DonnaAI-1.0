@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/card';
 import { useRealTimeData } from '@/hooks/use-real-time-data';
+import { useRealTimeDashboard, useDashboardRealTimeMetrics } from '@/hooks/use-real-time-dashboard';
 import { CompactConnectionStatus, useConnectionStatus } from '@/components/shared/connection-status';
 import { 
   Settings, 
@@ -135,18 +136,16 @@ export function DashboardLayout({
   const containerRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 
-  // 即時資料更新
-  const { 
-    status: realTimeStatus, 
-    lastEvent, 
-    isConnected,
-    reconnect 
-  } = useRealTimeData({
-    subscribeToEvents: ['dashboard_data_updated', 'metric_changed'],
-    onEvent: (event) => {
-      // 處理即時更新事件
-      if (event.type === 'dashboard_data_updated' && onLayoutChange) {
-        // 觸發佈局更新
+  // 即時資料更新 (整合版本)
+  const {
+    isConnected: wsConnected,
+    lastEvent: wsLastEvent,
+    reconnect: wsReconnect,
+    connectionState
+  } = useRealTimeDashboard({
+    onDashboardUpdate: (metrics) => {
+      // 處理 Dashboard 資料更新
+      if (onLayoutChange) {
         const updatedLayout = {
           ...layoutConfig,
           updatedAt: new Date(),
@@ -155,9 +154,39 @@ export function DashboardLayout({
       }
     },
     onStatusChange: (status) => {
-      console.log('Real-time connection status:', status);
+      console.log('WebSocket Dashboard connection:', status);
     }
   });
+
+  // 備用即時資料系統
+  const { 
+    status: realTimeStatus, 
+    lastEvent, 
+    isConnected: sseConnected,
+    reconnect: sseReconnect 
+  } = useRealTimeData({
+    subscribeToEvents: ['dashboard_data_updated', 'metric_changed'],
+    onEvent: (event) => {
+      // 處理即時更新事件（備用）
+      if (event.type === 'dashboard_data_updated' && onLayoutChange) {
+        const updatedLayout = {
+          ...layoutConfig,
+          updatedAt: new Date(),
+        };
+        onLayoutChange(updatedLayout);
+      }
+    },
+    onStatusChange: (status) => {
+      console.log('SSE Real-time connection status:', status);
+    }
+  });
+
+  // 統一的連線狀態
+  const isConnected = wsConnected || sseConnected;
+  const reconnect = () => {
+    wsReconnect();
+    sseReconnect();
+  };
 
   // 獲取當前網格設定
   const currentGridSettings = RESPONSIVE_GRID_SETTINGS[currentBreakpoint];
