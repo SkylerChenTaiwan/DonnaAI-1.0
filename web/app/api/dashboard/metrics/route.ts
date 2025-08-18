@@ -5,43 +5,54 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { authOptions } from '@/lib/auth/auth-config';
 import { firebaseAdmin } from '@/lib/firebase-admin';
 import { dashboardCacheManager } from '@/lib/cache/dashboard-cache-manager';
+import { withAuth } from '@/lib/auth/auth-middleware';
+import { Permission } from '@/lib/auth/permissions';
+import { PermissionAwareQueryHelper } from '@/lib/auth/query-helper';
 import type { DashboardMetricsRequest, DashboardMetricsResponse } from '@/docs/types/dashboard-data-models';
 
 export async function GET(request: NextRequest) {
   try {
-    // 驗證使用者身份
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
+    // 權限檢查和認證
+    const authResult = await withAuth(request, {
+      requireAuth: true,
+      requiredPermissions: [Permission.DASHBOARD_VIEW],
+      resource: 'dashboard',
+      action: 'read'
+    });
+
+    if (!authResult.success) {
       return NextResponse.json(
-        { success: false, error: { code: 'UNAUTHORIZED', message: '未授權存取' } },
-        { status: 401 }
+        { success: false, error: authResult.error },
+        { status: authResult.error!.status }
       );
     }
 
+    const { session, dataFilter } = authResult;
+
     // 解析查詢參數
     const searchParams = request.nextUrl.searchParams;
-    const organizationId = searchParams.get('organizationId') || session.user.organizationId;
+    const requestedOrgId = searchParams.get('organizationId');
     const period = searchParams.get('period') as string || '30d';
     const timezone = searchParams.get('timezone') || 'Asia/Taipei';
     const cache = searchParams.get('cache') !== 'false';
 
-    if (!organizationId) {
-      return NextResponse.json(
-        { success: false, error: { code: 'MISSING_ORGANIZATION', message: '缺少組織 ID' } },
-        { status: 400 }
-      );
-    }
-
-    // 檢查權限
-    const hasAccess = await checkOrganizationAccess(session.user.uid, organizationId);
-    if (!hasAccess) {
-      return NextResponse.json(
-        { success: false, error: { code: 'FORBIDDEN', message: '無存取權限' } },
-        { status: 403 }
-      );
+    // 使用資料過濾器驗證組織存取權限
+    let organizationId = session.user.organizationId;
+    if (requestedOrgId) {
+      // 檢查是否可以存取請求的組織
+      const accessScope = dataFilter.getMetricsAccessLevel();
+      if (accessScope.canViewGlobal || 
+          (accessScope.canViewOrganization && requestedOrgId === session.user.organizationId)) {
+        organizationId = requestedOrgId;
+      } else {
+        return NextResponse.json(
+          { success: false, error: { code: 'FORBIDDEN', message: '無權限存取指定組織的資料' } },
+          { status: 403 }
+        );
+      }
     }
 
     const startTime = Date.now();
@@ -62,12 +73,13 @@ export async function GET(request: NextRequest) {
     }
     
     if (!metrics) {
-      // 快取未命中，從資料庫獲取
+      // 快取未命中，從資料庫獲取（含權限過濾）
       metrics = await getDashboardMetrics({
         organizationId,
         period: period as any,
         timezone,
-        userId: session.user.uid
+        userId: session.user.uid,
+        dataFilter // 傳遞資料過濾器
       });
       
       // 將結果存入快取
@@ -143,9 +155,10 @@ async function getDashboardMetrics(params: {
   period: '7d' | '30d' | '90d' | '1y';
   timezone: string;
   userId: string;
+  dataFilter?: any; // 資料過濾器
 }) {
   const db = firebaseAdmin.firestore();
-  const { organizationId, period, timezone } = params;
+  const { organizationId, period, timezone, dataFilter } = params;
 
   // 計算時間範圍
   const endDate = new Date();
@@ -166,7 +179,7 @@ async function getDashboardMetrics(params: {
       break;
   }
 
-  // 並行獲取各種指標
+  // 並行獲取各種指標（含權限過濾）
   const [
     revenueMetrics,
     customerMetrics,
@@ -174,11 +187,11 @@ async function getDashboardMetrics(params: {
     meetingMetrics,
     performanceMetrics
   ] = await Promise.all([
-    getRevenueMetrics(db, organizationId, startDate, endDate),
-    getCustomerMetrics(db, organizationId, startDate, endDate),
-    getTaskMetrics(db, organizationId, startDate, endDate),
-    getMeetingMetrics(db, organizationId, startDate, endDate),
-    getPerformanceMetrics(db, organizationId, startDate, endDate)
+    getRevenueMetrics(db, organizationId, startDate, endDate, dataFilter),
+    getCustomerMetrics(db, organizationId, startDate, endDate, dataFilter),
+    getTaskMetrics(db, organizationId, startDate, endDate, dataFilter),
+    getMeetingMetrics(db, organizationId, startDate, endDate, dataFilter),
+    getPerformanceMetrics(db, organizationId, startDate, endDate, dataFilter)
   ]);
 
   return {
@@ -197,23 +210,32 @@ async function getRevenueMetrics(
   db: FirebaseFirestore.Firestore,
   organizationId: string,
   startDate: Date,
-  endDate: Date
+  endDate: Date,
+  dataFilter?: any
 ) {
   try {
-    // 查詢當期收入資料
-    const currentRevenueQuery = await db
-      .collection('records')
-      .where('organizationId', '==', organizationId)
-      .where('type', '==', 'sales')
-      .where('createdAt', '>=', startDate)
-      .where('createdAt', '<=', endDate)
-      .get();
+    // 創建帶權限過濾的查詢
+    let currentRevenueQueryResult;
+    if (dataFilter) {
+      const queryHelper = new PermissionAwareQueryHelper(dataFilter);
+      const currentRevenueQuery = queryHelper.createRevenueQuery(db, organizationId, startDate, endDate);
+      currentRevenueQueryResult = await currentRevenueQuery.get();
+    } else {
+      // 回退到基本查詢
+      const currentRevenueQuery = db
+        .collection('records')
+        .where('organizationId', '==', organizationId)
+        .where('type', '==', 'sales')
+        .where('createdAt', '>=', startDate)
+        .where('createdAt', '<=', endDate);
+      currentRevenueQueryResult = await currentRevenueQuery.get();
+    }
 
     // 計算當期總收入
     let currentRevenue = 0;
     const revenueBySource: { [key: string]: number } = {};
 
-    currentRevenueQuery.docs.forEach(doc => {
+    currentRevenueQueryResult.docs.forEach(doc => {
       const data = doc.data();
       const amount = data.metadata?.amount || 0;
       const source = data.metadata?.source || 'unknown';
