@@ -25,9 +25,11 @@ mkdir -p /docs/agent-reports
 
 ---
 
-## 🔄 **5 階段執行流程**
+## 🔄 **PRP 執行流程架構**
 
-### **Phase 1: 規劃驗證階段 (MANDATORY)**
+### **必要階段 (所有 PRP 都必須包含)**
+
+#### **Phase 1: 規劃驗證階段 (MANDATORY)**
 
 **必須執行的 4 個 Agent:**
 - [ ] `spec-writer`: 技術規格撰寫
@@ -48,61 +50,7 @@ mkdir -p /docs/agent-reports
 
 ---
 
-### **Phase 2: 後端服務實作**
-
-**開發任務:**
-- 根據技術規格實作後端邏輯
-- 資料模型建立和驗證
-- API 端點開發
-
-**自動觸發的 Agent:**
-- TypeScript 錯誤 → 觸發 `typescript-type-guardian`
-- 重構程式碼 → 觸發 `code-refactor-optimizer`
-
-**Phase 2 完成條件:**
-- 後端功能實作完成
-- Success Criteria Backend 項目驗證
-- 無 Critical TypeScript 錯誤
-
----
-
-### **Phase 3: 前端元件實作**
-
-**開發任務:**
-- 根據 UX 流程設計實作前端界面
-- 元件整合和互動邏輯
-- 響應式設計實作
-
-**自動觸發的 Agent:**
-- 修改 UI 元件 → 觸發 `ui-visual-tester` + `code-refactor-optimizer`
-- 新功能完成 → 觸發 `interaction-tester` + `typescript-type-guardian`
-
-**Phase 3 完成條件:**
-- 前端界面實作完成
-- Success Criteria Frontend 項目驗證
-- UI 元件通過視覺測試
-
----
-
-### **Phase 4: 系統整合**
-
-**開發任務:**
-- 前後端整合測試
-- 端到端功能驗證
-- 效能優化
-
-**自動觸發的 Agent:**
-- 整合測試失敗 → 觸發 `test-results-analyzer` + `interaction-tester`
-- UI 顯示異常 → 觸發 `ui-visual-tester` + `ux-journey-analyzer`
-
-**Phase 4 完成條件:**
-- 系統整合完成
-- Success Criteria UX 項目驗證
-- 端到端流程正常運作
-
----
-
-### **Phase 5: 測試與驗證階段 (MANDATORY)**
+#### **最終階段: 測試與驗證 (MANDATORY)**
 
 **必須執行的 5 個 Agent:**
 - [ ] `interaction-tester`: 互動測試
@@ -118,20 +66,66 @@ mkdir -p /docs/agent-reports
 - [ ] `/docs/tests/[prp-name]-type-safety.md`
 - [ ] `/docs/tests/[prp-name]-code-quality.md`
 
-**Phase 5 完成條件:**
+**最終階段完成條件:**
 - 所有 5 個 Agent 成功執行
 - 所有測試報告已生成
 - 所有 Critical 問題已修復
 
 ---
 
+### **中間開發階段 (根據 PRP 需求靈活調整)**
+
+**每個 PRP 文件中會定義具體的 Phase 架構，例如:**
+
+**典型的多階段 PRP:**
+- Phase 1: 規劃驗證 (必要)
+- Phase 2: 後端服務實作
+- Phase 3: 前端元件實作  
+- Phase 4: 系統整合
+- Phase 5: 測試與驗證 (必要)
+
+**簡單的單一功能 PRP:**
+- Phase 1: 規劃驗證 (必要)
+- Phase 2: 功能實作
+- Phase 3: 測試與驗證 (必要)
+
+**複雜的多系統 PRP:**
+- Phase 1: 規劃驗證 (必要)
+- Phase 2: 資料層開發
+- Phase 3: 業務邏輯層開發
+- Phase 4: API 層開發
+- Phase 5: 前端界面開發
+- Phase 6: 系統整合
+- Phase 7: 測試與驗證 (必要)
+
+---
+
+### **開發階段共通規則**
+
+**所有中間開發階段都適用以下自動觸發規則:**
+- TypeScript 錯誤 → 觸發 `typescript-type-guardian`
+- 重構程式碼 → 觸發 `code-refactor-optimizer`
+- 修改 UI 元件 → 觸發 `ui-visual-tester` + `code-refactor-optimizer`
+- 新功能完成 → 觸發 `interaction-tester` + `typescript-type-guardian`
+- 整合測試失敗 → 觸發 `test-results-analyzer` + `interaction-tester`
+- UI 顯示異常 → 觸發 `ui-visual-tester` + `ux-journey-analyzer`
+
+**每個開發階段完成條件:**
+- 該階段的開發任務完成
+- 相關的 Success Criteria 項目驗證
+- 自動觸發的 Agent 檢查通過
+- 無未修復的 Critical 問題
+
+---
+
 ## 📊 **品質閥門與強制停止點**
 
 ### **階段間檢查點**
-1. **Phase 1 未完成** → 禁止進入開發階段
-2. **Success Criteria 未驗證** → 禁止進入測試階段  
-3. **Phase 5 未完成** → 禁止提交 Git
+1. **Phase 1 (規劃驗證) 未完成** → 禁止進入任何開發階段
+2. **Success Criteria 未驗證** → 禁止進入最終測試階段  
+3. **最終測試階段未完成** → 禁止提交 Git
 4. **測試報告缺失** → 禁止標記完成
+5. **任一中間階段未完成** → 禁止進入下一階段
 
 ### **Agent 檢查要求**
 - 不執行 Agent 不能進入下一個 Phase
@@ -221,9 +215,9 @@ failure_recovery:
 ## 📋 **TodoWrite 整合要求**
 
 ### **必須追蹤的任務**
-- Phase 1: 4 個規劃 Agent 執行
-- Phase 2-4: 開發任務與自動觸發 Agent
-- Phase 5: 5 個驗證 Agent 執行
+- Phase 1: 4 個規劃 Agent 執行 (必要)
+- 中間開發階段: 各 PRP 定義的開發任務與自動觸發 Agent
+- 最終階段: 5 個驗證 Agent 執行 (必要)
 - 文件產出與品質檢查
 - Success Criteria 逐項驗證
 
@@ -237,19 +231,22 @@ failure_recovery:
 ## ⚠️ **執行注意事項**
 
 ### **絕對不允許的行為**
-1. ❌ 跳過任何 Phase
-2. ❌ 跳過必要的 Agent 執行
-3. ❌ 缺少必要文件就進入下一階段
-4. ❌ 未驗證 Success Criteria 就標記完成
-5. ❌ 有 Critical 問題未修復就繼續
+1. ❌ 跳過 Phase 1 (規劃驗證階段)
+2. ❌ 跳過最終測試階段
+3. ❌ 跳過必要的 Agent 執行
+4. ❌ 缺少必要文件就進入下一階段
+5. ❌ 未驗證 Success Criteria 就標記完成
+6. ❌ 有 Critical 問題未修復就繼續
+7. ❌ 跳過 PRP 中定義的任何開發階段
 
 ### **強制執行機制**
 - 每個階段都有檢查點，不符合條件立即停止
 - 所有文件和報告必須完整才能繼續
 - Git 提交前必須通過所有驗證
+- 中間開發階段必須按 PRP 定義的順序執行
 
 ---
 
-**🔥 記住：永遠不要再跳過 PRP 流程！每個 Phase 都是必要的！**
+**🔥 記住：永遠不要再跳過 PRP 流程！每個 PRP 定義的 Phase 都是必要的！**
 
 **此標準是不可妥協的品質保證機制，確保每個 PRP 都能達到生產級品質。**
