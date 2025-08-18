@@ -14,16 +14,18 @@ import {
   type MetricChangedEvent,
   type NotificationReceivedEvent,
   type TeamMemberStatusUpdatedEvent,
-  type TaskStatusChangedEvent 
+  type TaskStatusChangedEvent,
+  type WebSocketEvent
 } from '@/lib/websocket/websocket-events';
+import type { WebSocketMessage } from '@/lib/websocket/websocket-client';
 import type { DashboardMetrics } from '@/types/dashboard';
 
 // 即時 Dashboard 事件
-export interface RealTimeDashboardEvent {
+export interface RealTimeDashboardEvent<T = unknown> {
   id: string;
   type: 'dashboard_update' | 'metric_change' | 'notification' | 'team_update' | 'task_update';
   timestamp: Date;
-  data: any;
+  data: T;
   source: 'websocket' | 'sse' | 'fallback';
 }
 
@@ -33,10 +35,10 @@ interface UseRealTimeDashboardOptions {
   enableSSE?: boolean;
   autoReconnect?: boolean;
   onDashboardUpdate?: (metrics: Partial<DashboardMetrics>) => void;
-  onMetricChange?: (metric: any) => void;
-  onNotification?: (notification: any) => void;
-  onTeamUpdate?: (member: any) => void;
-  onTaskUpdate?: (task: any) => void;
+  onMetricChange?: (metric: MetricChangedEvent['data']) => void;
+  onNotification?: (notification: NotificationReceivedEvent['data']) => void;
+  onTeamUpdate?: (member: TeamMemberStatusUpdatedEvent['data']) => void;
+  onTaskUpdate?: (task: TaskStatusChangedEvent['data']) => void;
   onStatusChange?: (status: string) => void;
 }
 
@@ -45,7 +47,7 @@ export interface ConnectionState {
   websocket: 'connected' | 'connecting' | 'disconnected' | 'error';
   sse: 'connected' | 'connecting' | 'disconnected' | 'error';
   overall: 'connected' | 'connecting' | 'disconnected' | 'error';
-  lastEvent: RealTimeDashboardEvent | null;
+  lastEvent: RealTimeDashboardEvent<unknown> | null;
   eventCount: number;
   reconnectAttempts: number;
 }
@@ -178,8 +180,8 @@ export function useRealTimeDashboard(options: UseRealTimeDashboardOptions = {}) 
   }, [enableSSE, user, sseConnection, autoReconnect, onStatusChange]);
 
   // 處理事件
-  const handleEvent = useCallback((eventData: any, source: 'websocket' | 'sse') => {
-    const event: RealTimeDashboardEvent = {
+  const handleEvent = useCallback((eventData: WebSocketEvent | Record<string, unknown>, source: 'websocket' | 'sse') => {
+    const event: RealTimeDashboardEvent<unknown> = {
       id: eventData.id || `event_${Date.now()}`,
       type: mapEventType(eventData.type),
       timestamp: new Date(eventData.timestamp),
@@ -276,7 +278,7 @@ export function useRealTimeDashboard(options: UseRealTimeDashboardOptions = {}) 
   }, [enableSSE, user, webSocket.connectionState, webSocket.error, connectSSE, sseConnection]);
 
   // 發送訊息（僅限 WebSocket）
-  const sendMessage = useCallback((message: any) => {
+  const sendMessage = useCallback(<T = unknown>(message: Omit<WebSocketMessage<T>, 'timestamp'>) => {
     return webSocket.send?.(message) || false;
   }, [webSocket.send]);
 
@@ -381,7 +383,7 @@ export function useDashboardRealTimeMetrics() {
  * Dashboard 通知 Hook
  */
 export function useDashboardNotifications() {
-  const [notifications, setNotifications] = useState<any[]>([]);
+  const [notifications, setNotifications] = useState<NotificationReceivedEvent['data'][]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
 
   const { isConnected } = useRealTimeDashboard({
@@ -420,7 +422,7 @@ export function useDashboardNotifications() {
  * 團隊狀態即時更新 Hook
  */
 export function useTeamRealTimeStatus() {
-  const [teamMembers, setTeamMembers] = useState<Map<string, any>>(new Map());
+  const [teamMembers, setTeamMembers] = useState<Map<string, TeamMemberStatusUpdatedEvent['data']['member']>>(new Map());
   const [lastActivity, setLastActivity] = useState<Date | null>(null);
 
   const { isConnected } = useRealTimeDashboard({

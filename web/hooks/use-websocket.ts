@@ -5,7 +5,12 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/use-auth';
-import { WebSocketClient, WebSocketMessage, type WebSocketOptions } from '@/lib/websocket/websocket-client';
+import { 
+  WebSocketClient, 
+  type WebSocketMessage, 
+  type WebSocketOptions,
+  type WebSocketEventHandler 
+} from '@/lib/websocket/websocket-client';
 import { 
   WebSocketEvent, 
   WebSocketEventHandler, 
@@ -18,7 +23,7 @@ export interface UseWebSocketOptions extends Omit<WebSocketOptions, 'userId' | '
   onConnect?: () => void;
   onDisconnect?: () => void;
   onError?: (error: Error) => void;
-  onMessage?: (message: WebSocketMessage) => void;
+  onMessage?: (message: WebSocketMessage<unknown>) => void;
 }
 
 export interface UseWebSocketReturn {
@@ -28,13 +33,13 @@ export interface UseWebSocketReturn {
   connectionState: 'connecting' | 'open' | 'closing' | 'closed';
   connect: () => Promise<void>;
   disconnect: () => void;
-  send: (message: Omit<WebSocketMessage, 'timestamp'>) => boolean;
+  send: <T = unknown>(message: Omit<WebSocketMessage<T>, 'timestamp'>) => boolean;
   subscribe: <T extends WebSocketEvent>(
     eventType: T['type'], 
     handler: WebSocketEventHandler<T>
   ) => () => void;
   unsubscribe: (eventType: string, handler?: WebSocketEventHandler) => void;
-  lastMessage: WebSocketMessage | null;
+  lastMessage: WebSocketMessage<unknown> | null;
   error: Error | null;
 }
 
@@ -47,7 +52,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [connectionState, setConnectionState] = useState<'connecting' | 'open' | 'closing' | 'closed'>('closed');
-  const [lastMessage, setLastMessage] = useState<WebSocketMessage | null>(null);
+  const [lastMessage, setLastMessage] = useState<WebSocketMessage<unknown> | null>(null);
   const [error, setError] = useState<Error | null>(null);
   
   const clientRef = useRef<WebSocketClient | null>(null);
@@ -80,7 +85,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
       });
 
       // 設置訊息處理器
-      wsClient.subscribe('*', (message) => {
+      wsClient.subscribe<unknown>('*', (message) => {
         setLastMessage(message);
         onMessage?.(message);
         
@@ -119,7 +124,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
   }, [client, onDisconnect]);
 
   // 發送訊息函數
-  const send = useCallback((message: Omit<WebSocketMessage, 'timestamp'>) => {
+  const send = useCallback(<T = unknown>(message: Omit<WebSocketMessage<T>, 'timestamp'>) => {
     if (!client) {
       console.warn('WebSocket 未連線，無法發送訊息');
       return false;
@@ -136,7 +141,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
     
     // 如果客戶端已存在，立即訂閱
     if (client) {
-      client.subscribe(eventType, handler as any);
+      client.subscribe(eventType, handler as WebSocketEventHandler<unknown>);
     }
 
     // 在全域註冊表中註冊
@@ -144,7 +149,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
 
     return () => {
       subscribedEventsRef.current.delete(eventType);
-      client?.unsubscribe(eventType, handler as any);
+      client?.unsubscribe(eventType, handler as WebSocketEventHandler<unknown>);
       unsubscribe();
     };
   }, [client]);
@@ -152,8 +157,8 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
   // 取消訂閱函數
   const unsubscribe = useCallback((eventType: string, handler?: WebSocketEventHandler) => {
     subscribedEventsRef.current.delete(eventType);
-    client?.unsubscribe(eventType, handler as any);
-    globalEventRegistry.off(eventType, handler as any);
+    client?.unsubscribe(eventType, handler as WebSocketEventHandler<unknown>);
+    globalEventRegistry.off(eventType, handler);
   }, [client]);
 
   // 監聽連線狀態變化

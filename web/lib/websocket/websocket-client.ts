@@ -5,11 +5,11 @@
 
 import { DASHBOARD_CONFIG } from '@/config/dashboard.config';
 
-export interface WebSocketMessage {
+export interface WebSocketMessage<T = unknown> {
   type: string;
   id?: string;
   timestamp: string;
-  data?: any;
+  data?: T;
   from?: string;
 }
 
@@ -23,7 +23,7 @@ export interface WebSocketOptions {
   reconnectInterval?: number;
 }
 
-export type WebSocketEventHandler = (message: WebSocketMessage) => void;
+export type WebSocketEventHandler<T = unknown> = (message: WebSocketMessage<T>) => void;
 
 /**
  * WebSocket 客戶端管理類
@@ -31,7 +31,7 @@ export type WebSocketEventHandler = (message: WebSocketMessage) => void;
 export class WebSocketClient {
   private ws: WebSocket | null = null;
   private options: Required<WebSocketOptions>;
-  private eventHandlers: Map<string, Set<WebSocketEventHandler>> = new Map();
+  private eventHandlers: Map<string, Set<WebSocketEventHandler<unknown>>> = new Map();
   private reconnectAttempts = 0;
   private reconnectTimer: NodeJS.Timeout | null = null;
   private heartbeatTimer: NodeJS.Timeout | null = null;
@@ -127,14 +127,14 @@ export class WebSocketClient {
   /**
    * 發送訊息
    */
-  send(message: Omit<WebSocketMessage, 'timestamp'>): boolean {
+  send<T = unknown>(message: Omit<WebSocketMessage<T>, 'timestamp'>): boolean {
     if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
       console.warn('WebSocket 未連線，無法發送訊息');
       return false;
     }
 
     try {
-      const fullMessage: WebSocketMessage = {
+      const fullMessage: WebSocketMessage<T> = {
         ...message,
         timestamp: new Date().toISOString(),
       };
@@ -150,12 +150,12 @@ export class WebSocketClient {
   /**
    * 訂閱事件
    */
-  subscribe(eventType: string, handler: WebSocketEventHandler): void {
+  subscribe<T = unknown>(eventType: string, handler: WebSocketEventHandler<T>): void {
     if (!this.eventHandlers.has(eventType)) {
       this.eventHandlers.set(eventType, new Set());
     }
     
-    this.eventHandlers.get(eventType)!.add(handler);
+    this.eventHandlers.get(eventType)!.add(handler as WebSocketEventHandler<unknown>);
 
     // 如果已連線，立即更新訂閱
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
@@ -169,7 +169,7 @@ export class WebSocketClient {
   /**
    * 取消訂閱事件
    */
-  unsubscribe(eventType: string, handler?: WebSocketEventHandler): void {
+  unsubscribe<T = unknown>(eventType: string, handler?: WebSocketEventHandler<T>): void {
     if (!this.eventHandlers.has(eventType)) {
       return;
     }
@@ -177,7 +177,7 @@ export class WebSocketClient {
     const handlers = this.eventHandlers.get(eventType)!;
     
     if (handler) {
-      handlers.delete(handler);
+      handlers.delete(handler as WebSocketEventHandler<unknown>);
       if (handlers.size === 0) {
         this.eventHandlers.delete(eventType);
       }
@@ -249,7 +249,7 @@ export class WebSocketClient {
 
     this.ws.onmessage = (event) => {
       try {
-        const message: WebSocketMessage = JSON.parse(event.data);
+        const message: WebSocketMessage<unknown> = JSON.parse(event.data);
         this.handleMessage(message);
       } catch (error) {
         console.error('WebSocket 訊息解析錯誤:', error);
@@ -273,7 +273,7 @@ export class WebSocketClient {
   /**
    * 處理收到的訊息
    */
-  private handleMessage(message: WebSocketMessage): void {
+  private handleMessage(message: WebSocketMessage<unknown>): void {
     const { type } = message;
 
     // 處理系統訊息

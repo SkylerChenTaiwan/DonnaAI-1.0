@@ -111,7 +111,21 @@ export interface AiQueryCompletedEvent extends BaseWebSocketEvent {
   data: {
     queryId: string;
     query: string;
-    result: any;
+    result: {
+      answer: string;
+      confidence: number;
+      sources?: Array<{
+        type: string;
+        reference: string;
+        relevance: number;
+      }>;
+      suggestions?: string[];
+      visualizations?: Array<{
+        type: string;
+        data: unknown;
+        config?: Record<string, unknown>;
+      }>;
+    };
     processingTime: number;
     confidence: number;
   };
