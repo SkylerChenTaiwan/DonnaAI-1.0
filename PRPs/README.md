@@ -136,10 +136,27 @@
 
 | 118v | dynamic-field-mapping-v3-complete.md | ✅ 已完成 | 動態欄位映射系統 v3 - 100+欄位支援、分片儲存、Agent 完整測試 | 2025-08-16 |
 | 119v | fix-adaptive-modal-portal.md | ✅ 已完成 | 修復 AdaptiveModal Web 平台 Portal 問題 - 移除 createPortal，統一使用 RN Modal | 2025-08-17 |
+| 120  | next-js-web-platform-foundation.md | 📋 待執行 | Next.js Web 平台基礎架構 - 專案建立、路由系統、SSR/SSG 配置、效能最佳化 | - |
+| 121  | web-component-library-radix-tailwind.md | 📋 待執行 | Web 元件庫（Radix UI + Tailwind CSS）- 設計系統、元件庫、Storybook 整合 | - |
+| 122  | firebase-web-sdk-authentication-system.md | 📋 待執行 | Firebase Web SDK 整合與認證系統 - Web SDK v9、認證流程、Firestore 最佳化 | - |
+| 123  | dashboard-analytics-integration.md | 📋 待執行 | 儀表板頁面與分析整合 - 數據視覺化、即時更新、商業智能 | - |
+| 124  | ai-analytics-query-interface.md | 📋 待執行 | AI 驅動的分析查詢介面 - 自然語言查詢、智能圖表生成、對話式分析 | - |
+| 125  | notion-database-management-system.md | 📋 待執行 | Notion 風格資料庫管理系統 - 內聯編輯、拖拽排序、虛擬滾動、批量操作 | - |
+| 126  | personnel-organization-chart.md | 📋 待執行 | 人事管理與組織圖視覺化系統 - 互動式組織圖、權限管理、團隊結構 | - |
+| 127  | superadmin-platform-management.md | 📋 待執行 | SuperAdmin 平台管理介面 - 多租戶管理、客戶導入、監控告警、計費系統 | - |
+| 128  | settings-configuration-management.md | 📋 待執行 | 設定與配置管理系統 - 層級設定、自訂欄位、第三方整合、匯入匯出 | - |
+| 129  | advanced-file-upload-media-management.md | 📋 待執行 | 進階檔案上傳與媒體管理系統 - 拖拽上傳、CDN 整合、版本控制、安全掃描 | - |
+| 130  | web-chart-visualization-library.md | 📋 待執行 | Web 專用圖表與視覺化元件庫 - 互動圖表、自訂主題、響應式設計、動畫效果 | - |
+| 131  | real-time-collaboration-communication.md | 📋 待執行 | 即時協作與溝通系統 - WebSocket 通訊、多用戶編輯、評論系統、視訊整合 | - |
+| 132  | performance-monitoring-error-tracking.md | 📋 待執行 | 效能監控與錯誤追蹤系統 - 即時監控、錯誤分析、警報系統、用戶體驗追蹤 | - |
+| 133  | seo-marketing-optimization.md | 📋 待執行 | SEO 與行銷最佳化系統 - 搜尋引擎最佳化、行銷追蹤、A/B 測試、轉換最佳化 | - |
+| 134  | backend-api-gateway-microservices.md | 📋 待執行 | 後端 API 閘道器與微服務架構 - API 管理、服務治理、負載均衡、監控告警 | - |
+| 135  | database-optimization-caching-strategy.md | 📋 待執行 | 資料庫最佳化與快取策略系統 - 查詢最佳化、多層快取、分片策略、備份恢復 | - |
+| 136  | comprehensive-testing-quality-assurance.md | 📋 待執行 | 全方位測試與品質保證系統 - 自動化測試、品質閘道器、CI/CD 整合、效能測試 | - |
 
 ## 下一個 PRP 編號
 
-**下一個新建的 PRP 應使用編號：120**
+**下一個新建的 PRP 應使用編號：137**
 
 ## PRP 類型說明
 
