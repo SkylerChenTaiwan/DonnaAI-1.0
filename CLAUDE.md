@@ -15,6 +15,7 @@
 - **檢查 `INITIAL.md`** 開始新對話時了解專案概覽和功能需求
 - **參考 `ARCHITECTURE.md`** 實作新功能、使用 Firebase 服務、設定 AI 整合時
 - **檢查 `TASK.md`** 開始新任務前，如果任務不在列表中則新增
+- **🚨 執行 PRP 必須嚴格遵循** `/docs/workflows/PRP-EXECUTION-STANDARD.md` 的所有階段和檢查點
 - **考慮整個專案影響** 避免局部思維
 - **使用 venv_linux** 執行所有 Python 指令，包括單元測試
 
@@ -121,8 +122,7 @@
 - **Web 平台開發 (Next.js + Radix UI)** → `/docs/development/WEB-ADAPTIVE-GUIDE.md`
 - **Firebase 開發指南** → `/docs/development/FIREBASE-GUIDE.md`  
 - **Agent 工作流程** → `/docs/workflows/AGENT-WORKFLOWS.md`
-- **PRP 執行流程** → `/docs/workflows/PRP-EXECUTION.md`
-- **PRP 執行追蹤器** → `/docs/workflows/PRP-EXECUTION-TRACKER.md`
+- **🚨 PRP 執行標準規範（強制遵循）** → `/docs/workflows/PRP-EXECUTION-STANDARD.md`
 
 ---
 
