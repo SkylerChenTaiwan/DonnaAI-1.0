@@ -14,6 +14,12 @@ import {
 import { doc, setDoc, updateDoc, Timestamp, serverTimestamp } from 'firebase/firestore';
 import { getFirebaseAuth, getFirebaseDb } from './config';
 import { User, Organization, Team } from '@/types/entities';
+import { 
+  FirebaseAuthError, 
+  isFirebaseAuthError, 
+  AUTH_ERROR_MESSAGES,
+  getFirebaseErrorMessage 
+} from '@/types/firebase-errors';
 
 export interface SignUpData {
   email: string;
@@ -205,27 +211,9 @@ export const updateUserEmail = async (newEmail: string, currentPassword: string)
 /**
  * 轉換 Firebase 錯誤訊息為使用者友善的中文訊息
  */
-const getAuthErrorMessage = (error: any): string => {
-  switch (error.code) {
-    case 'auth/user-not-found':
-      return '找不到此電子郵件帳號';
-    case 'auth/wrong-password':
-      return '密碼錯誤';
-    case 'auth/email-already-in-use':
-      return '此電子郵件已被註冊';
-    case 'auth/weak-password':
-      return '密碼強度不足，請至少使用 6 個字元';
-    case 'auth/invalid-email':
-      return '電子郵件格式無效';
-    case 'auth/too-many-requests':
-      return '嘗試次數過多，請稍後再試';
-    case 'auth/network-request-failed':
-      return '網路連線失敗，請檢查網路設定';
-    case 'auth/requires-recent-login':
-      return '為了安全考量，請重新登入後再嘗試更新';
-    case 'auth/invalid-credential':
-      return '認證資訊無效，請確認您的電子郵件和密碼';
-    default:
-      return error.message || '發生未知錯誤，請稍後再試';
+const getAuthErrorMessage = (error: unknown): string => {
+  if (isFirebaseAuthError(error)) {
+    return AUTH_ERROR_MESSAGES[error.code] || error.message || '發生未知錯誤，請稍後再試';
   }
+  return getFirebaseErrorMessage(error);
 };
