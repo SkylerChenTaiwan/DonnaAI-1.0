@@ -1,263 +1,190 @@
 /**
- * 通用工具函數
- * 提供常用的工具函數和幫助方法
+ * 通用工具函數庫
+ * 提供元件開發所需的各種工具函數
  */
 
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 /**
- * 合併和條件性地應用 CSS 類名
- * 使用 clsx 處理條件邏輯，twMerge 處理 Tailwind CSS 衝突
+ * 合併 CSS 類別名稱
+ * 使用 clsx 進行條件式類別合併，再用 tailwind-merge 解決 Tailwind 類別衝突
+ * 
+ * @param inputs - 類別名稱輸入
+ * @returns 合併後的類別名稱字符串
  */
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
 /**
- * 格式化日期為本地化字串
+ * 格式化字節大小
+ * 
+ * @param bytes - 字節數
+ * @param decimals - 小數點位數
+ * @returns 格式化後的大小字符串
  */
-export function formatDate(date: Date | string, locale = 'zh-TW'): string {
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
+export function formatBytes(bytes: number, decimals: number = 2): string {
+  if (bytes === 0) return "0 Bytes";
   
-  return dateObj.toLocaleDateString(locale, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+  
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 }
 
 /**
- * 格式化日期時間為本地化字串
+ * 防抖函數
+ * 
+ * @param func - 要防抖的函數
+ * @param delay - 延遲時間（毫秒）
+ * @returns 防抖後的函數
  */
-export function formatDateTime(date: Date | string, locale = 'zh-TW'): string {
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
+export function debounce<T extends (...args: any[]) => any>(
+  func: T,
+  delay: number
+): (...args: Parameters<T>) => void {
+  let timeoutId: NodeJS.Timeout;
   
-  return dateObj.toLocaleString(locale, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+  return (...args: Parameters<T>) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func(...args), delay);
+  };
 }
 
 /**
- * 格式化相對時間 (例如：2小時前)
+ * 節流函數
+ * 
+ * @param func - 要節流的函數
+ * @param delay - 節流間隔（毫秒）
+ * @returns 節流後的函數
  */
-export function formatRelativeTime(date: Date | string, locale = 'zh-TW'): string {
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
-  const now = new Date();
-  const diff = now.getTime() - dateObj.getTime();
+export function throttle<T extends (...args: any[]) => any>(
+  func: T,
+  delay: number
+): (...args: Parameters<T>) => void {
+  let inThrottle: boolean;
+  
+  return (...args: Parameters<T>) => {
+    if (!inThrottle) {
+      func(...args);
+      inThrottle = true;
+      setTimeout(() => (inThrottle = false), delay);
+    }
+  };
+}
 
-  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
-
-  const minute = 60 * 1000;
-  const hour = 60 * minute;
-  const day = 24 * hour;
-  const month = 30 * day;
-  const year = 365 * day;
-
-  if (diff < minute) {
-    return rtf.format(-Math.floor(diff / 1000), 'second');
-  } else if (diff < hour) {
-    return rtf.format(-Math.floor(diff / minute), 'minute');
-  } else if (diff < day) {
-    return rtf.format(-Math.floor(diff / hour), 'hour');
-  } else if (diff < month) {
-    return rtf.format(-Math.floor(diff / day), 'day');
-  } else if (diff < year) {
-    return rtf.format(-Math.floor(diff / month), 'month');
-  } else {
-    return rtf.format(-Math.floor(diff / year), 'year');
+/**
+ * 深度複製對象
+ * 
+ * @param obj - 要複製的對象
+ * @returns 深度複製後的對象
+ */
+export function deepClone<T>(obj: T): T {
+  if (obj === null || typeof obj !== "object") return obj;
+  if (obj instanceof Date) return new Date(obj.getTime()) as T;
+  if (obj instanceof Array) return obj.map(item => deepClone(item)) as T;
+  if (typeof obj === "object") {
+    const clonedObj = {} as { [key: string]: any };
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        clonedObj[key] = deepClone((obj as any)[key]);
+      }
+    }
+    return clonedObj as T;
   }
+  return obj;
 }
 
 /**
- * 安全地解析 JSON，發生錯誤時返回預設值
+ * 生成隨機 ID
+ * 
+ * @param length - ID 長度
+ * @returns 隨機 ID 字符串
  */
-export function safeParseJSON<T>(json: string, defaultValue: T): T {
+export function generateId(length: number = 8): string {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
+
+/**
+ * 檢查是否為空值（null, undefined, 空字符串, 空陣列, 空對象）
+ * 
+ * @param value - 要檢查的值
+ * @returns 是否為空值
+ */
+export function isEmpty(value: any): boolean {
+  if (value === null || value === undefined) return true;
+  if (typeof value === 'string' && value.trim() === '') return true;
+  if (Array.isArray(value) && value.length === 0) return true;
+  if (typeof value === 'object' && Object.keys(value).length === 0) return true;
+  return false;
+}
+
+/**
+ * 安全的 JSON 解析
+ * 
+ * @param jsonString - JSON 字符串
+ * @param defaultValue - 解析失敗時的預設值
+ * @returns 解析後的對象或預設值
+ */
+export function safeJsonParse<T>(jsonString: string, defaultValue: T): T {
   try {
-    return JSON.parse(json) as T;
+    return JSON.parse(jsonString);
   } catch {
     return defaultValue;
   }
 }
 
 /**
- * 防抖函數
+ * 格式化日期
+ * 
+ * @param date - 日期對象
+ * @param format - 格式字符串
+ * @returns 格式化後的日期字符串
  */
-export function debounce<T extends (...args: any[]) => any>(
-  func: T,
-  wait: number
-): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout | null = null;
+export function formatDate(date: Date, format: string = 'YYYY-MM-DD'): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
 
-  return (...args: Parameters<T>) => {
-    if (timeout) {
-      clearTimeout(timeout);
-    }
-    timeout = setTimeout(() => func(...args), wait);
-  };
+  return format
+    .replace('YYYY', String(year))
+    .replace('MM', month)
+    .replace('DD', day)
+    .replace('HH', hours)
+    .replace('mm', minutes)
+    .replace('ss', seconds);
 }
 
 /**
- * 節流函數
+ * 延遲函數（Promise 版本）
+ * 
+ * @param ms - 延遲毫秒數
+ * @returns Promise
  */
-export function throttle<T extends (...args: any[]) => any>(
-  func: T,
-  limit: number
-): (...args: Parameters<T>) => void {
-  let inThrottle: boolean;
-
-  return (...args: Parameters<T>) => {
-    if (!inThrottle) {
-      func(...args);
-      inThrottle = true;
-      setTimeout(() => (inThrottle = false), limit);
-    }
-  };
-}
-
-/**
- * 深度複製物件
- */
-export function deepClone<T>(obj: T): T {
-  if (obj === null || typeof obj !== 'object') {
-    return obj;
-  }
-
-  if (obj instanceof Date) {
-    return new Date(obj.getTime()) as T;
-  }
-
-  if (obj instanceof Array) {
-    return obj.map(item => deepClone(item)) as T;
-  }
-
-  if (obj instanceof Object) {
-    const clonedObj = {} as T;
-    for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        (clonedObj as any)[key] = deepClone(obj[key]);
-      }
-    }
-    return clonedObj;
-  }
-
-  return obj;
-}
-
-/**
- * 檢查是否為有效的電子郵件地址
- */
-export function isValidEmail(email: string): boolean {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-}
-
-/**
- * 生成隨機字串
- */
-export function generateRandomString(length: number): string {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  
-  for (let i = 0; i < length; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  
-  return result;
-}
-
-/**
- * 截斷字串並添加省略號
- */
-export function truncateString(str: string, maxLength: number): string {
-  if (str.length <= maxLength) {
-    return str;
-  }
-  
-  return str.slice(0, maxLength - 3) + '...';
-}
-
-/**
- * 將字串轉換為 URL slug
- */
-export function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, '') // 移除特殊字符
-    .replace(/[\s_-]+/g, '-') // 將空格和底線替換為連字號
-    .replace(/^-+|-+$/g, ''); // 移除開頭和結尾的連字號
-}
-
-/**
- * 檢查物件是否為空
- */
-export function isEmpty(obj: any): boolean {
-  if (obj === null || obj === undefined) return true;
-  if (Array.isArray(obj) || typeof obj === 'string') return obj.length === 0;
-  if (obj instanceof Map || obj instanceof Set) return obj.size === 0;
-  if (typeof obj === 'object') return Object.keys(obj).length === 0;
-  return false;
-}
-
-/**
- * 格式化檔案大小
- */
-export function formatFileSize(bytes: number, decimals = 2): string {
-  if (bytes === 0) return '0 Bytes';
-
-  const k = 1024;
-  const dm = decimals < 0 ? 0 : decimals;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-}
-
-/**
- * 休眠函數 (用於測試或動畫延遲)
- */
-export function sleep(ms: number): Promise<void> {
+export function delay(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 /**
- * 安全地存取物件深層屬性
+ * 數字範圍限制
+ * 
+ * @param value - 輸入值
+ * @param min - 最小值
+ * @param max - 最大值
+ * @returns 限制後的值
  */
-export function get(obj: any, path: string, defaultValue: any = undefined): any {
-  const keys = path.split('.');
-  let result = obj;
-
-  for (const key of keys) {
-    if (result == null || typeof result !== 'object') {
-      return defaultValue;
-    }
-    result = result[key];
-  }
-
-  return result !== undefined ? result : defaultValue;
-}
-
-/**
- * 比較兩個物件是否相等 (淺比較)
- */
-export function shallowEqual(obj1: any, obj2: any): boolean {
-  const keys1 = Object.keys(obj1);
-  const keys2 = Object.keys(obj2);
-
-  if (keys1.length !== keys2.length) {
-    return false;
-  }
-
-  for (const key of keys1) {
-    if (obj1[key] !== obj2[key]) {
-      return false;
-    }
-  }
-
-  return true;
+export function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
 }
