@@ -5,10 +5,11 @@
 
 'use client';
 
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/badge';
+import { useRealTimeMetrics } from '@/hooks/use-real-time-data';
 import { 
   Select,
   SelectContent,
@@ -142,6 +143,16 @@ export function ChartContainer({
 }: ChartContainerProps) {
   const [showSettings, setShowSettings] = useState(false);
   const [selectedTimeRange, setSelectedTimeRange] = useState('30d');
+  const [lastUpdateTime, setLastUpdateTime] = useState<Date | null>(null);
+
+  // 即時指標更新
+  const { isConnected } = useRealTimeMetrics((data) => {
+    // 當收到即時更新時，觸發重新載入
+    if (data && onRefresh) {
+      setLastUpdateTime(new Date());
+      onRefresh();
+    }
+  });
 
   // 圖表類型圖標對應
   const chartIcons = {
@@ -286,6 +297,26 @@ export function ChartContainer({
           {config.timeRange && (
             <Badge variant="outline" className="text-xs">
               {selectedTimeRange}
+            </Badge>
+          )}
+          {/* 即時更新狀態 */}
+          <div className={cn(
+            "flex items-center space-x-1 px-1.5 py-0.5 rounded-full text-xs",
+            isConnected ? "bg-green-50 text-green-600" : "bg-gray-50 text-gray-400"
+          )}>
+            <div className={cn(
+              "w-1.5 h-1.5 rounded-full",
+              isConnected ? "bg-green-500 animate-pulse" : "bg-gray-400"
+            )} />
+            <span>即時</span>
+          </div>
+          {lastUpdateTime && (
+            <Badge variant="outline" className="text-xs text-blue-600">
+              更新: {lastUpdateTime.toLocaleTimeString('zh-TW', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                second: '2-digit'
+              })}
             </Badge>
           )}
         </div>

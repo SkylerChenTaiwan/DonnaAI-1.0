@@ -9,6 +9,7 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/card';
+import { useRealTimeData } from '@/hooks/use-real-time-data';
 import { 
   Settings, 
   Grid3X3, 
@@ -21,7 +22,8 @@ import {
   Copy,
   Move,
   Lock,
-  Unlock
+  Unlock,
+  RefreshCw
 } from 'lucide-react';
 
 // 佈局配置介面
@@ -131,6 +133,30 @@ export function DashboardLayout({
   
   const containerRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+
+  // 即時資料更新
+  const { 
+    status: realTimeStatus, 
+    lastEvent, 
+    isConnected,
+    reconnect 
+  } = useRealTimeData({
+    subscribeToEvents: ['dashboard_data_updated', 'metric_changed'],
+    onEvent: (event) => {
+      // 處理即時更新事件
+      if (event.type === 'dashboard_data_updated' && onLayoutChange) {
+        // 觸發佈局更新
+        const updatedLayout = {
+          ...layoutConfig,
+          updatedAt: new Date(),
+        };
+        onLayoutChange(updatedLayout);
+      }
+    },
+    onStatusChange: (status) => {
+      console.log('Real-time connection status:', status);
+    }
+  });
 
   // 獲取當前網格設定
   const currentGridSettings = RESPONSIVE_GRID_SETTINGS[currentBreakpoint];
@@ -349,6 +375,27 @@ export function DashboardLayout({
             </div>
             
             <div className="flex items-center space-x-2">
+              {/* 即時連線狀態指示器 */}
+              <div className={cn(
+                "flex items-center space-x-1 px-2 py-1 rounded-full text-xs border",
+                isConnected ? "bg-green-50 border-green-200 text-green-700" : "bg-red-50 border-red-200 text-red-700"
+              )}>
+                <div className={cn(
+                  "w-2 h-2 rounded-full",
+                  isConnected ? "bg-green-500 animate-pulse" : "bg-red-500"
+                )} />
+                <span>{isConnected ? '即時連線' : '已斷線'}</span>
+                {!isConnected && (
+                  <button 
+                    onClick={reconnect}
+                    className="ml-1 text-red-600 hover:text-red-700"
+                    title="重新連線"
+                  >
+                    <RefreshCw className="w-3 h-3" />
+                  </button>
+                )}
+              </div>
+              
               <Button variant="outline" size="sm">
                 <Settings className="w-4 h-4 mr-2" />
                 佈局設定
