@@ -118,8 +118,8 @@
 4. 提供報告摘要和分享建議
 
 ### 📚 詳細規範參考
-- **Web 平台與 Adaptive 元件** → `/docs/development/WEB-ADAPTIVE-GUIDE.md`
-- **Firebase 開發指南** → `/docs/development/FIREBASE-GUIDE.md`
+- **Web 平台開發 (Next.js + Radix UI)** → `/docs/development/WEB-ADAPTIVE-GUIDE.md`
+- **Firebase 開發指南** → `/docs/development/FIREBASE-GUIDE.md`  
 - **Agent 工作流程** → `/docs/workflows/AGENT-WORKFLOWS.md`
 - **PRP 執行流程** → `/docs/workflows/PRP-EXECUTION.md`
 
