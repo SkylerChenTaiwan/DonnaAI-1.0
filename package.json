@@ -34,6 +34,9 @@
     "audit:contrast": "node scripts/auditContrast.js",
     "adaptive:stats": "node scripts/adaptive-stats.js",
     "adaptive:stats:json": "node scripts/adaptive-stats.js --json",
+    "test:api": "node scripts/test-dashboard-apis.js",
+    "test:performance": "node scripts/performance-test.js",
+    "test:integration": "npm run test:api && npm run test:performance",
     "prepare": "husky"
   },
   "lint-staged": {

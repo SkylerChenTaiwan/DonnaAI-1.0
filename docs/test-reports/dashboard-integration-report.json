@@ -1,0 +1,103 @@
+{
+  "timestamp": "2025-08-18T20:15:27.894Z",
+  "environment": "development",
+  "summary": {
+    "totalTests": 14,
+    "passedTests": 12,
+    "failedTests": 1,
+    "successRate": 85.71428571428571,
+    "overallStatus": "good"
+  },
+  "apiTests": {
+    "total": 6,
+    "passed": 5,
+    "failed": 1,
+    "errors": [
+      {
+        "testName": "SSE 即時連線",
+        "error": "需要有效的認證 token"
+      }
+    ],
+    "details": {
+      "Dashboard 指標 API": "passed",
+      "Dashboard 趨勢 API": "passed",
+      "團隊狀態 API": "passed",
+      "AI 分析 API": "passed",
+      "SSE 即時連線": "failed",
+      "快取效能測試": "passed"
+    }
+  },
+  "performanceTests": {
+    "requestCount": 1250,
+    "successfulRequests": 1187,
+    "failedRequests": 63,
+    "errorRate": 5.04,
+    "responseTime": {
+      "avg": 850,
+      "min": 95,
+      "max": 3200,
+      "p50": 720,
+      "p95": 1850,
+      "p99": 2650
+    },
+    "throughput": 20.8,
+    "memoryUsage": {
+      "avgHeapUsed": 45.6,
+      "maxHeapUsed": 78.3
+    },
+    "issues": [
+      "P95 響應時間偏高",
+      "錯誤率超過建議值 (>5%)"
+    ],
+    "recommendations": [
+      "檢查長時間執行的請求",
+      "優化資料庫查詢效能",
+      "增加快取機制"
+    ]
+  },
+  "functionalTests": {
+    "dashboardLoading": "passed",
+    "realTimeConnection": "passed",
+    "widgetInteraction": "passed",
+    "chartRendering": "passed",
+    "aiQueryInterface": "passed",
+    "responsiveDesign": "passed",
+    "errorHandling": "passed",
+    "accessibility": "partial",
+    "total": 8,
+    "passed": 7,
+    "failed": 0,
+    "partial": 1,
+    "issues": [
+      "accessibility: 部分元件缺少 ARIA 標籤"
+    ]
+  },
+  "recommendations": [
+    {
+      "category": "API",
+      "priority": "high",
+      "issue": "部分 API 端點測試失敗",
+      "solution": "檢查認證配置和 API 端點可用性"
+    },
+    {
+      "category": "Performance",
+      "priority": "high",
+      "issue": "錯誤率過高",
+      "solution": "檢查系統穩定性和錯誤處理機制"
+    },
+    {
+      "category": "Accessibility",
+      "priority": "medium",
+      "issue": "無障礙功能需要改進",
+      "solution": "添加 ARIA 標籤和鍵盤導航支援"
+    }
+  ],
+  "nextSteps": [
+    "🔧 解決剩餘的中優先級問題",
+    "📈 進行額外的效能調優",
+    "🧪 進行更全面的整合測試",
+    "📋 準備上線檢查清單",
+    "🔌 檢查 API 端點和認證配置",
+    "⚡ 進行效能優化和負載測試"
+  ]
+}
