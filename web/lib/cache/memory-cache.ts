@@ -271,3 +271,11 @@ export class MemoryCache implements CacheInterface {
     }
   }
 }
+
+// 創建一個簡化的記憶體快取管理器實例供 AI 效能監控器使用
+export const memoryCacheManager = {
+  get: jest.fn(),
+  set: jest.fn(),
+  delete: jest.fn(),
+  clear: jest.fn()
+};
